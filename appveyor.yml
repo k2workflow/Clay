@@ -1,0 +1,23 @@
+version: '1.0.{build}'
+configuration:
+- Release
+platform:
+- Any CPU
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+init:
+- ps: $Env:LABEL = "preview1-" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
+before_build:
+- appveyor-retry dotnet restore -v Minimal
+build_script:
+- dotnet build "SourceCode.Clay.sln" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+after_build:
+- dotnet pack "src\SourceCode.Clay" --version-suffix %LABEL%
+test_script:
+- dotnet test "src\SourceCode.Clay.Tests" --no-build
+artifacts:
+  - path: '**\*.nupkg'
+deploy:
+  provider: NuGet
+  api_key:
+    secure: JlUgeUsCDsMvMo4u5DwopSnGM4+FByY6kc0WQw841Bt0BX7ntT09kiH2R6ybWAOO
