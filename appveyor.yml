@@ -9,11 +9,11 @@ init:
 before_build:
 - appveyor-retry dotnet restore -v Minimal
 build_script:
-- dotnet build "SourceCode.Clay.sln" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+- dotnet build "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 after_build:
- - dotnet pack "src\SourceCode.Clay" -c %CONFIGURATION% --version-suffix %LABEL%
+ - dotnet pack "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
 test_script:
-- dotnet test "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-build
+- dotnet test "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
 artifacts:
   - path: '**\*.nupkg'
 deploy:
