@@ -1,5 +1,7 @@
 ## Clay
 
+[![Build status](https://ci.appveyor.com/api/projects/status/yg5vnimungm86hf1/branch/master?svg=true)](https://ci.appveyor.com/project/jcdickinson/clay/branch/master)
+
 Tools and extensions to the .Net framework.
 
 ### Getting started
