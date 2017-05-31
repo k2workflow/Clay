@@ -11,7 +11,7 @@ before_build:
 build_script:
 - dotnet build "SourceCode.Clay.sln" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 test_script:
-- dotnet test "src\SourceCode.Clay.Tests" --no-build
+- dotnet test "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" --no-build
 artifacts:
   - path: '**\*.nupkg'
 deploy:
