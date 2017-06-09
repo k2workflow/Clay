@@ -42,7 +42,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Truncates a string, inserting an ellipsis if necessary, returning a value with the specified total width.
         /// Tolerates <paramref name="totalWidth"/> values that are too large or too small (or negative).
-        /// It the value is already smaller then <paramref name="totalWidth"/>, the original value is returned.
+        /// If the value is already smaller then <paramref name="totalWidth"/>, the original value is returned.
         /// Otherwise the value is truncated to the specified <paramref name="totalWidth"/> and the
         /// final 3 characters are replaced with "...".
         /// </summary>
