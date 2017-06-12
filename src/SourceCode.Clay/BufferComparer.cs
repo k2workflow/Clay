@@ -36,7 +36,6 @@ namespace SourceCode.Clay
         public BufferComparer()
             : this(-1)
         {
-
         }
 
         /// <summary>

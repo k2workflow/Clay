@@ -215,6 +215,4 @@ namespace SourceCode.Clay
         [FieldOffset(7)]
         public Byte Byte7;
     }
-
-
 }
