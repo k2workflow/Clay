@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Buffers
 {
     /// <summary>
     /// Represents the blittable components of a 8-bit integer.

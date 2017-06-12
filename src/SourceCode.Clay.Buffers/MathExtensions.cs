@@ -1,11 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Buffers
 {
     /// <summary>
     /// Represents additional mathematical methods.
     /// </summary>
-    public static class MathExtensions
+    public static class BlitExtensions
     {
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.
