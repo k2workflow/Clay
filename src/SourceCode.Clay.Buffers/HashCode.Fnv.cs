@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Buffers
 {
     /// <summary>
     /// Represents a way to calculate hash codes.
