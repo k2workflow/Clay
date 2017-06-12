@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
@@ -8,7 +9,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit32: UInt32 to Int32")]
         public static void When_blitting_UInt32_to_Int32()
         {
-            var tests = new uint[] { uint.MinValue, uint.MinValue + 1, 0, 100, uint.MaxValue - 1, uint.MaxValue };
+            var tests = new uint[] { uint.MinValue, uint.MinValue + 1, 0, 100, uint.MaxValue - 1, uint.MaxValue, BitConverter.ToUInt32(new byte[] { 1, 2, 4, 8 }, 0) };
 
             foreach (var test in tests)
             {
@@ -34,7 +35,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit32: Int32 to UInt32")]
         public static void When_blitting_Int32_to_UInt32()
         {
-            var tests = new[] { int.MinValue, int.MinValue + 1, 0, 100, int.MaxValue - 1, int.MaxValue };
+            var tests = new[] { int.MinValue, int.MinValue + 1, 0, 100, int.MaxValue - 1, int.MaxValue, BitConverter.ToInt32(new byte[] { 1, 2, 4, 8 }, 0) };
 
             foreach (var test in tests)
             {

@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
@@ -8,7 +9,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit64: UInt64 to Int64")]
         public static void When_blitting_UInt64_to_Int64()
         {
-            var tests = new ulong[] { ulong.MinValue, ulong.MinValue + 1, 0, 100, ulong.MaxValue - 1, ulong.MaxValue };
+            var tests = new ulong[] { ulong.MinValue, ulong.MinValue + 1, 0, 100, ulong.MaxValue - 1, ulong.MaxValue, BitConverter.ToUInt64(new byte[] { 1, 2, 4, 8, 16, 32, 64, 128 }, 0) };
 
             foreach (var test in tests)
             {
@@ -33,7 +34,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit64: UInt64 to Int64")]
         public static void When_blitting_Int64_to_UInt64()
         {
-            var tests = new[] { long.MinValue, long.MinValue + 1, 0, 100, long.MaxValue - 1, long.MaxValue };
+            var tests = new[] { long.MinValue, long.MinValue + 1, 0, 100, long.MaxValue - 1, long.MaxValue, BitConverter.ToInt64(new byte[] { 1, 2, 4, 8, 16, 32, 64, 128 }, 0) };
 
             foreach (var test in tests)
             {

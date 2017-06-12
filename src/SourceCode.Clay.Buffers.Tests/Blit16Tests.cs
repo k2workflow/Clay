@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
@@ -8,7 +9,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit16: UInt16 to Int16")]
         public static void When_blitting_UInt16_to_Int16()
         {
-            var tests = new ushort[] { ushort.MinValue, ushort.MinValue + 1, 0, 100, ushort.MaxValue - 1, ushort.MaxValue };
+            var tests = new ushort[] { ushort.MinValue, ushort.MinValue + 1, 0, 100, ushort.MaxValue - 1, ushort.MaxValue, BitConverter.ToUInt16(new byte[] { 1, 2 }, 0) };
 
             foreach (var test in tests)
             {
@@ -30,7 +31,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = "Blit16: Int16 to UInt16")]
         public static void When_blitting_Int16_to_UInt16()
         {
-            var tests = new short[] { short.MinValue, short.MinValue + 1, 0, 100, short.MaxValue - 1, short.MaxValue };
+            var tests = new short[] { short.MinValue, short.MinValue + 1, 0, 100, short.MaxValue - 1, short.MaxValue, BitConverter.ToInt16(new byte[] { 1, 2 }, 0) };
 
             foreach (var test in tests)
             {
