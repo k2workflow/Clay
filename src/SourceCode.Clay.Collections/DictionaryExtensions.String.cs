@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace SourceCode.Clay.Collections.Generic
 {
-    /// <summary>
-    /// Represents extensions for lists.
-    /// </summary>
     public static partial class DictionaryExtensions
     {
         /// <summary>
@@ -14,7 +10,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// Uses ordinal string comparison semantics.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
-        /// <param name="cases">The items.</param>
+        /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <param name="ignoreCase">Invariant lowercase (ordinal) comparisons should be used.</param>
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<string, T> ToOrdinalSwitch<T>(IReadOnlyDictionary<string, T> cases, bool ignoreCase)
@@ -25,53 +21,18 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Helpers
 
-        internal sealed class OrdinalStringSwitchImpl<T> : IDynamicSwitch<string, T>
+        internal sealed class OrdinalStringSwitchImpl<T> : BaseSwitchImpl<string, T>
         {
-            private readonly Func<string, int> _indexer;
-            private readonly IReadOnlyList<T> _values;
+            //private readonly bool _ignoreCase;
 
             public OrdinalStringSwitchImpl(IReadOnlyDictionary<string, T> cases, bool ignoreCase)
+                : base(cases, ignoreCase ? k => k.ToLowerInvariant() : (Func<string, string>)null)
             {
-                var count = cases?.Count ?? 0;
-
-                var list = Array.Empty<T>();
-                var dict = new Dictionary<string, int>(count);
-
-                if (count > 0)
-                {
-                    list = new T[count];
-
-                    var i = 0;
-                    foreach (var @case in cases)
-                    {
-                        list[i] = @case.Value;
-                        dict[@case.Key] = i;
-                        i++;
-                    }
-                }
-
-                _indexer = Build(dict, ignoreCase);
-                _values = list;
+                //_ignoreCase = ignoreCase;
             }
 
-            public T this[string key] => _values[_indexer(key)];
-
-            public int Count => _values.Count;
-
-            public bool ContainsKey(string key) => _indexer(key) >= 0;
-
-            public bool TryGetValue(string key, out T value)
-            {
-                value = default(T);
-                var ix = _indexer(key);
-
-                if (ix < 0) return false;
-
-                value = _values[ix];
-                return true;
-            }
-
-            private static Func<string, int> Build(IReadOnlyDictionary<string, int> cases, bool ignoreCase)
+            /*
+            protected override Func<string, int> Build(IReadOnlyDictionary<string, int> cases)
             {
                 // Return -1 if item is not found (per standard convention for IndexOf())
                 var notFound = Expression.Constant(-1);
@@ -89,7 +50,7 @@ namespace SourceCode.Clay.Collections.Generic
 
                 // Format MUST match #1 below
                 Expression switchValue = formalParam;
-                if (ignoreCase)
+                if (_ignoreCase)
                 {
                     switchValue = Expression.Call(formalParam, nameof(string.ToLowerInvariant), null);
                 }
@@ -103,7 +64,7 @@ namespace SourceCode.Clay.Collections.Generic
                     var key = @case.Key;
 
                     // Format MUST match #1 above
-                    if (ignoreCase)
+                    if (_ignoreCase)
                     {
                         key = key.ToLowerInvariant();
                     }
@@ -120,6 +81,7 @@ namespace SourceCode.Clay.Collections.Generic
                 var lambda = Expression.Lambda<Func<string, int>>(switchExpr, formalParam);
                 return lambda.Compile();
             }
+            */
         }
 
         #endregion
