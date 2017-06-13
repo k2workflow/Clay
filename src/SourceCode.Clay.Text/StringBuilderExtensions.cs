@@ -29,42 +29,27 @@ namespace SourceCode.Clay.Text
         public static StringBuilder AppendFormatLine(this StringBuilder sb, IFormatProvider provider, string format, params object[] args)
             => sb?.AppendFormat(provider, format, args).AppendLine();
 
-        //public static StringBuilder AppendBuilder(this StringBuilder x, StringBuilder y)
-        //{
-        //    if (x == null || x.Length == 0) return y;
-        //    if (y == null || y.Length == 0) return x;
+        public static StringBuilder AppendBuilder(this StringBuilder sb, StringBuilder arg)
+        {
+            if (sb == null || sb.Length == 0) return arg;
+            if (arg == null || arg.Length == 0) return sb;
 
-        //    var len = x.Length + y.Length;
+            // Minimize iterative reallocations
+            var len = sb.Length + arg.Length;
+            sb.EnsureCapacity(len);
 
-        //    StringBuilder concat;
-        //    if (len <= StringBuilderCache.Max)
-        //    {
-        //        // Get a fresh/cached builder
-        //        concat = StringBuilderCache.Acquire(len);
+            // Concat chars from @y
+            for (var i = 0; i < arg.Length; i++)
+                sb.Append(arg[i]);
 
-        //        // Concat chars from @x
-        //        for (var i = 0; i < x.Length; i++)
-        //            concat.Append(x[i]);
-        //    }
-        //    else
-        //    {
-        //        // Minimize iterative allocations
-        //        x.EnsureCapacity(len);
-        //        concat = x;
-        //    }
+            return sb;
+        }
 
-        //    // Concat chars from @y
-        //    for (var i = 0; i < y.Length; i++)
-        //        concat.Append(y[i]);
+        public static StringBuilder AppendBuilderLine(this StringBuilder sb, StringBuilder arg)
+        {
+            var concat = sb.AppendBuilder(arg);
 
-        //    return concat;
-        //}
-
-        //public static StringBuilder AppendBuilderLine(this StringBuilder x, StringBuilder y)
-        //{
-        //    var concat = x.AppendBuilder(y);
-
-        //    return concat?.AppendLine();
-        //}
+            return concat?.AppendLine();
+        }
     }
 }
