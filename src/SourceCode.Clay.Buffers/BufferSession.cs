@@ -69,8 +69,6 @@ namespace SourceCode.Clay.Buffers
         /// <returns></returns>
         public static byte[] RentBuffer(int minimumLength)
         {
-            //Contract.Requires(minimumLength >= 0);
-
             var buffer = ArrayPool<byte>.Shared.Rent(minimumLength);
             return buffer;
         }
@@ -81,8 +79,6 @@ namespace SourceCode.Clay.Buffers
         /// <param name="buffer">The buffer.</param>
         public static void ReturnBuffer(byte[] buffer)
         {
-            //Contract.Requires(buffer != null);
-
             ArrayPool<byte>.Shared.Return(buffer);
         }
 

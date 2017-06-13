@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
-    public class BufferSessionTests
+    public static class BufferSessionTests
     {
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "BufferSession Full Lifecycle")]
