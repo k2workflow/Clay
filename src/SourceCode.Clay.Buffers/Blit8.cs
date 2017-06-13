@@ -25,6 +25,12 @@ namespace SourceCode.Clay.Buffers
         #region Bytes
 
         /// <summary>
+        /// The bytes in unsafe form.
+        /// </summary>
+        [FieldOffset(0)] // 0
+        public unsafe fixed byte Bytes[1];
+
+        /// <summary>
         /// Gets the bytes as an array.
         /// </summary>
         /// <returns></returns>

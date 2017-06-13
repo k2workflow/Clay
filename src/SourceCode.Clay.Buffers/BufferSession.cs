@@ -3,7 +3,13 @@ using System.Buffers;
 
 namespace SourceCode.Clay.Buffers
 {
-    public struct BufferSession : IDisposable
+    /// <summary>
+    /// A <see cref="System.IDisposable"/> wrapper for a <see cref="System.Byte"/> buffer,
+    /// permitting automatic <see cref="ArrayPool{T}.Return(T[], bool)"/> behavior for
+    /// buffers allocated via <see cref="ArrayPool{T}.Rent(int)"/>.
+    /// </summary>
+    /// <seealso cref="System.IDisposable" />
+    public struct BufferSession : IDisposable // MUST be a struct, in order to lessen GC load
     {
         #region Properties
 

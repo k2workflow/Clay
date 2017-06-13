@@ -3,7 +3,7 @@
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents additional mathematical methods.
+    /// Represents additional blit methods.
     /// </summary>
     public static class BlitExtensions
     {
