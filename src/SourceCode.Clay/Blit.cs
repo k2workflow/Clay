@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
+#pragma warning disable S1104 // Fields should not have public accessibility
+
     /// <summary>
     /// Represents the blittable components of a 8-bit integer.
     /// </summary>
@@ -216,5 +218,5 @@ namespace SourceCode.Clay
         public Byte Byte7;
     }
 
-
+#pragma warning restore S1104 // Fields should not have public accessibility
 }
