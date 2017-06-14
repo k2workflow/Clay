@@ -19,10 +19,10 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="keyExtractor">The key extractor.</param>
         /// <param name="ignoreCase">if set to <c>true</c> case will be ignored.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static Func<string, int> BuildOrdinalSwitchExpression<T>(IReadOnlyList<T> items, Func<T, string> keyExtractor, bool ignoreCase)
+        public static Func<string, int> BuildOrdinalSwitchExpression<T>(this IReadOnlyList<T> items, Func<T, string> keyExtractor, bool ignoreCase)
         {
-            //Contract.Requires(keyExtractor != null);
-            //Contract.Ensures(Contract.Result<Func<string, int>>() != null);
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
 
             // Return -1 if item is not found (per standard convention for IndexOf())
             var notFound = Expression.Constant(-1);
@@ -81,11 +81,11 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="valueExtractor">The value extractor.</param>
         /// <returns>The compiled switch statement.</returns>
 
-        public static Func<TKey, TValue> BuildSwitchExpression<TElement, TKey, TValue>(IReadOnlyList<TElement> items, Func<TElement, TKey> keyExtractor, Func<TElement, TValue> valueExtractor)
+        public static Func<TKey, TValue> BuildSwitchExpression<TElement, TKey, TValue>(this IReadOnlyList<TElement> items, Func<TElement, TKey> keyExtractor, Func<TElement, TValue> valueExtractor)
         {
-            //Contract.Requires(keyExtractor != null);
-            //Contract.Requires(valueExtractor != null);
-            //Contract.Ensures(Contract.Result<Func<TKey, TValue>>() != null);
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (valueExtractor == null) throw new ArgumentNullException(nameof(valueExtractor));
 
             var tValue = typeof(TValue);
 
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool FastEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool colocated)
         {
-            //Contract.Requires(comparer != null);
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // If one is null but not the other (xor), then not equal
             if (ReferenceEquals(x, null) ^ ReferenceEquals(y, null)) return false;
@@ -201,8 +201,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool FastEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> convert, IEqualityComparer<U> comparer, bool colocated)
         {
-            //Contract.Requires(comparer != null);
-            //Contract.Requires(convert != null);
+            if (convert == null) throw new ArgumentNullException(nameof(convert));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // If one is null but not the other (xor), then not equal
             if (ReferenceEquals(x, null) ^ ReferenceEquals(y, null)) return false;

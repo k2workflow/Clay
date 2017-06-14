@@ -2,7 +2,10 @@
 
 namespace SourceCode.Clay.Collections.Generic
 {
-    public static partial class DictionaryExtensions // .ToDynamicSwitch
+    /// <summary>
+    /// Represents extensions for dictionaries.
+    /// </summary>
+    public static class DictionaryExtensions
     {
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.String"/> keys.
