@@ -11,7 +11,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<byte, T> ToDynamicSwitch<T>(IReadOnlyDictionary<byte, T> cases)
+        public static IDynamicSwitch<byte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<byte, T> cases)
         {
             var impl = new StructSwitchImpl<byte, T>(cases);
             return impl;
@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<sbyte, T> ToDynamicSwitch<T>(IReadOnlyDictionary<sbyte, T> cases)
+        public static IDynamicSwitch<sbyte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<sbyte, T> cases)
         {
             var impl = new StructSwitchImpl<sbyte, T>(cases);
             return impl;
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<short, T> ToDynamicSwitch<T>(IReadOnlyDictionary<short, T> cases)
+        public static IDynamicSwitch<short, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<short, T> cases)
         {
             var impl = new StructSwitchImpl<short, T>(cases);
             return impl;
@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<ushort, T> ToDynamicSwitch<T>(IReadOnlyDictionary<ushort, T> cases)
+        public static IDynamicSwitch<ushort, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<ushort, T> cases)
         {
             var impl = new StructSwitchImpl<ushort, T>(cases);
             return impl;
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<int, T> ToDynamicSwitch<T>(IReadOnlyDictionary<int, T> cases)
+        public static IDynamicSwitch<int, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<int, T> cases)
         {
             var impl = new StructSwitchImpl<int, T>(cases);
             return impl;
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<uint, T> ToDynamicSwitch<T>(IReadOnlyDictionary<uint, T> cases)
+        public static IDynamicSwitch<uint, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<uint, T> cases)
         {
             var impl = new StructSwitchImpl<uint, T>(cases);
             return impl;
@@ -83,7 +83,7 @@ namespace SourceCode.Clay.Collections.Generic
             where K : struct, IEquatable<K>
         {
             public StructSwitchImpl(IReadOnlyDictionary<K, V> cases)
-                : base(cases, null)
+                : base(cases)
             { }
         }
 

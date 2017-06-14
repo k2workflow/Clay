@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for lists.
+    /// Represents extensions for <see cref="System.Collections.Generic.IReadOnlyDictionary{TKey, TValue}"/>.
     /// </summary>
     public static partial class DictionaryExtensions
     {
@@ -14,7 +15,7 @@ namespace SourceCode.Clay.Collections.Generic
             private readonly Func<K, int> _indexer;
             private readonly IReadOnlyList<V> _values;
 
-            protected BaseSwitchImpl(IReadOnlyDictionary<K, V> cases, Func<K, K> normalize)
+            protected BaseSwitchImpl(IReadOnlyDictionary<K, V> cases)
             {
                 var count = cases?.Count ?? 0;
 
@@ -34,7 +35,7 @@ namespace SourceCode.Clay.Collections.Generic
                     }
                 }
 
-                _indexer = Build(dict, normalize);
+                _indexer = Build(dict);
                 _values = list;
             }
 
@@ -55,7 +56,7 @@ namespace SourceCode.Clay.Collections.Generic
                 return true;
             }
 
-            private static Func<K, int> Build(IReadOnlyDictionary<K, int> cases, Func<K, K> normalize)
+            protected virtual Func<K, int> Build(IReadOnlyDictionary<K, int> cases)
             {
                 // Return -1 if item is not found (per standard convention for IndexOf())
                 var notFound = Expression.Constant(-1);
@@ -71,13 +72,9 @@ namespace SourceCode.Clay.Collections.Generic
                 // Define formal parameter
                 var formalParam = Expression.Parameter(typeof(K), "key");
 
-                // Format MUST match #1 below
-                Expression switchValue = formalParam;
-                if (normalize != null)
-                {
-                    switchValue = (Expression<Func<K, K>>)(k => normalize(k));
-                    //switchValue = Expression.Call(formalParam, nameof(string.ToLowerInvariant), null);
-                }
+                // Expression MUST match #1 below
+                var mi = typeof(BaseSwitchImpl<K, V>).GetMethod(nameof(Normalize), BindingFlags.Instance | BindingFlags.NonPublic);
+                var switchValue = Expression.Call(Expression.Constant(this), mi, formalParam);
 
                 // Create <Key, SwitchCase>[] list
                 var i = 0;
@@ -87,14 +84,11 @@ namespace SourceCode.Clay.Collections.Generic
                     // Get Key
                     var key = @case.Key;
 
-                    // Format MUST match #1 above
-                    if (normalize != null)
-                    {
-                        key = normalize(key);
-                    }
+                    // Expression MUST match #1 above
+                    key = Normalize(key);
 
                     // Create Case Expression
-                    var body = Expression.Constant(@case.Value, typeof(V));
+                    var body = Expression.Constant(@case.Value, typeof(int));
                     switchCases[i++] = Expression.SwitchCase(body, Expression.Constant(key));
                 }
 
@@ -105,6 +99,8 @@ namespace SourceCode.Clay.Collections.Generic
                 var lambda = Expression.Lambda<Func<K, int>>(switchExpr, formalParam);
                 return lambda.Compile();
             }
+
+            protected virtual K Normalize(K key) => key;
         }
     }
 }

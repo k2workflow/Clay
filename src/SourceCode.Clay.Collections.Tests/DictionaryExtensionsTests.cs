@@ -1,11 +1,56 @@
 ﻿using SourceCode.Clay.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
     public static class DictionaryExtensionsTests
     {
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "DictionaryExtensions ToOrdinalSwitch Ordinal")]
+        public static void Use_ToOrdinalSwitch_Ordinal()
+        {
+            var dict = new Dictionary<string, AttributeTargets>(StringComparer.Ordinal)
+            {
+                ["foo"] = AttributeTargets.Class,
+                ["bar"] = AttributeTargets.Constructor,
+                ["baz"] = AttributeTargets.Delegate
+            };
+
+            var sut = dict.ToOrdinalSwitch(false);
+
+            Assert.Equal(dict.Count, sut.Count);
+            Assert.Equal(dict.ContainsKey("FOO"), sut.ContainsKey("FOO"));
+            Assert.Equal(dict.ContainsKey("foo"), sut.ContainsKey("foo"));
+            Assert.Equal(dict.ContainsKey("fob"), sut.ContainsKey("fob"));
+            Assert.Equal(dict["foo"], sut["foo"]);
+            Assert.Equal(dict["bar"], sut["bar"]);
+            Assert.Equal(dict["baz"], sut["baz"]);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "DictionaryExtensions ToOrdinalSwitch OrdinalIgnoreCase")]
+        public static void Use_ToOrdinalSwitch_OrdinalIgnoreCase()
+        {
+            var dict = new Dictionary<string, AttributeTargets>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["foo"] = AttributeTargets.Class,
+                ["bar"] = AttributeTargets.Constructor,
+                ["baz"] = AttributeTargets.Delegate
+            };
+
+            var sut = dict.ToOrdinalSwitch(true);
+
+            Assert.Equal(dict.Count, sut.Count);
+            Assert.Equal(dict.ContainsKey("FOO"), sut.ContainsKey("FOO"));
+            Assert.Equal(dict.ContainsKey("foo"), sut.ContainsKey("foo"));
+            Assert.Equal(dict.ContainsKey("fob"), sut.ContainsKey("fob"));
+            Assert.Equal(dict["foo"], sut["foo"]);
+            Assert.Equal(dict["bar"], sut["bar"]);
+            Assert.Equal(dict["baz"], sut["baz"]);
+        }
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "DictionaryExtensions BuildOrdinalSwitchExpression IgnoreCase")]
         public static void Use_BuildOrdinalSwitchExpression_IgnoreCase()
