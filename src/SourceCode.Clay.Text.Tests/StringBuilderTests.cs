@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Text.Tests
 {
-    public static class StringBuilderFixtures
+    public static class StringBuilderTests
     {
         [Trait("Type", "Unit")]
         [Fact]
