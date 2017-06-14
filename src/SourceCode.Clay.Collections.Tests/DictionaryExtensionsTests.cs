@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Tests
                 ["baz"] = AttributeTargets.Delegate
             };
 
-            var sut = dict.ToOrdinalSwitch(false);
+            var sut = dict.ToDynamicSwitch(false);
 
             Assert.Equal(dict.Count, sut.Count);
             Assert.Equal(dict.ContainsKey("FOO"), sut.ContainsKey("FOO"));
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Collections.Tests
                 ["baz"] = AttributeTargets.Delegate
             };
 
-            var sut = dict.ToOrdinalSwitch(true);
+            var sut = dict.ToDynamicSwitch(true);
 
             Assert.Equal(dict.Count, sut.Count);
             Assert.Equal(dict.ContainsKey("FOO"), sut.ContainsKey("FOO"));
