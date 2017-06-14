@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
-    public class DateTimeExtensionsTests
+    public static class DateTimeExtensionsTests
     {
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "DateTimeExtensions ToPosixFileTime")]
