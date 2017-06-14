@@ -2,9 +2,9 @@
 using System.Linq;
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Buffers.Tests
 {
-    public class BufferComparerTests
+    public static class BufferComparerTests
     {
         private static byte[] GenerateArray(int length, int offset = 0)
         {
@@ -178,7 +178,7 @@ namespace SourceCode.Clay.Tests
             var c = GenerateArray(16, 1).Take(16);
             Assert.Equal(a, b, BufferComparer.Default);
             Assert.NotEqual(a, c, BufferComparer.Default);
-        } 
+        }
 
         #endregion
     }
