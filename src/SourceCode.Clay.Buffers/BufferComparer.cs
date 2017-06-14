@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Buffers
 {
     /// <summary>
     /// Represents a way to compare binary buffers.
@@ -36,7 +36,6 @@ namespace SourceCode.Clay
         public BufferComparer()
             : this(-1)
         {
-
         }
 
         /// <summary>

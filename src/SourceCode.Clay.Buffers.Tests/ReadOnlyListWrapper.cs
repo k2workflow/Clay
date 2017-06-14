@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Buffers.Tests
 {
     internal sealed class ReadOnlyListWrapper<T> : IReadOnlyList<T>
     {
