@@ -16,4 +16,8 @@
         <Folder Include="Properties\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="5.11.0.1761" />
+    </ItemGroup>
+
 </Project>

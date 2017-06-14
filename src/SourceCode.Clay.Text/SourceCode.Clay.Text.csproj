@@ -14,7 +14,6 @@
     
     <ItemGroup>
         <PackageReference Include="SonarAnalyzer.CSharp" Version="5.11.0.1761" />
-        <PackageReference Include="System.Memory" Version="4.4.0-preview1-25305-02" />
     </ItemGroup>
 
     <ItemGroup>
