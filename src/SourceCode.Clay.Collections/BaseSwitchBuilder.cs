@@ -14,8 +14,8 @@ namespace SourceCode.Clay.Collections.Generic
     {
         #region Fields
 
-        private readonly Func<TKey, int> _indexer;
         private readonly IReadOnlyList<TValue> _values;
+        private readonly Func<TKey, int> _indexer;
 
         #endregion
 
@@ -23,30 +23,7 @@ namespace SourceCode.Clay.Collections.Generic
 
         protected BaseSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
         {
-            var count = cases?.Count ?? 0;
-
-            var list = Array.Empty<TValue>();
-            var dict = new Dictionary<TKey, int>(count);
-
-            if (count > 0)
-            {
-                list = new TValue[count];
-
-                var i = 0;
-                foreach (var @case in cases)
-                {
-                    list[i] = @case.Value;
-
-                    // Expression MUST match #1 elsewhere in this class
-                    var normalizedKey = Normalize(@case.Key);
-
-                    dict[normalizedKey] = i;
-                    i++;
-                }
-            }
-
-            _indexer = BuildSwitchExpression(dict);
-            _values = list;
+            (_values, _indexer) = BuildSwitchExpression(cases);
         }
 
         #endregion
@@ -80,57 +57,82 @@ namespace SourceCode.Clay.Collections.Generic
         /// </summary>
         /// <param name="key">The key value to be transformed.</param>
         /// <returns>The transformed key value.</returns>
-        protected virtual TKey Normalize(TKey key) => key;
+        protected virtual TKey NormalizeKey(TKey key) => key;
 
         /// <summary>
-        /// A persistent pointer to the <see cref="Normalize(TKey)"/> method.
+        /// A persistent pointer to the <see cref="NormalizeKey(TKey)"/> method.
         /// </summary>
-        private static readonly MethodInfo _normalize = typeof(BaseSwitchBuilder<TKey, TValue>).GetMethod(nameof(Normalize), BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo _normalize = typeof(BaseSwitchBuilder<TKey, TValue>).GetMethod(nameof(NormalizeKey), BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
         /// Builds the underlying <see cref="Expression"/> based switch.
         /// </summary>
         /// <param name="cases">The cases to transform into a dynamic switch.</param>
         /// <returns>A lambda that returns an index for a specified key value.</returns>
-        private Func<TKey, int> BuildSwitchExpression(IReadOnlyDictionary<TKey, int> cases)
+        private (TValue[] ar, Func<TKey, int> func) BuildSwitchExpression(IReadOnlyDictionary<TKey, TValue> cases)
         {
-            // Return -1 if item is not found (per standard convention for IndexOf())
+            TValue[] values;
+            Expression<Func<TKey, int>> expr;
+
+            // Return -1 if key is not found (per standard convention for IndexOf())
             var notFound = Expression.Constant(-1);
 
-            // Exit early if no items
-            var count = cases?.Count ?? 0;
-            if (count == 0)
+            // Fast path if no cases
+            if (cases == null || cases.Count == 0)
             {
-                var noItems = Expression.Lambda<Func<TKey, int>>(notFound);
-                return noItems.Compile();
+                values = Array.Empty<TValue>();
+                expr = Expression.Lambda<Func<TKey, int>>(notFound);
+            }
+            else
+            {
+                values = new TValue[cases.Count];
+                var normalizedCases = new Dictionary<TKey, int>(cases.Count);
+
+                // Extract valuea and ensure normalized keys are unique
+                var i = 0;
+                foreach (var @case in cases)
+                {
+                    values[i] = @case.Value;
+
+                    // Expression MUST match #1 below
+                    var normalizedKey = NormalizeKey(@case.Key);
+                    normalizedCases[normalizedKey] = i;
+
+                    i++;
+                }
+
+                // Define formal parameter
+                var formalParam = Expression.Parameter(typeof(TKey), "key");
+
+                // Expression MUST match #1 above
+                var @this = Expression.Constant(this);
+                var switchValue = Expression.Call(@this, _normalize, formalParam);
+
+                // Create <Key, SwitchCase>[] list
+                i = 0;
+                var switchCases = new SwitchCase[cases.Count];
+                foreach (var @case in normalizedCases)
+                {
+                    // Get normalized Key
+                    var key = Expression.Constant(@case.Key);
+
+                    // Create Case Expression
+                    var value = Expression.Constant(@case.Value);
+                    switchCases[i] = Expression.SwitchCase(value, key);
+
+                    i++;
+                }
+
+                // Create Switch Expression
+                var switchExpr = Expression.Switch(switchValue, notFound, switchCases);
+
+                // Create final Expression
+                expr = Expression.Lambda<Func<TKey, int>>(switchExpr, formalParam);
             }
 
-            // Define formal parameter
-            var formalParam = Expression.Parameter(typeof(TKey), "key");
-
-            // Expression MUST match #1 elsewhere in this class
-            var @this = Expression.Constant(this);
-            var switchValue = Expression.Call(@this, _normalize, formalParam);
-
-            // Create <Key, SwitchCase>[] list
-            var i = 0;
-            var switchCases = new SwitchCase[count];
-            foreach (var @case in cases)
-            {
-                // Get (already normalized) Key
-                var key = @case.Key;
-
-                // Create Case Expression
-                var body = Expression.Constant(@case.Value);
-                switchCases[i++] = Expression.SwitchCase(body, Expression.Constant(key));
-            }
-
-            // Create Switch Expression
-            var switchExpr = Expression.Switch(switchValue, notFound, switchCases);
-
-            // Compile Lambda
-            var lambda = Expression.Lambda<Func<TKey, int>>(switchExpr, formalParam);
-            return lambda.Compile();
+            // Compile Expression
+            var func = expr.Compile();
+            return (values, func);
         }
 
         #endregion

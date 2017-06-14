@@ -13,6 +13,6 @@ namespace SourceCode.Clay.Collections.Generic
             : base(cases)
         { }
 
-        protected override string Normalize(string key) => key.ToLowerInvariant();
+        protected override string NormalizeKey(string key) => key.ToLowerInvariant();
     }
 }
