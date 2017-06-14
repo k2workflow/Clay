@@ -40,9 +40,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="result">The result.</param>
         public BufferSession(byte[] buffer, ArraySegment<byte> result)
         {
-            //Contract.Requires(buffer != null);
-
-            Buffer = buffer;
+            Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             Result = result;
         }
 
@@ -52,7 +50,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="minimumLength">The minimum length.</param>
         public BufferSession(int minimumLength)
         {
-            //Contract.Requires(minimumLength >= 0);
+            if (minimumLength < 0) throw new ArgumentOutOfRangeException(nameof(minimumLength));
 
             Buffer = RentBuffer(minimumLength);
             Result = default(ArraySegment<byte>);
