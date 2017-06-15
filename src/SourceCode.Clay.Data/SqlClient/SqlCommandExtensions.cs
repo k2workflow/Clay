@@ -1,13 +1,23 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace SourceCode.Clay.Data.SqlClient
 {
+    /// <summary>
+    /// Represents extensions for <see cref="SqlCommand"/> instances.
+    /// </summary>
+    /// <seealso cref="System.Data.SqlClient.SqlCommand"/>
     public static class SqlCommandExtensions
     {
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "SqlCommand extension method")]
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <param name="timeoutSeconds">The command timeout.</param>
+        /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, int timeoutSeconds)
         {
             Contract.Requires(sqlCon != null);
@@ -23,7 +33,14 @@ namespace SourceCode.Clay.Data.SqlClient
             return cmd;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "SqlCommand extension method")]
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlTxn">The <see cref="SqlTransaction"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <param name="timeoutSeconds">The command timeout.</param>
+        /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType, int timeoutSeconds)
         {
             Contract.Requires(sqlTxn != null);
@@ -41,7 +58,13 @@ namespace SourceCode.Clay.Data.SqlClient
             return cmd;
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "SqlCommand extension method")]
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType)
         {
             Contract.Requires(sqlCon != null);
@@ -51,7 +74,13 @@ namespace SourceCode.Clay.Data.SqlClient
             return sqlCon.CreateCommand(commandText, commandType, 3 * 60);
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "SqlCommand extension method")]
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlTransaction"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType)
         {
             Contract.Requires(sqlTxn != null);

@@ -2,6 +2,9 @@
 
 namespace SourceCode.Clay.Data.SqlClient
 {
+    /// <summary>
+    /// A property bag to hold various connection retry options.
+    /// </summary>
     public sealed class SqlConnectionRetryOptions
     {
         #region Constants
@@ -9,18 +12,6 @@ namespace SourceCode.Clay.Data.SqlClient
         public static SqlConnectionRetryOptions Default { [Pure]get; } = new SqlConnectionRetryOptions();
 
         #endregion
-
-        public SqlConnectionRetryOptions(byte retryCount, byte intervalSeconds, ushort timeoutSeconds)
-        {
-            Contract.Requires(intervalSeconds >= 1 && intervalSeconds <= 60);
-
-            ConnectRetryCount = retryCount;
-            ConnectRetryInterval = intervalSeconds;
-            ConnectTimeout = timeoutSeconds;
-        }
-
-        public SqlConnectionRetryOptions()
-        { }
 
         #region Properties
 
@@ -42,6 +33,22 @@ namespace SourceCode.Clay.Data.SqlClient
         /// server before terminating the attempt and generating an error. The default is 30 seconds.
         /// </summary>
         public ushort ConnectTimeout { [Pure]get; } = 30;
+
+        #endregion
+
+        #region Constructors
+
+        public SqlConnectionRetryOptions(byte retryCount, byte intervalSeconds, ushort timeoutSeconds)
+        {
+            Contract.Requires(intervalSeconds >= 1 && intervalSeconds <= 60);
+
+            ConnectRetryCount = retryCount;
+            ConnectRetryInterval = intervalSeconds;
+            ConnectTimeout = timeoutSeconds;
+        }
+
+        public SqlConnectionRetryOptions()
+        { }
 
         #endregion
     }
