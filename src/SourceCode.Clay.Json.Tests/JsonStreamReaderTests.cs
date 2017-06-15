@@ -7,7 +7,7 @@ namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonStreamReaderTests
     {
-        [Trait("Type", "Integration")]
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = "JsonStreamReader: Parse AAD document")]
         public static void Parsing_a_large_AAD_delta_document_should_succeed()
         {
