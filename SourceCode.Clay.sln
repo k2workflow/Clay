@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Tests", "src\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj", "{7E20382C-A1AE-4D67-AE08-F26E4B54D472}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data", "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj", "{323ED161-1D48-42C1-B312-3C93559DA6B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data.Tests", "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj", "{D602DE90-7BB2-491A-98D4-22A9E45E6869}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,14 @@ Global
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323ED161-1D48-42C1-B312-3C93559DA6B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323ED161-1D48-42C1-B312-3C93559DA6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323ED161-1D48-42C1-B312-3C93559DA6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323ED161-1D48-42C1-B312-3C93559DA6B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +80,6 @@ Global
 		{6745404E-CC66-4226-A28D-6E2C16357863} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{D602DE90-7BB2-491A-98D4-22A9E45E6869} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 	EndGlobalSection
 EndGlobal
