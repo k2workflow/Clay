@@ -11,13 +11,13 @@
     <PropertyGroup>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="System.Memory" Version="4.4.0-preview1-25305-02" />
-    </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Properties\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="5.11.0.1761" />
     </ItemGroup>
 
 </Project>

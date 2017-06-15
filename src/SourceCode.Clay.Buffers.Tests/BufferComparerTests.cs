@@ -4,7 +4,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
-    public class BufferComparerTests
+    public static class BufferComparerTests
     {
         private static byte[] GenerateArray(int length, int offset = 0)
         {

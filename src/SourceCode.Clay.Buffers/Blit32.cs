@@ -10,6 +10,8 @@ namespace SourceCode.Clay.Buffers
     [DebuggerDisplay("{Int32,nq}")]
     public struct Blit32
     {
+#pragma warning disable S1104 // Fields should not have public accessibility
+
         /// <summary>
         /// Gets or sets the first <see cref="byte"/> value.
         /// </summary>
@@ -64,13 +66,13 @@ namespace SourceCode.Clay.Buffers
         [FieldOffset(2)]
         public Blit16 Blit1;
 
-        #region Bytes
-
         /// <summary>
         /// The bytes in unsafe form.
         /// </summary>
         [FieldOffset(0)] // 0-3
         public unsafe fixed byte Bytes[4];
+
+#pragma warning restore S1104 // Fields should not have public accessibility
 
         /// <summary>
         /// Gets the bytes as an array.
@@ -78,7 +80,5 @@ namespace SourceCode.Clay.Buffers
         /// <returns></returns>
         public byte[] GetBytes()
             => new[] { Byte0, Byte1, Byte2, Byte3 };
-
-        #endregion
     }
 }

@@ -18,6 +18,16 @@ namespace SourceCode.Clay.Buffers.Tests
                 var actual = new Blit64 { UInt64 = test };
                 Assert.Equal(expected, actual.Int64);
 
+                var bytes = actual.GetBytes();
+                Assert.Equal(actual.Byte0, bytes[0]);
+                Assert.Equal(actual.Byte1, bytes[1]);
+                Assert.Equal(actual.Byte2, bytes[2]);
+                Assert.Equal(actual.Byte3, bytes[3]);
+                Assert.Equal(actual.Byte4, bytes[4]);
+                Assert.Equal(actual.Byte5, bytes[5]);
+                Assert.Equal(actual.Byte6, bytes[6]);
+                Assert.Equal(actual.Byte7, bytes[7]);
+
                 Assert.Equal(actual.Byte0, actual.Blit0.Byte0);
                 Assert.Equal(actual.Byte1, actual.Blit0.Byte1);
                 Assert.Equal(actual.Byte2, actual.Blit0.Byte2);
@@ -42,6 +52,16 @@ namespace SourceCode.Clay.Buffers.Tests
 
                 var actual = new Blit64 { Int64 = test };
                 Assert.Equal(expected, actual.UInt64);
+
+                var bytes = actual.GetBytes();
+                Assert.Equal(actual.Byte0, bytes[0]);
+                Assert.Equal(actual.Byte1, bytes[1]);
+                Assert.Equal(actual.Byte2, bytes[2]);
+                Assert.Equal(actual.Byte3, bytes[3]);
+                Assert.Equal(actual.Byte4, bytes[4]);
+                Assert.Equal(actual.Byte5, bytes[5]);
+                Assert.Equal(actual.Byte6, bytes[6]);
+                Assert.Equal(actual.Byte7, bytes[7]);
 
                 Assert.Equal(actual.Byte0, actual.Blit0.Byte0);
                 Assert.Equal(actual.Byte1, actual.Blit0.Byte1);
