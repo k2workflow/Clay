@@ -11,7 +11,7 @@ namespace SourceCode.Clay.Data.Tests
         private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
 
         [Trait("Type", "Unit")]
-        [Fact]
+        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
         public static void When_make_robust_local()
         {
             foreach (var svr in serverTokens)
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Data.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
+        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Negative")]
         public static void When_make_robust_token_negative()
         {
             foreach (var svr in serverTokens)
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Data.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
+        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Positive")]
         public static void When_make_robust_token_positive()
         {
             foreach (var svr in serverTokens)
@@ -100,8 +100,8 @@ namespace SourceCode.Clay.Data.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_make_robust_token_override()
+        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Force")]
+        public static void When_make_robust_token_force()
         {
             foreach (var svr in serverTokens)
             {
