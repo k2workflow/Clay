@@ -138,7 +138,7 @@ namespace SourceCode.Clay.Text
             var len = sb.Length + arg.Length;
             sb.EnsureCapacity(len);
 
-            // Concat chars from @y
+            // Concat chars from second builder (loop is cheaper than bouncing via ToString)
             for (var i = 0; i < arg.Length; i++)
                 sb.Append(arg[i]);
 
