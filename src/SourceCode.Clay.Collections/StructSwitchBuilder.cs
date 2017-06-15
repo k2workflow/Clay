@@ -12,6 +12,10 @@ namespace SourceCode.Clay.Collections.Generic
     internal sealed class StructSwitchBuilder<TKey, TValue> : BaseSwitchBuilder<TKey, TValue>
         where TKey : struct, IEquatable<TKey>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StructSwitchBuilder{TKey, TValue}"/> class.
+        /// </summary>
+        /// <param name="cases">The cases.</param>
         public StructSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
             : base(cases)
         { }

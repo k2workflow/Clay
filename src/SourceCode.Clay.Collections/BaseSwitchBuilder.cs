@@ -21,6 +21,10 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseSwitchBuilder{TKey, TValue}"/> class.
+        /// </summary>
+        /// <param name="cases">The cases.</param>
         protected BaseSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
         {
             (_values, _indexer) = BuildSwitchExpression(cases);
@@ -30,12 +34,34 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region IDynamicSwitch
 
+        /// <summary>
+        /// Gets the value with the specified key.
+        /// </summary>
+        /// <value>
+        /// The <see cref="TValue"/>.
+        /// </value>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
         public TValue this[TKey key] => _values[_indexer(key)];
 
+        /// <summary>
+        /// The number of items in the switch.
+        /// </summary>
         public int Count => _values.Count;
 
+        /// <summary>
+        /// Checks whether the specified key is present in the switch.
+        /// </summary>
+        /// <param name="key">The key value.</param>
+        /// <returns></returns>
         public bool ContainsKey(TKey key) => _indexer(key) >= 0;
 
+        /// <summary>
+        /// Attempts to get the value corresponding to the specified key.
+        /// </summary>
+        /// <param name="key">The key value.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
             value = default(TValue);

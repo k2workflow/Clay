@@ -10,7 +10,7 @@
     public interface IDynamicSwitch<in TKey, TValue>
     {
         /// <summary>
-        /// Gets the value corresponding to the specified key.
+        /// Gets the value with the specified key.
         /// </summary>
         /// <param name="key">The key value.</param>
         /// <returns></returns>

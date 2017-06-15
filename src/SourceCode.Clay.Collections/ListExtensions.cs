@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             for (int i = 0; i < x.Count; i++)
             {
-                // Monotonic comparisons should be at the same position
+                // Colocated comparisons should be at the same position
                 if (colocated && !bit[i] && comparer.Equals(x[i], y[i]))
                 {
                     bit[i] = true;
@@ -113,7 +113,7 @@ namespace SourceCode.Clay.Collections.Generic
                 var xi = convert(x[i]);
                 var yi = convert(y[i]);
 
-                // Monotonic comparisons should be at the same position
+                // Colocated comparisons should be at the same position
                 if (colocated && !bit[i] && comparer.Equals(xi, yi))
                 {
                     bit[i] = true;

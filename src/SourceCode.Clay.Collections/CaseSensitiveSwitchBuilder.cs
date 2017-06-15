@@ -9,6 +9,10 @@ namespace SourceCode.Clay.Collections.Generic
     /// <typeparam name="TValue">The type of values.</typeparam>
     internal sealed class CaseSensitiveSwitchBuilder<TValue> : BaseSwitchBuilder<string, TValue>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CaseSensitiveSwitchBuilder{TValue}"/> class.
+        /// </summary>
+        /// <param name="cases">The cases.</param>
         public CaseSensitiveSwitchBuilder(IReadOnlyDictionary<string, TValue> cases)
             : base(cases)
         { }
