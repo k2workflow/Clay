@@ -8,8 +8,8 @@ namespace SourceCode.Clay.Collections.Tests
     public static class SwitchExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch Ordinal")]
-        public static void Use_ToDynamicSwitch_Ordinal()
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch string StrictCase")]
+        public static void Use_ToDynamicSwitch_String_StrictCase()
         {
             var dict = new Dictionary<string, AttributeTargets>(StringComparer.Ordinal)
             {
@@ -30,8 +30,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch OrdinalIgnoreCase")]
-        public static void Use_ToDynamicSwitch_OrdinalIgnoreCase()
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch String IgnoreCase")]
+        public static void Use_ToDynamicSwitch_String_IgnoreCase()
         {
             var dict = new Dictionary<string, AttributeTargets>(StringComparer.OrdinalIgnoreCase)
             {
