@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq.Expressions;
 
 namespace SourceCode.Clay.Collections.Generic
 {
@@ -11,22 +9,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// <seealso cref="Expression.Switch"/>
     public static class SwitchExtensions
     {
-        /// <summary>
-        /// Builds a dynamic switch with <see cref="System.String"/> keys.
-        /// Uses ordinal string comparison semantics.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
-        /// <param name="cases">The items to convert into a dynamic switch statement.</param>
-        /// <param name="ignoreCase">Invariant lowercase (ordinal) comparisons should be used.</param>
-        /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<string, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<string, T> cases, bool ignoreCase)
-        {
-            if (ignoreCase)
-                return new CaseInsensitiveSwitchBuilder<T>(cases);
-
-            return new CaseSensitiveSwitchBuilder<T>(cases);
-        }
-
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Boolean"/> keys.
         /// </summary>
@@ -112,115 +94,64 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds an ordinal switch expression.
+        /// Builds a dynamic switch with <see cref="System.String"/> keys.
+        /// Uses ordinal string comparison semantics.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
-        /// <param name="items">The items.</param>
-        /// <param name="keyExtractor">The key extractor.</param>
-        /// <param name="ignoreCase">if set to <c>true</c> case will be ignored.</param>
+        /// <param name="cases">The items to convert into a dynamic switch statement.</param>
+        /// <param name="ignoreCase">Invariant lowercase (ordinal) comparisons should be used.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static Func<string, int> BuildOrdinalSwitchExpression<T>(this IReadOnlyList<T> items, Func<T, string> keyExtractor, bool ignoreCase)
+        public static IDynamicSwitch<string, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<string, T> cases, bool ignoreCase)
         {
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-
-            // Return -1 if item is not found (per standard convention for IndexOf())
-            var notFound = Expression.Constant(-1);
-
-            // Exit early if no items
-            if (items == null || items.Count == 0)
-            {
-                var noItems = Expression.Lambda<Func<string, int>>(notFound);
-                return noItems.Compile();
-            }
-
-            // Define formal parameter & ensure value is UPPER
-            var formalParam = Expression.Parameter(typeof(string), "key");
-
-            // Format MUST match #1 below
-            Expression switchValue = formalParam;
             if (ignoreCase)
-            {
-                switchValue = Expression.Call(formalParam, nameof(string.ToUpperInvariant), null);
-            }
+                return new CaseInsensitiveSwitchBuilder<T>(cases);
 
-            // Create <Key, SwitchCase>[] list
-            var switchCases = new SwitchCase[items.Count];
-            for (var i = 0; i < switchCases.Length; i++)
-            {
-                // Extract Key from T
-                var key = keyExtractor(items[i]);
-                Debug.Assert(!string.IsNullOrWhiteSpace(key));
-
-                // Format MUST match #1 above
-                if (ignoreCase)
-                {
-                    key = key.ToUpperInvariant();
-                }
-
-                // Create Case Expression
-                var body = Expression.Constant(i);
-                switchCases[i] = Expression.SwitchCase(body, Expression.Constant(key));
-            }
-
-            // Create Switch Expression
-            var switchExpr = Expression.Switch(switchValue, notFound, switchCases);
-
-            // Compile Lambda
-            var lambda = Expression.Lambda<Func<string, int>>(switchExpr, formalParam);
-            return lambda.Compile();
+            return new CaseSensitiveSwitchBuilder<T>(cases);
         }
 
         /// <summary>
-        /// Builds an ordinal switch expression.
+        /// Builds a dynamic switch with <see cref="System.String"/> keys.
         /// </summary>
-        /// <typeparam name="TElement">The type of the elements.</typeparam>
-        /// <typeparam name="TValue">The type of the return value.</typeparam>
-        /// <param name="items">The items.</param>
+        /// <typeparam name="TItem">The type of the elements.</typeparam>
+        /// <param name="cases">The items.</param>
         /// <param name="keyExtractor">The key extractor.</param>
         /// <param name="valueExtractor">The value extractor.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> case will be ignored.</param>
         /// <returns>The compiled switch statement.</returns>
-
-        public static Func<TKey, TValue> BuildSwitchExpression<TElement, TKey, TValue>(this IReadOnlyList<TElement> items, Func<TElement, TKey> keyExtractor, Func<TElement, TValue> valueExtractor)
+        public static IDynamicSwitch<string, TValue> ToDynamicSwitch<TItem, TValue>(this IReadOnlyList<TItem> cases, Func<TItem, string> keyExtractor, Func<TItem, TValue> valueExtractor, bool ignoreCase)
         {
-            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (cases == null) throw new ArgumentNullException(nameof(cases));
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
             if (valueExtractor == null) throw new ArgumentNullException(nameof(valueExtractor));
 
-            var tValue = typeof(TValue);
-
-            // Return default(TValue) if item is not found
-            var notFound = Expression.Default(tValue);
-
-            // Exit early if no items
-            if (items == null || items.Count == 0)
+            var dict = new Dictionary<string, TValue>(cases.Count);
+            foreach (var @case in cases)
             {
-                var noItems = Expression.Lambda<Func<TKey, TValue>>(notFound);
-                return noItems.Compile();
+                var key = keyExtractor(@case);
+                var value = valueExtractor(@case);
+
+                dict.Add(key, value); // Rely on this throwing if there are any duplicates
             }
 
-            // Define formal parameter
-            var formalParam = Expression.Parameter(typeof(TKey), "key");
+            var impl = dict.ToDynamicSwitch(ignoreCase);
+            return impl;
+        }
 
-            // Create <Key, SwitchCase>[] list
-            var switchCases = new SwitchCase[items.Count];
-            for (var i = 0; i < switchCases.Length; i++)
-            {
-                // Extract Key from T
-                var key = keyExtractor(items[i]);
-                var value = valueExtractor(items[i]);
+        /// <summary>
+        /// Builds a dynamic switch with <see cref="System.String"/> keys.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the elements.</typeparam>
+        /// <param name="cases">The items.</param>
+        /// <param name="keyExtractor">The key extractor.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> case will be ignored.</param>
+        /// <returns>The compiled switch statement.</returns>
+        public static IDynamicSwitch<string, TItem> ToDynamicSwitch<TItem>(this IReadOnlyList<TItem> cases, Func<TItem, string> keyExtractor, bool ignoreCase)
+        {
+            if (cases == null) throw new ArgumentNullException(nameof(cases));
+            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
 
-                // Create Case Expression
-                var body = Expression.Constant(value, tValue);
-                switchCases[i] = Expression.SwitchCase(body, Expression.Constant(key));
-            }
-
-            // Create Switch Expression
-            var switchExpr = Expression.Switch(formalParam, notFound, switchCases);
-
-            // Compile Lambda
-            var lambda = Expression.Lambda<Func<TKey, TValue>>(switchExpr, formalParam);
-            return lambda.Compile();
+            var impl = cases.ToDynamicSwitch(keyExtractor, v => v, ignoreCase);
+            return impl;
         }
     }
 }

@@ -97,8 +97,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SwitchExtensions BuildOrdinalSwitchExpression IgnoreCase")]
-        public static void Use_BuildOrdinalSwitchExpression_IgnoreCase()
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch KeyExtractor IgnoreCase")]
+        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyExtractor_IgnoreCase()
         {
             var list = new[]
             {
@@ -107,20 +107,26 @@ namespace SourceCode.Clay.Collections.Tests
                 "Baz"
             };
 
-            var @switch = list.BuildOrdinalSwitchExpression(x => x, true);
+            var @switch = list.ToDynamicSwitch(x => x, true);
 
-            Assert.Equal(-1, @switch("fob"));
-            Assert.Equal(0, @switch("foo"));
-            Assert.Equal(1, @switch("bar"));
-            Assert.Equal(2, @switch("baz"));
-            Assert.Equal(0, @switch("Foo"));
-            Assert.Equal(1, @switch("Bar"));
-            Assert.Equal(2, @switch("Baz"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["fob"]);
+
+            Assert.Equal("Foo", @switch["Foo"]);
+            Assert.Equal("Bar", @switch["Bar"]);
+            Assert.Equal("Baz", @switch["Baz"]);
+
+            Assert.Equal("Foo", @switch["foo"]);
+            Assert.Equal("Bar", @switch["bar"]);
+            Assert.Equal("Baz", @switch["baz"]);
+
+            Assert.Equal("Foo", @switch["FOO"]);
+            Assert.Equal("Bar", @switch["BAR"]);
+            Assert.Equal("Baz", @switch["BAZ"]);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SwitchExtensions BuildOrdinalSwitchExpression StrictCase")]
-        public static void Use_BuildOrdinalSwitchExpression_StrictCase()
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch KeyExtractor StrictCase")]
+        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyExtractor_StrictCase()
         {
             var list = new[]
             {
@@ -129,20 +135,25 @@ namespace SourceCode.Clay.Collections.Tests
                 "Baz"
             };
 
-            var @switch = list.BuildOrdinalSwitchExpression(x => x, false);
+            var @switch = list.ToDynamicSwitch(x => x, false);
 
-            Assert.Equal(-1, @switch("fob"));
-            Assert.Equal(-1, @switch("foo"));
-            Assert.Equal(-1, @switch("bar"));
-            Assert.Equal(-1, @switch("baz"));
-            Assert.Equal(0, @switch("Foo"));
-            Assert.Equal(1, @switch("Bar"));
-            Assert.Equal(2, @switch("Baz"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["fob"]);
+
+            Assert.Equal("Foo", @switch["Foo"]);
+            Assert.Equal("Bar", @switch["Bar"]);
+            Assert.Equal("Baz", @switch["Baz"]);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["foo"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["bar"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["baz"]);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["FOO"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["BAR"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["BAZ"]);
         }
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SwitchExtensions BuildOrdinalSwitchExpression KeyExtractor ValueExtractor")]
-        public static void Use_BuildSwitchExpression()
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch KeyValueExtractor IgnoreCase")]
+        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyValueExtractor_IgnoreCase()
         {
             var list = new[]
             {
@@ -151,15 +162,48 @@ namespace SourceCode.Clay.Collections.Tests
                 Tuple.Create("baz", AttributeTargets.Delegate)
             };
 
-            var @switch = list.BuildSwitchExpression(x => x.Item1, x => x.Item2);
+            var @switch = list.ToDynamicSwitch(x => x.Item1, x => x.Item2, true);
 
-            Assert.Equal((AttributeTargets)0, @switch("fob"));
-            Assert.Equal(AttributeTargets.Class, @switch("foo"));
-            Assert.Equal(AttributeTargets.Constructor, @switch("bar"));
-            Assert.Equal(AttributeTargets.Delegate, @switch("baz"));
-            Assert.Equal((AttributeTargets)0, @switch("Foo"));
-            Assert.Equal((AttributeTargets)0, @switch("Bar"));
-            Assert.Equal((AttributeTargets)0, @switch("Baz"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["fob"]);
+
+            Assert.Equal(AttributeTargets.Class, @switch["Foo"]);
+            Assert.Equal(AttributeTargets.Constructor, @switch["Bar"]);
+            Assert.Equal(AttributeTargets.Delegate, @switch["Baz"]);
+
+            Assert.Equal(AttributeTargets.Class, @switch["foo"]);
+            Assert.Equal(AttributeTargets.Constructor, @switch["bar"]);
+            Assert.Equal(AttributeTargets.Delegate, @switch["baz"]);
+
+            Assert.Equal(AttributeTargets.Class, @switch["FOO"]);
+            Assert.Equal(AttributeTargets.Constructor, @switch["BAR"]);
+            Assert.Equal(AttributeTargets.Delegate, @switch["BAZ"]);
+        }
+
+        [Fact(DisplayName = "SwitchExtensions ToDynamicSwitch KeyValueExtractor StrictCase")]
+        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyValueExtractor_StrictCase()
+        {
+            var list = new[]
+            {
+                Tuple.Create("foo", AttributeTargets.Class),
+                Tuple.Create("bar", AttributeTargets.Constructor),
+                Tuple.Create("baz", AttributeTargets.Delegate)
+            };
+
+            var @switch = list.ToDynamicSwitch(x => x.Item1, x => x.Item2, false);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["fob"]);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["Foo"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["Bar"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["Baz"]);
+
+            Assert.Equal(AttributeTargets.Class, @switch["foo"]);
+            Assert.Equal(AttributeTargets.Constructor, @switch["bar"]);
+            Assert.Equal(AttributeTargets.Delegate, @switch["baz"]);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["FOO"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["BAR"]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => @switch["BAZ"]);
         }
     }
 }

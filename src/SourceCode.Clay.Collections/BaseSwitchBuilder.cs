@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Collections.Generic
                 values = new TValue[cases.Count];
                 var normalizedCases = new Dictionary<TKey, int>(cases.Count);
 
-                // Extract valuea and ensure normalized keys are unique
+                // Extract values and ensure normalized keys are unique
                 var i = 0;
                 foreach (var @case in cases)
                 {
@@ -96,7 +96,7 @@ namespace SourceCode.Clay.Collections.Generic
 
                     // Expression MUST match #1 below
                     var normalizedKey = NormalizeKey(@case.Key);
-                    normalizedCases[normalizedKey] = i;
+                    normalizedCases.Add(normalizedKey, i); // Rely on this throwing if there are any duplicates
 
                     i++;
                 }
