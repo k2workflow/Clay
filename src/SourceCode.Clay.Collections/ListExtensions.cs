@@ -23,7 +23,8 @@ namespace SourceCode.Clay.Collections.Generic
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // If one is null but not the other (xor), then not equal
-            if (ReferenceEquals(x, null) ^ ReferenceEquals(y, null)) return false;
+            if (ReferenceEquals(x, null) && ReferenceEquals(y, null)) return true;
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
 
             // If first is null then, due to previous check, the second is guaranteed to be null (and thus equal)
             if (ReferenceEquals(x, null)) return true;
@@ -91,7 +92,8 @@ namespace SourceCode.Clay.Collections.Generic
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // If one is null but not the other (xor), then not equal
-            if (ReferenceEquals(x, null) ^ ReferenceEquals(y, null)) return false;
+            if (ReferenceEquals(x, null) && ReferenceEquals(y, null)) return true;
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
 
             // If first is null then, due to previous check, the second is guaranteed to be null (and thus equal)
             if (ReferenceEquals(x, null)) return true;

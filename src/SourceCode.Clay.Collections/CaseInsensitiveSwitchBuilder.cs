@@ -13,6 +13,6 @@ namespace SourceCode.Clay.Collections.Generic
             : base(cases)
         { }
 
-        protected override string NormalizeKey(string key) => key.ToLowerInvariant();
+        protected override string NormalizeKey(string key) => key.ToUpperInvariant(); // Apparently UC (vs LC) is optimized in CLR
     }
 }
