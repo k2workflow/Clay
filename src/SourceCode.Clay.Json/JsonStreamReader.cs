@@ -48,10 +48,7 @@ namespace SourceCode.Clay.Json
         /// <value>
         /// The position.
         /// </value>
-        public int Position
-        {
-            get { return _pos; }
-        }
+        public int Position => _pos;
 
         #endregion
 
@@ -63,9 +60,7 @@ namespace SourceCode.Clay.Json
         /// <param name="reader">The reader.</param>
         public JsonStreamReader(TextReader reader)
         {
-            //Contract.Requires(reader != null);
-
-            _reader = reader;
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             _pos = 0;
         }
 
@@ -73,6 +68,9 @@ namespace SourceCode.Clay.Json
 
         #region Helpers
 
+        /// <summary>
+        /// Read the next token from the stream.
+        /// </summary>
         private void ReadNext()
         {
             if (_token != JsonToken.None)
@@ -311,8 +309,6 @@ namespace SourceCode.Clay.Json
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char DecodeUnicode4()
         {
-            //Contract.Requires(_buffer.Length >= 4);
-
             var len = _reader.Read(_buffer, 0, 4);
             if (len != 4)
                 throw new EndOfStreamException();
@@ -351,8 +347,6 @@ namespace SourceCode.Clay.Json
         /// <returns>The value.</returns>
         public IReadOnlyList<string> ReadStringArray()
         {
-            //Contract.Ensures(Contract.Result<IReadOnlyList<string>>() != null);
-
             SkipExpected(JsonToken.ArrayOpen); // [
 
             var list = new List<string>();

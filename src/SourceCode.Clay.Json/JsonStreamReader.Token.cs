@@ -2,6 +2,9 @@
 {
     public sealed partial class JsonStreamReader // .Token
     {
+        /// <summary>
+        /// The type of Json token.
+        /// </summary>
         public enum JsonToken : byte
         {
             None = 0, // None
