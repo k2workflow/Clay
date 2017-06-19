@@ -56,15 +56,6 @@ namespace SourceCode.Clay.Data.SqlClient
 
         #region Constructors
 
-        public SqlConnectionRetryOptions(byte retryCount, byte intervalSeconds, ushort timeoutSeconds)
-        {
-            Contract.Requires(intervalSeconds >= 1 && intervalSeconds <= 60);
-
-            ConnectRetryCount = retryCount;
-            ConnectRetryInterval = intervalSeconds;
-            ConnectTimeout = timeoutSeconds;
-        }
-
         public SqlConnectionRetryOptions()
         { }
 
