@@ -1,4 +1,5 @@
 ﻿using SourceCode.Clay.Data.SqlClient;
+using SourceCode.Clay.Data.SqlClient.Azure;
 using System;
 using System.Data.SqlClient;
 using Xunit;
