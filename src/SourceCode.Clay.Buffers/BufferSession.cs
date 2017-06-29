@@ -45,6 +45,16 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BufferSession"/> struct.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        public BufferSession(ArraySegment<byte> result)
+        {
+            Buffer = null;
+            Result = result;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BufferSession" /> struct.
         /// </summary>
         /// <param name="minimumLength">The minimum length.</param>
