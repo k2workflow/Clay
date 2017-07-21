@@ -7,19 +7,19 @@ namespace SourceCode.Clay.Text
     /// Uses implicit conversions to/from <see cref="System.String"/>.
     /// </summary>
     /// <seealso cref="IEquatable{T}"/>
-    public struct OrdinalCaseSensitiveString : IEquatable<OrdinalCaseSensitiveString>, IEquatable<string>
+    public struct OrdinalString : IEquatable<OrdinalString>, IEquatable<string>
     {
         private readonly string _str;
 
-        public OrdinalCaseSensitiveString(string str)
+        public OrdinalString(string str)
         {
             _str = str;
         }
 
-        public static implicit operator OrdinalCaseSensitiveString(string str)
-            => new OrdinalCaseSensitiveString(str);
+        public static implicit operator OrdinalString(string str)
+            => new OrdinalString(str);
 
-        public static explicit operator string(OrdinalCaseSensitiveString str)
+        public static explicit operator string(OrdinalString str)
             => str._str;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Text
         /// </summary>
         /// <param name="other">The other string.</param>
         /// <returns></returns>
-        public bool Equals(OrdinalCaseSensitiveString other)
+        public bool Equals(OrdinalString other)
             => string.Equals(_str, other._str, StringComparison.Ordinal);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Text
             if (ReferenceEquals(obj, null))
                 return _str == null;
 
-            if (obj is OrdinalCaseSensitiveString ics)
+            if (obj is OrdinalString ics)
                 return string.Equals(_str, ics._str, StringComparison.Ordinal);
 
             if (obj is string str)
