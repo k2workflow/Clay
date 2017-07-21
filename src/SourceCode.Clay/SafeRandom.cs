@@ -22,7 +22,9 @@ namespace SourceCode.Clay
             {
                 var buffer = new byte[4];
                 _seedSource.GetBytes(buffer);
-                _local = new Random(BitConverter.ToInt32(buffer, 0));
+                var seed = BitConverter.ToInt32(buffer, 0);
+
+                _local = new Random(seed);
             }
         }
 

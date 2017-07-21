@@ -252,8 +252,7 @@ namespace SourceCode.Clay.Data.SqlClient
                             var p = cmd.Parameters.Add("cookie", SqlDbType.VarBinary, 100); // @COOKIE is VARBINARY(100)
                             p.Value = cookie;
 
-                            await cmd.ExecuteNonQueryAsync()
-                                .ConfigureAwait(false);
+                            await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);
                         }
                     }
                 }
