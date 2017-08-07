@@ -21,11 +21,13 @@ namespace SourceCode.Clay.Collections
 
         #endregion
 
-        private sealed class EmptyImpl<TKey, TValue> : IDictionary<TKey, TValue>
+        internal sealed class EmptyImpl<TKey, TValue> : IDictionary<TKey, TValue>
         {
             #region Constants
 
             internal static readonly IDictionary<TKey, TValue> Value = new EmptyImpl<TKey, TValue>();
+
+            internal static readonly IReadOnlyDictionary<TKey, TValue> ReadOnlyValue = (IReadOnlyDictionary<TKey, TValue>)Value;
 
             #endregion
 
