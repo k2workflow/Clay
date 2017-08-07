@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SourceCode.Clay.Collections
+namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
     /// Useful properties and methods for <see cref="IDictionary{TKey, TValue}"/>.
@@ -21,13 +21,13 @@ namespace SourceCode.Clay.Collections
 
         #endregion
 
-        internal sealed class EmptyImpl<TKey, TValue> : IDictionary<TKey, TValue>
+        internal sealed class EmptyImpl<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>
         {
             #region Constants
 
             internal static readonly IDictionary<TKey, TValue> Value = new EmptyImpl<TKey, TValue>();
 
-            internal static readonly IReadOnlyDictionary<TKey, TValue> ReadOnlyValue = (IReadOnlyDictionary<TKey, TValue>)Value;
+            internal static readonly IReadOnlyDictionary<TKey, TValue> ReadOnlyValue = (IReadOnlyDictionary<TKey, TValue>)(Value);
 
             #endregion
 
@@ -45,9 +45,13 @@ namespace SourceCode.Clay.Collections
                 set => throw new InvalidOperationException();
             }
 
-            public ICollection<TKey> Keys => Array.Empty<TKey>();
+            ICollection<TKey> IDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
 
-            public ICollection<TValue> Values => Array.Empty<TValue>();
+            ICollection<TValue> IDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
+
+            IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
+
+            IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
 
             public int Count => 0;
 
