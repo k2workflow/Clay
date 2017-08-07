@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceCode.Clay.Collections
+namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
     /// Useful properties and methods for <see cref="IReadOnlyDictionary{TKey, TValue}"/>.
