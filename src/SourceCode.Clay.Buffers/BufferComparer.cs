@@ -11,8 +11,25 @@ namespace SourceCode.Clay.Buffers
     /// Represents a way to compare binary buffers.
     /// </summary>
     public sealed class BufferComparer :
-        IEqualityComparer<byte[]>, IEqualityComparer<ArraySegment<byte>>, IEqualityComparer<IReadOnlyList<byte>>, IEqualityComparer<IList<byte>>, IEqualityComparer<IEnumerable<byte>>, IEqualityComparer<ReadOnlySpan<byte>>, IEqualityComparer<Span<byte>>,
-        IComparer<byte[]>, IComparer<ArraySegment<byte>>, IComparer<IReadOnlyList<byte>>, IComparer<IList<byte>>, IComparer<IEnumerable<byte>>, IComparer<ReadOnlySpan<byte>>, IComparer<Span<byte>>
+        IEqualityComparer<byte[]>,
+        IEqualityComparer<ArraySegment<byte>>,
+        IEqualityComparer<IReadOnlyList<byte>>,
+        IEqualityComparer<IList<byte>>,
+        IEqualityComparer<IEnumerable<byte>>,
+        IEqualityComparer<ReadOnlySpan<byte>>,
+        IEqualityComparer<Span<byte>>,
+        IEqualityComparer<ReadOnlyBuffer<byte>>,
+        IEqualityComparer<Buffer<byte>>,
+
+        IComparer<byte[]>,
+        IComparer<ArraySegment<byte>>,
+        IComparer<IReadOnlyList<byte>>,
+        IComparer<IList<byte>>,
+        IComparer<IEnumerable<byte>>,
+        IComparer<ReadOnlySpan<byte>>,
+        IComparer<Span<byte>>,
+        IComparer<ReadOnlyBuffer<byte>>,
+        IComparer<Buffer<byte>>
     {
         /// <summary>
         /// Gets the number of octets that will be processed when calculating a hashcode.
@@ -72,8 +89,8 @@ namespace SourceCode.Clay.Buffers
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
         [SecuritySafeCritical]
-        public int Compare(Span<byte> x, Span<byte> y) =>
-            Compare((ReadOnlySpan<byte>)x, y);
+        public int Compare(Span<byte> x, Span<byte> y)
+            => Compare((ReadOnlySpan<byte>)x, y);
 
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
@@ -98,6 +115,28 @@ namespace SourceCode.Clay.Buffers
                 }
             }
         }
+
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+        /// </returns>
+        public int Compare(Buffer<byte> x, Buffer<byte> y)
+            => Compare(x.Span, y.Span);
+
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+        /// </returns>
+        public int Compare(ReadOnlyBuffer<byte> x, ReadOnlyBuffer<byte> y)
+            => Compare(x.Span, y.Span);
 
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
@@ -256,8 +295,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => Compare(x, y) == 0;
+        public bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -267,8 +306,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(Span<byte> x, Span<byte> y) => Compare(x, y) == 0;
+        public bool Equals(Span<byte> x, Span<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -278,8 +317,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(byte[] x, byte[] y) => Compare(x, y) == 0;
+        public bool Equals(ReadOnlyBuffer<byte> x, ReadOnlyBuffer<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -289,8 +328,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(ArraySegment<byte> x, ArraySegment<byte> y) => Compare(x, y) == 0;
+        public bool Equals(Buffer<byte> x, Buffer<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -300,8 +339,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(IReadOnlyList<byte> x, IReadOnlyList<byte> y) => Compare(x, y) == 0;
+        public bool Equals(byte[] x, byte[] y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -311,8 +350,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(IList<byte> x, IList<byte> y) => Compare(x, y) == 0;
+        public bool Equals(ArraySegment<byte> x, ArraySegment<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -322,8 +361,30 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        [SecuritySafeCritical]
-        public bool Equals(IEnumerable<byte> x, IEnumerable<byte> y) => Compare(x, y) == 0;
+        public bool Equals(IReadOnlyList<byte> x, IReadOnlyList<byte> y)
+            => Compare(x, y) == 0;
+
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// true if the specified objects are equal; otherwise, false.
+        /// </returns>
+        public bool Equals(IList<byte> x, IList<byte> y)
+            => Compare(x, y) == 0;
+
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// true if the specified objects are equal; otherwise, false.
+        /// </returns>
+        public bool Equals(IEnumerable<byte> x, IEnumerable<byte> y)
+            => Compare(x, y) == 0;
 
         #endregion
 
@@ -354,6 +415,7 @@ namespace SourceCode.Clay.Buffers
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         [SecuritySafeCritical]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetHashCode(Span<byte> obj)
         {
             if (_hashCodeFidelity <= 0 || obj.Length <= _hashCodeFidelity)
@@ -361,6 +423,28 @@ namespace SourceCode.Clay.Buffers
 
             return HashCode.Fnv(obj.Slice(0, _hashCodeFidelity));
         }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int GetHashCode(ReadOnlyBuffer<byte> obj)
+            => GetHashCode(obj.Span);
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int GetHashCode(Buffer<byte> obj)
+            => GetHashCode(obj.Span);
 
         /// <summary>
         /// Returns a hash code for this instance.
