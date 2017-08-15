@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <VersionPrefix>1.0.0</VersionPrefix>
     <Company>SourceCode Technology Holdings Inc.</Company>
     <Product>Clay</Product>
@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.1" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.3.0.2862">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
