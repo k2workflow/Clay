@@ -11,12 +11,7 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="BufferComparer.cs" />
-    <None Include="BufferComparer.cs" />
-  </ItemGroup>
+  </PropertyGroup> 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.1" />

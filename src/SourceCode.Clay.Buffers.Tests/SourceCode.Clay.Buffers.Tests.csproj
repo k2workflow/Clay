@@ -10,12 +10,7 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="BufferComparerTests.cs" />
-    <None Include="BufferComparerTests.cs" />
-  </ItemGroup>
+  </PropertyGroup> 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
