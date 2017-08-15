@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Text
         /// <param name="other">The other string.</param>
         /// <returns></returns>
         public bool Equals(string other)
-            => string.Equals(_str, other, StringComparison.OrdinalIgnoreCase);
+            => StringComparer.OrdinalIgnoreCase.Equals(_str, other);
 
         /// <summary>
         /// Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Text
         /// <param name="other">The other string.</param>
         /// <returns></returns>
         public bool Equals(OrdinalIgnoreCaseString other)
-            => string.Equals(_str, other._str, StringComparison.OrdinalIgnoreCase);
+            => StringComparer.OrdinalIgnoreCase.Equals(_str, other._str);
 
         /// <summary>
         /// Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
@@ -49,10 +49,10 @@ namespace SourceCode.Clay.Text
                 return _str == null;
 
             if (obj is OrdinalIgnoreCaseString ics)
-                return string.Equals(_str, ics._str, StringComparison.OrdinalIgnoreCase);
+                return StringComparer.OrdinalIgnoreCase.Equals(_str, ics._str);
 
             if (obj is string str)
-                return string.Equals(_str, str, StringComparison.OrdinalIgnoreCase);
+                return StringComparer.OrdinalIgnoreCase.Equals(_str, str);
 
             return false;
         }

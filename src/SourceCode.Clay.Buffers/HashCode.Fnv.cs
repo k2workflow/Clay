@@ -19,10 +19,11 @@ namespace SourceCode.Clay.Buffers
         /// Calculates a hash code from the specified data using the
         /// Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
-        /// <param name="buffer">A pointer to the initial octet in the data.</param>
-        /// <param name="count">The number of octets to include in the hash code.</param>
-        /// <returns>The hash code.</returns>
-        public static int Fnv(ReadOnlySpan<byte> buffer)
+        /// <param name="buffer">The array containing the range of bytes to include in the hash code.</param>
+        /// <returns>
+        /// The hash code.
+        /// </returns>
+        public static int Fnv(params byte[] buffer)
         {
             var h = FnvOffsetBasis;
 
@@ -46,8 +47,18 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte* buffer, int count)
         {
-            if (buffer == default(byte*)) throw new ArgumentNullException(nameof(buffer));
-            return Fnv(new ReadOnlySpan<byte>(buffer, count));
+            if (buffer == default(byte*))
+                throw new ArgumentNullException(nameof(buffer));
+
+            var h = FnvOffsetBasis;
+
+            for (var i = 0; i < count; i++)
+            {
+                var c = buffer[i];
+                h = unchecked((h ^ c) * FnvPrime);
+            }
+
+            return unchecked((int)h);
         }
 
         /// <summary>
@@ -118,25 +129,7 @@ namespace SourceCode.Clay.Buffers
 
         #region Overloads
 
-        /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
-        /// </summary>
-        /// <param name="buffer">The array containing the range of bytes to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
-        [SecurityCritical]
-        public static unsafe int Fnv(params byte[] buffer)
-        {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (buffer.Length == 0) return unchecked((int)FnvOffsetBasis);
 
-            fixed (byte* b = &buffer[0])
-            {
-                return Fnv(b, buffer.Length);
-            }
-        }
 
         /// <summary>
         /// Calculates a hash code from the specified data using the

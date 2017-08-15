@@ -86,9 +86,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         public static void ReturnBuffer(byte[] buffer)
-        {
-            ArrayPool<byte>.Shared.Return(buffer);
-        }
+            => ArrayPool<byte>.Shared.Return(buffer);
 
         #endregion
 

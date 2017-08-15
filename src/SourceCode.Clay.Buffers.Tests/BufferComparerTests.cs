@@ -143,8 +143,11 @@ namespace SourceCode.Clay.Buffers.Tests
             var a = GenerateArray(16);
             var b = GenerateArray(16);
             var c = GenerateArray(16, 1);
+            var d = GenerateArray(15);
+
             Assert.Equal(a, b, BufferComparer.Default);
             Assert.NotEqual(a, c, BufferComparer.Default);
+            Assert.NotEqual(a, d, BufferComparer.Default);
         }
 
         [Trait("Type", "Unit")]
@@ -154,8 +157,11 @@ namespace SourceCode.Clay.Buffers.Tests
             var a = GenerateArray(16).ToList();
             var b = GenerateArray(16).ToList();
             var c = GenerateArray(16, 1).ToList();
+            var d = GenerateArray(15).ToList();
+
             Assert.Equal(a, b, BufferComparer.Default);
             Assert.NotEqual(a, c, BufferComparer.Default);
+            Assert.NotEqual(a, d, BufferComparer.Default);
         }
 
         [Trait("Type", "Unit")]
@@ -165,8 +171,11 @@ namespace SourceCode.Clay.Buffers.Tests
             var a = new ReadOnlyListWrapper<byte>(GenerateArray(16));
             var b = new ReadOnlyListWrapper<byte>(GenerateArray(16));
             var c = new ReadOnlyListWrapper<byte>(GenerateArray(16, 1));
+            var d = new ReadOnlyListWrapper<byte>(GenerateArray(15));
+
             Assert.Equal(a, b, BufferComparer.Default);
             Assert.NotEqual(a, c, BufferComparer.Default);
+            Assert.NotEqual(a, d, BufferComparer.Default);
         }
 
         [Trait("Type", "Unit")]
@@ -176,8 +185,85 @@ namespace SourceCode.Clay.Buffers.Tests
             var a = GenerateArray(16).Take(16);
             var b = GenerateArray(16).Take(16);
             var c = GenerateArray(16, 1).Take(16);
+            var d = GenerateArray(16).Take(15);
+
             Assert.Equal(a, b, BufferComparer.Default);
             Assert.NotEqual(a, c, BufferComparer.Default);
+            Assert.NotEqual(a, d, BufferComparer.Default);
+        }
+
+        #endregion
+
+        #region Compare
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "BufferComparer Compare Array")]
+        public static void BufferComparer_Compare_Array()
+        {
+            var a = GenerateArray(16);
+            var b = GenerateArray(16);
+            var c = GenerateArray(16, 1);
+            var d = GenerateArray(15);
+
+            Assert.True(BufferComparer.Default.Compare(a, b) == 0);
+            Assert.True(BufferComparer.Default.Compare(a, c) < 0);
+            Assert.True(BufferComparer.Default.Compare(c, a) > 0);
+            Assert.True(BufferComparer.Default.Compare(d, a) < 0);
+            Assert.True(BufferComparer.Default.Compare(a, d) > 0);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "BufferComparer Compare List")]
+        public static void BufferComparer_Compare_List()
+        {
+            var a = GenerateArray(16).ToList();
+            var b = GenerateArray(16).ToList();
+            var c = GenerateArray(16, 1).ToList();
+            var d = GenerateArray(15).ToList();
+
+            Assert.True(BufferComparer.Default.Compare((IList<byte>)a, b) == 0);
+            Assert.True(BufferComparer.Default.Compare((IList<byte>)a, c) < 0);
+            Assert.True(BufferComparer.Default.Compare((IList<byte>)c, a) > 0);
+            Assert.True(BufferComparer.Default.Compare((IList<byte>)d, a) < 0);
+            Assert.True(BufferComparer.Default.Compare((IList<byte>)a, d) > 0);
+
+            Assert.True(BufferComparer.Default.Compare((IReadOnlyList<byte>)a, b) == 0);
+            Assert.True(BufferComparer.Default.Compare((IReadOnlyList<byte>)a, c) < 0);
+            Assert.True(BufferComparer.Default.Compare((IReadOnlyList<byte>)c, a) > 0);
+            Assert.True(BufferComparer.Default.Compare((IReadOnlyList<byte>)d, a) < 0);
+            Assert.True(BufferComparer.Default.Compare((IReadOnlyList<byte>)a, d) > 0);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "BufferComparer Compare ReadOnlyList")]
+        public static void BufferComparer_Compare_ReadOnlyList()
+        {
+            var a = new ReadOnlyListWrapper<byte>(GenerateArray(16));
+            var b = new ReadOnlyListWrapper<byte>(GenerateArray(16));
+            var c = new ReadOnlyListWrapper<byte>(GenerateArray(16, 1));
+            var d = new ReadOnlyListWrapper<byte>(GenerateArray(15));
+
+            Assert.True(BufferComparer.Default.Compare(a, b) == 0);
+            Assert.True(BufferComparer.Default.Compare(a, c) < 0);
+            Assert.True(BufferComparer.Default.Compare(c, a) > 0);
+            Assert.True(BufferComparer.Default.Compare(d, a) < 0);
+            Assert.True(BufferComparer.Default.Compare(a, d) > 0);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "BufferComparer Compare Enumerable")]
+        public static void BufferComparer_Compare_Enumerable()
+        {
+            var a = GenerateArray(16).Take(16);
+            var b = GenerateArray(16).Take(16);
+            var c = GenerateArray(16, 1).Take(16);
+            var d = GenerateArray(16).Take(15);
+
+            Assert.True(BufferComparer.Default.Compare(a, b) == 0);
+            Assert.True(BufferComparer.Default.Compare(a, c) < 0);
+            Assert.True(BufferComparer.Default.Compare(c, a) > 0);
+            Assert.True(BufferComparer.Default.Compare(d, a) < 0);
+            Assert.True(BufferComparer.Default.Compare(a, d) > 0);
         }
 
         #endregion
