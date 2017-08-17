@@ -25,10 +25,10 @@ namespace SourceCode.Clay.Buffers
         IComparer<IReadOnlyList<byte>>,
         IComparer<IList<byte>>,
         IComparer<IEnumerable<byte>>
-        //IComparer<ReadOnlySpan<byte>>,
-        //IComparer<Span<byte>>,
-        //IComparer<ReadOnlyBuffer<byte>>,
-        //IComparer<Buffer<byte>>
+    //IComparer<ReadOnlySpan<byte>>,
+    //IComparer<Span<byte>>,
+    //IComparer<ReadOnlyBuffer<byte>>,
+    //IComparer<Buffer<byte>>
     {
         #region Constants
 
@@ -89,67 +89,6 @@ namespace SourceCode.Clay.Buffers
         #endregion
 
         #region Compare
-
-        /*
-        /// <summary>
-        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
-        /// </returns>
-        [SecuritySafeCritical]
-        public int Compare(Span<byte> x, Span<byte> y)
-            => Compare((ReadOnlySpan<byte>)x, y);
-
-        /// <summary>
-        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
-        /// </returns>
-        [SecuritySafeCritical]
-        public int Compare(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
-        {
-            var cmp = x.Length.CompareTo(y.Length);
-            if (cmp != 0) return cmp; // (m, n)
-
-            if (x.Length == 0) return 0; // (0, 0)
-            unsafe
-            {
-                fixed (byte* xp = &x.DangerousGetPinnableReference(), yp = &y.DangerousGetPinnableReference())
-                {
-                    cmp =  NativeMethods.MemCompare(xp, yp, x.Length);
-                    return cmp;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
-        /// </returns>
-        public int Compare(Buffer<byte> x, Buffer<byte> y)
-            => Compare(x.Span, y.Span);
-
-        /// <summary>
-        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
-        /// </returns>
-        public int Compare(ReadOnlyBuffer<byte> x, ReadOnlyBuffer<byte> y)
-            => Compare(x.Span, y.Span);
-        */
 
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
@@ -322,53 +261,6 @@ namespace SourceCode.Clay.Buffers
 
         #region Equals
 
-        /*
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
-            => Compare(x, y) == 0;
-
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public bool Equals(Span<byte> x, Span<byte> y)
-            => Compare(x, y) == 0;
-
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public bool Equals(ReadOnlyBuffer<byte> x, ReadOnlyBuffer<byte> y)
-            => Compare(x, y) == 0;
-
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public bool Equals(Buffer<byte> x, Buffer<byte> y)
-            => Compare(x, y) == 0;
-
-        */
-
         /// <summary>
         /// Determines whether the specified objects are equal.
         /// </summary>
@@ -427,64 +319,6 @@ namespace SourceCode.Clay.Buffers
         #endregion
 
         #region GetHashCode
-
-        /*
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetHashCode(ReadOnlySpan<byte> obj)
-        {
-            if (_hashCodeFidelity <= 0 || obj.Length <= _hashCodeFidelity)
-                return HashCode.Fnv(obj);
-
-            return HashCode.Fnv(obj.Slice(0, _hashCodeFidelity));
-        }
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetHashCode(Span<byte> obj)
-        {
-            if (_hashCodeFidelity <= 0 || obj.Length <= _hashCodeFidelity)
-                return HashCode.Fnv(obj);
-
-            return HashCode.Fnv(obj.Slice(0, _hashCodeFidelity));
-        }
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetHashCode(ReadOnlyBuffer<byte> obj)
-            => GetHashCode(obj.Span);
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int GetHashCode(Buffer<byte> obj)
-            => GetHashCode(obj.Span);
-        */
 
         /// <summary>
         /// Returns a hash code for this instance.
