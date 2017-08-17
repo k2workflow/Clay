@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <VersionPrefix>1.0.0</VersionPrefix>
     <Company>SourceCode Technology Holdings Inc.</Company>
     <Product>Clay</Product>
@@ -20,6 +20,5 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
-    <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
   </ItemGroup>
 </Project>
