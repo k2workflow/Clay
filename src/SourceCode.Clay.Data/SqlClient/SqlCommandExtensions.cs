@@ -10,6 +10,8 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlCommand"/>
     public static class SqlCommandExtensions
     {
+#pragma warning disable S3649 // User-provided values should be sanitized before use in SQL statements
+
         /// <summary>
         /// Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
@@ -89,5 +91,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
             return sqlTxn.CreateCommand(commandText, commandType, 3 * 60);
         }
+
+#pragma warning restore S3649 // User-provided values should be sanitized before use in SQL statements
     }
 }

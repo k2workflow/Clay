@@ -94,8 +94,8 @@ namespace SourceCode.Clay.Data.Tests
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
 
                     Assert.True(sqlCsb.Encrypt);
-                    Assert.True(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
-                    Assert.True(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                    Assert.StartsWith("tcp:", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
+                    Assert.EndsWith(",1433", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
                 }
             }
         }

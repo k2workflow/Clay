@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Collections.Generic.Tests
         {
             var empty = Dictionary.Empty<string, int>();
 
-            Assert.Equal(empty.Count, 0);
+            Assert.Equal(0, empty.Count);
         }
 
         [Trait("Type", "Unit")]
@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Collections.Generic.Tests
         {
             var empty = ReadOnlyDictionary.Empty<string, int>();
 
-            Assert.Equal(empty.Count, 0);
+            Assert.Equal(0, empty.Count);
         }
     }
 }
