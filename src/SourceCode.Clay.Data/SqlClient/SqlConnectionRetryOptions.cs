@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace SourceCode.Clay.Data.SqlClient
+﻿namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
     /// A property bag to hold various connection retry options.
@@ -9,7 +7,7 @@ namespace SourceCode.Clay.Data.SqlClient
     {
         #region Constants
 
-        public static SqlConnectionRetryOptions Default { [Pure]get; } = new SqlConnectionRetryOptions();
+        public static SqlConnectionRetryOptions Default { get; } = new SqlConnectionRetryOptions();
 
         #endregion
 

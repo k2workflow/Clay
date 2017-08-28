@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
 
 namespace SourceCode.Clay.Data.SqlClient.Azure
 {
@@ -19,8 +18,7 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
         /// <returns></returns>
         public static SqlConnectionStringBuilder MakeRobust(this SqlConnectionStringBuilder sqlCsb, SqlConnectionRetryOptions options)
         {
-            Contract.Requires(sqlCsb != null);
-            Contract.Ensures(Contract.Result<SqlConnectionStringBuilder>() != null);
+            if (sqlCsb == null) throw new ArgumentNullException(nameof(sqlCsb));
 
             var opt = options ?? SqlConnectionRetryOptions.Default;
 

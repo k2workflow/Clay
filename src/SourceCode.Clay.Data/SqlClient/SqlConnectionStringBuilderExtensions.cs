@@ -1,5 +1,5 @@
-﻿using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.Data.SqlClient;
 
 namespace SourceCode.Clay.Data.SqlClient
 {
@@ -17,8 +17,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlConnectionStringBuilder ClearInlineCredentials(this SqlConnectionStringBuilder sqlCsb)
         {
-            Contract.Requires(sqlCsb != null);
-            Contract.Ensures(Contract.Result<SqlConnectionStringBuilder>() != null);
+            if (sqlCsb == null) throw new ArgumentNullException(nameof(sqlCsb));
 
             sqlCsb.UserID = string.Empty;
             sqlCsb.Password = string.Empty;
