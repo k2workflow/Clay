@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C8ACBBA9-16BD-4361-A5FB-B35278752B19}"
 EndProject
@@ -24,6 +24,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data", "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj", "{323ED161-1D48-42C1-B312-3C93559DA6B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data.Tests", "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj", "{D602DE90-7BB2-491A-98D4-22A9E45E6869}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json", "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj", "{93785833-A2A6-4FB7-87EC-2AFCF49A7186}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Tests", "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj", "{83089EA0-510E-43A4-B316-FADC3C1D4C67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +75,14 @@ Global
 		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D602DE90-7BB2-491A-98D4-22A9E45E6869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93785833-A2A6-4FB7-87EC-2AFCF49A7186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93785833-A2A6-4FB7-87EC-2AFCF49A7186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93785833-A2A6-4FB7-87EC-2AFCF49A7186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93785833-A2A6-4FB7-87EC-2AFCF49A7186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83089EA0-510E-43A4-B316-FADC3C1D4C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83089EA0-510E-43A4-B316-FADC3C1D4C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83089EA0-510E-43A4-B316-FADC3C1D4C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83089EA0-510E-43A4-B316-FADC3C1D4C67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,5 +93,9 @@ Global
 		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{D602DE90-7BB2-491A-98D4-22A9E45E6869} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{83089EA0-510E-43A4-B316-FADC3C1D4C67} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9F58E15-1F9A-4AAC-831F-9C7A81512C01}
 	EndGlobalSection
 EndGlobal

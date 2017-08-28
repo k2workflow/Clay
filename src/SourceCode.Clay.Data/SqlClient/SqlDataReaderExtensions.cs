@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
 using System.Xml.Linq;
 
 namespace SourceCode.Clay.Data.SqlClient
@@ -14,37 +13,37 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <summary>
         /// Gets the value of the specified binary column as <see cref="System.Byte"/>[].
         /// </summary>
-        /// <param name="dr">The data reader.</param>
+        /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
         /// <returns></returns>
-        public static byte[] GetSqlBytes(this SqlDataReader dr, string name)
+        public static byte[] GetSqlBytes(this SqlDataReader sqlDr, string name)
         {
-            Contract.Requires(dr != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
-            var ord = dr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            if (dr.IsDBNull(ord))
+            var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
+            if (sqlDr.IsDBNull(ord))
                 return null;
 
-            var val = dr.GetSqlBytes(ord);
+            var val = sqlDr.GetSqlBytes(ord);
             return val.IsNull ? null : val.Buffer;
         }
 
         /// <summary>
         /// Gets the value of the specified text column as an <see cref="System.Enum"/>.
         /// </summary>
-        /// <param name="dr">The data reader.</param>
+        /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
         /// <typeparam name="TEnum">The type of enum.</typeparam>
         /// <returns></returns>
-        public static TEnum? GetSqlEnum<TEnum>(this SqlDataReader dr, string name)
+        public static TEnum? GetSqlEnum<TEnum>(this SqlDataReader sqlDr, string name)
            where TEnum : struct, IComparable, IFormattable, IConvertible // We cannot directly constrain by Enum, so approximate by constraining on Enum's implementation
         {
-            Contract.Requires(dr != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
-            var ord = dr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = dr.GetSqlString(ord);
+            var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
+            var val = sqlDr.GetSqlString(ord);
 
             if (val.IsNull)
                 return null;
@@ -56,16 +55,16 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <summary>
         /// Gets the value of the specified xml column as a <see cref="System.String"/>.
         /// </summary>
-        /// <param name="dr">The data reader.</param>
+        /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
         /// <returns></returns>
-        public static string GetSqlXml(this SqlDataReader dr, string name)
+        public static string GetSqlXml(this SqlDataReader sqlDr, string name)
         {
-            Contract.Requires(dr != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
-            var ord = dr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = dr.GetSqlXml(ord);
+            var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
+            var val = sqlDr.GetSqlXml(ord);
 
             if (val.IsNull)
                 return null;
@@ -77,16 +76,16 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <summary>
         /// Gets the value of the specified xml column as a <see cref="XDocument"/>.
         /// </summary>
-        /// <param name="dr">The data reader.</param>
+        /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
         /// <returns></returns>
-        public static XDocument GetSqlXDocument(this SqlDataReader dr, string name)
+        public static XDocument GetSqlXDocument(this SqlDataReader sqlDr, string name)
         {
-            Contract.Requires(dr != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
-            var ord = dr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = dr.GetSqlXml(ord);
+            var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
+            var val = sqlDr.GetSqlXml(ord);
 
             if (val.IsNull)
                 return null;

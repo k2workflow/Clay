@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" />
+    <ProjectReference Include="..\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" />
   </ItemGroup>
 
   <ItemGroup>

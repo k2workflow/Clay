@@ -27,7 +27,10 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="cases">The cases.</param>
         protected BaseSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
         {
-            (_values, _indexer) = BuildSwitchExpression(cases);
+            var (values, indexer) = BuildSwitchExpression(cases);
+
+            _values = values;
+            _indexer = indexer;
         }
 
         #endregion
@@ -64,7 +67,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            value = default(TValue);
+            value = default;
             var ix = _indexer(key);
 
             if (ix < 0) return false;

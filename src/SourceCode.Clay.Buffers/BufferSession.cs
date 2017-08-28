@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 
 namespace SourceCode.Clay.Buffers
 {
@@ -63,7 +62,7 @@ namespace SourceCode.Clay.Buffers
             if (minimumLength < 0) throw new ArgumentOutOfRangeException(nameof(minimumLength));
 
             Buffer = RentBuffer(minimumLength);
-            Result = default(ArraySegment<byte>);
+            Result = default;
         }
 
         #endregion
@@ -77,7 +76,9 @@ namespace SourceCode.Clay.Buffers
         /// <returns></returns>
         public static byte[] RentBuffer(int minimumLength)
         {
-            var buffer = ArrayPool<byte>.Shared.Rent(minimumLength);
+            if (minimumLength < 0) throw new ArgumentOutOfRangeException(nameof(minimumLength));
+
+            var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(minimumLength);
             return buffer;
         }
 
@@ -86,7 +87,11 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         public static void ReturnBuffer(byte[] buffer)
-            => ArrayPool<byte>.Shared.Return(buffer);
+        {
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+
+            System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+        }
 
         #endregion
 
@@ -100,7 +105,7 @@ namespace SourceCode.Clay.Buffers
             if (Buffer == null)
                 return;
 
-            ArrayPool<byte>.Shared.Return(Buffer);
+            System.Buffers.ArrayPool<byte>.Shared.Return(Buffer);
             Buffer = null;
         }
 

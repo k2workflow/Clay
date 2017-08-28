@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace SourceCode.Clay.Data.SqlClient
@@ -19,7 +18,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The connection.</param>
         public static void Reopen(this SqlConnection sqlCon)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             switch (sqlCon.State)
             {
@@ -46,7 +45,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The connection.</param>
         public static async Task ReopenAsync(this SqlConnection sqlCon)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             switch (sqlCon.State)
             {
@@ -77,7 +76,7 @@ namespace SourceCode.Clay.Data.SqlClient
         [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Static query with no user inputs")]
         public static byte[] Open(this SqlConnection sqlCon, string impersonatedUsername)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Open the underlying connection
             sqlCon.Reopen();
@@ -140,7 +139,7 @@ namespace SourceCode.Clay.Data.SqlClient
         [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Static query with no user inputs")]
         public static async Task<byte[]> OpenAsync(this SqlConnection sqlCon, string impersonatedUsername)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Open the underlying connection
             await sqlCon.ReopenAsync().ConfigureAwait(false);
@@ -201,7 +200,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
         public static void Close(this SqlConnection sqlCon, byte[] cookie)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Check that the underlying connection is still open
             if (sqlCon.State == ConnectionState.Open)
@@ -236,7 +235,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
         public static async Task CloseAsync(this SqlConnection sqlCon, byte[] cookie)
         {
-            Contract.Requires(sqlCon != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Check that the underlying connection is still open
             if (sqlCon.State == ConnectionState.Open)

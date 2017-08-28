@@ -1,6 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.Contracts;
 
 namespace SourceCode.Clay.Data.SqlClient
 {
@@ -10,6 +10,8 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlCommand"/>
     public static class SqlCommandExtensions
     {
+#pragma warning disable S3649 // User-provided values should be sanitized before use in SQL statements
+
         /// <summary>
         /// Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
@@ -20,9 +22,8 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, int timeoutSeconds)
         {
-            Contract.Requires(sqlCon != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(commandText));
-            Contract.Ensures(Contract.Result<SqlCommand>() != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             var cmd = new SqlCommand(commandText, sqlCon)
             {
@@ -43,10 +44,9 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType, int timeoutSeconds)
         {
-            Contract.Requires(sqlTxn != null);
-            Contract.Requires(sqlTxn.Connection != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(commandText));
-            Contract.Ensures(Contract.Result<SqlCommand>() != null);
+            if (sqlTxn == null) throw new ArgumentNullException(nameof(sqlTxn));
+            if (sqlTxn.Connection == null) throw new ArgumentNullException(nameof(sqlTxn));
+            if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             var cmd = new SqlCommand(commandText, sqlTxn.Connection)
             {
@@ -67,9 +67,8 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType)
         {
-            Contract.Requires(sqlCon != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(commandText));
-            Contract.Ensures(Contract.Result<SqlCommand>() != null);
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             return sqlCon.CreateCommand(commandText, commandType, 3 * 60);
         }
@@ -83,11 +82,12 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType)
         {
-            Contract.Requires(sqlTxn != null);
-            Contract.Requires(!string.IsNullOrWhiteSpace(commandText));
-            Contract.Ensures(Contract.Result<SqlCommand>() != null);
+            if (sqlTxn == null) throw new ArgumentNullException(nameof(sqlTxn));
+            if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             return sqlTxn.CreateCommand(commandText, commandType, 3 * 60);
         }
+
+#pragma warning restore S3649 // User-provided values should be sanitized before use in SQL statements
     }
 }

@@ -11,7 +11,8 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup> 
+    <NoWarn>1701;1702;1705;S3242</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.1" />
@@ -20,9 +21,5 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Buffers" Version="4.4.0" />
-    <!--<PackageReference Include="System.Memory" Version="4.4.0-preview2-25405-01" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.4.0-preview2-25405-01" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0-preview2-25405-01" />
-    <PackageReference Include="System.Buffers.Primitives" Version="0.1.0-e170810-2" />-->
   </ItemGroup>
 </Project>
