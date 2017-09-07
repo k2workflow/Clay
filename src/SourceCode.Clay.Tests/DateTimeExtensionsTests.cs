@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Tests
     public static class DateTimeExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DateTimeExtensions ToPosixFileTime")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTime))]
         public static void DateTimeExtensions_ToPosixFileTime()
         {
             var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTime();
@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DateTimeExtensions ToPosixFileTimeUtc")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTimeUtc))]
         public static void DateTimeExtensions_ToPosixFileTimeUtc()
         {
             var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTimeUtc();
@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DateTimeExtensions FromPosixFileTime")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_FromPosixFileTime))]
         public static void DateTimeExtensions_FromPosixFileTime()
         {
             var dt = DateTimeExtensions.FromPosixFileTime(5380218331230000).ToUniversalTime();
@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DateTimeExtensions FromPosixFileTimeUtc")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_FromPosixFileTimeUtc))]
         public static void DateTimeExtensions_FromPosixFileTimeUtc()
         {
             var dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);

@@ -21,6 +21,50 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, false);
             Assert.True(equal);
+
+            equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, true);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "ListExtensions FastEquals 0, 0")]
+        public static void Use_FastEquals_both_empty()
+        {
+            var list1 = Array.Empty<string>();
+            var list2 = new string[0];
+
+            var equal = list1.FastEquals(list2, StringComparer.Ordinal, false);
+            Assert.True(equal);
+
+            equal = list1.FastEquals(list2, StringComparer.Ordinal, true);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "ListExtensions FastEquals 1, 1")]
+        public static void Use_FastEquals_both_one()
+        {
+            var list1 = new string[] { "hi" };
+            var list2 = new string[] { "HI" };
+            var list3 = new string[] { "bye" };
+
+            var equal = list1.FastEquals(list2, StringComparer.OrdinalIgnoreCase, false);
+            Assert.True(equal);
+
+            equal = list1.FastEquals(list2, StringComparer.OrdinalIgnoreCase, true);
+            Assert.True(equal);
+
+            equal = list1.FastEquals(list2, StringComparer.Ordinal, false);
+            Assert.False(equal);
+
+            equal = list1.FastEquals(list2, StringComparer.Ordinal, true);
+            Assert.False(equal);
+
+            equal = list1.FastEquals(list3, StringComparer.Ordinal, false);
+            Assert.False(equal);
+
+            equal = list1.FastEquals(list3, StringComparer.Ordinal, true);
+            Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]

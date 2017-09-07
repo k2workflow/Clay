@@ -22,18 +22,26 @@ namespace SourceCode.Clay.Collections.Generic
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
-            // If one is null but not the other (xor), then not equal
-            if (ReferenceEquals(x, null) && ReferenceEquals(y, null)) return true;
-            if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
+            var xNull = ReferenceEquals(x, null);
+            if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other
+            if (xNull) return true; // Both are null
 
-            // If first is null then, due to previous check, the second is guaranteed to be null (and thus equal)
-            if (ReferenceEquals(x, null)) return true;
+            // Both are not null; we can now test their values
+            if (ReferenceEquals(x, y)) return true; // Same reference
 
             // If counts are different, not equal
             if (x.Count != y.Count) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-            if (x.Count == 0) return true;
+            switch (x.Count)
+            {
+                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+                case 0: return true;
+
+                // If there is only 1 item, short-circuit the comparison
+                case 1: return comparer.Equals(x[0], y[0]);
+
+                default: break;
+            }
 
             var min = 0;
             var max = x.Count - 1;
@@ -91,18 +99,32 @@ namespace SourceCode.Clay.Collections.Generic
             if (convert == null) throw new ArgumentNullException(nameof(convert));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
-            // If one is null but not the other (xor), then not equal
-            if (ReferenceEquals(x, null) && ReferenceEquals(y, null)) return true;
-            if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
+            var xNull = ReferenceEquals(x, null);
+            if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other
+            if (xNull) return true; // Both are null
 
-            // If first is null then, due to previous check, the second is guaranteed to be null (and thus equal)
-            if (ReferenceEquals(x, null)) return true;
+            // Both are not null; we can now test their values
+            if (ReferenceEquals(x, y)) return true; // Same reference
 
             // If counts are different, not equal
             if (x.Count != y.Count) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-            if (x.Count == 0) return true;
+            switch (x.Count)
+            {
+                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+                case 0: return true;
+
+                // If there is only 1 item, short-circuit the comparison
+                case 1:
+                    {
+                        var x0 = convert(x[0]);
+                        var y0 = convert(y[0]);
+
+                        return comparer.Equals(x0, y0);
+                    }
+
+                default: break;
+            }
 
             var min = 0;
             var max = x.Count - 1;
