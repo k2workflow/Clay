@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Collections.Generic
     public static class ListExtensions
     {
         /// <summary>
-        /// Performs an efficient item-by-item comparison.
+        /// Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
