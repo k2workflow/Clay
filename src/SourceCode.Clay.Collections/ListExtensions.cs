@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for lists.
+    /// Represents extensions for <see cref="IList{T}"/>.
     /// </summary>
     public static class ListExtensions
     {
@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <param name="colocated">Optimizes algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool FastEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool colocated)
+        public static bool NullableEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool colocated)
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
@@ -94,7 +94,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <param name="colocated">Optimizes algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool FastEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> convert, IEqualityComparer<U> comparer, bool colocated)
+        public static bool NullableEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> convert, IEqualityComparer<U> comparer, bool colocated)
         {
             if (convert == null) throw new ArgumentNullException(nameof(convert));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -171,14 +171,14 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an efficient item-by-item comparison, used the default comparer for the type.
+        /// Performs an efficient item-by-item comparison, using the default comparer for the type.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
         /// <param name="colocated">Optimizes algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool FastEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool colocated)
-            => FastEquals(x, y, EqualityComparer<T>.Default, colocated);
+        public static bool NullableEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool colocated)
+            => x.NullableEquals(y, EqualityComparer<T>.Default, colocated);
     }
 }

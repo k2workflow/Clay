@@ -16,68 +16,68 @@ namespace SourceCode.Clay.Collections.Tests
         };
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals null, null")]
-        public static void Use_FastEquals_both_null()
+        [Fact(DisplayName = "ListExtensions NullableEquals null, null")]
+        public static void Use_NullableEquals_both_null()
         {
-            var equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, false);
+            var equal = ((string[])null).NullableEquals(null, StringComparer.Ordinal, false);
             Assert.True(equal);
 
-            equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, true);
+            equal = ((string[])null).NullableEquals(null, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals 0, 0")]
-        public static void Use_FastEquals_both_empty()
+        [Fact(DisplayName = "ListExtensions NullableEquals 0, 0")]
+        public static void Use_NullableEquals_both_empty()
         {
             var list1 = Array.Empty<string>();
             var list2 = new string[0];
 
-            var equal = list1.FastEquals(list2, StringComparer.Ordinal, false);
+            var equal = list1.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
 
-            equal = list1.FastEquals(list2, StringComparer.Ordinal, true);
+            equal = list1.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals 1, 1")]
-        public static void Use_FastEquals_both_one()
+        [Fact(DisplayName = "ListExtensions NullableEquals 1, 1")]
+        public static void Use_NullableEquals_both_one()
         {
             var list1 = new string[] { "hi" };
             var list2 = new string[] { "HI" };
             var list3 = new string[] { "bye" };
 
-            var equal = list1.FastEquals(list2, StringComparer.OrdinalIgnoreCase, false);
+            var equal = list1.NullableEquals(list2, StringComparer.OrdinalIgnoreCase, false);
             Assert.True(equal);
 
-            equal = list1.FastEquals(list2, StringComparer.OrdinalIgnoreCase, true);
+            equal = list1.NullableEquals(list2, StringComparer.OrdinalIgnoreCase, true);
             Assert.True(equal);
 
-            equal = list1.FastEquals(list2, StringComparer.Ordinal, false);
+            equal = list1.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
 
-            equal = list1.FastEquals(list2, StringComparer.Ordinal, true);
+            equal = list1.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = list1.FastEquals(list3, StringComparer.Ordinal, false);
+            equal = list1.NullableEquals(list3, StringComparer.Ordinal, false);
             Assert.False(equal);
 
-            equal = list1.FastEquals(list3, StringComparer.Ordinal, true);
+            equal = list1.NullableEquals(list3, StringComparer.Ordinal, true);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals list, null")]
-        public static void Use_FastEquals_one_null()
+        [Fact(DisplayName = "ListExtensions NullableEquals list, null")]
+        public static void Use_NullableEquals_one_null()
         {
-            var equal = _list.FastEquals((string[])null, StringComparer.Ordinal, false);
+            var equal = _list.NullableEquals((string[])null, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals N, M")]
-        public static void Use_FastEquals_different_count()
+        [Fact(DisplayName = "ListExtensions NullableEquals N, M")]
+        public static void Use_NullableEquals_different_count()
         {
             var list2 = new[]
             {
@@ -86,13 +86,13 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[2]
             };
 
-            var equal = _list.FastEquals(list2, StringComparer.Ordinal, false);
+            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals IsEqual colocated true")]
-        public static void Use_FastEquals_IsEqual_colocated_true()
+        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated true")]
+        public static void Use_NullableEquals_IsEqual_colocated_true()
         {
             var list2 = new[]
             {
@@ -102,16 +102,16 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[3]
             };
 
-            var equal = _list.FastEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = _list.FastEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals IsEqual colocated false")]
-        public static void Use_FastEquals_IsEqual_colocated_false()
+        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated false")]
+        public static void Use_NullableEquals_IsEqual_colocated_false()
         {
             var list2 = new[]
             {
@@ -121,16 +121,16 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[0]
             };
 
-            var equal = _list.FastEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = _list.FastEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals NotEqual colocated true")]
-        public static void Use_FastEquals_NotEqual_colocated_true()
+        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated true")]
+        public static void Use_NullableEquals_NotEqual_colocated_true()
         {
             var list2 = new[]
             {
@@ -140,16 +140,16 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[3]
             };
 
-            var equal = _list.FastEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = _list.FastEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals NotEqual colocated false")]
-        public static void Use_FastEquals_NotEqual_colocated_false()
+        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated false")]
+        public static void Use_NullableEquals_NotEqual_colocated_false()
         {
             var list2 = new[]
             {
@@ -159,16 +159,16 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[0]
             };
 
-            var equal = _list.FastEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = _list.FastEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals duplicates")]
-        public static void Use_FastEquals_duplicates()
+        [Fact(DisplayName = "ListExtensions NullableEquals duplicates")]
+        public static void Use_NullableEquals_duplicates()
         {
             var list2 = new[]
             {
@@ -178,16 +178,16 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[0]
             };
 
-            var equal = _list.FastEquals(list2, true);
+            var equal = _list.NullableEquals(list2, true);
             Assert.False(equal);
 
-            equal = _list.FastEquals(list2, false);
+            equal = _list.NullableEquals(list2, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals IsEqual colocated transform")]
-        public static void Use_FastEquals_Transform_IsEqual_colocated_true()
+        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated transform")]
+        public static void Use_NullableEquals_Transform_IsEqual_colocated_true()
         {
             var listA = new[]
             {
@@ -205,16 +205,16 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(2, _list[3])
             };
 
-            var equal = listA.FastEquals(listB, n => n.Value, StringComparer.Ordinal, true);
+            var equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = listA.FastEquals(listB, n => n.Value, StringComparer.Ordinal, false);
+            equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions FastEquals NotEqual colocated transform")]
-        public static void Use_FastEquals_Transform_NotEqual_colocated_true()
+        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated transform")]
+        public static void Use_NullableEquals_Transform_NotEqual_colocated_true()
         {
             var listA = new[]
             {
@@ -232,10 +232,10 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(2, _list[3])
             };
 
-            var equal = listA.FastEquals(listB, n => n.Value, StringComparer.Ordinal, true);
+            var equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = listA.FastEquals(listB, n => n.Value, StringComparer.Ordinal, false);
+            equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
     }
