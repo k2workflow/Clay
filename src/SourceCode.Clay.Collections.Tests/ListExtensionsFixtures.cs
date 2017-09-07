@@ -19,10 +19,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = "ListExtensions FastEquals null, null")]
         public static void Use_FastEquals_both_null()
         {
-            var equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, false);
+            var equal = ((string[])null).FastEquals(null, StringComparer.Ordinal, false);
             Assert.True(equal);
 
-            equal = ((string[])null).FastEquals((string[])null, StringComparer.Ordinal, true);
+            equal = ((string[])null).FastEquals(null, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 

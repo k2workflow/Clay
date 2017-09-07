@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for lists.
+    /// Represents extensions for <see cref="IList{T}"/>.
     /// </summary>
     public static class ListExtensions
     {
@@ -171,7 +171,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an efficient item-by-item comparison, used the default comparer for the type.
+        /// Performs an efficient item-by-item comparison, using the default comparer for the type.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
@@ -179,6 +179,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="colocated">Optimizes algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
         public static bool FastEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool colocated)
-            => FastEquals(x, y, EqualityComparer<T>.Default, colocated);
+            => x.FastEquals(y, EqualityComparer<T>.Default, colocated);
     }
 }
