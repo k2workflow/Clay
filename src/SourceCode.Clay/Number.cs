@@ -14,13 +14,14 @@ namespace SourceCode.Clay
     public struct Number : IEquatable<Number>, IComparable, IComparable<Number>, IFormattable, IConvertible
     {
         #region ObjectFactory
+
         private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
 
         private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
         {
             var rthParam = Expression.Parameter(typeof(RuntimeTypeHandle), "rth");
             var objParam = Expression.Parameter(typeof(object), "value");
-            
+
             var types = new[]
             {
                 typeof(sbyte),
@@ -68,6 +69,7 @@ namespace SourceCode.Clay
         }
 
         private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
+
         #endregion
 
         #region Fields
@@ -214,10 +216,11 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The <see cref="Number"/> instance.</returns>
-        public static Number CreateFromObject(object value) => ReferenceEquals(value, null)
+        public static Number CreateFromObject(object value)
+            => ReferenceEquals(value, null)
             ? default
             : _objectFactory(value.GetType().TypeHandle, value);
-        
+
         /// <summary>
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
@@ -477,8 +480,8 @@ namespace SourceCode.Clay
             where T : struct
         {
             if (_typeCode == 0) return default;
-            else if (_typeCode != (byte)typeCode) throw new InvalidOperationException();
-            else return field;
+            if (_typeCode != (byte)typeCode) throw new InvalidOperationException();
+            return field;
         }
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
@@ -722,42 +725,61 @@ namespace SourceCode.Clay
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(sbyte? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(sbyte value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(byte? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(byte value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(short? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(short value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ushort? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ushort value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(int? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(int value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(uint? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(uint value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(long? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(long value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ulong? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ulong value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(float? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(float value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(double? value) => new Number(value);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(double value) => new Number(value);
 
@@ -1032,6 +1054,7 @@ namespace SourceCode.Clay
                 default: return default;
             }
         }
+
         #endregion
     }
 }
