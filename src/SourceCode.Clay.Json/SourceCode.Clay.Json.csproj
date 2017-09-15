@@ -22,4 +22,8 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SourceCode.Clay\SourceCode.Clay.csproj" />
+  </ItemGroup>
 </Project>

@@ -75,7 +75,7 @@
             // MultipleOf
             if (MultipleOf.HasValue
                 && MultipleOf.Value != 0 // n % 0 == undefined
-                && value.Value != 0) // 0 % n == 0
+                && value.Value != 0) // 0 % n == 0 (we already know value.HasValue is true)
             {
                 var zero = value.Value % MultipleOf.Value == 0;
                 if (!zero) return false;

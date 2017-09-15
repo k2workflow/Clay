@@ -1,12 +1,14 @@
-﻿namespace SourceCode.Clay.Json.Validation
+﻿using System;
+
+namespace SourceCode.Clay.Json.Validation
 {
-    public sealed class DoubleValidator
+    public sealed class NumberValidator
     {
         #region Properties
 
-        public double? Min { get; }
+        public Number Min { get; }
 
-        public double? Max { get; }
+        public Number Max { get; }
 
         public bool MinExclusive { get; }
 
@@ -20,8 +22,13 @@
 
         #region Constructors
 
-        public DoubleValidator(double? min, double? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
+        public NumberValidator(Number min, Number max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
         {
+            // Ensure min and max are of the same general type (integer or real)
+            if (((min.Kind & NumberKind.Integer) > 0 && (max.Kind & NumberKind.Real) > 0)
+            || ((min.Kind & NumberKind.Real) > 0 && (max.Kind & NumberKind.Integer) > 0))
+                throw new ArgumentOutOfRangeException(nameof(max), $"{nameof(NumberValidator)} {nameof(min)} and {nameof(max)} should have the same {nameof(NumberKind)}");
+
             Min = min;
             if (Min.HasValue && minExclusive)
                 MinExclusive = true;
@@ -34,11 +41,11 @@
             MultipleOf = multipleOf;
         }
 
-        public DoubleValidator(double? min, double? max, bool required)
+        public NumberValidator(Number min, Number max, bool required)
             : this(min, max, false, false, required, null)
         { }
 
-        public DoubleValidator(double? min, double? max)
+        public NumberValidator(Number min, Number max)
             : this(min, max, false, false, false, null)
         { }
 
@@ -46,7 +53,7 @@
 
         #region Methods
 
-        public bool IsValid(double? value)
+        public bool IsValid(Number value)
         {
             // Check Required
             if (!value.HasValue)
@@ -57,9 +64,9 @@
             {
                 if (MinExclusive)
                 {
-                    if (value.Value <= Min.Value) return false;
+                    if (value <= Min) return false;
                 }
-                else if (value.Value < Min.Value) return false;
+                else if (value < Min) return false;
             }
 
             // Check Max
@@ -67,18 +74,28 @@
             {
                 if (MaxExclusive)
                 {
-                    if (value.Value >= Max.Value) return false;
+                    if (value >= Max) return false;
                 }
-                else if (value.Value > Max.Value) return false;
+                else if (value > Max) return false;
             }
 
             // MultipleOf
             if (MultipleOf.HasValue
                 && MultipleOf.Value != 0 // n % 0 == undefined
-                && value.Value != 0.0) // 0 % n == 0 (we already know value.HasValue is true)
+                && !value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
             {
-                var zero = value.Value % MultipleOf.Value == 0.0; // Modulus(Double) is a well-defined operation
-                if (!zero) return false;
+                if ((value.Kind & NumberKind.Integer) > 0)
+                {
+                    var val = value.ToInt64();
+                    var zero = val % MultipleOf.Value == 0;
+                    if (!zero) return false;
+                }
+                else if ((value.Kind & NumberKind.Real) > 0)
+                {
+                    var val = value.ToDouble();
+                    var zero = val % MultipleOf.Value == 0.0; // Modulus(Double) is a well-defined operation
+                    if (!zero) return false;
+                }
             }
 
             return true;
