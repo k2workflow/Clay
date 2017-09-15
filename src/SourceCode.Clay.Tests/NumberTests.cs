@@ -6,38 +6,53 @@ namespace SourceCode.Clay.Tests
 {
     // Parameters are used to disambiguate theories
 #   pragma warning disable xUnit1026 // Theory methods should use all of their parameters
+
     public class NumberTests
     {
         [
-            InlineData("null", null),
-            InlineData(nameof(SByte), (sbyte)1),
-            InlineData(nameof(Byte), (byte)2),
-            InlineData(nameof(Int16), (short)3),
-            InlineData(nameof(UInt16), (ushort)4),
-            InlineData(nameof(Int32), 5),
-            InlineData(nameof(UInt32), 6U),
-            InlineData(nameof(Int64), 7L),
-            InlineData(nameof(UInt64), 8UL),
-            InlineData(nameof(Single), 9.0F),
-            InlineData(nameof(Double), 10.0)
+            InlineData("null", null, NumberKind.Null, false),
+            InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
+            InlineData(nameof(Byte), (byte)2, NumberKind.Integer, false),
+            InlineData(nameof(Int16) + "=0", (short)0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int16), (short)3, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt16) + "=0", (ushort)0, NumberKind.Integer, true),
+            InlineData(nameof(UInt16), (ushort)4, NumberKind.Integer, false),
+            InlineData(nameof(Int32) + "=0", 0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int32), 5, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt32) + "=0", 0U, NumberKind.Integer, true),
+            InlineData(nameof(UInt32), 6U, NumberKind.Integer, false),
+            InlineData(nameof(Int64) + "=0", 0L, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int64), 7L, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt64) + "=0", 0UL, NumberKind.Integer, true),
+            InlineData(nameof(UInt64), 8UL, NumberKind.Integer, false),
+            InlineData(nameof(Single) + "=0", 0.0F, NumberKind.Real | NumberKind.Signed, true),
+            InlineData(nameof(Single), 9.0F, NumberKind.Real | NumberKind.Signed, false),
+            InlineData(nameof(Double) + "=0", 0.0, NumberKind.Real | NumberKind.Signed, true),
+            InlineData(nameof(Double), 10.0, NumberKind.Real | NumberKind.Signed, false)
         ]
         [Theory(DisplayName = nameof(Number_ContructGet))]
-        public void Number_ContructGet(string description, object value)
+        public void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
         {
-            var sut = Number.CreateFromObject(value);
-            Assert.Equal(value, sut.Value);
+            var actual = Number.CreateFromObject(expected);
+            Assert.Equal(expected, actual.Value);
 
-            if (value == null) return;
+            if (expected == null) return;
 
-            var t = value.GetType();
+            var t = expected.GetType();
             var nullable = typeof(Nullable<>).MakeGenericType(t);
             var nullableCtor = nullable.GetConstructor(new[] { t });
 
-            sut = Number.CreateFromObject(nullableCtor.Invoke(new[] { value }));
-            Assert.Equal(value, sut.Value);
+            actual = Number.CreateFromObject(nullableCtor.Invoke(new[] { expected }));
+            Assert.Equal(expected, actual.Value);
+            Assert.Equal(kind, actual.Kind);
+            Assert.Equal(isZero, actual.IsZero);
 
-            sut = Number.CreateFromObject(Activator.CreateInstance(nullable));
-            Assert.False(sut.HasValue);
+            actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
+            Assert.False(actual.HasValue);
+            Assert.Equal(NumberKind.Null, actual.Kind);
+            Assert.False(actual.IsZero);
         }
 
         [
@@ -53,10 +68,10 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Double), 10.0)
         ]
         [Theory(DisplayName = nameof(Number_ToString))]
-        public void Number_ToString(string description, object value)
+        public void Number_ToString(string description, object expected)
         {
-            var sut = Number.CreateFromObject(value);
-            Assert.Equal(sut.ToString(), value.ToString());
+            var actual = Number.CreateFromObject(expected);
+            Assert.Equal(expected.ToString(), actual.ToString());
         }
 
         [
@@ -86,7 +101,7 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Int16), nameof(Byte), (short)10, (short)100, (byte)10, (byte)100),
             InlineData(nameof(Int16), nameof(Int16), (short)-100, (short)100, (short)-100, (short)100),
             InlineData(nameof(Int16), nameof(UInt16), (short)10, (short)100, (ushort)10, (ushort)100),
-            InlineData(nameof(Int16), nameof(Int32), (short) -100, (short)100, -100, 100),
+            InlineData(nameof(Int16), nameof(Int32), (short)-100, (short)100, -100, 100),
             InlineData(nameof(Int16), nameof(UInt32), (short)10, (short)100, 10U, 100U),
             InlineData(nameof(Int16), nameof(Int64), (short)-100, (short)100, -100L, 100L),
             InlineData(nameof(Int16), nameof(UInt64), (short)10, (short)100, 10UL, 100UL),
@@ -324,5 +339,6 @@ namespace SourceCode.Clay.Tests
             aMax.CompareTo(bMax);
         }
     }
+
 #   pragma warning restore xUnit1026 // Theory methods should use all of their parameters
 }

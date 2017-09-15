@@ -10,106 +10,117 @@ namespace SourceCode.Clay
     /// <summary>
     /// Represents an efficient discriminated union across all the primitive number types.
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
+    [StructLayout(LayoutKind.Explicit)] // 9 bytes
     public struct Number : IEquatable<Number>, IComparable, IComparable<Number>, IFormattable, IConvertible
     {
-        #region ObjectFactory
-
-        private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
-
-        private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
-        {
-            var rthParam = Expression.Parameter(typeof(RuntimeTypeHandle), "rth");
-            var objParam = Expression.Parameter(typeof(object), "value");
-
-            var types = new[]
-            {
-                typeof(sbyte),
-                typeof(byte),
-                typeof(short),
-                typeof(ushort),
-                typeof(int),
-                typeof(uint),
-                typeof(long),
-                typeof(ulong),
-                typeof(float),
-                typeof(double)
-            };
-
-            var cases = new SwitchCase[types.Length * 2];
-            for (var i = 0; i < types.Length; i++)
-            {
-                var j = i * 2;
-                var type = types[i];
-                var ctor = typeof(Number).GetConstructor(new[] { type });
-                var cast = Expression.Convert(objParam, type);
-                var create = Expression.New(ctor, cast);
-                cases[j] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
-
-                type = typeof(Nullable<>).MakeGenericType(type);
-                ctor = typeof(Number).GetConstructor(new[] { type });
-                cast = Expression.Convert(objParam, type);
-                create = Expression.New(ctor, cast);
-                cases[j + 1] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
-            }
-
-            var thrwCtor = typeof(ArgumentOutOfRangeException).GetConstructor(new[] { typeof(string) });
-            var thrw = Expression.Throw(Expression.New(thrwCtor, Expression.Constant("value")), typeof(Number));
-
-            var comp = typeof(Number).GetMethod(nameof(TypeHandleEquals), BindingFlags.NonPublic | BindingFlags.Static);
-
-            var swtch = Expression.Switch(
-                rthParam,
-                thrw,
-                comp,
-                cases
-            );
-
-            return Expression.Lambda<Func<RuntimeTypeHandle, object, Number>>(swtch, rthParam, objParam).Compile();
-        }
-
-        private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
-
-        #endregion
-
         #region Fields
 
-        [FieldOffset(0)]
+        // Signed
+
+        [FieldOffset(0)] // [0..0]
         private readonly sbyte _sbyte;
 
-        [FieldOffset(0)]
-        private readonly byte _byte;
-
-        [FieldOffset(0)]
+        [FieldOffset(0)] // [0..1]
         private readonly short _int16;
 
-        [FieldOffset(0)]
-        private readonly ushort _uint16;
-
-        [FieldOffset(0)]
+        [FieldOffset(0)] // [0..3]
         private readonly int _int32;
 
-        [FieldOffset(0)]
-        private readonly uint _uint32;
-
-        [FieldOffset(0)]
+        [FieldOffset(0)] // [0..7]
         private readonly long _int64;
 
-        [FieldOffset(0)]
+        // Unsigned
+
+        [FieldOffset(0)] // [0..0]
+        private readonly byte _byte;
+
+        [FieldOffset(0)] // [0..1]
+        private readonly ushort _uint16;
+
+        [FieldOffset(0)] // [0..3]
+        private readonly uint _uint32;
+
+        [FieldOffset(0)] // [0..7]
         private readonly ulong _uint64;
 
-        [FieldOffset(0)]
+        // Float
+
+        [FieldOffset(0)] // [0..3]
         private readonly float _single;
 
-        [FieldOffset(0)]
+        [FieldOffset(0)] // [0..7]
         private readonly double _double;
 
-        [FieldOffset(8)]
+        // Discriminator
+
+        [FieldOffset(8)] // [8..8]
         private readonly byte _typeCode;
 
         #endregion
 
         #region Properties
+
+        public NumberKind Kind
+        {
+            get
+            {
+                switch (ValueTypeCode)
+                {
+                    // Signed
+                    case TypeCode.SByte:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                        return NumberKind.Integer | NumberKind.Signed;
+
+                    // Unsigned
+                    case TypeCode.Byte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                        return NumberKind.Integer;
+
+                    // Float
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+                        return NumberKind.Real | NumberKind.Signed;
+
+                    // Empty
+                    default:
+                        return NumberKind.Null;
+                }
+            }
+        }
+
+        public bool IsZero
+        {
+            get
+            {
+                switch (ValueTypeCode)
+                {
+                    // Signed
+                    case TypeCode.SByte:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+
+                    // Unsigned
+                    case TypeCode.Byte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+
+                    // Float
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+                        return _uint64 == 0;
+
+                    // Empty
+                    default:
+                        return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the value as a <see cref="sbyte"/>.
@@ -186,16 +197,23 @@ namespace SourceCode.Clay
             {
                 switch (ValueTypeCode)
                 {
-                    case TypeCode.Byte: return _byte;
-                    case TypeCode.Double: return _double;
+                    // Signed
+                    case TypeCode.SByte: return _sbyte;
                     case TypeCode.Int16: return _int16;
                     case TypeCode.Int32: return _int32;
                     case TypeCode.Int64: return _int64;
-                    case TypeCode.SByte: return _sbyte;
-                    case TypeCode.Single: return _single;
+
+                    // Unsigned
+                    case TypeCode.Byte: return _byte;
                     case TypeCode.UInt16: return _uint16;
                     case TypeCode.UInt32: return _uint32;
                     case TypeCode.UInt64: return _uint64;
+
+                    // Float
+                    case TypeCode.Single: return _single;
+                    case TypeCode.Double: return _double;
+
+                    // Empty
                     default: return null;
                 }
             }
@@ -209,17 +227,6 @@ namespace SourceCode.Clay
         #endregion
 
         #region Constructors
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
-        /// value type.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The <see cref="Number"/> instance.</returns>
-        public static Number CreateFromObject(object value)
-            => ReferenceEquals(value, null)
-            ? default
-            : _objectFactory(value.GetType().TypeHandle, value);
 
         /// <summary>
         /// Creates a new instance of the <see cref="Number"/> struct.
@@ -473,6 +480,82 @@ namespace SourceCode.Clay
 
         #endregion
 
+        #region Factory
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
+        /// value type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The <see cref="Number"/> instance.</returns>
+        public static Number CreateFromObject(object value)
+            => ReferenceEquals(value, null)
+            ? default
+            : _objectFactory(value.GetType().TypeHandle, value);
+
+        private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
+
+        private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
+        {
+            var rthParam = Expression.Parameter(typeof(RuntimeTypeHandle), "rth");
+            var objParam = Expression.Parameter(typeof(object), "value");
+
+            var types = new[]
+            {
+                // Signed
+                typeof(sbyte),
+                typeof(short),
+                typeof(int),
+                typeof(long),
+
+                // Unsigned
+                typeof(byte),
+                typeof(ushort),
+                typeof(uint),
+                typeof(ulong),
+
+                // Float
+                typeof(float),
+                typeof(double)
+            };
+
+            var cases = new SwitchCase[types.Length * 2];
+            for (var i = 0; i < types.Length; i++)
+            {
+                var j = i * 2;
+                var type = types[i];
+                var ctor = typeof(Number).GetConstructor(new[] { type });
+                var cast = Expression.Convert(objParam, type);
+                var create = Expression.New(ctor, cast);
+                cases[j] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
+
+                type = typeof(Nullable<>).MakeGenericType(type);
+                ctor = typeof(Number).GetConstructor(new[] { type });
+                cast = Expression.Convert(objParam, type);
+                create = Expression.New(ctor, cast);
+                cases[j + 1] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
+            }
+
+            var thrwCtor = typeof(ArgumentOutOfRangeException).GetConstructor(new[] { typeof(string) });
+            var thrw = Expression.Throw(Expression.New(thrwCtor, Expression.Constant("value")), typeof(Number));
+
+            var comp = typeof(Number).GetMethod(nameof(TypeHandleEquals), BindingFlags.NonPublic | BindingFlags.Static);
+
+            var swtch = Expression.Switch(
+                rthParam,
+                thrw,
+                comp,
+                cases
+            );
+
+            var lambda = Expression.Lambda<Func<RuntimeTypeHandle, object, Number>>(swtch, rthParam, objParam).Compile();
+            return lambda;
+        }
+
+        private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
+
+        #endregion
+
         #region Methods
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -487,19 +570,19 @@ namespace SourceCode.Clay
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="format">The format of the number to use.</param>
         /// <returns>A string representation of the number.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public string ToString(string format) => ToString(format, CultureInfo.CurrentCulture);
+        public string ToString(string format)
+            => ToString(format, CultureInfo.CurrentCulture);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="provider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public string ToString(IFormatProvider provider) => ToString(null, provider);
+        public string ToString(IFormatProvider provider)
+            => ToString(null, provider);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <returns>A <see cref="T:System.String" /> containing the number.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+        public override string ToString()
+            => ToString(null, CultureInfo.CurrentCulture);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="format">The format of the number to use.</param>
@@ -510,16 +593,22 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return _byte.ToString(format, formatProvider);
-                case TypeCode.Double: return _double.ToString(format, formatProvider);
+                // Signed
+                case TypeCode.SByte: return _sbyte.ToString(format, formatProvider);
                 case TypeCode.Int16: return _int16.ToString(format, formatProvider);
                 case TypeCode.Int32: return _int32.ToString(format, formatProvider);
                 case TypeCode.Int64: return _int64.ToString(format, formatProvider);
-                case TypeCode.SByte: return _sbyte.ToString(format, formatProvider);
-                case TypeCode.Single: return _single.ToString(format, formatProvider);
+
+                // Unsigned
+                case TypeCode.Byte: return _byte.ToString(format, formatProvider);
                 case TypeCode.UInt16: return _uint16.ToString(format, formatProvider);
                 case TypeCode.UInt32: return _uint32.ToString(format, formatProvider);
                 case TypeCode.UInt64: return _uint64.ToString(format, formatProvider);
+
+                // Float
+                case TypeCode.Single: return _single.ToString(format, formatProvider);
+                case TypeCode.Double: return _double.ToString(format, formatProvider);
+
                 default: return string.Empty;
             }
         }
@@ -531,10 +620,9 @@ namespace SourceCode.Clay
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
         /// <param name="obj">The object to compare with the current instance.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
-            => (obj is Number o && Equals(o))
-            || (ReferenceEquals(obj, null) && _typeCode == 0);
+            => (ReferenceEquals(obj, null) && _typeCode == 0)
+            || (obj is Number o && Equals(o));
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
@@ -549,7 +637,6 @@ namespace SourceCode.Clay
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             var hc = 17;
@@ -563,10 +650,8 @@ namespace SourceCode.Clay
             return hc;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Number x, Number y) => x.Equals(y);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Number x, Number y) => !(x == y);
 
         #endregion
@@ -578,7 +663,6 @@ namespace SourceCode.Clay
         /// <param name="obj">An object to compare with this instance.</param>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         ///   <paramref name="obj" /> is not the same type as this instance.</exception>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(object obj)
         {
             if (ReferenceEquals(obj, null))
@@ -586,14 +670,15 @@ namespace SourceCode.Clay
                 if (_typeCode == 0) return 0;
                 return 1;
             }
-            else if (!(obj is Number n)) throw new ArgumentOutOfRangeException(nameof(obj));
-            else return CompareTo(n);
+
+            if (!(obj is Number n)) throw new ArgumentOutOfRangeException(nameof(obj));
+
+            return CompareTo(n);
         }
 
         /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
         /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
         /// <param name="other">An object to compare with this instance.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Number other)
         {
             if (_typeCode == 0 && other._typeCode == 0) return 0;
@@ -707,16 +792,12 @@ namespace SourceCode.Clay
             return 0;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator <(Number x, Number y) => x.CompareTo(y) < 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator >(Number x, Number y) => x.CompareTo(y) > 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator <=(Number x, Number y) => x.CompareTo(y) <= 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator >=(Number x, Number y) => x.CompareTo(y) >= 0;
 
         #endregion
@@ -875,20 +956,53 @@ namespace SourceCode.Clay
             }
         }
 
+        public double ToDouble()
+        {
+            // Do not return _double directly; that may end up being a reinterpret_cast
+            switch (ValueTypeCode)
+            {
+                // Signed
+                case TypeCode.SByte: return (double)_sbyte;
+                case TypeCode.Int16: return (double)_int16;
+                case TypeCode.Int32: return (double)_int32;
+                case TypeCode.Int64: return (double)_int64;
+
+                // Unsigned
+                case TypeCode.Byte: return (double)_byte;
+                case TypeCode.UInt16: return (double)_uint16;
+                case TypeCode.UInt32: return (double)_uint32;
+                case TypeCode.UInt64: return (double)_uint64;
+
+                // Float
+                case TypeCode.Single: return (double)_single;
+                case TypeCode.Double: return _double;
+
+                // Empty
+                default: return default;
+            }
+        }
+
         double IConvertible.ToDouble(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToDouble(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToDouble(provider);
+                // Signed
+                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDouble(provider);
                 case TypeCode.Int16: return ((IConvertible)_int16).ToDouble(provider);
                 case TypeCode.Int32: return ((IConvertible)_int32).ToDouble(provider);
                 case TypeCode.Int64: return ((IConvertible)_int64).ToDouble(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDouble(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToDouble(provider);
+
+                // Unsigned
+                case TypeCode.Byte: return ((IConvertible)_byte).ToDouble(provider);
                 case TypeCode.UInt16: return ((IConvertible)_uint16).ToDouble(provider);
                 case TypeCode.UInt32: return ((IConvertible)_uint32).ToDouble(provider);
                 case TypeCode.UInt64: return ((IConvertible)_uint64).ToDouble(provider);
+
+                // Float
+                case TypeCode.Single: return ((IConvertible)_single).ToDouble(provider);
+                case TypeCode.Double: return ((IConvertible)_double).ToDouble(provider);
+
+                // Empty
                 default: return default;
             }
         }
@@ -929,20 +1043,53 @@ namespace SourceCode.Clay
             }
         }
 
+        public long ToInt64()
+        {
+            // Do not return _double directly; that may end up being a reinterpret_cast
+            switch (ValueTypeCode)
+            {
+                // Signed
+                case TypeCode.SByte: return (long)_sbyte;
+                case TypeCode.Int16: return (long)_int16;
+                case TypeCode.Int32: return (long)_int32;
+                case TypeCode.Int64: return _int64;
+
+                // Unsigned
+                case TypeCode.Byte: return (long)_byte;
+                case TypeCode.UInt16: return (long)_uint16;
+                case TypeCode.UInt32: return (long)_uint32;
+                case TypeCode.UInt64: return (long)_uint64;
+
+                // Float
+                case TypeCode.Single: return (long)_single;
+                case TypeCode.Double: return (long)_double;
+
+                // Empty
+                default: return default;
+            }
+        }
+
         long IConvertible.ToInt64(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToInt64(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToInt64(provider);
+                // Signed
+                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt64(provider);
                 case TypeCode.Int16: return ((IConvertible)_int16).ToInt64(provider);
                 case TypeCode.Int32: return ((IConvertible)_int32).ToInt64(provider);
                 case TypeCode.Int64: return ((IConvertible)_int64).ToInt64(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt64(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToInt64(provider);
+
+                // Unsigned
+                case TypeCode.Byte: return ((IConvertible)_byte).ToInt64(provider);
                 case TypeCode.UInt16: return ((IConvertible)_uint16).ToInt64(provider);
                 case TypeCode.UInt32: return ((IConvertible)_uint32).ToInt64(provider);
                 case TypeCode.UInt64: return ((IConvertible)_uint64).ToInt64(provider);
+
+                // Float
+                case TypeCode.Single: return ((IConvertible)_single).ToInt64(provider);
+                case TypeCode.Double: return ((IConvertible)_double).ToInt64(provider);
+
+                // Empty
                 default: return default;
             }
         }
@@ -1057,4 +1204,22 @@ namespace SourceCode.Clay
 
         #endregion
     }
+
+#pragma warning disable S2342 // Enumeration types should comply with a naming convention
+#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
+
+    [Flags]
+    public enum NumberKind
+    {
+        Null = 0, // Default
+
+        Signed = 1,
+
+        Integer = 2,
+
+        Real = 4
+    }
+
+#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
+#pragma warning restore S2342 // Enumeration types should comply with a naming convention
 }
