@@ -60,7 +60,7 @@ namespace SourceCode.Clay
 
         #region Properties
 
-        public bool IsInteger
+        public NumberKind Kind
         {
             get
             {
@@ -71,52 +71,23 @@ namespace SourceCode.Clay
                     case TypeCode.Int16:
                     case TypeCode.Int32:
                     case TypeCode.Int64:
+                        return NumberKind.Integer | NumberKind.Signed;
 
                     // Unsigned
                     case TypeCode.Byte:
                     case TypeCode.UInt16:
                     case TypeCode.UInt32:
                     case TypeCode.UInt64:
-                        return true;
+                        return NumberKind.Integer;
 
                     // Float
                     case TypeCode.Single:
                     case TypeCode.Double:
+                        return NumberKind.Real | NumberKind.Signed;
 
                     // Empty
                     default:
-                        return false;
-                }
-            }
-        }
-
-        public bool IsSigned
-        {
-            get
-            {
-                switch (ValueTypeCode)
-                {
-                    // Float
-                    case TypeCode.Single:
-                    case TypeCode.Double:
-
-                    // Signed
-                    case TypeCode.SByte:
-                    case TypeCode.Int16:
-                    case TypeCode.Int32:
-                    case TypeCode.Int64:
-                        return true;
-
-                    // Unsigned
-                    case TypeCode.Byte:
-                    case TypeCode.UInt16:
-                    case TypeCode.UInt32:
-                    case TypeCode.UInt64:
-                        return false;
-
-                    // Empty
-                    default:
-                        return false;
+                        return NumberKind.Null;
                 }
             }
         }
@@ -986,7 +957,30 @@ namespace SourceCode.Clay
         }
 
         public double ToDouble()
-            => ((IConvertible)this).ToDouble(CultureInfo.InvariantCulture); // Do not return _double directly; that may end up being a reinterpret_cast
+        {
+            // Do not return _double directly; that may end up being a reinterpret_cast
+            switch (ValueTypeCode)
+            {
+                // Signed
+                case TypeCode.SByte: return (double)_sbyte;
+                case TypeCode.Int16: return (double)_int16;
+                case TypeCode.Int32: return (double)_int32;
+                case TypeCode.Int64: return (double)_int64;
+
+                // Unsigned
+                case TypeCode.Byte: return (double)_byte;
+                case TypeCode.UInt16: return (double)_uint16;
+                case TypeCode.UInt32: return (double)_uint32;
+                case TypeCode.UInt64: return (double)_uint64;
+
+                // Float
+                case TypeCode.Single: return (double)_single;
+                case TypeCode.Double: return _double;
+
+                // Empty
+                default: return default;
+            }
+        }
 
         double IConvertible.ToDouble(IFormatProvider provider)
         {
@@ -1049,8 +1043,31 @@ namespace SourceCode.Clay
             }
         }
 
-        public double ToInt64()
-            => ((IConvertible)this).ToInt64(CultureInfo.InvariantCulture); // Do not return _int64 directly; that may end up being a reinterpret_cast
+        public long ToInt64()
+        {
+            // Do not return _double directly; that may end up being a reinterpret_cast
+            switch (ValueTypeCode)
+            {
+                // Signed
+                case TypeCode.SByte: return (long)_sbyte;
+                case TypeCode.Int16: return (long)_int16;
+                case TypeCode.Int32: return (long)_int32;
+                case TypeCode.Int64: return _int64;
+
+                // Unsigned
+                case TypeCode.Byte: return (long)_byte;
+                case TypeCode.UInt16: return (long)_uint16;
+                case TypeCode.UInt32: return (long)_uint32;
+                case TypeCode.UInt64: return (long)_uint64;
+
+                // Float
+                case TypeCode.Single: return (long)_single;
+                case TypeCode.Double: return (long)_double;
+
+                // Empty
+                default: return default;
+            }
+        }
 
         long IConvertible.ToInt64(IFormatProvider provider)
         {
@@ -1187,4 +1204,22 @@ namespace SourceCode.Clay
 
         #endregion
     }
+
+#pragma warning disable S2342 // Enumeration types should comply with a naming convention
+#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
+
+    [Flags]
+    public enum NumberKind
+    {
+        Null = 0, // Default
+
+        Signed = 1,
+
+        Integer = 2,
+
+        Real = 4
+    }
+
+#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
+#pragma warning restore S2342 // Enumeration types should comply with a naming convention
 }
