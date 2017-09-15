@@ -79,7 +79,11 @@ namespace SourceCode.Clay
                     case TypeCode.UInt64:
                         return true;
 
-                    // Float, Empty
+                    // Float
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+
+                    // Empty
                     default:
                         return false;
                 }
