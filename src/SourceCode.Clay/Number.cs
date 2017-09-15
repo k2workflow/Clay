@@ -79,7 +79,37 @@ namespace SourceCode.Clay
                     case TypeCode.UInt64:
                         return true;
 
+                    // Float, Empty
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public bool IsZero
+        {
+            get
+            {
+                switch (ValueTypeCode)
+                {
+                    // Signed
+                    case TypeCode.SByte:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+
+                    // Unsigned
+                    case TypeCode.Byte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+
                     // Float
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+                        return _uint64 == 0;
+
+                    // Empty
                     default:
                         return false;
                 }
@@ -176,6 +206,8 @@ namespace SourceCode.Clay
                     // Float
                     case TypeCode.Single: return _single;
                     case TypeCode.Double: return _double;
+
+                    // Empty
                     default: return null;
                 }
             }

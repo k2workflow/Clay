@@ -10,20 +10,30 @@ namespace SourceCode.Clay.Tests
     public class NumberTests
     {
         [
-            InlineData("null", null, false),
-            InlineData(nameof(SByte), (sbyte)1, true),
-            InlineData(nameof(Byte), (byte)2, true),
-            InlineData(nameof(Int16), (short)3, true),
-            InlineData(nameof(UInt16), (ushort)4, true),
-            InlineData(nameof(Int32), 5, true),
-            InlineData(nameof(UInt32), 6U, true),
-            InlineData(nameof(Int64), 7L, true),
-            InlineData(nameof(UInt64), 8UL, true),
-            InlineData(nameof(Single), 9.0F, false),
-            InlineData(nameof(Double), 10.0, false)
+            InlineData("null", null, false, false),
+            InlineData(nameof(SByte) + "=0", (sbyte)0, true, true),
+            InlineData(nameof(SByte), (sbyte)1, true, false),
+            InlineData(nameof(Byte) + "=0", (byte)0, true, true),
+            InlineData(nameof(Byte), (byte)2, true, false),
+            InlineData(nameof(Int16) + "=0", (short)0, true, true),
+            InlineData(nameof(Int16), (short)3, true, false),
+            InlineData(nameof(UInt16) + "=0", (ushort)0, true, true),
+            InlineData(nameof(UInt16), (ushort)4, true, false),
+            InlineData(nameof(Int32) + "=0", 0, true, true),
+            InlineData(nameof(Int32), 5, true, false),
+            InlineData(nameof(UInt32) + "=0", 0U, true, true),
+            InlineData(nameof(UInt32), 6U, true, false),
+            InlineData(nameof(Int64) + "=0", 0L, true, true),
+            InlineData(nameof(Int64), 7L, true, false),
+            InlineData(nameof(UInt64) + "=0", 0UL, true, true),
+            InlineData(nameof(UInt64), 8UL, true, false),
+            InlineData(nameof(Single) + "=0", 0.0F, false, true),
+            InlineData(nameof(Single), 9.0F, false, false),
+            InlineData(nameof(Double) + "=0", 0.0, false, true),
+            InlineData(nameof(Double), 10.0, false, false)
         ]
         [Theory(DisplayName = nameof(Number_ContructGet))]
-        public void Number_ContructGet(string description, object expected, bool isInteger)
+        public void Number_ContructGet(string description, object expected, bool isInteger, bool isZero)
         {
             var actual = Number.CreateFromObject(expected);
             Assert.Equal(expected, actual.Value);
@@ -37,10 +47,12 @@ namespace SourceCode.Clay.Tests
             actual = Number.CreateFromObject(nullableCtor.Invoke(new[] { expected }));
             Assert.Equal(expected, actual.Value);
             Assert.Equal(isInteger, actual.IsInteger);
+            Assert.Equal(isZero, actual.IsZero);
 
             actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
             Assert.False(actual.HasValue);
             Assert.False(actual.IsInteger);
+            Assert.False(actual.IsZero);
         }
 
         [
