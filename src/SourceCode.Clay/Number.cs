@@ -954,20 +954,30 @@ namespace SourceCode.Clay
             }
         }
 
-        double IConvertible.ToDouble(IFormatProvider provider)
+        public double ToDouble()
+            => _double; // Same but faster result as calling ToDouble(CultureInfo.InvariantCulture)
+
+        public double ToDouble(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToDouble(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToDouble(provider);
+                // Signed
+                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDouble(provider);
                 case TypeCode.Int16: return ((IConvertible)_int16).ToDouble(provider);
                 case TypeCode.Int32: return ((IConvertible)_int32).ToDouble(provider);
                 case TypeCode.Int64: return ((IConvertible)_int64).ToDouble(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDouble(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToDouble(provider);
+
+                // Unsigned
+                case TypeCode.Byte: return ((IConvertible)_byte).ToDouble(provider);
                 case TypeCode.UInt16: return ((IConvertible)_uint16).ToDouble(provider);
                 case TypeCode.UInt32: return ((IConvertible)_uint32).ToDouble(provider);
                 case TypeCode.UInt64: return ((IConvertible)_uint64).ToDouble(provider);
+
+                // Float
+                case TypeCode.Single: return ((IConvertible)_single).ToDouble(provider);
+                case TypeCode.Double: return ((IConvertible)_double).ToDouble(provider);
+
+                // Empty
                 default: return default;
             }
         }
@@ -1008,20 +1018,30 @@ namespace SourceCode.Clay
             }
         }
 
-        long IConvertible.ToInt64(IFormatProvider provider)
+        public double ToInt64()
+            => _int64; // Same but faster result as calling ToInt64(CultureInfo.InvariantCulture)
+
+        public long ToInt64(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToInt64(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToInt64(provider);
+                // Signed
+                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt64(provider);
                 case TypeCode.Int16: return ((IConvertible)_int16).ToInt64(provider);
                 case TypeCode.Int32: return ((IConvertible)_int32).ToInt64(provider);
                 case TypeCode.Int64: return ((IConvertible)_int64).ToInt64(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt64(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToInt64(provider);
+
+                // Unsigned
+                case TypeCode.Byte: return ((IConvertible)_byte).ToInt64(provider);
                 case TypeCode.UInt16: return ((IConvertible)_uint16).ToInt64(provider);
                 case TypeCode.UInt32: return ((IConvertible)_uint32).ToInt64(provider);
                 case TypeCode.UInt64: return ((IConvertible)_uint64).ToInt64(provider);
+
+                // Float
+                case TypeCode.Single: return ((IConvertible)_single).ToInt64(provider);
+                case TypeCode.Double: return ((IConvertible)_double).ToInt64(provider);
+
+                // Empty
                 default: return default;
             }
         }
