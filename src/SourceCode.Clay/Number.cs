@@ -955,7 +955,7 @@ namespace SourceCode.Clay
         }
 
         public double ToDouble()
-            => _double; // Same but faster result as calling ToDouble(CultureInfo.InvariantCulture)
+            => ToDouble(CultureInfo.InvariantCulture); // Do not return _double directly; that may end up being a reinterpret_cast
 
         public double ToDouble(IFormatProvider provider)
         {
@@ -1019,7 +1019,7 @@ namespace SourceCode.Clay
         }
 
         public double ToInt64()
-            => _int64; // Same but faster result as calling ToInt64(CultureInfo.InvariantCulture)
+            => ToInt64(CultureInfo.InvariantCulture); // Do not return _int64 directly; that may end up being a reinterpret_cast
 
         public long ToInt64(IFormatProvider provider)
         {
