@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
-    public static class LengthValidatorUnits
+    public static class LengthValidatorTests
     {
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_LengthValidator))]

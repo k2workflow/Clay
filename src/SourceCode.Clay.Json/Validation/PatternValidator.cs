@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Json.Validation
 
         public PatternValidator(string pattern, bool required, RegexOptions options, TimeSpan timeout)
         {
-            if (!string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException(nameof(pattern));
+            if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException(nameof(pattern));
 
             Pattern = pattern;
             Required = required;

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
-    public static class DoubleValidatorUnits
+    public static class DoubleValidatorTests
     {
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_DoubleValidator))]
