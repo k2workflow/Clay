@@ -90,6 +90,37 @@ namespace SourceCode.Clay
             }
         }
 
+        public bool IsSigned
+        {
+            get
+            {
+                switch (ValueTypeCode)
+                {
+                    // Float
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+
+                    // Signed
+                    case TypeCode.SByte:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                        return true;
+
+                    // Unsigned
+                    case TypeCode.Byte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                        return false;
+
+                    // Empty
+                    default:
+                        return false;
+                }
+            }
+        }
+
         public bool IsZero
         {
             get
@@ -480,6 +511,17 @@ namespace SourceCode.Clay
 
         #region Factory
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
+        /// value type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The <see cref="Number"/> instance.</returns>
+        public static Number CreateFromObject(object value)
+            => ReferenceEquals(value, null)
+            ? default
+            : _objectFactory(value.GetType().TypeHandle, value);
+
         private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
 
         private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
@@ -540,17 +582,6 @@ namespace SourceCode.Clay
         }
 
         private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
-        /// value type.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The <see cref="Number"/> instance.</returns>
-        public static Number CreateFromObject(object value)
-            => ReferenceEquals(value, null)
-            ? default
-            : _objectFactory(value.GetType().TypeHandle, value);
 
         #endregion
 
@@ -955,9 +986,9 @@ namespace SourceCode.Clay
         }
 
         public double ToDouble()
-            => ToDouble(CultureInfo.InvariantCulture); // Do not return _double directly; that may end up being a reinterpret_cast
+            => ((IConvertible)this).ToDouble(CultureInfo.InvariantCulture); // Do not return _double directly; that may end up being a reinterpret_cast
 
-        public double ToDouble(IFormatProvider provider)
+        double IConvertible.ToDouble(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
@@ -1019,9 +1050,9 @@ namespace SourceCode.Clay
         }
 
         public double ToInt64()
-            => ToInt64(CultureInfo.InvariantCulture); // Do not return _int64 directly; that may end up being a reinterpret_cast
+            => ((IConvertible)this).ToInt64(CultureInfo.InvariantCulture); // Do not return _int64 directly; that may end up being a reinterpret_cast
 
-        public long ToInt64(IFormatProvider provider)
+        long IConvertible.ToInt64(IFormatProvider provider)
         {
             switch (ValueTypeCode)
             {
