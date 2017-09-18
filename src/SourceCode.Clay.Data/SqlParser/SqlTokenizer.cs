@@ -55,16 +55,17 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        private static IEnumerable<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
+        private static IReadOnlyList<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(reader != null);
             var peekBuffer = new char[2];
 
+            var tokens = new List<SqlTokenInfo>();
             while (true)
             {
                 reader.FillLength(peekBuffer, peekBuffer.Length, out var peekLength);
                 if (peekLength <= 0)
-                    yield break;
+                    return tokens;
 
                 SqlTokenInfo token;
 
@@ -106,7 +107,7 @@ namespace SourceCode.Clay.Data.SqlParser
                         throw new InvalidOperationException($"Unknown {nameof(SqlTokenKind)}: {kind}");
                 }
 
-                yield return token;
+                tokens.Add(token);
             }
         }
 
