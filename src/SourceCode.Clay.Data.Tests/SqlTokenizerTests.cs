@@ -51,6 +51,12 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
         public static void Tokenize_messy_proc_2_params()
         {
+            Console.Out.WriteLine(sql1);
+            var tokens = SqlTokenizer.Tokenize(sql1, true);
+            Console.Out.WriteLine($"Tokens = {tokens.Count}");
+            foreach (var token in tokens)
+                Console.Out.Write($"{token}, ");
+
             var @params = SqlParamBlockParser.ParseProcedure(sql1, out var errors);
 
             if (errors != null && errors.Count > 0)

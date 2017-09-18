@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    internal static class SqlTokenizer
+    public static class SqlTokenizer
     {
         #region Tokenize
 
