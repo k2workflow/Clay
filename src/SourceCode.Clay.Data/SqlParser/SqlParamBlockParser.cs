@@ -286,8 +286,9 @@ namespace SourceCode.Clay.Data.SqlParser
             Console.Out.WriteLine(a);
             bool b = StringComparer.OrdinalIgnoreCase.Equals(actual, expected2);
             Console.Out.WriteLine(b);
+
             Console.Out.Write(a || b);
-            Console.Out.Write(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1) || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
+            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1) || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
 
             if (!(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)))
@@ -301,7 +302,10 @@ namespace SourceCode.Clay.Data.SqlParser
                 return false;
             }
 
+            Console.Out.Write("NEXT");
+
             var more = tokenizer.MoveNext();
+            Console.Out.WriteLine(tokenizer.Current);
             return more;
         }
 
