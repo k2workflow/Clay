@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using Xunit;
 
 namespace SourceCode.Clay.Data.SqlParser.Tests
@@ -21,7 +22,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         [Fact(DisplayName = nameof(Tokenize_escaped_names))]
         public static void Tokenize_escaped_names()
         {
-            var @params = SqlParamBlockParser.ParseFunction(sql0);
+            var @params = SqlParamBlockParser.ParseFunction(sql0, out var errors);
 
             Assert.True(@params == null || @params.Count == 0);
         }
@@ -48,11 +49,14 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 				/* ok -- */
 			END;";
 
-        //[Trait("Type", "Unit")]
-        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
         public static void Tokenize_messy_proc_2_params()
         {
-            var @params = SqlParamBlockParser.ParseProcedure(sql1);
+            var @params = SqlParamBlockParser.ParseProcedure(sql1, out var errors);
+
+            if (errors != null && errors.Count > 0)
+                throw new Exception(errors[0]);
 
             Assert.Equal(2, @params.Count);
 
@@ -110,7 +114,7 @@ AS RETURN
         [Fact(DisplayName = nameof(Tokenize_real_function_2_params))]
         public static void Tokenize_real_function_2_params()
         {
-            var @params = SqlParamBlockParser.ParseFunction(sql2);
+            var @params = SqlParamBlockParser.ParseFunction(sql2, out var errors);
 
             Assert.Equal(2, @params.Count);
 
@@ -153,11 +157,14 @@ AS RETURN
 				/* ok -- */
 			END;";
 
-        //[Trait("Type", "Unit")]
-        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
-            var @params = SqlParamBlockParser.ParseProcedure(sql3);
+            var @params = SqlParamBlockParser.ParseProcedure(sql3, out var errors);
+
+            if (errors != null && errors.Count > 0)
+                throw new Exception(errors[0]);
 
             Assert.Equal(1, @params.Count);
 

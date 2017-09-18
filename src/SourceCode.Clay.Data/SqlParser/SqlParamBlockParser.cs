@@ -11,8 +11,10 @@ namespace SourceCode.Clay.Data.SqlParser
         #region Parse
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
-        public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
+        public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql, out IList<string> parseErrors)
         {
+            parseErrors = new List<string>();
+
             if (string.IsNullOrWhiteSpace(sql))
                 return null;
 
@@ -22,19 +24,31 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
+                {
+                    parseErrors.Add("Unexpected end of input");
                     return null;
+                }
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "CREATE"), tokenizer.Current);
                     return null;
+                }
 
                 // PROC | PROCEDURE
                 if (!ParseLiteral(tokenizer, "PROC", "PROCEDURE"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
+                }
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<module name>"), tokenizer.Current);
                     return null;
+                }
 
                 // (
                 var parenthesized = ParseSymbol(tokenizer, '(');
@@ -46,9 +60,13 @@ namespace SourceCode.Clay.Data.SqlParser
                     // Exit loop if end of parameter block
 
                     // )
-                    if (parenthesized
-                        && ParseSymbol(tokenizer, ')'))
-                        break;
+                    if (ParseSymbol(tokenizer, ')'))
+                    {
+                        if (parenthesized) break;
+
+                        parseErrors.Add($"Unexpected token {tokenizer.Current}.");
+                        return null;
+                    }
 
                     // AS, WITH or FOR
                     if (ParseLiteral(tokenizer, "AS", "WITH", "FOR"))
@@ -58,14 +76,20 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param name>"), tokenizer.Current);
                         return null;
+                    }
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param type>"), tokenizer.Current);
                         return null;
+                    }
 
                     // VARYING
                     ParseLiteral(tokenizer, "VARYING");
@@ -76,9 +100,7 @@ namespace SourceCode.Clay.Data.SqlParser
                     // OUT | OUTPUT
                     var dir = ParameterDirection.Input;
                     if (ParseLiteral(tokenizer, "OUT", "OUTPUT"))
-                    {
                         dir = ParameterDirection.InputOutput;
-                    }
 
                     // READONLY
                     var isReadOnly = ParseLiteral(tokenizer, "READONLY");
@@ -95,9 +117,16 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
-        public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql)
+        private static void BuildErrorMessage(IList<string> errors, SqlTokenInfo expected, SqlTokenInfo actual)
         {
+            errors.Add($"Expected token {expected} but got {actual}.");
+        }
+
+        // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
+        public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql, out IList<string> parseErrors)
+        {
+            parseErrors = new List<string>();
+
             if (string.IsNullOrWhiteSpace(sql))
                 return null;
 
@@ -107,23 +136,38 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
+                {
+                    parseErrors.Add("Unexpected end of input");
                     return null;
+                }
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "CREATE"), tokenizer.Current);
                     return null;
+                }
 
                 // FUNCTION
                 if (!ParseLiteral(tokenizer, "FUNCTION"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "FUNCTION"), tokenizer.Current);
                     return null;
+                }
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<module name>"), tokenizer.Current);
                     return null;
+                }
 
                 // (
                 if (!ParseSymbol(tokenizer, '('))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Symbol, "("), tokenizer.Current);
                     return null;
+                }
 
                 var parms = new Dictionary<string, SqlParamInfo>(StringComparer.Ordinal);
 
@@ -143,14 +187,20 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param name>"), tokenizer.Current);
                         return null;
+                    }
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param type>"), tokenizer.Current);
                         return null;
+                    }
 
                     // = default
                     var hasDefault = ParseDefault(tokenizer, out bool isNullable);
