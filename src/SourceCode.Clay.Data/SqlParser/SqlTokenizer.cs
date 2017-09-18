@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="sql"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
@@ -55,7 +55,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        private static IReadOnlyList<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
+        private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(reader != null);
             var peekBuffer = new char[2];
