@@ -1,10 +1,9 @@
-﻿using SourceCode.Clay.Data.SqlClient;
-using SourceCode.Clay.Data.SqlClient.Azure;
+﻿using SourceCode.Clay.Data.SqlClient.Azure;
 using System;
 using System.Data.SqlClient;
 using Xunit;
 
-namespace SourceCode.Clay.Data.Tests
+namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
