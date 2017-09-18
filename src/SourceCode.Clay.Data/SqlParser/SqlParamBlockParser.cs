@@ -253,8 +253,8 @@ namespace SourceCode.Clay.Data.SqlParser
             if (actual.Length != 1) return false;
             if (actual[0] != expected) return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected)
@@ -266,8 +266,8 @@ namespace SourceCode.Clay.Data.SqlParser
             if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected))
                 return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2)
@@ -296,11 +296,11 @@ namespace SourceCode.Clay.Data.SqlParser
                 return false;
             }
 
-            Console.Out.WriteLine("NEXT:");
+            Console.Out.Write("NEXT:");
 
             var more = tokenizer.MoveNext();
-            Console.Out.WriteLine(tokenizer.Current);
-            return more;
+            Console.Out.WriteLine($"{more}=" + tokenizer.Current);
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2, string expected3)
@@ -314,8 +314,8 @@ namespace SourceCode.Clay.Data.SqlParser
                 && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected3))
                 return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseParamName(IEnumerator<SqlTokenInfo> tokenizer, out string name)
@@ -331,8 +331,8 @@ namespace SourceCode.Clay.Data.SqlParser
 
             name = actual;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseDefault(IEnumerator<SqlTokenInfo> tokenizer, out bool isNullable)
@@ -348,9 +348,8 @@ namespace SourceCode.Clay.Data.SqlParser
 
             isNullable = ParseLiteral(tokenizer, "NULL");
 
-            // Fail if EOF
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseModuleName(IEnumerator<SqlTokenInfo> tokenizer, out string schema, out string name)
@@ -439,9 +438,8 @@ namespace SourceCode.Clay.Data.SqlParser
                 sb.Clear();
                 sb.Append(tokenizer.Current.Value); // Capture before .MoveNext
 
-                // Fail if EOF
-                more = tokenizer.MoveNext();
-                if (!more) return false;
+                tokenizer.MoveNext();
+                return true;
             }
 
             // Simple schematized type - no type details

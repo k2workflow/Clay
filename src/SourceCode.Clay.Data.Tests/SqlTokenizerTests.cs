@@ -160,8 +160,8 @@ AS RETURN
 				/* ok -- */
 			END;";
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        //[Trait("Type", "Unit")]
+        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sql3, out var errors);
