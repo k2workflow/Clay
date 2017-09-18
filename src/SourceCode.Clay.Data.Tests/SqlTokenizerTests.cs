@@ -56,7 +56,10 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
             var @params = SqlParamBlockParser.ParseProcedure(sql1, out var errors);
 
             if (errors != null && errors.Count > 0)
-                throw new Exception(errors[0]);
+            {
+                var equal = StringComparer.OrdinalIgnoreCase.Equals("PROCEDURE", "PROCedure");
+                throw new Exception($"{equal}=" + errors[0]);
+            }
 
             Assert.Equal(2, @params.Count);
 

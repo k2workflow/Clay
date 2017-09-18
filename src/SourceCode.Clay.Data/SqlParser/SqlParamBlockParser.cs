@@ -230,9 +230,10 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Symbol)
                 return false;
 
-            if (tokenizer.Current.Value == null) return false;
-            if (tokenizer.Current.Value.Length != 1) return false;
-            if (tokenizer.Current.Value[0] != expected) return false;
+            var actual = tokenizer.Current.Value;
+            if (actual == null) return false;
+            if (actual.Length != 1) return false;
+            if (actual[0] != expected) return false;
 
             var more = tokenizer.MoveNext();
             return more;
@@ -243,7 +244,8 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected))
+            var actual = tokenizer.Current.Value;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected))
                 return false;
 
             var more = tokenizer.MoveNext();
@@ -255,8 +257,9 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected1)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected2))
+            var actual = tokenizer.Current.Value;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
+                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
                 return false;
 
             var more = tokenizer.MoveNext();
@@ -268,9 +271,10 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected1)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected2)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected3))
+            var actual = tokenizer.Current.Value;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
+                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)
+                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected3))
                 return false;
 
             var more = tokenizer.MoveNext();
@@ -284,10 +288,11 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!tokenizer.Current.Value.StartsWith("@"))
+            var actual = tokenizer.Current.Value;
+            if (!actual.StartsWith("@"))
                 return false;
 
-            name = tokenizer.Current.Value;
+            name = actual;
 
             var more = tokenizer.MoveNext();
             return more;
