@@ -41,14 +41,14 @@ namespace SourceCode.Clay.Data.SqlParser
                 if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
                 {
                     Console.Out.WriteLine("-----");
-                    Console.Out.WriteLine("PROC FOUND");
+                    Console.Out.WriteLine("PROC NOT FOUND");
                     BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
                 }
                 else
                 {
                     Console.Out.WriteLine("-----");
-                    Console.Out.WriteLine("PROC NOT FOUND");
+                    Console.Out.WriteLine("PROC FOUND");
                 }
 
                 // [Name] or "Name"
@@ -272,20 +272,25 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2)
         {
-            if (tokenizer.Current.Kind != SqlTokenKind.Literal)
+            var current = tokenizer.Current;
+            if (current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            var actual = tokenizer.Current.Value; // PROC
+            var actual = current.Value; // PROC
 
             Console.Out.WriteLine(actual);
             Console.Out.WriteLine(expected1);
             Console.Out.WriteLine(expected2);
 
-            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1));
-            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
+            bool a = StringComparer.OrdinalIgnoreCase.Equals(actual, expected1);
+            Console.Out.WriteLine(a);
+            bool b = StringComparer.OrdinalIgnoreCase.Equals(actual, expected2);
+            Console.Out.WriteLine(b);
+            Console.Out.Write(a || b);
+            Console.Out.Write(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1) || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
-                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
+            if (!(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
+                || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)))
             {
                 if (actual == "PROCedure")
                 {
