@@ -40,19 +40,33 @@ namespace SourceCode.Clay.Data.SqlParser
                 // PROC | PROCEDURE
                 if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
                 {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC FOUND");
                     BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
+                }
+                else
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC NOT FOUND");
                 }
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
                 {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC NAME FOUND");
                     BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<module name>"), tokenizer.Current);
                     return null;
                 }
 
                 // (
                 var parenthesized = ParseSymbol(tokenizer, '(');
+                if (parenthesized)
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PAREN FOUND");
+                }
 
                 var parms = new Dictionary<string, SqlParamInfo>();
 
@@ -63,6 +77,9 @@ namespace SourceCode.Clay.Data.SqlParser
                     // )
                     if (ParseSymbol(tokenizer, ')'))
                     {
+                        Console.Out.WriteLine("-----");
+                        Console.Out.WriteLine(") FOUND");
+
                         if (parenthesized) break;
 
                         parseErrors.Add($"Unexpected token {tokenizer.Current}.");
