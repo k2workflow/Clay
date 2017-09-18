@@ -253,6 +253,7 @@ namespace SourceCode.Clay.Data.SqlParser
             return more;
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2)
         {
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
