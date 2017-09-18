@@ -262,7 +262,7 @@ namespace SourceCode.Clay.Data.SqlParser
             if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
             {
-                if (actual == "PROCedure" && expected2 == "PROC" && expected1 == "PROCEDURE")
+                if (actual == "PROCedure")
                 {
                     var s = actual.ToCharArray().Select(c => (int)c).Select(n => n.ToString());
                     throw new Exception(string.Join(",", s));
