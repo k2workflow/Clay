@@ -38,13 +38,10 @@ namespace SourceCode.Clay.Data.SqlParser
                 }
 
                 // PROC | PROCEDURE
-                if (!ParseLiteral(tokenizer, "PROCEDURE"))
+                if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
                 {
-                    if (!ParseLiteral(tokenizer, "PROC"))
-                    {
-                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
-                        return null;
-                    }
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
+                    return null;
                 }
 
                 // [Name] or "Name"
@@ -256,13 +253,20 @@ namespace SourceCode.Clay.Data.SqlParser
             return more;
         }
 
-        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2)
         {
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            var actual = tokenizer.Current.Value;
+            var actual = tokenizer.Current.Value; // PROC
+
+            Console.Out.WriteLine(actual);
+            Console.Out.WriteLine(expected1);
+            Console.Out.WriteLine(expected2);
+
+            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1));
+            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
+
             if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
             {
