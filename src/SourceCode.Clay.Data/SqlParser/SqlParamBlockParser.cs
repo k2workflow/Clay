@@ -22,6 +22,9 @@ namespace SourceCode.Clay.Data.SqlParser
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
             Console.Out.WriteLine($"Tokens = {tokens.Count}");
+            foreach (var token in tokens)
+                Console.Out.Write($"{token}, ");
+
             using (var tokenizer = tokens.GetEnumerator())
             {
                 var more = tokenizer.MoveNext();
