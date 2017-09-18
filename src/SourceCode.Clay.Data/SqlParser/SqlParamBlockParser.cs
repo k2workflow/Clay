@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -37,7 +38,7 @@ namespace SourceCode.Clay.Data.SqlParser
                 }
 
                 // PROC | PROCEDURE
-                if (!ParseLiteral(tokenizer, "PROC", "PROCEDURE"))
+                if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
                 {
                     BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
@@ -261,11 +262,10 @@ namespace SourceCode.Clay.Data.SqlParser
             if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
             {
-                if (actual == "PROCedure" && expected1 == "PROC" && expected2 == "PROCEDURE")
+                if (actual == "PROCedure" && expected2 == "PROC" && expected1 == "PROCEDURE")
                 {
-                    actual = actual.ToUpperInvariant();
-                    if (actual == expected1) throw new Exception("Actual1");
-                    if (actual == expected2) throw new Exception("Actual2");
+                    var s = actual.ToCharArray().Select(c => (int)c).Select(n => n.ToString());
+                    throw new Exception(string.Join(",", s));
                 }
 
                 return false;
