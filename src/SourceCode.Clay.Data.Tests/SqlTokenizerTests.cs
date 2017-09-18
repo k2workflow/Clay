@@ -52,8 +52,8 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         public static void Tokenize_messy_proc_2_params()
         {
             Console.Out.WriteLine(sql1);
-            var tokens = SqlTokenizer.Tokenize(sql1, true);
-            Console.Out.WriteLine($"Tokens = {tokens.Count}");
+            var tokens = SqlTokenizer.Tokenize(sql1, false);
+            Console.Out.WriteLine($"Tokens = {tokens.Count}:");
             foreach (var token in tokens)
                 Console.Out.Write($"{token}, ");
 
