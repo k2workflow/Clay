@@ -48,8 +48,8 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 				/* ok -- */
 			END;";
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        //[Trait("Type", "Unit")]
+        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
         public static void Tokenize_messy_proc_2_params()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sql1);
