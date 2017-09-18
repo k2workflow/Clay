@@ -40,8 +40,11 @@ namespace SourceCode.Clay.Data.SqlParser
                 // PROC | PROCEDURE
                 if (!ParseLiteral(tokenizer, "PROCEDURE"))
                 {
-                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
-                    return null;
+                    if (!ParseLiteral(tokenizer, "PROC"))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
+                        return null;
+                    }
                 }
 
                 // [Name] or "Name"
