@@ -516,7 +516,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
             // Block/Line Comment
             var kind = SqlTokenKind.LineComment;
-            var delimiter = "\r\n";
+            var delimiter = @"\r\n";
             if (isBlockComment)
             {
                 kind = SqlTokenKind.BlockComment;
