@@ -24,11 +24,7 @@ namespace SourceCode.Clay.Data.SqlParser
             using (var reader = new SqlCharReader(sql))
             {
                 var tokens = Tokenize(reader, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 
@@ -45,11 +41,7 @@ namespace SourceCode.Clay.Data.SqlParser
             using (var cr = new SqlCharReader(reader))
             {
                 var tokens = Tokenize(cr, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 

@@ -293,16 +293,10 @@ namespace SourceCode.Clay.Data.SqlParser
             if (!(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)))
             {
-                if (actual == "PROCedure")
-                {
-                    var s = actual.ToCharArray().Select(c => (int)c).Select(n => n.ToString());
-                    throw new Exception(string.Join(",", s));
-                }
-
                 return false;
             }
 
-            Console.Out.Write("NEXT");
+            Console.Out.WriteLine("NEXT:");
 
             var more = tokenizer.MoveNext();
             Console.Out.WriteLine(tokenizer.Current);
