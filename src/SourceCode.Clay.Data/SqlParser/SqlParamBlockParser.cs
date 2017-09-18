@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Data.SqlParser
                 }
 
                 // PROC | PROCEDURE
-                if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
+                if (!ParseLiteral(tokenizer, "PROCEDURE"))
                 {
                     BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
