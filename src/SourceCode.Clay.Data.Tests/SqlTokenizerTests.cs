@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         // [abc[]]def]
         private const string sql1 = @"
 			CReaTE /*blah*/
-				PROCedure            --etc
+				PROCedure       --etc
 			abc.[def]
 					/*
 						xyz -- /*

@@ -260,7 +260,16 @@ namespace SourceCode.Clay.Data.SqlParser
             var actual = tokenizer.Current.Value;
             if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
                 && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2))
+            {
+                if (actual == "PROCedure" && expected1 == "PROC" && expected2 == "PROCEDURE")
+                {
+                    actual = actual.ToUpperInvariant();
+                    if (actual == expected1) throw new Exception("Actual1");
+                    if (actual == expected2) throw new Exception("Actual2");
+                }
+
                 return false;
+            }
 
             var more = tokenizer.MoveNext();
             return more;
