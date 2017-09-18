@@ -153,15 +153,15 @@ AS RETURN
 				/* ok -- */
 			END;";
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        //[Trait("Type", "Unit")]
+        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sql3);
 
             Assert.Equal(1, @params.Count);
 
-            // @p1
+            // @p
             var found = @params.TryGetValue("@p", out var param);
             Assert.True(found);
 
