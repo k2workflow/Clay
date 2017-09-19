@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    internal static class SqlTokenizer
+    public static class SqlTokenizer
     {
         #region Tokenize
 
@@ -17,18 +17,14 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="sql"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
             using (var reader = new SqlCharReader(sql))
             {
                 var tokens = Tokenize(reader, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 
@@ -38,18 +34,14 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
             using (var cr = new SqlCharReader(reader))
             {
                 var tokens = Tokenize(cr, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 
@@ -63,19 +55,18 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        private static IEnumerable<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
+        private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(reader != null);
             var peekBuffer = new char[2];
 
+            var tokens = new List<SqlTokenInfo>();
             while (true)
             {
                 reader.FillLength(peekBuffer, peekBuffer.Length, out var peekLength);
-                if (peekLength <= 0)
-                    yield break;
+                if (peekLength <= 0) break;
 
                 SqlTokenInfo token;
-
                 var kind = Peek(peekBuffer, peekLength);
                 switch (kind)
                 {
@@ -85,12 +76,12 @@ namespace SourceCode.Clay.Data.SqlParser
                         break;
 
                     case SqlTokenKind.LineComment:
-                        token = ReadComment(peekBuffer, peekLength, false, reader, skipSundry);
+                        token = ReadLineComment(peekBuffer, reader, skipSundry);
                         if (skipSundry) continue;
                         break;
 
                     case SqlTokenKind.BlockComment:
-                        token = ReadComment(peekBuffer, peekLength, true, reader, skipSundry);
+                        token = ReadBlockComment(peekBuffer, reader, skipSundry);
                         if (skipSundry) continue;
                         break;
 
@@ -114,8 +105,10 @@ namespace SourceCode.Clay.Data.SqlParser
                         throw new InvalidOperationException($"Unknown {nameof(SqlTokenKind)}: {kind}");
                 }
 
-                yield return token;
+                tokens.Add(token);
             }
+
+            return tokens;
         }
 
         private static SqlTokenKind Peek(char[] peekBuffer, int peekLength)
@@ -214,16 +207,18 @@ namespace SourceCode.Clay.Data.SqlParser
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0)
         {
-            return count - offset >= 1
-                && buffer[offset] == c0;
+            if (count - offset < 1) return false;
+            if (buffer[offset] != c0) return false;
+            return true;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0, char c1)
         {
-            return count - offset >= 2
-                && buffer[offset + 0] == c0
-                && buffer[offset + 1] == c1;
+            if (count - offset < 2) return false;
+            if (buffer[offset + 0] != c0) return false;
+            if (buffer[offset + 1] != c1) return false;
+            return true;
         }
 
         #endregion
@@ -504,45 +499,31 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        private static SqlTokenInfo ReadComment(char[] peekBuffer, int peekLength, bool isBlockComment, SqlCharReader reader, bool skipSundry)
+        private static SqlTokenInfo ReadBlockComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(reader != null);
             Debug.Assert(peekBuffer != null);
             Debug.Assert(peekBuffer.Length >= 1);
-            Debug.Assert(peekLength >= 1);
 
             // Perf: Assume comment is N chars
-            const int averageLen = 50;
-            var cap = peekLength + averageLen;
-            var buffer = new char[cap];
-            var sb = skipSundry ? null : new StringBuilder(cap);
+            const int bufferLen = 50;
+            var buffer = new char[bufferLen];
+            var sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
 
-            // We already know the incoming data is -- or /*, so keep it
+            // We already know the peeked token is /*, so keep it
             if (!skipSundry)
-                sb.Append(peekBuffer, 0, peekLength);
-
-            // Block/Line Comment
-            var kind = SqlTokenKind.LineComment;
-            var delimiter = "\r\n";
-            if (isBlockComment)
-            {
-                kind = SqlTokenKind.BlockComment;
-                delimiter = "*/";
-            }
+                sb.Append("/*");
 
             while (true)
             {
-                reader.FillLength(buffer, 5, out var count);
+                reader.FillLength(buffer, bufferLen, out var count);
                 if (count <= 0) break;
-
-                var eof = count <= 4;
-                var cnt = eof ? count : count - 4;
 
                 // Try find a delimiter
                 var idx = -1;
-                for (var i = 0; i < cnt; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    if (!Contains(buffer, i, count, delimiter[0], delimiter[1]))
+                    if (!Contains(buffer, i, count, '*', '/'))
                         continue;
 
                     idx = i;
@@ -557,21 +538,80 @@ namespace SourceCode.Clay.Data.SqlParser
                         sb.Append(buffer, 0, idx + 2);
 
                     reader.Undo(buffer, idx + 2, count - idx - 2);
-
                     break;
                 }
 
                 if (!skipSundry)
-                    sb.Append(buffer, 0, cnt);
+                    sb.Append(buffer, 0, count);
 
-                // Exit if no more data
-                if (eof) break;
-
-                // Ensure we can peek again
-                reader.Undo(buffer, cnt, 4);
+                // Exit if eof
+                if (count < bufferLen) break;
             }
 
-            var token = new SqlTokenInfo(kind, sb);
+            var token = new SqlTokenInfo(SqlTokenKind.BlockComment, sb);
+            return token;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="peekBuffer"></param>
+        /// <param name="peekLength"></param>
+        /// <param name="isBlockComment"></param>
+        /// <param name="reader"></param>
+        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <returns></returns>
+        private static SqlTokenInfo ReadLineComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
+        {
+            Debug.Assert(reader != null);
+            Debug.Assert(peekBuffer != null);
+            Debug.Assert(peekBuffer.Length >= 1);
+
+            // Perf: Assume comment is N chars
+            const int bufferLen = 30;
+            var buffer = new char[bufferLen];
+            var sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
+
+            // We already know the peeked token is --, so keep it
+            if (!skipSundry)
+                sb.Append("--");
+
+            while (true)
+            {
+                reader.FillLength(buffer, bufferLen, out var count);
+                if (count <= 0) break;
+
+                // Try find a delimiter
+                var idx = -1;
+                for (var i = 0; i < count; i++)
+                {
+                    // Final character in both Windows (\r\n) and Linux (\n) line-endings is \n.
+                    if (!Contains(buffer, i, count, '\n'))
+                        continue;
+
+                    idx = i;
+                    break;
+                }
+
+                // If we found a delimiter
+                if (idx >= 0)
+                {
+                    // Undo any extraneous data and exit the loop
+                    if (!skipSundry)
+                        sb.Append(buffer, 0, idx + 1);
+
+                    reader.Undo(buffer, idx + 1, count - idx - 1);
+                    break;
+                }
+
+                if (!skipSundry)
+                    sb.Append(buffer, 0, count);
+
+                // Exit if eof
+                if (count < bufferLen) break;
+            }
+
+            var token = new SqlTokenInfo(SqlTokenKind.LineComment, sb);
             return token;
         }
 
