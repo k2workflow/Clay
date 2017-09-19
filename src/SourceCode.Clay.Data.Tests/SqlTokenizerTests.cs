@@ -5,9 +5,27 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 {
     public static class SqlTokenizerTests
     {
+        // Block comment is not closed
+        private const string sqlBadComment = @"
+			CReaTE /*blah
+				FUNCTION abc.def()
+            AS RETURNS INT
+			BEGIN
+                RETURN 1;
+			END;";
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_bad_comment))]
+        public static void Tokenize_bad_comment()
+        {
+            var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
+
+            Assert.True(@params == null || @params.Count == 0);
+        }
+
         // [abc]]def]
         // [abc[]]def]
-        private const string sql0 = @"
+        private const string sqlEscapedNames = @"
 			CReaTE /*blah*/
 				FunCTIOn            --etc
 			[abc]]def].[abc[]]def]
@@ -15,20 +33,18 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 			)AS RETURNS
 			    inT
 			BEGIN RETURN 1;
-			END;";
+			END; /**/";
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(Tokenize_escaped_names))]
         public static void Tokenize_escaped_names()
         {
-            var @params = SqlParamBlockParser.ParseFunction(sql0);
+            var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
 
             Assert.True(@params == null || @params.Count == 0);
         }
 
-        // [abc]]def]
-        // [abc[]]def]
-        private const string sql1 = @"
+        private const string sqlMessyProcWithParen = @"
 			CReaTE /*blah*/
 				PROCedure            --etc
 			abc.[def]
@@ -48,11 +64,11 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 				/* ok -- */
 			END;";
 
-        //[Trait("Type", "Unit")]
-        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
         public static void Tokenize_messy_proc_2_params()
         {
-            var @params = SqlParamBlockParser.ParseProcedure(sql1);
+            var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcWithParen);
 
             Assert.Equal(2, @params.Count);
 
@@ -65,7 +81,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
             Assert.False(param.IsNullable);
             Assert.False(param.IsReadOnly);
 
-            // @p2
+            // @p_2
             found = @params.TryGetValue("@p_2", out param);
             Assert.True(found);
 
@@ -75,7 +91,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
             Assert.True(param.IsReadOnly);
         }
 
-        private const string sql2 = @"
+        private const string sqlRealFunction = @"
 /*
 	Refactored from [Utility].[SplitMax].
 	See that function for implementation details.
@@ -110,7 +126,7 @@ AS RETURN
         [Fact(DisplayName = nameof(Tokenize_real_function_2_params))]
         public static void Tokenize_real_function_2_params()
         {
-            var @params = SqlParamBlockParser.ParseFunction(sql2);
+            var @params = SqlParamBlockParser.ParseFunction(sqlRealFunction);
 
             Assert.Equal(2, @params.Count);
 
@@ -133,7 +149,7 @@ AS RETURN
             Assert.False(param.IsReadOnly);
         }
 
-        private const string sql3 = @"
+        private const string sqlMessyProcNoParen = @"
 			CReaTE /*blah*/
 				PROCedure            --etc
 			abc.[def]
@@ -153,11 +169,11 @@ AS RETURN
 				/* ok -- */
 			END;";
 
-        //[Trait("Type", "Unit")]
-        //[Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
-            var @params = SqlParamBlockParser.ParseProcedure(sql3);
+            var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcNoParen);
 
             Assert.Equal(1, @params.Count);
 
