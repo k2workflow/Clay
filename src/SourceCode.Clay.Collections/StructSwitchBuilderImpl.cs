@@ -9,14 +9,14 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of keys.</typeparam>
     /// <typeparam name="TValue">The type of values.</typeparam>
-    internal sealed class StructSwitchBuilder<TKey, TValue> : BaseSwitchBuilder<TKey, TValue>
+    internal sealed class StructSwitchBuilderImpl<TKey, TValue> : BaseSwitchBuilder<TKey, TValue>
         where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StructSwitchBuilder{TKey, TValue}"/> class.
+        /// Initializes a new instance of the <see cref="StructSwitchBuilderImpl{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="cases">The cases.</param>
-        public StructSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
+        public StructSwitchBuilderImpl(IReadOnlyDictionary<TKey, TValue> cases)
             : base(cases)
         { }
     }

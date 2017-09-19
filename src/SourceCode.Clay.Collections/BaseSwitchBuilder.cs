@@ -106,11 +106,14 @@ namespace SourceCode.Clay.Collections.Generic
             // Return -1 if key is not found (per standard convention for IndexOf())
             var notFound = Expression.Constant(-1);
 
+            // Define formal parameter
+            var formalParam = Expression.Parameter(typeof(TKey), "key");
+
             // Fast path if no cases
             if (cases == null || cases.Count == 0)
             {
                 values = Array.Empty<TValue>();
-                expr = Expression.Lambda<Func<TKey, int>>(notFound);
+                expr = Expression.Lambda<Func<TKey, int>>(notFound, formalParam);
             }
             else
             {
@@ -129,9 +132,6 @@ namespace SourceCode.Clay.Collections.Generic
 
                     i++;
                 }
-
-                // Define formal parameter
-                var formalParam = Expression.Parameter(typeof(TKey), "key");
 
                 // Expression MUST match #1 above
                 var @this = Expression.Constant(this);

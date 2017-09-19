@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
-    public static class SetExtensionsFixtures
+    public static class SetExtensionsTests
     {
         private static readonly HashSet<string> _set = new HashSet<string>
         {
