@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
-    public static class DictionaryExtensionsFixtures
+    public static class DictionaryExtensionsTests
     {
         private static readonly Dictionary<string, string> _dict = new Dictionary<string, string>()
         {

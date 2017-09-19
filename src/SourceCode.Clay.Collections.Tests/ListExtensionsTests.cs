@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
-    public static class ListExtensionsFixtures
+    public static class ListExtensionsTests
     {
         private static readonly string[] _list =
         {
