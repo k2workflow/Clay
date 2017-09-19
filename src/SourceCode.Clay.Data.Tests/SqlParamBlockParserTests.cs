@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Data.SqlParser.Tests
 {
-    public static class SqlTokenizerTests
+    public static class SqlParamBlockParserTests
     {
         // Block comment is not closed
         private const string sqlBadComment = @"
@@ -20,7 +20,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
 
-            Assert.True(@params == null || @params.Count == 0);
+            Assert.True(@params.Count == 0);
         }
 
         // [abc]]def]
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
 
-            Assert.True(@params == null || @params.Count == 0);
+            Assert.True(@params.Count == 0);
         }
 
         private const string sqlMessyProcWithParen = @"

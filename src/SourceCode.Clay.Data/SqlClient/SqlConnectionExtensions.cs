@@ -83,7 +83,9 @@ namespace SourceCode.Clay.Data.SqlClient
 
             // If username is null, empty or whitespace-only then don't try impersonate
             if (string.IsNullOrEmpty(impersonatedUsername))
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             // Set impersonation context using EXECUTE AS
             try

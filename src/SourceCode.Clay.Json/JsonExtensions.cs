@@ -14,7 +14,10 @@ namespace SourceCode.Clay.Json
 
             if (jv == null)
             {
-                if (nullable) return null;
+                if (nullable)
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                    return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
                 throw new FormatException($"Json key {key} should have non-null {expectedType} value");
             }
@@ -53,7 +56,9 @@ namespace SourceCode.Clay.Json
                 throw new FormatException($"Expected Json key {key}");
 
             if (jv == null)
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             if (!(jv is JsonObject o))
                 throw new FormatException($"Json key {key} should have type {nameof(JsonObject)}");
@@ -88,7 +93,9 @@ namespace SourceCode.Clay.Json
                 throw new FormatException($"Expected Json key {key}");
 
             if (jv == null)
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             if (!(jv is JsonArray ja))
                 throw new FormatException($"Json key {key} should have type {nameof(JsonArray)}");
