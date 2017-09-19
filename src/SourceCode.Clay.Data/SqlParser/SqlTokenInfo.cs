@@ -2,7 +2,7 @@
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    internal struct SqlTokenInfo
+    public struct SqlTokenInfo
     {
         #region Properties
 

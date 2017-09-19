@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -11,33 +12,65 @@ namespace SourceCode.Clay.Data.SqlParser
         #region Parse
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
-        public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
+        public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql, out IList<string> parseErrors)
         {
+            parseErrors = new List<string>();
+
             if (string.IsNullOrWhiteSpace(sql))
                 return null;
 
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
+            Console.Out.WriteLine($"Tokens = {tokens.Count}");
+            foreach (var token in tokens)
+                Console.Out.Write($"{token}, ");
+
             using (var tokenizer = tokens.GetEnumerator())
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
+                {
+                    parseErrors.Add("Unexpected end of input");
                     return null;
+                }
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "CREATE"), tokenizer.Current);
                     return null;
+                }
 
                 // PROC | PROCEDURE
-                if (!ParseLiteral(tokenizer, "PROC", "PROCEDURE"))
+                if (!ParseLiteral(tokenizer, "PROCEDURE", "PROC"))
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC NOT FOUND");
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "PROCEDURE"), tokenizer.Current);
                     return null;
+                }
+                else
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC FOUND");
+                }
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PROC NAME FOUND");
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<module name>"), tokenizer.Current);
                     return null;
+                }
 
                 // (
                 var parenthesized = ParseSymbol(tokenizer, '(');
+                if (parenthesized)
+                {
+                    Console.Out.WriteLine("-----");
+                    Console.Out.WriteLine("PAREN FOUND");
+                }
 
                 var parms = new Dictionary<string, SqlParamInfo>();
 
@@ -46,9 +79,16 @@ namespace SourceCode.Clay.Data.SqlParser
                     // Exit loop if end of parameter block
 
                     // )
-                    if (parenthesized
-                        && ParseSymbol(tokenizer, ')'))
-                        break;
+                    if (ParseSymbol(tokenizer, ')'))
+                    {
+                        Console.Out.WriteLine("-----");
+                        Console.Out.WriteLine(") FOUND");
+
+                        if (parenthesized) break;
+
+                        parseErrors.Add($"Unexpected token {tokenizer.Current}.");
+                        return null;
+                    }
 
                     // AS, WITH or FOR
                     if (ParseLiteral(tokenizer, "AS", "WITH", "FOR"))
@@ -58,14 +98,20 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param name>"), tokenizer.Current);
                         return null;
+                    }
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param type>"), tokenizer.Current);
                         return null;
+                    }
 
                     // VARYING
                     ParseLiteral(tokenizer, "VARYING");
@@ -76,9 +122,7 @@ namespace SourceCode.Clay.Data.SqlParser
                     // OUT | OUTPUT
                     var dir = ParameterDirection.Input;
                     if (ParseLiteral(tokenizer, "OUT", "OUTPUT"))
-                    {
                         dir = ParameterDirection.InputOutput;
-                    }
 
                     // READONLY
                     var isReadOnly = ParseLiteral(tokenizer, "READONLY");
@@ -95,9 +139,16 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
-        public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql)
+        private static void BuildErrorMessage(IList<string> errors, SqlTokenInfo expected, SqlTokenInfo actual)
         {
+            errors.Add($"Expected token {expected} but got {actual}.");
+        }
+
+        // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
+        public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql, out IList<string> parseErrors)
+        {
+            parseErrors = new List<string>();
+
             if (string.IsNullOrWhiteSpace(sql))
                 return null;
 
@@ -107,23 +158,38 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
+                {
+                    parseErrors.Add("Unexpected end of input");
                     return null;
+                }
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "CREATE"), tokenizer.Current);
                     return null;
+                }
 
                 // FUNCTION
                 if (!ParseLiteral(tokenizer, "FUNCTION"))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "FUNCTION"), tokenizer.Current);
                     return null;
+                }
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<module name>"), tokenizer.Current);
                     return null;
+                }
 
                 // (
                 if (!ParseSymbol(tokenizer, '('))
+                {
+                    BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Symbol, "("), tokenizer.Current);
                     return null;
+                }
 
                 var parms = new Dictionary<string, SqlParamInfo>(StringComparer.Ordinal);
 
@@ -143,14 +209,20 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param name>"), tokenizer.Current);
                         return null;
+                    }
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    {
+                        BuildErrorMessage(parseErrors, new SqlTokenInfo(SqlTokenKind.Literal, "<param type>"), tokenizer.Current);
                         return null;
+                    }
 
                     // = default
                     var hasDefault = ParseDefault(tokenizer, out bool isNullable);
@@ -180,12 +252,13 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Symbol)
                 return false;
 
-            if (tokenizer.Current.Value == null) return false;
-            if (tokenizer.Current.Value.Length != 1) return false;
-            if (tokenizer.Current.Value[0] != expected) return false;
+            var actual = tokenizer.Current.Value;
+            if (actual == null) return false;
+            if (actual.Length != 1) return false;
+            if (actual[0] != expected) return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected)
@@ -193,24 +266,45 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected))
+            var actual = tokenizer.Current.Value;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected))
                 return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2)
         {
-            if (tokenizer.Current.Kind != SqlTokenKind.Literal)
+            var current = tokenizer.Current;
+            if (current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected1)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected2))
+            var actual = current.Value; // PROC
+
+            Console.Out.WriteLine(actual);
+            Console.Out.WriteLine(expected1);
+            Console.Out.WriteLine(expected2);
+
+            bool a = StringComparer.OrdinalIgnoreCase.Equals(actual, expected1);
+            Console.Out.WriteLine(a);
+            bool b = StringComparer.OrdinalIgnoreCase.Equals(actual, expected2);
+            Console.Out.WriteLine(b);
+
+            Console.Out.Write(a || b);
+            Console.Out.WriteLine(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1) || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2));
+
+            if (!(StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
+                || StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)))
+            {
                 return false;
+            }
+
+            Console.Out.Write("NEXT:");
 
             var more = tokenizer.MoveNext();
-            return more;
+            Console.Out.WriteLine($"{more}=" + tokenizer.Current);
+            return true;
         }
 
         private static bool ParseLiteral(IEnumerator<SqlTokenInfo> tokenizer, string expected1, string expected2, string expected3)
@@ -218,13 +312,14 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected1)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected2)
-                && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected3))
+            var actual = tokenizer.Current.Value;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(actual, expected1)
+                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected2)
+                && !StringComparer.OrdinalIgnoreCase.Equals(actual, expected3))
                 return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseParamName(IEnumerator<SqlTokenInfo> tokenizer, out string name)
@@ -234,13 +329,14 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!tokenizer.Current.Value.StartsWith("@"))
+            var actual = tokenizer.Current.Value;
+            if (!actual.StartsWith("@"))
                 return false;
 
-            name = tokenizer.Current.Value;
+            name = actual;
 
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseDefault(IEnumerator<SqlTokenInfo> tokenizer, out bool isNullable)
@@ -256,9 +352,8 @@ namespace SourceCode.Clay.Data.SqlParser
 
             isNullable = ParseLiteral(tokenizer, "NULL");
 
-            // Fail if EOF
-            var more = tokenizer.MoveNext();
-            return more;
+            tokenizer.MoveNext();
+            return true;
         }
 
         private static bool ParseModuleName(IEnumerator<SqlTokenInfo> tokenizer, out string schema, out string name)
@@ -347,9 +442,8 @@ namespace SourceCode.Clay.Data.SqlParser
                 sb.Clear();
                 sb.Append(tokenizer.Current.Value); // Capture before .MoveNext
 
-                // Fail if EOF
-                more = tokenizer.MoveNext();
-                if (!more) return false;
+                tokenizer.MoveNext();
+                return true;
             }
 
             // Simple schematized type - no type details

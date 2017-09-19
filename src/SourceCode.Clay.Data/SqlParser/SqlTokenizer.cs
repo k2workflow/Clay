@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    internal static class SqlTokenizer
+    public static class SqlTokenizer
     {
         #region Tokenize
 
@@ -17,18 +17,14 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="sql"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
             using (var reader = new SqlCharReader(sql))
             {
                 var tokens = Tokenize(reader, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 
@@ -38,18 +34,14 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        public static IEnumerable<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
+        public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
             if (reader == null) throw new ArgumentNullException(nameof(reader));
 
             using (var cr = new SqlCharReader(reader))
             {
                 var tokens = Tokenize(cr, skipSundry);
-
-                foreach (var token in tokens)
-                {
-                    yield return token;
-                }
+                return tokens;
             }
         }
 
@@ -63,16 +55,17 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
-        private static IEnumerable<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
+        private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(reader != null);
             var peekBuffer = new char[2];
 
+            var tokens = new List<SqlTokenInfo>();
             while (true)
             {
                 reader.FillLength(peekBuffer, peekBuffer.Length, out var peekLength);
                 if (peekLength <= 0)
-                    yield break;
+                    return tokens;
 
                 SqlTokenInfo token;
 
@@ -114,7 +107,7 @@ namespace SourceCode.Clay.Data.SqlParser
                         throw new InvalidOperationException($"Unknown {nameof(SqlTokenKind)}: {kind}");
                 }
 
-                yield return token;
+                tokens.Add(token);
             }
         }
 
@@ -221,9 +214,20 @@ namespace SourceCode.Clay.Data.SqlParser
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0, char c1)
         {
-            return count - offset >= 2
-                && buffer[offset + 0] == c0
-                && buffer[offset + 1] == c1;
+            var found = false;
+
+            if (c0 == (char)0)
+            {
+                if (count - offset >= 1)
+                    found = buffer[offset + 1] == c1;
+            }
+            else if (count - offset >= 2)
+            {
+                found = buffer[offset + 0] == c0
+                    && buffer[offset + 1] == c1;
+            }
+
+            return found;
         }
 
         #endregion
@@ -523,7 +527,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
             // Block/Line Comment
             var kind = SqlTokenKind.LineComment;
-            var delimiter = "\r\n";
+            var delimiter = (char)0 + "\n";
             if (isBlockComment)
             {
                 kind = SqlTokenKind.BlockComment;
