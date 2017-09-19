@@ -85,8 +85,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = "DictionaryExtensions NullableEquals NotEqual")]
         public static void Use_NullableEquals_NotEqual()
         {
-            var dict2 = new Dictionary<string, string>(_dict);
-            dict2.Add("xyz", "xyz1");
+            var dict2 = new Dictionary<string, string>(_dict)
+            {
+                ["xyz"] = "xyz1"
+            };
 
             var equal = _dict.NullableEquals(dict2);
             Assert.False(equal);

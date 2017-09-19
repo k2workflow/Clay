@@ -9,14 +9,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-    <NoWarn>1701;1702;1705;S3242</NoWarn>
+    <Description>Tools and extensions for working with json.</Description>
+    <PackageTags>clay utility extension json validate</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Tools and extensions for working with json.</Description>
-    <PackageTags>clay utility extension json validate</PackageTags>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>1701;1702;1705;S3242</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

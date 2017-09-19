@@ -9,14 +9,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-    <NoWarn>1701;1702;1705;S3242</NoWarn>
+    <Description>Tools and extensions to the .Net framework.</Description>
+    <PackageTags>clay utility extension string datetime</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Tools and extensions to the .Net framework.</Description>
-    <PackageTags>clay utility extension string datetime</PackageTags>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>1701;1702;1705;S3242</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
