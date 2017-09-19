@@ -14,6 +14,11 @@
     <NoWarn>1701;1702;1705;S3242</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Description>Tools and extensions for working with data.</Description>
+    <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\SourceCode.Clay.Collections\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
   </ItemGroup>
