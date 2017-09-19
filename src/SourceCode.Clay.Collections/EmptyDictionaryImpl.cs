@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
+    /// <summary>
+    /// A memory-efficient internal implementation of a Dictionary that has zero members.
+    /// Useful for scenarios where the equivalent of <see cref="Array.Empty{T}"/> is required
+    /// for <see cref="IDictionary{TKey, TValue}"/> or <see cref="IReadOnlyDictionary{TKey, TValue}"/>.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     internal sealed class EmptyDictionaryImpl<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>
     {
         #region Constants
@@ -24,7 +31,7 @@ namespace SourceCode.Clay.Collections.Generic
 
         public TValue this[TKey key]
         {
-            get => _dict[key];
+            get => _dict[key]; // Leverage the underlying exception
             set => throw new InvalidOperationException();
         }
 
