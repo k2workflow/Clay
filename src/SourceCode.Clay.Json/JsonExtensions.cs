@@ -52,8 +52,7 @@ namespace SourceCode.Clay.Json
             if (!jo.TryGetValue(key, out JsonValue jv))
                 throw new FormatException($"Expected Json key {key}");
 
-            if (jv == null)
-                return null;
+            if (jv == null) return null;
 
             if (!(jv is JsonObject o))
                 throw new FormatException($"Json key {key} should have type {nameof(JsonObject)}");
@@ -87,8 +86,7 @@ namespace SourceCode.Clay.Json
             if (!jo.TryGetValue(key, out JsonValue jv))
                 throw new FormatException($"Expected Json key {key}");
 
-            if (jv == null)
-                return null;
+            if (jv == null) return null;
 
             if (!(jv is JsonArray ja))
                 throw new FormatException($"Json key {key} should have type {nameof(JsonArray)}");

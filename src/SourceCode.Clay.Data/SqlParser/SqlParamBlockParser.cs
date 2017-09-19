@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SourceCode.Clay.Collections.Generic;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -8,13 +9,19 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static partial class SqlParamBlockParser
     {
-        #region Parse
+        #region Constants
+
+        private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = EmptyDictionaryImpl<string, SqlParamInfo>.ReadOnlyValue;
+
+        #endregion
+
+        #region Procedure
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                return null;
+                return _empty;
 
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
@@ -22,19 +29,19 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
-                    return null;
+                    return _empty;
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
-                    return null;
+                    return _empty;
 
                 // PROC | PROCEDURE
                 if (!ParseLiteral(tokenizer, "PROC", "PROCEDURE"))
-                    return null;
+                    return _empty;
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
-                    return null;
+                    return _empty;
 
                 // (
                 var parenthesized = ParseSymbol(tokenizer, '(');
@@ -58,14 +65,14 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
-                        return null;
+                        return _empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
-                        return null;
+                        return _empty;
 
                     // VARYING
                     ParseLiteral(tokenizer, "VARYING");
@@ -76,9 +83,7 @@ namespace SourceCode.Clay.Data.SqlParser
                     // OUT | OUTPUT
                     var dir = ParameterDirection.Input;
                     if (ParseLiteral(tokenizer, "OUT", "OUTPUT"))
-                    {
                         dir = ParameterDirection.InputOutput;
-                    }
 
                     // READONLY
                     var isReadOnly = ParseLiteral(tokenizer, "READONLY");
@@ -95,11 +100,15 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
+        #endregion
+
+        #region Function
+
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                return null;
+                return _empty;
 
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
@@ -107,23 +116,23 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
-                    return null;
+                    return _empty;
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
-                    return null;
+                    return _empty;
 
                 // FUNCTION
                 if (!ParseLiteral(tokenizer, "FUNCTION"))
-                    return null;
+                    return _empty;
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out string schema, out string name))
-                    return null;
+                    return _empty;
 
                 // (
                 if (!ParseSymbol(tokenizer, '('))
-                    return null;
+                    return _empty;
 
                 var parms = new Dictionary<string, SqlParamInfo>(StringComparer.Ordinal);
 
@@ -143,14 +152,14 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out string pname))
-                        return null;
+                        return _empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out string tschema, out string tname))
-                        return null;
+                        return _empty;
 
                     // = default
                     var hasDefault = ParseDefault(tokenizer, out bool isNullable);
