@@ -15,20 +15,12 @@ namespace SourceCode.Clay.Buffers
         IEqualityComparer<IReadOnlyList<byte>>,
         IEqualityComparer<IList<byte>>,
         IEqualityComparer<IEnumerable<byte>>,
-        //IEqualityComparer<ReadOnlySpan<byte>>,
-        //IEqualityComparer<Span<byte>>,
-        //IEqualityComparer<ReadOnlyBuffer<byte>>,
-        //IEqualityComparer<Buffer<byte>>,
 
         IComparer<byte[]>,
         IComparer<ArraySegment<byte>>,
         IComparer<IReadOnlyList<byte>>,
         IComparer<IList<byte>>,
         IComparer<IEnumerable<byte>>
-    //IComparer<ReadOnlySpan<byte>>,
-    //IComparer<Span<byte>>,
-    //IComparer<ReadOnlyBuffer<byte>>,
-    //IComparer<Buffer<byte>>
     {
         #region Constants
 
@@ -110,15 +102,28 @@ namespace SourceCode.Clay.Buffers
 
             var cmp = x.Length.CompareTo(y.Length);
             if (cmp != 0) return cmp; // (m, n)
-            if (x.Length == 0) return 0; // (0, 0)
 
-            unsafe
+            switch (x.Length)
             {
-                fixed (byte* xp = x, yp = y)
-                {
-                    cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                // (0, 0)
+                case 0:
+                    return 0;
+
+                // (m[0], n[0])
+                case 1:
+                    cmp = x[0].CompareTo(y[0]);
                     return cmp;
-                }
+
+                // (m[0..N], n[0..N])
+                default:
+                    unsafe
+                    {
+                        fixed (byte* xp = x, yp = y)
+                        {
+                            cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                            return cmp;
+                        }
+                    }
             }
         }
 
@@ -142,15 +147,28 @@ namespace SourceCode.Clay.Buffers
 
             var cmp = x.Count.CompareTo(y.Count);
             if (cmp != 0) return cmp; // (m, n)
-            if (x.Count == 0) return 0; // (0, 0)
 
-            unsafe
+            switch (x.Count)
             {
-                fixed (byte* xp = x.Array, yp = y.Array)
-                {
-                    cmp = NativeMethods.MemCompare(xp + x.Offset, yp + y.Offset, x.Count);
+                // (0, 0)
+                case 0:
+                    return 0;
+
+                // (m[0], n[0])
+                case 1:
+                    cmp = x.Array[x.Offset].CompareTo(y.Array[y.Offset]);
                     return cmp;
-                }
+
+                // (m[0..N], n[0..N])
+                default:
+                    unsafe
+                    {
+                        fixed (byte* xp = x.Array, yp = y.Array)
+                        {
+                            cmp = NativeMethods.MemCompare(xp + x.Offset, yp + y.Offset, x.Count);
+                            return cmp;
+                        }
+                    }
             }
         }
 
@@ -172,13 +190,15 @@ namespace SourceCode.Clay.Buffers
             var cmp = x.Count.CompareTo(y.Count);
             if (cmp != 0) return cmp;
 
-            var bax = x as byte[];
-            var bay = y as byte[];
-            if (bax != null && bay != null) return Compare(bax, bay);
+            // Use fast path if both are arrays
+            if (x is byte[] bax && y is byte[] bay)
+                return Compare(bax, bay);
 
-            if (x is ArraySegment<byte> && y is ArraySegment<byte>)
-                return Compare((ArraySegment<byte>)x, (ArraySegment<byte>)y);
+            // Use fast path if both are ArraySegments
+            if (x is ArraySegment<byte> sgx && y is ArraySegment<byte> sgy)
+                return Compare(sgx, sgy);
 
+            // Else forced to use slow path
             for (var i = 0; i < x.Count; i++)
             {
                 cmp = x[i].CompareTo(y[i]);
@@ -205,13 +225,15 @@ namespace SourceCode.Clay.Buffers
             var cmp = x.Count.CompareTo(y.Count);
             if (cmp != 0) return cmp;
 
-            var bax = x as byte[];
-            var bay = y as byte[];
-            if (bax != null && bay != null) return Compare(bax, bay);
+            // Use fast path if both are arrays
+            if (x is byte[] bax && y is byte[] bay)
+                return Compare(bax, bay);
 
-            if (x is ArraySegment<byte> && y is ArraySegment<byte>)
-                return Compare((ArraySegment<byte>)x, (ArraySegment<byte>)y);
+            // Use fast path if both are ArraySegments
+            if (x is ArraySegment<byte> sgx && y is ArraySegment<byte> sgy)
+                return Compare(sgx, sgy);
 
+            // Else forced to use slow path
             for (var i = 0; i < x.Count; i++)
             {
                 cmp = x[i].CompareTo(y[i]);
@@ -235,13 +257,15 @@ namespace SourceCode.Clay.Buffers
             if (x == null) return -1;
             if (y == null) return 1;
 
-            var bax = x as byte[];
-            var bay = y as byte[];
-            if (bax != null && bay != null) return Compare(bax, bay);
+            // Use fast path if both are arrays
+            if (x is byte[] bax && y is byte[] bay)
+                return Compare(bax, bay);
 
-            if (x is ArraySegment<byte> && y is ArraySegment<byte>)
-                return Compare((ArraySegment<byte>)x, (ArraySegment<byte>)y);
+            // Use fast path if both are ArraySegments
+            if (x is ArraySegment<byte> sgx && y is ArraySegment<byte> sgy)
+                return Compare(sgx, sgy);
 
+            // Else forced to use slow path
             using (var xe = x.GetEnumerator())
             using (var ye = y.GetEnumerator())
             {
