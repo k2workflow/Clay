@@ -22,9 +22,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.2" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.0.3347">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.1.3596">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25707-02" />
     <PackageReference Include="System.Buffers" Version="4.4.0" />
   </ItemGroup>
 </Project>

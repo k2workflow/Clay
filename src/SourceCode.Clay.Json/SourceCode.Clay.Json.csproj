@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.2" />
     <PackageReference Include="System.Json" Version="4.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.0.3347">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.1.3596">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
