@@ -6,9 +6,9 @@ using System.Security;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to compare the contents of <see cref="IReadOnlyList{T}"/>.
+    /// Represents a way to compare the contents of <see cref="IReadOnlyList{T}"/> buffers.
     /// </summary>
-    public sealed class ReadOnlyListComparer : BufferComparer<IReadOnlyList<byte>>
+    public sealed class ReadOnlyListBufferComparer : BufferComparer<IReadOnlyList<byte>>
     {
         #region Constructors
 
@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Buffers
         /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
         /// </summary>
-        public ReadOnlyListComparer()
+        public ReadOnlyListBufferComparer()
         { }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Buffers
         /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
         /// disable the limit.
         /// </param>
-        public ReadOnlyListComparer(int hashCodeFidelity)
+        public ReadOnlyListBufferComparer(int hashCodeFidelity)
             : base(hashCodeFidelity)
         { }
 
@@ -53,12 +53,12 @@ namespace SourceCode.Clay.Buffers
             if (cmp != 0) return cmp;
 
             // Use fast path if both are arrays
-            if (x is byte[] bax && y is byte[] bay)
-                return CompareArray(bax, bay);
+            if (x is byte[] xa && y is byte[] ya)
+                return BufferComparer.CompareSpan(xa, ya);
 
             // Use fast path if both are ArraySegments
-            if (x is ArraySegment<byte> sgx && y is ArraySegment<byte> sgy)
-                return CompareArraySegment(sgx, sgy);
+            if (x is ArraySegment<byte> xg && y is ArraySegment<byte> yg)
+                return BufferComparer.CompareSpan(xg, yg);
 
             // Else forced to use slow path
             for (var i = 0; i < x.Count; i++)
