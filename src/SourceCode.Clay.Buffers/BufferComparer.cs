@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Buffers
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<byte[]> DefaultArrayComparer { get; } = new ArrayComparer(DefaultHashCodeFidelity);
+        //public static BufferComparer<byte[]> DefaultArrayComparer { get; } = new ArrayComparer(DefaultHashCodeFidelity);
 
         /// <summary>
         /// Gets the default instance of the <see cref="ArraySegment{T}"/> buffer comparer that uses FNV.

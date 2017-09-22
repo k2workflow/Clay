@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BufferComparer_GetHashCode_ArrayShort()
         {
             var bytes = GenerateArray(16);
-            var hash = BufferComparer.DefaultArrayComparer.GetHashCode(bytes);
+            var hash = BufferComparer.DefaultComparer.GetHashCode(bytes);
             Assert.Equal(-779918115, hash);
         }
 
@@ -91,7 +91,7 @@ namespace SourceCode.Clay.Buffers.Tests
             // NB: Fidelity
 
             var bytes = GenerateArray(712);
-            var hash = BufferComparer.DefaultArrayComparer.GetHashCode(bytes);
+            var hash = BufferComparer.DefaultComparer.GetHashCode(bytes);
             Assert.Equal(1507092677, hash);
         }
 
@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BufferComparer_GetHashCode_ArrayLong()
         {
             var bytes = GenerateArray(1024);
-            var hash = BufferComparer.DefaultArrayComparer.GetHashCode(bytes);
+            var hash = BufferComparer.DefaultComparer.GetHashCode(bytes);
             Assert.Equal(1507092677, hash);
         }
 
@@ -232,9 +232,9 @@ namespace SourceCode.Clay.Buffers.Tests
             var c = GenerateArray(16, 1);
             var d = GenerateArray(15);
 
-            Assert.Equal(a, b, BufferComparer.DefaultArrayComparer);
-            Assert.NotEqual(a, c, BufferComparer.DefaultArrayComparer);
-            Assert.NotEqual(a, d, BufferComparer.DefaultArrayComparer);
+            Assert.Equal(a, b, BufferComparer.DefaultComparer);
+            Assert.NotEqual(a, c, BufferComparer.DefaultComparer);
+            Assert.NotEqual(a, d, BufferComparer.DefaultComparer);
         }
 
         [Trait("Type", "Unit")]
@@ -303,9 +303,9 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.DefaultComparer.Compare((ReadOnlySpan<byte>)a, c) > 0);
 
             // Array
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, aa) == 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, b) < 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, c) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, aa) == 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, b) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, c) > 0);
 
             // IList
             Assert.True(BufferComparer.DefaultListComparer.Compare(a, aa) == 0);
@@ -347,11 +347,11 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.DefaultComparer.Compare((ReadOnlySpan<byte>)a, d) > 0);
 
             // Array
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, aa) == 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, c) < 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(c, a) > 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(d, a) < 0);
-            Assert.True(BufferComparer.DefaultArrayComparer.Compare(a, d) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, aa) == 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, c) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(c, a) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(d, a) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, d) > 0);
 
             // IList
             Assert.True(BufferComparer.DefaultListComparer.Compare(a, aa) == 0);
