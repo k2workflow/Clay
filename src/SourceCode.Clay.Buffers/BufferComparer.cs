@@ -17,14 +17,39 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         public const int DefaultHashCodeFidelity = 512;
 
+        #endregion
+
+        #region Span
+
         /// <summary>
-        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with default fidelity.
+        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with full fidelity.
         /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlySpan{T}"/>.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> Default { get; } = new ReadOnlySpanBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<ReadOnlySpan<byte>> Default { get; } = new ReadOnlySpanBufferComparer();
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with the default fidelity.
+        /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlySpan{T}"/>.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<ReadOnlySpan<byte>> Limited { get; } = new ReadOnlySpanBufferComparer(DefaultHashCodeFidelity);
+
+        #endregion
+
+        #region List
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="IList{T}"/> buffer comparer that uses FNV with full fidelity.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<IList<byte>> DefaultList { get; } = new ListBufferComparer();
 
         /// <summary>
         /// Gets the default instance of the <see cref="IList{T}"/> buffer comparer that uses FNV with default fidelity.
@@ -32,23 +57,47 @@ namespace SourceCode.Clay.Buffers
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<IList<byte>> DefaultList { get; } = new ListBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<IList<byte>> LimitedList { get; } = new ListBufferComparer(DefaultHashCodeFidelity);
+
+        #endregion
+
+        #region ReadOnlyList
 
         /// <summary>
-        /// Gets the default instance of the <see cref="IReadOnlyList{T}"/> buffer comparer that uses FNV with default fidelity.
+        /// Gets the default instance of the <see cref="IReadOnlyList{T}"/> buffer comparer that uses FNV with full fidelity.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<IReadOnlyList<byte>> DefaultReadOnlyList { get; } = new ReadOnlyListBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<IReadOnlyList<byte>> DefaultReadOnlyList { get; } = new ReadOnlyListBufferComparer();
 
         /// <summary>
-        /// Gets the default instance of the <see cref="IEnumerable{T}"/> buffer comparer that uses FNV with default fidelity.
+        /// Gets the default instance of the <see cref="IReadOnlyList{T}"/> buffer comparer that uses FNV with the default fidelity.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<IEnumerable<byte>> DefaultEnumerable { get; } = new EnumerableBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<IReadOnlyList<byte>> LimitedReadOnlyList { get; } = new ReadOnlyListBufferComparer(DefaultHashCodeFidelity);
+
+        #endregion
+
+        #region Enumerable
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="IEnumerable{T}"/> buffer comparer that uses FNV with full fidelity.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<IEnumerable<byte>> DefaultEnumerable { get; } = new EnumerableBufferComparer();
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="IEnumerable{T}"/> buffer comparer that uses FNV with the default fidelity.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<IEnumerable<byte>> LimitedEnumerable { get; } = new EnumerableBufferComparer(DefaultHashCodeFidelity);
 
         #endregion
 
