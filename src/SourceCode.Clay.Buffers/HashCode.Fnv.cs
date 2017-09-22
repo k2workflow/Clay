@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte* buffer, int count)
         {
-            if (buffer == default(byte*))
+            if (buffer == default)
                 throw new ArgumentNullException(nameof(buffer));
 
             var h = FnvOffsetBasis;

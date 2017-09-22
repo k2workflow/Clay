@@ -6,10 +6,32 @@ using System.Security;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to compare binary buffers.
+    /// Represents a way to compare the contents of <see cref="IReadOnlyList{T}"/>.
     /// </summary>
-    partial class BufferComparer : IEqualityComparer<IList<byte>>, IComparer<IList<byte>>
+    public sealed class ReadOnlyListComparer : BufferComparer<IReadOnlyList<byte>>
     {
+        #region Constructors
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
+        /// buffer when calculating the hashcode.
+        /// </summary>
+        public ReadOnlyListComparer()
+        { }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="BufferComparer"/> class.
+        /// </summary>
+        /// <param name="hashCodeFidelity">
+        /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
+        /// disable the limit.
+        /// </param>
+        public ReadOnlyListComparer(int hashCodeFidelity)
+            : base(hashCodeFidelity)
+        { }
+
+        #endregion
+
         #region IComparer
 
         /// <summary>
@@ -20,11 +42,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
-        int IComparer<IList<byte>>.Compare(IList<byte> x, IList<byte> y)
-            => CompareListImpl(x, y);
-
         [SecuritySafeCritical]
-        private static int CompareListImpl(IList<byte> x, IList<byte> y)
+        public override int Compare(IReadOnlyList<byte> x, IReadOnlyList<byte> y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)
             if (x == null) return -1; // (null, y)
@@ -35,11 +54,11 @@ namespace SourceCode.Clay.Buffers
 
             // Use fast path if both are arrays
             if (x is byte[] bax && y is byte[] bay)
-                return CompareArrayImpl(bax, bay);
+                return CompareArray(bax, bay);
 
             // Use fast path if both are ArraySegments
             if (x is ArraySegment<byte> sgx && y is ArraySegment<byte> sgy)
-                return CompareArraySegmentImpl(sgx, sgy);
+                return CompareArraySegment(sgx, sgy);
 
             // Else forced to use slow path
             for (var i = 0; i < x.Count; i++)
@@ -63,8 +82,8 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        bool IEqualityComparer<IList<byte>>.Equals(IList<byte> x, IList<byte> y)
-            => CompareListImpl(x, y) == 0;
+        public override bool Equals(IReadOnlyList<byte> x, IReadOnlyList<byte> y)
+            => Compare(x, y) == 0;
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -74,14 +93,14 @@ namespace SourceCode.Clay.Buffers
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         [SecuritySafeCritical]
-        int IEqualityComparer<IList<byte>>.GetHashCode(IList<byte> obj)
+        public override int GetHashCode(IReadOnlyList<byte> obj)
         {
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            if (_hashCodeFidelity <= 0 || obj.Count <= _hashCodeFidelity)
+            if (HashCodeFidelity <= 0 || obj.Count <= HashCodeFidelity)
                 return HashCode.Fnv(obj);
 
-            return HashCode.Fnv(obj.Take(_hashCodeFidelity));
+            return HashCode.Fnv(obj.Take(HashCodeFidelity));
         }
 
         #endregion
