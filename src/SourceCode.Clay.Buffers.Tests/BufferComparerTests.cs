@@ -385,9 +385,9 @@ namespace SourceCode.Clay.Buffers.Tests
             var c = new ArraySegment<byte>(new byte[] { 3, 3, 3, 3, 0 }, 4, 1);
 
             // ArraySegment
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, aa) == 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, b) < 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, c) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, aa) == 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, b) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, c) > 0);
 
             // IList
             Assert.True(BufferComparer.DefaultListComparer.Compare(a, aa) == 0);
@@ -415,11 +415,11 @@ namespace SourceCode.Clay.Buffers.Tests
             var d = new ArraySegment<byte>(GenerateArray(15));
 
             // ArraySegment
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, aa) == 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, c) < 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(c, a) > 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(d, a) < 0);
-            Assert.True(BufferComparer.DefaultArraySegmentComparer.Compare(a, d) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, aa) == 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, c) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(c, a) > 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(d, a) < 0);
+            Assert.True(BufferComparer.DefaultComparer.Compare(a, d) > 0);
 
             // IList
             Assert.True(BufferComparer.DefaultListComparer.Compare(a, aa) == 0);

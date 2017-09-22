@@ -24,22 +24,6 @@ namespace SourceCode.Clay.Buffers
         public static BufferComparer<ReadOnlySpan<byte>> DefaultComparer { get; } = new ReadOnlySpanComparer(DefaultHashCodeFidelity);
 
         /// <summary>
-        /// Gets the default instance of the <see cref="byte[]"/> buffer comparer that uses FNV.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        //public static BufferComparer<byte[]> DefaultArrayComparer { get; } = new ArrayComparer(DefaultHashCodeFidelity);
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="ArraySegment{T}"/> buffer comparer that uses FNV.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<ArraySegment<byte>> DefaultArraySegmentComparer { get; } = new ArraySegmentComparer(DefaultHashCodeFidelity);
-
-        /// <summary>
         /// Gets the default instance of the <see cref="IList{T}"/> buffer comparer that uses FNV.
         /// </summary>
         /// <value>
