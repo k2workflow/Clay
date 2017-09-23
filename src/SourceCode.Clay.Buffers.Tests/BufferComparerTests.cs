@@ -23,6 +23,43 @@ namespace SourceCode.Clay.Buffers.Tests
         #region GetHashCode
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Null_Array))]
+        public static void BufferComparer_GetHashCode_Null_Array()
+        {
+            byte[] a = null;
+
+            Assert.Equal(0, BufferComparer.Default.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultEnumerable.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultList.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultReadOnlyList.GetHashCode(a));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Array))]
+        public static void BufferComparer_GetHashCode_Empty_Array()
+        {
+            var a = Array.Empty<byte>();
+
+            Assert.Equal(-2128831035, BufferComparer.Default.GetHashCode(a));
+            Assert.Equal(-2128831035, BufferComparer.DefaultEnumerable.GetHashCode(a));
+            Assert.Equal(-2128831035, BufferComparer.DefaultList.GetHashCode(a));
+            Assert.Equal(-2128831035, BufferComparer.DefaultReadOnlyList.GetHashCode(a));
+            Assert.Equal(-2128831035, BufferComparer.DefaultSpan.GetHashCode(default));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Null_List))]
+        public static void BufferComparer_GetHashCode_Null_List()
+        {
+            List<byte> a = null;
+
+            Assert.Equal(0, BufferComparer.Default.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultEnumerable.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultList.GetHashCode(a));
+            Assert.Equal(0, BufferComparer.DefaultReadOnlyList.GetHashCode(a));
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_SpanShort))]
         public static void BufferComparer_GetHashCode_SpanShort()
         {
