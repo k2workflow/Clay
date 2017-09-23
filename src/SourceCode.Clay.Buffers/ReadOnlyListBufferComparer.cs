@@ -95,12 +95,14 @@ namespace SourceCode.Clay.Buffers
         [SecuritySafeCritical]
         public override int GetHashCode(IReadOnlyList<byte> obj)
         {
-            if (obj == null) return HashCode.Fnv((byte[])null);
+            if (obj == null) return 0;
 
-            if (HashCodeFidelity <= 0 || obj.Count <= HashCodeFidelity)
+            if (HashCodeFidelity <= 0
+                || obj.Count <= HashCodeFidelity)
                 return HashCode.Fnv(obj);
 
-            return HashCode.Fnv(obj.Take(HashCodeFidelity));
+            var hc = HashCode.Fnv(obj.Take(HashCodeFidelity));
+            return hc;
         }
 
         #endregion

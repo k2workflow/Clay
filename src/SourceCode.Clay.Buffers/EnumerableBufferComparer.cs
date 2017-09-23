@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Buffers
         [SecuritySafeCritical]
         public override int GetHashCode(IEnumerable<byte> obj)
         {
-            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (obj == null) return 0;
 
             if (HashCodeFidelity <= 0)
                 return HashCode.Fnv(obj);

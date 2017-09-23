@@ -77,8 +77,7 @@ namespace SourceCode.Clay.Buffers
 
         public int GetHashCode(object obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
+            if (obj == null) return 0; ;
 
             if (obj is T ot)
                 return GetHashCode(ot);
