@@ -19,6 +19,26 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
+        #region Array
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with full fidelity.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<byte[]> Default { get; } = new ArrayBufferComparer();
+
+        /// <summary>
+        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with the default fidelity.
+        /// </summary>
+        /// <value>
+        /// The default instance of the buffer comparer that uses FNV.
+        /// </value>
+        public static BufferComparer<byte[]> Limited { get; } = new ArrayBufferComparer(DefaultHashCodeFidelity);
+
+        #endregion
+
         #region Span
 
         /// <summary>
@@ -28,7 +48,7 @@ namespace SourceCode.Clay.Buffers
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> Default { get; } = new ReadOnlySpanBufferComparer();
+        public static BufferComparer<ReadOnlySpan<byte>> DefaultSpan { get; } = new SpanBufferComparer();
 
         /// <summary>
         /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with the default fidelity.
@@ -37,7 +57,7 @@ namespace SourceCode.Clay.Buffers
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> Limited { get; } = new ReadOnlySpanBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<ReadOnlySpan<byte>> LimitedSpan { get; } = new SpanBufferComparer(DefaultHashCodeFidelity);
 
         #endregion
 
