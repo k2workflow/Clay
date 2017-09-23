@@ -66,9 +66,11 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public override int GetHashCode(byte[] obj)
         {
-            ReadOnlySpan<byte> span = obj;
-            if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
-                span = new ReadOnlySpan<byte>(obj, 0, HashCodeFidelity);
+            if (obj == null) return HashCode.Fnv((byte[])null);
+
+            var span = new ReadOnlySpan<byte>(obj);
+            if (HashCodeFidelity > 0 && span.Length > HashCodeFidelity)
+                span = span.Slice(0, HashCodeFidelity);
 
             var fnv = HashCode.Fnv(span);
             return fnv;
