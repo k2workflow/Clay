@@ -40,6 +40,27 @@ namespace SourceCode.Clay.Buffers
         /// Calculates a hash code from the specified data using the
         /// Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
+        /// <param name="buffer">The <see cref="ReadOnlySpan{T}"/> containing the range of bytes to include in the hash code.</param>
+        /// <returns>
+        /// The hash code.
+        /// </returns>
+        public static int Fnv(ReadOnlySpan<byte> span)
+        {
+            var h = FnvOffsetBasis;
+
+            for (var i = 0; i < span.Length; i++)
+            {
+                var c = span[i];
+                h = unchecked((h ^ c) * FnvPrime);
+            }
+
+            return unchecked((int)h);
+        }
+
+        /// <summary>
+        /// Calculates a hash code from the specified data using the
+        /// Fowler/Noll/Vo 1-a algorithm.
+        /// </summary>
         /// <param name="buffer">A pointer to the initial octet in the data.</param>
         /// <param name="count">The number of octets to include in the hash code.</param>
         /// <returns>The hash code.</returns>
@@ -47,7 +68,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte* buffer, int count)
         {
-            if (buffer == default(byte*))
+            if (buffer == default)
                 throw new ArgumentNullException(nameof(buffer));
 
             var h = FnvOffsetBasis;
@@ -128,8 +149,6 @@ namespace SourceCode.Clay.Buffers
         #endregion
 
         #region Overloads
-
-
 
         /// <summary>
         /// Calculates a hash code from the specified data using the
