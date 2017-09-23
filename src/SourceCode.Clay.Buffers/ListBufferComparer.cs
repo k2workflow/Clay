@@ -13,14 +13,14 @@ namespace SourceCode.Clay.Buffers
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
+        /// Creates a new instance of the <see cref="ListBufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
         /// </summary>
         public ListBufferComparer()
         { }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class.
+        /// Creates a new instance of the <see cref="ListBufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
         /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to

@@ -5,25 +5,25 @@ namespace SourceCode.Clay.Buffers
     /// <summary>
     /// Represents a way to compare the contents of <see cref="ReadOnlySpan{T}{T}"/> buffers.
     /// </summary>
-    public sealed class ReadOnlySpanBufferComparer : BufferComparer<ReadOnlySpan<byte>>
+    public sealed class SpanBufferComparer : BufferComparer<ReadOnlySpan<byte>>
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
+        /// Creates a new instance of the <see cref="SpanBufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
         /// </summary>
-        public ReadOnlySpanBufferComparer()
+        public SpanBufferComparer()
         { }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class.
+        /// Creates a new instance of the <see cref="SpanBufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
         /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
         /// disable the limit.
         /// </param>
-        public ReadOnlySpanBufferComparer(int hashCodeFidelity)
+        public SpanBufferComparer(int hashCodeFidelity)
             : base(hashCodeFidelity)
         { }
 
