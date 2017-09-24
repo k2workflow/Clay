@@ -66,13 +66,17 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public override int GetHashCode(byte[] obj)
         {
-            if (obj == null) return 0;
-
-            if (HashCodeFidelity <= 0
-                || obj.Length <= HashCodeFidelity)
+            // Fnv has consistent handling for Null
+            if (obj == null)
                 return HashCode.Fnv(obj);
 
-            var hc = HashCode.Fnv(obj);
+            // Calculate on full length
+            if (HashCodeFidelity <= 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
+                return HashCode.Fnv(obj);
+
+            // Calculate on prefix
+            var span = new ReadOnlySpan<byte>(obj, 0, HashCodeFidelity);
+            var hc = HashCode.Fnv(span);
             return hc;
         }
 

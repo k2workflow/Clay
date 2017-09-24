@@ -66,12 +66,16 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public override int GetHashCode(ReadOnlySpan<byte> obj)
         {
-            if (HashCodeFidelity <= 0
-                || obj.Length <= HashCodeFidelity)
+            // Note ReadOnly/Span is a struct, so cannot pass Null to it
+
+            // Calculate on full length
+            if (HashCodeFidelity <= 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
                 return HashCode.Fnv(obj);
 
-            var obk = obj.Slice(0, HashCodeFidelity);
-            return HashCode.Fnv(obk);
+            // Calculate on prefix
+            var span = obj.Slice(0, HashCodeFidelity);
+            var hc = HashCode.Fnv(span);
+            return hc;
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security;
 
@@ -10,8 +11,18 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static partial class HashCode // .Fnv
     {
+        #region Constants
+
         private const uint FnvOffsetBasis = 0x811C9DC5u;
         private const uint FnvPrime = 0x01000193u;
+
+        // Same result as full calculation would give for an empty buffer
+        internal const int FnvEmpty = unchecked((int)FnvOffsetBasis); // Marked internal for Unit visibility
+
+        // Chosen hash for a null input. Thanks for all the fish
+        internal const int FnvNull = 42; // Marked internal for Unit visibility
+
+        #endregion
 
         #region Root Implementations
 
@@ -25,15 +36,21 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Fnv(params byte[] buffer)
         {
-            var h = FnvOffsetBasis;
+            if (buffer == null) return FnvNull;
+            if (buffer.Length == 0) return FnvEmpty;
 
-            for (var i = 0; i < buffer.Length; i++)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                var c = buffer[i];
-                h = unchecked((h ^ c) * FnvPrime);
-            }
+                for (var i = 0; i < buffer.Length; i++)
+                {
+                    var c = buffer[i];
+                    hc = (hc ^ c) * FnvPrime;
+                }
 
-            return unchecked((int)h);
+                return (int)hc;
+            }
         }
 
         /// <summary>
@@ -46,15 +63,21 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Fnv(ReadOnlySpan<byte> span)
         {
-            var h = FnvOffsetBasis;
+            // ReadOnly/Span is a struct, nore do its ctors permit null. So null check is redundant.
+            if (span.Length == 0) return FnvEmpty;
 
-            for (var i = 0; i < span.Length; i++)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                var c = span[i];
-                h = unchecked((h ^ c) * FnvPrime);
-            }
+                for (var i = 0; i < span.Length; i++)
+                {
+                    var c = span[i];
+                    hc = (hc ^ c) * FnvPrime;
+                }
 
-            return unchecked((int)h);
+                return (int)hc;
+            }
         }
 
         /// <summary>
@@ -68,18 +91,23 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte* buffer, int count)
         {
-            if (buffer == default)
-                throw new ArgumentNullException(nameof(buffer));
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
 
-            var h = FnvOffsetBasis;
+            if (buffer == default) return FnvNull;
+            if (count == 0) return FnvEmpty;
 
-            for (var i = 0; i < count; i++)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                var c = buffer[i];
-                h = unchecked((h ^ c) * FnvPrime);
-            }
+                for (var i = 0; i < count; i++)
+                {
+                    var c = buffer[i];
+                    hc = (hc ^ c) * FnvPrime;
+                }
 
-            return unchecked((int)h);
+                return (int)hc;
+            }
         }
 
         /// <summary>
@@ -94,24 +122,28 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IReadOnlyList<int> fields)
         {
-            if (fields == null) throw new ArgumentNullException(nameof(fields));
+            if (fields == null) return FnvNull;
+            if (fields.Count == 0) return FnvEmpty;
 
             int* data = stackalloc int[1];
             var bdata = (byte*)data;
 
-            var h = FnvOffsetBasis;
+            var hc = FnvOffsetBasis;
 
-            for (var i = 0; i < fields.Count; i++)
+            unchecked
             {
-                data[0] = fields[i];
+                for (var i = 0; i < fields.Count; i++)
+                {
+                    data[0] = fields[i];
 
-                h = unchecked((h ^ bdata[0]) * FnvPrime);
-                h = unchecked((h ^ bdata[1]) * FnvPrime);
-                h = unchecked((h ^ bdata[2]) * FnvPrime);
-                h = unchecked((h ^ bdata[3]) * FnvPrime);
+                    hc = (hc ^ bdata[0]) * FnvPrime;
+                    hc = (hc ^ bdata[1]) * FnvPrime;
+                    hc = (hc ^ bdata[2]) * FnvPrime;
+                    hc = (hc ^ bdata[3]) * FnvPrime;
+                }
+
+                return (int)hc;
             }
-
-            return unchecked((int)h);
         }
 
         /// <summary>
@@ -126,24 +158,28 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IEnumerable<int> fields)
         {
-            if (fields == null) throw new ArgumentNullException(nameof(fields));
+            if (fields == null) return FnvNull;
+            if (!fields.Any()) return FnvEmpty;
 
             int* data = stackalloc int[1];
             var bdata = (byte*)data;
 
-            var h = FnvOffsetBasis;
+            var hc = FnvOffsetBasis;
 
-            foreach (var field in fields)
+            unchecked
             {
-                data[0] = field;
+                foreach (var field in fields)
+                {
+                    data[0] = field;
 
-                h = unchecked((h ^ bdata[0]) * FnvPrime);
-                h = unchecked((h ^ bdata[1]) * FnvPrime);
-                h = unchecked((h ^ bdata[2]) * FnvPrime);
-                h = unchecked((h ^ bdata[3]) * FnvPrime);
+                    hc = (hc ^ bdata[0]) * FnvPrime;
+                    hc = (hc ^ bdata[1]) * FnvPrime;
+                    hc = (hc ^ bdata[2]) * FnvPrime;
+                    hc = (hc ^ bdata[3]) * FnvPrime;
+                }
+
+                return (int)hc;
             }
-
-            return unchecked((int)h);
         }
 
         #endregion
@@ -164,17 +200,18 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte[] buffer, int offset, int count)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer == null) return FnvNull;
+            if (count == 0) return FnvEmpty;
+
             if (offset < 0) throw new ArgumentOutOfRangeException(nameof(offset));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
             if (offset > buffer.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             if (offset + count > buffer.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
-            if (count == 0) return unchecked((int)FnvOffsetBasis);
-
             fixed (byte* b = &buffer[offset])
             {
-                return Fnv(b, count);
+                var hc = Fnv(b, count);
+                return hc;
             }
         }
 
@@ -190,12 +227,13 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(ArraySegment<byte> buffer)
         {
-            if (buffer.Array == null) throw new ArgumentNullException(nameof(buffer));
-            if (buffer.Count == 0) return unchecked((int)FnvOffsetBasis);
+            if (buffer.Array == null) return FnvNull;
+            if (buffer.Count == 0) return FnvEmpty;
 
             fixed (byte* b = &buffer.Array[buffer.Offset])
             {
-                return Fnv(b, buffer.Count);
+                var hc = Fnv(b, buffer.Count);
+                return hc;
             }
         }
 
@@ -211,16 +249,21 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IReadOnlyList<byte> buffer)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (buffer.Count == 0) return unchecked((int)FnvOffsetBasis);
+            if (buffer == null) return FnvNull;
+            if (buffer.Count == 0) return FnvEmpty;
 
-            var h = FnvOffsetBasis;
-            for (var i = 0; i < buffer.Count; i++)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                var c = buffer[i];
-                h = unchecked((h ^ c) * FnvPrime);
+                for (var i = 0; i < buffer.Count; i++)
+                {
+                    var c = buffer[i];
+                    hc = (hc ^ c) * FnvPrime;
+                }
+
+                return (int)hc;
             }
-            return unchecked((int)h);
         }
 
         /// <summary>
@@ -235,16 +278,21 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IList<byte> buffer)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (buffer.Count == 0) return unchecked((int)FnvOffsetBasis);
+            if (buffer == null) return FnvNull;
+            if (buffer.Count == 0) return FnvEmpty;
 
-            var h = FnvOffsetBasis;
-            for (var i = 0; i < buffer.Count; i++)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                var c = buffer[i];
-                h = unchecked((h ^ c) * FnvPrime);
+                for (var i = 0; i < buffer.Count; i++)
+                {
+                    var c = buffer[i];
+                    hc = (hc ^ c) * FnvPrime;
+                }
+
+                return (int)hc;
             }
-            return unchecked((int)h);
         }
 
         /// <summary>
@@ -259,14 +307,42 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IEnumerable<byte> buffer)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer == null) return FnvNull;
+            if (!buffer.Any()) return FnvEmpty;
 
-            var h = FnvOffsetBasis;
-            foreach (var c in buffer)
+            var hc = FnvOffsetBasis;
+
+            unchecked
             {
-                h = unchecked((h ^ c) * FnvPrime);
+                foreach (var c in buffer)
+                {
+                    hc = (hc ^ c) * FnvPrime;
+                }
+
+                return (int)hc;
             }
-            return unchecked((int)h);
+        }
+
+        /// <summary>
+        /// Calculates a hash code from the specified data using the
+        /// Fowler/Noll/Vo 1-a algorithm.
+        /// </summary>
+        /// <param name="fields">The fields to include in the hash code.</param>
+        /// <returns>
+        /// The hash code.
+        /// </returns>
+        [SecurityCritical]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int Fnv(params int[] fields)
+        {
+            if (fields == null) return FnvNull;
+            if (fields.Length == 0) return FnvEmpty;
+
+            fixed (int* data = &fields[0])
+            {
+                var hc = Fnv((byte*)data, fields.Length * sizeof(int));
+                return hc;
+            }
         }
 
         /// <summary>
@@ -286,7 +362,8 @@ namespace SourceCode.Clay.Buffers
             data[0] = a;
             data[1] = b;
 
-            return Fnv((byte*)data, 2 * sizeof(int));
+            var hc = Fnv((byte*)data, 2 * sizeof(int));
+            return hc;
         }
 
         /// <summary>
@@ -308,7 +385,8 @@ namespace SourceCode.Clay.Buffers
             data[1] = b;
             data[2] = c;
 
-            return Fnv((byte*)data, 3 * sizeof(int));
+            var hc = Fnv((byte*)data, 3 * sizeof(int));
+            return hc;
         }
 
         /// <summary>
@@ -332,7 +410,8 @@ namespace SourceCode.Clay.Buffers
             data[2] = c;
             data[3] = d;
 
-            return Fnv((byte*)data, 4 * sizeof(int));
+            var hc = Fnv((byte*)data, 4 * sizeof(int));
+            return hc;
         }
 
         /// <summary>
@@ -358,28 +437,8 @@ namespace SourceCode.Clay.Buffers
             data[3] = d;
             data[4] = e;
 
-            return Fnv((byte*)data, 5 * sizeof(int));
-        }
-
-        /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
-        /// </summary>
-        /// <param name="fields">The fields to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
-        [SecurityCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int Fnv(params int[] fields)
-        {
-            if (fields == null) throw new ArgumentNullException(nameof(fields));
-            if (fields.Length == 0) return unchecked((int)FnvOffsetBasis);
-
-            fixed (int* data = &fields[0])
-            {
-                return Fnv((byte*)data, fields.Length * sizeof(int));
-            }
+            var hc = Fnv((byte*)data, 5 * sizeof(int));
+            return hc;
         }
 
         #endregion

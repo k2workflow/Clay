@@ -5,7 +5,7 @@ namespace SourceCode.Clay.Buffers
     /// <summary>
     /// Represents additional blit methods.
     /// </summary>
-    public static class BlitExtensions
+    public static class Blit
     {
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.

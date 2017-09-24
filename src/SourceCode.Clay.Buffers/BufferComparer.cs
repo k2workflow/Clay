@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace SourceCode.Clay.Buffers
@@ -22,102 +20,25 @@ namespace SourceCode.Clay.Buffers
         #region Array
 
         /// <summary>
-        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with full fidelity.
+        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with default fidelity.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<byte[]> Default { get; } = new ArrayBufferComparer();
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with the default fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<byte[]> Limited { get; } = new ArrayBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<byte[]> Array { get; } = new ArrayBufferComparer(DefaultHashCodeFidelity);
 
         #endregion
 
         #region Span
 
         /// <summary>
-        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with full fidelity.
+        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with default fidelity.
         /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlySpan{T}"/>.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> DefaultSpan { get; } = new SpanBufferComparer();
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with the default fidelity.
-        /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlySpan{T}"/>.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> LimitedSpan { get; } = new SpanBufferComparer(DefaultHashCodeFidelity);
-
-        #endregion
-
-        #region List
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IList{T}"/> buffer comparer that uses FNV with full fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IList<byte>> DefaultList { get; } = new ListBufferComparer();
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IList{T}"/> buffer comparer that uses FNV with default fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IList<byte>> LimitedList { get; } = new ListBufferComparer(DefaultHashCodeFidelity);
-
-        #endregion
-
-        #region ReadOnlyList
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IReadOnlyList{T}"/> buffer comparer that uses FNV with full fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IReadOnlyList<byte>> DefaultReadOnlyList { get; } = new ReadOnlyListBufferComparer();
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IReadOnlyList{T}"/> buffer comparer that uses FNV with the default fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IReadOnlyList<byte>> LimitedReadOnlyList { get; } = new ReadOnlyListBufferComparer(DefaultHashCodeFidelity);
-
-        #endregion
-
-        #region Enumerable
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IEnumerable{T}"/> buffer comparer that uses FNV with full fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IEnumerable<byte>> DefaultEnumerable { get; } = new EnumerableBufferComparer();
-
-        /// <summary>
-        /// Gets the default instance of the <see cref="IEnumerable{T}"/> buffer comparer that uses FNV with the default fidelity.
-        /// </summary>
-        /// <value>
-        /// The default instance of the buffer comparer that uses FNV.
-        /// </value>
-        public static BufferComparer<IEnumerable<byte>> LimitedEnumerable { get; } = new EnumerableBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<ReadOnlySpan<byte>> Span { get; } = new SpanBufferComparer(DefaultHashCodeFidelity);
 
         #endregion
 
@@ -130,7 +51,6 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Span 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CompareSpan(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
         {
             // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
@@ -211,48 +131,6 @@ namespace SourceCode.Clay.Buffers
                             fixed (byte* xp = x, yp = y)
                             {
                                 cmp = NativeMethods.MemCompare(xp, yp, x.Length);
-                                return cmp;
-                            }
-                        }
-                    }
-            }
-        }
-
-        /// <summary>
-        /// Compare the contexts of two <see cref="ArraySegment{T}{T}"/> buffers.
-        /// </summary>
-        /// <param name="x">Span 1</param>
-        /// <param name="y">Span 2</param>
-        /// <returns></returns>
-        [SecuritySafeCritical]
-        public static int CompareArraySegment(ArraySegment<byte> x, ArraySegment<byte> y)
-        {
-            if (ReferenceEquals(x.Array, y.Array)) return 0; // (null, null) or (x, x)
-            if (x.Array == null) return -1; // (null, y)
-            if (y.Array == null) return 1; // (x, null)
-
-            var cmp = x.Count.CompareTo(y.Count); // (x, y)
-            if (cmp != 0) return cmp; // (m, n)
-
-            switch (x.Count)
-            {
-                // (0, 0)
-                case 0:
-                    return 0;
-
-                // (m[0], n[0])
-                case 1:
-                    cmp = x.Array[x.Offset].CompareTo(y.Array[y.Offset]);
-                    return cmp;
-
-                // (m[0..N], n[0..N])
-                default:
-                    {
-                        unsafe
-                        {
-                            fixed (byte* xp = x.Array, yp = y.Array)
-                            {
-                                cmp = NativeMethods.MemCompare(xp + x.Offset, yp + y.Offset, x.Count);
                                 return cmp;
                             }
                         }
