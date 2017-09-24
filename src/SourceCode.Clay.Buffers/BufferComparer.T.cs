@@ -11,7 +11,10 @@ namespace SourceCode.Clay.Buffers
     {
         #region Fields
 
-        public readonly int HashCodeFidelity;
+        /// <summary>
+        /// The prefix of the buffer that is considered for hashcode calculation.
+        /// </summary>
+        public int HashCodeFidelity { get; }
 
         #endregion
 
@@ -22,8 +25,9 @@ namespace SourceCode.Clay.Buffers
         /// buffer when calculating the hashcode.
         /// </summary>
         protected BufferComparer()
-            : this(-1)
-        { }
+        {
+            HashCodeFidelity = -1;
+        }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BufferComparer"/> class.
@@ -52,7 +56,7 @@ namespace SourceCode.Clay.Buffers
             if (x is T xt && y is T yt)
                 return Compare(xt, yt);
 
-            throw new ArgumentException($"Arguments for {nameof(Compare)} should both be {nameof(T)}");
+            throw new ArgumentException($"Arguments for {nameof(Compare)} should both be of type {nameof(T)}");
         }
 
         #endregion
