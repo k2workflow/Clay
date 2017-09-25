@@ -253,6 +253,12 @@ namespace SourceCode.Clay.Buffers.Tests
             var c = GenerateSegment(0, 16, 1).Array;
             var d = GenerateSegment(0, 15).Array;
 
+            // Array
+            Assert.Equal(a, a1, BufferComparer.Array);
+            Assert.NotEqual(a, c, BufferComparer.Array);
+            Assert.NotEqual(a, d, BufferComparer.Array);
+
+            // Span
             Assert.Equal(a, a1, BufferComparer.Span);
             Assert.NotEqual(a, c, BufferComparer.Span);
             Assert.NotEqual(a, d, BufferComparer.Span);
@@ -288,6 +294,11 @@ namespace SourceCode.Clay.Buffers.Tests
             var b = new byte[1] { 2 };
             var c = new byte[1] { 0 };
 
+            // Array
+            Assert.True(BufferComparer.Array.Compare(a, a1) == 0);
+            Assert.True(BufferComparer.Array.Compare(a, b) < 0);
+            Assert.True(BufferComparer.Array.Compare(a, c) > 0);
+
             // ReadOnlySpan
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, a1) == 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, b) < 0);
@@ -319,6 +330,13 @@ namespace SourceCode.Clay.Buffers.Tests
             var a2 = GenerateSegment(10, 16); // Same
             var c = GenerateSegment(0, 16, 1);
             var d = GenerateSegment(0, 15);
+
+            // Array
+            Assert.True(BufferComparer.Array.Compare(a.Array, a1.Array) == 0);
+            Assert.True(BufferComparer.Array.Compare(a.Array, c.Array) < 0);
+            Assert.True(BufferComparer.Array.Compare(c.Array, a.Array) > 0);
+            Assert.True(BufferComparer.Array.Compare(d.Array, a.Array) < 0);
+            Assert.True(BufferComparer.Array.Compare(a.Array, d.Array) > 0);
 
             // ReadOnlySpan
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, a1) == 0);

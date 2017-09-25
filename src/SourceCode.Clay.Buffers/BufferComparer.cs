@@ -66,19 +66,19 @@ namespace SourceCode.Clay.Buffers
             }
             if (y.IsEmpty) return 1; // (x, null)
 
-            var cmp = x.Length.CompareTo(y.Length);
-            if (cmp != 0) return cmp; // (m, n)
+            if (x.Length < y.Length) return -1; // (m, n)
+            if (x.Length > y.Length) return 1;
 
-            switch (x.Length)
+            switch (x.Length) // (n, n)
             {
                 // (0, 0)
-                case 0:
-                    return 0;
+                case 0: return 0;
 
                 // (m[0], n[0])
                 case 1:
-                    cmp = x[0].CompareTo(y[0]);
-                    return cmp;
+                    if (x[0] < y[0]) return -1;
+                    if (x[0] > y[0]) return 1;
+                    return 0;
 
                 // (m[0..N], n[0..N])
                 default:
@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Buffers
                             fixed (byte* xp = &x.DangerousGetPinnableReference())
                             fixed (byte* yp = &y.DangerousGetPinnableReference())
                             {
-                                cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                                var cmp = NativeMethods.MemCompare(xp, yp, x.Length);
                                 return cmp;
                             }
                         }
@@ -109,19 +109,19 @@ namespace SourceCode.Clay.Buffers
             if (x == null) return -1; // (null, y)
             if (y == null) return 1; // (x, null)
 
-            var cmp = x.Length.CompareTo(y.Length); // (x, y)
-            if (cmp != 0) return cmp; // (m, n)
+            if (x.Length < y.Length) return -1; // (m, n)
+            if (x.Length > y.Length) return 1;
 
-            switch (x.Length)
+            switch (x.Length) // (n, n)
             {
                 // (0, 0)
-                case 0:
-                    return 0;
+                case 0: return 0;
 
                 // (m[0], n[0])
                 case 1:
-                    cmp = x[0].CompareTo(y[0]);
-                    return cmp;
+                    if (x[0] < y[0]) return -1;
+                    if (x[0] > y[0]) return 1;
+                    return 0;
 
                 // (m[0..N], n[0..N])
                 default:
@@ -130,7 +130,7 @@ namespace SourceCode.Clay.Buffers
                         {
                             fixed (byte* xp = x, yp = y)
                             {
-                                cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                                var cmp = NativeMethods.MemCompare(xp, yp, x.Length);
                                 return cmp;
                             }
                         }
