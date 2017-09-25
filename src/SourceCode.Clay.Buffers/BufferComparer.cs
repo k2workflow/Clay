@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace SourceCode.Clay.Buffers
@@ -42,7 +43,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Methods
+        #region Helpers
 
         /// <summary>
         /// Compare the contexts of two <see cref="ReadOnlySpan{T}"/> buffers.
@@ -51,12 +52,13 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Span 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CompareSpan(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
         {
             // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
             // public static bool operator ==
-            // Returns true if left and right point at the same memory and have the same length.  Note that
-            // this does *not* check to see if the *contents* are equal.
+            // Returns true if left and right point at the same memory and have the same length.
+            // Note that this does *not* check to see if the *contents* are equal.
             if (x == y) return 0;
 
             if (x.IsEmpty)
@@ -103,6 +105,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Buffer 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CompareArray(byte[] x, byte[] y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)

@@ -47,17 +47,6 @@ namespace SourceCode.Clay.Buffers
         #region IEqualityComparer
 
         /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public override bool Equals(byte[] x, byte[] y)
-            => BufferComparer.CompareArray(x, y) == 0;
-
-        /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <param name="obj">The object.</param>

@@ -63,7 +63,16 @@ namespace SourceCode.Clay.Buffers
 
         #region IEqualityComparer
 
-        public abstract bool Equals(T x, T y);
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// true if the specified objects are equal; otherwise, false.
+        /// </returns>
+        public bool Equals(T x, T y)
+            => Compare(x, y) == 0;
 
         public new bool Equals(object x, object y)
         {
@@ -88,6 +97,16 @@ namespace SourceCode.Clay.Buffers
 
             return obj.GetHashCode();
         }
+
+        #endregion
+
+        #region Comparison
+
+        /// <summary>
+        /// Returns an instance of the <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
+        /// </summary>
+        public Comparison<T> Comparison
+            => Compare;
 
         #endregion
     }
