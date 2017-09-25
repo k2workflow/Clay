@@ -522,6 +522,7 @@ namespace SourceCode.Clay
             var cases = new SwitchCase[types.Length * 2];
             for (var i = 0; i < types.Length; i++)
             {
+                // T
                 var j = i * 2;
                 var type = types[i];
                 var ctor = typeof(Number).GetConstructor(new[] { type });
@@ -529,6 +530,7 @@ namespace SourceCode.Clay
                 var create = Expression.New(ctor, cast);
                 cases[j] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
 
+                // Nullable<T>
                 type = typeof(Nullable<>).MakeGenericType(type);
                 ctor = typeof(Number).GetConstructor(new[] { type });
                 cast = Expression.Convert(objParam, type);
