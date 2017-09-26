@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
@@ -203,6 +204,30 @@ namespace SourceCode.Clay.Tests
                     Assert.Equal(expected, actual);
                 }
             }
+        }
+
+        [InlineData(null, null, true)]
+        [InlineData(null, "", false)]
+        [InlineData(null, "a", false)]
+        [InlineData("a", "a", true)]
+        [InlineData(LongStr, LongStr, true)]
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
+        public static void When_String_EqualsOrdinal(string x, string y, bool expected)
+        {
+            // Forward
+            var actual = x.EqualsOrdinal(y);
+            Assert.Equal(expected, actual);
+
+            var exp = StringComparer.Ordinal.Equals(x, y);
+            Assert.Equal(exp, actual);
+
+            // Reverse
+            actual = y.EqualsOrdinal(x);
+            Assert.Equal(expected, actual);
+
+            exp = StringComparer.Ordinal.Equals(y, x);
+            Assert.Equal(exp, actual);
         }
     }
 }

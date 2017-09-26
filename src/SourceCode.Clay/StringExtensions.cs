@@ -63,5 +63,21 @@ namespace SourceCode.Clay
 
             return new string(ca);
         }
+
+        /// <summary>
+        /// Compares two strings using ordinal rules, with checks for null and reference equality.
+        /// A partner for the framework-provided <see cref="string.CompareOrdinal(string, string)"/> method.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool EqualsOrdinal(this string x, string y)
+        {
+            if (x == y) return true; // (null, null) or (s, s)
+            if (x == null || y == null) return false; // (s, null) or (null, t)
+
+            return x.Equals(y); // (s, t)
+        }
     }
 }
