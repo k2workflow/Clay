@@ -113,7 +113,7 @@ namespace SourceCode.Clay.Buffers
         /// Returns an instance of the <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
         /// </summary>
         public Comparison<T> Comparison
-            => Compare;
+            => Compare; // Delegate dispatch faster than interface dispatch (https://github.com/dotnet/coreclr/pull/8504)
 
         #endregion
     }
