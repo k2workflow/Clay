@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
@@ -442,11 +443,37 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Span.Comparison(a, d) > 0);
         }
 
-        #endregion
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_With_Comparison))]
+        public static void BufferComparer_Compare_Array_With_Comparison()
+        {
+            var expected = new byte[4] { 1, 2, 3, 4 };
 
-        #region Comparison
+            var a1 = new byte[4] { 1, 2, 3, 6 };
+            var a2 = new byte[4] { 1, 2, 3, 7 };
+            var a3 = new byte[4] { 1, 2, 3, 5 };
 
-        //
+            var list = new List<byte[]>(new[] { a1, a2, expected, a3 });
+            list.Sort(BufferComparer.Array.Comparison);
+
+            Assert.Equal(expected, list[0], BufferComparer.Array);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_Compare_Span_With_Comparison))]
+        public static void BufferComparer_Compare_Span_With_Comparison()
+        {
+            var expected = new byte[4] { 1, 2, 3, 4 }.AsReadOnlySpan();
+
+            var a1 = new byte[4] { 1, 2, 3, 6 }.AsReadOnlySpan();
+            var a2 = new byte[4] { 1, 2, 3, 7 }.AsReadOnlySpan();
+            var a3 = new byte[4] { 1, 2, 3, 5 }.AsReadOnlySpan();
+
+            var list = new List<ReadOnlySpan<byte>>(new[] { a1, a2, expected, a3 });
+            list.Sort(BufferComparer.Span.Comparison);
+
+            Assert.Equal(expected, list[0], BufferComparer.Span);
+        }
 
         #endregion
     }

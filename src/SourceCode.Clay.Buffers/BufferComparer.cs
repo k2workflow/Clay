@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Buffers
         #region Constants
 
         /// <summary>
-        /// Gets the number of octets that will be processed when calculating a hashcode.
+        /// The prefix of octets processed when calculating a hashcode.
         /// </summary>
         public const int DefaultHashCodeFidelity = 512;
 

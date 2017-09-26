@@ -20,8 +20,8 @@ namespace SourceCode.Clay.Buffers
         /// Creates a new instance of the <see cref="SpanBufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
-        /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
-        /// disable the limit.
+        /// The maximum number of octets processed when calculating a hashcode.
+        /// Pass zero to disable the limit.
         /// </param>
         public SpanBufferComparer(int hashCodeFidelity)
             : base(hashCodeFidelity)
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Buffers
             // Note ReadOnly/Span is a struct, so cannot pass Null to it
 
             // Calculate on full length
-            if (HashCodeFidelity <= 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
+            if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
                 return HashCode.Fnv(obj);
 
             // Calculate on prefix

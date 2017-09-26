@@ -26,18 +26,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         protected BufferComparer()
         {
-            HashCodeFidelity = -1;
+            HashCodeFidelity = 0;
         }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
-        /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
-        /// disable the limit.
+        /// The maximum number of octets processed when calculating a hashcode.
+        /// Pass zero to disable the limit.
         /// </param>
         protected BufferComparer(int hashCodeFidelity)
         {
+            if (hashCodeFidelity < 0) throw new ArgumentOutOfRangeException(nameof(hashCodeFidelity));
+
             HashCodeFidelity = hashCodeFidelity;
         }
 
@@ -110,10 +112,10 @@ namespace SourceCode.Clay.Buffers
         #region Comparison
 
         /// <summary>
-        /// Returns an instance of the <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
+        /// Returns a <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
         /// </summary>
-        public Comparison<T> Comparison
-            => Compare; // Delegate dispatch faster than interface dispatch (https://github.com/dotnet/coreclr/pull/8504)
+        public int Comparison(T x, T y)
+            => Compare(x, y);
 
         #endregion
     }
