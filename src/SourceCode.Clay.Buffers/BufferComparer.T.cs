@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Buffers
 
         public abstract int Compare(T x, T y);
 
-        public int Compare(object x, object y)
+        int IComparer.Compare(object x, object y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)
             if (x == null) return -1; // (null, y)
@@ -74,7 +74,16 @@ namespace SourceCode.Clay.Buffers
         public bool Equals(T x, T y)
             => Compare(x, y) == 0;
 
-        public new bool Equals(object x, object y)
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// </returns>
+        public abstract int GetHashCode(T obj);
+
+        bool IEqualityComparer.Equals(object x, object y)
         {
             if (ReferenceEquals(x, y)) return true; // (null, null) or (x, x)
             if (x == null) return false; // (null, y)
@@ -86,11 +95,9 @@ namespace SourceCode.Clay.Buffers
             return false;
         }
 
-        public abstract int GetHashCode(T obj);
-
-        public int GetHashCode(object obj)
+        int IEqualityComparer.GetHashCode(object obj)
         {
-            if (obj == null) return 0; ;
+            if (obj == null) return 0;
 
             if (obj is T ot)
                 return GetHashCode(ot);
