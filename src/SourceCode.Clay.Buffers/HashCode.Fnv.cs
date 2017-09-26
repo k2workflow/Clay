@@ -125,7 +125,7 @@ namespace SourceCode.Clay.Buffers
             if (fields == null) return FnvNull;
             if (fields.Count == 0) return FnvEmpty;
 
-            int* data = stackalloc int[1];
+            int* data = stackalloc int[1]; // TODO: https://github.com/dotnet/corefx/pull/24212
             var bdata = (byte*)data;
 
             var hc = FnvOffsetBasis;
@@ -161,7 +161,7 @@ namespace SourceCode.Clay.Buffers
             if (fields == null) return FnvNull;
             if (!fields.Any()) return FnvEmpty;
 
-            int* data = stackalloc int[1];
+            int* data = stackalloc int[1]; // TODO: https://github.com/dotnet/corefx/pull/24212
             var bdata = (byte*)data;
 
             var hc = FnvOffsetBasis;
@@ -358,7 +358,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b)
         {
-            int* data = stackalloc int[2];
+            int* data = stackalloc int[2]; // TODO: https://github.com/dotnet/corefx/pull/24212
             data[0] = a;
             data[1] = b;
 
@@ -380,7 +380,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c)
         {
-            int* data = stackalloc int[3];
+            int* data = stackalloc int[3]; // TODO: https://github.com/dotnet/corefx/pull/24212
             data[0] = a;
             data[1] = b;
             data[2] = c;
@@ -404,7 +404,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c, int d)
         {
-            int* data = stackalloc int[4];
+            int* data = stackalloc int[4]; // TODO: https://github.com/dotnet/corefx/pull/24212
             data[0] = a;
             data[1] = b;
             data[2] = c;
@@ -430,7 +430,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c, int d, int e)
         {
-            int* data = stackalloc int[5];
+            int* data = stackalloc int[5]; // TODO: https://github.com/dotnet/corefx/pull/24212
             data[0] = a;
             data[1] = b;
             data[2] = c;

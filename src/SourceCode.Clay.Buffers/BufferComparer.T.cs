@@ -26,18 +26,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         protected BufferComparer()
         {
-            HashCodeFidelity = -1;
+            HashCodeFidelity = 0;
         }
 
         /// <summary>
         /// Creates a new instance of the <see cref="BufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
-        /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
-        /// disable the limit.
+        /// The maximum number of octets processed when calculating a hashcode.
+        /// Pass zero to disable the limit.
         /// </param>
         protected BufferComparer(int hashCodeFidelity)
         {
+            if (hashCodeFidelity < 0) throw new ArgumentOutOfRangeException(nameof(hashCodeFidelity));
+
             HashCodeFidelity = hashCodeFidelity;
         }
 
@@ -47,7 +49,7 @@ namespace SourceCode.Clay.Buffers
 
         public abstract int Compare(T x, T y);
 
-        public int Compare(object x, object y)
+        int IComparer.Compare(object x, object y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)
             if (x == null) return -1; // (null, y)
@@ -63,9 +65,27 @@ namespace SourceCode.Clay.Buffers
 
         #region IEqualityComparer
 
-        public abstract bool Equals(T x, T y);
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// true if the specified objects are equal; otherwise, false.
+        /// </returns>
+        public bool Equals(T x, T y)
+            => Compare(x, y) == 0;
 
-        public new bool Equals(object x, object y)
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// </returns>
+        public abstract int GetHashCode(T obj);
+
+        bool IEqualityComparer.Equals(object x, object y)
         {
             if (ReferenceEquals(x, y)) return true; // (null, null) or (x, x)
             if (x == null) return false; // (null, y)
@@ -77,17 +97,25 @@ namespace SourceCode.Clay.Buffers
             return false;
         }
 
-        public abstract int GetHashCode(T obj);
-
-        public int GetHashCode(object obj)
+        int IEqualityComparer.GetHashCode(object obj)
         {
-            if (obj == null) return 0; ;
+            if (obj == null) return 0;
 
             if (obj is T ot)
                 return GetHashCode(ot);
 
             return obj.GetHashCode();
         }
+
+        #endregion
+
+        #region Comparison
+
+        /// <summary>
+        /// Returns a <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
+        /// </summary>
+        public int Comparison(T x, T y)
+            => Compare(x, y);
 
         #endregion
     }

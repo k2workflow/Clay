@@ -20,8 +20,8 @@ namespace SourceCode.Clay.Buffers
         /// Creates a new instance of the <see cref="ArrayBufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
-        /// The maximum number of octets that processed when calculating a hashcode. Pass zero or a negative value to
-        /// disable the limit.
+        /// The maximum number of octets processed when calculating a hashcode.
+        /// Pass zero to disable the limit.
         /// </param>
         public ArrayBufferComparer(int hashCodeFidelity)
             : base(hashCodeFidelity)
@@ -47,17 +47,6 @@ namespace SourceCode.Clay.Buffers
         #region IEqualityComparer
 
         /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public override bool Equals(byte[] x, byte[] y)
-            => BufferComparer.CompareArray(x, y) == 0;
-
-        /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <param name="obj">The object.</param>
@@ -71,7 +60,7 @@ namespace SourceCode.Clay.Buffers
                 return HashCode.Fnv(obj);
 
             // Calculate on full length
-            if (HashCodeFidelity <= 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
+            if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
                 return HashCode.Fnv(obj);
 
             // Calculate on prefix

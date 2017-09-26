@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Buffers
         #region Properties
 
         /// <summary>
-        /// Gets the result.
+        /// Gets the delineated result (<see cref="BufferSession.Buffer"/> may be overallocated).
         /// </summary>
         /// <value>
         /// The result.
