@@ -299,10 +299,20 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Array.Compare(a, b) < 0);
             Assert.True(BufferComparer.Array.Compare(a, c) > 0);
 
+            // Array Comparison
+            Assert.True(BufferComparer.Array.Comparison(a, a1) == 0);
+            Assert.True(BufferComparer.Array.Comparison(a, b) < 0);
+            Assert.True(BufferComparer.Array.Comparison(a, c) > 0);
+
             // ReadOnlySpan
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, a1) == 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, b) < 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, c) > 0);
+
+            // ReadOnlySpan Comparison
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, a1) == 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, b) < 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, c) > 0);
 
             // Span (implicit conversion from Span to ReadOnlySpan)
             Assert.True(BufferComparer.Span.Compare((Span<byte>)a, a1) == 0);
@@ -338,6 +348,13 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Array.Compare(d.Array, a.Array) < 0);
             Assert.True(BufferComparer.Array.Compare(a.Array, d.Array) > 0);
 
+            // Array Comparison
+            Assert.True(BufferComparer.Array.Comparison(a.Array, a1.Array) == 0);
+            Assert.True(BufferComparer.Array.Comparison(a.Array, c.Array) < 0);
+            Assert.True(BufferComparer.Array.Comparison(c.Array, a.Array) > 0);
+            Assert.True(BufferComparer.Array.Comparison(d.Array, a.Array) < 0);
+            Assert.True(BufferComparer.Array.Comparison(a.Array, d.Array) > 0);
+
             // ReadOnlySpan
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, a1) == 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, a2) == 0);
@@ -345,6 +362,14 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)c, a) > 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)d, a) < 0);
             Assert.True(BufferComparer.Span.Compare((ReadOnlySpan<byte>)a, d) > 0);
+
+            // ReadOnlySpan Comparison
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, a1) == 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, a2) == 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, c) < 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)c, a) > 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)d, a) < 0);
+            Assert.True(BufferComparer.Span.Comparison((ReadOnlySpan<byte>)a, d) > 0);
 
             // Span (implicit conversion from Span to ReadOnlySpan)
             Assert.True(BufferComparer.Span.Compare((Span<byte>)a, a1) == 0);
@@ -383,6 +408,11 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Span.Compare(a, a1) == 0);
             Assert.True(BufferComparer.Span.Compare(a, b) < 0);
             Assert.True(BufferComparer.Span.Compare(a, c) > 0);
+
+            // ArraySegment Comparison (implicit conversion)
+            Assert.True(BufferComparer.Span.Comparison(a, a1) == 0);
+            Assert.True(BufferComparer.Span.Comparison(a, b) < 0);
+            Assert.True(BufferComparer.Span.Comparison(a, c) > 0);
         }
 
         [Trait("Type", "Unit")]
@@ -402,7 +432,21 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.True(BufferComparer.Span.Compare(c, a) > 0);
             Assert.True(BufferComparer.Span.Compare(d, a) < 0);
             Assert.True(BufferComparer.Span.Compare(a, d) > 0);
+
+            // ArraySegment Comparison (implicit conversion)
+            Assert.True(BufferComparer.Span.Comparison(a, a1) == 0);
+            Assert.True(BufferComparer.Span.Comparison(a, a2) == 0);
+            Assert.True(BufferComparer.Span.Comparison(a, c) < 0);
+            Assert.True(BufferComparer.Span.Comparison(c, a) > 0);
+            Assert.True(BufferComparer.Span.Comparison(d, a) < 0);
+            Assert.True(BufferComparer.Span.Comparison(a, d) > 0);
         }
+
+        #endregion
+
+        #region Comparison
+
+        //
 
         #endregion
     }

@@ -2,10 +2,10 @@
 
 namespace SourceCode.Clay.Buffers.Tests
 {
-    public class BlitExtensionsTests
+    public static class BlitTests
     {
         [Fact(DisplayName = "BlitExtensions RotateLeft Byte")]
-        public void BlitExtensions_RotateLeft_Byte()
+        public static void Blit_RotateLeft_Byte()
         {
             byte sut = 0b01010101;
             Assert.Equal((byte)0b10101010, Blit.RotateLeft(sut, 1));
@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateLeft UShort")]
-        public void BlitExtensions_RotateLeft_UShort()
+        public static void Blit_RotateLeft_UShort()
         {
             ushort sut = 0b01010101_01010101;
             Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 1));
@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateLeft UInt")]
-        public void BlitExtensions_RotateLeft_UInt()
+        public static void Blit_RotateLeft_UInt()
         {
             uint sut = 0b01010101_01010101_01010101_01010101;
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 1));
@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateLeft ULong")]
-        public void BlitExtensions_RotateLeft_ULong()
+        public static void Blit_RotateLeft_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 1));
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateRight Byte")]
-        public void BlitExtensions_RotateRight_Byte()
+        public static void Blit_RotateRight_Byte()
         {
             byte sut = 0b01010101;
             Assert.Equal((byte)0b10101010, Blit.RotateRight(sut, 1));
@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateRight UShort")]
-        public void BlitExtensions_RotateRight_UShort()
+        public static void Blit_RotateRight_UShort()
         {
             ushort sut = 0b01010101_01010101;
             Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 1));
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateRight UInt")]
-        public void BlitExtensions_RotateRight_UInt()
+        public static void Blit_RotateRight_UInt()
         {
             uint sut = 0b01010101_01010101_01010101_01010101;
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 1));
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Fact(DisplayName = "BlitExtensions RotateRight ULong")]
-        public void BlitExtensions_RotateRight_ULong()
+        public static void Blit_RotateRight_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 1));
