@@ -125,7 +125,7 @@ namespace SourceCode.Clay.Buffers
             if (fields == null) return FnvNull;
             if (fields.Count == 0) return FnvEmpty;
 
-            Span<int> data = stackalloc int[1]; // TODO: https://github.com/dotnet/corefx/pull/24212
+            int* data = stackalloc int[1]; // TODO: https://github.com/dotnet/corefx/pull/24212
             var bdata = (byte*)data;
 
             var hc = FnvOffsetBasis;
