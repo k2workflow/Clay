@@ -6,6 +6,7 @@ namespace SourceCode.Clay.Tests
     public static class StringExtensionsTests
     {
         private const string LongStr = @"From Wikipedia: Astley was born on 6 February 1966 in Newton-le-Willows in Lancashire, the fourth child of his family. His parents divorced when he was five, and Astley was brought up by his father.[9] His musical career started when he was ten, singing in the local church choir.[10] During his schooldays, Astley formed and played the drums in a number of local bands, where he met guitarist David Morris.[2][11] After leaving school at sixteen, Astley was employed during the day as a driver in his father's market-gardening business and played drums on the Northern club circuit at night in bands such as Give Way – specialising in covering Beatles and Shadows songs – and FBI, which won several local talent competitions.[10]";
+        private const string surrogateChar = "\uD869\uDE01";
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "StringExtensions Left")]
@@ -159,51 +160,55 @@ namespace SourceCode.Clay.Tests
             }
         }
 
+        // Narrow-1
+        [InlineData("A", -1, 1)]
+        [InlineData("A", 0, 1)]
+        [InlineData("A", 1, 1)]
+        [InlineData("A", 2, 1)]
+        // Wide-1
+        [InlineData(surrogateChar, -1, 2)]
+        [InlineData(surrogateChar, 0, 2)]
+        [InlineData(surrogateChar, 1, 2)]
+        [InlineData(surrogateChar, 2, 2)]
+        [InlineData(surrogateChar, 3, 2)]
+        // Narrow-2
+        [InlineData("AB", -1, 2)]
+        [InlineData("AB", 0, 2)]
+        [InlineData("AB", 1, 2)]
+        [InlineData("AB", 2, 2)]
+        [InlineData("AB", 3, 2)]
+        // Wide-2
+        [InlineData(surrogateChar + surrogateChar, -1, 4)]
+        [InlineData(surrogateChar + surrogateChar, 0, 4)]
+        [InlineData(surrogateChar + surrogateChar, 1, 4)]
+        [InlineData(surrogateChar + surrogateChar, 2, 4)]
+        [InlineData(surrogateChar + surrogateChar, 3, 3)]
+        [InlineData(surrogateChar + surrogateChar, 4, 4)]
+        [InlineData(surrogateChar + surrogateChar, 5, 4)]
+        // Narrow-3
+        [InlineData("ABC", -1, 3)]
+        [InlineData("ABC", 0, 3)]
+        [InlineData("ABC", 1, 3)]
+        [InlineData("ABC", 2, 3)]
+        [InlineData("ABC", 3, 3)]
+        [InlineData("ABC", 4, 3)]
+        // Wide-3
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, -1, 6)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 0, 6)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 1, 6)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 2, 6)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 3, 3)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 4, 3)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 5, 5)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 6, 6)]
+        [InlineData(surrogateChar + surrogateChar + surrogateChar, 7, 6)]
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide 4-")]
-        public static void When_elide_string_lte_4()
+        [Theory(DisplayName = nameof(When_elide_string_boundary))]
+        public static void When_elide_string_boundary(string str, int totalWidth, int expected)
         {
-            var tests = new[] { "A", "AB", "ABC", "ABCD" };
+            var actual = str.Elide(totalWidth);
 
-            foreach (var test in tests)
-            {
-                for (var totalWidth = -1; totalWidth < 10; totalWidth++)
-                {
-                    var expected = test;
-                    var actual = test.Elide(totalWidth);
-
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
-            }
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide 5+")]
-        public static void When_elide_string_gte_5()
-        {
-            var tests = new[] { "ABCDE", "ABCDEF", "ABCDEFG", "ABCDEFGHIJKLMNOP", LongStr };
-
-            foreach (var test in tests)
-            {
-                for (var totalWidth = -1; totalWidth <= 4; totalWidth++)
-                {
-                    var expected = test;
-                    var actual = test.Elide(totalWidth);
-
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
-
-                for (var totalWidth = 5; totalWidth < test.Length + 10; totalWidth++)
-                {
-                    var expected = test.Length <= totalWidth ? test : test.Left(totalWidth - 3) + @"...";
-                    var actual = test.Elide(totalWidth);
-
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
-            }
+            Assert.Equal(expected, actual.Length);
         }
 
         [InlineData(null, null, true)]

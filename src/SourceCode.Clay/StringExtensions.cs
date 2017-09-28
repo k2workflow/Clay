@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
@@ -40,11 +41,12 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Truncates a string, inserting an ellipsis if necessary, returning a value with the specified total width.
-        /// Tolerates <paramref name="totalWidth"/> values that are too large or too small (or negative).
-        /// If the value is already smaller then <paramref name="totalWidth"/>, the original value is returned.
-        /// Otherwise the value is truncated to the specified <paramref name="totalWidth"/> and the
-        /// final 3 characters are replaced with "...".
+        /// Truncates a string to a specified width, respecting surrogate pairs and inserting
+        /// an ellipsis '…' in the final position.
+        /// Tolerates width values that are too large or too small (or negative).
+        /// If the value is already smaller than the specified width, the original value is returned.
+        /// Note that if the target character is in a surrogate pair then the pair is treated atomically.
+        /// In this case the result may be shorter than specified.
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="totalWidth">The total width.</param>
@@ -52,16 +54,30 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Elide(this string str, int totalWidth)
         {
-            if (str == null || totalWidth <= 4 || str.Length <= totalWidth) return str;
+            if (str == null || totalWidth <= 2 || str.Length <= totalWidth) return str;
 
-            // str.Substring(0, width) + "..." incurs multiple allocations
-            // new StringBuilder(str, width) allocates char[width] regardless
-            var ca = str.ToCharArray(0, totalWidth);
-            ca[totalWidth - 3] = '.'; // Actual ellipsis character = ALT+0133
-            ca[totalWidth - 2] = '.';
-            ca[totalWidth - 1] = '.';
+            var ca = str.ToCharArray();
 
-            return new string(ca);
+            // Expect non-surrogates by default
+            var n = 0;
+
+            // High|Low (default on x86/x64)
+            if (BitConverter.IsLittleEndian)
+            {
+                // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
+                if (char.IsLowSurrogate(ca[totalWidth - 1]))
+                    n = 1;
+            }
+            // Low|High
+            else
+            {
+                // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
+                if (char.IsHighSurrogate(ca[totalWidth - 1]))
+                    n = 1;
+            }
+
+            ca[totalWidth - n - 1] = '…';
+            return new string(ca, 0, totalWidth - n);
         }
 
         /// <summary>
