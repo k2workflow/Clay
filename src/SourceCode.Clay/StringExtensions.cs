@@ -21,6 +21,8 @@ namespace SourceCode.Clay
             var len = length <= 0 ? 0 : length;
 
             if (str == null || str.Length <= len) return str;
+
+            // Per Substring behavior, we don't respect surrogate pairs
             return str.Substring(0, len);
         }
 
@@ -37,6 +39,8 @@ namespace SourceCode.Clay
             var len = length <= 0 ? 0 : length;
 
             if (str == null || str.Length <= len) return str;
+
+            // Per Substring behavior, we don't respect surrogate pairs
             return str.Substring(str.Length - len, len);
         }
 
@@ -51,10 +55,14 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="totalWidth">The total width.</param>
         /// <returns>The elided string.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Elide(this string str, int totalWidth)
         {
             if (str == null || totalWidth <= 2 || str.Length <= totalWidth) return str;
+
+            // Since Elide is expected to be used primarily for display purposes, it needs to respect
+            // surrogate pairs and not blindly split them in half.
+            // https://stackoverflow.com/questions/2241348/what-is-unicode-utf-8-utf-16
+            // https://stackoverflow.com/questions/14347799/how-do-i-create-a-string-with-a-surrogate-pair-inside-of-it
 
             var ca = str.ToCharArray();
 
@@ -67,6 +75,8 @@ namespace SourceCode.Clay
                 // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
                 if (char.IsLowSurrogate(ca[totalWidth - 1]))
                     n = 1;
+
+                // It it's the HIGH surrogate, we're replacing it regardless
             }
             // Low|High
             else
@@ -74,6 +84,8 @@ namespace SourceCode.Clay
                 // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
                 if (char.IsHighSurrogate(ca[totalWidth - 1]))
                     n = 1;
+
+                // It it's the LOW surrogate, we're replacing it regardless
             }
 
             ca[totalWidth - n - 1] = '…';
