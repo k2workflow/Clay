@@ -10,7 +10,8 @@
 
   <PropertyGroup>
     <Description>Tools and extensions for working with buffers.</Description>
-    <PackageTags>clay utility extension buffer byte</PackageTags>
+    <PackageLicenseUrl>https://github.com/k2workflow/Clay/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>clay utility extension buffer byte array</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -10,7 +10,8 @@
 
   <PropertyGroup>
     <Description>Tools and extensions to the .Net framework.</Description>
-    <PackageTags>clay utility extension string datetime</PackageTags>
+    <PackageLicenseUrl>https://github.com/k2workflow/Clay/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>clay utility extension string datetime number</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -10,6 +10,7 @@
 
   <PropertyGroup>
     <Description>Tools and extensions for working with json.</Description>
+    <PackageLicenseUrl>https://github.com/k2workflow/Clay/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>clay utility extension json validate</PackageTags>
   </PropertyGroup>
 
