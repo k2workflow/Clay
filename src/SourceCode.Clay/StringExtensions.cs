@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
@@ -20,6 +21,8 @@ namespace SourceCode.Clay
             var len = length <= 0 ? 0 : length;
 
             if (str == null || str.Length <= len) return str;
+
+            // Per Substring behavior, we don't respect surrogate pairs
             return str.Substring(0, len);
         }
 
@@ -36,32 +39,73 @@ namespace SourceCode.Clay
             var len = length <= 0 ? 0 : length;
 
             if (str == null || str.Length <= len) return str;
+
+            // Per Substring behavior, we don't respect surrogate pairs
             return str.Substring(str.Length - len, len);
         }
 
         /// <summary>
-        /// Truncates a string, inserting an ellipsis if necessary, returning a value with the specified total width.
-        /// Tolerates <paramref name="totalWidth"/> values that are too large or too small (or negative).
-        /// If the value is already smaller then <paramref name="totalWidth"/>, the original value is returned.
-        /// Otherwise the value is truncated to the specified <paramref name="totalWidth"/> and the
-        /// final 3 characters are replaced with "...".
+        /// Truncates a string to a specified width, respecting surrogate pairs and inserting
+        /// an ellipsis '…' in the final position.
+        /// Tolerates width values that are too large or too small (or negative).
+        /// If the value is already smaller than the specified width, the original value is returned.
+        /// Note that if the target character is in a surrogate pair then the pair is treated atomically.
+        /// In this case the result may be shorter than specified.
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="totalWidth">The total width.</param>
         /// <returns>The elided string.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Elide(this string str, int totalWidth)
         {
-            if (str == null || totalWidth <= 4 || str.Length <= totalWidth) return str;
+            if (str == null || totalWidth <= 2 || str.Length <= totalWidth) return str;
 
-            // str.Substring(0, width) + "..." incurs multiple allocations
-            // new StringBuilder(str, width) allocates char[width] regardless
-            var ca = str.ToCharArray(0, totalWidth);
-            ca[totalWidth - 3] = '.'; // Actual ellipsis character = ALT+0133
-            ca[totalWidth - 2] = '.';
-            ca[totalWidth - 1] = '.';
+            // Since Elide is expected to be used primarily for display purposes, it needs to respect
+            // surrogate pairs and not blindly split them in half.
+            // https://stackoverflow.com/questions/2241348/what-is-unicode-utf-8-utf-16
+            // https://stackoverflow.com/questions/14347799/how-do-i-create-a-string-with-a-surrogate-pair-inside-of-it
 
-            return new string(ca);
+            var ca = str.ToCharArray();
+
+            // Expect non-surrogates by default
+            var n = 0;
+
+            // High|Low (default on x86/x64)
+            if (BitConverter.IsLittleEndian)
+            {
+                // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
+                if (char.IsLowSurrogate(ca[totalWidth - 1]))
+                    n = 1;
+
+                // It it's the HIGH surrogate, we're replacing it regardless
+            }
+            // Low|High
+            else
+            {
+                // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
+                if (char.IsHighSurrogate(ca[totalWidth - 1]))
+                    n = 1;
+
+                // It it's the LOW surrogate, we're replacing it regardless
+            }
+
+            ca[totalWidth - n - 1] = '…';
+            return new string(ca, 0, totalWidth - n);
+        }
+
+        /// <summary>
+        /// Compares two strings using ordinal rules, with checks for null and reference equality.
+        /// A partner for the framework-provided <see cref="string.CompareOrdinal(string, string)"/> method.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool EqualsOrdinal(this string x, string y)
+        {
+            if (x == y) return true; // (null, null) or (s, s)
+            if (x == null || y == null) return false; // (s, null) or (null, t)
+
+            return x.Equals(y); // (s, t)
         }
     }
 }

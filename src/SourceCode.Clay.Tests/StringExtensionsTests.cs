@@ -1,13 +1,15 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class StringExtensionsTests
     {
         private const string LongStr = @"From Wikipedia: Astley was born on 6 February 1966 in Newton-le-Willows in Lancashire, the fourth child of his family. His parents divorced when he was five, and Astley was brought up by his father.[9] His musical career started when he was ten, singing in the local church choir.[10] During his schooldays, Astley formed and played the drums in a number of local bands, where he met guitarist David Morris.[2][11] After leaving school at sixteen, Astley was employed during the day as a driver in his father's market-gardening business and played drums on the Northern club circuit at night in bands such as Give Way – specialising in covering Beatles and Shadows songs – and FBI, which won several local talent competitions.[10]";
+        private const string _surrogatePair = "\uD869\uDE01";
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Left")]
+        [Fact(DisplayName = nameof(When_left_string))]
         public static void When_left_string()
         {
             // Null
@@ -59,7 +61,7 @@ namespace SourceCode.Clay.Tests
                 string s = null;
                 for (var i = -1; i < 10; i++)
                 {
-                    var ln = System.Math.Max(0, System.Math.Min(i - 1, len));
+                    var ln = Math.Max(0, Math.Min(i - 1, len));
                     var expected = string.IsNullOrEmpty(s) ? s : s.Substring(0, ln);
 
                     actual = s.Left(len);
@@ -71,7 +73,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Right")]
+        [Fact(DisplayName = nameof(When_right_string))]
         public static void When_right_string()
         {
             // Null
@@ -123,7 +125,7 @@ namespace SourceCode.Clay.Tests
                 string s = null;
                 for (var i = -1; i < 10; i++)
                 {
-                    var ln = System.Math.Max(0, System.Math.Min(i - 1, len));
+                    var ln = Math.Max(0, Math.Min(i - 1, len));
                     var expected = string.IsNullOrEmpty(s) ? s : s.Substring(0, ln);
 
                     actual = s.Right(len);
@@ -135,7 +137,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide Null")]
+        [Fact(DisplayName = nameof(When_elide_string_null))]
         public static void When_elide_string_null()
         {
             for (var totalWidth = -1; totalWidth < 10; totalWidth++)
@@ -147,7 +149,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide Empty")]
+        [Fact(DisplayName = nameof(When_elide_string_empty))]
         public static void When_elide_string_empty()
         {
             for (var totalWidth = -1; totalWidth < 10; totalWidth++)
@@ -158,51 +160,79 @@ namespace SourceCode.Clay.Tests
             }
         }
 
+        // Narrow-1
+        [InlineData("A", -1, 1)]
+        [InlineData("A", 0, 1)]
+        [InlineData("A", 1, 1)]
+        [InlineData("A", 2, 1)]
+        // Wide-1
+        [InlineData(_surrogatePair, -1, 2)]
+        [InlineData(_surrogatePair, 0, 2)]
+        [InlineData(_surrogatePair, 1, 2)]
+        [InlineData(_surrogatePair, 2, 2)]
+        [InlineData(_surrogatePair, 3, 2)]
+        // Narrow-2
+        [InlineData("AB", -1, 2)]
+        [InlineData("AB", 0, 2)]
+        [InlineData("AB", 1, 2)]
+        [InlineData("AB", 2, 2)]
+        [InlineData("AB", 3, 2)]
+        // Wide-2
+        [InlineData(_surrogatePair + _surrogatePair, -1, 4)]
+        [InlineData(_surrogatePair + _surrogatePair, 0, 4)]
+        [InlineData(_surrogatePair + _surrogatePair, 1, 4)]
+        [InlineData(_surrogatePair + _surrogatePair, 2, 4)]
+        [InlineData(_surrogatePair + _surrogatePair, 3, 3)]
+        [InlineData(_surrogatePair + _surrogatePair, 4, 4)]
+        [InlineData(_surrogatePair + _surrogatePair, 5, 4)]
+        // Narrow-3
+        [InlineData("ABC", -1, 3)]
+        [InlineData("ABC", 0, 3)]
+        [InlineData("ABC", 1, 3)]
+        [InlineData("ABC", 2, 3)]
+        [InlineData("ABC", 3, 3)]
+        [InlineData("ABC", 4, 3)]
+        // Wide-3
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, -1, 6)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 0, 6)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 1, 6)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 2, 6)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 3, 3)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 4, 3)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 5, 5)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 6, 6)]
+        [InlineData(_surrogatePair + _surrogatePair + _surrogatePair, 7, 6)]
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide 4-")]
-        public static void When_elide_string_lte_4()
+        [Theory(DisplayName = nameof(When_elide_string_boundary))]
+        public static void When_elide_string_boundary(string str, int totalWidth, int expected)
         {
-            var tests = new[] { "A", "AB", "ABC", "ABCD" };
+            var actual = str.Elide(totalWidth);
 
-            foreach (var test in tests)
-            {
-                for (var totalWidth = -1; totalWidth < 10; totalWidth++)
-                {
-                    var expected = test;
-                    var actual = test.Elide(totalWidth);
-
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
-            }
+            Assert.Equal(expected, actual.Length);
         }
 
+        [InlineData(null, null, true)]
+        [InlineData(null, "", false)]
+        [InlineData(null, "a", false)]
+        [InlineData("a", "a", true)]
+        [InlineData(LongStr, LongStr, true)]
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringExtensions Elide 5+")]
-        public static void When_elide_string_gte_5()
+        [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
+        public static void When_String_EqualsOrdinal(string x, string y, bool expected)
         {
-            var tests = new[] { "ABCDE", "ABCDEF", "ABCDEFG", "ABCDEFGHIJKLMNOP", LongStr };
+            // Forward
+            var actual = x.EqualsOrdinal(y);
+            Assert.Equal(expected, actual);
 
-            foreach (var test in tests)
-            {
-                for (var totalWidth = -1; totalWidth <= 4; totalWidth++)
-                {
-                    var expected = test;
-                    var actual = test.Elide(totalWidth);
+            var exp = StringComparer.Ordinal.Equals(x, y);
+            Assert.Equal(exp, actual);
 
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
+            // Reverse
+            actual = y.EqualsOrdinal(x);
+            Assert.Equal(expected, actual);
 
-                for (var totalWidth = 5; totalWidth < test.Length + 10; totalWidth++)
-                {
-                    var expected = test.Length <= totalWidth ? test : test.Left(totalWidth - 3) + @"...";
-                    var actual = test.Elide(totalWidth);
-
-                    Assert.Equal(expected.Length, actual.Length);
-                    Assert.Equal(expected, actual);
-                }
-            }
+            exp = StringComparer.Ordinal.Equals(y, x);
+            Assert.Equal(exp, actual);
         }
     }
 }
