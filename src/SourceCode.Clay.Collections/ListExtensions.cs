@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Collections.Generic
             var max = x.Count - 1;
             var bit = new BitArray(x.Count); // Optimize looping by tracking which positions have been matched
 
-            for (int i = 0; i < x.Count; i++)
+            for (var i = 0; i < x.Count; i++)
             {
                 // Colocated comparisons should be at the same position
                 if (colocated && !bit[i] && comparer.Equals(x[i], y[i]))
@@ -130,7 +130,7 @@ namespace SourceCode.Clay.Collections.Generic
             var max = x.Count - 1;
             var bit = new BitArray(x.Count); // Optimize looping by tracking which positions have been matched
 
-            for (int i = 0; i < x.Count; i++)
+            for (var i = 0; i < x.Count; i++)
             {
                 var xi = convert(x[i]);
                 var yi = convert(y[i]);
