@@ -1,16 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <Company>SourceCode Technology Holdings Inc.</Company>
-    <Product>Clay</Product>
-    <Copyright>Copyright © 2017 SourceCode Technology Holdings Inc.</Copyright>
-  </PropertyGroup>
+  <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
