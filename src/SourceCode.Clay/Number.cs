@@ -995,17 +995,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToBoolean(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToBoolean(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToBoolean(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToBoolean(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToBoolean(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToBoolean(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToBoolean(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToBoolean(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToBoolean(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToBoolean(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToBoolean(provider);
+                case TypeCode.Byte: return Convert.ToBoolean(_byte);
+                case TypeCode.Double: return Convert.ToBoolean(_double);
+                case TypeCode.Int16: return Convert.ToBoolean(_int16);
+                case TypeCode.Int32: return Convert.ToBoolean(_int32);
+                case TypeCode.Int64: return Convert.ToBoolean(_int64);
+                case TypeCode.SByte: return Convert.ToBoolean(_sbyte);
+                case TypeCode.Single: return Convert.ToBoolean(_single);
+                case TypeCode.UInt16: return Convert.ToBoolean(_uint16);
+                case TypeCode.UInt32: return Convert.ToBoolean(_uint32);
+                case TypeCode.UInt64: return Convert.ToBoolean(_uint64);
+                case TypeCode.Decimal: return Convert.ToBoolean(_decimal);
                 default: return default;
             }
         }
@@ -1015,16 +1015,16 @@ namespace SourceCode.Clay
             switch (ValueTypeCode)
             {
                 case TypeCode.Byte: return _byte;
-                case TypeCode.Double: return ((IConvertible)_double).ToByte(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToByte(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToByte(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToByte(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToByte(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToByte(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToByte(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToByte(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToByte(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToByte(provider);
+                case TypeCode.Double: return Convert.ToByte(_double);
+                case TypeCode.Int16: return Convert.ToByte(_int16);
+                case TypeCode.Int32: return Convert.ToByte(_int32);
+                case TypeCode.Int64: return Convert.ToByte(_int64);
+                case TypeCode.SByte: return Convert.ToByte(_sbyte);
+                case TypeCode.Single: return Convert.ToByte(_single);
+                case TypeCode.UInt16: return Convert.ToByte(_uint16);
+                case TypeCode.UInt32: return Convert.ToByte(_uint32);
+                case TypeCode.UInt64: return Convert.ToByte(_uint64);
+                case TypeCode.Decimal: return Convert.ToByte(_decimal);
                 default: return default;
             }
         }
@@ -1097,16 +1097,16 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToDecimal(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToDecimal(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToDecimal(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToDecimal(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToDecimal(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDecimal(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToDecimal(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToDecimal(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToDecimal(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToDecimal(provider);
+                case TypeCode.Byte: return Convert.ToDecimal(_byte);
+                case TypeCode.Double: return Convert.ToDecimal(_double);
+                case TypeCode.Int16: return Convert.ToDecimal(_int16);
+                case TypeCode.Int32: return Convert.ToDecimal(_int32);
+                case TypeCode.Int64: return Convert.ToDecimal(_int64);
+                case TypeCode.SByte: return Convert.ToDecimal(_sbyte);
+                case TypeCode.Single: return Convert.ToDecimal(_single);
+                case TypeCode.UInt16: return Convert.ToDecimal(_uint16);
+                case TypeCode.UInt32: return Convert.ToDecimal(_uint32);
+                case TypeCode.UInt64: return Convert.ToDecimal(_uint64);
                 case TypeCode.Decimal: return _decimal;
                 default: return default;
             }
@@ -1143,21 +1143,21 @@ namespace SourceCode.Clay
             switch (ValueTypeCode)
             {
                 // Signed
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToDouble(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToDouble(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToDouble(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToDouble(provider);
+                case TypeCode.SByte: return Convert.ToDouble(_sbyte);
+                case TypeCode.Int16: return Convert.ToDouble(_int16);
+                case TypeCode.Int32: return Convert.ToDouble(_int32);
+                case TypeCode.Int64: return Convert.ToDouble(_int64);
 
                 // Unsigned
-                case TypeCode.Byte: return ((IConvertible)_byte).ToDouble(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToDouble(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToDouble(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToDouble(provider);
+                case TypeCode.Byte: return Convert.ToDouble(_byte);
+                case TypeCode.UInt16: return Convert.ToDouble(_uint16);
+                case TypeCode.UInt32: return Convert.ToDouble(_uint32);
+                case TypeCode.UInt64: return Convert.ToDouble(_uint64);
 
                 // Float
-                case TypeCode.Single: return ((IConvertible)_single).ToDouble(provider);
+                case TypeCode.Single: return Convert.ToDouble(_single);
                 case TypeCode.Double: return _double;
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToDouble(provider);
+                case TypeCode.Decimal: return Convert.ToDouble(_decimal);
 
                 // Empty
                 default: return default;
@@ -1168,17 +1168,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToInt16(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToInt16(provider);
+                case TypeCode.Byte: return Convert.ToInt16(_byte);
+                case TypeCode.Double: return Convert.ToInt16(_double);
                 case TypeCode.Int16: return _int16;
-                case TypeCode.Int32: return ((IConvertible)_int32).ToInt16(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToInt16(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt16(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToInt16(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToInt16(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToInt16(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToInt16(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToInt16(provider);
+                case TypeCode.Int32: return Convert.ToInt16(_int32);
+                case TypeCode.Int64: return Convert.ToInt16(_int64);
+                case TypeCode.SByte: return Convert.ToInt16(_sbyte);
+                case TypeCode.Single: return Convert.ToInt16(_single);
+                case TypeCode.UInt16: return Convert.ToInt16(_uint16);
+                case TypeCode.UInt32: return Convert.ToInt16(_uint32);
+                case TypeCode.UInt64: return Convert.ToInt16(_uint64);
+                case TypeCode.Decimal: return Convert.ToInt16(_decimal);
                 default: return default;
             }
         }
@@ -1187,17 +1187,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToInt32(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToInt32(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToInt32(provider);
+                case TypeCode.Byte: return Convert.ToInt32(_byte);
+                case TypeCode.Double: return Convert.ToInt32(_double);
+                case TypeCode.Int16: return Convert.ToInt32(_int16);
                 case TypeCode.Int32: return _int32;
-                case TypeCode.Int64: return ((IConvertible)_int64).ToInt32(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt32(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToInt32(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToInt32(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToInt32(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToInt32(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToInt32(provider);
+                case TypeCode.Int64: return Convert.ToInt32(_int64);
+                case TypeCode.SByte: return Convert.ToInt32(_sbyte);
+                case TypeCode.Single: return Convert.ToInt32(_single);
+                case TypeCode.UInt16: return Convert.ToInt32(_uint16);
+                case TypeCode.UInt32: return Convert.ToInt32(_uint32);
+                case TypeCode.UInt64: return Convert.ToInt32(_uint64);
+                case TypeCode.Decimal: return Convert.ToInt32(_decimal);
                 default: return default;
             }
         }
@@ -1233,21 +1233,21 @@ namespace SourceCode.Clay
             switch (ValueTypeCode)
             {
                 // Signed
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToInt64(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToInt64(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToInt64(provider);
+                case TypeCode.SByte: return Convert.ToInt64(_sbyte);
+                case TypeCode.Int16: return Convert.ToInt64(_int16);
+                case TypeCode.Int32: return Convert.ToInt64(_int32);
                 case TypeCode.Int64: return _int64;
 
                 // Unsigned
-                case TypeCode.Byte: return ((IConvertible)_byte).ToInt64(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToInt64(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToInt64(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToInt64(provider);
+                case TypeCode.Byte: return Convert.ToInt64(_byte);
+                case TypeCode.UInt16: return Convert.ToInt64(_uint16);
+                case TypeCode.UInt32: return Convert.ToInt64(_uint32);
+                case TypeCode.UInt64: return Convert.ToInt64(_uint64);
 
                 // Float
-                case TypeCode.Single: return ((IConvertible)_single).ToInt64(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToInt64(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToInt64(provider);
+                case TypeCode.Single: return Convert.ToInt64(_single);
+                case TypeCode.Double: return Convert.ToInt64(_double);
+                case TypeCode.Decimal: return Convert.ToInt64(_decimal);
 
                 // Empty
                 default: return default;
@@ -1258,17 +1258,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToSByte(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToSByte(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToSByte(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToSByte(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToSByte(provider);
+                case TypeCode.Byte: return Convert.ToSByte(_byte);
+                case TypeCode.Double: return Convert.ToSByte(_double);
+                case TypeCode.Int16: return Convert.ToSByte(_int16);
+                case TypeCode.Int32: return Convert.ToSByte(_int32);
+                case TypeCode.Int64: return Convert.ToSByte(_int64);
                 case TypeCode.SByte: return _sbyte;
-                case TypeCode.Single: return ((IConvertible)_single).ToSByte(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToSByte(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToSByte(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToSByte(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToSByte(provider);
+                case TypeCode.Single: return Convert.ToSByte(_single);
+                case TypeCode.UInt16: return Convert.ToSByte(_uint16);
+                case TypeCode.UInt32: return Convert.ToSByte(_uint32);
+                case TypeCode.UInt64: return Convert.ToSByte(_uint64);
+                case TypeCode.Decimal: return Convert.ToSByte(_decimal);
                 default: return default;
             }
         }
@@ -1277,17 +1277,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToSingle(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToSingle(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToSingle(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToSingle(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToSingle(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToSingle(provider);
+                case TypeCode.Byte: return Convert.ToSingle(_byte);
+                case TypeCode.Double: return Convert.ToSingle(_double);
+                case TypeCode.Int16: return Convert.ToSingle(_int16);
+                case TypeCode.Int32: return Convert.ToSingle(_int32);
+                case TypeCode.Int64: return Convert.ToSingle(_int64);
+                case TypeCode.SByte: return Convert.ToSingle(_sbyte);
                 case TypeCode.Single: return _single;
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToSingle(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToSingle(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToSingle(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToSingle(provider);
+                case TypeCode.UInt16: return Convert.ToSingle(_uint16);
+                case TypeCode.UInt32: return Convert.ToSingle(_uint32);
+                case TypeCode.UInt64: return Convert.ToSingle(_uint64);
+                case TypeCode.Decimal: return Convert.ToSingle(_decimal);
                 default: return default;
             }
         }
@@ -1315,17 +1315,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToUInt16(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToUInt16(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToUInt16(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToUInt16(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToUInt16(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToUInt16(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToUInt16(provider);
+                case TypeCode.Byte: return Convert.ToUInt16(_byte);
+                case TypeCode.Double: return Convert.ToUInt16(_double);
+                case TypeCode.Int16: return Convert.ToUInt16(_int16);
+                case TypeCode.Int32: return Convert.ToUInt16(_int32);
+                case TypeCode.Int64: return Convert.ToUInt16(_int64);
+                case TypeCode.SByte: return Convert.ToUInt16(_sbyte);
+                case TypeCode.Single: return Convert.ToUInt16(_single);
                 case TypeCode.UInt16: return _uint16;
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToUInt16(provider);
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToUInt16(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToUInt16(provider);
+                case TypeCode.UInt32: return Convert.ToUInt16(_uint32);
+                case TypeCode.UInt64: return Convert.ToUInt16(_uint64);
+                case TypeCode.Decimal: return Convert.ToUInt16(_decimal);
                 default: return default;
             }
         }
@@ -1334,17 +1334,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToUInt32(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToUInt32(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToUInt32(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToUInt32(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToUInt32(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToUInt32(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToUInt32(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToUInt32(provider);
+                case TypeCode.Byte: return Convert.ToUInt32(_byte);
+                case TypeCode.Double: return Convert.ToUInt32(_double);
+                case TypeCode.Int16: return Convert.ToUInt32(_int16);
+                case TypeCode.Int32: return Convert.ToUInt32(_int32);
+                case TypeCode.Int64: return Convert.ToUInt32(_int64);
+                case TypeCode.SByte: return Convert.ToUInt32(_sbyte);
+                case TypeCode.Single: return Convert.ToUInt32(_single);
+                case TypeCode.UInt16: return Convert.ToUInt32(_uint16);
                 case TypeCode.UInt32: return _uint32;
-                case TypeCode.UInt64: return ((IConvertible)_uint64).ToUInt32(provider);
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToUInt32(provider);
+                case TypeCode.UInt64: return Convert.ToUInt32(_uint64);
+                case TypeCode.Decimal: return Convert.ToUInt32(_decimal);
                 default: return default;
             }
         }
@@ -1353,17 +1353,17 @@ namespace SourceCode.Clay
         {
             switch (ValueTypeCode)
             {
-                case TypeCode.Byte: return ((IConvertible)_byte).ToUInt64(provider);
-                case TypeCode.Double: return ((IConvertible)_double).ToUInt64(provider);
-                case TypeCode.Int16: return ((IConvertible)_int16).ToUInt64(provider);
-                case TypeCode.Int32: return ((IConvertible)_int32).ToUInt64(provider);
-                case TypeCode.Int64: return ((IConvertible)_int64).ToUInt64(provider);
-                case TypeCode.SByte: return ((IConvertible)_sbyte).ToUInt64(provider);
-                case TypeCode.Single: return ((IConvertible)_single).ToUInt64(provider);
-                case TypeCode.UInt16: return ((IConvertible)_uint16).ToUInt64(provider);
-                case TypeCode.UInt32: return ((IConvertible)_uint32).ToUInt64(provider);
+                case TypeCode.Byte: return Convert.ToUInt64(_byte);
+                case TypeCode.Double: return Convert.ToUInt64(_double);
+                case TypeCode.Int16: return Convert.ToUInt64(_int16);
+                case TypeCode.Int32: return Convert.ToUInt64(_int32);
+                case TypeCode.Int64: return Convert.ToUInt64(_int64);
+                case TypeCode.SByte: return Convert.ToUInt64(_sbyte);
+                case TypeCode.Single: return Convert.ToUInt64(_single);
+                case TypeCode.UInt16: return Convert.ToUInt64(_uint16);
+                case TypeCode.UInt32: return Convert.ToUInt64(_uint32);
                 case TypeCode.UInt64: return _uint64;
-                case TypeCode.Decimal: return ((IConvertible)_decimal).ToUInt64(provider);
+                case TypeCode.Decimal: return Convert.ToUInt64(_decimal);
                 default: return default;
             }
         }

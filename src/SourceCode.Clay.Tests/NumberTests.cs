@@ -7,7 +7,7 @@ namespace SourceCode.Clay.Tests
     // Parameters are used to disambiguate theories
 #   pragma warning disable xUnit1026 // Theory methods should use all of their parameters
 
-    public class NumberTests
+    public static class NumberTests
     {
         [
             InlineData("null", null, NumberKind.Null, false),
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Decimal), 10.0, NumberKind.Real | NumberKind.Signed, false)
         ]
         [Theory(DisplayName = nameof(Number_ContructGet))]
-        public void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
+        public static void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
         {
             if (description == nameof(Decimal))
                 expected = (decimal)(double)expected;
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Decimal), 10.0)
         ]
         [Theory(DisplayName = nameof(Number_ToString))]
-        public void Number_ToString(string description, object expected)
+        public static void Number_ToString(string description, object expected)
         {
             if (description == nameof(Decimal))
                 expected = (decimal)(double)expected;
@@ -216,7 +216,7 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Decimal), nameof(Decimal), 10.0, 100.0, 10.0, 100.0),
         ]
         [Theory(DisplayName = nameof(Number_Compare))]
-        public void Number_Compare(string a, string b, object aLow, object aHigh, object bLow, object bHigh)
+        public static void Number_Compare(string a, string b, object aLow, object aHigh, object bLow, object bHigh)
         {
             if (a == nameof(Decimal))
             {
@@ -384,7 +384,7 @@ namespace SourceCode.Clay.Tests
             InlineData(nameof(Decimal), nameof(Decimal)),
         ]
         [Theory(DisplayName = nameof(Number_Compare_Overflow))]
-        public void Number_Compare_Overflow(string a, string b)
+        public static void Number_Compare_Overflow(string a, string b)
         {
             var aT = Type.GetType($"System.{a}");
             var bT = Type.GetType($"System.{b}");
