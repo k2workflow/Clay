@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Buffers
@@ -7,7 +6,7 @@ namespace SourceCode.Clay.Buffers
     /// <summary>
     /// Represents a way to compare binary buffers.
     /// </summary>
-    public abstract class BufferComparer<T> : IEqualityComparer<T>, IComparer<T>, IEqualityComparer, IComparer
+    public abstract class BufferComparer<T> : IEqualityComparer<T>, IComparer<T>
     {
         #region Fields
 
@@ -49,18 +48,6 @@ namespace SourceCode.Clay.Buffers
 
         public abstract int Compare(T x, T y);
 
-        int IComparer.Compare(object x, object y)
-        {
-            if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)
-            if (x == null) return -1; // (null, y)
-            if (y == null) return 1; // (x, null)
-
-            if (x is T xt && y is T yt)
-                return Compare(xt, yt);
-
-            throw new ArgumentException($"Arguments for {nameof(Compare)} should both be of type {nameof(T)}");
-        }
-
         #endregion
 
         #region IEqualityComparer
@@ -84,28 +71,6 @@ namespace SourceCode.Clay.Buffers
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public abstract int GetHashCode(T obj);
-
-        bool IEqualityComparer.Equals(object x, object y)
-        {
-            if (ReferenceEquals(x, y)) return true; // (null, null) or (x, x)
-            if (x == null) return false; // (null, y)
-            if (y == null) return false; // (x, null)
-
-            if (x is T xt && y is T yt)
-                return Equals(xt, yt);
-
-            return false;
-        }
-
-        int IEqualityComparer.GetHashCode(object obj)
-        {
-            if (obj == null) return 0;
-
-            if (obj is T ot)
-                return GetHashCode(ot);
-
-            return obj.GetHashCode();
-        }
 
         #endregion
 
