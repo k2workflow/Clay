@@ -2,7 +2,7 @@
 
 namespace SourceCode.Clay.Tests
 {
-    public class SemanticVersionComparerTests
+    public static class SemanticVersionComparerTests
     {
         [InlineData(
             0, 1, 2, null, null,
@@ -96,7 +96,7 @@ namespace SourceCode.Clay.Tests
         )]
 
         [Theory(DisplayName = nameof(SemanticVersionComparer_Equals))]
-        public void SemanticVersionComparer_Equals(
+        public static void SemanticVersionComparer_Equals(
             int major1, int minor1, int patch1, string pre1, string meta1,
             int major2, int minor2, int patch2, string pre2, string meta2,
             bool standardEquals, bool strictEquals)
@@ -207,7 +207,7 @@ namespace SourceCode.Clay.Tests
         )]
 
         [Theory(DisplayName = nameof(SemanticVersionComparer_Compare))]
-        public void SemanticVersionComparer_Compare(
+        public static void SemanticVersionComparer_Compare(
             int major1, int minor1, int patch1, string pre1, string meta1,
             int major2, int minor2, int patch2, string pre2, string meta2,
             int standardResult, int strictResult)

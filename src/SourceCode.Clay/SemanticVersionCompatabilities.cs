@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SourceCode.Clay
 {
@@ -8,7 +6,7 @@ namespace SourceCode.Clay
     /// Represents the different levels of <see cref="SemanticVersion"/> compatability.
     /// </summary>
     [Flags]
-    public enum SemanticVersionIncompatabilities
+    public enum SemanticVersionCompatabilities
     {
 #       pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
         /// <summary>

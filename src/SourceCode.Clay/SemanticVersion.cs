@@ -12,7 +12,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
-        public static SemanticVersion Default { get; }
+        public static SemanticVersion Empty { get; }
         #endregion
 
         #region Properties
@@ -131,7 +131,7 @@ namespace SourceCode.Clay
         /// <param name="s">A <see cref="string"/> containing a number to convert.</param>
         /// <param name="result">
         /// When this method returns, contains the structured equivalent of the semantic version contained in
-        /// <paramref name="s"/>, if the conversion succeeded, or <see cref="Default"/> if the conversion failed. The
+        /// <paramref name="s"/>, if the conversion succeeded, or <see cref="Empty"/> if the conversion failed. The
         /// conversion fails if the <paramref name="s"/> parameter is null or <see cref="string.Empty"/>, does not conform
         /// to the semantic version specification, or contains version components less than 0 or greater than
         /// <see cref="int.MaxValue"/>. This parameter is passed uninitialized.
@@ -272,28 +272,28 @@ namespace SourceCode.Clay
         /// <param name="baseline">The baseline <see cref="SemanticVersion"/>.</param>
         /// <param name="comparand">The <see cref="SemanticVersion"/> to test for compatability.</param>
         /// <remarks>
-        /// The presence of the <see cref="SemanticVersionIncompatabilities.Incompatible"/> flag indicates that
+        /// The presence of the <see cref="SemanticVersionCompatabilities.Incompatible"/> flag indicates that
         /// <paramref name="comparand"/> is incompatible with <paramref name="baseline"/>. Any other value 
         /// indicates compatability. <see cref="BuildMetadata"/> is completely ignored.
         /// </remarks>
         /// <returns>
         /// A value that contains information on how the <see cref="SemanticVersion"/> values are incompatible. 
         /// </returns>
-        public static SemanticVersionIncompatabilities GetIncompatabilities(SemanticVersion baseline, SemanticVersion comparand)
+        public static SemanticVersionCompatabilities GetCompatabilities(SemanticVersion baseline, SemanticVersion comparand)
         {
-            var compatability = SemanticVersionIncompatabilities.Identical;
+            var compatability = SemanticVersionCompatabilities.Identical;
 
             // Major versions must match.
             if (baseline.Major > comparand.Major)
-                compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.OlderMajorVersion;
+                compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.OlderMajorVersion;
             else if (baseline.Major < comparand.Major)
-                compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.NewerMajorVersion;
+                compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.NewerMajorVersion;
 
             // If functionality is added, the second version must be newer.
             if (baseline.Minor > comparand.Minor)
-                compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.OlderMinorVersion;
+                compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.OlderMinorVersion;
             else if (baseline.Minor < comparand.Minor)
-                compatability |= SemanticVersionIncompatabilities.NewerMinorVersion;
+                compatability |= SemanticVersionCompatabilities.NewerMinorVersion;
 
             // Major version 0 is used for initial development. Everything must match.
             if (
@@ -305,33 +305,33 @@ namespace SourceCode.Clay
                         !StringComparer.Ordinal.Equals(baseline.PreRelease, comparand.PreRelease)
                     )
                 )
-                compatability |= SemanticVersionIncompatabilities.Incompatible;
+                compatability |= SemanticVersionCompatabilities.Incompatible;
 
             // Technically these are compatible.
             if (baseline.Patch > comparand.Patch)
-                compatability |= SemanticVersionIncompatabilities.OlderPatchVersion;
+                compatability |= SemanticVersionCompatabilities.OlderPatchVersion;
             else if (baseline.Patch < comparand.Patch)
-                compatability |= SemanticVersionIncompatabilities.NewerPatchVersion;
+                compatability |= SemanticVersionCompatabilities.NewerPatchVersion;
 
             // Different pre-releases are always incompatible.
             if (baseline.PreRelease == null && comparand.PreRelease != null)
-                compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.PreReleaseAdded;
+                compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.PreReleaseAdded;
             else if (baseline.PreRelease != null && comparand.PreRelease == null)
-                compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.PreReleaseRemoved;
+                compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.PreReleaseRemoved;
             else if (baseline.PreRelease != null && comparand.PreRelease != null)
             {
                 var cmp = StringComparer.Ordinal.Compare(baseline.PreRelease, comparand.PreRelease);
-                if (cmp == -1) compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.NewerPreRelease;
-                else if (cmp == 1) compatability |= SemanticVersionIncompatabilities.Incompatible | SemanticVersionIncompatabilities.OlderPreRelease;
+                if (cmp == -1) compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.NewerPreRelease;
+                else if (cmp == 1) compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.OlderPreRelease;
             }
 
             // Build metadata is irrelevant.
             if (baseline.BuildMetadata == null && comparand.BuildMetadata != null)
-                compatability |= SemanticVersionIncompatabilities.BuildMetadataAdded;
+                compatability |= SemanticVersionCompatabilities.BuildMetadataAdded;
             else if (baseline.BuildMetadata != null && comparand.BuildMetadata == null)
-                compatability |= SemanticVersionIncompatabilities.BuildMetadataRemoved;
+                compatability |= SemanticVersionCompatabilities.BuildMetadataRemoved;
             else if (baseline.BuildMetadata != null && comparand.BuildMetadata != null && !StringComparer.Ordinal.Equals(baseline.BuildMetadata, comparand.BuildMetadata))
-                compatability |= SemanticVersionIncompatabilities.DifferentBuildMetadata;
+                compatability |= SemanticVersionCompatabilities.DifferentBuildMetadata;
 
             return compatability;
         }
@@ -443,21 +443,25 @@ namespace SourceCode.Clay
             FormattableString str;
             switch (format)
             {
+                case 'v':
                 case 'V':
                     str = $"{Major}.{Minor}.{Patch}";
                     break;
+                case 'p':
                 case 'P':
                     if (PreRelease == null)
                         str = $"{Major}.{Minor}.{Patch}";
                     else
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}";
                     break;
+                case 'm':
                 case 'M':
                     if (BuildMetadata == null)
                         str = $"{Major}.{Minor}.{Patch}";
                     else
                         str = $"{Major}.{Minor}.{Patch}+{BuildMetadata}";
                     break;
+                case 'f':
                 case 'F':
                     if (PreRelease == null && BuildMetadata == null)
                         str = $"{Major}.{Minor}.{Patch}";
