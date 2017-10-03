@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -8,8 +8,8 @@ namespace SourceCode.Clay.Collections.Tests
     public static class SwitchExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Use_ToDynamicSwitch_Bool))]
-        public static void Use_ToDynamicSwitch_Bool()
+        [Fact(DisplayName = nameof(ToDynamicSwitch_Bool))]
+        public static void ToDynamicSwitch_Bool()
         {
             var dict = new Dictionary<bool, int>()
             {
@@ -27,8 +27,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Use_ToDynamicSwitch_Int32))]
-        public static void Use_ToDynamicSwitch_Int32()
+        [Fact(DisplayName = nameof(ToDynamicSwitch_Int32))]
+        public static void ToDynamicSwitch_Int32()
         {
             var dict = new Dictionary<int, string>()
             {
@@ -53,8 +53,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Use_SwitchExtensions_ToDynamicSwitch_KeyExtractor))]
-        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyExtractor()
+        [Fact(DisplayName = nameof(ToDynamicSwitch_KeyExtractor))]
+        public static void ToDynamicSwitch_KeyExtractor()
         {
             var list = new[]
             {
@@ -72,8 +72,8 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(30, @switch[3]);
         }
 
-        [Fact(DisplayName = nameof(Use_SwitchExtensions_ToDynamicSwitch_KeyValueExtractor))]
-        public static void Use_SwitchExtensions_ToDynamicSwitch_KeyValueExtractor()
+        [Fact(DisplayName = nameof(ToDynamicSwitch_KeyValueExtractor))]
+        public static void ToDynamicSwitch_KeyValueExtractor()
         {
             var list = new[]
             {

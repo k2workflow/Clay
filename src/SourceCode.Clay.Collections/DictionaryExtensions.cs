@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>
         /// <returns></returns>
-        public static bool NullableEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
+        public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
         {
             if (valueComparer == null) throw new ArgumentNullException(nameof(valueComparer));
 
@@ -57,7 +57,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Dictionary 1</param>
         /// <param name="y">Dictionary 2</param>
         /// <returns></returns>
-        public static bool NullableEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
-            => x.NullableEquals(y, EqualityComparer<TValue>.Default);
+        public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
+            => x.DictionaryEquals(y, EqualityComparer<TValue>.Default);
     }
 }
