@@ -7,8 +7,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class KeyedLookupTests
     {
-        [Fact(DisplayName = nameof(Use_KeyedLookup_KeyExtractor))]
-        public static void Use_KeyedLookup_KeyExtractor()
+        [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor))]
+        public static void KeyedLookup_KeyExtractor()
         {
             var items = new[]
             {
@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int, AttributeTargets>(30, AttributeTargets.Delegate)
             };
 
-            var lookup = KeyedCollectionFactory.Create<int, KeyValuePair<int, AttributeTargets>>(items, t => t.Key / 10);
+            var lookup = KeyedCollectionFactory.Create(items, t => t.Key / 10);
 
             Assert.Throws<KeyNotFoundException>(() => lookup[4]);
 
@@ -26,8 +26,8 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Delegate, lookup[3].Value);
         }
 
-        [Fact(DisplayName = nameof(Use_KeyedLookup_KeyExtractor_OrdinalIgnoreCase))]
-        public static void Use_KeyedLookup_KeyExtractor_OrdinalIgnoreCase()
+        [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor_OrdinalIgnoreCase))]
+        public static void KeyedLookup_KeyExtractor_OrdinalIgnoreCase()
         {
             var items = new[]
             {
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<string, AttributeTargets>("c", AttributeTargets.Delegate)
             };
 
-            var lookup = KeyedCollectionFactory.Create<string, KeyValuePair<string, AttributeTargets>>(items, t => t.Key, StringComparer.OrdinalIgnoreCase);
+            var lookup = KeyedCollectionFactory.Create(items, t => t.Key, StringComparer.OrdinalIgnoreCase);
 
             Assert.Throws<KeyNotFoundException>(() => lookup["d"]);
 
@@ -48,8 +48,8 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Delegate, lookup["C"].Value);
         }
 
-        [Fact(DisplayName = nameof(Use_KeyedLookup_KeyExtractor_Ordinal))]
-        public static void Use_KeyedLookup_KeyExtractor_Ordinal()
+        [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor_Ordinal))]
+        public static void KeyedLookup_KeyExtractor_Ordinal()
         {
             var items = new[]
             {
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<string, AttributeTargets>("c", AttributeTargets.Delegate)
             };
 
-            var lookup = KeyedCollectionFactory.Create<string, KeyValuePair<string, AttributeTargets>>(items, t => t.Key, StringComparer.Ordinal);
+            var lookup = KeyedCollectionFactory.Create(items, t => t.Key, StringComparer.Ordinal);
 
             Assert.Throws<KeyNotFoundException>(() => lookup["d"]);
 

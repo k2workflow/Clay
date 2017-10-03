@@ -18,8 +18,8 @@ namespace SourceCode.Clay.Collections.Tests
         };
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals null, null")]
-        public static void Use_NullableEquals_both_null()
+        [Fact(DisplayName = nameof(ListEquals_both_null))]
+        public static void ListEquals_both_null()
         {
             var equal = _null.ListEquals(null, StringComparer.Ordinal, false);
             Assert.True(equal);
@@ -29,8 +29,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals 0, 0")]
-        public static void Use_NullableEquals_both_empty()
+        [Fact(DisplayName = nameof(ListEquals_both_empty))]
+        public static void ListEquals_both_empty()
         {
             var list1 = Array.Empty<string>();
             var list2 = new string[0];
@@ -43,8 +43,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals 1, 1")]
-        public static void Use_NullableEquals_both_one()
+        [Fact(DisplayName = nameof(ListEquals_both_one))]
+        public static void ListEquals_both_one()
         {
             var list1 = new string[] { "hi" };
             var list2 = new string[] { "HI" };
@@ -70,16 +70,16 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals list, null")]
-        public static void Use_NullableEquals_one_null()
+        [Fact(DisplayName = nameof(ListEquals_one_null))]
+        public static void ListEquals_one_null()
         {
             var equal = _list.ListEquals((string[])null, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals N, M")]
-        public static void Use_NullableEquals_different_count()
+        [Fact(DisplayName = nameof(ListEquals_different_count))]
+        public static void ListEquals_different_count()
         {
             var list2 = new[]
             {
@@ -93,8 +93,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated true")]
-        public static void Use_NullableEquals_IsEqual_colocated_true()
+        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
+        public static void ListEquals_IsEqual_sequential_true()
         {
             var list2 = new[]
             {
@@ -112,8 +112,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated false")]
-        public static void Use_NullableEquals_IsEqual_colocated_false()
+        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false))]
+        public static void ListEquals_IsEqual_sequential_false()
         {
             var list2 = new[]
             {
@@ -131,8 +131,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated true")]
-        public static void Use_NullableEquals_NotEqual_colocated_true()
+        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
+        public static void ListEquals_NotEqual_sequential_true()
         {
             var list2 = new[]
             {
@@ -150,8 +150,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated false")]
-        public static void Use_NullableEquals_NotEqual_colocated_false()
+        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
+        public static void ListEquals_NotEqual_sequential_false()
         {
             var list2 = new[]
             {
@@ -169,8 +169,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals duplicates")]
-        public static void Use_NullableEquals_duplicates()
+        [Fact(DisplayName = nameof(ListEquals_duplicates))]
+        public static void ListEquals_duplicates()
         {
             var list2 = new[]
             {
@@ -188,8 +188,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated transform")]
-        public static void Use_NullableEquals_Transform_IsEqual_colocated_true()
+        [Fact(DisplayName = nameof(ListEquals_Extract_IsEqual_sequential_true))]
+        public static void ListEquals_Extract_IsEqual_sequential_true()
         {
             var listA = new[]
             {
@@ -215,8 +215,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated transform")]
-        public static void Use_NullableEquals_Transform_NotEqual_colocated_true()
+        [Fact(DisplayName = nameof(ListEquals_Extract_NotEqual_sequential_true))]
+        public static void ListEquals_Extract_NotEqual_sequential_true()
         {
             var listA = new[]
             {

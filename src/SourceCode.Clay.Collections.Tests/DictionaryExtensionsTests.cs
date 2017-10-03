@@ -16,16 +16,16 @@ namespace SourceCode.Clay.Collections.Tests
         };
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals null, null")]
-        public static void Use_NullableEquals_both_null()
+        [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
+        public static void DictionaryEquals_both_null()
         {
             var equal = ((Dictionary<string, string>)null).DictionaryEquals(null);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals 0, 0")]
-        public static void Use_NullableEquals_both_empty()
+        [Fact(DisplayName = nameof(DictionaryEquals_both_empty))]
+        public static void DictionaryEquals_both_empty()
         {
             var dict1 = new Dictionary<string, string>();
             var dict2 = new Dictionary<string, string>();
@@ -35,8 +35,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals 1, 1")]
-        public static void Use_NullableEquals_both_one()
+        [Fact(DisplayName = nameof(DictionaryEquals_both_one))]
+        public static void DictionaryEquals_both_one()
         {
             var dict1 = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["hi"] = "hi1" };
             var dict2 = new Dictionary<string, string> { ["HI"] = "HI1" };
@@ -53,16 +53,16 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals list, null")]
-        public static void Use_NullableEquals_one_null()
+        [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
+        public static void DictionaryEquals_one_null()
         {
             var equal = _dict.DictionaryEquals(null);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals N, M")]
-        public static void Use_NullableEquals_different_count()
+        [Fact(DisplayName = nameof(DictionaryEquals_different_count))]
+        public static void DictionaryEquals_different_count()
         {
             var dict2 = new Dictionary<string, string>(_dict);
             dict2.Remove("foo");
@@ -72,8 +72,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals IsEqual")]
-        public static void Use_NullableEquals_IsEqual()
+        [Fact(DisplayName = nameof(DictionaryEquals_IsEqual))]
+        public static void DictionaryEquals_IsEqual()
         {
             var dict2 = new Dictionary<string, string>(_dict);
 
@@ -82,8 +82,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "DictionaryExtensions NullableEquals NotEqual")]
-        public static void Use_NullableEquals_NotEqual()
+        [Fact(DisplayName = nameof(DictionaryEquals_NotEqual))]
+        public static void DictionaryEquals_NotEqual()
         {
             var dict2 = new Dictionary<string, string>(_dict)
             {

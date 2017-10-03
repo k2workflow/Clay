@@ -18,8 +18,8 @@ namespace SourceCode.Clay.Collections.Tests
         }.AsReadOnlySpan();
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals null, null")]
-        public static void Use_NullableEquals_both_null()
+        [Fact(DisplayName = nameof(SpanEquals_both_null))]
+        public static void SpanEquals_both_null()
         {
             var equal = _null.SpanEquals(Span<string>.Empty, StringComparer.Ordinal, false);
             Assert.True(equal);
@@ -29,8 +29,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals 0, 0")]
-        public static void Use_NullableEquals_both_empty()
+        [Fact(DisplayName = nameof(SpanEquals_both_empty))]
+        public static void SpanEquals_both_empty()
         {
             var list1 = Array.Empty<string>().AsReadOnlySpan();
             var list2 = new string[0].AsReadOnlySpan();
@@ -43,8 +43,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals 1, 1")]
-        public static void Use_NullableEquals_both_one()
+        [Fact(DisplayName = nameof(SpanEquals_both_one))]
+        public static void SpanEquals_both_one()
         {
             var list1 = new string[] { "hi" }.AsReadOnlySpan();
             var list2 = new string[] { "HI" }.AsReadOnlySpan();
@@ -70,16 +70,16 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals list, null")]
-        public static void Use_NullableEquals_one_null()
+        [Fact(DisplayName = nameof(SpanEquals_one_null))]
+        public static void SpanEquals_one_null()
         {
             var equal = _list.SpanEquals(_null, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals N, M")]
-        public static void Use_NullableEquals_different_count()
+        [Fact(DisplayName = nameof(SpanEquals_different_count))]
+        public static void SpanEquals_different_count()
         {
             var list2 = new[]
             {
@@ -93,8 +93,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated true")]
-        public static void Use_NullableEquals_IsEqual_colocated_true()
+        [Fact(DisplayName = nameof(SpanEquals_IsEqual_sequential_true))]
+        public static void SpanEquals_IsEqual_sequential_true()
         {
             var list2 = new[]
             {
@@ -112,8 +112,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated false")]
-        public static void Use_NullableEquals_IsEqual_colocated_false()
+        [Fact(DisplayName = nameof(SpanEquals_IsEqual_sequential_false))]
+        public static void SpanEquals_IsEqual_sequential_false()
         {
             var list2 = new[]
             {
@@ -131,8 +131,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated true")]
-        public static void Use_NullableEquals_NotEqual_colocated_true()
+        [Fact(DisplayName = nameof(SpanEquals_NotEqual_sequential_true))]
+        public static void SpanEquals_NotEqual_sequential_true()
         {
             var list2 = new[]
             {
@@ -150,8 +150,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated false")]
-        public static void Use_NullableEquals_NotEqual_colocated_false()
+        [Fact(DisplayName = nameof(SpanEquals_NotEqual_sequential_false))]
+        public static void SpanEquals_NotEqual_sequential_false()
         {
             var list2 = new[]
             {
@@ -169,8 +169,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals duplicates")]
-        public static void Use_NullableEquals_duplicates()
+        [Fact(DisplayName = nameof(SpanEquals_duplicates))]
+        public static void SpanEquals_duplicates()
         {
             var list2 = new[]
             {
@@ -188,8 +188,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated transform")]
-        public static void Use_NullableEquals_Transform_IsEqual_colocated_true()
+        [Fact(DisplayName = nameof(SpanEquals_Extract_IsEqual_sequential_true))]
+        public static void SpanEquals_Extract_IsEqual_sequential_true()
         {
             var listA = new[]
             {
@@ -215,8 +215,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated transform")]
-        public static void Use_NullableEquals_Transform_NotEqual_colocated_true()
+        [Fact(DisplayName = nameof(SpanEquals_Extract_NotEqual_sequential_true))]
+        public static void SpanEquals_Extract_NotEqual_sequential_true()
         {
             var listA = new[]
             {
