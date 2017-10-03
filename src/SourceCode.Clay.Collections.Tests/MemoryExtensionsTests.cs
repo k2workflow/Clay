@@ -1,6 +1,5 @@
-using SourceCode.Clay.Collections.Generic;
+﻿using SourceCode.Clay.Collections.Generic;
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
@@ -191,60 +190,6 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.False(equal);
 
             equal = list.MemoryEquals(list2, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_Extract_IsEqual_sequential_true))]
-        public static void MemoryEquals_Extract_IsEqual_sequential_true()
-        {
-            var listA = new ReadOnlyMemory<KeyValuePair<int, string>>(new[]
-            {
-                new KeyValuePair<int,string>(1, _list[0]),
-                new KeyValuePair<int,string>(1, _list[1]),
-                new KeyValuePair<int,string>(1, _list[2]),
-                new KeyValuePair<int,string>(1, _list[3])
-            });
-
-            var listB = new ReadOnlyMemory<KeyValuePair<int, string>>(new[]
-            {
-                new KeyValuePair<int,string>(2, _list[0]),
-                new KeyValuePair<int,string>(2, _list[1]),
-                new KeyValuePair<int,string>(2, _list[2]),
-                new KeyValuePair<int,string>(2, _list[3])
-            });
-
-            var equal = listA.MemoryEquals(listB, n => n.Value, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = listA.MemoryEquals(listB, n => n.Value, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_Extract_NotEqual_sequential_true))]
-        public static void MemoryEquals_Extract_NotEqual_sequential_true()
-        {
-            var listA = new ReadOnlyMemory<KeyValuePair<int, string>>(new[]
-            {
-                new KeyValuePair<int,string>(1, _list[0]),
-                new KeyValuePair<int,string>(1, _list[1]),
-                new KeyValuePair<int,string>(1, _list[2]),
-                new KeyValuePair<int,string>(1, _list[3])
-            });
-
-            var listB = new ReadOnlyMemory<KeyValuePair<int, string>>(new[]
-            {
-                new KeyValuePair<int,string>(2, _list[0]),
-                new KeyValuePair<int,string>(2, _list[1]),
-                new KeyValuePair<int,string>(2, "a"),
-                new KeyValuePair<int,string>(2, _list[3])
-            });
-
-            var equal = listA.MemoryEquals(listB, n => n.Value, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = listA.MemoryEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
     }
