@@ -5,7 +5,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class Blit8Tests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit8: Byte to SByte")]
+        [Fact(DisplayName = nameof(When_blitting_byte_to_sbyte))]
         public static void When_blitting_byte_to_sbyte()
         {
             var tests = new byte[] { byte.MinValue, byte.MinValue + 1, 0, 100, byte.MaxValue - 1, byte.MaxValue };
@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit8: SByte to Byte")]
+        [Fact(DisplayName = nameof(When_blitting_sbyte_to_byte))]
         public static void When_blitting_sbyte_to_byte()
         {
             var tests = new sbyte[] { sbyte.MinValue, sbyte.MinValue + 1, 0, 100, sbyte.MaxValue - 1, sbyte.MaxValue };

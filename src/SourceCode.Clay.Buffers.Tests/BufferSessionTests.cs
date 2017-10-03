@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class BufferSessionTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "BufferSession Full Lifecycle")]
+        [Fact(DisplayName = nameof(BufferSession_Full_Lifecycle))]
         public static void BufferSession_Full_Lifecycle()
         {
             var buffer = BufferSession.RentBuffer(100);

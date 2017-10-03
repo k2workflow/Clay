@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class Blit32Tests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit32: UInt32 to Int32")]
+        [Fact(DisplayName = nameof(When_blitting_UInt32_to_Int32))]
         public static void When_blitting_UInt32_to_Int32()
         {
             var tests = new uint[] { uint.MinValue, uint.MinValue + 1, 0, 100, uint.MaxValue - 1, uint.MaxValue, BitConverter.ToUInt32(new byte[] { 1, 2, 4, 8 }, 0) };
@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit32: Int32 to UInt32")]
+        [Fact(DisplayName = nameof(When_blitting_Int32_to_UInt32))]
         public static void When_blitting_Int32_to_UInt32()
         {
             var tests = new[] { int.MinValue, int.MinValue + 1, 0, 100, int.MaxValue - 1, int.MaxValue, BitConverter.ToInt32(new byte[] { 1, 2, 4, 8 }, 0) };
