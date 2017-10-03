@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+using System;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
@@ -36,6 +35,7 @@ namespace SourceCode.Clay.Tests
         [Theory(DisplayName = nameof(Number_ContructGet))]
         public static void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
         {
+            // InlineData does not like decimal literals (eg 10.0m)
             if (description == nameof(Decimal))
                 expected = (decimal)(double)expected;
 
@@ -75,6 +75,7 @@ namespace SourceCode.Clay.Tests
         [Theory(DisplayName = nameof(Number_ToString))]
         public static void Number_ToString(string description, object expected)
         {
+            // InlineData does not like decimal literals (eg 10.0m)
             if (description == nameof(Decimal))
                 expected = (decimal)(double)expected;
 
@@ -218,6 +219,7 @@ namespace SourceCode.Clay.Tests
         [Theory(DisplayName = nameof(Number_Compare))]
         public static void Number_Compare(string a, string b, object aLow, object aHigh, object bLow, object bHigh)
         {
+            // InlineData does not like decimal literals (eg 10.0m)
             if (a == nameof(Decimal))
             {
                 aLow = (decimal)(double)aLow;

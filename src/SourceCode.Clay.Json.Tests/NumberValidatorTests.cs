@@ -1,9 +1,9 @@
-﻿using SourceCode.Clay.Json.Validation;
+using SourceCode.Clay.Json.Validation;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
-    public static class NumberValidatorUnits
+    public static class NumberValidatorTests
     {
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(OpenApi_Test_Empty_DoubleValidator))]
