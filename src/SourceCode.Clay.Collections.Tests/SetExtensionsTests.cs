@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = "SetExtensions NullableEquals null, null")]
         public static void Use_NullableEquals_both_null()
         {
-            var equal = ((HashSet<string>)null).NullableEquals(null);
+            var equal = SetExtensions.SetEquals(((HashSet<string>)null), null);
             Assert.True(equal);
         }
 
@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set1 = new HashSet<string>();
             var set2 = new HashSet<string>();
 
-            var equal = set1.NullableEquals(set2);
+            var equal = SetExtensions.SetEquals(set1, set2);
             Assert.True(equal);
         }
 
@@ -42,10 +42,10 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = set1.NullableEquals(set2);
+            var equal = SetExtensions.SetEquals(set1, set2);
             Assert.True(equal);
 
-            equal = set1.NullableEquals(set3);
+            equal = SetExtensions.SetEquals(set1, set3);
             Assert.False(equal);
         }
 
@@ -53,7 +53,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = "SetExtensions NullableEquals list, null")]
         public static void Use_NullableEquals_one_null()
         {
-            var equal = _set.NullableEquals(null);
+            var equal = SetExtensions.SetEquals(_set, null);
             Assert.False(equal);
         }
 
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string>(_set);
             set2.Remove("foo");
 
-            var equal = _set.NullableEquals(set2);
+            var equal = SetExtensions.SetEquals(_set, set2);
             Assert.False(equal);
         }
 
@@ -74,7 +74,7 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var set2 = new HashSet<string>(_set);
 
-            var equal = _set.NullableEquals(set2);
+            var equal = SetExtensions.SetEquals(_set, set2);
             Assert.True(equal);
         }
 
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string>(_set);
             set2.Add("xyz");
 
-            var equal = _set.NullableEquals(set2);
+            var equal = SetExtensions.SetEquals(_set, set2);
             Assert.False(equal);
         }
     }

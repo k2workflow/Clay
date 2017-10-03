@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool NullableEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool sequential)
+        public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool sequential)
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
@@ -112,7 +112,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool NullableEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> extractor, IEqualityComparer<U> comparer, bool sequential)
+        public static bool ListEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> extractor, IEqualityComparer<U> comparer, bool sequential)
         {
             if (extractor == null) throw new ArgumentNullException(nameof(extractor));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -219,7 +219,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">List 2</param>
         /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool NullableEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool sequential)
-            => x.NullableEquals(y, EqualityComparer<T>.Default, sequential);
+        public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool sequential)
+            => x.ListEquals(y, EqualityComparer<T>.Default, sequential);
     }
 }
