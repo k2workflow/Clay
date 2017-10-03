@@ -14,11 +14,13 @@ namespace SourceCode.Clay
     public struct Number : IEquatable<Number>, IComparable, IComparable<Number>, IFormattable, IConvertible
     {
         #region Constants
+
         private static readonly double DoubleDecimalMinValue = (double)decimal.MinValue;
         private static readonly double DoubleDecimalMaxValue = (double)decimal.MaxValue;
 
         private static readonly float SingleDecimalMinValue = (float)decimal.MinValue;
         private static readonly float SingleDecimalMaxValue = (float)decimal.MaxValue;
+
         #endregion
 
         #region Fields
@@ -901,10 +903,12 @@ namespace SourceCode.Clay
                     return other._single <= SingleDecimalMinValue || other._single >= SingleDecimalMaxValue
                         ? ((float)Decimal).CompareTo(other._single)
                         : _decimal.CompareTo((decimal)other._single);
+
                 case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Double:
                     return other._double <= DoubleDecimalMinValue || other._double >= DoubleDecimalMaxValue
                         ? ((double)Decimal).CompareTo(other._double)
                         : _decimal.CompareTo((decimal)other._double);
+
                 case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Decimal: return _decimal.CompareTo(other._decimal);
             }
 
