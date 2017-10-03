@@ -1,4 +1,9 @@
+# http://editorconfig.org
+root = true
+
+# All files
 [*]
+charset = utf-8
 end_of_line = crlf
 
 # CSharp code style settings:
