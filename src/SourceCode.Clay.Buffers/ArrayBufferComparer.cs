@@ -39,12 +39,14 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
-        public override int Compare(byte[] x, byte[] y)
-            => BufferComparer.CompareArray(x, y);
+        public override int Compare(byte[] x, byte[] y) => BufferComparer.CompareArray(x, y);
 
         #endregion
 
         #region IEqualityComparer
+
+        /// <inheritdoc/>
+        public override bool Equals(byte[] x, byte[] y) => BufferComparer.CompareArray(x, y) == 0;
 
         /// <summary>
         /// Returns a hash code for this instance.

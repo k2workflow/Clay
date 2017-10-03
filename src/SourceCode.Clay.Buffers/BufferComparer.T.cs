@@ -60,8 +60,7 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        public bool Equals(T x, T y)
-            => Compare(x, y) == 0;
+        public abstract bool Equals(T x, T y);
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -71,16 +70,6 @@ namespace SourceCode.Clay.Buffers
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public abstract int GetHashCode(T obj);
-
-        #endregion
-
-        #region Comparison
-
-        /// <summary>
-        /// Returns a <see cref="Comparison{T}"/> delegate for use in methods such as <see cref="Array.Sort{T}(T[], Comparison{T})"/>.
-        /// </summary>
-        public int Comparison(T x, T y)
-            => Compare(x, y);
 
         #endregion
     }
