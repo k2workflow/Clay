@@ -5,80 +5,80 @@ using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
-    public static class ListExtensionsTests
+    public static class SpanExtensionsTests
     {
-        private static readonly string[] _null = null;
+        private static readonly ReadOnlySpan<string> _null = new ReadOnlySpan<string>();
 
-        private static readonly string[] _list =
+        private static readonly ReadOnlySpan<string> _list = new[]
         {
             "foo",
             "bar",
             "baz",
             "nin"
-        };
+        }.AsReadOnlySpan();
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals null, null")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals null, null")]
         public static void Use_NullableEquals_both_null()
         {
-            var equal = _null.NullableEquals(null, StringComparer.Ordinal, false);
+            var equal = _null.SpanEquals(Span<string>.Empty, StringComparer.Ordinal, false);
             Assert.True(equal);
 
-            equal = _null.NullableEquals(null, StringComparer.Ordinal, true);
+            equal = _null.SpanEquals(Span<string>.Empty, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals 0, 0")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals 0, 0")]
         public static void Use_NullableEquals_both_empty()
         {
-            var list1 = Array.Empty<string>();
-            var list2 = new string[0];
+            var list1 = Array.Empty<string>().AsReadOnlySpan();
+            var list2 = new string[0].AsReadOnlySpan();
 
-            var equal = list1.NullableEquals(list2, StringComparer.Ordinal, false);
+            var equal = list1.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
 
-            equal = list1.NullableEquals(list2, StringComparer.Ordinal, true);
+            equal = list1.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals 1, 1")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals 1, 1")]
         public static void Use_NullableEquals_both_one()
         {
-            var list1 = new string[] { "hi" };
-            var list2 = new string[] { "HI" };
-            var list3 = new string[] { "bye" };
+            var list1 = new string[] { "hi" }.AsReadOnlySpan();
+            var list2 = new string[] { "HI" }.AsReadOnlySpan();
+            var list3 = new string[] { "bye" }.AsReadOnlySpan();
 
-            var equal = list1.NullableEquals(list2, StringComparer.OrdinalIgnoreCase, false);
+            var equal = list1.SpanEquals(list2, StringComparer.OrdinalIgnoreCase, false);
             Assert.True(equal);
 
-            equal = list1.NullableEquals(list2, StringComparer.OrdinalIgnoreCase, true);
+            equal = list1.SpanEquals(list2, StringComparer.OrdinalIgnoreCase, true);
             Assert.True(equal);
 
-            equal = list1.NullableEquals(list2, StringComparer.Ordinal, false);
+            equal = list1.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
 
-            equal = list1.NullableEquals(list2, StringComparer.Ordinal, true);
+            equal = list1.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = list1.NullableEquals(list3, StringComparer.Ordinal, false);
+            equal = list1.SpanEquals(list3, StringComparer.Ordinal, false);
             Assert.False(equal);
 
-            equal = list1.NullableEquals(list3, StringComparer.Ordinal, true);
+            equal = list1.SpanEquals(list3, StringComparer.Ordinal, true);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals list, null")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals list, null")]
         public static void Use_NullableEquals_one_null()
         {
-            var equal = _list.NullableEquals((string[])null, StringComparer.Ordinal, false);
+            var equal = _list.SpanEquals(_null, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals N, M")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals N, M")]
         public static void Use_NullableEquals_different_count()
         {
             var list2 = new[]
@@ -86,14 +86,14 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[0],
                 _list[1],
                 _list[2]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
+            var equal = _list.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated true")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated true")]
         public static void Use_NullableEquals_IsEqual_colocated_true()
         {
             var list2 = new[]
@@ -102,17 +102,17 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[1],
                 _list[2],
                 _list[3]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated false")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated false")]
         public static void Use_NullableEquals_IsEqual_colocated_false()
         {
             var list2 = new[]
@@ -121,17 +121,17 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[1],
                 _list[3],
                 _list[0]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated true")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated true")]
         public static void Use_NullableEquals_NotEqual_colocated_true()
         {
             var list2 = new[]
@@ -140,17 +140,17 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[1],
                 "a",
                 _list[3]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated false")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated false")]
         public static void Use_NullableEquals_NotEqual_colocated_false()
         {
             var list2 = new[]
@@ -159,17 +159,17 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[1],
                 "a",
                 _list[0]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, StringComparer.Ordinal, true);
+            var equal = _list.SpanEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = _list.NullableEquals(list2, StringComparer.Ordinal, false);
+            equal = _list.SpanEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals duplicates")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals duplicates")]
         public static void Use_NullableEquals_duplicates()
         {
             var list2 = new[]
@@ -178,17 +178,17 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[1],
                 _list[2],
                 _list[0]
-            };
+            }.AsReadOnlySpan();
 
-            var equal = _list.NullableEquals(list2, true);
+            var equal = _list.SpanEquals(list2, true);
             Assert.False(equal);
 
-            equal = _list.NullableEquals(list2, false);
+            equal = _list.SpanEquals(list2, false);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals IsEqual colocated transform")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals IsEqual colocated transform")]
         public static void Use_NullableEquals_Transform_IsEqual_colocated_true()
         {
             var listA = new[]
@@ -197,7 +197,7 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(1, _list[1]),
                 new KeyValuePair<int,string>(1, _list[2]),
                 new KeyValuePair<int,string>(1, _list[3])
-            };
+            }.AsReadOnlySpan();
 
             var listB = new[]
             {
@@ -205,17 +205,17 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(2, _list[1]),
                 new KeyValuePair<int,string>(2, _list[2]),
                 new KeyValuePair<int,string>(2, _list[3])
-            };
+            }.AsReadOnlySpan();
 
-            var equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, true);
+            var equal = listA.SpanEquals(listB, n => n.Value, StringComparer.Ordinal, true);
             Assert.True(equal);
 
-            equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, false);
+            equal = listA.SpanEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ListExtensions NullableEquals NotEqual colocated transform")]
+        [Fact(DisplayName = "SpanExtensions NullableEquals NotEqual colocated transform")]
         public static void Use_NullableEquals_Transform_NotEqual_colocated_true()
         {
             var listA = new[]
@@ -224,7 +224,7 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(1, _list[1]),
                 new KeyValuePair<int,string>(1, _list[2]),
                 new KeyValuePair<int,string>(1, _list[3])
-            };
+            }.AsReadOnlySpan();
 
             var listB = new[]
             {
@@ -232,12 +232,12 @@ namespace SourceCode.Clay.Collections.Tests
                 new KeyValuePair<int,string>(2, _list[1]),
                 new KeyValuePair<int,string>(2, "a"),
                 new KeyValuePair<int,string>(2, _list[3])
-            };
+            }.AsReadOnlySpan();
 
-            var equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, true);
+            var equal = listA.SpanEquals(listB, n => n.Value, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = listA.NullableEquals(listB, n => n.Value, StringComparer.Ordinal, false);
+            equal = listA.SpanEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
     }
