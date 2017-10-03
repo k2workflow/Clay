@@ -19,7 +19,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, "pre1", "build1",
             true, true
         )]
-
         [InlineData(
             0, 1, 2, null, null,
             1, 1, 2, null, null,
@@ -30,7 +29,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, null,
             false, false
         )]
-
         [InlineData(
             0, 1, 2, null, null,
             0, 2, 2, null, null,
@@ -41,7 +39,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, null,
             false, false
         )]
-
         [InlineData(
             0, 1, 3, null, null,
             0, 1, 2, null, null,
@@ -52,7 +49,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 3, null, null,
             false, false
         )]
-
         [InlineData(
             0, 1, 2, "pre1", null,
             0, 1, 2, null, null,
@@ -73,7 +69,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, "build1",
             true, false
         )]
-
         [InlineData(
             0, 1, 2, "pre1", null,
             0, 1, 2, "pre2", null,
@@ -94,7 +89,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, "build1",
             true, false
         )]
-
         [Theory(DisplayName = nameof(SemanticVersionComparer_Equals))]
         public static void SemanticVersionComparer_Equals(
             int major1, int minor1, int patch1, string pre1, string meta1,
@@ -130,7 +124,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, "pre1", "build1",
             0, 0
         )]
-
         [InlineData(
             0, 1, 2, null, null,
             1, 1, 2, null, null,
@@ -141,7 +134,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, null,
             1, 1
         )]
-
         [InlineData(
             0, 1, 2, null, null,
             0, 2, 2, null, null,
@@ -152,7 +144,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, null,
             1, 1
         )]
-
         [InlineData(
             0, 1, 2, null, null,
             0, 1, 3, null, null,
@@ -163,7 +154,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, null,
             1, 1
         )]
-
         [InlineData(
             0, 1, 2, "pre1", null,
             0, 1, 2, null, null,
@@ -184,7 +174,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, "build1",
             0, -1
         )]
-
         [InlineData(
             0, 1, 2, "pre1", null,
             0, 1, 2, "pre2", null,
@@ -205,7 +194,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 2, null, "build1",
             0, 1
         )]
-
         [Theory(DisplayName = nameof(SemanticVersionComparer_Compare))]
         public static void SemanticVersionComparer_Compare(
             int major1, int minor1, int patch1, string pre1, string meta1,

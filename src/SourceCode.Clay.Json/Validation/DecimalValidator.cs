@@ -1,12 +1,12 @@
-﻿namespace SourceCode.Clay.Json.Validation
+namespace SourceCode.Clay.Json.Validation
 {
-    public sealed class LongValidator
+    public sealed class DecimalValidator
     {
         #region Properties
 
-        public long? Min { get; }
+        public decimal? Min { get; }
 
-        public long? Max { get; }
+        public decimal? Max { get; }
 
         public bool MinExclusive { get; }
 
@@ -20,7 +20,7 @@
 
         #region Constructors
 
-        public LongValidator(long? min, long? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
+        public DecimalValidator(decimal? min, decimal? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
         {
             Min = min;
             if (Min.HasValue && minExclusive)
@@ -34,11 +34,11 @@
             MultipleOf = multipleOf;
         }
 
-        public LongValidator(long? min, long? max, bool required)
+        public DecimalValidator(decimal? min, decimal? max, bool required)
             : this(min, max, false, false, required, null)
         { }
 
-        public LongValidator(long? min, long? max)
+        public DecimalValidator(decimal? min, decimal? max)
             : this(min, max, false, false, false, null)
         { }
 
@@ -46,7 +46,7 @@
 
         #region Methods
 
-        public bool IsValid(long? value)
+        public bool IsValid(decimal? value)
         {
             // Check Required
             if (!value.HasValue)
@@ -75,9 +75,9 @@
             // MultipleOf
             if (MultipleOf.HasValue
                 && MultipleOf.Value != 0 // n % 0 == undefined
-                && value.Value != 0) // 0 % n == 0 (we already know value.HasValue is true)
+                && value.Value != decimal.Zero) // 0 % n == 0 (we already know value.HasValue is true)
             {
-                var zero = value.Value % MultipleOf.Value == 0;
+                var zero = value.Value % MultipleOf.Value == decimal.Zero; // Modulus(Decimal) is a well-defined operation
                 if (!zero) return false;
             }
 

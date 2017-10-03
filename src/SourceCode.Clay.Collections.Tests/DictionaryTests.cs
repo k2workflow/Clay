@@ -1,12 +1,12 @@
-﻿using Xunit;
+using Xunit;
 
 namespace SourceCode.Clay.Collections.Generic.Tests
 {
     public static class DictionaryTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Dictionary.Empty")]
-        public static void Use_Dictionary_Empty()
+        [Fact(DisplayName = nameof(Dictionary_Empty))]
+        public static void Dictionary_Empty()
         {
             var empty = Dictionary.Empty<string, int>();
 
@@ -14,8 +14,8 @@ namespace SourceCode.Clay.Collections.Generic.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "ReadOnlyDictionary.Empty")]
-        public static void Use_ReadOnlyDictionary_Empty()
+        [Fact(DisplayName = nameof(ReadOnlyDictionary_Empty))]
+        public static void ReadOnlyDictionary_Empty()
         {
             var empty = ReadOnlyDictionary.Empty<string, int>();
 

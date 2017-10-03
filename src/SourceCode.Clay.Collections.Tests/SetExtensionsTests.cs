@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -16,76 +16,76 @@ namespace SourceCode.Clay.Collections.Tests
         };
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals null, null")]
-        public static void Use_NullableEquals_both_null()
+        [Fact(DisplayName = nameof(SetEquals_both_null))]
+        public static void SetEquals_both_null()
         {
-            var equal = ((HashSet<string>)null).NullableEquals(null);
+            var equal = ((HashSet<string>)null).NullableSetEquals(null);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals 0, 0")]
-        public static void Use_NullableEquals_both_empty()
+        [Fact(DisplayName = nameof(SetEquals_both_empty))]
+        public static void SetEquals_both_empty()
         {
             var set1 = new HashSet<string>();
             var set2 = new HashSet<string>();
 
-            var equal = set1.NullableEquals(set2);
+            var equal = set1.NullableSetEquals(set2);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals 1, 1")]
-        public static void Use_NullableEquals_both_one()
+        [Fact(DisplayName = nameof(SetEquals_both_one))]
+        public static void SetEquals_both_one()
         {
             var set1 = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "hi" };
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = set1.NullableEquals(set2);
+            var equal = SetExtensions.NullableSetEquals(set1, set2);
             Assert.True(equal);
 
-            equal = set1.NullableEquals(set3);
+            equal = set1.NullableSetEquals(set3);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals list, null")]
-        public static void Use_NullableEquals_one_null()
+        [Fact(DisplayName = nameof(SetEquals_one_null))]
+        public static void SetEquals_one_null()
         {
-            var equal = _set.NullableEquals(null);
+            var equal = _set.NullableSetEquals(null);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals N, M")]
-        public static void Use_NullableEquals_different_count()
+        [Fact(DisplayName = nameof(SetEquals_different_count))]
+        public static void SetEquals_different_count()
         {
             var set2 = new HashSet<string>(_set);
             set2.Remove("foo");
 
-            var equal = _set.NullableEquals(set2);
+            var equal = _set.NullableSetEquals(set2);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals IsEqual")]
-        public static void Use_NullableEquals_IsEqual()
+        [Fact(DisplayName = nameof(SetEquals_IsEqual))]
+        public static void SetEquals_IsEqual()
         {
             var set2 = new HashSet<string>(_set);
 
-            var equal = _set.NullableEquals(set2);
+            var equal = _set.NullableSetEquals(set2);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SetExtensions NullableEquals NotEqual")]
-        public static void Use_NullableEquals_NotEqual()
+        [Fact(DisplayName = nameof(SetEquals_NotEqual))]
+        public static void SetEquals_NotEqual()
         {
             var set2 = new HashSet<string>(_set);
             set2.Add("xyz");
 
-            var equal = _set.NullableEquals(set2);
+            var equal = _set.NullableSetEquals(set2);
             Assert.False(equal);
         }
     }

@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_Empty_LongValidator(long? value, bool valid)
         {
             // (-∞, ∞)
-            var range = new LongValidator(null, null, false);
+            var range = new Int64Validator(null, null, false);
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_InclusiveValue_Infinity_LongValidator(long? value, bool valid)
         {
             // [5, ∞)
-            var range = new LongValidator(-10, null, false, true, false, null); // maxExclusive is redundant
+            var range = new Int64Validator(-10, null, false, true, false, null); // maxExclusive is redundant
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -42,7 +42,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_ExclusiveValue_Infinity_LongValidator(long? value, bool valid)
         {
             // (5, ∞)
-            var range = new LongValidator(-10, null, true, true, false, null); // maxExclusive is redundant
+            var range = new Int64Validator(-10, null, true, true, false, null); // maxExclusive is redundant
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -56,7 +56,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_Infinity_InclusiveValue_LongValidator(long? value, bool valid)
         {
             // (-∞, 10.1]
-            var range = new LongValidator(null, 10, true, false, false, null); // minExclusive is redundant
+            var range = new Int64Validator(null, 10, true, false, false, null); // minExclusive is redundant
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_Infinity_ExclusiveValue_LongValidator(long? value, bool valid)
         {
             // (-∞, 10.1)
-            var range = new LongValidator(null, 10, true, true, false, null); // minExclusive is redundant
+            var range = new Int64Validator(null, 10, true, true, false, null); // minExclusive is redundant
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -87,7 +87,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_InclusiveValue_LongValidator(long? value, bool valid)
         {
             // (-10.1, 10.1)
-            var range = new LongValidator(-10, 10, false, false, false, null);
+            var range = new Int64Validator(-10, 10, false, false, false, null);
 
             Assert.True(range.IsValid(value) == valid);
         }
@@ -104,7 +104,7 @@ namespace SourceCode.Clay.Json.Units
         public static void Test_ExclusiveValue_LongValidator(long? value, bool valid)
         {
             // [-10.1, 10.1]
-            var range = new LongValidator(-10, 10, true, true, false, null);
+            var range = new Int64Validator(-10, 10, true, true, false, null);
 
             Assert.True(range.IsValid(value) == valid);
         }

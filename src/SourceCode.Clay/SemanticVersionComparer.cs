@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SourceCode.Clay
 {
@@ -9,8 +8,54 @@ namespace SourceCode.Clay
     /// </summary>
     public abstract class SemanticVersionComparer : IEqualityComparer<SemanticVersion>, IComparer<SemanticVersion>
     {
+        #region Constants
+
+        /// <summary>
+        /// Gets a <see cref="SemanticVersionComparer"/> that compares all fields of a <see cref="SemanticVersion"/>
+        /// value.
+        /// </summary>
+        public static SemanticVersionComparer Strict { get; } = new StrictSemanticVersionComparer();
+
+        /// <summary>
+        /// Gets a <see cref="SemanticVersionComparer"/> that only compares the <see cref="SemanticVersion.Major"/>,
+        /// <see cref="SemanticVersion.Minor"/>, <see cref="SemanticVersion.Patch"/> and <see cref="SemanticVersion.PreRelease"/>
+        /// values.
+        /// </summary>
+        public static SemanticVersionComparer Standard { get; } = new StandardSemanticVersionComparer();
+
+        #endregion
+
+        #region Constructors
+
+        protected SemanticVersionComparer()
+        { }
+
+        #endregion
+
+        #region IComparer
+
+        /// <inheritdoc/>
+        public abstract int Compare(SemanticVersion x, SemanticVersion y);
+
+        #endregion
+
+        #region IEqualityComparer
+
+        /// <inheritdoc/>
+        public abstract bool Equals(SemanticVersion x, SemanticVersion y);
+
+        /// <inheritdoc/>
+        public abstract int GetHashCode(SemanticVersion obj);
+
+        #endregion
+
+        #region Concrete
+
         private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
         {
+            internal StrictSemanticVersionComparer()
+            { }
+
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
                 var cmp = x.Major.CompareTo(y.Major);
@@ -56,8 +101,12 @@ namespace SourceCode.Clay
                 return hc;
             }
         }
+
         private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
         {
+            internal StandardSemanticVersionComparer()
+            { }
+
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
                 var cmp = x.Major.CompareTo(y.Major);
@@ -99,26 +148,6 @@ namespace SourceCode.Clay
             }
         }
 
-        /// <summary>
-        /// Gets a <see cref="SemanticVersionComparer"/> that compares all fields of a <see cref="SemanticVersion"/>
-        /// value.
-        /// </summary>
-        public static SemanticVersionComparer Strict { get; } = new StrictSemanticVersionComparer();
-
-        /// <summary>
-        /// Gets a <see cref="SemanticVersionComparer"/> that only compares the <see cref="SemanticVersion.Major"/>,
-        /// <see cref="SemanticVersion.Minor"/>, <see cref="SemanticVersion.Patch"/> and <see cref="SemanticVersion.PreRelease"/>
-        /// values.
-        /// </summary>
-        public static SemanticVersionComparer Standard { get; } = new StandardSemanticVersionComparer();
-
-        /// <inheritdoc/>
-        public abstract int Compare(SemanticVersion x, SemanticVersion y);
-
-        /// <inheritdoc/>
-        public abstract bool Equals(SemanticVersion x, SemanticVersion y);
-
-        /// <inheritdoc/>
-        public abstract int GetHashCode(SemanticVersion obj);
+        #endregion
     }
 }

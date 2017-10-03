@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Set 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableEquals<T>(this ISet<T> x, ISet<T> y, IEqualityComparer<T> comparer)
+        public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y, IEqualityComparer<T> comparer) // Naming avoids conflict with native ISet.SetEquals method
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
@@ -49,7 +49,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Set 1</param>
         /// <param name="y">Set 2</param>
         /// <returns></returns>
-        public static bool NullableEquals<T>(this ISet<T> x, ISet<T> y)
+        public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y) // Naming avoids conflict with native ISet.SetEquals method
         {
             var xNull = ReferenceEquals(x, null);
             if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other

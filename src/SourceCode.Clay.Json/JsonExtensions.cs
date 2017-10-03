@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Json;
 
 namespace SourceCode.Clay.Json
@@ -14,8 +14,8 @@ namespace SourceCode.Clay.Json
 
             if (jv == null)
             {
-                if (nullable)
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                if (nullable)
                     return null;
 #pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
@@ -55,8 +55,8 @@ namespace SourceCode.Clay.Json
             if (!jo.TryGetValue(key, out JsonValue jv))
                 throw new FormatException($"Expected Json key {key}");
 
-            if (jv == null)
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+            if (jv == null)
                 return null;
 #pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
@@ -92,8 +92,8 @@ namespace SourceCode.Clay.Json
             if (!jo.TryGetValue(key, out JsonValue jv))
                 throw new FormatException($"Expected Json key {key}");
 
-            if (jv == null)
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+            if (jv == null)
                 return null;
 #pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 

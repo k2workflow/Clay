@@ -9,10 +9,12 @@ namespace SourceCode.Clay
     public enum SemanticVersionCompatabilities
     {
 #       pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
+
         /// <summary>
         /// The two versions are completely identical.
         /// </summary>
         Identical = 0,
+
 #       pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
 
         /// <summary>

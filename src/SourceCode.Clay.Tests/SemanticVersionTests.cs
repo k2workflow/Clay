@@ -116,21 +116,20 @@ namespace SourceCode.Clay.Tests
             SemanticVersionCompatabilities.Identical
         )]
         [InlineData(
-            1, 2, 3, null, "build1", 
-            1, 2, 3, null, "build2", 
+            1, 2, 3, null, "build1",
+            1, 2, 3, null, "build2",
             SemanticVersionCompatabilities.DifferentBuildMetadata
         )]
         [InlineData(
-            1, 2, 3, null, null, 
-            1, 2, 3, null, "build2", 
+            1, 2, 3, null, null,
+            1, 2, 3, null, "build2",
             SemanticVersionCompatabilities.BuildMetadataAdded
         )]
         [InlineData(
-            1, 2, 3, null, "build1", 
-            1, 2, 3, null, null, 
+            1, 2, 3, null, "build1",
+            1, 2, 3, null, null,
             SemanticVersionCompatabilities.BuildMetadataRemoved
         )]
-
         [Theory(DisplayName = nameof(SemanticVersion_GetCompatabilities))]
         public static void SemanticVersion_GetCompatabilities(
             int major1, int minor1, int patch1, string pre1, string meta1,

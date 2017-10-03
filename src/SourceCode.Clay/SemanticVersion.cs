@@ -9,10 +9,12 @@ namespace SourceCode.Clay
     public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
     {
         #region Constants
+
         /// <summary>
         /// Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
         public static SemanticVersion Empty { get; }
+
         #endregion
 
         #region Properties
@@ -108,6 +110,7 @@ namespace SourceCode.Clay
         #endregion
 
         #region Parse
+
         /// <summary>
         /// Converts the <see cref="string"/> representation of a semantic version to its structured equivalent.
         /// </summary>
@@ -273,11 +276,11 @@ namespace SourceCode.Clay
         /// <param name="comparand">The <see cref="SemanticVersion"/> to test for compatability.</param>
         /// <remarks>
         /// The presence of the <see cref="SemanticVersionCompatabilities.Incompatible"/> flag indicates that
-        /// <paramref name="comparand"/> is incompatible with <paramref name="baseline"/>. Any other value 
+        /// <paramref name="comparand"/> is incompatible with <paramref name="baseline"/>. Any other value
         /// indicates compatability. <see cref="BuildMetadata"/> is completely ignored.
         /// </remarks>
         /// <returns>
-        /// A value that contains information on how the <see cref="SemanticVersion"/> values are incompatible. 
+        /// A value that contains information on how the <see cref="SemanticVersion"/> values are incompatible.
         /// </returns>
         public static SemanticVersionCompatabilities GetCompatabilities(SemanticVersion baseline, SemanticVersion comparand)
         {
@@ -447,6 +450,7 @@ namespace SourceCode.Clay
                 case 'V':
                     str = $"{Major}.{Minor}.{Patch}";
                     break;
+
                 case 'p':
                 case 'P':
                     if (PreRelease == null)
@@ -454,6 +458,7 @@ namespace SourceCode.Clay
                     else
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}";
                     break;
+
                 case 'm':
                 case 'M':
                     if (BuildMetadata == null)
@@ -461,6 +466,7 @@ namespace SourceCode.Clay
                     else
                         str = $"{Major}.{Minor}.{Patch}+{BuildMetadata}";
                     break;
+
                 case 'f':
                 case 'F':
                     if (PreRelease == null && BuildMetadata == null)
@@ -472,14 +478,13 @@ namespace SourceCode.Clay
                     else
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}+{BuildMetadata}";
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(format));
             }
 
             return str.ToString(formatProvider ?? CultureInfo.InvariantCulture);
         }
-
-
 
         #endregion
     }

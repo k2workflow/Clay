@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class Blit16Tests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit16: UInt16 to Int16")]
+        [Fact(DisplayName = nameof(When_blitting_UInt16_to_Int16))]
         public static void When_blitting_UInt16_to_Int16()
         {
             var tests = new ushort[] { ushort.MinValue, ushort.MinValue + 1, 0, 100, ushort.MaxValue - 1, ushort.MaxValue, BitConverter.ToUInt16(new byte[] { 1, 2 }, 0) };
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "Blit16: Int16 to UInt16")]
+        [Fact(DisplayName = nameof(When_blitting_Int16_to_UInt16))]
         public static void When_blitting_Int16_to_UInt16()
         {
             var tests = new short[] { short.MinValue, short.MinValue + 1, 0, 100, short.MaxValue - 1, short.MaxValue, BitConverter.ToInt16(new byte[] { 1, 2 }, 0) };
