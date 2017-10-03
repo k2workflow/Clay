@@ -1,6 +1,6 @@
-﻿namespace SourceCode.Clay.Json.Validation
+namespace SourceCode.Clay.Json.Validation
 {
-    public sealed class LongValidator
+    public sealed class Int64Validator
     {
         #region Properties
 
@@ -20,7 +20,7 @@
 
         #region Constructors
 
-        public LongValidator(long? min, long? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
+        public Int64Validator(long? min, long? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
         {
             Min = min;
             if (Min.HasValue && minExclusive)
@@ -34,11 +34,11 @@
             MultipleOf = multipleOf;
         }
 
-        public LongValidator(long? min, long? max, bool required)
+        public Int64Validator(long? min, long? max, bool required)
             : this(min, max, false, false, required, null)
         { }
 
-        public LongValidator(long? min, long? max)
+        public Int64Validator(long? min, long? max)
             : this(min, max, false, false, false, null)
         { }
 
