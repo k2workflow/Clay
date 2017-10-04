@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace SourceCode.Clay.Json.Pointers
@@ -63,9 +63,12 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hashCode = -1248728428;
-            if (Value != null) hashCode = hashCode * -1521134295 + StringComparer.Ordinal.GetHashCode(Value);
-            return hashCode;
+            unchecked
+            {
+                var hashCode = -1248728428;
+                if (Value != null) hashCode = hashCode * -1521134295 + StringComparer.Ordinal.GetHashCode(Value);
+                return hashCode;
+            }
         }
 
         public static bool operator ==(JsonPointerToken token1, JsonPointerToken token2) => token1.Equals(token2);

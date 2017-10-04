@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Json;
@@ -267,8 +267,10 @@ namespace SourceCode.Clay.Json.Pointers
             if (ReferenceEquals(_tokens, other._tokens)) return true;
             if (ReferenceEquals(_tokens, null) || ReferenceEquals(other._tokens, null)) return false;
             if (_tokens.Length != other._tokens.Length) return false;
+            if (_tokens.Length == 0) return true;
 
-            for (var i = 0; i < _tokens.Length; i++)
+            if (!_tokens[0].Equals(other._tokens[0])) return false;
+            for (var i = 1; i < _tokens.Length; i++)
             {
                 if (!_tokens[i].Equals(other._tokens[i])) return false;
             }
@@ -280,9 +282,12 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hashCode = -1248728428;
-            if (_tokens != null) hashCode = hashCode * -1521134295 + _tokens.Length;
-            return hashCode;
+            unchecked
+            {
+                var hashCode = -1248728428;
+                if (_tokens != null) hashCode = hashCode * -1521134295 + _tokens.Length;
+                return hashCode;
+            }
         }
         #endregion
     }
