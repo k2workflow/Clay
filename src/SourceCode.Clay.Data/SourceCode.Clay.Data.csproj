@@ -21,7 +21,8 @@
 
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Data</PackageId>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with data.</Description>
     <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
   </PropertyGroup>
