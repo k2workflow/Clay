@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay
@@ -87,7 +87,7 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = 17;
+                var hc = 17L;
 
                 unchecked
                 {
@@ -98,7 +98,7 @@ namespace SourceCode.Clay
                     hc = hc * 23 + StringComparer.Ordinal.GetHashCode(obj.BuildMetadata);
                 }
 
-                return hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
 
@@ -134,7 +134,7 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = 17;
+                var hc = 17L;
 
                 unchecked
                 {
@@ -144,7 +144,7 @@ namespace SourceCode.Clay
                     hc = hc * 23 + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
                 }
 
-                return hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -702,7 +702,7 @@ namespace SourceCode.Clay
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hc = 17;
+            var hc = 17L;
 
             unchecked
             {
@@ -714,7 +714,7 @@ namespace SourceCode.Clay
                     hc = hc * 21 + _int64.GetHashCode();
             }
 
-            return hc;
+            return ((int)(hc >> 32)) ^ (int)hc;
         }
 
         public static bool operator ==(Number x, Number y) => x.Equals(y);

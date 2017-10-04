@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Text
 {
@@ -51,8 +51,7 @@ namespace SourceCode.Clay.Text
         /// </summary>
         /// <param name="other">The other string.</param>
         /// <returns></returns>
-        public bool Equals(OrdinalString other)
-            => StringComparer.Ordinal.Equals(_str, other._str);
+        public bool Equals(OrdinalString other) => StringComparer.Ordinal.Equals(_str, other._str);
 
         /// <summary>
         /// Check equality using <see cref="System.StringComparison.Ordinal"/>.
@@ -73,8 +72,7 @@ namespace SourceCode.Clay.Text
             return false;
         }
 
-        public override int GetHashCode()
-            => StringComparer.Ordinal.GetHashCode(_str);
+        public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(_str);
 
         #endregion
 

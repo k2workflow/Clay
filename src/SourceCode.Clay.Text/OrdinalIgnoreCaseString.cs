@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Text
 {
@@ -51,8 +51,7 @@ namespace SourceCode.Clay.Text
         /// </summary>
         /// <param name="other">The other string.</param>
         /// <returns></returns>
-        public bool Equals(OrdinalIgnoreCaseString other)
-            => StringComparer.OrdinalIgnoreCase.Equals(_str, other._str);
+        public bool Equals(OrdinalIgnoreCaseString other) => StringComparer.OrdinalIgnoreCase.Equals(_str, other._str);
 
         /// <summary>
         /// Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
@@ -73,15 +72,13 @@ namespace SourceCode.Clay.Text
             return false;
         }
 
-        public override int GetHashCode()
-            => StringComparer.OrdinalIgnoreCase.GetHashCode(_str);
+        public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(_str);
 
         #endregion
 
         #region IComparable
 
-        public int CompareTo(OrdinalIgnoreCaseString other)
-            => StringComparer.OrdinalIgnoreCase.Compare(_str, other._str);
+        public int CompareTo(OrdinalIgnoreCaseString other) => StringComparer.OrdinalIgnoreCase.Compare(_str, other._str);
 
         #endregion
     }
