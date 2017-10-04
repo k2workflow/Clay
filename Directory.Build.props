@@ -17,7 +17,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageProjectUrl>https://github.com/k2workflow/Clay/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/k2workflow/Clay/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 </Project>
