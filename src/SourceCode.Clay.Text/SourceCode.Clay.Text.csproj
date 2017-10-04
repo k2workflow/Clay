@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SourceCode.Clay.Text</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with text.</Description>
     <PackageTags>clay utility extension string stringbuilder</PackageTags>
   </PropertyGroup>

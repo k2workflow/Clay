@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SourceCode.Clay.Buffers</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with buffers.</Description>
     <PackageTags>clay utility extension buffer byte array</PackageTags>
   </PropertyGroup>

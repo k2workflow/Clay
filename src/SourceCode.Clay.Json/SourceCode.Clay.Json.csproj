@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SourceCode.Clay.Json</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with json.</Description>
     <PackageTags>clay utility extension json validate</PackageTags>
   </PropertyGroup>

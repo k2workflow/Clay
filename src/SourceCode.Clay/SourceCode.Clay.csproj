@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SourceCode.Clay</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions to the .Net framework.</Description>
     <PackageTags>clay utility extension string datetime number</PackageTags>
   </PropertyGroup>
