@@ -3,11 +3,6 @@
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <Description>Tools and extensions for working with json.</Description>
-    <PackageTags>clay utility extension json validate</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -23,4 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SourceCode.Clay\SourceCode.Clay.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Tools and extensions for working with json.</Description>
+    <PackageTags>clay utility extension json validate</PackageTags>
+  </PropertyGroup>
 </Project>
