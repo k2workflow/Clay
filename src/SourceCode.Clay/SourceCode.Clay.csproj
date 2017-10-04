@@ -3,11 +3,7 @@
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <Description>Tools and extensions to the .Net framework.</Description>
-    <PackageTags>clay utility extension string datetime number</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -17,4 +13,10 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Tools and extensions to the .Net framework.</Description>
+    <PackageTags>clay utility extension string datetime number</PackageTags>
+  </PropertyGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 
 namespace SourceCode.Clay.Data.SqlParser
@@ -50,9 +50,19 @@ namespace SourceCode.Clay.Data.SqlParser
             && Equals(prm);
 
         public override int GetHashCode()
-            => (IsNullable ? 9 : 4) * ((int)Direction)
-            + (HasDefault ? 2 : 21)
-            + (IsReadOnly ? 17 : 8);
+        {
+            var hc = 17L;
+
+            unchecked
+            {
+                hc = hc * 23 + (IsNullable ? 9 : 4);
+                hc = hc * 23 + ((int)Direction);
+                hc = hc * 23 + (HasDefault ? 2 : 21);
+                hc = hc * 23 + (IsReadOnly ? 17 : 8);
+            }
+
+            return ((int)(hc >> 32)) ^ (int)hc;
+        }
 
         #endregion
 

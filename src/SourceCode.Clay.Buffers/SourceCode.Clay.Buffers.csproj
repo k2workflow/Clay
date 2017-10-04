@@ -3,11 +3,7 @@
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <Description>Tools and extensions for working with buffers.</Description>
-    <PackageTags>clay utility extension buffer byte array</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -18,4 +14,10 @@
     </PackageReference>
     <PackageReference Include="System.Memory" Version="4.5.0-preview2-25707-02" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Tools and extensions for working with buffers.</Description>
+    <PackageTags>clay utility extension buffer byte array</PackageTags>
+  </PropertyGroup>
 </Project>

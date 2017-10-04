@@ -30,8 +30,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (ReferenceEquals(x, y)) return true; // Same reference
 
             // If counts are different, not equal
-            if (x.Count != y.Count)
-                return false;
+            if (x.Count != y.Count) return false;
 
             // Optimize for cases 0, 1, 2, N
             switch (x.Count)

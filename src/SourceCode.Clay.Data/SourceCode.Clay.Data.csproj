@@ -3,11 +3,7 @@
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <Description>Tools and extensions for working with data.</Description>
-    <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
-  </PropertyGroup>
-
-  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -22,4 +18,10 @@
   <ItemGroup>
     <Compile Include="..\SourceCode.Clay.Collections\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Tools and extensions for working with data.</Description>
+    <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
+  </PropertyGroup>
 </Project>
