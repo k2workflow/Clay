@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <PackageId>SourceCode.Clay.Collections</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with collections.</Description>
     <PackageTags>clay utility extension dictionary switch list set</PackageTags>

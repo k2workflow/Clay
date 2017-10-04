@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <PackageId>SourceCode.Clay.Data</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with data.</Description>
     <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
