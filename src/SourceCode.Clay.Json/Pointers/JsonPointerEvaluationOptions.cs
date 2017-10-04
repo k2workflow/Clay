@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Json.Pointers
 {
@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Json.Pointers
     /// Determines options for evaluating a <see cref="JsonPointer"/>.
     /// </summary>
     [Flags]
-    public enum JsonPointerEvaluationOptions
+    public enum JsonPointerEvaluationOptions : byte
     {
         /// <summary>
         /// The default options.
@@ -36,6 +36,6 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>
         /// Evaluation returns null when any error condition is encountered.
         /// </summary>
-        NeverFail = -1
+        NeverFail = 0xFF
     }
 }

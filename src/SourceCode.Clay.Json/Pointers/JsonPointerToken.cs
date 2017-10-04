@@ -65,9 +65,9 @@ namespace SourceCode.Clay.Json.Pointers
         {
             unchecked
             {
-                var hashCode = -1248728428;
-                if (Value != null) hashCode = hashCode * -1521134295 + StringComparer.Ordinal.GetHashCode(Value);
-                return hashCode;
+                var hc = 17L;
+                if (Value != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Value);
+                return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
 

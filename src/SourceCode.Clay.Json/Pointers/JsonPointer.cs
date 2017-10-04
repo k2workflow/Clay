@@ -284,9 +284,9 @@ namespace SourceCode.Clay.Json.Pointers
         {
             unchecked
             {
-                var hashCode = -1248728428;
-                if (_tokens != null) hashCode = hashCode * -1521134295 + _tokens.Length;
-                return hashCode;
+                var hc = 21L;
+                if (_tokens != null) hc = hc * 21 + _tokens.Length;
+                return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
         #endregion
