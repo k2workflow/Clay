@@ -11,6 +11,7 @@ namespace SourceCode.Clay.Json.Pointers
         #region Properties
 
         private readonly string _value;
+
         /// <summary>
         /// Gets the member name.
         /// </summary>
@@ -31,7 +32,8 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
 
-        #region Constructor
+        #region Constructors
+
         /// <summary>
         /// Creates a new <see cref="JsonPointerToken"/> value.
         /// </summary>
@@ -41,14 +43,17 @@ namespace SourceCode.Clay.Json.Pointers
             _value = value ?? throw new ArgumentNullException(nameof(value));
             if (_value == string.Empty) _value = null;
         }
+
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is JsonPointerToken o && Equals(o);
+        public override bool Equals(object obj)
+            => obj is JsonPointerToken jpt
+            && Equals(jpt);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -63,20 +68,23 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
+            var hc = 17L;
+
             unchecked
             {
-                var hc = 17L;
                 if (Value != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Value);
-                return ((int)(hc >> 32)) ^ (int)hc;
             }
-        }
 
-        public static bool operator ==(JsonPointerToken token1, JsonPointerToken token2) => token1.Equals(token2);
-        public static bool operator !=(JsonPointerToken token1, JsonPointerToken token2) => !token1.Equals(token2);
+            return ((int)(hc >> 32)) ^ (int)hc;
+        }
 
         #endregion
 
-        #region Conversion
+        #region Operators
+
+        public static bool operator ==(JsonPointerToken x, JsonPointerToken y) => x.Equals(y);
+
+        public static bool operator !=(JsonPointerToken x, JsonPointerToken y) => !x.Equals(y);
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>

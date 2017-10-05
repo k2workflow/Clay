@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
 
-        #region Ctor
+        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="JsonPointer"/> value.
@@ -50,7 +50,8 @@ namespace SourceCode.Clay.Json.Pointers
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
-        public IEnumerator<JsonPointerToken> GetEnumerator() => (IEnumerator<JsonPointerToken>)(_tokens ?? Array.Empty<JsonPointerToken>()).GetEnumerator();
+        public IEnumerator<JsonPointerToken> GetEnumerator()
+            => (IEnumerator<JsonPointerToken>)(_tokens ?? Array.Empty<JsonPointerToken>()).GetEnumerator();
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
         /// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
@@ -75,12 +76,12 @@ namespace SourceCode.Clay.Json.Pointers
         }
 
         /// <summary>
-        /// Converts the string representation of a JSON pointer to its structured equivalent. 
+        /// Converts the string representation of a JSON pointer to its structured equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="s">A string containing a JSON pointer to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the JSON pointer contained in <paramref name="s"/>, 
+        /// When this method returns, contains the structured equivalent of the JSON pointer contained in <paramref name="s"/>,
         /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
         /// is not in a format compliant with the JSON pointer specification. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.
@@ -146,7 +147,7 @@ namespace SourceCode.Clay.Json.Pointers
 
             if (slashSeen || currentToken.Length != 0) tokens.Add(currentToken.ToString());
 
-            result = new JsonPointer(tokens.ToArray());
+            result = new JsonPointer(tokens.ToArray()); // TODO: Perf
             return true;
         }
 
@@ -205,6 +206,7 @@ namespace SourceCode.Clay.Json.Pointers
                         else throw new InvalidOperationException($"Cannot evaluate the token '{token.Value}' against the primitive value {target}.");
 
                         break;
+
                     case JsonType.Object:
                         var o = (JsonObject)target;
                         if (!o.ContainsKey(token.Value))
@@ -216,6 +218,7 @@ namespace SourceCode.Clay.Json.Pointers
 
                         target = o[token.Value];
                         break;
+
                     case JsonType.Array:
                         if (token.Value == "-")
                         {
@@ -242,6 +245,7 @@ namespace SourceCode.Clay.Json.Pointers
 
                         target = a[index.Value];
                         break;
+
                     default:
                         throw new InvalidOperationException($"Unsupported JSON type {target.GetType()}.");
                 }
@@ -252,12 +256,14 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is JsonPointer o && Equals(o);
+        public override bool Equals(object obj)
+            => obj is JsonPointer jp
+            && Equals(jp);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -282,13 +288,25 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
+            var hc = 17L;
+
             unchecked
             {
-                var hc = 21L;
-                if (_tokens != null) hc = hc * 21 + _tokens.Length;
-                return ((int)(hc >> 32)) ^ (int)hc;
+                if (_tokens != null)
+                    hc = hc * 21 + _tokens.Length;
             }
+
+            return ((int)(hc >> 32)) ^ (int)hc;
         }
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
+
+        public static bool operator !=(JsonPointer x, JsonPointer y) => !x.Equals(y);
+
         #endregion
     }
 }
