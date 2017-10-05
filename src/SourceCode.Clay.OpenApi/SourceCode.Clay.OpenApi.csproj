@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties defined in Directory.Build.props -->
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.2" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.1.3596">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj" />
+    <ProjectReference Include="..\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" />
+    <ProjectReference Include="..\SourceCode.Clay\SourceCode.Clay.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.OpenApi</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>DTOs for Open API 3.0.0.</Description>
+    <PackageTags>clay json open-api swagger</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>1701;1702;1705;S3242;S4035</NoWarn>
+  </PropertyGroup>
+</Project>
