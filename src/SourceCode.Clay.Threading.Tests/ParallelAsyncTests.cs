@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -259,5 +261,123 @@ namespace SourceCode.Clay.Threading.Tests
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
         }
+
+        #region Timing
+
+        private const int delay = 50;
+        private const int loops = 100;
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(ParallelAsync_For_Action_Delay))]
+        [InlineData(null)]
+        [InlineData(-1)]
+        [InlineData(4)]
+        public static void ParallelAsync_For_Action_Delay(int? maxDop)
+        {
+            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var actual = 0;
+            Func<int, Task> func = async i =>
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay);
+            };
+
+            ParallelAsync.ForAsync(0, loops, options, func).Wait();
+
+            sw.Stop();
+
+            Assert.Equal(loops, actual);
+            Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(ParallelAsync_For_Func_Delay))]
+        [InlineData(null)]
+        [InlineData(-1)]
+        [InlineData(4)]
+        public static void ParallelAsync_For_Func_Delay(int? maxDop)
+        {
+            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var actual = 0;
+            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay);
+                return new KeyValuePair<int, int>(n, n * 2);
+            };
+
+            var result = ParallelAsync.ForAsync(0, loops, options, func).Result;
+
+            sw.Stop();
+
+            Assert.Equal(loops, actual);
+            Assert.Equal(loops, result.Count);
+            Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(ParallelAsync_ForEach_Action_Delay))]
+        [InlineData(null)]
+        [InlineData(-1)]
+        [InlineData(4)]
+        public static void ParallelAsync_ForEach_Action_Delay(int? maxDop)
+        {
+            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var actual = 0;
+            Func<int, Task> func = async i =>
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay);
+            };
+
+            ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Wait();
+
+            sw.Stop();
+
+            Assert.Equal(loops, actual);
+            Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(ParallelAsync_ForEach_Func_Delay))]
+        [InlineData(null)]
+        [InlineData(-1)]
+        [InlineData(4)]
+        public static void ParallelAsync_ForEach_Func_Delay(int? maxDop)
+        {
+            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var actual = 0;
+            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay);
+                return new KeyValuePair<int, int>(n, n * 2);
+            };
+
+            var result = ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Result;
+
+            sw.Stop();
+
+            Assert.Equal(loops, actual);
+            Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+        }
+
+        #endregion
     }
 }
