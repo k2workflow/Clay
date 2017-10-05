@@ -1,10 +1,12 @@
-﻿using System.Json;
+using System.Json;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonExtensionTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_TryGetValue))]
         public static void When_TryGetValue()
@@ -24,5 +26,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.True(json.TryGetObject("object", out JsonObject jo));
             Assert.True(json.TryGetArray("array", out JsonArray ja));
         }
+
+        #endregion Methods
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Json.Validation
 {
@@ -6,19 +6,14 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Properties
 
-        public Number Min { get; }
-
         public Number Max { get; }
-
-        public bool MinExclusive { get; }
-
         public bool MaxExclusive { get; }
-
+        public Number Min { get; }
+        public bool MinExclusive { get; }
+        public long? MultipleOf { get; }
         public bool Required { get; }
 
-        public long? MultipleOf { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -49,7 +44,7 @@ namespace SourceCode.Clay.Json.Validation
             : this(min, max, false, false, false, null)
         { }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -123,6 +118,6 @@ namespace SourceCode.Clay.Json.Validation
             return s;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

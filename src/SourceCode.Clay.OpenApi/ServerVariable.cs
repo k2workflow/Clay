@@ -5,62 +5,86 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// An object representing a Server Variable for server URL template substitution.
+    ///   An object representing a Server Variable for server URL template substitution.
     /// </summary>
     public class ServerVariable : IEquatable<ServerVariable>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the enumeration of string values to be used if the substitution options are from a limited set.
-        /// </summary>
-        public IReadOnlyList<string> Enum { get; }
-
-        /// <summary>
-        /// Gets the default value to use for substitution, and to send, if an alternate value is not supplied.
+        ///   Gets the default value to use for substitution, and to send, if an alternate value is
+        ///   not supplied.
         /// </summary>
         public string Default { get; }
 
         /// <summary>
-        /// Gets the description for the server variable.
+        ///   Gets the description for the server variable.
         /// </summary>
-        /// <remarks>
-        /// CommonMark syntax MAY be used for rich text representation.
-        /// </remarks>
+        /// <remarks>CommonMark syntax MAY be used for rich text representation.</remarks>
         public string Description { get; }
 
-        #endregion
+        /// <summary>
+        ///   Gets the enumeration of string values to be used if the substitution options are from a
+        ///   limited set.
+        /// </summary>
+        public IReadOnlyList<string> Enum { get; }
 
-        #region Constructor
+        #endregion Properties
+
+        #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ServerVariable"/> class.
+        ///   Creates a new instance of the <see cref="ServerVariable"/> class.
         /// </summary>
-        /// <param name="enum">The enumeration of string values to be used if the substitution options are from a limited set.</param>
-        /// <param name="default">The default value to use for substitution, and to send, if an alternate value is not supplied. </param>
+        /// <param name="enum">
+        ///   The enumeration of string values to be used if the substitution options are from a
+        ///   limited set.
+        /// </param>
+        /// <param name="default">
+        ///   The default value to use for substitution, and to send, if an alternate value is not supplied.
+        /// </param>
         /// <param name="description">The description for the server variable.</param>
         public ServerVariable(
-            IReadOnlyList<string> @enum,
-            string @default,
-            string description)
+            IReadOnlyList<string> @enum = default,
+            string @default = default,
+            string description = default)
         {
             Enum = @enum ?? Array.Empty<string>();
             Default = @default;
             Description = description;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IEquatable
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        public static bool operator !=(ServerVariable serverVariable1, ServerVariable serverVariable2)
+                    => !(serverVariable1 == serverVariable2);
+
+        public static bool operator ==(ServerVariable serverVariable1, ServerVariable serverVariable2)
+        {
+            if (ReferenceEquals(serverVariable1, null) && ReferenceEquals(serverVariable2, null)) return true;
+            if (ReferenceEquals(serverVariable1, null) || ReferenceEquals(serverVariable2, null)) return false;
+            return serverVariable1.Equals((object)serverVariable2);
+        }
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as ServerVariable);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public virtual bool Equals(ServerVariable other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -73,7 +97,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Serves as the default hash function.</summary>
+        /// <summary>
+        ///   Serves as the default hash function.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -89,16 +115,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(ServerVariable serverVariable1, ServerVariable serverVariable2)
-        {
-            if (ReferenceEquals(serverVariable1, null) && ReferenceEquals(serverVariable2, null)) return true;
-            if (ReferenceEquals(serverVariable1, null) || ReferenceEquals(serverVariable2, null)) return false;
-            return serverVariable1.Equals((object)serverVariable2);
-        }
-
-        public static bool operator !=(ServerVariable serverVariable1, ServerVariable serverVariable2)
-            => !(serverVariable1 == serverVariable2);
-
-        #endregion
+        #endregion IEquatable
     }
 }

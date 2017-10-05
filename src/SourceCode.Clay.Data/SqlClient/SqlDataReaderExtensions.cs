@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Data.SqlClient;
 using System.Xml.Linq;
 
 namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
-    /// Represents extensions for <see cref="SqlDataReader"/> instances.
+    ///   Represents extensions for <see cref="SqlDataReader"/> instances.
     /// </summary>
     /// <seealso cref="System.Data.SqlClient.SqlDataReader"/>
     public static class SqlDataReaderExtensions
     {
         /// <summary>
-        /// Gets the value of the specified binary column as <see cref="System.Byte"/>[].
+        ///   Gets the value of the specified binary column as <see cref="System.Byte"/>[].
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Gets the value of the specified text column as an <see cref="System.Enum"/>.
+        ///   Gets the value of the specified text column as an <see cref="System.Enum"/>.
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
@@ -55,7 +55,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Gets the value of the specified xml column as a <see cref="System.String"/>.
+        ///   Gets the value of the specified xml column as a <see cref="System.String"/>.
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Gets the value of the specified xml column as a <see cref="XDocument"/>.
+        ///   Gets the value of the specified xml column as a <see cref="XDocument"/>.
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>

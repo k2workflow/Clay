@@ -7,6 +7,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class DictionaryExtensionsTests
     {
+        #region Fields
+
         private static readonly Dictionary<string, string> _dict = new Dictionary<string, string>()
         {
             ["foo"] = "foo1",
@@ -15,13 +17,9 @@ namespace SourceCode.Clay.Collections.Tests
             ["nin"] = "nin1"
         };
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
-        public static void DictionaryEquals_both_null()
-        {
-            var equal = ((Dictionary<string, string>)null).DictionaryEquals(null);
-            Assert.True(equal);
-        }
+        #endregion Fields
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DictionaryEquals_both_empty))]
@@ -31,6 +29,14 @@ namespace SourceCode.Clay.Collections.Tests
             var dict2 = new Dictionary<string, string>();
 
             var equal = dict1.DictionaryEquals(dict2);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
+        public static void DictionaryEquals_both_null()
+        {
+            var equal = ((Dictionary<string, string>)null).DictionaryEquals(null);
             Assert.True(equal);
         }
 
@@ -49,14 +55,6 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.True(equal);
 
             equal = dict1.DictionaryEquals(dict3);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
-        public static void DictionaryEquals_one_null()
-        {
-            var equal = _dict.DictionaryEquals(null);
             Assert.False(equal);
         }
 
@@ -93,5 +91,15 @@ namespace SourceCode.Clay.Collections.Tests
             var equal = _dict.DictionaryEquals(dict2);
             Assert.False(equal);
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
+        public static void DictionaryEquals_one_null()
+        {
+            var equal = _dict.DictionaryEquals(null);
+            Assert.False(equal);
+        }
+
+        #endregion Methods
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,11 +10,11 @@ namespace SourceCode.Clay.Data.SqlParser
     {
         #region Fields
 
-        private readonly Stack<ArraySegment<char>> _undo = new Stack<ArraySegment<char>>();
-        private readonly TextReader _reader;
         private readonly bool _ownsReader;
+        private readonly TextReader _reader;
+        private readonly Stack<ArraySegment<char>> _undo = new Stack<ArraySegment<char>>();
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -32,16 +32,19 @@ namespace SourceCode.Clay.Data.SqlParser
             _ownsReader = false;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
         /// <summary>
-        /// Attempty to fill the provided buffer with (at least) the specified number of characters.
+        ///   Attempty to fill the provided buffer with (at least) the specified number of characters.
         /// </summary>
         /// <param name="buffer">The buffer to fill.</param>
         /// <param name="minimumCount">The minimum number of characters required.</param>
-        /// <param name="count">The number of characters filled. This may be more (or less, if the source is empty) than requested.</param>
+        /// <param name="count">
+        ///   The number of characters filled. This may be more (or less, if the source is empty)
+        ///   than requested.
+        /// </param>
         public void FillLength(char[] buffer, int minimumCount, out int count)
         {
             Debug.Assert(buffer != null);
@@ -64,11 +67,14 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         /// <summary>
-        /// Fill the provided buffer with as many characters as are available, from the given offset.
+        ///   Fill the provided buffer with as many characters as are available, from the given offset.
         /// </summary>
         /// <param name="buffer">The buffer to fill.</param>
         /// <param name="offset">The offset in the buffer from where to start filling.</param>
-        /// <param name="count">The number of characters filled. This may or may not fill the rest of buffer depending on whether the source is empty.</param>
+        /// <param name="count">
+        ///   The number of characters filled. This may or may not fill the rest of buffer depending
+        ///   on whether the source is empty.
+        /// </param>
         public void FillRemaining(char[] buffer, int offset, out int count)
         {
             Debug.Assert(buffer != null);
@@ -112,7 +118,7 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         /// <summary>
-        /// Return the specified number of characters to the pool.
+        ///   Return the specified number of characters to the pool.
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
@@ -134,13 +140,13 @@ namespace SourceCode.Clay.Data.SqlParser
             _undo.Push(seg);
         }
 
-        #endregion
+        #endregion Methods
 
         #region IDisposable
 
         private bool _disposed;
 
-        void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -159,6 +165,6 @@ namespace SourceCode.Clay.Data.SqlParser
             Dispose(true);
         }
 
-        #endregion
+        #endregion IDisposable
     }
 }

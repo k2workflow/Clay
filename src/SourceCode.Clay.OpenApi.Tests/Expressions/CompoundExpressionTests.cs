@@ -5,6 +5,8 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
 {
     public static class CompoundExpressionTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(CompoundExpression_Parse))]
         public static void CompoundExpression_Parse()
         {
@@ -27,5 +29,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
             Assert.Equal("$method", sut[5].ToString());
             Assert.Equal("$statusCode", sut[6].ToString());
         }
+
+        #endregion Methods
     }
 }

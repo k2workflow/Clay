@@ -3,30 +3,22 @@ using System;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Represents a JSON scalar value.
+    ///   Represents a JSON scalar value.
     /// </summary>
     public struct ScalarValue : IEquatable<ScalarValue>, IFormattable
     {
-        private readonly byte _typeCode;
+        #region Fields
+
         private readonly Number _number;
         private readonly string _string;
+        private readonly byte _typeCode;
+
+        #endregion Fields
+
+        #region Properties
 
         /// <summary>
-        /// Gets the <see cref="Number"/> value.
-        /// </summary>
-        public Number Number
-        {
-            get
-            {
-                if (_typeCode == 0) return default;
-                else if (_typeCode == (byte)TypeCode.Boolean) throw new InvalidOperationException("This scalar contains a Boolean.");
-                else if (_typeCode == (byte)TypeCode.String) throw new InvalidOperationException("This scalar contains a String.");
-                else return _number;
-            }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="bool"/> value.
+        ///   Gets the <see cref="bool"/> value.
         /// </summary>
         public bool Boolean
         {
@@ -40,7 +32,26 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Gets the <see cref="bool"/> value.
+        ///   Gets a value indicating whether this instance contains a value.
+        /// </summary>
+        public bool HasValue => _typeCode != 0;
+
+        /// <summary>
+        ///   Gets the <see cref="Number"/> value.
+        /// </summary>
+        public Number Number
+        {
+            get
+            {
+                if (_typeCode == 0) return default;
+                else if (_typeCode == (byte)TypeCode.Boolean) throw new InvalidOperationException("This scalar contains a Boolean.");
+                else if (_typeCode == (byte)TypeCode.String) throw new InvalidOperationException("This scalar contains a String.");
+                else return _number;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the <see cref="bool"/> value.
         /// </summary>
         public string String
         {
@@ -54,17 +65,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Gets the value <see cref="TypeCode"/>;
-        /// </summary>
-        public TypeCode ValueTypeCode => (TypeCode)_typeCode;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance contains a value.
-        /// </summary>
-        public bool HasValue => _typeCode != 0;
-
-        /// <summary>
-        /// Gets the contained value as a boxed value.
+        ///   Gets the contained value as a boxed value.
         /// </summary>
         public object Value
         {
@@ -80,10 +81,17 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
+        /// <summary>
+        ///   Gets the value <see cref="TypeCode"/>;
+        /// </summary>
+        public TypeCode ValueTypeCode => (TypeCode)_typeCode;
+
+        #endregion Properties
+
         #region Ctor
 
         /// <summary>
-        /// Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.
+        ///   Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.
         /// </summary>
         /// <param name="number">The number.</param>
         public ScalarValue(Number number)
@@ -103,7 +111,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new <see cref="ScalarValue"/> containing a <see cref="string"/>.
+        ///   Creates a new <see cref="ScalarValue"/> containing a <see cref="string"/>.
         /// </summary>
         /// <param name="string">The string.</param>
         public ScalarValue(string @string)
@@ -123,7 +131,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new <see cref="ScalarValue"/> containing a <see cref="bool"/>.
+        ///   Creates a new <see cref="ScalarValue"/> containing a <see cref="bool"/>.
         /// </summary>
         /// <param name="boolean">The boolean.</param>
         public ScalarValue(bool boolean)
@@ -133,18 +141,28 @@ namespace SourceCode.Clay.OpenApi
             _string = null;
         }
 
-        #endregion
+        #endregion Ctor
 
         #region Equatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => obj is ScalarValue o && Equals(o);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(ScalarValue other)
         {
             if (_typeCode != other._typeCode) return false;
@@ -157,7 +175,9 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -177,22 +197,38 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        #endregion
+        #endregion Equatable
 
         #region String
 
-        /// <summary>Formats the value of the current instance.</summary>
+        /// <summary>
+        ///   Formats the value of the current instance.
+        /// </summary>
         /// <returns>The value of the current instance.</returns>
         public override string ToString() => ToString(null, null);
 
-        /// <summary>Formats the value of the current instance using the specified format.</summary>
-        /// <param name="format">The format to use.   -or-   A null reference (Nothing in Visual Basic) to use the default format defined for the type of the <see cref="T:System.IFormattable"></see> implementation.</param>
+        /// <summary>
+        ///   Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <param name="format">
+        ///   The format to use. -or- A null reference (Nothing in Visual Basic) to use the default
+        ///   format defined for the type of the <see cref="T:System.IFormattable"></see> implementation.
+        /// </param>
         /// <returns>The value of the current instance in the specified format.</returns>
         public string ToString(string format) => ToString(format, null);
 
-        /// <summary>Formats the value of the current instance using the specified format.</summary>
-        /// <param name="format">The format to use.   -or-   A null reference (Nothing in Visual Basic) to use the default format defined for the type of the <see cref="T:System.IFormattable"></see> implementation.</param>
-        /// <param name="formatProvider">The provider to use to format the value.   -or-   A null reference (Nothing in Visual Basic) to obtain the numeric format information from the current locale setting of the operating system.</param>
+        /// <summary>
+        ///   Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <param name="format">
+        ///   The format to use. -or- A null reference (Nothing in Visual Basic) to use the default
+        ///   format defined for the type of the <see cref="T:System.IFormattable"></see> implementation.
+        /// </param>
+        /// <param name="formatProvider">
+        ///   The provider to use to format the value. -or- A null reference (Nothing in Visual
+        ///   Basic) to obtain the numeric format information from the current locale setting of the
+        ///          operating system.
+        /// </param>
         /// <returns>The value of the current instance in the specified format.</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -205,6 +241,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        #endregion
+        #endregion String
     }
 }

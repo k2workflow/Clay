@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Data.SqlClient.Azure;
+using SourceCode.Clay.Data.SqlClient.Azure;
 using System;
 using System.Data.SqlClient;
 using Xunit;
@@ -7,8 +7,14 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
+        #region Fields
+
         private const string dbToken = "database";
         private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
+
+        #endregion Fields
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
@@ -33,6 +39,28 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     Assert.False(sqlCsb.Encrypt);
                     Assert.False(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
                     Assert.False(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                }
+            }
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Force")]
+        public static void When_make_robust_token_force()
+        {
+            foreach (var svr in serverTokens)
+            {
+                var tests = new[]
+                {
+                    $"{svr}=a",
+                    $"{svr}={dbToken}"
+                };
+
+                foreach (var test in tests)
+                {
+                    var sqlCsb = new SqlConnectionStringBuilder(test + ";encrypt=true");
+                    sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
+
+                    Assert.True(sqlCsb.Encrypt);
                 }
             }
         }
@@ -99,26 +127,6 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
             }
         }
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Force")]
-        public static void When_make_robust_token_force()
-        {
-            foreach (var svr in serverTokens)
-            {
-                var tests = new[]
-                {
-                    $"{svr}=a",
-                    $"{svr}={dbToken}"
-                };
-
-                foreach (var test in tests)
-                {
-                    var sqlCsb = new SqlConnectionStringBuilder(test + ";encrypt=true");
-                    sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
-
-                    Assert.True(sqlCsb.Encrypt);
-                }
-            }
-        }
+        #endregion Methods
     }
 }

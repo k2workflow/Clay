@@ -1,10 +1,12 @@
-﻿using SourceCode.Clay.Json.Validation;
+using SourceCode.Clay.Json.Validation;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
     public static class PatternValidatorTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Simple_Optional_PatternValidator))]
         [InlineData("a", true)]
@@ -32,5 +34,7 @@ namespace SourceCode.Clay.Json.Units
 
             Assert.True(range.IsValid(value) == valid);
         }
+
+        #endregion Methods
     }
 }

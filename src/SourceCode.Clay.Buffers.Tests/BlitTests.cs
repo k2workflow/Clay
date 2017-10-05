@@ -1,9 +1,11 @@
-﻿using Xunit;
+using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
     public static class BlitTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(Blit_RotateLeft_Byte))]
         public static void Blit_RotateLeft_Byte()
         {
@@ -11,15 +13,6 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((byte)0b10101010, Blit.RotateLeft(sut, 1));
             Assert.Equal((byte)0b01010101, Blit.RotateLeft(sut, 2));
             Assert.Equal((byte)0b10101010, Blit.RotateLeft(sut, 3));
-        }
-
-        [Fact(DisplayName = nameof(Blit_RotateLeft_UShort))]
-        public static void Blit_RotateLeft_UShort()
-        {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateLeft(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateLeft_UInt))]
@@ -40,6 +33,15 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 3));
         }
 
+        [Fact(DisplayName = nameof(Blit_RotateLeft_UShort))]
+        public static void Blit_RotateLeft_UShort()
+        {
+            ushort sut = 0b01010101_01010101;
+            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateLeft(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 3));
+        }
+
         [Fact(DisplayName = nameof(Blit_RotateRight_Byte))]
         public static void Blit_RotateRight_Byte()
         {
@@ -47,15 +49,6 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((byte)0b10101010, Blit.RotateRight(sut, 1));
             Assert.Equal((byte)0b01010101, Blit.RotateRight(sut, 2));
             Assert.Equal((byte)0b10101010, Blit.RotateRight(sut, 3));
-        }
-
-        [Fact(DisplayName = nameof(Blit_RotateRight_UShort))]
-        public static void Blit_RotateRight_UShort()
-        {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateRight(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateRight_UInt))]
@@ -75,5 +68,16 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, Blit.RotateRight(sut, 2));
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
         }
+
+        [Fact(DisplayName = nameof(Blit_RotateRight_UShort))]
+        public static void Blit_RotateRight_UShort()
+        {
+            ushort sut = 0b01010101_01010101;
+            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateRight(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 3));
+        }
+
+        #endregion Methods
     }
 }

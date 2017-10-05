@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
-    /// Represents extensions for <see cref="SqlConnection"/> instances.
+    ///   Represents extensions for <see cref="SqlConnection"/> instances.
     /// </summary>
     /// <seealso cref="System.Data.SqlClient.SqlConnection"/>
     public static class SqlConnectionExtensions
     {
         /// <summary>
-        /// Reopens the specified <see cref="SqlConnection"/>.
+        ///   Reopens the specified <see cref="SqlConnection"/>.
         /// </summary>
         /// <param name="sqlCon">The connection.</param>
         public static void Reopen(this SqlConnection sqlCon)
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Reopens the specified <see cref="SqlConnection"/>.
+        ///   Reopens the specified <see cref="SqlConnection"/>.
         /// </summary>
         /// <param name="sqlCon">The connection.</param>
         public static async Task ReopenAsync(this SqlConnection sqlCon)
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Opens the specified <see cref="SqlConnection"/> using impersonation.
+        ///   Opens the specified <see cref="SqlConnection"/> using impersonation.
         /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="impersonatedUsername">The username to be impersonated.</param>
@@ -110,8 +110,9 @@ namespace SourceCode.Clay.Data.SqlClient
                 }
 
                 // If we successfully quoted the username, then execute the impersonation switch
-                // Remember to use the cookie option so we can deterministically undo the impersonation
-                // and put the connection back in the connection pool when we are done with it
+                // Remember to use the cookie option so we can deterministically undo the
+                // impersonation and put the connection back in the connection pool when we are done
+                // with it
                 var sql1 = $@"
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
@@ -133,7 +134,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Opens the specified <see cref="SqlConnection"/> using impersonation.
+        ///   Opens the specified <see cref="SqlConnection"/> using impersonation.
         /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="impersonatedUsername">The username to be impersonated.</param>
@@ -173,8 +174,9 @@ namespace SourceCode.Clay.Data.SqlClient
                 }
 
                 // If we successfully quoted the username, then execute the impersonation switch
-                // Remember to use the cookie option so we can deterministically undo the impersonation
-                // and put the connection back in the connection pool when we are done with it
+                // Remember to use the cookie option so we can deterministically undo the
+                // impersonation and put the connection back in the connection pool when we are done
+                // with it
                 var sql1 = $@"
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
@@ -196,7 +198,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Close the specified <see cref="SqlConnection"/> and revert any impersonation.
+        ///   Close the specified <see cref="SqlConnection"/> and revert any impersonation.
         /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
@@ -229,12 +231,9 @@ namespace SourceCode.Clay.Data.SqlClient
             }
         }
 
-        /// <summary>
-        /// Close the specified <see cref="SqlConnection"/> and revert any impersonation.
-        /// </summary>
-        /// </summary>
-        /// <param name="sqlCon">The SqlConnection to use.</param>
-        /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
+        /// <summary> Close the specified <see cref="SqlConnection"/> and revert any impersonation.
+        /// </summary> </summary> <param name="sqlCon">The SqlConnection to use.</param> <param
+        /// name="cookie">The impersonation cookie returned from the Open() method</param>
         public static async Task CloseAsync(this SqlConnection sqlCon, byte[] cookie)
         {
             if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));

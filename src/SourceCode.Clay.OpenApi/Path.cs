@@ -5,86 +5,89 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Describes the operations available on a single path. A Path Item MAY be empty, due to ACL constraints.
-    /// The path itself is still exposed to the documentation viewer but they will not know which operations
-    /// and parameters are available.
+    ///   Describes the operations available on a single path. A Path Item MAY be empty, due to ACL
+    ///   constraints. The path itself is still exposed to the documentation viewer but they will not
+    ///   know which operations and parameters are available.
     /// </summary>
     public class Path : IEquatable<Path>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the string summary intended to apply to all operations in this path.
-        /// </summary>
-        public string Summary { get; set; }
-
-        /// <summary>
-        /// Gets the string description intended to apply to all operations in this path.
-        /// </summary>
-        /// <remarks>
-        /// CommonMark syntax MAY be used for rich text representation.
-        /// </remarks>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets the definition of a GET operation on this path.
-        /// </summary>
-        public Operation Get { get; set; }
-
-        /// <summary>
-        /// Gets the definition of a PUT operation on this path.
-        /// </summary>
-        public Operation Put { get; set; }
-
-        /// <summary>
-        /// Gets the definition of a POST operation on this path.
-        /// </summary>
-        public Operation Post { get; set; }
-
-        /// <summary>
-        /// Gets the definition of a DELETE operation on this path.
+        ///   Gets the definition of a DELETE operation on this path.
         /// </summary>
         public Operation Delete { get; set; }
 
         /// <summary>
-        /// Gets the definition of a OPTIONS operation on this path.
+        ///   Gets the string description intended to apply to all operations in this path.
         /// </summary>
-        public Operation Options { get; set; }
+        /// <remarks>CommonMark syntax MAY be used for rich text representation.</remarks>
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets the definition of a HEAD operation on this path.
+        ///   Gets the definition of a GET operation on this path.
+        /// </summary>
+        public Operation Get { get; set; }
+
+        /// <summary>
+        ///   Gets the definition of a HEAD operation on this path.
         /// </summary>
         public Operation Head { get; set; }
 
         /// <summary>
-        /// Gets the definition of a PATCH operation on this path.
+        ///   Gets the definition of a OPTIONS operation on this path.
+        /// </summary>
+        public Operation Options { get; set; }
+
+        /// <summary>
+        ///   Gets the list of parameters that are applicable for all the operations described under
+        ///   this path.
+        /// </summary>
+        public IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> Parameters { get; }
+
+        /// <summary>
+        ///   Gets the definition of a PATCH operation on this path.
         /// </summary>
         public Operation Patch { get; set; }
 
         /// <summary>
-        /// Gets the definition of a TRACE operation on this path.
+        ///   Gets the definition of a POST operation on this path.
         /// </summary>
-        public Operation Trace { get; set; }
+        public Operation Post { get; set; }
 
         /// <summary>
-        /// Gets the alternative server array to service all operations in this path.
+        ///   Gets the definition of a PUT operation on this path.
+        /// </summary>
+        public Operation Put { get; set; }
+
+        /// <summary>
+        ///   Gets the alternative server array to service all operations in this path.
         /// </summary>
         public IReadOnlyList<Server> Servers { get; }
 
         /// <summary>
-        /// Gets the list of parameters that are applicable for all the operations described under this path.
+        ///   Gets the string summary intended to apply to all operations in this path.
         /// </summary>
-        public IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> Parameters { get; }
+        public string Summary { get; set; }
 
-        #endregion
+        /// <summary>
+        ///   Gets the definition of a TRACE operation on this path.
+        /// </summary>
+        public Operation Trace { get; set; }
+
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Path"/> class.
+        ///   Creates a new instance of the <see cref="Path"/> class.
         /// </summary>
-        /// <param name="summary">The string summary intended to apply to all operations in this path.</param>
-        /// <param name="description">The string description intended to apply to all operations in this path.</param>
+        /// <param name="summary">
+        ///   The string summary intended to apply to all operations in this path.
+        /// </param>
+        /// <param name="description">
+        ///   The string description intended to apply to all operations in this path.
+        /// </param>
         /// <param name="get">The definition of a GET operation on this path.</param>
         /// <param name="put">The definition of a PUT operation on this path.</param>
         /// <param name="post">The definition of a POST operation on this path.</param>
@@ -93,21 +96,25 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="head">The definition of a HEAD operation on this path.</param>
         /// <param name="patch">The definition of a PATCH operation on this path.</param>
         /// <param name="trace">The definition of a TRACE operation on this path.</param>
-        /// <param name="servers">The alternative server list to service all operations in this path.</param>
-        /// <param name="parameters">The list of parameters that are applicable for all the operations described under this path.</param>
+        /// <param name="servers">
+        ///   The alternative server list to service all operations in this path.
+        /// </param>
+        /// <param name="parameters">
+        ///   The list of parameters that are applicable for all the operations described under this path.
+        /// </param>
         public Path(
-            string summary,
-            string description,
-            Operation get,
-            Operation put,
-            Operation post,
-            Operation delete,
-            Operation options,
-            Operation head,
-            Operation patch,
-            Operation trace,
-            IReadOnlyList<Server> servers,
-            IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters)
+            string summary = default,
+            string description = default,
+            Operation get = default,
+            Operation put = default,
+            Operation post = default,
+            Operation delete = default,
+            Operation options = default,
+            Operation head = default,
+            Operation patch = default,
+            Operation trace = default,
+            IReadOnlyList<Server> servers = default,
+            IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters = default)
         {
             Summary = summary;
             Description = description;
@@ -123,18 +130,36 @@ namespace SourceCode.Clay.OpenApi
             Parameters = parameters ?? ReadOnlyDictionary.Empty<ParameterKey, Referable<ParameterBody>>();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IEquatable
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        public static bool operator !=(Path path1, Path path2) => !(path1 == path2);
+
+        public static bool operator ==(Path path1, Path path2)
+        {
+            if (ReferenceEquals(path1, null) && ReferenceEquals(path2, null)) return true;
+            if (ReferenceEquals(path1, null) || ReferenceEquals(path2, null)) return false;
+            return path1.Equals((object)path2);
+        }
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as Path);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public virtual bool Equals(Path other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -156,7 +181,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Serves as the default hash function.</summary>
+        /// <summary>
+        ///   Serves as the default hash function.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -181,15 +208,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(Path path1, Path path2)
-        {
-            if (ReferenceEquals(path1, null) && ReferenceEquals(path2, null)) return true;
-            if (ReferenceEquals(path1, null) || ReferenceEquals(path2, null)) return false;
-            return path1.Equals((object)path2);
-        }
-
-        public static bool operator !=(Path path1, Path path2) => !(path1 == path2);
-
-        #endregion
+        #endregion IEquatable
     }
 }

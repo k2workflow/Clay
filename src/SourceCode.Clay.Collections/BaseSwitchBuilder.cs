@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -6,7 +6,7 @@ using System.Reflection;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Base class for dynamic switches.
+    ///   Base class for dynamic switches.
     /// </summary>
     /// <typeparam name="TKey">The type of keys.</typeparam>
     /// <typeparam name="TValue">The type of values.</typeparam>
@@ -14,15 +14,15 @@ namespace SourceCode.Clay.Collections.Generic
     {
         #region Fields
 
-        private readonly IReadOnlyList<TValue> _values;
         private readonly Func<TKey, int> _indexer;
+        private readonly IReadOnlyList<TValue> _values;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseSwitchBuilder{TKey, TValue}"/> class.
+        ///   Initializes a new instance of the <see cref="BaseSwitchBuilder{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="cases">The cases.</param>
         protected BaseSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
@@ -33,34 +33,32 @@ namespace SourceCode.Clay.Collections.Generic
             _indexer = indexer;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IDynamicSwitch
 
         /// <summary>
-        /// Gets the value with the specified key.
+        ///   The number of items in the switch.
         /// </summary>
-        /// <value>
-        /// The <see cref="TValue"/>.
-        /// </value>
+        public int Count => _values.Count;
+
+        /// <summary>
+        ///   Gets the value with the specified key.
+        /// </summary>
+        /// <value>The <see cref="TValue"/>.</value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
         public TValue this[TKey key] => _values[_indexer(key)];
 
         /// <summary>
-        /// The number of items in the switch.
-        /// </summary>
-        public int Count => _values.Count;
-
-        /// <summary>
-        /// Checks whether the specified key is present in the switch.
+        ///   Checks whether the specified key is present in the switch.
         /// </summary>
         /// <param name="key">The key value.</param>
         /// <returns></returns>
         public bool ContainsKey(TKey key) => _indexer(key) >= 0;
 
         /// <summary>
-        /// Attempts to get the value corresponding to the specified key.
+        ///   Attempts to get the value corresponding to the specified key.
         /// </summary>
         /// <param name="key">The key value.</param>
         /// <param name="value">The value.</param>
@@ -76,25 +74,17 @@ namespace SourceCode.Clay.Collections.Generic
             return true;
         }
 
-        #endregion
+        #endregion IDynamicSwitch
 
         #region Helpers
 
         /// <summary>
-        /// Override this method if the keys need to be transformed in some manner before
-        /// being compared. For example, changing string keys to their lowercase equivalent.
-        /// </summary>
-        /// <param name="key">The key value to be transformed.</param>
-        /// <returns>The transformed key value.</returns>
-        protected virtual TKey NormalizeKey(TKey key) => key;
-
-        /// <summary>
-        /// A persistent pointer to the <see cref="NormalizeKey(TKey)"/> method.
+        ///   A persistent pointer to the <see cref="NormalizeKey(TKey)"/> method.
         /// </summary>
         private static readonly MethodInfo _normalize = typeof(BaseSwitchBuilder<TKey, TValue>).GetMethod(nameof(NormalizeKey), BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
-        /// Builds the underlying <see cref="Expression"/> based switch.
+        ///   Builds the underlying <see cref="Expression"/> based switch.
         /// </summary>
         /// <param name="cases">The cases to transform into a dynamic switch.</param>
         /// <returns>A lambda that returns an index for a specified key value.</returns>
@@ -164,6 +154,14 @@ namespace SourceCode.Clay.Collections.Generic
             return (values, func);
         }
 
-        #endregion
+        /// <summary>
+        ///   Override this method if the keys need to be transformed in some manner before being
+        ///   compared. For example, changing string keys to their lowercase equivalent.
+        /// </summary>
+        /// <param name="key">The key value to be transformed.</param>
+        /// <returns>The transformed key value.</returns>
+        protected virtual TKey NormalizeKey(TKey key) => key;
+
+        #endregion Helpers
     }
 }

@@ -1,27 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to compare binary buffers.
+    ///   Represents a way to compare binary buffers.
     /// </summary>
     public abstract class BufferComparer<T> : IEqualityComparer<T>, IComparer<T>
     {
         #region Fields
 
         /// <summary>
-        /// The prefix of the buffer that is considered for hashcode calculation.
+        ///   The prefix of the buffer that is considered for hashcode calculation.
         /// </summary>
         public int HashCodeFidelity { get; }
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
-        /// buffer when calculating the hashcode.
+        ///   Creates a new instance of the <see cref="BufferComparer"/> class, that considers the
+        ///   full buffer when calculating the hashcode.
         /// </summary>
         protected BufferComparer()
         {
@@ -29,11 +29,11 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class.
+        ///   Creates a new instance of the <see cref="BufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
-        /// The maximum number of octets processed when calculating a hashcode.
-        /// Pass zero to disable the limit.
+        ///   The maximum number of octets processed when calculating a hashcode. Pass zero to
+        ///   disable the limit.
         /// </param>
         protected BufferComparer(int hashCodeFidelity)
         {
@@ -42,35 +42,34 @@ namespace SourceCode.Clay.Buffers
             HashCodeFidelity = hashCodeFidelity;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IComparer
 
         public abstract int Compare(T x, T y);
 
-        #endregion
+        #endregion IComparer
 
         #region IEqualityComparer
 
         /// <summary>
-        /// Determines whether the specified objects are equal.
+        ///   Determines whether the specified objects are equal.
         /// </summary>
         /// <param name="x">The first object to compare.</param>
         /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
+        /// <returns>true if the specified objects are equal; otherwise, false.</returns>
         public abstract bool Equals(T x, T y);
 
         /// <summary>
-        /// Returns a hash code for this instance.
+        ///   Returns a hash code for this instance.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        ///   A hash code for this instance, suitable for use in hashing algorithms and data
+        ///   structures like a hash table.
         /// </returns>
         public abstract int GetHashCode(T obj);
 
-        #endregion
+        #endregion IEqualityComparer
     }
 }

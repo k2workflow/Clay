@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -7,6 +7,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class KeyedLookupTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor))]
         public static void KeyedLookup_KeyExtractor()
         {
@@ -24,6 +26,28 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Class, lookup[1].Value);
             Assert.Equal(AttributeTargets.Constructor, lookup[2].Value);
             Assert.Equal(AttributeTargets.Delegate, lookup[3].Value);
+        }
+
+        [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor_Ordinal))]
+        public static void KeyedLookup_KeyExtractor_Ordinal()
+        {
+            var items = new[]
+            {
+                new KeyValuePair<string, AttributeTargets>("a", AttributeTargets.Class),
+                new KeyValuePair<string, AttributeTargets>("b", AttributeTargets.Constructor),
+                new KeyValuePair<string, AttributeTargets>("c", AttributeTargets.Delegate)
+            };
+
+            var lookup = KeyedCollectionFactory.Create(items, t => t.Key, StringComparer.Ordinal);
+
+            Assert.Throws<KeyNotFoundException>(() => lookup["d"]);
+
+            Assert.Equal(AttributeTargets.Class, lookup["a"].Value);
+            Assert.Throws<KeyNotFoundException>(() => lookup["A"]);
+            Assert.Equal(AttributeTargets.Constructor, lookup["b"].Value);
+            Assert.Throws<KeyNotFoundException>(() => lookup["B"]);
+            Assert.Equal(AttributeTargets.Delegate, lookup["c"].Value);
+            Assert.Throws<KeyNotFoundException>(() => lookup["C"]);
         }
 
         [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor_OrdinalIgnoreCase))]
@@ -48,26 +72,6 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Delegate, lookup["C"].Value);
         }
 
-        [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor_Ordinal))]
-        public static void KeyedLookup_KeyExtractor_Ordinal()
-        {
-            var items = new[]
-            {
-                new KeyValuePair<string, AttributeTargets>("a", AttributeTargets.Class),
-                new KeyValuePair<string, AttributeTargets>("b", AttributeTargets.Constructor),
-                new KeyValuePair<string, AttributeTargets>("c", AttributeTargets.Delegate)
-            };
-
-            var lookup = KeyedCollectionFactory.Create(items, t => t.Key, StringComparer.Ordinal);
-
-            Assert.Throws<KeyNotFoundException>(() => lookup["d"]);
-
-            Assert.Equal(AttributeTargets.Class, lookup["a"].Value);
-            Assert.Throws<KeyNotFoundException>(() => lookup["A"]);
-            Assert.Equal(AttributeTargets.Constructor, lookup["b"].Value);
-            Assert.Throws<KeyNotFoundException>(() => lookup["B"]);
-            Assert.Equal(AttributeTargets.Delegate, lookup["c"].Value);
-            Assert.Throws<KeyNotFoundException>(() => lookup["C"]);
-        }
+        #endregion Methods
     }
 }

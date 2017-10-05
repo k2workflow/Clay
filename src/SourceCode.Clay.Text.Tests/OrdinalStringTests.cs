@@ -1,17 +1,19 @@
-﻿using Xunit;
+using Xunit;
 
 namespace SourceCode.Clay.Text.Tests
 {
     public static class OrdinalStringTests
     {
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = "OrdinalStringTests NotEqual null")]
-        public static void When_not_equal_null()
-        {
-            OrdinalString actual = null;
-            const string expected = "ABCD";
+        #region Methods
 
-            Assert.NotEqual(expected, actual);
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = "OrdinalStringTests Equal")]
+        public static void When_equal()
+        {
+            OrdinalString actual = "abcd";
+            const string expected = "abcd";
+
+            Assert.Equal(expected, actual);
         }
 
         [Trait("Type", "Unit")]
@@ -35,13 +37,15 @@ namespace SourceCode.Clay.Text.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "OrdinalStringTests Equal")]
-        public static void When_equal()
+        [Fact(DisplayName = "OrdinalStringTests NotEqual null")]
+        public static void When_not_equal_null()
         {
-            OrdinalString actual = "abcd";
-            const string expected = "abcd";
+            OrdinalString actual = null;
+            const string expected = "ABCD";
 
-            Assert.Equal(expected, actual);
+            Assert.NotEqual(expected, actual);
         }
+
+        #endregion Methods
     }
 }

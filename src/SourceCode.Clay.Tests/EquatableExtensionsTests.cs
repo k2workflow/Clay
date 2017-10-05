@@ -1,10 +1,25 @@
-﻿using Xunit;
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class EquatableExtensionsTests
     {
+        #region Fields
+
         private const string _a = "a";
+
+        #endregion Fields
+
+        #region Methods
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_nullable_equals_int))]
+        [InlineData(1, 1, true)]
+        [InlineData(1, 2, false)]
+        public static void When_nullable_equals_int(int x, int y, bool expected)
+        {
+            Assert.Equal(expected, x.NullableEquals(y));
+        }
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_nullable_equals_string))]
@@ -20,13 +35,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, x.NullableEquals(y));
         }
 
-        [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_nullable_equals_int))]
-        [InlineData(1, 1, true)]
-        [InlineData(1, 2, false)]
-        public static void When_nullable_equals_int(int x, int y, bool expected)
-        {
-            Assert.Equal(expected, x.NullableEquals(y));
-        }
+        #endregion Methods
     }
 }

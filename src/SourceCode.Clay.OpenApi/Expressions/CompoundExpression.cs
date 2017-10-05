@@ -6,7 +6,7 @@ using System.Text;
 namespace SourceCode.Clay.OpenApi.Expressions
 {
     /// <summary>
-    /// Represents an Open API expression.
+    ///   Represents an Open API expression.
     /// </summary>
     public struct CompoundExpression : IReadOnlyList<ExpressionComponent>, IEquatable<CompoundExpression>
     {
@@ -14,21 +14,25 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         private readonly ExpressionComponent[] _components;
 
-        /// <summary>Gets the element at the specified index in the read-only list.</summary>
+        /// <summary>
+        ///   Gets the number of elements in the collection.
+        /// </summary>
+        /// <returns>The number of elements in the collection.</returns>
+        public int Count => _components?.Length ?? 0;
+
+        /// <summary>
+        ///   Gets the element at the specified index in the read-only list.
+        /// </summary>
         /// <param name="index">The zero-based index of the element to get.</param>
         /// <returns>The element at the specified index in the read-only list.</returns>
         public ExpressionComponent this[int index] => (_components ?? Array.Empty<ExpressionComponent>())[index];
 
-        /// <summary>Gets the number of elements in the collection.</summary>
-        /// <returns>The number of elements in the collection.</returns>
-        public int Count => _components?.Length ?? 0;
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new <see cref="CompoundExpression"/> value.
+        ///   Creates a new <see cref="CompoundExpression"/> value.
         /// </summary>
         /// <param name="components">The expression components.</param>
         public CompoundExpression(params ExpressionComponent[] components)
@@ -37,30 +41,47 @@ namespace SourceCode.Clay.OpenApi.Expressions
             if (_components.Length == 0) _components = null;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Enumerable
 
-        /// <summary>Returns an enumerator that iterates through the collection.</summary>
+        /// <summary>
+        ///   Returns an enumerator that iterates through the collection.
+        /// </summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ExpressionComponent> GetEnumerator() => (IEnumerator<ExpressionComponent>)_components.GetEnumerator();
 
-        /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
+        /// <summary>
+        ///   Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        ///   An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to
+        ///   iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        #endregion
+        #endregion Enumerable
 
         #region Equatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => obj is CompoundExpression o && Equals(o);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(CompoundExpression other)
         {
             if (ReferenceEquals(_components, other._components)) return true;
@@ -75,7 +96,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -91,48 +114,19 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
         }
 
-        #endregion
+        #endregion Equatable
 
         #region String
 
-        /// <summary>Returns the string format of the expression.</summary>
-        /// <returns>The string format of the expression.</returns>
-        public override string ToString()
-        {
-            if (_components == null) return string.Empty;
-
-            var sb = new StringBuilder();
-            for (var i = 0; i < _components.Length; i++)
-            {
-                var component = _components[i];
-
-                if (component is LiteralExpression literal)
-                {
-                    for (var j = 0; j < literal.Value.Length; j++)
-                    {
-                        var c = literal.Value[j];
-                        sb.Append(c);
-                        if (c == '{' || c == '}') sb.Append(c);
-                    }
-                }
-                else if (component is FieldExpression field)
-                {
-                    sb.Append("{");
-                    field.ToString(sb);
-                    sb.Append("}");
-                }
-            }
-
-            return sb.ToString();
-        }
-
         /// <summary>
-        /// Converts the string representation of an expression to its structured equivalent.
+        ///   Converts the string representation of an expression to its structured equivalent.
         /// </summary>
         /// <param name="s">A string containing an expression to convert.</param>
         /// <returns>The structured equivalent of the expression contained in <paramref name="s"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
+        /// <exception cref="FormatException">
+        ///   <paramref name="s"/> is not in a format compliant with the Open API specification.
+        /// </exception>
         public static CompoundExpression Parse(string s)
         {
             if (s == null) throw new ArgumentNullException(nameof(s));
@@ -141,15 +135,16 @@ namespace SourceCode.Clay.OpenApi.Expressions
         }
 
         /// <summary>
-        /// Converts the string representation of a expression to its structured equivalent.
-        /// A return value indicates whether the conversion succeeded.
+        ///   Converts the string representation of a expression to its structured equivalent. A
+        ///   return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="s">A string containing a expression to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the expression contained in <paramref name="s"/>,
-        /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
-        /// is not in a format compliant with the Open API expression specification. This parameter is passed uninitialized;
-        /// any value originally supplied in result will be overwritten.
+        ///   When this method returns, contains the structured equivalent of the expression
+        ///   contained in <paramref name="s"/>, if the conversion succeeded, or default if the
+        ///   conversion failed. The conversion fails if the <paramref name="s"/> parameter is not in
+        ///   a format compliant with the Open API expression specification. This parameter is passed
+        ///   uninitialized; any value originally supplied in result will be overwritten.
         /// </param>
         /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string s, out CompoundExpression result)
@@ -212,6 +207,39 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        #endregion
+        /// <summary>
+        ///   Returns the string format of the expression.
+        /// </summary>
+        /// <returns>The string format of the expression.</returns>
+        public override string ToString()
+        {
+            if (_components == null) return string.Empty;
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < _components.Length; i++)
+            {
+                var component = _components[i];
+
+                if (component is LiteralExpression literal)
+                {
+                    for (var j = 0; j < literal.Value.Length; j++)
+                    {
+                        var c = literal.Value[j];
+                        sb.Append(c);
+                        if (c == '{' || c == '}') sb.Append(c);
+                    }
+                }
+                else if (component is FieldExpression field)
+                {
+                    sb.Append("{");
+                    field.ToString(sb);
+                    sb.Append("}");
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        #endregion String
     }
 }

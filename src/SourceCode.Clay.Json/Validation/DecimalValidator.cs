@@ -4,19 +4,14 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Properties
 
-        public decimal? Min { get; }
-
         public decimal? Max { get; }
-
-        public bool MinExclusive { get; }
-
         public bool MaxExclusive { get; }
-
+        public decimal? Min { get; }
+        public bool MinExclusive { get; }
+        public long? MultipleOf { get; }
         public bool Required { get; }
 
-        public long? MultipleOf { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -42,7 +37,7 @@ namespace SourceCode.Clay.Json.Validation
             : this(min, max, false, false, false, null)
         { }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -106,6 +101,6 @@ namespace SourceCode.Clay.Json.Validation
             return s;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

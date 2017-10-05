@@ -1,35 +1,10 @@
-﻿using Xunit;
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class SemanticVersionTests
     {
-        [InlineData("123.4.56", 123, 4, 56, null, null)]
-        [InlineData("123.4.56-pre-0", 123, 4, 56, "pre-0", null)]
-        [InlineData("123.4.56+build-0.1", 123, 4, 56, null, "build-0.1")]
-        [InlineData("123.4.56-pre-0+build-0.1", 123, 4, 56, "pre-0", "build-0.1")]
-        [Theory(DisplayName = nameof(SemanticVersion_Parse))]
-        public static void SemanticVersion_Parse(string version, int major, int minor, int patch, string pre, string meta)
-        {
-            var success = SemanticVersion.TryParse(version, out var sut);
-            Assert.True(success);
-            Assert.Equal(new SemanticVersion(major, minor, patch, pre, meta), sut);
-        }
-
-        [InlineData("123.4.56", 123, 4, 56, null, null)]
-        [InlineData("123.4.56-pre-0", 123, 4, 56, "pre-0", null)]
-        [InlineData("123.4.56+build-0.1", 123, 4, 56, null, "build-0.1")]
-        [InlineData("123.4.56-pre-0+build-0.1", 123, 4, 56, "pre-0", "build-0.1")]
-        [Theory(DisplayName = nameof(SemanticVersion_Parse))]
-        public static void SemanticVersion_ToString(string version, int major, int minor, int patch, string pre, string meta)
-        {
-            var sut = new SemanticVersion(major, minor, patch, pre, meta);
-            Assert.Equal(version, sut.ToString());
-
-            Assert.Equal(new SemanticVersion(major, minor, patch).ToString(), sut.ToString("V"));
-            Assert.Equal(new SemanticVersion(major, minor, patch, pre, null).ToString(), sut.ToString("P"));
-            Assert.Equal(new SemanticVersion(major, minor, patch, null, meta).ToString(), sut.ToString("M"));
-        }
+        #region Methods
 
         // Major version incompatability
         [InlineData(
@@ -142,5 +117,34 @@ namespace SourceCode.Clay.Tests
             var compat = SemanticVersion.GetCompatabilities(sut1, sut2);
             Assert.Equal(expected, compat);
         }
+
+        [InlineData("123.4.56", 123, 4, 56, null, null)]
+        [InlineData("123.4.56-pre-0", 123, 4, 56, "pre-0", null)]
+        [InlineData("123.4.56+build-0.1", 123, 4, 56, null, "build-0.1")]
+        [InlineData("123.4.56-pre-0+build-0.1", 123, 4, 56, "pre-0", "build-0.1")]
+        [Theory(DisplayName = nameof(SemanticVersion_Parse))]
+        public static void SemanticVersion_Parse(string version, int major, int minor, int patch, string pre, string meta)
+        {
+            var success = SemanticVersion.TryParse(version, out var sut);
+            Assert.True(success);
+            Assert.Equal(new SemanticVersion(major, minor, patch, pre, meta), sut);
+        }
+
+        [InlineData("123.4.56", 123, 4, 56, null, null)]
+        [InlineData("123.4.56-pre-0", 123, 4, 56, "pre-0", null)]
+        [InlineData("123.4.56+build-0.1", 123, 4, 56, null, "build-0.1")]
+        [InlineData("123.4.56-pre-0+build-0.1", 123, 4, 56, "pre-0", "build-0.1")]
+        [Theory(DisplayName = nameof(SemanticVersion_Parse))]
+        public static void SemanticVersion_ToString(string version, int major, int minor, int patch, string pre, string meta)
+        {
+            var sut = new SemanticVersion(major, minor, patch, pre, meta);
+            Assert.Equal(version, sut.ToString());
+
+            Assert.Equal(new SemanticVersion(major, minor, patch).ToString(), sut.ToString("V"));
+            Assert.Equal(new SemanticVersion(major, minor, patch, pre, null).ToString(), sut.ToString("P"));
+            Assert.Equal(new SemanticVersion(major, minor, patch, null, meta).ToString(), sut.ToString("M"));
+        }
+
+        #endregion Methods
     }
 }

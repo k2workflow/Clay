@@ -3,48 +3,49 @@ using System;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Represents a possible design-time link for a response.
+    ///   Represents a possible design-time link for a response.
     /// </summary>
     /// <remarks>
-    /// The <c>Parameters</c> and <c>RequestBody</c> parameters are implementation-specific. If they are required, create a new type
-    /// that inherits from this one.
+    ///   The <c>Parameters</c> and <c>RequestBody</c> parameters are implementation-specific. If
+    ///   they are required, create a new type that inherits from this one.
     /// </remarks>
     public class Link : IEquatable<Link>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the relative or absolute reference to an OAS operation.
+        ///   Get the description of the link.
         /// </summary>
-        public Reference OperationReference { get; }
+        /// <remarks>CommonMark syntax MAY be used for rich text representation.</remarks>
+        public string Description { get; set; }
 
         /// <summary>
-        /// Gets the name of an existing, resolvable OAS operation, as defined with a unique operation identifier.
+        ///   Gets the name of an existing, resolvable OAS operation, as defined with a unique
+        ///   operation identifier.
         /// </summary>
         public string OperationIdentifier { get; set; }
 
         /// <summary>
-        /// Get the description of the link.
+        ///   Gets the relative or absolute reference to an OAS operation.
         /// </summary>
-        /// <remarks>
-        /// CommonMark syntax MAY be used for rich text representation.
-        /// </remarks>
-        public string Description { get; set; }
+        public Reference OperationReference { get; }
 
         /// <summary>
-        /// A server object to be used by the target operation.
+        ///   A server object to be used by the target operation.
         /// </summary>
         public Server Server { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Link"/> class.
+        ///   Creates a new instance of the <see cref="Link"/> class.
         /// </summary>
         /// <param name="operationReference">The relative or absolute reference to an OAS operation.</param>
-        /// <param name="operationIdentifier">The name of an existing, resolvable OAS operation, as defined with a unique operation identifier.</param>
+        /// <param name="operationIdentifier">
+        ///   The name of an existing, resolvable OAS operation, as defined with a unique operation identifier.
+        /// </param>
         /// <param name="description">The description of the link.</param>
         /// <param name="server">The server object to be used by the target operation.</param>
         public Link(
@@ -59,18 +60,36 @@ namespace SourceCode.Clay.OpenApi
             Server = server;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IEquatable
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        public static bool operator !=(Link link1, Link link2) => !(link1 == link2);
+
+        public static bool operator ==(Link link1, Link link2)
+        {
+            if (ReferenceEquals(link1, null) && ReferenceEquals(link2, null)) return true;
+            if (ReferenceEquals(link1, null) || ReferenceEquals(link2, null)) return false;
+            return link1.Equals((object)link2);
+        }
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as Link);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public virtual bool Equals(Link other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -84,7 +103,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Serves as the default hash function.</summary>
+        /// <summary>
+        ///   Serves as the default hash function.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -101,15 +122,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(Link link1, Link link2)
-        {
-            if (ReferenceEquals(link1, null) && ReferenceEquals(link2, null)) return true;
-            if (ReferenceEquals(link1, null) || ReferenceEquals(link2, null)) return false;
-            return link1.Equals((object)link2);
-        }
-
-        public static bool operator !=(Link link1, Link link2) => !(link1 == link2);
-
-        #endregion
+        #endregion IEquatable
     }
 }

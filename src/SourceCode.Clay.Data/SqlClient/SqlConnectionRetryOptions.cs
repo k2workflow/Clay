@@ -1,7 +1,7 @@
-﻿namespace SourceCode.Clay.Data.SqlClient
+namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
-    /// A property bag to hold various connection retry options.
+    ///   A property bag to hold various connection retry options.
     /// </summary>
     public sealed class SqlConnectionRetryOptions
     {
@@ -9,16 +9,20 @@
 
         public static SqlConnectionRetryOptions Default { get; } = new SqlConnectionRetryOptions();
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
         private byte? _connectRetryCount;
 
+        private byte? _connectRetryInterval;
+
+        private ushort? _connectTimeout;
+
         /// <summary>
-        /// The number of reconnections attempted after identifying that there was an
-        /// idle connection failure. This must be an integer between 0 and 255. Default is 5.
-        /// Set to 0 to disable reconnecting on idle connection failures.
+        ///   The number of reconnections attempted after identifying that there was an idle
+        ///   connection failure. This must be an integer between 0 and 255. Default is 5. Set to 0
+        ///   to disable reconnecting on idle connection failures.
         /// </summary>
         public byte ConnectRetryCount
         {
@@ -26,11 +30,10 @@
             set => _connectRetryCount = value;
         }
 
-        private byte? _connectRetryInterval;
-
         /// <summary>
-        /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an
-        /// idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
+        ///   Amount of time (in seconds) between each reconnection attempt after identifying that
+        ///   there was an idle connection failure. This must be an integer between 1 and 60. The
+        ///   default is 10 seconds.
         /// </summary>
         public byte ConnectRetryInterval
         {
@@ -38,11 +41,9 @@
             set => _connectRetryInterval = value;
         }
 
-        private ushort? _connectTimeout;
-
         /// <summary>
-        /// Gets or sets the length of time (in seconds) to wait for a connection to the
-        /// server before terminating the attempt and generating an error. The default is 30 seconds.
+        ///   Gets or sets the length of time (in seconds) to wait for a connection to the server
+        ///   before terminating the attempt and generating an error. The default is 30 seconds.
         /// </summary>
         public ushort ConnectTimeout
         {
@@ -50,13 +51,13 @@
             set => _connectTimeout = value;
         }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         public SqlConnectionRetryOptions()
         { }
 
-        #endregion
+        #endregion Constructors
     }
 }

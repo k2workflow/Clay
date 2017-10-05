@@ -3,8 +3,8 @@ using System;
 namespace SourceCode.Clay.Text
 {
     /// <summary>
-    /// A wrapper for <see cref="System.String"/> that automatically compares values using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
-    /// Uses implicit conversions to/from <see cref="System.String"/>.
+    ///   A wrapper for <see cref="System.String"/> that automatically compares values using <see
+    ///   cref="System.StringComparison.OrdinalIgnoreCase"/>. Uses implicit conversions to/from <see cref="System.String"/>.
     /// </summary>
     /// <seealso cref="IEquatable{T}"/>
     public struct OrdinalIgnoreCaseString : IEquatable<OrdinalIgnoreCaseString>, IComparable<OrdinalIgnoreCaseString>
@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Text
 
         private readonly string _str;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -22,39 +22,39 @@ namespace SourceCode.Clay.Text
             _str = str;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Operators
 
-        public static implicit operator OrdinalIgnoreCaseString(string str) => new OrdinalIgnoreCaseString(str);
-
         public static explicit operator string(OrdinalIgnoreCaseString str) => str._str;
 
-        public static bool operator ==(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.Equals(y);
+        public static implicit operator OrdinalIgnoreCaseString(string str) => new OrdinalIgnoreCaseString(str);
 
         public static bool operator !=(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => !(x == y);
 
         public static bool operator <(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.CompareTo(y) < 0;
 
-        public static bool operator >(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.CompareTo(y) > 0;
-
         public static bool operator <=(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.CompareTo(y) <= 0;
+
+        public static bool operator ==(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.Equals(y);
+
+        public static bool operator >(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.CompareTo(y) > 0;
 
         public static bool operator >=(OrdinalIgnoreCaseString x, OrdinalIgnoreCaseString y) => x.CompareTo(y) >= 0;
 
-        #endregion
+        #endregion Operators
 
         #region IEquatable
 
         /// <summary>
-        /// Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
+        ///   Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
         /// </summary>
         /// <param name="other">The other string.</param>
         /// <returns></returns>
         public bool Equals(OrdinalIgnoreCaseString other) => StringComparer.OrdinalIgnoreCase.Equals(_str, other._str);
 
         /// <summary>
-        /// Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
+        ///   Check equality using <see cref="System.StringComparison.OrdinalIgnoreCase"/>.
         /// </summary>
         /// <param name="obj">The other object.</param>
         /// <returns></returns>
@@ -74,12 +74,12 @@ namespace SourceCode.Clay.Text
 
         public override int GetHashCode() => StringComparer.OrdinalIgnoreCase.GetHashCode(_str);
 
-        #endregion
+        #endregion IEquatable
 
         #region IComparable
 
         public int CompareTo(OrdinalIgnoreCaseString other) => StringComparer.OrdinalIgnoreCase.Compare(_str, other._str);
 
-        #endregion
+        #endregion IComparable
     }
 }

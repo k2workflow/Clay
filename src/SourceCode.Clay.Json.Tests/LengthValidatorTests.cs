@@ -1,10 +1,12 @@
-﻿using SourceCode.Clay.Json.Validation;
+using SourceCode.Clay.Json.Validation;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
     public static class LengthValidatorTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_LengthValidator))]
         [InlineData(-1, true)]
@@ -33,19 +35,6 @@ namespace SourceCode.Clay.Json.Units
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_LengthValidator))]
-        [InlineData(10, true)]
-        [InlineData(11, true)]
-        [InlineData(12, false)]
-        public static void Test_Infinity_InclusiveValue_LengthValidator(long value, bool valid)
-        {
-            // (-∞, 11]
-            var range = new LengthValidator(null, 11);
-
-            Assert.True(range.IsValid(value) == valid);
-        }
-
-        [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_LengthValidator))]
         [InlineData(-11, false)]
         [InlineData(-10, true)]
         [InlineData(10, true)]
@@ -57,5 +46,20 @@ namespace SourceCode.Clay.Json.Units
 
             Assert.True(range.IsValid(value) == valid);
         }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_LengthValidator))]
+        [InlineData(10, true)]
+        [InlineData(11, true)]
+        [InlineData(12, false)]
+        public static void Test_Infinity_InclusiveValue_LengthValidator(long value, bool valid)
+        {
+            // (-∞, 11]
+            var range = new LengthValidator(null, 11);
+
+            Assert.True(range.IsValid(value) == valid);
+        }
+
+        #endregion Methods
     }
 }

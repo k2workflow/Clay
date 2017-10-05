@@ -5,39 +5,43 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Configuration details for a supported OAuth Flow.
+    ///   Configuration details for a supported OAuth Flow.
     /// </summary>
     public class OAuthFlow : IEquatable<OAuthFlow>
     {
+        #region Properties
+
         /// <summary>
-        /// Gets the authorization URL to be used for this flow.
+        ///   Gets the authorization URL to be used for this flow.
         /// </summary>
-        /// <remarks>
-        /// Applies to <see cref="OAuth2SecurityScheme.ImplicitFlow"/> and <see cref="OAuth2SecurityScheme.AuthorizationCodeFlow"/>.
-        /// </remarks>
+        /// <remarks>Applies to <see cref="OAuth2SecurityScheme.ImplicitFlow"/> and <see cref="OAuth2SecurityScheme.AuthorizationCodeFlow"/>.</remarks>
         public Uri AuthorizationUrl { get; }
 
         /// <summary>
-        /// Gets the token URL to be used for this flow.
-        /// </summary>
-        /// <remarks>
-        /// Applies to <see cref="OAuth2SecurityScheme.PasswordFlow"/>, <see cref="OAuth2SecurityScheme.ClientCredentialsFlow"/>
-        /// and <see cref="OAuth2SecurityScheme.AuthorizationCodeFlow"/>.
-        /// </remarks>
-        public Uri TokenUrl { get; }
-
-        /// <summary>
-        /// Gets the URL to be used for obtaining refresh tokens.
+        ///   Gets the URL to be used for obtaining refresh tokens.
         /// </summary>
         public Uri RefreshUrl { get; }
 
         /// <summary>
-        /// Get the available scopes for the OAuth2 security scheme.
+        ///   Get the available scopes for the OAuth2 security scheme.
         /// </summary>
         public IReadOnlyDictionary<string, string> Scopes { get; }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="OAuthFlow"/> class.
+        ///   Gets the token URL to be used for this flow.
+        /// </summary>
+        /// <remarks>
+        ///   Applies to <see cref="OAuth2SecurityScheme.PasswordFlow"/>, <see
+        ///   cref="OAuth2SecurityScheme.ClientCredentialsFlow"/> and <see cref="OAuth2SecurityScheme.AuthorizationCodeFlow"/>.
+        /// </remarks>
+        public Uri TokenUrl { get; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        ///   Creates a new instance of the <see cref="OAuthFlow"/> class.
         /// </summary>
         /// <param name="authorizationUrl">The authorization URL to be used for this flow.</param>
         /// <param name="tokenUrl">The token URL to be used for this flow.</param>
@@ -55,16 +59,37 @@ namespace SourceCode.Clay.OpenApi
             Scopes = scopes ?? ReadOnlyDictionary.Empty<string, string>();
         }
 
+        #endregion Constructors
+
         #region Equatable
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
+                    !(flow1 == flow2);
+
+        public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
+        {
+            if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
+            if (ReferenceEquals(flow1, null) || ReferenceEquals(flow2, null)) return false;
+            return flow1.Equals((object)flow2);
+        }
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as OAuthFlow);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(OAuthFlow other)
         {
             if (ReferenceEquals(this, other)) return true;
@@ -78,7 +103,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Serves as the default hash function.</summary>
+        /// <summary>
+        ///   Serves as the default hash function.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -95,16 +122,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
-        {
-            if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
-            if (ReferenceEquals(flow1, null) || ReferenceEquals(flow2, null)) return false;
-            return flow1.Equals((object)flow2);
-        }
-
-        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
-            !(flow1 == flow2);
-
-        #endregion
+        #endregion Equatable
     }
 }

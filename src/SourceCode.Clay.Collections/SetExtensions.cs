@@ -4,12 +4,14 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="ISet{T}"/>.
+    ///   Represents extensions for <see cref="ISet{T}"/>.
     /// </summary>
     public static class SetExtensions
     {
+        #region Methods
+
         /// <summary>
-        /// Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
+        ///   Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Set 1</param>
@@ -30,7 +32,8 @@ namespace SourceCode.Clay.Collections.Generic
             // If counts are different, not equal
             if (x.Count != y.Count) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and
+            // thus equal)
             if (x.Count == 0) return true;
 
             // Use native checks
@@ -43,7 +46,8 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an efficient item-by-item comparison, using the <see cref="IEqualityComparer{T}"/> from the first set.
+        ///   Performs an efficient item-by-item comparison, using the <see
+        ///   cref="IEqualityComparer{T}"/> from the first set.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Set 1</param>
@@ -61,11 +65,14 @@ namespace SourceCode.Clay.Collections.Generic
             // If counts are different, not equal
             if (x.Count != y.Count) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and
+            // thus equal)
             if (x.Count == 0) return true;
 
             // Use native checks
             return x.SetEquals(y); // Uses the equality comparer from the first set
         }
+
+        #endregion Methods
     }
 }

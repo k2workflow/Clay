@@ -5,18 +5,23 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="IList{T}"/>.
+    ///   Represents extensions for <see cref="IList{T}"/>.
     /// </summary>
     public static class ListExtensions
     {
+        #region Methods
+
         /// <summary>
-        /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
+        ///   Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
+        /// <param name="sequential">
+        ///   Optimizes the algorithm for cases when the inputs are expected to be ordered in the
+        ///   same manner.
+        /// </param>
         /// <returns></returns>
         public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool sequential)
         {
@@ -35,7 +40,8 @@ namespace SourceCode.Clay.Collections.Generic
             // Optimize for cases 0, 1, 2, N
             switch (x.Count)
             {
-                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+                // If first count is 0 then, due to previous check, the second is guaranteed to be 0
+                // (and thus equal)
                 case 0: return true;
 
                 // If there is only 1 item, short-circuit
@@ -102,14 +108,20 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an optimized item-by-item comparison.
+        ///   Performs an optimized item-by-item comparison.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
-        /// <param name="extractor">A delegate that extracts an embedded value from each item before comparing it using the specified comparer.</param>
+        /// <param name="extractor">
+        ///   A delegate that extracts an embedded value from each item before comparing it using the
+        ///   specified comparer.
+        /// </param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
+        /// <param name="sequential">
+        ///   Optimizes the algorithm for cases when the inputs are expected to be ordered in the
+        ///   same manner.
+        /// </param>
         /// <returns></returns>
         public static bool ListEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> extractor, IEqualityComparer<U> comparer, bool sequential)
         {
@@ -129,7 +141,8 @@ namespace SourceCode.Clay.Collections.Generic
             // Optimize for cases 0, 1, 2, N
             switch (x.Count)
             {
-                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+                // If first count is 0 then, due to previous check, the second is guaranteed to be 0
+                // (and thus equal)
                 case 0: return true;
 
                 // If there is only 1 item, short-circuit
@@ -211,14 +224,19 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an optimized item-by-item comparison, using the default comparer for the type.
+        ///   Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
+        /// <param name="sequential">
+        ///   Optimizes the algorithm for cases when the inputs are expected to be ordered in the
+        ///   same manner.
+        /// </param>
         /// <returns></returns>
         public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool sequential)
             => x.ListEquals(y, EqualityComparer<T>.Default, sequential);
+
+        #endregion Methods
     }
 }

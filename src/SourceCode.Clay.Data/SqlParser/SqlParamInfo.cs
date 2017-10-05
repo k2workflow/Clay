@@ -9,19 +9,16 @@ namespace SourceCode.Clay.Data.SqlParser
 
         public static SqlParamInfo Empty { get; }
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
-        public bool IsNullable { get; }
-
+        public ParameterDirection Direction { get; }
         public bool HasDefault { get; }
-
+        public bool IsNullable { get; }
         public bool IsReadOnly { get; }
 
-        public ParameterDirection Direction { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -35,7 +32,7 @@ namespace SourceCode.Clay.Data.SqlParser
             Direction = direction;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IEquatable
 
@@ -64,7 +61,7 @@ namespace SourceCode.Clay.Data.SqlParser
             return ((int)(hc >> 32)) ^ (int)hc;
         }
 
-        #endregion
+        #endregion IEquatable
 
         #region Override
 
@@ -74,6 +71,6 @@ namespace SourceCode.Clay.Data.SqlParser
             + (HasDefault ? ", Default" : string.Empty)
             + (IsReadOnly ? ", ReadOnly" : string.Empty);
 
-        #endregion
+        #endregion Override
     }
 }

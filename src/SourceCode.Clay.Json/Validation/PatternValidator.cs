@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -12,13 +12,13 @@ namespace SourceCode.Clay.Json.Validation
         public const RegexOptions DefaultOptions = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant;
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMilliseconds(500);
 
-        #endregion
+        #endregion Constants
 
         #region Fields
 
         private readonly Lazy<Regex> _regex;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Json.Validation
 
         public bool Required { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -44,9 +44,16 @@ namespace SourceCode.Clay.Json.Validation
             : this(pattern, required, DefaultOptions, DefaultTimeout)
         { }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
+
+        // Heap analysis shows Regex permanently holds onto last input string, which may be large
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        private static void Clear(Regex regex)
+        {
+            regex.IsMatch(string.Empty);
+        }
 
         public bool IsValid(string value)
         {
@@ -60,16 +67,9 @@ namespace SourceCode.Clay.Json.Validation
             return isMatch;
         }
 
-        // Heap analysis shows Regex permanently holds onto last input string, which may be large
-        [MethodImpl(MethodImplOptions.NoOptimization)]
-        private static void Clear(Regex regex)
-        {
-            regex.IsMatch(string.Empty);
-        }
-
         public override string ToString()
             => (Required ? "Required: " : string.Empty) + Pattern;
 
-        #endregion
+        #endregion Methods
     }
 }

@@ -1,16 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions that generate dynamic switches from dictionaries and lists.
+    ///   Represents extensions that generate dynamic switches from dictionaries and lists.
     /// </summary>
     /// <seealso cref="Expression.Switch"/>
     public static class SwitchExtensions
     {
+        #region Methods
+
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Boolean"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Boolean"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -22,7 +24,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Byte"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Byte"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -34,7 +36,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.SByte"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.SByte"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -46,7 +48,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Int16"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Int16"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -58,7 +60,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.UInt16"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.UInt16"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -70,7 +72,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Int32"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Int32"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -82,7 +84,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.UInt32"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.UInt32"/> keys.
         /// </summary>
         /// <typeparam name="T">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
@@ -94,7 +96,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Int32"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Int32"/> keys.
         /// </summary>
         /// <typeparam name="TItem">The type of the elements.</typeparam>
         /// <param name="cases">The items.</param>
@@ -121,7 +123,7 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Builds a dynamic switch with <see cref="System.Int32"/> keys.
+        ///   Builds a dynamic switch with <see cref="System.Int32"/> keys.
         /// </summary>
         /// <typeparam name="TItem">The type of the elements.</typeparam>
         /// <param name="cases">The items.</param>
@@ -135,5 +137,7 @@ namespace SourceCode.Clay.Collections.Generic
             var impl = cases.ToDynamicSwitch(keyExtractor, v => v);
             return impl;
         }
+
+        #endregion Methods
     }
 }

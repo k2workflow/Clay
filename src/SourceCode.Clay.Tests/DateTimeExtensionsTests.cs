@@ -1,25 +1,11 @@
-﻿using System;
+using System;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class DateTimeExtensionsTests
     {
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTime))]
-        public static void DateTimeExtensions_ToPosixFileTime()
-        {
-            var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTime();
-            Assert.Equal(5380218331230000, posix);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTimeUtc))]
-        public static void DateTimeExtensions_ToPosixFileTimeUtc()
-        {
-            var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTimeUtc();
-            Assert.Equal(5380218331230000, posix);
-        }
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DateTimeExtensions_FromPosixFileTime))]
@@ -36,5 +22,23 @@ namespace SourceCode.Clay.Tests
             var dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);
             Assert.Equal(new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc), dt);
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTime))]
+        public static void DateTimeExtensions_ToPosixFileTime()
+        {
+            var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTime();
+            Assert.Equal(5380218331230000, posix);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTimeUtc))]
+        public static void DateTimeExtensions_ToPosixFileTimeUtc()
+        {
+            var posix = new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc).ToPosixFileTimeUtc();
+            Assert.Equal(5380218331230000, posix);
+        }
+
+        #endregion Methods
     }
 }

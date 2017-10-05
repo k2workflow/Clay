@@ -1,39 +1,35 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// A <see cref="System.IDisposable"/> wrapper for a <see cref="System.Byte"/> buffer,
-    /// permitting automatic <see cref="ArrayPool{T}.Return(T[], bool)"/> behavior for
-    /// buffers allocated via <see cref="ArrayPool{T}.Rent(int)"/>.
+    ///   A <see cref="System.IDisposable"/> wrapper for a <see cref="System.Byte"/> buffer,
+    ///   permitting automatic <see cref="ArrayPool{T}.Return(T[], bool)"/> behavior for buffers
+    ///   allocated via <see cref="ArrayPool{T}.Rent(int)"/>.
     /// </summary>
-    /// <seealso cref="System.IDisposable" />
+    /// <seealso cref="System.IDisposable"/>
     public struct BufferSession : IDisposable // MUST be a struct, in order to lessen GC load
     {
         #region Properties
 
         /// <summary>
-        /// Gets the delineated result (<see cref="BufferSession.Buffer"/> may be overallocated).
+        ///   Gets the original rented buffer.
         /// </summary>
-        /// <value>
-        /// The result.
-        /// </value>
-        public ArraySegment<byte> Result { get; }
-
-        /// <summary>
-        /// Gets the original rented buffer.
-        /// </summary>
-        /// <value>
-        /// The buffer.
-        /// </value>
+        /// <value>The buffer.</value>
         public byte[] Buffer { get; private set; }
 
-        #endregion
+        /// <summary>
+        ///   Gets the delineated result ( <see cref="BufferSession.Buffer"/> may be overallocated).
+        /// </summary>
+        /// <value>The result.</value>
+        public ArraySegment<byte> Result { get; }
+
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession"/> struct.
+        ///   Initializes a new instance of the <see cref="BufferSession"/> struct.
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="result">The result.</param>
@@ -44,7 +40,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession"/> struct.
+        ///   Initializes a new instance of the <see cref="BufferSession"/> struct.
         /// </summary>
         /// <param name="result">The result.</param>
         public BufferSession(ArraySegment<byte> result)
@@ -54,7 +50,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession" /> struct.
+        ///   Initializes a new instance of the <see cref="BufferSession"/> struct.
         /// </summary>
         /// <param name="minimumLength">The minimum length.</param>
         public BufferSession(int minimumLength)
@@ -65,12 +61,12 @@ namespace SourceCode.Clay.Buffers
             Result = default;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
         /// <summary>
-        /// Rents the buffer.
+        ///   Rents the buffer.
         /// </summary>
         /// <param name="minimumLength">The minimum length.</param>
         /// <returns></returns>
@@ -83,7 +79,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Returns the buffer.
+        ///   Returns the buffer.
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         public static void ReturnBuffer(byte[] buffer)
@@ -93,12 +89,13 @@ namespace SourceCode.Clay.Buffers
             System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
         }
 
-        #endregion
+        #endregion Methods
 
         #region IDisposable
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///   Performs application-defined tasks associated with freeing, releasing, or resetting
+        ///   unmanaged resources.
         /// </summary>
         public void Dispose()
         {
@@ -109,6 +106,6 @@ namespace SourceCode.Clay.Buffers
             Buffer = null;
         }
 
-        #endregion
+        #endregion IDisposable
     }
 }
