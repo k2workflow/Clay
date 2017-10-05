@@ -9,6 +9,7 @@ namespace SourceCode.Clay.OpenApi
         /// The default options.
         /// </summary>
         None = 0,
+
         /// <summary>
         /// The the request body is required in the request.
         /// </summary>

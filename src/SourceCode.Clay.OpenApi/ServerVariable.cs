@@ -17,7 +17,7 @@ namespace SourceCode.Clay.OpenApi
         public IReadOnlyList<string> Enum { get; }
 
         /// <summary>
-        /// Gets the default value to use for substitution, and to send, if an alternate value is not supplied. 
+        /// Gets the default value to use for substitution, and to send, if an alternate value is not supplied.
         /// </summary>
         public string Default { get; }
 

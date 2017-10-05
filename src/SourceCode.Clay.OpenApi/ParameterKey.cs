@@ -16,14 +16,14 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the location of the parameter.
         /// </summary>
         public ParameterLocation Location { get; }
-        
+
         /// <summary>
         /// Creates a new <see cref="ParameterKey"/> value.
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="location">The location of the parameter.</param>
         public ParameterKey(
-            string name = default, 
+            string name = default,
             ParameterLocation location = default)
             : this()
         {
@@ -63,6 +63,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         public static bool operator ==(ParameterKey key1, ParameterKey key2) => key1.Equals(key2);
+
         public static bool operator !=(ParameterKey key1, ParameterKey key2) => !(key1 == key2);
     }
 }

@@ -12,20 +12,24 @@ namespace SourceCode.Clay.OpenApi
         /// The default options.
         /// </summary>
         None = 0,
+
         /// <summary>
         /// Indicates that the parameter is not mandatory.
         /// </summary>
         Optional = 1,
+
         /// <summary>
         /// Specifies that a parameter is deprecated.
         /// </summary>
         Deprecated = 2,
+
         /// <summary>
         /// Sets the ability to pass empty-valued parameters.
         /// </summary>
         AllowEmptyValue = 4,
+
         /// <summary>
-        /// Indicates that parameter values of type array or object generate separate parameters for each value of the array or 
+        /// Indicates that parameter values of type array or object generate separate parameters for each value of the array or
         /// key-value pair of the map.
         /// </summary>
         Explode = 8,
@@ -37,7 +41,7 @@ namespace SourceCode.Clay.OpenApi
         /// Indicates that the parameter value allows reserved characters.
         /// </summary>
         AllowReserved = 16
-#       pragma warning restore S4016 // Enumeration members should not be named "Reserved"
 
+#       pragma warning restore S4016 // Enumeration members should not be named "Reserved"
     }
 }

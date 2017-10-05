@@ -9,6 +9,7 @@ namespace SourceCode.Clay.OpenApi
         /// No options are set.
         /// </summary>
         None = 0,
+
         /// <summary>
         /// The operation is deprecated.
         /// </summary>

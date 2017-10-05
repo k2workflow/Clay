@@ -81,6 +81,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         #region Ctor
+
         /// <summary>
         /// Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.
         /// </summary>
@@ -130,10 +131,12 @@ namespace SourceCode.Clay.OpenApi
             _typeCode = (byte)TypeCode.Boolean;
             _number = new Number(boolean ? 1 : 0);
             _string = null;
-        } 
+        }
+
         #endregion
 
         #region Equatable
+
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -173,9 +176,11 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
+
         #endregion
 
         #region String
+
         /// <summary>Formats the value of the current instance.</summary>
         /// <returns>The value of the current instance.</returns>
         public override string ToString() => ToString(null, null);
@@ -198,7 +203,8 @@ namespace SourceCode.Clay.OpenApi
                 case TypeCode.String: return _string;
                 default: return _number.ToString(format, formatProvider);
             }
-        } 
+        }
+
         #endregion
     }
 }

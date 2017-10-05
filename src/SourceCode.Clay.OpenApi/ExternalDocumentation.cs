@@ -30,7 +30,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The short description of the target documentation.</param>
         /// <param name="url">The URL for the target documentation.</param>
         public ExternalDocumentation(
-            string description = default, 
+            string description = default,
             Uri url = default)
         {
             Description = description;

@@ -37,6 +37,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         #region Equatable
+
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
@@ -79,6 +80,7 @@ namespace SourceCode.Clay.OpenApi
 
         public static bool operator !=(ApiKeySecurityScheme scheme1, ApiKeySecurityScheme scheme2)
             => !(scheme1 == scheme2);
+
         #endregion
     }
 }

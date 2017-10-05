@@ -68,6 +68,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         #region Equatable
+
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -97,11 +98,13 @@ namespace SourceCode.Clay.OpenApi
         }
 
         public static bool operator ==(Reference reference1, Reference reference2) => reference1.Equals(reference2);
+
         public static bool operator !=(Reference reference1, Reference reference2) => !(reference1 == reference2);
 
         #endregion
 
         #region Conversion
+
         /// <summary>
         /// Returns the reference formatted as a <see cref="Uri"/>.
         /// </summary>
@@ -109,7 +112,7 @@ namespace SourceCode.Clay.OpenApi
         public Uri ToUri()
         {
             if (!HasValue) return null;
-            
+
             var frag = "#" + Uri.EscapeUriString(Pointer.ToString());
             if (Url == null) return new Uri(frag, UriKind.Relative);
             else if (frag == "#") return Url;
@@ -132,12 +135,12 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Converts the URL representation of a reference to its structured equivalent. 
+        /// Converts the URL representation of a reference to its structured equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="url">A URL containing a reference to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the reference contained in <paramref name="url"/>, 
+        /// When this method returns, contains the structured equivalent of the reference contained in <paramref name="url"/>,
         /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="url"/> parameter
         /// is not in a format compliant with the Open API specification. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.
@@ -199,7 +202,9 @@ namespace SourceCode.Clay.OpenApi
         public override string ToString() => ToUri()?.ToString() ?? string.Empty;
 
         public static implicit operator Reference(JsonPointer pointer) => pointer.Count == 0 ? default : new Reference(pointer);
+
         public static implicit operator Reference(Uri url) => url == null ? default : ParseUrl(url);
+
         public static implicit operator Reference(string url)
         {
             if (string.IsNullOrEmpty(url)) return default;

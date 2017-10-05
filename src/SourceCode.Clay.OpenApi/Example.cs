@@ -40,8 +40,8 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The long description for the example.</param>
         /// <param name="externalValue">The URL that points to the literal example.</param>
         public Example(
-            string summary = default, 
-            string description = default, 
+            string summary = default,
+            string description = default,
             Uri externalValue = default)
         {
             Summary = summary;

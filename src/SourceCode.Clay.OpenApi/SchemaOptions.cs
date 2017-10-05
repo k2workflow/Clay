@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -19,17 +17,17 @@ namespace SourceCode.Clay.OpenApi
         /// The contained items must be unique.
         /// </summary>
         UniqueItems = 1,
-        
+
         /// <summary>
         /// This item is required.
         /// </summary>
         Required = 2,
-        
+
         /// <summary>
         /// This item is nullable.
         /// </summary>
         Nullable = 4,
-        
+
         /// <summary>
         /// This item is deprecated.
         /// </summary>

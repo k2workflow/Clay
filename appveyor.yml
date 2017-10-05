@@ -7,8 +7,10 @@ environment:
 init:
 - ps: $Env:LABEL = "preview1-" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 - ps: if(-not $env:APPVEYOR_PULL_REQUEST_NUMBER) { $env:is_not_pr = "true"; }
+
 before_build:
 - appveyor-retry dotnet restore -v Minimal
+
 build_script:
 - dotnet build "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
@@ -22,30 +24,38 @@ build_script:
 - dotnet build "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 
-- dotnet build "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
 - dotnet build "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 
+- dotnet build "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+- dotnet build "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+
+- dotnet build "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+- dotnet build "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+
 - dotnet build "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+
 after_build:
  - dotnet pack "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
  - dotnet pack "src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
  - dotnet pack "src\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
  - dotnet pack "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
  - dotnet pack "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
+ - dotnet pack "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
+ - dotnet pack "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
  - dotnet pack "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
+
 test_script:
 - dotnet test "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-build
 - dotnet test "src\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj" -c %CONFIGURATION% --no-build
 - dotnet test "src\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj" -c %CONFIGURATION% --no-build
 - dotnet test "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-build
 - dotnet test "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj" -c %CONFIGURATION% --no-build
+- dotnet test "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-build
+- dotnet test "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj" -c %CONFIGURATION% --no-build
 - dotnet test "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj" -c %CONFIGURATION% --no-build
+
 artifacts:
   - path: '**\*.nupkg'
 deploy:

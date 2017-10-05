@@ -13,6 +13,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         public abstract ExpressionComponentType ComponentType { get; }
 
         #region Ctor
+
 #       pragma warning disable S3442 // "abstract" classes should not have "public" constructors
         // Reasoning: external inheritance not supported.
 
@@ -21,9 +22,10 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// </summary>
         internal ExpressionComponent()
         {
-
         }
+
 #       pragma warning restore S3442 // "abstract" classes should not have "public" constructors
+
         #endregion
 
         #region Equality
@@ -63,7 +65,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return expression1.Equals(expression2);
         }
 
-        public static bool operator !=(ExpressionComponent expression1, ExpressionComponent expression2) => !(expression1 == expression2); 
+        public static bool operator !=(ExpressionComponent expression1, ExpressionComponent expression2) => !(expression1 == expression2);
 
         #endregion
     }

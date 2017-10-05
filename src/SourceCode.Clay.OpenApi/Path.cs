@@ -96,17 +96,17 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="servers">The alternative server list to service all operations in this path.</param>
         /// <param name="parameters">The list of parameters that are applicable for all the operations described under this path.</param>
         public Path(
-            string summary, 
-            string description, 
-            Operation get, 
-            Operation put, 
-            Operation post, 
-            Operation delete, 
-            Operation options, 
-            Operation head, 
-            Operation patch, 
-            Operation trace, 
-            IReadOnlyList<Server> servers, 
+            string summary,
+            string description,
+            Operation get,
+            Operation put,
+            Operation post,
+            Operation delete,
+            Operation options,
+            Operation head,
+            Operation patch,
+            Operation trace,
+            IReadOnlyList<Server> servers,
             IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters)
         {
             Summary = summary;

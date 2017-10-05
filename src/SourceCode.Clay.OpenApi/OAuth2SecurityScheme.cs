@@ -40,9 +40,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="authorizationCodeFlow">The configuration for the OAuth Authorization flow.</param>
         public OAuth2SecurityScheme(
             string description = default,
-            OAuthFlow implicitFlow = default, 
-            OAuthFlow passwordFlow = default, 
-            OAuthFlow clientCredentialsFlow = default, 
+            OAuthFlow implicitFlow = default,
+            OAuthFlow passwordFlow = default,
+            OAuthFlow clientCredentialsFlow = default,
             OAuthFlow authorizationCodeFlow = default)
         {
             ImplicitFlow = implicitFlow;

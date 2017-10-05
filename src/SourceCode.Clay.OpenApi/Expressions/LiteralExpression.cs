@@ -51,7 +51,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-        
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() => Value;

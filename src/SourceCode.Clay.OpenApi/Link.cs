@@ -19,7 +19,7 @@ namespace SourceCode.Clay.OpenApi
         public Reference OperationReference { get; }
 
         /// <summary>
-        /// Gets the name of an existing, resolvable OAS operation, as defined with a unique operation identifier. 
+        /// Gets the name of an existing, resolvable OAS operation, as defined with a unique operation identifier.
         /// </summary>
         public string OperationIdentifier { get; set; }
 
@@ -48,9 +48,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The description of the link.</param>
         /// <param name="server">The server object to be used by the target operation.</param>
         public Link(
-            Reference operationReference = default, 
-            string operationIdentifier = default, 
-            string description = default, 
+            Reference operationReference = default,
+            string operationIdentifier = default,
+            string description = default,
             Server server = default)
         {
             OperationReference = operationReference;

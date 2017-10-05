@@ -141,12 +141,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
         }
 
         /// <summary>
-        /// Converts the string representation of a expression to its structured equivalent. 
+        /// Converts the string representation of a expression to its structured equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="s">A string containing a expression to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the expression contained in <paramref name="s"/>, 
+        /// When this method returns, contains the structured equivalent of the expression contained in <paramref name="s"/>,
         /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
         /// is not in a format compliant with the Open API expression specification. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.

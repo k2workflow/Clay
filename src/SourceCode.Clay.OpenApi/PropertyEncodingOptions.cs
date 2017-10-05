@@ -9,8 +9,9 @@ namespace SourceCode.Clay.OpenApi
         /// The default options.
         /// </summary>
         None = 0,
+
         /// <summary>
-        /// Indicates that parameter values of type array or object generate separate parameters for each value of the array or 
+        /// Indicates that parameter values of type array or object generate separate parameters for each value of the array or
         /// key-value pair of the map.
         /// </summary>
         Explode = ParameterOptions.Explode,
@@ -22,7 +23,7 @@ namespace SourceCode.Clay.OpenApi
         /// Indicates that the parameter value allows reserved characters.
         /// </summary>
         AllowReserved = ParameterOptions.AllowReserved
-#       pragma warning restore S4016 // Enumeration members should not be named "Reserved"
 
+#       pragma warning restore S4016 // Enumeration members should not be named "Reserved"
     }
 }

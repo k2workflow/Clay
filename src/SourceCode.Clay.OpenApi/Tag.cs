@@ -35,8 +35,8 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The short description for the tag.</param>
         /// <param name="externalDocumentation">The additional external documentation for the tag.</param>
         public Tag(
-            string name = null, 
-            string description = null, 
+            string name = null,
+            string description = null,
             ExternalDocumentation externalDocumentation = null)
         {
             Name = name;

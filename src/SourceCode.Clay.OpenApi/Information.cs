@@ -58,11 +58,11 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="license">The license information for the exposed API.</param>
         /// <param name="version">The version of the exposed API.</param>
         public Information(
-            string title = default, 
-            string description = default, 
-            Uri termsOfService = default, 
-            Contact contact = default, 
-            License license = default, 
+            string title = default,
+            string description = default,
+            Uri termsOfService = default,
+            Contact contact = default,
+            License license = default,
             SemanticVersion version = default)
         {
             Title = title;
@@ -122,7 +122,7 @@ namespace SourceCode.Clay.OpenApi
             return information1.Equals((object)information2);
         }
 
-        public static bool operator !=(Information information1, Information information2) 
+        public static bool operator !=(Information information1, Information information2)
             => !(information1 == information2);
 
         #endregion

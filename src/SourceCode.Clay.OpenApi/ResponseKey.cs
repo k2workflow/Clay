@@ -241,6 +241,7 @@ namespace SourceCode.Clay.OpenApi
             : "default";
 
         public static bool operator ==(ResponseKey key1, ResponseKey key2) => key1.Equals(key2);
+
         public static bool operator !=(ResponseKey key1, ResponseKey key2) => !(key1 == key2);
 
         public static implicit operator ResponseKey(HttpStatusCode httpStatusCode) => new ResponseKey(httpStatusCode);

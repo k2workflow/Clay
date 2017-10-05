@@ -44,7 +44,6 @@ namespace SourceCode.Clay.OpenApi
         public NumberRange(Number? minimum, Number? maximum)
             : this(minimum, maximum, null, RangeOptions.Inclusive)
         {
-
         }
 
         /// <summary>
@@ -56,7 +55,6 @@ namespace SourceCode.Clay.OpenApi
         public NumberRange(Number? minimum, Number? maximum, RangeOptions rangeOptions)
             : this(minimum, maximum, null, rangeOptions)
         {
-
         }
 
         /// <summary>

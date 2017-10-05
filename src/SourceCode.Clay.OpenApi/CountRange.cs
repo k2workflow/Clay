@@ -39,7 +39,6 @@ namespace SourceCode.Clay.OpenApi
         public CountRange(uint? minimum, uint? maximum)
             : this(minimum, maximum, RangeOptions.Inclusive)
         {
-
         }
 
         /// <summary>

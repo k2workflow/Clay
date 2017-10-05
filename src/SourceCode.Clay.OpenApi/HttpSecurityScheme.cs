@@ -28,7 +28,7 @@ namespace SourceCode.Clay.OpenApi
         protected HttpSecurityScheme(
             string description = null,
             string scheme = null,
-            string bearerFormat = null) 
+            string bearerFormat = null)
             : base(description)
         {
             Scheme = scheme;

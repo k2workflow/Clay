@@ -1,15 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Collections;
 using SourceCode.Clay.Collections.Generic;
 using SourceCode.Clay.OpenApi.Expressions;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// A map of possible out-of band callbacks related to the parent operation. Each value in the map is a 
-    /// <see cref="Path"/> that describes a set of requests that may be initiated by the API provider and 
-    /// the expected responses. The key value used to identify the callback object is an expression, evaluated 
+    /// A map of possible out-of band callbacks related to the parent operation. Each value in the map is a
+    /// <see cref="Path"/> that describes a set of requests that may be initiated by the API provider and
+    /// the expected responses. The key value used to identify the callback object is an expression, evaluated
     /// at runtime, that identifies a URL to use for the callback operation.
     /// </summary>
     public class Callback : IReadOnlyDictionary<CompoundExpression, Referable<Path>>, IEquatable<Callback>
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new instance of the <see cref="Callback"/> class.
         /// </summary>
@@ -120,6 +120,7 @@ namespace SourceCode.Clay.OpenApi
             if (ReferenceEquals(callback1, null) || ReferenceEquals(callback2, null)) return false;
             return callback1.Equals((object)callback2);
         }
+
         public static bool operator !=(Callback callback1, Callback callback2) => !(callback1 == callback2);
 
         #endregion

@@ -35,7 +35,7 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new instance of the <see cref="Response"/> class.
         /// </summary>
@@ -44,9 +44,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="content">The map containing descriptions of potential response payloads.</param>
         /// <param name="links">The map of operations links that can be followed from the response.</param>
         public Response(
-            string description, 
-            IReadOnlyDictionary<string, Referable<ParameterBody>> headers, 
-            IReadOnlyDictionary<ContentType, MediaType> content, 
+            string description,
+            IReadOnlyDictionary<string, Referable<ParameterBody>> headers,
+            IReadOnlyDictionary<ContentType, MediaType> content,
             IReadOnlyDictionary<string, Referable<Link>> links)
         {
             Description = description;

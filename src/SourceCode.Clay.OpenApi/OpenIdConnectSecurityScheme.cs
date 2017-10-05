@@ -69,7 +69,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         public static bool operator !=(OpenIdConnectSecurityScheme scheme1, OpenIdConnectSecurityScheme scheme2)
-            => !(scheme1 == scheme2); 
+            => !(scheme1 == scheme2);
 
         #endregion
     }

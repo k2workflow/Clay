@@ -103,7 +103,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
-            !(flow1 == flow2); 
+            !(flow1 == flow2);
 
         #endregion
     }

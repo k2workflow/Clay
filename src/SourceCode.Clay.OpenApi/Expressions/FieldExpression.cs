@@ -38,11 +38,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Creates a new simple <see cref="FieldExpression"/>.
         /// </summary>
         /// <param name="expressionType">
-        ///     The expression type. This must be <see cref="FieldExpressionType.Url"/>, <see cref="FieldExpressionType.Method"/> 
+        ///     The expression type. This must be <see cref="FieldExpressionType.Url"/>, <see cref="FieldExpressionType.Method"/>
         ///     or <see cref="FieldExpressionType.StatusCode"/>.
         /// </param>
         public FieldExpression(FieldExpressionType expressionType)
@@ -53,6 +54,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 case FieldExpressionType.Method:
                 case FieldExpressionType.StatusCode:
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expressionType));
             }
@@ -85,6 +87,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 case FieldExpressionType.Request:
                 case FieldExpressionType.Response:
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expressionType));
             }
@@ -94,9 +97,11 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 case FieldExpressionSource.Header:
                     ValidateToken(name);
                     break;
+
                 case FieldExpressionSource.Query:
                 case FieldExpressionSource.Path:
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expressionSource));
             }
@@ -123,6 +128,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 case FieldExpressionType.Request:
                 case FieldExpressionType.Response:
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expressionType));
             }
@@ -132,6 +138,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             Name = null;
             Pointer = pointer;
         }
+
         #endregion
 
         #region Factory
@@ -205,9 +212,11 @@ namespace SourceCode.Clay.OpenApi.Expressions
         #endregion
 
         #region Token - https://tools.ietf.org/html/rfc7230#section-3.2.6
+
         private static readonly HashSet<char> _tchar = new HashSet<char>(
             "!#$%&'*+-.^_`|~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
+
         private static void ValidateToken(string name)
         {
             for (var i = 0; i < name.Length; i++)
@@ -225,6 +234,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
             return true;
         }
+
         #endregion
 
         #region Equatable
@@ -311,12 +321,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
         }
 
         /// <summary>
-        /// Converts the string representation of a field expression to its structured equivalent. 
+        /// Converts the string representation of a field expression to its structured equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="s">A string containing a field expression to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the field expression contained in <paramref name="s"/>, 
+        /// When this method returns, contains the structured equivalent of the field expression contained in <paramref name="s"/>,
         /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
         /// is not in a format compliant with the Open API field expression specification. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.

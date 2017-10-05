@@ -33,12 +33,12 @@ namespace SourceCode.Clay.OpenApi
         public Parameter(
             string name = default,
             ParameterLocation location = default,
-            string description = null, 
-            ParameterOptions options = ParameterOptions.None, 
-            ParameterStyle style = ParameterStyle.Default, 
-            Referable<Schema> schema = default, 
-            IReadOnlyDictionary<ContentType, Referable<Example>> examples = null, 
-            IReadOnlyDictionary<ContentType, MediaType> content = null) 
+            string description = null,
+            ParameterOptions options = ParameterOptions.None,
+            ParameterStyle style = ParameterStyle.Default,
+            Referable<Schema> schema = default,
+            IReadOnlyDictionary<ContentType, Referable<Example>> examples = null,
+            IReadOnlyDictionary<ContentType, MediaType> content = null)
             : base(description, options, style, schema, examples, content)
         {
             Name = name;

@@ -9,6 +9,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// A literal value.
         /// </summary>
         Literal = 0,
+
         /// <summary>
         /// A field getter.
         /// </summary>
