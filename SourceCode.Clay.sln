@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26929.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
 EndProject
@@ -31,9 +31,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Bench", "src\SourceCode.Clay.Collections.Bench\SourceCode.Clay.Collections.Bench.csproj", "{C0107BC5-3058-40DD-AC85-FF3E0F9404B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.OpenApi", "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj", "{70A6FD5F-A1DE-4443-8233-110C94011215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.OpenApi", "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj", "{70A6FD5F-A1DE-4443-8233-110C94011215}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.OpenApi.Tests", "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj", "{D54EA12F-1949-4BC3-A119-6FD48869DEDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.OpenApi.Tests", "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj", "{D54EA12F-1949-4BC3-A119-6FD48869DEDA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading", "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj", "{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading.Tests", "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj", "{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +105,14 @@ Global
 		{D54EA12F-1949-4BC3-A119-6FD48869DEDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D54EA12F-1949-4BC3-A119-6FD48869DEDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D54EA12F-1949-4BC3-A119-6FD48869DEDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +126,7 @@ Global
 		{83089EA0-510E-43A4-B316-FADC3C1D4C67} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{C0107BC5-3058-40DD-AC85-FF3E0F9404B2} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{D54EA12F-1949-4BC3-A119-6FD48869DEDA} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9F58E15-1F9A-4AAC-831F-9C7A81512C01}

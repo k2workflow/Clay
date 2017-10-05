@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Common properties defined in Directory.Build.props -->
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SourceCode.Clay.Collections\EmptyDictionaryImpl.cs" Link="EmptyDictionaryImpl.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.2" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.1.3596">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Threading</PackageId>
+    <Authors>SourceCode</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>Tools and extensions for working with threads.</Description>
+    <PackageTags>clay utility extension thread task parallel</PackageTags>
+  </PropertyGroup>
+</Project>
