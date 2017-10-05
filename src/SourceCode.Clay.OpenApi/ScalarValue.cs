@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -7,9 +14,15 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public struct ScalarValue : IEquatable<ScalarValue>, IFormattable
     {
+        #region Fields
+
         private readonly byte _typeCode;
         private readonly Number _number;
         private readonly string _string;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets the <see cref="Number"/> value.
@@ -79,6 +92,8 @@ namespace SourceCode.Clay.OpenApi
                 }
             }
         }
+
+        #endregion
 
         #region Constructors
 

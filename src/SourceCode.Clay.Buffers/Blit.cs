@@ -1,4 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
 {
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class Blit
     {
+        #region Methods
+
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.
         /// </summary>
@@ -118,5 +127,7 @@ namespace SourceCode.Clay.Buffers
 
             return unchecked((value >> b) | (value << (64 - b)));
         }
+
+        #endregion
     }
 }

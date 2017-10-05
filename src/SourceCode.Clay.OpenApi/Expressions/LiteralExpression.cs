@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi.Expressions
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public sealed class LiteralExpression : ExpressionComponent, IEquatable<LiteralExpression>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the literal value.
         /// </summary>
@@ -14,6 +23,10 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Gets the component type.</summary>
         public override ExpressionComponentType ComponentType => ExpressionComponentType.Literal;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="LiteralExpression"/> class.
@@ -23,6 +36,10 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -55,5 +72,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() => Value;
+
+        #endregion
     }
 }

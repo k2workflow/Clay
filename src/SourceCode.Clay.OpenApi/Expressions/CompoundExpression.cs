@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,14 +21,14 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         private readonly ExpressionComponent[] _components;
 
+        /// <summary>Gets the number of elements in the collection.</summary>
+        /// <returns>The number of elements in the collection.</returns>
+        public int Count => _components?.Length ?? 0;
+
         /// <summary>Gets the element at the specified index in the read-only list.</summary>
         /// <param name="index">The zero-based index of the element to get.</param>
         /// <returns>The element at the specified index in the read-only list.</returns>
         public ExpressionComponent this[int index] => (_components ?? Array.Empty<ExpressionComponent>())[index];
-
-        /// <summary>Gets the number of elements in the collection.</summary>
-        /// <returns>The number of elements in the collection.</returns>
-        public int Count => _components?.Length ?? 0;
 
         #endregion
 
@@ -94,37 +101,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         #endregion
 
         #region String
-
-        /// <summary>Returns the string format of the expression.</summary>
-        /// <returns>The string format of the expression.</returns>
-        public override string ToString()
-        {
-            if (_components == null) return string.Empty;
-
-            var sb = new StringBuilder();
-            for (var i = 0; i < _components.Length; i++)
-            {
-                var component = _components[i];
-
-                if (component is LiteralExpression literal)
-                {
-                    for (var j = 0; j < literal.Value.Length; j++)
-                    {
-                        var c = literal.Value[j];
-                        sb.Append(c);
-                        if (c == '{' || c == '}') sb.Append(c);
-                    }
-                }
-                else if (component is FieldExpression field)
-                {
-                    sb.Append("{");
-                    field.ToString(sb);
-                    sb.Append("}");
-                }
-            }
-
-            return sb.ToString();
-        }
 
         /// <summary>
         /// Converts the string representation of an expression to its structured equivalent.
@@ -210,6 +186,37 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
             result = new CompoundExpression(components.ToArray());
             return true;
+        }
+
+        /// <summary>Returns the string format of the expression.</summary>
+        /// <returns>The string format of the expression.</returns>
+        public override string ToString()
+        {
+            if (_components == null) return string.Empty;
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < _components.Length; i++)
+            {
+                var component = _components[i];
+
+                if (component is LiteralExpression literal)
+                {
+                    for (var j = 0; j < literal.Value.Length; j++)
+                    {
+                        var c = literal.Value[j];
+                        sb.Append(c);
+                        if (c == '{' || c == '}') sb.Append(c);
+                    }
+                }
+                else if (component is FieldExpression field)
+                {
+                    sb.Append("{");
+                    field.ToString(sb);
+                    sb.Append("}");
+                }
+            }
+
+            return sb.ToString();
         }
 
         #endregion

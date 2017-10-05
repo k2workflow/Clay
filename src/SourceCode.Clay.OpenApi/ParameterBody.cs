@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -78,6 +85,16 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        public static bool operator ==(ParameterBody parameterBody1, ParameterBody parameterBody2)
+        {
+            if (ReferenceEquals(parameterBody1, null) && ReferenceEquals(parameterBody2, null)) return true;
+            if (ReferenceEquals(parameterBody1, null) || ReferenceEquals(parameterBody2, null)) return false;
+            return parameterBody1.Equals((object)parameterBody2);
+        }
+
+        public static bool operator !=(ParameterBody parameterBody1, ParameterBody parameterBody2)
+                    => !(parameterBody1 == parameterBody2);
+
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
@@ -119,16 +136,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(ParameterBody parameterBody1, ParameterBody parameterBody2)
-        {
-            if (ReferenceEquals(parameterBody1, null) && ReferenceEquals(parameterBody2, null)) return true;
-            if (ReferenceEquals(parameterBody1, null) || ReferenceEquals(parameterBody2, null)) return false;
-            return parameterBody1.Equals((object)parameterBody2);
-        }
-
-        public static bool operator !=(ParameterBody parameterBody1, ParameterBody parameterBody2)
-            => !(parameterBody1 == parameterBody2);
 
         #endregion
     }

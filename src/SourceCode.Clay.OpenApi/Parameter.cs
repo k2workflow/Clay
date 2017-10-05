@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Net.Mime;
@@ -9,6 +16,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class Parameter : ParameterBody, IEquatable<Parameter>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the name of the parameter.
         /// </summary>
@@ -18,6 +27,10 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the location of the parameter.
         /// </summary>
         public ParameterLocation Location { get; }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="ParameterBody"/> class.
@@ -45,7 +58,18 @@ namespace SourceCode.Clay.OpenApi
             Location = location;
         }
 
+        #endregion
+
         #region Equatable
+
+        public static bool operator ==(Parameter parameter1, Parameter parameter2)
+        {
+            if (ReferenceEquals(parameter1, null) && ReferenceEquals(parameter2, null)) return true;
+            if (ReferenceEquals(parameter1, null) || ReferenceEquals(parameter2, null)) return false;
+            return parameter1.Equals((object)parameter2);
+        }
+
+        public static bool operator !=(Parameter parameter1, Parameter parameter2) => !(parameter1 == parameter2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -82,15 +106,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Parameter parameter1, Parameter parameter2)
-        {
-            if (ReferenceEquals(parameter1, null) && ReferenceEquals(parameter2, null)) return true;
-            if (ReferenceEquals(parameter1, null) || ReferenceEquals(parameter2, null)) return false;
-            return parameter1.Equals((object)parameter2);
-        }
-
-        public static bool operator !=(Parameter parameter1, Parameter parameter2) => !(parameter1 == parameter2);
 
         #endregion
     }

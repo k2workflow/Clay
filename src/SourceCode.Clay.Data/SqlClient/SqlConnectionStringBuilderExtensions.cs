@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Data.SqlClient;
 
 namespace SourceCode.Clay.Data.SqlClient
@@ -10,6 +17,8 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlConnectionStringBuilder"/>
     public static class SqlConnectionStringBuilderExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Clear any inline credentials store in the builder. This is useful for logging.
         /// </summary>
@@ -24,5 +33,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
             return sqlCsb;
         }
+
+        #endregion
     }
 }

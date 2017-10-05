@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Globalization;
 
@@ -86,11 +93,11 @@ namespace SourceCode.Clay.Json.Pointers
 
         public static bool operator !=(JsonPointerToken x, JsonPointerToken y) => !x.Equals(y);
 
+        public static implicit operator JsonPointerToken(string value) => new JsonPointerToken(value);
+
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString() => Value;
-
-        public static implicit operator JsonPointerToken(string value) => new JsonPointerToken(value);
 
         #endregion
     }

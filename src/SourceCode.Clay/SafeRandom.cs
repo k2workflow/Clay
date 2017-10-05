@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Security.Cryptography;
 using System.Threading;
 
@@ -9,6 +16,8 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class SafeRandom : Random
     {
+        #region Fields
+
         private static readonly RandomNumberGenerator _seedSource = RandomNumberGenerator.Create();
 
         private static ThreadLocal<Random> _local = new ThreadLocal<Random>(() =>
@@ -20,6 +29,10 @@ namespace SourceCode.Clay
             var rand = new Random(seed);
             return rand;
         });
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Returns a non-negative random integer.
@@ -61,5 +74,7 @@ namespace SourceCode.Clay
         /// A double-precision floating point number that is greater than or equal to 0.0, and less than 1.0.
         /// </returns>
         public override double NextDouble() => _local.Value.NextDouble();
+
+        #endregion
     }
 }

@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Globalization;
 
 namespace SourceCode.Clay
@@ -111,6 +118,59 @@ namespace SourceCode.Clay
 
         #region Parse
 
+        private static bool TryParseInt(string value, int startIndex, int endIndex, out int result)
+        {
+            if (endIndex < 0) endIndex = value.Length;
+
+            result = 0;
+            for (var i = startIndex; i < endIndex; i++)
+            {
+                var c = value[i];
+                if (c < '0' || c > '9') return false;
+                result = unchecked((result * 10) + (c - '0'));
+                if (result < 0) return false;
+            }
+
+            return true;
+        }
+
+        private static bool ValidateBuildMetadata(string value, int startIndex, int endIndex)
+        {
+            if (value == null) return true;
+            if (endIndex < 0) endIndex = value.Length - 1;
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                var c = value[i];
+                if (
+                    (c < '0' || c > '9') &&
+                    (c < 'a' || c > 'z') &&
+                    (c < 'A' || c > 'Z') &&
+                    (c != '-') &&
+                    (c != '.'))
+                    return false;
+            }
+            return true;
+        }
+
+        private static bool ValidatePreRelease(string value, int startIndex, int endIndex)
+        {
+            if (value == null) return true;
+            if (endIndex < 0) endIndex = value.Length - 1;
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                var c = value[i];
+                if (
+                    (c < '0' || c > '9') &&
+                    (c < 'a' || c > 'z') &&
+                    (c < 'A' || c > 'Z') &&
+                    (c != '-'))
+                    return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Converts the <see cref="string"/> representation of a semantic version to its structured equivalent.
         /// </summary>
@@ -209,59 +269,6 @@ namespace SourceCode.Clay
                     : s.Substring(preReleaseIndex + 1, buildMetadataIndex - preReleaseIndex - 1);
 
             result = new SemanticVersion(major, minor, patch, preRelease, buildMetadata);
-            return true;
-        }
-
-        private static bool TryParseInt(string value, int startIndex, int endIndex, out int result)
-        {
-            if (endIndex < 0) endIndex = value.Length;
-
-            result = 0;
-            for (var i = startIndex; i < endIndex; i++)
-            {
-                var c = value[i];
-                if (c < '0' || c > '9') return false;
-                result = unchecked((result * 10) + (c - '0'));
-                if (result < 0) return false;
-            }
-
-            return true;
-        }
-
-        private static bool ValidateBuildMetadata(string value, int startIndex, int endIndex)
-        {
-            if (value == null) return true;
-            if (endIndex < 0) endIndex = value.Length - 1;
-
-            for (var i = startIndex; i <= endIndex; i++)
-            {
-                var c = value[i];
-                if (
-                    (c < '0' || c > '9') &&
-                    (c < 'a' || c > 'z') &&
-                    (c < 'A' || c > 'Z') &&
-                    (c != '-') &&
-                    (c != '.'))
-                    return false;
-            }
-            return true;
-        }
-
-        private static bool ValidatePreRelease(string value, int startIndex, int endIndex)
-        {
-            if (value == null) return true;
-            if (endIndex < 0) endIndex = value.Length - 1;
-
-            for (var i = startIndex; i <= endIndex; i++)
-            {
-                var c = value[i];
-                if (
-                    (c < '0' || c > '9') &&
-                    (c < 'a' || c > 'z') &&
-                    (c < 'A' || c > 'Z') &&
-                    (c != '-'))
-                    return false;
-            }
             return true;
         }
 
@@ -427,20 +434,6 @@ namespace SourceCode.Clay
 
         #region String
 
-        /// <inheritdoc/>
-        public override string ToString() => ToDefinedFormatString('F', CultureInfo.InvariantCulture);
-
-        /// <inheritdoc/>
-        public string ToString(string format) => ToString(format, CultureInfo.InvariantCulture);
-
-        /// <inheritdoc/>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            if (string.IsNullOrEmpty(format)) format = "F";
-            if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
-            return ToDefinedFormatString(format[0], formatProvider);
-        }
-
         private string ToDefinedFormatString(char format, IFormatProvider formatProvider)
         {
             FormattableString str;
@@ -484,6 +477,20 @@ namespace SourceCode.Clay
             }
 
             return str.ToString(formatProvider ?? CultureInfo.InvariantCulture);
+        }
+
+        /// <inheritdoc/>
+        public override string ToString() => ToDefinedFormatString('F', CultureInfo.InvariantCulture);
+
+        /// <inheritdoc/>
+        public string ToString(string format) => ToString(format, CultureInfo.InvariantCulture);
+
+        /// <inheritdoc/>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (string.IsNullOrEmpty(format)) format = "F";
+            if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
+            return ToDefinedFormatString(format[0], formatProvider);
         }
 
         #endregion

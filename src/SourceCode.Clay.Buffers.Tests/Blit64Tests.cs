@@ -1,10 +1,19 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
     public static class Blit64Tests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_blitting_UInt64_to_Int64))]
         public static void When_blitting_UInt64_to_Int64()
@@ -74,5 +83,7 @@ namespace SourceCode.Clay.Buffers.Tests
                 Assert.Equal(actual.Byte7, actual.Blit1.Byte3);
             }
         }
+
+        #endregion
     }
 }

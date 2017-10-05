@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi.Expressions
@@ -7,14 +14,18 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public abstract class ExpressionComponent : IEquatable<ExpressionComponent>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the component type.
         /// </summary>
         public abstract ExpressionComponentType ComponentType { get; }
 
+        #endregion
+
         #region Ctor
 
-#       pragma warning disable S3442 // "abstract" classes should not have "public" constructors
+#pragma warning disable S3442 // "abstract" classes should not have "public" constructors
         // Reasoning: external inheritance not supported.
 
         /// <summary>
@@ -24,11 +35,21 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
         }
 
-#       pragma warning restore S3442 // "abstract" classes should not have "public" constructors
+#pragma warning restore S3442 // "abstract" classes should not have "public" constructors
 
         #endregion
 
         #region Equality
+
+        public static bool operator ==(ExpressionComponent expression1, ExpressionComponent expression2)
+        {
+            if (ReferenceEquals(expression1, expression2)) return true;
+            if (ReferenceEquals(expression1, null) || ReferenceEquals(expression2, null)) return false;
+
+            return expression1.Equals(expression2);
+        }
+
+        public static bool operator !=(ExpressionComponent expression1, ExpressionComponent expression2) => !(expression1 == expression2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -56,16 +77,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             if (ComponentType != other.ComponentType) return false;
             return Equals(other);
         }
-
-        public static bool operator ==(ExpressionComponent expression1, ExpressionComponent expression2)
-        {
-            if (ReferenceEquals(expression1, expression2)) return true;
-            if (ReferenceEquals(expression1, null) || ReferenceEquals(expression2, null)) return false;
-
-            return expression1.Equals(expression2);
-        }
-
-        public static bool operator !=(ExpressionComponent expression1, ExpressionComponent expression2) => !(expression1 == expression2);
 
         #endregion
     }

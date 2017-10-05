@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Data.SqlClient;
 
 namespace SourceCode.Clay.Data.SqlClient.Azure
@@ -10,6 +17,8 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
     /// <seealso cref="System.Data.SqlClient.SqlConnectionStringBuilder"/>
     public static class SqlConnectionStringBuilderAzureExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Add retry and timeout settings according to AzureDb best practices.
         /// </summary>
@@ -71,5 +80,7 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
 
             return sqlCsb;
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OpenIdConnectSecurityScheme : SecurityScheme, IEquatable<OpenIdConnectSecurityScheme>
     {
+        #region Properties
+
         /// <summary>Gets the type of the security scheme.</summary>
         public override SecuritySchemeType Type => SecuritySchemeType.OpenIdConnect;
 
@@ -14,6 +23,10 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the OpenId Connect URL to discover OAuth2 configuration values.
         /// </summary>
         public Uri Url { get; }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OpenIdConnectSecurityScheme"/>.
@@ -28,7 +41,19 @@ namespace SourceCode.Clay.OpenApi
             Url = url;
         }
 
+        #endregion
+
         #region Equatable
+
+        public static bool operator ==(OpenIdConnectSecurityScheme scheme1, OpenIdConnectSecurityScheme scheme2)
+        {
+            if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
+            if (ReferenceEquals(scheme1, null) || ReferenceEquals(scheme2, null)) return false;
+            return scheme1.Equals((object)scheme2);
+        }
+
+        public static bool operator !=(OpenIdConnectSecurityScheme scheme1, OpenIdConnectSecurityScheme scheme2)
+                    => !(scheme1 == scheme2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -60,16 +85,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(OpenIdConnectSecurityScheme scheme1, OpenIdConnectSecurityScheme scheme2)
-        {
-            if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
-            if (ReferenceEquals(scheme1, null) || ReferenceEquals(scheme2, null)) return false;
-            return scheme1.Equals((object)scheme2);
-        }
-
-        public static bool operator !=(OpenIdConnectSecurityScheme scheme1, OpenIdConnectSecurityScheme scheme2)
-            => !(scheme1 == scheme2);
 
         #endregion
     }

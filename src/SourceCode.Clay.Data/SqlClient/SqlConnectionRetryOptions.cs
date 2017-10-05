@@ -1,4 +1,11 @@
-﻿namespace SourceCode.Clay.Data.SqlClient
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
     /// A property bag to hold various connection retry options.
@@ -15,6 +22,10 @@
 
         private byte? _connectRetryCount;
 
+        private byte? _connectRetryInterval;
+
+        private ushort? _connectTimeout;
+
         /// <summary>
         /// The number of reconnections attempted after identifying that there was an
         /// idle connection failure. This must be an integer between 0 and 255. Default is 5.
@@ -26,8 +37,6 @@
             set => _connectRetryCount = value;
         }
 
-        private byte? _connectRetryInterval;
-
         /// <summary>
         /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an
         /// idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
@@ -37,8 +46,6 @@
             get => _connectRetryInterval.GetValueOrDefault(10);
             set => _connectRetryInterval = value;
         }
-
-        private ushort? _connectTimeout;
 
         /// <summary>
         /// Gets or sets the length of time (in seconds) to wait for a connection to the

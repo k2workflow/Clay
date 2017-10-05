@@ -1,10 +1,23 @@
-﻿using Xunit;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class EquatableExtensionsTests
     {
+        #region Fields
+
         private const string _a = "a";
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_nullable_equals_string))]
@@ -28,5 +41,7 @@ namespace SourceCode.Clay.Tests
         {
             Assert.Equal(expected, x.NullableEquals(y));
         }
+
+        #endregion
     }
 }

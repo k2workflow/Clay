@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +16,8 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class KeyedCollectionFactory
     {
+        #region Methods
+
         /// <summary>
         /// Creates a Dictionary that stores values containing embedded keys.
         /// </summary>
@@ -136,14 +145,28 @@ namespace SourceCode.Clay.Collections.Generic
             return impl;
         }
 
+        #endregion
+
         #region Implementation
 
         private sealed class KeyedCollectionImpl<TKey, TValue> : KeyedCollection<TKey, TValue>
         {
+            #region Fields
+
             private readonly Func<TValue, TKey> _keyExtractor;
 
+            #endregion
+
+            #region Methods
+
+            protected sealed override TKey GetKeyForItem(TValue item) => _keyExtractor(item);
+
+            #endregion
+
+            #region Constructors
+
             public KeyedCollectionImpl(Func<TValue, TKey> keyExtractor, IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
-                : base(comparer, dictionaryCreationThreshold)
+                            : base(comparer, dictionaryCreationThreshold)
             {
                 if (comparer == null) throw new ArgumentNullException(nameof(comparer));
                 if (dictionaryCreationThreshold < -1) throw new ArgumentOutOfRangeException(nameof(dictionaryCreationThreshold));
@@ -164,7 +187,7 @@ namespace SourceCode.Clay.Collections.Generic
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }
 
-            protected sealed override TKey GetKeyForItem(TValue item) => _keyExtractor(item);
+            #endregion
         }
 
         #endregion

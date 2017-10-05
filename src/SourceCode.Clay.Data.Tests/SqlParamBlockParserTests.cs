@@ -1,10 +1,19 @@
-﻿using System.Data;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System.Data;
 using Xunit;
 
 namespace SourceCode.Clay.Data.SqlParser.Tests
 {
     public static class SqlParamBlockParserTests
     {
+        #region Fields
+
         // Block comment is not closed
         private const string sqlBadComment = @"
 			CReaTE /*blah
@@ -13,15 +22,6 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 			BEGIN
                 RETURN 1;
 			END;";
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_bad_comment))]
-        public static void Tokenize_bad_comment()
-        {
-            var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
-
-            Assert.True(@params.Count == 0);
-        }
 
         // [abc]]def]
         // [abc[]]def]
@@ -34,15 +34,6 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 			    inT
 			BEGIN RETURN 1;
 			END; /**/";
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_escaped_names))]
-        public static void Tokenize_escaped_names()
-        {
-            var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
-
-            Assert.True(@params.Count == 0);
-        }
 
         private const string sqlMessyProcWithParen = @"
 			CReaTE /*blah*/
@@ -63,33 +54,6 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 			--blah */ etc
 				/* ok -- */
 			END;";
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
-        public static void Tokenize_messy_proc_2_params()
-        {
-            var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcWithParen);
-
-            Assert.Equal(2, @params.Count);
-
-            // @p1
-            var found = @params.TryGetValue("@p1", out var param);
-            Assert.True(found);
-
-            Assert.Equal(ParameterDirection.InputOutput, param.Direction);
-            Assert.True(param.HasDefault);
-            Assert.False(param.IsNullable);
-            Assert.False(param.IsReadOnly);
-
-            // @p_2
-            found = @params.TryGetValue("@p_2", out param);
-            Assert.True(found);
-
-            Assert.Equal(ParameterDirection.Input, param.Direction);
-            Assert.False(param.HasDefault);
-            Assert.False(param.IsNullable);
-            Assert.True(param.IsReadOnly);
-        }
 
         private const string sqlRealFunction = @"
 /*
@@ -122,6 +86,75 @@ AS RETURN
 );
 		";
 
+        private const string sqlMessyProcNoParen = @"
+			CReaTE /*blah*/
+				PROCedure            --etc
+			abc.[def]
+					/*
+						xyz -- /*
+					*/
+			@p  --test--
+			/* yada
+			*/
+			NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */
+			WITH ( OPTION -- opt
+               /* AS */ RECOMPILE) AS
+			/**/
+			BEGIN --
+			--
+			--blah */ etc
+				/* ok -- */
+			END;";
+
+        #endregion
+
+        #region Methods
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_bad_comment))]
+        public static void Tokenize_bad_comment()
+        {
+            var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
+
+            Assert.True(@params.Count == 0);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_escaped_names))]
+        public static void Tokenize_escaped_names()
+        {
+            var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
+
+            Assert.True(@params.Count == 0);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        public static void Tokenize_messy_proc_2_params()
+        {
+            var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcWithParen);
+
+            Assert.Equal(2, @params.Count);
+
+            // @p1
+            var found = @params.TryGetValue("@p1", out var param);
+            Assert.True(found);
+
+            Assert.Equal(ParameterDirection.InputOutput, param.Direction);
+            Assert.True(param.HasDefault);
+            Assert.False(param.IsNullable);
+            Assert.False(param.IsReadOnly);
+
+            // @p_2
+            found = @params.TryGetValue("@p_2", out param);
+            Assert.True(found);
+
+            Assert.Equal(ParameterDirection.Input, param.Direction);
+            Assert.False(param.HasDefault);
+            Assert.False(param.IsNullable);
+            Assert.True(param.IsReadOnly);
+        }
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(Tokenize_real_function_2_params))]
         public static void Tokenize_real_function_2_params()
@@ -149,26 +182,6 @@ AS RETURN
             Assert.False(param.IsReadOnly);
         }
 
-        private const string sqlMessyProcNoParen = @"
-			CReaTE /*blah*/
-				PROCedure            --etc
-			abc.[def]
-					/*
-						xyz -- /*
-					*/
-			@p  --test--
-			/* yada
-			*/
-			NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */
-			WITH ( OPTION -- opt
-               /* AS */ RECOMPILE) AS
-			/**/
-			BEGIN --
-			--
-			--blah */ etc
-				/* ok -- */
-			END;";
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
         public static void Tokenize_messy_proc_2_no_parenthesis()
@@ -186,5 +199,7 @@ AS RETURN
             Assert.False(param.IsNullable);
             Assert.False(param.IsReadOnly);
         }
+
+        #endregion
     }
 }

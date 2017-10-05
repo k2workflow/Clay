@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -24,6 +31,8 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Creates a new instance of the <see cref="ExternalDocumentation"/> class.
         /// </summary>
@@ -37,7 +46,19 @@ namespace SourceCode.Clay.OpenApi
             Url = url;
         }
 
+        #endregion
+
         #region IEquatable
+
+        public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
+        {
+            if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
+            if (ReferenceEquals(externalDocumentation1, null) || ReferenceEquals(externalDocumentation2, null)) return false;
+            return externalDocumentation1.Equals((object)externalDocumentation2);
+        }
+
+        public static bool operator !=(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
+                    => !(externalDocumentation1 == externalDocumentation2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -72,16 +93,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
-        {
-            if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
-            if (ReferenceEquals(externalDocumentation1, null) || ReferenceEquals(externalDocumentation2, null)) return false;
-            return externalDocumentation1.Equals((object)externalDocumentation2);
-        }
-
-        public static bool operator !=(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
-            => !(externalDocumentation1 == externalDocumentation2);
 
         #endregion
     }

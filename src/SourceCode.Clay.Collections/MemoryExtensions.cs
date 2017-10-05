@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,6 +16,8 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class MemoryExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
@@ -109,5 +118,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool MemoryEquals<T>(this ReadOnlyMemory<T> x, ReadOnlyMemory<T> y, bool sequential)
             => x.MemoryEquals(y, EqualityComparer<T>.Default, sequential);
+
+        #endregion
     }
 }

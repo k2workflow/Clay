@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 
 namespace SourceCode.Clay
 {
@@ -7,12 +14,22 @@ namespace SourceCode.Clay
     /// </summary>
     public static class DateTimeExtensions
     {
+        #region Fields
+
+        private static readonly long _difference = UnixEpoch.ToFileTimeUtc();
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets the Unix epoch as a <see cref="DateTime"/>.
         /// </summary>
         public static DateTime UnixEpoch { get; } = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        private static readonly long _difference = UnixEpoch.ToFileTimeUtc();
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Converts the specified <see cref="DateTime"/> to a Posix timestamp.
@@ -41,5 +58,7 @@ namespace SourceCode.Clay
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
         public static DateTime FromPosixFileTimeUtc(long posix) => DateTime.FromFileTimeUtc(posix + _difference);
+
+        #endregion
     }
 }

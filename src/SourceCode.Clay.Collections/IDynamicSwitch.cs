@@ -1,4 +1,11 @@
-﻿namespace SourceCode.Clay.Collections.Generic
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
     /// Interface used for exposing dynamic switch statements.
@@ -9,6 +16,17 @@
     /// <seealso cref="Expression.Switch"/>
     public interface IDynamicSwitch<in TKey, TValue>
     {
+        #region Properties
+
+        /// <summary>
+        /// The number of items in the switch.
+        /// </summary>
+        int Count { get; }
+
+        #endregion
+
+        #region Indexers
+
         /// <summary>
         /// Gets the value with the specified key.
         /// </summary>
@@ -16,10 +34,9 @@
         /// <returns></returns>
         TValue this[TKey key] { get; }
 
-        /// <summary>
-        /// The number of items in the switch.
-        /// </summary>
-        int Count { get; }
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Checks whether the specified key is present in the switch.
@@ -35,5 +52,7 @@
         /// <param name="value">The value.</param>
         /// <returns></returns>
         bool TryGetValue(TKey key, out TValue value);
+
+        #endregion
     }
 }

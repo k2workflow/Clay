@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -31,6 +38,8 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Creates a new instance of the <see cref="PropertyEncoding"/> class.
         /// </summary>
@@ -50,7 +59,19 @@ namespace SourceCode.Clay.OpenApi
             Options = options;
         }
 
+        #endregion
+
         #region IEquatable
+
+        public static bool operator ==(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
+        {
+            if (ReferenceEquals(propertyEncoding1, null) && ReferenceEquals(propertyEncoding2, null)) return true;
+            if (ReferenceEquals(propertyEncoding1, null) || ReferenceEquals(propertyEncoding2, null)) return false;
+            return propertyEncoding1.Equals((object)propertyEncoding2);
+        }
+
+        public static bool operator !=(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
+                    => !(propertyEncoding1 == propertyEncoding2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -89,16 +110,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
-        {
-            if (ReferenceEquals(propertyEncoding1, null) && ReferenceEquals(propertyEncoding2, null)) return true;
-            if (ReferenceEquals(propertyEncoding1, null) || ReferenceEquals(propertyEncoding2, null)) return false;
-            return propertyEncoding1.Equals((object)propertyEncoding2);
-        }
-
-        public static bool operator !=(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
-            => !(propertyEncoding1 == propertyEncoding2);
 
         #endregion
     }

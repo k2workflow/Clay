@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Net.Mail;
 
@@ -27,6 +34,8 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Creates a new instance of the <see cref="Contact"/> class.
         /// </summary>
@@ -43,7 +52,18 @@ namespace SourceCode.Clay.OpenApi
             Email = email;
         }
 
+        #endregion
+
         #region IEquatable
+
+        public static bool operator ==(Contact contact1, Contact contact2)
+        {
+            if (ReferenceEquals(contact1, null) && ReferenceEquals(contact2, null)) return true;
+            if (ReferenceEquals(contact1, null) || ReferenceEquals(contact2, null)) return false;
+            return contact1.Equals((object)contact2);
+        }
+
+        public static bool operator !=(Contact contact1, Contact contact2) => !(contact1 == contact2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -84,15 +104,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Contact contact1, Contact contact2)
-        {
-            if (ReferenceEquals(contact1, null) && ReferenceEquals(contact2, null)) return true;
-            if (ReferenceEquals(contact1, null) || ReferenceEquals(contact2, null)) return false;
-            return contact1.Equals((object)contact2);
-        }
-
-        public static bool operator !=(Contact contact1, Contact contact2) => !(contact1 == contact2);
 
         #endregion
     }

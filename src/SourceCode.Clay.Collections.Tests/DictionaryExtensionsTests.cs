@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class DictionaryExtensionsTests
     {
+        #region Fields
+
         private static readonly Dictionary<string, string> _dict = new Dictionary<string, string>()
         {
             ["foo"] = "foo1",
@@ -14,6 +23,10 @@ namespace SourceCode.Clay.Collections.Tests
             ["baz"] = "baz1",
             ["nin"] = "nin1"
         };
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
@@ -93,5 +106,7 @@ namespace SourceCode.Clay.Collections.Tests
             var equal = _dict.DictionaryEquals(dict2);
             Assert.False(equal);
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Json.Pointers;
 using System;
 
@@ -8,6 +15,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public struct Reference : IEquatable<Reference>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the URL portion of the reference.
         /// </summary>
@@ -22,6 +31,10 @@ namespace SourceCode.Clay.OpenApi
         /// Gets a value indicating whether the reference has a value.
         /// </summary>
         public bool HasValue => Url != null || Pointer.Count != 0;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new internal <see cref="Reference"/> value.
@@ -67,7 +80,13 @@ namespace SourceCode.Clay.OpenApi
             Pointer = pointer;
         }
 
+        #endregion
+
         #region Equatable
+
+        public static bool operator ==(Reference reference1, Reference reference2) => reference1.Equals(reference2);
+
+        public static bool operator !=(Reference reference1, Reference reference2) => !(reference1 == reference2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -97,28 +116,9 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(Reference reference1, Reference reference2) => reference1.Equals(reference2);
-
-        public static bool operator !=(Reference reference1, Reference reference2) => !(reference1 == reference2);
-
         #endregion
 
         #region Conversion
-
-        /// <summary>
-        /// Returns the reference formatted as a <see cref="Uri"/>.
-        /// </summary>
-        /// <returns>The reference formatted as a <see cref="Uri"/>.</returns>
-        public Uri ToUri()
-        {
-            if (!HasValue) return null;
-
-            var frag = "#" + Uri.EscapeUriString(Pointer.ToString());
-            if (Url == null) return new Uri(frag, UriKind.Relative);
-            else if (frag == "#") return Url;
-            else if (Url.IsAbsoluteUri) return new UriBuilder(Url) { Fragment = frag }.Uri;
-            else return new Uri(Url.OriginalString + frag, UriKind.Relative);
-        }
 
         /// <summary>
         /// Converts the URL representation of a reference to its structured equivalent.
@@ -197,10 +197,6 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Returns reference formatted as a string.</summary>
-        /// <returns>The reference formatted as a string.</returns>
-        public override string ToString() => ToUri()?.ToString() ?? string.Empty;
-
         public static implicit operator Reference(JsonPointer pointer) => pointer.Count == 0 ? default : new Reference(pointer);
 
         public static implicit operator Reference(Uri url) => url == null ? default : ParseUrl(url);
@@ -214,6 +210,25 @@ namespace SourceCode.Clay.OpenApi
 
             return ParseUrl(uri);
         }
+
+        /// <summary>
+        /// Returns the reference formatted as a <see cref="Uri"/>.
+        /// </summary>
+        /// <returns>The reference formatted as a <see cref="Uri"/>.</returns>
+        public Uri ToUri()
+        {
+            if (!HasValue) return null;
+
+            var frag = "#" + Uri.EscapeUriString(Pointer.ToString());
+            if (Url == null) return new Uri(frag, UriKind.Relative);
+            else if (frag == "#") return Url;
+            else if (Url.IsAbsoluteUri) return new UriBuilder(Url) { Fragment = frag }.Uri;
+            else return new Uri(Url.OriginalString + frag, UriKind.Relative);
+        }
+
+        /// <summary>Returns reference formatted as a string.</summary>
+        /// <returns>The reference formatted as a string.</returns>
+        public override string ToString() => ToUri()?.ToString() ?? string.Empty;
 
         #endregion
     }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,6 +17,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public struct CountRange : IEquatable<CountRange>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the minimum value.
         /// </summary>
@@ -30,6 +39,10 @@ namespace SourceCode.Clay.OpenApi
         /// has a value.
         /// </summary>
         public bool HasValue => Minimum.HasValue || Maximum.HasValue;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new inclusive <see cref="NumberRange"/> value.
@@ -57,6 +70,10 @@ namespace SourceCode.Clay.OpenApi
             Maximum = maximum;
             RangeOptions = rangeOptions;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -111,5 +128,7 @@ namespace SourceCode.Clay.OpenApi
 
             return sb.ToString();
         }
+
+        #endregion
     }
 }

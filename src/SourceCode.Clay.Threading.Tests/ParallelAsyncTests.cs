@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +17,8 @@ namespace SourceCode.Clay.Threading.Tests
 {
     public static class ParallelAsyncTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(ParallelAsync_ForEach_Action_Default_Arguments))]
         [InlineData(null)]
@@ -261,6 +270,8 @@ namespace SourceCode.Clay.Threading.Tests
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
         }
+
+        #endregion
 
         #region Timing
 

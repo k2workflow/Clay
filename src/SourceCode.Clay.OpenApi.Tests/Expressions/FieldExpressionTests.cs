@@ -1,14 +1,20 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Json.Pointers;
 using SourceCode.Clay.OpenApi.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace SourceCode.Clay.OpenApi.Tests.Expressions
 {
     public static class FieldExpressionTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(FieldExpression_Parse_Url))]
         public static void FieldExpression_Parse_Url()
         {
@@ -72,7 +78,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
             Assert.Equal(JsonPointer.Parse("/foo/bar"), sut.Pointer);
             Assert.Equal("$request.body#/foo/bar", sut.ToString());
         }
-        
+
         [Fact(DisplayName = nameof(FieldExpression_Parse_ResponseHeader))]
         public static void FieldExpression_Parse_ResponseHeader()
         {
@@ -112,5 +118,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
             Assert.Equal(JsonPointer.Parse("/foo/bar"), sut.Pointer);
             Assert.Equal("$response.body#/foo/bar", sut.ToString());
         }
+
+        #endregion
     }
 }
