@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>
         /// The transformed key value.
         /// </returns>
-        protected override string NormalizeKey(string key) => key.ToUpperInvariant();
+        protected override string NormalizeKey(string key) => key.ToUpperInvariant(); // Apparently UC (vs LC) is optimized in CLR
 
         #endregion
 
@@ -40,7 +40,5 @@ namespace SourceCode.Clay.Collections.Generic
         { }
 
         #endregion
-
-        // Apparently UC (vs LC) is optimized in CLR
     }
 }
