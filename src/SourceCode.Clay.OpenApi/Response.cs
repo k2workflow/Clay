@@ -44,10 +44,10 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="content">The map containing descriptions of potential response payloads.</param>
         /// <param name="links">The map of operations links that can be followed from the response.</param>
         public Response(
-            string description,
-            IReadOnlyDictionary<string, Referable<ParameterBody>> headers,
-            IReadOnlyDictionary<ContentType, MediaType> content,
-            IReadOnlyDictionary<string, Referable<Link>> links)
+            string description = default,
+            IReadOnlyDictionary<string, Referable<ParameterBody>> headers = default,
+            IReadOnlyDictionary<ContentType, MediaType> content = default,
+            IReadOnlyDictionary<string, Referable<Link>> links = default)
         {
             Description = description;
             Headers = headers ?? ReadOnlyDictionary.Empty<string, Referable<ParameterBody>>();

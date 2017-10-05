@@ -40,9 +40,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The optional string describing the host designated by the URL.</param>
         /// <param name="variables">The map between a variable name and its value.</param>
         public Server(
-            Uri url,
-            string description,
-            IReadOnlyDictionary<string, ServerVariable> variables)
+            Uri url = default,
+            string description = default,
+            IReadOnlyDictionary<string, ServerVariable> variables = default)
         {
             Url = url;
             Description = description;

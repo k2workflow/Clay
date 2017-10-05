@@ -29,8 +29,8 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="name">The licese named used for the API.</param>
         /// <param name="url">The URL to the license used for the API.</param>
         public License(
-            string name = null,
-            Uri url = null)
+            string name = default,
+            Uri url = default)
         {
             Name = name;
             Url = url;

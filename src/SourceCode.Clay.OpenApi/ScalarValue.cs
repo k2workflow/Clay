@@ -80,7 +80,7 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        #region Ctor
+        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.

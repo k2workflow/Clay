@@ -40,9 +40,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="default">The default value to use for substitution, and to send, if an alternate value is not supplied. </param>
         /// <param name="description">The description for the server variable.</param>
         public ServerVariable(
-            IReadOnlyList<string> @enum,
-            string @default,
-            string description)
+            IReadOnlyList<string> @enum = default,
+            string @default = default,
+            string description = default)
         {
             Enum = @enum ?? Array.Empty<string>();
             Default = @default;
