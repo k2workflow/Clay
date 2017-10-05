@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -7,7 +7,7 @@ using System.Security;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to calculate hash codes.
+    ///   Represents a way to calculate hash codes.
     /// </summary>
     public static partial class HashCode // .Fnv
     {
@@ -22,18 +22,17 @@ namespace SourceCode.Clay.Buffers
         // Chosen hash for a null input. Thanks for all the fish
         internal const int FnvNull = 42; // Marked internal for Unit visibility
 
-        #endregion
+        #endregion Constants
 
         #region Root Implementations
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
-        /// <param name="buffer">The array containing the range of bytes to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <param name="buffer">
+        ///   The array containing the range of bytes to include in the hash code.
+        /// </param>
+        /// <returns>The hash code.</returns>
         public static int Fnv(params byte[] buffer)
         {
             if (buffer == null) return FnvNull;
@@ -54,13 +53,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
-        /// <param name="buffer">The <see cref="ReadOnlySpan{T}"/> containing the range of bytes to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <param name="buffer">
+        ///   The <see cref="ReadOnlySpan{T}"/> containing the range of bytes to include in the hash code.
+        /// </param>
+        /// <returns>The hash code.</returns>
         public static int Fnv(ReadOnlySpan<byte> span)
         {
             // ReadOnly/Span is a struct, nore do its ctors permit null. So null check is redundant.
@@ -81,8 +79,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="buffer">A pointer to the initial octet in the data.</param>
         /// <param name="count">The number of octets to include in the hash code.</param>
@@ -111,13 +108,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="fields">The fields to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IReadOnlyList<int> fields)
@@ -147,13 +141,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="fields">The fields to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IEnumerable<int> fields)
@@ -182,20 +173,19 @@ namespace SourceCode.Clay.Buffers
             }
         }
 
-        #endregion
+        #endregion Root Implementations
 
         #region Overloads
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
-        /// <param name="buffer">The array containing the range of bytes to include in the hash code.</param>
+        /// <param name="buffer">
+        ///   The array containing the range of bytes to include in the hash code.
+        /// </param>
         /// <param name="offset">The zero-based index of the first element in the range.</param>
         /// <param name="count">The number of elements in the range.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(byte[] buffer, int offset, int count)
@@ -216,13 +206,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="buffer">The range of bytes to incldue in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(ArraySegment<byte> buffer)
@@ -238,13 +225,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="buffer">The range of bytes to incldue in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IReadOnlyList<byte> buffer)
@@ -267,13 +251,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="buffer">The range of bytes to incldue in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IList<byte> buffer)
@@ -296,13 +277,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="buffer">The range of bytes to incldue in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(IEnumerable<byte> buffer)
@@ -324,13 +302,10 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="fields">The fields to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(params int[] fields)
@@ -346,14 +321,11 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="a">The first hash code to include in the hash code.</param>
         /// <param name="b">The second hash code to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b)
@@ -367,15 +339,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="a">The first hash code to include in the hash code.</param>
         /// <param name="b">The second hash code to include in the hash code.</param>
         /// <param name="c">The third hash code to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c)
@@ -390,16 +359,13 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="a">The first hash code to include in the hash code.</param>
         /// <param name="b">The second hash code to include in the hash code.</param>
         /// <param name="c">The third hash code to include in the hash code.</param>
         /// <param name="d">The fourth hash code to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c, int d)
@@ -415,17 +381,14 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Calculates a hash code from the specified data using the
-        /// Fowler/Noll/Vo 1-a algorithm.
+        ///   Calculates a hash code from the specified data using the Fowler/Noll/Vo 1-a algorithm.
         /// </summary>
         /// <param name="a">The first hash code to include in the hash code.</param>
         /// <param name="b">The second hash code to include in the hash code.</param>
         /// <param name="c">The third hash code to include in the hash code.</param>
         /// <param name="d">The fourth hash code to include in the hash code.</param>
         /// <param name="e">The fifth hash code to include in the hash code.</param>
-        /// <returns>
-        /// The hash code.
-        /// </returns>
+        /// <returns>The hash code.</returns>
         [SecurityCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe int Fnv(int a, int b, int c, int d, int e)
@@ -441,6 +404,6 @@ namespace SourceCode.Clay.Buffers
             return hc;
         }
 
-        #endregion
+        #endregion Overloads
     }
 }

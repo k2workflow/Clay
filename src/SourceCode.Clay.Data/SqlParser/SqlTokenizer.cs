@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,10 +12,11 @@ namespace SourceCode.Clay.Data.SqlParser
         #region Tokenize
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="sql"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
@@ -29,10 +30,11 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
@@ -45,15 +47,16 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        #endregion
+        #endregion Tokenize
 
         #region Helpers
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
@@ -221,17 +224,18 @@ namespace SourceCode.Clay.Data.SqlParser
             return true;
         }
 
-        #endregion
+        #endregion Helpers
 
         #region Whitespace
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="peekBuffer"></param>
         /// <param name="peekLength"></param>
         /// <param name="reader"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         private static SqlTokenInfo ReadWhitespace(char[] peekBuffer, int peekLength, SqlCharReader reader, bool skipSundry)
         {
@@ -297,7 +301,7 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
+        #endregion Whitespace
 
         #region String
 
@@ -345,8 +349,7 @@ namespace SourceCode.Clay.Data.SqlParser
                 // If we found a delimiter
                 if (idx >= 0)
                 {
-                    // If it is an escaped delimiter
-                    // https://docs.microsoft.com/en-us/sql/t-sql/functions/quotename-transact-sql
+                    // If it is an escaped delimiter https://docs.microsoft.com/en-us/sql/t-sql/functions/quotename-transact-sql
                     if (idx >= 1 && Contains(buffer, idx, count, ']', ']'))
                     {
                         // Keep going
@@ -486,18 +489,19 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
+        #endregion String
 
         #region Comment
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="peekBuffer"></param>
         /// <param name="peekLength"></param>
         /// <param name="isBlockComment"></param>
         /// <param name="reader"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         private static SqlTokenInfo ReadBlockComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
         {
@@ -553,13 +557,14 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="peekBuffer"></param>
         /// <param name="peekLength"></param>
         /// <param name="isBlockComment"></param>
         /// <param name="reader"></param>
-        /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+        /// <param name="skipSundry">
+        ///   Do not emit sundry tokens (such as comments and whitespace) in the output.
+        /// </param>
         /// <returns></returns>
         private static SqlTokenInfo ReadLineComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
         {
@@ -615,7 +620,7 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
+        #endregion Comment
 
         #region Symbol
 
@@ -667,7 +672,7 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
+        #endregion Symbol
 
         #region Literal
 
@@ -758,6 +763,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
+        #endregion Literal
     }
 }

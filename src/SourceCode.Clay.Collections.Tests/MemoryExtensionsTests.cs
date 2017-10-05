@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using System;
 using Xunit;
 
@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class MemoryExtensionsTests
     {
-        private static readonly ReadOnlyMemory<string> _null = new ReadOnlyMemory<string>();
+        #region Fields
 
         private static readonly string[] _list = new[]
         {
@@ -16,16 +16,11 @@ namespace SourceCode.Clay.Collections.Tests
             "nin"
         };
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_both_null))]
-        public static void MemoryEquals_both_null()
-        {
-            var equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, false);
-            Assert.True(equal);
+        private static readonly ReadOnlyMemory<string> _null = new ReadOnlyMemory<string>();
 
-            equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, true);
-            Assert.True(equal);
-        }
+        #endregion Fields
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(MemoryEquals_both_empty))]
@@ -38,6 +33,17 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.True(equal);
 
             equal = list1.MemoryEquals(list2, StringComparer.Ordinal, true);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(MemoryEquals_both_null))]
+        public static void MemoryEquals_both_null()
+        {
+            var equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, false);
+            Assert.True(equal);
+
+            equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
@@ -69,15 +75,6 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_one_null))]
-        public static void MemoryEquals_one_null()
-        {
-            var list = new ReadOnlyMemory<string>(_list);
-            var equal = list.MemoryEquals(_null, StringComparer.Ordinal, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(MemoryEquals_different_count))]
         public static void MemoryEquals_different_count()
         {
@@ -94,23 +91,23 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_IsEqual_sequential_true))]
-        public static void MemoryEquals_IsEqual_sequential_true()
+        [Fact(DisplayName = nameof(MemoryEquals_duplicates))]
+        public static void MemoryEquals_duplicates()
         {
             var list = new ReadOnlyMemory<string>(_list);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[0],
+                _list[2],
                 _list[1],
                 _list[2],
-                _list[3]
+                _list[0]
             });
 
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
+            var equal = list.MemoryEquals(list2, true);
+            Assert.False(equal);
 
-            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
+            equal = list.MemoryEquals(list2, false);
+            Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
@@ -134,23 +131,23 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_NotEqual_sequential_true))]
-        public static void MemoryEquals_NotEqual_sequential_true()
+        [Fact(DisplayName = nameof(MemoryEquals_IsEqual_sequential_true))]
+        public static void MemoryEquals_IsEqual_sequential_true()
         {
             var list = new ReadOnlyMemory<string>(_list);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
                 _list[0],
                 _list[1],
-                "a",
+                _list[2],
                 _list[3]
             });
 
             var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
+            Assert.True(equal);
 
             equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
-            Assert.False(equal);
+            Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
@@ -174,23 +171,34 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_duplicates))]
-        public static void MemoryEquals_duplicates()
+        [Fact(DisplayName = nameof(MemoryEquals_NotEqual_sequential_true))]
+        public static void MemoryEquals_NotEqual_sequential_true()
         {
             var list = new ReadOnlyMemory<string>(_list);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[2],
+                _list[0],
                 _list[1],
-                _list[2],
-                _list[0]
+                "a",
+                _list[3]
             });
 
-            var equal = list.MemoryEquals(list2, true);
+            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
             Assert.False(equal);
 
-            equal = list.MemoryEquals(list2, false);
+            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(MemoryEquals_one_null))]
+        public static void MemoryEquals_one_null()
+        {
+            var list = new ReadOnlyMemory<string>(_list);
+            var equal = list.MemoryEquals(_null, StringComparer.Ordinal, false);
+            Assert.False(equal);
+        }
+
+        #endregion Methods
     }
 }

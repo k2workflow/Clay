@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// A memory-efficient internal implementation of a Dictionary that has zero members.
-    /// Useful for scenarios where the equivalent of <see cref="Array.Empty{T}"/> is required
-    /// for <see cref="IDictionary{TKey, TValue}"/> or <see cref="IReadOnlyDictionary{TKey, TValue}"/>.
+    ///   A memory-efficient internal implementation of a Dictionary that has zero members. Useful
+    ///   for scenarios where the equivalent of <see cref="Array.Empty{T}"/> is required for <see
+    ///   cref="IDictionary{TKey, TValue}"/> or <see cref="IReadOnlyDictionary{TKey, TValue}"/>.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
@@ -15,19 +15,30 @@ namespace SourceCode.Clay.Collections.Generic
     {
         #region Constants
 
+        internal static readonly IReadOnlyDictionary<TKey, TValue> ReadOnlyValue = (IReadOnlyDictionary<TKey, TValue>)Value;
         internal static readonly IDictionary<TKey, TValue> Value = new EmptyDictionaryImpl<TKey, TValue>();
 
-        internal static readonly IReadOnlyDictionary<TKey, TValue> ReadOnlyValue = (IReadOnlyDictionary<TKey, TValue>)Value;
-
-        #endregion
+        #endregion Constants
 
         #region Fields
 
         private readonly IReadOnlyDictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>(0);
 
-        #endregion
+        #endregion Fields
 
         #region Properties
+
+        public int Count => 0;
+
+        public bool IsReadOnly => true;
+
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
+
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
+
+        ICollection<TValue> IDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
+
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
 
         public TValue this[TKey key]
         {
@@ -35,26 +46,14 @@ namespace SourceCode.Clay.Collections.Generic
             set => throw new InvalidOperationException();
         }
 
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
-
-        ICollection<TValue> IDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
-
-        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
-
-        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
-
-        public int Count => 0;
-
-        public bool IsReadOnly => true;
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         private EmptyDictionaryImpl()
         { }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -88,7 +87,7 @@ namespace SourceCode.Clay.Collections.Generic
             return false;
         }
 
-        #endregion
+        #endregion Methods
 
         #region IEnumerable
 
@@ -102,6 +101,6 @@ namespace SourceCode.Clay.Collections.Generic
             yield break;
         }
 
-        #endregion
+        #endregion IEnumerable
     }
 }

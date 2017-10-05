@@ -4,14 +4,16 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="IReadOnlyDictionary{TKey, TValue}{T}"/>.
+    ///   Represents extensions for <see cref="IReadOnlyDictionary{TKey, TValue}{T}"/>.
     /// </summary>
     public static class DictionaryExtensions
     {
+        #region Methods
+
         /// <summary>
-        /// Performs an efficient item-by-item comparison
-        /// using the <see cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons
-        /// and the specified <see cref="IEqualityComparer{T}"/> for Value comparisons.
+        ///   Performs an efficient item-by-item comparison using the <see
+        ///   cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons and the
+        ///   specified <see cref="IEqualityComparer{T}"/> for Value comparisons.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Dictionary 1</param>
@@ -32,7 +34,8 @@ namespace SourceCode.Clay.Collections.Generic
             // If counts are different, not equal
             if (x.Count != y.Count) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and
+            // thus equal)
             if (x.Count == 0) return true;
 
             // For each key in the first dictionary...
@@ -49,9 +52,9 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an efficient item-by-item comparison,
-        /// using the <see cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons
-        /// and the default <see cref="IEqualityComparer{T}"/> for Value comparisons.
+        ///   Performs an efficient item-by-item comparison, using the <see
+        ///   cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons and the
+        ///   default <see cref="IEqualityComparer{T}"/> for Value comparisons.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Dictionary 1</param>
@@ -59,5 +62,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
             => x.DictionaryEquals(y, EqualityComparer<TValue>.Default);
+
+        #endregion Methods
     }
 }

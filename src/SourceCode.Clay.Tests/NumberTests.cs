@@ -8,83 +8,10 @@ namespace SourceCode.Clay.Tests
 
     public static class NumberTests
     {
-        [
-            InlineData("null", null, NumberKind.Null, false),
-            InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
-            InlineData(nameof(Byte), (byte)2, NumberKind.Integer, false),
-            InlineData(nameof(Int16) + "=0", (short)0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int16), (short)3, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt16) + "=0", (ushort)0, NumberKind.Integer, true),
-            InlineData(nameof(UInt16), (ushort)4, NumberKind.Integer, false),
-            InlineData(nameof(Int32) + "=0", 0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int32), 5, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt32) + "=0", 0U, NumberKind.Integer, true),
-            InlineData(nameof(UInt32), 6U, NumberKind.Integer, false),
-            InlineData(nameof(Int64) + "=0", 0L, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int64), 7L, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt64) + "=0", 0UL, NumberKind.Integer, true),
-            InlineData(nameof(UInt64), 8UL, NumberKind.Integer, false),
-            InlineData(nameof(Single) + "=0", 0.0F, NumberKind.Real | NumberKind.Signed, true),
-            InlineData(nameof(Single), 9.0F, NumberKind.Real | NumberKind.Signed, false),
-            InlineData(nameof(Double) + "=0", 0.0, NumberKind.Real | NumberKind.Signed, true),
-            InlineData(nameof(Double), 10.0, NumberKind.Real | NumberKind.Signed, false),
-            InlineData(nameof(Decimal), 10.0, NumberKind.Real | NumberKind.Signed, false)
-        ]
-        [Theory(DisplayName = nameof(Number_ContructGet))]
-        public static void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
-        {
-            // InlineData does not like decimal literals (eg 10.0m)
-            if (description == nameof(Decimal))
-                expected = (decimal)(double)expected;
-
-            var actual = Number.CreateFromObject(expected);
-            Assert.Equal(expected, actual.Value);
-
-            if (expected == null) return;
-
-            var t = expected.GetType();
-            var nullable = typeof(Nullable<>).MakeGenericType(t);
-            var nullableCtor = nullable.GetConstructor(new[] { t });
-
-            actual = Number.CreateFromObject(nullableCtor.Invoke(new[] { expected }));
-            Assert.Equal(expected, actual.Value);
-            Assert.Equal(kind, actual.Kind);
-            Assert.Equal(isZero, actual.IsZero);
-
-            actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
-            Assert.False(actual.HasValue);
-            Assert.Equal(NumberKind.Null, actual.Kind);
-            Assert.False(actual.IsZero);
-        }
+        #region Methods
 
         [
-            InlineData(nameof(SByte), (sbyte)1),
-            InlineData(nameof(Byte), (byte)2),
-            InlineData(nameof(Int16), (short)3),
-            InlineData(nameof(UInt16), (ushort)4),
-            InlineData(nameof(Int32), 5),
-            InlineData(nameof(UInt32), 6U),
-            InlineData(nameof(Int64), 7L),
-            InlineData(nameof(UInt64), 8UL),
-            InlineData(nameof(Single), 9.0F),
-            InlineData(nameof(Double), 10.0),
-            InlineData(nameof(Decimal), 10.0)
-        ]
-        [Theory(DisplayName = nameof(Number_ToString))]
-        public static void Number_ToString(string description, object expected)
-        {
-            // InlineData does not like decimal literals (eg 10.0m)
-            if (description == nameof(Decimal))
-                expected = (decimal)(double)expected;
-
-            var actual = Number.CreateFromObject(expected);
-            Assert.Equal(expected.ToString(), actual.ToString());
-        }
-
-        [
-            InlineData(nameof(SByte), nameof(SByte), (sbyte)-100, (sbyte)100, (sbyte)-100, (sbyte)100),
+                    InlineData(nameof(SByte), nameof(SByte), (sbyte)-100, (sbyte)100, (sbyte)-100, (sbyte)100),
             InlineData(nameof(SByte), nameof(Byte), (sbyte)10, (sbyte)100, (byte)10, (byte)100),
             InlineData(nameof(SByte), nameof(Int16), (sbyte)-100, (sbyte)100, (short)-100, (short)100),
             InlineData(nameof(SByte), nameof(UInt16), (sbyte)10, (sbyte)100, (ushort)10, (ushort)100),
@@ -396,13 +323,89 @@ namespace SourceCode.Clay.Tests
             var aMax = Number.CreateFromObject(aT.GetField("MaxValue").GetValue(null));
             var bMax = Number.CreateFromObject(bT.GetField("MaxValue").GetValue(null));
 
-            // Simply make sure that these don't throw,
-            // there's no simple way to do a compare without Number.
+            // Simply make sure that these don't throw, there's no simple way to do a compare without Number.
             aMin.CompareTo(bMin);
             aMin.CompareTo(bMax);
             aMax.CompareTo(bMin);
             aMax.CompareTo(bMax);
         }
+
+        [
+                            InlineData("null", null, NumberKind.Null, false),
+            InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
+            InlineData(nameof(Byte), (byte)2, NumberKind.Integer, false),
+            InlineData(nameof(Int16) + "=0", (short)0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int16), (short)3, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt16) + "=0", (ushort)0, NumberKind.Integer, true),
+            InlineData(nameof(UInt16), (ushort)4, NumberKind.Integer, false),
+            InlineData(nameof(Int32) + "=0", 0, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int32), 5, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt32) + "=0", 0U, NumberKind.Integer, true),
+            InlineData(nameof(UInt32), 6U, NumberKind.Integer, false),
+            InlineData(nameof(Int64) + "=0", 0L, NumberKind.Integer | NumberKind.Signed, true),
+            InlineData(nameof(Int64), 7L, NumberKind.Integer | NumberKind.Signed, false),
+            InlineData(nameof(UInt64) + "=0", 0UL, NumberKind.Integer, true),
+            InlineData(nameof(UInt64), 8UL, NumberKind.Integer, false),
+            InlineData(nameof(Single) + "=0", 0.0F, NumberKind.Real | NumberKind.Signed, true),
+            InlineData(nameof(Single), 9.0F, NumberKind.Real | NumberKind.Signed, false),
+            InlineData(nameof(Double) + "=0", 0.0, NumberKind.Real | NumberKind.Signed, true),
+            InlineData(nameof(Double), 10.0, NumberKind.Real | NumberKind.Signed, false),
+            InlineData(nameof(Decimal), 10.0, NumberKind.Real | NumberKind.Signed, false)
+        ]
+        [Theory(DisplayName = nameof(Number_ContructGet))]
+        public static void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
+        {
+            // InlineData does not like decimal literals (eg 10.0m)
+            if (description == nameof(Decimal))
+                expected = (decimal)(double)expected;
+
+            var actual = Number.CreateFromObject(expected);
+            Assert.Equal(expected, actual.Value);
+
+            if (expected == null) return;
+
+            var t = expected.GetType();
+            var nullable = typeof(Nullable<>).MakeGenericType(t);
+            var nullableCtor = nullable.GetConstructor(new[] { t });
+
+            actual = Number.CreateFromObject(nullableCtor.Invoke(new[] { expected }));
+            Assert.Equal(expected, actual.Value);
+            Assert.Equal(kind, actual.Kind);
+            Assert.Equal(isZero, actual.IsZero);
+
+            actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
+            Assert.False(actual.HasValue);
+            Assert.Equal(NumberKind.Null, actual.Kind);
+            Assert.False(actual.IsZero);
+        }
+
+        [
+            InlineData(nameof(SByte), (sbyte)1),
+            InlineData(nameof(Byte), (byte)2),
+            InlineData(nameof(Int16), (short)3),
+            InlineData(nameof(UInt16), (ushort)4),
+            InlineData(nameof(Int32), 5),
+            InlineData(nameof(UInt32), 6U),
+            InlineData(nameof(Int64), 7L),
+            InlineData(nameof(UInt64), 8UL),
+            InlineData(nameof(Single), 9.0F),
+            InlineData(nameof(Double), 10.0),
+            InlineData(nameof(Decimal), 10.0)
+        ]
+        [Theory(DisplayName = nameof(Number_ToString))]
+        public static void Number_ToString(string description, object expected)
+        {
+            // InlineData does not like decimal literals (eg 10.0m)
+            if (description == nameof(Decimal))
+                expected = (decimal)(double)expected;
+
+            var actual = Number.CreateFromObject(expected);
+            Assert.Equal(expected.ToString(), actual.ToString());
+        }
+
+        #endregion Methods
     }
 
 #   pragma warning restore xUnit1026 // Theory methods should use all of their parameters

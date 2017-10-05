@@ -1,22 +1,17 @@
-﻿namespace SourceCode.Clay.Json.Validation
+namespace SourceCode.Clay.Json.Validation
 {
     public sealed class DoubleValidator
     {
         #region Properties
 
-        public double? Min { get; }
-
         public double? Max { get; }
-
-        public bool MinExclusive { get; }
-
         public bool MaxExclusive { get; }
-
+        public double? Min { get; }
+        public bool MinExclusive { get; }
+        public long? MultipleOf { get; }
         public bool Required { get; }
 
-        public long? MultipleOf { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -42,7 +37,7 @@
             : this(min, max, false, false, false, null)
         { }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -106,6 +101,6 @@
             return s;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

@@ -3,8 +3,8 @@ using System;
 namespace SourceCode.Clay.Text
 {
     /// <summary>
-    /// A wrapper for <see cref="System.String"/> that automatically compares values using <see cref="System.StringComparison.Ordinal"/>.
-    /// Uses implicit conversions to/from <see cref="System.String"/>.
+    ///   A wrapper for <see cref="System.String"/> that automatically compares values using <see
+    ///   cref="System.StringComparison.Ordinal"/>. Uses implicit conversions to/from <see cref="System.String"/>.
     /// </summary>
     /// <seealso cref="IEquatable{T}"/>
     public struct OrdinalString : IEquatable<OrdinalString>, IComparable<OrdinalString>
@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Text
 
         private readonly string _str;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -22,39 +22,39 @@ namespace SourceCode.Clay.Text
             _str = str;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Operators
 
-        public static implicit operator OrdinalString(string str) => new OrdinalString(str);
-
         public static explicit operator string(OrdinalString str) => str._str;
 
-        public static bool operator ==(OrdinalString x, OrdinalString y) => x.Equals(y);
+        public static implicit operator OrdinalString(string str) => new OrdinalString(str);
 
         public static bool operator !=(OrdinalString x, OrdinalString y) => !(x == y);
 
         public static bool operator <(OrdinalString x, OrdinalString y) => x.CompareTo(y) < 0;
 
-        public static bool operator >(OrdinalString x, OrdinalString y) => x.CompareTo(y) > 0;
-
         public static bool operator <=(OrdinalString x, OrdinalString y) => x.CompareTo(y) <= 0;
+
+        public static bool operator ==(OrdinalString x, OrdinalString y) => x.Equals(y);
+
+        public static bool operator >(OrdinalString x, OrdinalString y) => x.CompareTo(y) > 0;
 
         public static bool operator >=(OrdinalString x, OrdinalString y) => x.CompareTo(y) >= 0;
 
-        #endregion
+        #endregion Operators
 
         #region IEquatable
 
         /// <summary>
-        /// Check equality using <see cref="System.StringComparison.Ordinal"/>.
+        ///   Check equality using <see cref="System.StringComparison.Ordinal"/>.
         /// </summary>
         /// <param name="other">The other string.</param>
         /// <returns></returns>
         public bool Equals(OrdinalString other) => StringComparer.Ordinal.Equals(_str, other._str);
 
         /// <summary>
-        /// Check equality using <see cref="System.StringComparison.Ordinal"/>.
+        ///   Check equality using <see cref="System.StringComparison.Ordinal"/>.
         /// </summary>
         /// <param name="obj">The other object.</param>
         /// <returns></returns>
@@ -74,13 +74,13 @@ namespace SourceCode.Clay.Text
 
         public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(_str);
 
-        #endregion
+        #endregion IEquatable
 
         #region IComparable
 
         public int CompareTo(OrdinalString other)
             => string.CompareOrdinal(_str, other._str);
 
-        #endregion
+        #endregion IComparable
     }
 }

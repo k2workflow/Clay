@@ -1,79 +1,84 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// Represents a semantic version that conforms to the <a href="http://semver.org/spec/v2.0.0.html">v2.0.0 specification</a>.
+    ///   Represents a semantic version that conforms to the <a
+    ///   href="http://semver.org/spec/v2.0.0.html">v2.0.0 specification</a>.
     /// </summary>
     public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
     {
         #region Constants
 
         /// <summary>
-        /// Gets the default value of <see cref="SemanticVersion"/>.
+        ///   Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
         public static SemanticVersion Empty { get; }
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
         /// <summary>
-        /// Gets the major version.
+        ///   Gets the build metadata.
+        /// </summary>
+        public string BuildMetadata { get; }
+
+        /// <summary>
+        ///   Gets the major version.
         /// </summary>
         public int Major { get; }
 
         /// <summary>
-        /// Gets the minor version.
+        ///   Gets the minor version.
         /// </summary>
         public int Minor { get; }
 
         /// <summary>
-        /// Gets the patch version.
+        ///   Gets the patch version.
         /// </summary>
         public int Patch { get; }
 
         /// <summary>
-        /// Gets the pre-release version.
+        ///   Gets the pre-release version.
         /// </summary>
         public string PreRelease { get; }
 
-        /// <summary>
-        /// Gets the build metadata.
-        /// </summary>
-        public string BuildMetadata { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> with the specified
-        /// <see cref="Major"/>, <see cref="Minor"/> and <see cref="Patch"/>
-        /// values.
+        ///   Creates a new <see cref="SemanticVersion"/> with the specified <see cref="Major"/>,
+        ///   <see cref="Minor"/> and <see cref="Patch"/> values.
         /// </summary>
         /// <param name="major">The major version.</param>
         /// <param name="minor">The minor version.</param>
         /// <param name="patch">The patch version.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>
+        ///   <para>
         ///     Thrown in any of the following cases:
         ///     <list type="bullet">
-        ///         <item><description><paramref name="major"/> is less than 0.</description></item>
-        ///         <item><description><paramref name="minor"/> is less than 0.</description></item>
-        ///         <item><description><paramref name="patch"/> is less than 0.</description></item>
+        ///       <item>
+        ///         <description><paramref name="major"/> is less than 0.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description><paramref name="minor"/> is less than 0.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description><paramref name="patch"/> is less than 0.</description>
+        ///       </item>
         ///     </list>
-        /// </para>
+        ///   </para>
         /// </exception>
         public SemanticVersion(int major, int minor, int patch)
             : this(major, minor, patch, null, null)
         { }
 
         /// <summary>
-        /// Creates a new <see cref="SemanticVersion"/> with the specified
-        /// <see cref="Major"/>, <see cref="Minor"/>, <see cref="Patch"/>
-        /// and <see cref="PreRelease"/> values.
+        ///   Creates a new <see cref="SemanticVersion"/> with the specified <see cref="Major"/>,
+        ///   <see cref="Minor"/>, <see cref="Patch"/> and <see cref="PreRelease"/> values.
         /// </summary>
         /// <param name="major">The major version.</param>
         /// <param name="minor">The minor version.</param>
@@ -81,16 +86,32 @@ namespace SourceCode.Clay
         /// <param name="preRelease">The prelease data.</param>
         /// <param name="buildMetadata">The build metadata.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// <para>
+        ///   <para>
         ///     Thrown in any of the following cases:
         ///     <list type="bullet">
-        ///         <item><description><paramref name="major"/> is less than 0.</description></item>
-        ///         <item><description><paramref name="minor"/> is less than 0.</description></item>
-        ///         <item><description><paramref name="patch"/> is less than 0.</description></item>
-        ///         <item><description><paramref name="preRelease"/> contains characters that don't match the regular expression <c>[A-Za-z0-9\-]</c>.</description></item>
-        ///         <item><description><paramref name="buildMetadata"/> contains characters that don't match the regular expression <c>[A-Za-z0-9\-\.]</c>.</description></item>
+        ///       <item>
+        ///         <description><paramref name="major"/> is less than 0.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description><paramref name="minor"/> is less than 0.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description><paramref name="patch"/> is less than 0.</description>
+        ///       </item>
+        ///       <item>
+        ///         <description>
+        ///           <paramref name="preRelease"/> contains characters that don't match the regular
+        ///           expression <c>[A-Za-z0-9\-]</c>.
+        ///         </description>
+        ///       </item>
+        ///       <item>
+        ///         <description>
+        ///           <paramref name="buildMetadata"/> contains characters that don't match the
+        ///           regular expression <c>[A-Za-z0-9\-\.]</c>.
+        ///         </description>
+        ///       </item>
         ///     </list>
-        /// </para>
+        ///   </para>
         /// </exception>
         public SemanticVersion(int major, int minor, int patch, string preRelease, string buildMetadata)
         {
@@ -107,17 +128,78 @@ namespace SourceCode.Clay
             BuildMetadata = buildMetadata == string.Empty ? null : buildMetadata;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Parse
 
+        private static bool TryParseInt(string value, int startIndex, int endIndex, out int result)
+        {
+            if (endIndex < 0) endIndex = value.Length;
+
+            result = 0;
+            for (var i = startIndex; i < endIndex; i++)
+            {
+                var c = value[i];
+                if (c < '0' || c > '9') return false;
+                result = unchecked((result * 10) + (c - '0'));
+                if (result < 0) return false;
+            }
+
+            return true;
+        }
+
+        private static bool ValidateBuildMetadata(string value, int startIndex, int endIndex)
+        {
+            if (value == null) return true;
+            if (endIndex < 0) endIndex = value.Length - 1;
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                var c = value[i];
+                if (
+                    (c < '0' || c > '9') &&
+                    (c < 'a' || c > 'z') &&
+                    (c < 'A' || c > 'Z') &&
+                    (c != '-') &&
+                    (c != '.'))
+                    return false;
+            }
+            return true;
+        }
+
+        private static bool ValidatePreRelease(string value, int startIndex, int endIndex)
+        {
+            if (value == null) return true;
+            if (endIndex < 0) endIndex = value.Length - 1;
+
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+                var c = value[i];
+                if (
+                    (c < '0' || c > '9') &&
+                    (c < 'a' || c > 'z') &&
+                    (c < 'A' || c > 'Z') &&
+                    (c != '-'))
+                    return false;
+            }
+            return true;
+        }
+
         /// <summary>
-        /// Converts the <see cref="string"/> representation of a semantic version to its structured equivalent.
+        ///   Converts the <see cref="string"/> representation of a semantic version to its
+        ///   structured equivalent.
         /// </summary>
         /// <param name="s">A <see cref="string"/> containing a number to convert.</param>
-        /// <returns>A <see cref="SemanticVersion"/> equivalent to the semantic version contained in <paramref name="s"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="s"/> is null or <see cref="string.Empty"/>.</exception>
-        /// <exception cref="FormatException"><paramref name="s"/> is not in the correct format.</exception>
+        /// <returns>
+        ///   A <see cref="SemanticVersion"/> equivalent to the semantic version contained in
+        ///   <paramref name="s"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="s"/> is null or <see cref="string.Empty"/>.
+        /// </exception>
+        /// <exception cref="FormatException">
+        ///   <paramref name="s"/> is not in the correct format.
+        /// </exception>
         public static SemanticVersion Parse(string s)
         {
             if (string.IsNullOrEmpty(s))
@@ -128,18 +210,21 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts the <see cref="string"/> representation of a semantic version to its structured equivalent.
-        /// A return value indicates whether the conversion succeeded.
+        ///   Converts the <see cref="string"/> representation of a semantic version to its
+        ///   structured equivalent. A return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="s">A <see cref="string"/> containing a number to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the semantic version contained in
-        /// <paramref name="s"/>, if the conversion succeeded, or <see cref="Empty"/> if the conversion failed. The
-        /// conversion fails if the <paramref name="s"/> parameter is null or <see cref="string.Empty"/>, does not conform
-        /// to the semantic version specification, or contains version components less than 0 or greater than
-        /// <see cref="int.MaxValue"/>. This parameter is passed uninitialized.
+        ///   When this method returns, contains the structured equivalent of the semantic version
+        ///   contained in <paramref name="s"/>, if the conversion succeeded, or <see cref="Empty"/>
+        ///   if the conversion failed. The conversion fails if the <paramref name="s"/> parameter is
+        ///   null or <see cref="string.Empty"/>, does not conform to the semantic version
+        ///   specification, or contains version components less than 0 or greater than <see
+        ///   cref="int.MaxValue"/>. This parameter is passed uninitialized.
         /// </param>
-        /// <returns><c>true</c> if <paramref name="s"/> was converted successfully; otherwise, false.</returns>
+        /// <returns>
+        ///   <c>true</c> if <paramref name="s"/> was converted successfully; otherwise, false.
+        /// </returns>
         public static bool TryParse(string s, out SemanticVersion result)
         {
             if (string.IsNullOrEmpty(s))
@@ -212,75 +297,24 @@ namespace SourceCode.Clay
             return true;
         }
 
-        private static bool TryParseInt(string value, int startIndex, int endIndex, out int result)
-        {
-            if (endIndex < 0) endIndex = value.Length;
-
-            result = 0;
-            for (var i = startIndex; i < endIndex; i++)
-            {
-                var c = value[i];
-                if (c < '0' || c > '9') return false;
-                result = unchecked((result * 10) + (c - '0'));
-                if (result < 0) return false;
-            }
-
-            return true;
-        }
-
-        private static bool ValidateBuildMetadata(string value, int startIndex, int endIndex)
-        {
-            if (value == null) return true;
-            if (endIndex < 0) endIndex = value.Length - 1;
-
-            for (var i = startIndex; i <= endIndex; i++)
-            {
-                var c = value[i];
-                if (
-                    (c < '0' || c > '9') &&
-                    (c < 'a' || c > 'z') &&
-                    (c < 'A' || c > 'Z') &&
-                    (c != '-') &&
-                    (c != '.'))
-                    return false;
-            }
-            return true;
-        }
-
-        private static bool ValidatePreRelease(string value, int startIndex, int endIndex)
-        {
-            if (value == null) return true;
-            if (endIndex < 0) endIndex = value.Length - 1;
-
-            for (var i = startIndex; i <= endIndex; i++)
-            {
-                var c = value[i];
-                if (
-                    (c < '0' || c > '9') &&
-                    (c < 'a' || c > 'z') &&
-                    (c < 'A' || c > 'Z') &&
-                    (c != '-'))
-                    return false;
-            }
-            return true;
-        }
-
-        #endregion
+        #endregion Parse
 
         #region Compatible
 
         /// <summary>
-        /// Determines how the specified <paramref name="comparand"/> is compatible with the specified <paramref name="baseline"/>.
+        ///   Determines how the specified <paramref name="comparand"/> is compatible with the
+        ///   specified <paramref name="baseline"/>.
         /// </summary>
         /// <param name="baseline">The baseline <see cref="SemanticVersion"/>.</param>
         /// <param name="comparand">The <see cref="SemanticVersion"/> to test for compatability.</param>
         /// <remarks>
-        /// The presence of the <see cref="SemanticVersionCompatabilities.Incompatible"/> flag indicates that
-        /// <paramref name="comparand"/> is incompatible with <paramref name="baseline"/>. Any other value
-        /// indicates compatability. <see cref="BuildMetadata"/> is completely ignored.
+        ///   The presence of the <see cref="SemanticVersionCompatabilities.Incompatible"/> flag
+        ///   indicates that <paramref name="comparand"/> is incompatible with <paramref
+        ///   name="baseline"/>. Any other value indicates compatability. <see cref="BuildMetadata"/>
+        ///   is completely ignored.
         /// </remarks>
         /// <returns>
-        /// A value that contains information on how the <see cref="SemanticVersion"/> values are incompatible.
+        ///   A value that contains information on how the <see cref="SemanticVersion"/> values are incompatible.
         /// </returns>
         public static SemanticVersionCompatabilities GetCompatabilities(SemanticVersion baseline, SemanticVersion comparand)
         {
@@ -339,14 +373,14 @@ namespace SourceCode.Clay
             return compatability;
         }
 
-        #endregion
+        #endregion Compatible
 
         #region Compare
 
         /// <inheritdoc/>
         public int CompareTo(SemanticVersion other) => SemanticVersionComparer.Strict.Compare(this, other);
 
-        #endregion
+        #endregion Compare
 
         #region IEquatable
 
@@ -359,87 +393,78 @@ namespace SourceCode.Clay
         /// <inheritdoc/>
         public override int GetHashCode() => SemanticVersionComparer.Strict.GetHashCode(this);
 
-        #endregion
+        #endregion IEquatable
 
         #region Operators
 
         /// <summary>
-        /// Determines if <paramref name="a"/> is a smaller version than <paramref name="b"/>.
+        ///   Determines if <paramref name="a"/> is not a similar version to <paramref name="b"/>.
         /// </summary>
         /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
         /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is smaller than the <see cref="SemanticVersion"/>.
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is not similar to
+        ///   <see cref="SemanticVersion"/>.
+        /// </returns>
+        public static bool operator !=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) != 0;
+
+        /// <summary>
+        ///   Determines if <paramref name="a"/> is a smaller version than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
+        /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
+        /// <returns>
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is smaller than the
+        ///   <see cref="SemanticVersion"/>.
         /// </returns>
         public static bool operator <(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) < 0;
 
         /// <summary>
-        /// Determines if <paramref name="a"/> is a greater version than <paramref name="b"/>.
+        ///   Determines if <paramref name="a"/> is a smaller or similar version than <paramref name="b"/>.
         /// </summary>
         /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
         /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is smaller than the <see cref="SemanticVersion"/>.
-        /// </returns>
-        public static bool operator >(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) > 0;
-
-        /// <summary>
-        /// Determines if <paramref name="a"/> is a smaller or similar version than <paramref name="b"/>.
-        /// </summary>
-        /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
-        /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
-        /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is smaller or similar than the <see cref="SemanticVersion"/>.
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is smaller or
+        ///   similar than the <see cref="SemanticVersion"/>.
         /// </returns>
         public static bool operator <=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) <= 0;
 
         /// <summary>
-        /// Determines if <paramref name="a"/> is a greater or similar version than <paramref name="b"/>.
+        ///   Determines if <paramref name="a"/> is a similar version to <paramref name="b"/>.
         /// </summary>
         /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
         /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is greater or similar than the <see cref="SemanticVersion"/>.
-        /// </returns>
-        public static bool operator >=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) >= 0;
-
-        /// <summary>
-        /// Determines if <paramref name="a"/> is a similar version to <paramref name="b"/>.
-        /// </summary>
-        /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
-        /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
-        /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is similar to <see cref="SemanticVersion"/>.
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is similar to <see cref="SemanticVersion"/>.
         /// </returns>
         public static bool operator ==(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) == 0;
 
         /// <summary>
-        /// Determines if <paramref name="a"/> is not a similar version to <paramref name="b"/>.
+        ///   Determines if <paramref name="a"/> is a greater version than <paramref name="b"/>.
         /// </summary>
         /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
         /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="SemanticVersion"/> is not similar to <see cref="SemanticVersion"/>.
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is smaller than the
+        ///   <see cref="SemanticVersion"/>.
         /// </returns>
-        public static bool operator !=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) != 0;
+        public static bool operator >(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) > 0;
 
-        #endregion
+        /// <summary>
+        ///   Determines if <paramref name="a"/> is a greater or similar version than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a">The first <see cref="SemanticVersion"/> to compare.</param>
+        /// <param name="b">The second <see cref="SemanticVersion"/> to compare.</param>
+        /// <returns>
+        ///   A value indicating whether the first <see cref="SemanticVersion"/> is greater or
+        ///   similar than the <see cref="SemanticVersion"/>.
+        /// </returns>
+        public static bool operator >=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) >= 0;
+
+        #endregion Operators
 
         #region String
-
-        /// <inheritdoc/>
-        public override string ToString() => ToDefinedFormatString('F', CultureInfo.InvariantCulture);
-
-        /// <inheritdoc/>
-        public string ToString(string format) => ToString(format, CultureInfo.InvariantCulture);
-
-        /// <inheritdoc/>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            if (string.IsNullOrEmpty(format)) format = "F";
-            if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
-            return ToDefinedFormatString(format[0], formatProvider);
-        }
 
         private string ToDefinedFormatString(char format, IFormatProvider formatProvider)
         {
@@ -486,6 +511,20 @@ namespace SourceCode.Clay
             return str.ToString(formatProvider ?? CultureInfo.InvariantCulture);
         }
 
-        #endregion
+        /// <inheritdoc/>
+        public override string ToString() => ToDefinedFormatString('F', CultureInfo.InvariantCulture);
+
+        /// <inheritdoc/>
+        public string ToString(string format) => ToString(format, CultureInfo.InvariantCulture);
+
+        /// <inheritdoc/>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (string.IsNullOrEmpty(format)) format = "F";
+            if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
+            return ToDefinedFormatString(format[0], formatProvider);
+        }
+
+        #endregion String
     }
 }

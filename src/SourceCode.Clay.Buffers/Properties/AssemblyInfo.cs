@@ -1,1 +1,1 @@
-﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Buffers.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Buffers.Tests")]

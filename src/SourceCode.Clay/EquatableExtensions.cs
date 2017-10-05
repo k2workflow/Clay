@@ -1,13 +1,15 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// Represents <see cref="IEquatable{T}"/> extensions.
+    ///   Represents <see cref="IEquatable{T}"/> extensions.
     /// </summary>
     public static class EquatableExtensions
     {
+        #region Methods
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NullableEquals<T>(this T x, T y)
             where T : IEquatable<T>
@@ -21,5 +23,7 @@ namespace SourceCode.Clay
 
             return x.Equals(y);
         }
+
+        #endregion Methods
     }
 }

@@ -1,14 +1,13 @@
-﻿namespace SourceCode.Clay.Json.Validation
+namespace SourceCode.Clay.Json.Validation
 {
     public sealed class LengthValidator
     {
         #region Properties
 
+        public long? Max { get; }
         public long? Min { get; }
 
-        public long? Max { get; }
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -18,7 +17,7 @@
             Max = max;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -53,6 +52,6 @@
             return s;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

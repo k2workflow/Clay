@@ -7,6 +7,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SetExtensionsTests
     {
+        #region Fields
+
         private static readonly HashSet<string> _set = new HashSet<string>
         {
             "foo",
@@ -15,13 +17,9 @@ namespace SourceCode.Clay.Collections.Tests
             "nin"
         };
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_both_null))]
-        public static void SetEquals_both_null()
-        {
-            var equal = ((HashSet<string>)null).NullableSetEquals(null);
-            Assert.True(equal);
-        }
+        #endregion Fields
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(SetEquals_both_empty))]
@@ -31,6 +29,14 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string>();
 
             var equal = set1.NullableSetEquals(set2);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_both_null))]
+        public static void SetEquals_both_null()
+        {
+            var equal = ((HashSet<string>)null).NullableSetEquals(null);
             Assert.True(equal);
         }
 
@@ -46,14 +52,6 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.True(equal);
 
             equal = set1.NullableSetEquals(set3);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_one_null))]
-        public static void SetEquals_one_null()
-        {
-            var equal = _set.NullableSetEquals(null);
             Assert.False(equal);
         }
 
@@ -88,5 +86,15 @@ namespace SourceCode.Clay.Collections.Tests
             var equal = _set.NullableSetEquals(set2);
             Assert.False(equal);
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_one_null))]
+        public static void SetEquals_one_null()
+        {
+            var equal = _set.NullableSetEquals(null);
+            Assert.False(equal);
+        }
+
+        #endregion Methods
     }
 }

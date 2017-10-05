@@ -1,17 +1,17 @@
 namespace SourceCode.Clay.OpenApi.Expressions
 {
     /// <summary>
-    /// Represents the different type of expression components.
+    ///   Represents the different type of expression components.
     /// </summary>
     public enum ExpressionComponentType : byte
     {
         /// <summary>
-        /// A literal value.
+        ///   A literal value.
         /// </summary>
         Literal = 0,
 
         /// <summary>
-        /// A field getter.
+        ///   A field getter.
         /// </summary>
         Field = 1
     }

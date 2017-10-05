@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// Represents an efficient discriminated union across all the primitive number types.
+    ///   Represents an efficient discriminated union across all the primitive number types.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)] // 17 bytes, aligned up to 20
     public struct Number : IEquatable<Number>, IComparable, IComparable<Number>, IFormattable, IConvertible
@@ -21,7 +21,7 @@ namespace SourceCode.Clay
         private static readonly float SingleDecimalMinValue = (float)decimal.MinValue;
         private static readonly float SingleDecimalMaxValue = (float)decimal.MaxValue;
 
-        #endregion
+        #endregion Constants
 
         #region Fields
 
@@ -69,7 +69,7 @@ namespace SourceCode.Clay
         [FieldOffset(16)] // [16..16]
         private readonly byte _typeCode;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -141,78 +141,100 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Gets the value as a <see cref="sbyte"/>.
+        ///   Gets the value as a <see cref="sbyte"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.SByte"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.SByte"/>.
+        /// </exception>
         public sbyte? SByte => GetValue(_sbyte, TypeCode.SByte);
 
         /// <summary>
-        /// Gets the value as a <see cref="byte"/>.
+        ///   Gets the value as a <see cref="byte"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Byte"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Byte"/>.
+        /// </exception>
         public byte? Byte => GetValue(_byte, TypeCode.Byte);
 
         /// <summary>
-        /// Gets the value as a <see cref="ushort"/>.
+        ///   Gets the value as a <see cref="ushort"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt16"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt16"/>.
+        /// </exception>
         public ushort? UInt16 => GetValue(_uint16, TypeCode.UInt16);
 
         /// <summary>
-        /// Gets the value as a <see cref="short"/>.
+        ///   Gets the value as a <see cref="short"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int16"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int16"/>.
+        /// </exception>
         public short? Int16 => GetValue(_int16, TypeCode.Int16);
 
         /// <summary>
-        /// Gets the value as a <see cref="uint"/>.
+        ///   Gets the value as a <see cref="uint"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt32"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt32"/>.
+        /// </exception>
         public uint? UInt32 => GetValue(_uint32, TypeCode.UInt32);
 
         /// <summary>
-        /// Gets the value as a <see cref="int"/>.
+        ///   Gets the value as a <see cref="int"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int32"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int32"/>.
+        /// </exception>
         public int? Int32 => GetValue(_int32, TypeCode.Int32);
 
         /// <summary>
-        /// Gets the value as a <see cref="ulong"/>.
+        ///   Gets the value as a <see cref="ulong"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt64"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt64"/>.
+        /// </exception>
         public ulong? UInt64 => GetValue(_uint64, TypeCode.UInt64);
 
         /// <summary>
-        /// Gets the value as a <see cref="long"/>.
+        ///   Gets the value as a <see cref="long"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int64"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int64"/>.
+        /// </exception>
         public long? Int64 => GetValue(_int64, TypeCode.Int64);
 
         /// <summary>
-        /// Gets the value as a <see cref="float"/>.
+        ///   Gets the value as a <see cref="float"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Single"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Single"/>.
+        /// </exception>
         public float? Single => GetValue(_single, TypeCode.Single);
 
         /// <summary>
-        /// Gets the value as a <see cref="double"/>.
+        ///   Gets the value as a <see cref="double"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Double"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Double"/>.
+        /// </exception>
         public double? Double => GetValue(_double, TypeCode.Double);
 
         /// <summary>
-        /// Gets the value as a <see cref="decimal"/>.
+        ///   Gets the value as a <see cref="decimal"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Decimal"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Decimal"/>.
+        /// </exception>
         public decimal? Decimal => GetValue(_decimal, TypeCode.Decimal);
 
         /// <summary>
-        /// Determines whether a value is stored.
+        ///   Determines whether a value is stored.
         /// </summary>
         public bool HasValue => _typeCode != 0;
 
         /// <summary>
-        /// Gets the value boxed in a <see cref="object"/>.
+        ///   Gets the value boxed in a <see cref="object"/>.
         /// </summary>
         public object Value
         {
@@ -245,16 +267,16 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Gets the <see cref="TypeCode"/> that indicates what the number type is.
+        ///   Gets the <see cref="TypeCode"/> that indicates what the number type is.
         /// </summary>
         public TypeCode ValueTypeCode => (TypeCode)_typeCode;
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -268,7 +290,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -279,7 +301,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -293,7 +315,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -304,7 +326,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -318,7 +340,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -329,7 +351,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -343,7 +365,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -354,7 +376,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -368,7 +390,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -379,7 +401,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -393,7 +415,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -404,7 +426,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -418,7 +440,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -429,7 +451,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -443,7 +465,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -454,7 +476,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -468,7 +490,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -479,7 +501,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -493,7 +515,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -504,7 +526,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -518,7 +540,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
+        ///   Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -528,13 +550,12 @@ namespace SourceCode.Clay
             _decimal = value;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Factory
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
-        /// value type.
+        ///   Creates a new instance of the <see cref="Number"/> struct, given an unknown value type.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The <see cref="Number"/> instance.</returns>
@@ -607,7 +628,7 @@ namespace SourceCode.Clay
 
         private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
 
-        #endregion
+        #endregion Factory
 
         #region Methods
 
@@ -620,24 +641,32 @@ namespace SourceCode.Clay
             return field;
         }
 
-        /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
+        /// <summary>
+        ///   Returns a string representation of the <see cref="Number"/> value.
+        /// </summary>
         /// <param name="format">The format of the number to use.</param>
         /// <returns>A string representation of the number.</returns>
         public string ToString(string format)
             => ToString(format, CultureInfo.CurrentCulture);
 
-        /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
+        /// <summary>
+        ///   Returns a string representation of the <see cref="Number"/> value.
+        /// </summary>
         /// <param name="provider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
         public string ToString(IFormatProvider provider)
             => ToString(null, provider);
 
-        /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
-        /// <returns>A <see cref="T:System.String" /> containing the number.</returns>
+        /// <summary>
+        ///   Returns a string representation of the <see cref="Number"/> value.
+        /// </summary>
+        /// <returns>A <see cref="T:System.String"/> containing the number.</returns>
         public override string ToString()
             => ToString(null, CultureInfo.CurrentCulture);
 
-        /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
+        /// <summary>
+        ///   Returns a string representation of the <see cref="Number"/> value.
+        /// </summary>
         /// <param name="format">The format of the number to use.</param>
         /// <param name="provider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
@@ -667,19 +696,29 @@ namespace SourceCode.Clay
             }
         }
 
-        #endregion
+        #endregion Methods
 
         #region IEquatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
-        /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
+        /// <returns>
+        ///   true if <paramref name="obj"/> and this instance are the same type and represent the
+        ///   same value; otherwise, false.
+        /// </returns>
         /// <param name="obj">The object to compare with the current instance.</param>
         public override bool Equals(object obj)
             => (ReferenceEquals(obj, null) && _typeCode == 0)
             || (obj is Number o && Equals(o));
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other"/> parameter;
+        ///   otherwise, false.
+        /// </returns>
         /// <param name="other">An object to compare with this object.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Number other)
@@ -698,7 +737,9 @@ namespace SourceCode.Clay
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -721,15 +762,26 @@ namespace SourceCode.Clay
 
         public static bool operator !=(Number x, Number y) => !(x == y);
 
-        #endregion
+        #endregion IEquatable
 
         #region IComparable
 
-        /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="obj" /> in the sort order. Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. Greater than zero This instance follows <paramref name="obj" /> in the sort order.</returns>
+        /// <summary>
+        ///   Compares the current instance with another object of the same type and returns an
+        ///   integer that indicates whether the current instance precedes, follows, or occurs in the
+        ///   same position in the sort order as the other object.
+        /// </summary>
+        /// <returns>
+        ///   A value that indicates the relative order of the objects being compared. The return
+        ///   value has these meanings: Value Meaning Less than zero This instance precedes <paramref
+        ///   name="obj"/> in the sort order. Zero This instance occurs in the same position in the
+        ///   sort order as <paramref name="obj"/>. Greater than zero This instance follows <paramref
+        ///   name="obj"/> in the sort order.
+        /// </returns>
         /// <param name="obj">An object to compare with this instance.</param>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        ///   <paramref name="obj" /> is not the same type as this instance.</exception>
+        ///   <paramref name="obj"/> is not the same type as this instance.
+        /// </exception>
         public int CompareTo(object obj)
         {
             if (ReferenceEquals(obj, null))
@@ -743,8 +795,18 @@ namespace SourceCode.Clay
             return CompareTo(n);
         }
 
-        /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
+        /// <summary>
+        ///   Compares the current instance with another object of the same type and returns an
+        ///   integer that indicates whether the current instance precedes, follows, or occurs in the
+        ///   same position in the sort order as the other object.
+        /// </summary>
+        /// <returns>
+        ///   A value that indicates the relative order of the objects being compared. The return
+        ///   value has these meanings: Value Meaning Less than zero This instance precedes <paramref
+        ///   name="other"/> in the sort order. Zero This instance occurs in the same position in the
+        ///   sort order as <paramref name="other"/>. Greater than zero This instance follows
+        ///   <paramref name="other"/> in the sort order.
+        /// </returns>
         /// <param name="other">An object to compare with this instance.</param>
         public int CompareTo(Number other)
         {
@@ -923,7 +985,7 @@ namespace SourceCode.Clay
 
         public static bool operator >=(Number x, Number y) => x.CompareTo(y) >= 0;
 
-        #endregion
+        #endregion IComparable
 
         #region IConvertible
 
@@ -1372,7 +1434,7 @@ namespace SourceCode.Clay
             }
         }
 
-        #endregion
+        #endregion IConvertible
     }
 
 #pragma warning disable S2342 // Enumeration types should comply with a naming convention

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
-    /// Represents extensions for <see cref="SqlCommand"/> instances.
+    ///   Represents extensions for <see cref="SqlCommand"/> instances.
     /// </summary>
     /// <seealso cref="System.Data.SqlClient.SqlCommand"/>
     public static class SqlCommandExtensions
@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Data.SqlClient
 #pragma warning disable S3649 // User-provided values should be sanitized before use in SQL statements
 
         /// <summary>
-        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        ///   Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
         /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        ///   Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
         /// <param name="sqlTxn">The <see cref="SqlTransaction"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        ///   Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
         /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
@@ -74,7 +74,7 @@ namespace SourceCode.Clay.Data.SqlClient
         }
 
         /// <summary>
-        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        ///   Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
         /// <param name="sqlCon">The <see cref="SqlTransaction"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>

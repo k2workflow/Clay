@@ -5,62 +5,80 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// An object representing a Server.
+    ///   An object representing a Server.
     /// </summary>
     public class Server : IEquatable<Server>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the URL to the target host.
+        ///   Gets the optional string describing the host designated by the URL.
+        /// </summary>
+        /// <remarks>CommonMark syntax MAY be used for rich text representation.</remarks>
+        public string Description { get; }
+
+        /// <summary>
+        ///   Gets the URL to the target host.
         /// </summary>
         public Uri Url { get; }
 
         /// <summary>
-        /// Gets the optional string describing the host designated by the URL.
-        /// </summary>
-        /// <remarks>
-        /// CommonMark syntax MAY be used for rich text representation.
-        /// </remarks>
-        public string Description { get; }
-
-        /// <summary>
-        /// Gets the map between a variable name and its value.
+        ///   Gets the map between a variable name and its value.
         /// </summary>
         public IReadOnlyDictionary<string, ServerVariable> Variables { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructor
 
         /// <summary>
-        /// Creates a new instance of the <see cref="Server"/> class.
+        ///   Creates a new instance of the <see cref="Server"/> class.
         /// </summary>
         /// <param name="url">The URL to the target host.</param>
-        /// <param name="description">The optional string describing the host designated by the URL.</param>
+        /// <param name="description">
+        ///   The optional string describing the host designated by the URL.
+        /// </param>
         /// <param name="variables">The map between a variable name and its value.</param>
         public Server(
-            Uri url,
-            string description,
-            IReadOnlyDictionary<string, ServerVariable> variables)
+            Uri url = default,
+            string description = default,
+            IReadOnlyDictionary<string, ServerVariable> variables = default)
         {
             Url = url;
             Description = description;
             Variables = variables ?? ReadOnlyDictionary.Empty<string, ServerVariable>();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region IEquatable
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        public static bool operator !=(Server server1, Server server2) => !(server1 == server2);
+
+        public static bool operator ==(Server server1, Server server2)
+        {
+            if (ReferenceEquals(server1, null) && ReferenceEquals(server2, null)) return true;
+            if (ReferenceEquals(server1, null) || ReferenceEquals(server2, null)) return false;
+            return server1.Equals((object)server2);
+        }
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as Server);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public virtual bool Equals(Server other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -73,7 +91,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Serves as the default hash function.</summary>
+        /// <summary>
+        ///   Serves as the default hash function.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -89,15 +109,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(Server server1, Server server2)
-        {
-            if (ReferenceEquals(server1, null) && ReferenceEquals(server2, null)) return true;
-            if (ReferenceEquals(server1, null) || ReferenceEquals(server2, null)) return false;
-            return server1.Equals((object)server2);
-        }
-
-        public static bool operator !=(Server server1, Server server2) => !(server1 == server2);
-
-        #endregion
+        #endregion IEquatable
     }
 }

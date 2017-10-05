@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Json.Pointers;
+using SourceCode.Clay.Json.Pointers;
 using System;
 using System.Json;
 using System.Linq;
@@ -8,69 +8,7 @@ namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonPointerTests
     {
-        [Fact(DisplayName = nameof(JsonPointer_ToString))]
-        public static void JsonPointer_ToString()
-        {
-            var sut = new JsonPointer();
-            var str = sut.ToString();
-            Assert.Equal("", str);
-
-            sut = new JsonPointer("");
-            str = sut.ToString();
-            Assert.Equal("/", str);
-
-            sut = new JsonPointer("", "test");
-            str = sut.ToString();
-            Assert.Equal("//test", str);
-
-            sut = new JsonPointer("test", "");
-            str = sut.ToString();
-            Assert.Equal("/test/", str);
-
-            sut = new JsonPointer("test/", "");
-            str = sut.ToString();
-            Assert.Equal("/test~1/", str);
-
-            sut = new JsonPointer("test~", "");
-            str = sut.ToString();
-            Assert.Equal("/test~0/", str);
-
-            sut = new JsonPointer("test~/", "");
-            str = sut.ToString();
-            Assert.Equal("/test~0~1/", str);
-        }
-
-        [Fact(DisplayName = nameof(JsonPointer_Parse))]
-        public static void JsonPointer_Parse()
-        {
-            var str = "";
-            var sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer(), sut);
-
-            str = "/";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(sut, new JsonPointer(""));
-
-            str = "//test";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer("", "test"), sut);
-
-            str = "/test/";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer("test", ""), sut);
-
-            str = "/test~1/";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer("test/", ""), sut);
-
-            str = "/test~0/";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer("test~", ""), sut);
-
-            str = "/test~0~1/";
-            sut = JsonPointer.Parse(str);
-            Assert.Equal(new JsonPointer("test~/", ""), sut);
-        }
+        #region Methods
 
         [Fact(DisplayName = nameof(JsonPointer_Evaluate))]
         public static void JsonPointer_Evaluate()
@@ -179,5 +117,71 @@ namespace SourceCode.Clay.Json.Tests
             JsonPointer.Parse("/foo6/2").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
             JsonPointer.Parse("/foo6/-").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
         }
+
+        [Fact(DisplayName = nameof(JsonPointer_Parse))]
+        public static void JsonPointer_Parse()
+        {
+            var str = "";
+            var sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer(), sut);
+
+            str = "/";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(sut, new JsonPointer(""));
+
+            str = "//test";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer("", "test"), sut);
+
+            str = "/test/";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer("test", ""), sut);
+
+            str = "/test~1/";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer("test/", ""), sut);
+
+            str = "/test~0/";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer("test~", ""), sut);
+
+            str = "/test~0~1/";
+            sut = JsonPointer.Parse(str);
+            Assert.Equal(new JsonPointer("test~/", ""), sut);
+        }
+
+        [Fact(DisplayName = nameof(JsonPointer_ToString))]
+        public static void JsonPointer_ToString()
+        {
+            var sut = new JsonPointer();
+            var str = sut.ToString();
+            Assert.Equal("", str);
+
+            sut = new JsonPointer("");
+            str = sut.ToString();
+            Assert.Equal("/", str);
+
+            sut = new JsonPointer("", "test");
+            str = sut.ToString();
+            Assert.Equal("//test", str);
+
+            sut = new JsonPointer("test", "");
+            str = sut.ToString();
+            Assert.Equal("/test/", str);
+
+            sut = new JsonPointer("test/", "");
+            str = sut.ToString();
+            Assert.Equal("/test~1/", str);
+
+            sut = new JsonPointer("test~", "");
+            str = sut.ToString();
+            Assert.Equal("/test~0/", str);
+
+            sut = new JsonPointer("test~/", "");
+            str = sut.ToString();
+            Assert.Equal("/test~0~1/", str);
+        }
+
+        #endregion Methods
     }
 }

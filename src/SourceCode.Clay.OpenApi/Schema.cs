@@ -5,116 +5,116 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Represents a JSON schema.
+    ///   Represents a JSON schema.
     /// </summary>
     public class Schema : IEquatable<Schema>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the general type of the schema.
-        /// </summary>
-        public SchemaType Type { get; }
-
-        /// <summary>
-        /// Gets the title of the schema.
-        /// </summary>
-        public string Title { get; }
-
-        /// <summary>
-        /// Gets the format of the JSON schema.
-        /// </summary>
-        /// <remarks>
-        /// This conforms to the <a href="https://swagger.io/specification/#data-types-13">Open API specification</a>.
-        /// </remarks>
-        public string Format { get; }
-
-        /// <summary>
-        /// Gets the schema description.
-        /// </summary>
-        public string Description { get; }
-
-        /// <summary>
-        /// Gets the number range validation details.
-        /// </summary>
-        public NumberRange NumberRange { get; }
-
-        /// <summary>
-        /// Gets the item count validation details.
-        /// </summary>
-        public CountRange ItemsRange { get; }
-
-        /// <summary>
-        /// Gets the length validation details.
-        /// </summary>
-        public CountRange LengthRange { get; }
-
-        /// <summary>
-        /// Gets the property count validation details.
-        /// </summary>
-        public CountRange PropertiesRange { get; }
-
-        /// <summary>
-        /// Gets the schema options.
-        /// </summary>
-        public SchemaOptions Options { get; }
-
-        /// <summary>
-        /// Gets the valid enum values.
-        /// </summary>
-        public IReadOnlyList<ScalarValue> Enum { get; }
-
-        /// <summary>
-        /// Gets the list of schemas that this schema must conform to.
-        /// </summary>
-        public IReadOnlyList<Referable<Schema>> AllOf { get; }
-
-        /// <summary>
-        /// Gets the list of schemas that, from which exactly one, this schema must conform to.
-        /// </summary>
-        public IReadOnlyList<Referable<Schema>> OneOf { get; }
-
-        /// <summary>
-        /// Gets the list of schemas that, from which one or more, this schema must conform to.
-        /// </summary>
-        public IReadOnlyList<Referable<Schema>> AnyOf { get; }
-
-        /// <summary>
-        /// Gets the list of schemas that this schema must not conform to.
-        /// </summary>
-        public IReadOnlyList<Referable<Schema>> Not { get; }
-
-        /// <summary>
-        /// Gets the list of schemas that represent the array items that this schema must contain.
-        /// </summary>
-        public Referable<Schema> Items { get; }
-
-        /// <summary>
-        /// Gets the list of valid properties.
-        /// </summary>
-        public IReadOnlyDictionary<string, Referable<Schema>> Properties { get; }
-
-        /// <summary>
-        /// Gets the list of valid properties for children.
+        ///   Gets the list of valid properties for children.
         /// </summary>
         public IReadOnlyDictionary<string, Referable<Schema>> AdditionalProperties { get; }
 
         /// <summary>
-        /// Gets the external documentation.
+        ///   Gets the list of schemas that this schema must conform to.
+        /// </summary>
+        public IReadOnlyList<Referable<Schema>> AllOf { get; }
+
+        /// <summary>
+        ///   Gets the list of schemas that, from which one or more, this schema must conform to.
+        /// </summary>
+        public IReadOnlyList<Referable<Schema>> AnyOf { get; }
+
+        /// <summary>
+        ///   Gets the schema description.
+        /// </summary>
+        public string Description { get; }
+
+        /// <summary>
+        ///   Gets the valid enum values.
+        /// </summary>
+        public IReadOnlyList<ScalarValue> Enum { get; }
+
+        /// <summary>
+        ///   Gets the external documentation.
         /// </summary>
         public ExternalDocumentation ExternalDocs { get; }
 
         /// <summary>
-        /// Gets the string validation pattern.
+        ///   Gets the format of the JSON schema.
+        /// </summary>
+        /// <remarks>
+        ///   This conforms to the <a href="https://swagger.io/specification/#data-types-13">Open API specification</a>.
+        /// </remarks>
+        public string Format { get; }
+
+        /// <summary>
+        ///   Gets the list of schemas that represent the array items that this schema must contain.
+        /// </summary>
+        public Referable<Schema> Items { get; }
+
+        /// <summary>
+        ///   Gets the item count validation details.
+        /// </summary>
+        public CountRange ItemsRange { get; }
+
+        /// <summary>
+        ///   Gets the length validation details.
+        /// </summary>
+        public CountRange LengthRange { get; }
+
+        /// <summary>
+        ///   Gets the list of schemas that this schema must not conform to.
+        /// </summary>
+        public IReadOnlyList<Referable<Schema>> Not { get; }
+
+        /// <summary>
+        ///   Gets the number range validation details.
+        /// </summary>
+        public NumberRange NumberRange { get; }
+
+        /// <summary>
+        ///   Gets the list of schemas that, from which exactly one, this schema must conform to.
+        /// </summary>
+        public IReadOnlyList<Referable<Schema>> OneOf { get; }
+
+        /// <summary>
+        ///   Gets the schema options.
+        /// </summary>
+        public SchemaOptions Options { get; }
+
+        /// <summary>
+        ///   Gets the string validation pattern.
         /// </summary>
         public string Pattern { get; }
 
-        #endregion
+        /// <summary>
+        ///   Gets the list of valid properties.
+        /// </summary>
+        public IReadOnlyDictionary<string, Referable<Schema>> Properties { get; }
+
+        /// <summary>
+        ///   Gets the property count validation details.
+        /// </summary>
+        public CountRange PropertiesRange { get; }
+
+        /// <summary>
+        ///   Gets the title of the schema.
+        /// </summary>
+        public string Title { get; }
+
+        /// <summary>
+        ///   Gets the general type of the schema.
+        /// </summary>
+        public SchemaType Type { get; }
+
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new <see cref="Schema"/> value.
+        ///   Creates a new <see cref="Schema"/> value.
         /// </summary>
         /// <param name="type">The general type of the schema.</param>
         /// <param name="format">The specific type of the schema/</param>
@@ -124,22 +124,30 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="itemsRange">The range of valid item counts.</param>
         /// <param name="lengthRange">The range of valid lengths.</param>
         /// <param name="propertiesRange">The range of valid property counts.</param>
-        /// <param name="options">The schema options. <see cref="SchemaOptions.ItemsIsArray"/> will be automatically set.</param>
+        /// <param name="options">
+        ///   The schema options. <see cref="SchemaOptions.ItemsIsArray"/> will be automatically set.
+        /// </param>
         /// <param name="pattern">The regex validation for string values.</param>
         /// <param name="enum">The valid enum values.</param>
         /// <param name="allOf">The list of schemas that this schema must conform to.</param>
-        /// <param name="oneOf">The list of schemas that, from which exactly one, this schema must conform to.</param>
-        /// <param name="anyOf">The list of schemas that, from which one or more, this schema must conform to.</param>
+        /// <param name="oneOf">
+        ///   The list of schemas that, from which exactly one, this schema must conform to.
+        /// </param>
+        /// <param name="anyOf">
+        ///   The list of schemas that, from which one or more, this schema must conform to.
+        /// </param>
         /// <param name="not">The list of schemas that this schema must not conform to.</param>
-        /// <param name="items">The list of schemas that represent the array items that this schema must contain.</param>
+        /// <param name="items">
+        ///   The list of schemas that represent the array items that this schema must contain.
+        /// </param>
         /// <param name="properties">The list of valid properties.</param>
         /// <param name="additionalProperties">The list of valid properties for children.</param>
         /// <param name="externalDocs">The external documentation.</param>
         public Schema(
             SchemaType type = default,
-            string format = null,
-            string title = null,
-            string description = null,
+            string format = default,
+            string title = default,
+            string description = default,
             NumberRange numberRange = default,
             CountRange itemsRange = default,
             CountRange lengthRange = default,
@@ -177,27 +185,48 @@ namespace SourceCode.Clay.OpenApi
             ExternalDocs = externalDocs;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
-        /// <summary>Returns the fully qualified type name of this instance.</summary>
+        /// <summary>
+        ///   Returns the fully qualified type name of this instance.
+        /// </summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString()
             => $"{Type}";
 
-        #endregion
+        #endregion Methods
 
         #region Equatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        public static bool operator !=(Schema schema1, Schema schema2) => !(schema1 == schema2);
+
+        public static bool operator ==(Schema schema1, Schema schema2)
+        {
+            if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
+            if (ReferenceEquals(schema1, null) || ReferenceEquals(schema2, null)) return false;
+            return schema1.Equals((object)schema2);
+        }
+
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as Schema);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(Schema other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -225,7 +254,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -257,15 +288,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(Schema schema1, Schema schema2)
-        {
-            if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
-            if (ReferenceEquals(schema1, null) || ReferenceEquals(schema2, null)) return false;
-            return schema1.Equals((object)schema2);
-        }
-
-        public static bool operator !=(Schema schema1, Schema schema2) => !(schema1 == schema2);
-
-        #endregion
+        #endregion Equatable
     }
 }

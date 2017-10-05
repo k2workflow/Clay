@@ -7,7 +7,7 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class ListExtensionsTests
     {
-        private static readonly string[] _null = null;
+        #region Fields
 
         private static readonly string[] _list =
         {
@@ -17,16 +17,11 @@ namespace SourceCode.Clay.Collections.Tests
             "nin"
         };
 
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_null))]
-        public static void ListEquals_both_null()
-        {
-            var equal = _null.ListEquals(null, StringComparer.Ordinal, false);
-            Assert.True(equal);
+        private static readonly string[] _null = null;
 
-            equal = _null.ListEquals(null, StringComparer.Ordinal, true);
-            Assert.True(equal);
-        }
+        #endregion Fields
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(ListEquals_both_empty))]
@@ -39,6 +34,17 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.True(equal);
 
             equal = list1.ListEquals(list2, StringComparer.Ordinal, true);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_both_null))]
+        public static void ListEquals_both_null()
+        {
+            var equal = _null.ListEquals(null, StringComparer.Ordinal, false);
+            Assert.True(equal);
+
+            equal = _null.ListEquals(null, StringComparer.Ordinal, true);
             Assert.True(equal);
         }
 
@@ -70,14 +76,6 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_one_null))]
-        public static void ListEquals_one_null()
-        {
-            var equal = _list.ListEquals((string[])null, StringComparer.Ordinal, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(ListEquals_different_count))]
         public static void ListEquals_different_count()
         {
@@ -89,82 +87,6 @@ namespace SourceCode.Clay.Collections.Tests
             };
 
             var equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
-        public static void ListEquals_IsEqual_sequential_true()
-        {
-            var list2 = new[]
-            {
-                _list[0],
-                _list[1],
-                _list[2],
-                _list[3]
-            };
-
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false))]
-        public static void ListEquals_IsEqual_sequential_false()
-        {
-            var list2 = new[]
-            {
-                _list[2],
-                _list[1],
-                _list[3],
-                _list[0]
-            };
-
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
-        public static void ListEquals_NotEqual_sequential_true()
-        {
-            var list2 = new[]
-            {
-                _list[0],
-                _list[1],
-                "a",
-                _list[3]
-            };
-
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
-        public static void ListEquals_NotEqual_sequential_false()
-        {
-            var list2 = new[]
-            {
-                _list[2],
-                _list[1],
-                "a",
-                _list[0]
-            };
-
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
 
@@ -240,5 +162,91 @@ namespace SourceCode.Clay.Collections.Tests
             equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false))]
+        public static void ListEquals_IsEqual_sequential_false()
+        {
+            var list2 = new[]
+            {
+                _list[2],
+                _list[1],
+                _list[3],
+                _list[0]
+            };
+
+            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            Assert.True(equal);
+
+            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
+        public static void ListEquals_IsEqual_sequential_true()
+        {
+            var list2 = new[]
+            {
+                _list[0],
+                _list[1],
+                _list[2],
+                _list[3]
+            };
+
+            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            Assert.True(equal);
+
+            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
+        public static void ListEquals_NotEqual_sequential_false()
+        {
+            var list2 = new[]
+            {
+                _list[2],
+                _list[1],
+                "a",
+                _list[0]
+            };
+
+            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            Assert.False(equal);
+
+            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            Assert.False(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
+        public static void ListEquals_NotEqual_sequential_true()
+        {
+            var list2 = new[]
+            {
+                _list[0],
+                _list[1],
+                "a",
+                _list[3]
+            };
+
+            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            Assert.False(equal);
+
+            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            Assert.False(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(ListEquals_one_null))]
+        public static void ListEquals_one_null()
+        {
+            var equal = _list.ListEquals((string[])null, StringComparer.Ordinal, false);
+            Assert.False(equal);
+        }
+
+        #endregion Methods
     }
 }

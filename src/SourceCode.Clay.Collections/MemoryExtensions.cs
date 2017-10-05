@@ -1,22 +1,27 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="Memory{T}"/> and <see cref="ReadOnlyMemory{T}{T}"/>.
+    ///   Represents extensions for <see cref="Memory{T}"/> and <see cref="ReadOnlyMemory{T}{T}"/>.
     /// </summary>
     public static class MemoryExtensions
     {
+        #region Methods
+
         /// <summary>
-        /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
+        ///   Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
+        /// <param name="sequential">
+        ///   Optimizes the algorithm for cases when the inputs are expected to be ordered in the
+        ///   same manner.
+        /// </param>
         /// <returns></returns>
         public static bool MemoryEquals<T>(this ReadOnlyMemory<T> x, ReadOnlyMemory<T> y, IEqualityComparer<T> comparer, bool sequential)
         {
@@ -26,7 +31,8 @@ namespace SourceCode.Clay.Collections.Generic
             // If counts are different, not equal
             if (x.Length != y.Length) return false;
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
+            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and
+            // thus equal)
             if (x.IsEmpty) return true;
 
             // Memory<T>.Span throws if IsEmpty == true
@@ -100,14 +106,19 @@ namespace SourceCode.Clay.Collections.Generic
         }
 
         /// <summary>
-        /// Performs an optimized item-by-item comparison, using the default comparer for the type.
+        ///   Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
+        /// <param name="sequential">
+        ///   Optimizes the algorithm for cases when the inputs are expected to be ordered in the
+        ///   same manner.
+        /// </param>
         /// <returns></returns>
         public static bool MemoryEquals<T>(this ReadOnlyMemory<T> x, ReadOnlyMemory<T> y, bool sequential)
             => x.MemoryEquals(y, EqualityComparer<T>.Default, sequential);
+
+        #endregion Methods
     }
 }

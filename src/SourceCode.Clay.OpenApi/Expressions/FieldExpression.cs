@@ -6,45 +6,47 @@ using System.Text;
 namespace SourceCode.Clay.OpenApi.Expressions
 {
     /// <summary>
-    /// Represents an Open API expression.
+    ///   Represents an Open API expression.
     /// </summary>
     public sealed class FieldExpression : ExpressionComponent, IEquatable<FieldExpression>
     {
         #region Properties
 
         /// <summary>
-        /// Gets the type of the expression.
+        ///   Gets the component type.
         /// </summary>
-        public FieldExpressionType ExpressionType { get; }
+        public override ExpressionComponentType ComponentType => ExpressionComponentType.Field;
 
         /// <summary>
-        /// Gets the expression source.
+        ///   Gets the expression source.
         /// </summary>
         public FieldExpressionSource ExpressionSource { get; }
 
         /// <summary>
-        /// Gets the name component of the source.
+        ///   Gets the type of the expression.
+        /// </summary>
+        public FieldExpressionType ExpressionType { get; }
+
+        /// <summary>
+        ///   Gets the name component of the source.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Gets the <see cref="JsonPointer"/>.
+        ///   Gets the <see cref="JsonPointer"/>.
         /// </summary>
         public JsonPointer Pointer { get; }
 
-        /// <summary>Gets the component type.</summary>
-        public override ExpressionComponentType ComponentType => ExpressionComponentType.Field;
-
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new simple <see cref="FieldExpression"/>.
+        ///   Creates a new simple <see cref="FieldExpression"/>.
         /// </summary>
         /// <param name="expressionType">
-        ///     The expression type. This must be <see cref="FieldExpressionType.Url"/>, <see cref="FieldExpressionType.Method"/>
-        ///     or <see cref="FieldExpressionType.StatusCode"/>.
+        ///   The expression type. This must be <see cref="FieldExpressionType.Url"/>, <see
+        ///   cref="FieldExpressionType.Method"/> or <see cref="FieldExpressionType.StatusCode"/>.
         /// </param>
         public FieldExpression(FieldExpressionType expressionType)
         {
@@ -66,18 +68,16 @@ namespace SourceCode.Clay.OpenApi.Expressions
         }
 
         /// <summary>
-        /// Creates a new parameter <see cref="FieldExpression"/>.
+        ///   Creates a new parameter <see cref="FieldExpression"/>.
         /// </summary>
         /// <param name="expressionType">
-        ///     The expression type. This must be <see cref="FieldExpressionType.Request"/> or <see cref="FieldExpressionType.Response"/>.
+        ///   The expression type. This must be <see cref="FieldExpressionType.Request"/> or <see cref="FieldExpressionType.Response"/>.
         /// </param>
         /// <param name="expressionSource">
-        ///     The expression source. This must be <see cref="FieldExpressionSource.Header"/>, <see cref="FieldExpressionSource.Query"/>
-        ///     or <see cref="FieldExpressionSource.Path"/>.
+        ///   The expression source. This must be <see cref="FieldExpressionSource.Header"/>, <see
+        ///   cref="FieldExpressionSource.Query"/> or <see cref="FieldExpressionSource.Path"/>.
         /// </param>
-        /// <param name="name">
-        ///     The name being referred to.
-        /// </param>
+        /// <param name="name">The name being referred to.</param>
         public FieldExpression(FieldExpressionType expressionType, FieldExpressionSource expressionSource, string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
@@ -113,14 +113,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
         }
 
         /// <summary>
-        /// Creates a new parameter <see cref="FieldExpression"/>.
+        ///   Creates a new parameter <see cref="FieldExpression"/>.
         /// </summary>
         /// <param name="expressionType">
-        ///     The expression type. This must be <see cref="FieldExpressionType.Request"/> or <see cref="FieldExpressionType.Response"/>.
+        ///   The expression type. This must be <see cref="FieldExpressionType.Request"/> or <see cref="FieldExpressionType.Response"/>.
         /// </param>
-        /// <param name="pointer">
-        ///     The JSON pointer.
-        /// </param>
+        /// <param name="pointer">The JSON pointer.</param>
         public FieldExpression(FieldExpressionType expressionType, JsonPointer pointer)
         {
             switch (expressionType)
@@ -139,92 +137,89 @@ namespace SourceCode.Clay.OpenApi.Expressions
             Pointer = pointer;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Factory
 
         /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves the URL.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression Url() => new FieldExpression(FieldExpressionType.Url);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves the HTTP method.
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves the HTTP method.
         /// </summary>
         /// <returns>The new <see cref="FieldExpression"/>.</returns>
         public static FieldExpression Method() => new FieldExpression(FieldExpressionType.Method);
 
         /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves the HTTP status code.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression StatusCode() => new FieldExpression(FieldExpressionType.StatusCode);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific header from the request.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression RequestHeader(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Header, name);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific query parameter from the request.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression RequestQuery(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Query, name);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific path parameter from the request.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression RequestPath(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Path, name);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific value from the request body.
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific value from the
+        ///   request body.
         /// </summary>
         /// <returns>The new <see cref="FieldExpression"/>.</returns>
         public static FieldExpression RequestBody(JsonPointer pointer) => new FieldExpression(FieldExpressionType.Request, pointer);
 
         /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific header from the response.
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific header from the request.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression RequestHeader(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Header, name);
+
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific path parameter
+        ///   from the request.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression RequestPath(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Path, name);
+
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific query parameter
+        ///   from the request.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression RequestQuery(string name) => new FieldExpression(FieldExpressionType.Request, FieldExpressionSource.Query, name);
+
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific value from the
+        ///   response body.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression ResponseBody(JsonPointer pointer) => new FieldExpression(FieldExpressionType.Response, pointer);
+
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific header from the response.
         /// </summary>
         /// <returns>The new <see cref="FieldExpression"/>.</returns>
         public static FieldExpression ResponseHeader(string name) => new FieldExpression(FieldExpressionType.Response, FieldExpressionSource.Header, name);
 
         /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific query parameter from the response.
-        /// </summary>
-        /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression ResponseQuery(string name) => new FieldExpression(FieldExpressionType.Response, FieldExpressionSource.Query, name);
-
-        /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific path parameter from the response.
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific path parameter
+        ///   from the response.
         /// </summary>
         /// <returns>The new <see cref="FieldExpression"/>.</returns>
         public static FieldExpression ResponsePath(string name) => new FieldExpression(FieldExpressionType.Response, FieldExpressionSource.Path, name);
 
         /// <summary>
-        /// Creates a new <see cref="FieldExpression"/> that retrieves a specific value from the response body.
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves a specific query parameter
+        ///   from the response.
         /// </summary>
         /// <returns>The new <see cref="FieldExpression"/>.</returns>
-        public static FieldExpression ResponseBody(JsonPointer pointer) => new FieldExpression(FieldExpressionType.Response, pointer);
+        public static FieldExpression ResponseQuery(string name) => new FieldExpression(FieldExpressionType.Response, FieldExpressionSource.Query, name);
 
-        #endregion
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves the HTTP status code.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression StatusCode() => new FieldExpression(FieldExpressionType.StatusCode);
+
+        /// <summary>
+        ///   Creates a new <see cref="FieldExpression"/> that retrieves the URL.
+        /// </summary>
+        /// <returns>The new <see cref="FieldExpression"/>.</returns>
+        public static FieldExpression Url() => new FieldExpression(FieldExpressionType.Url);
+
+        #endregion Factory
 
         #region Token - https://tools.ietf.org/html/rfc7230#section-3.2.6
 
         private static readonly HashSet<char> _tchar = new HashSet<char>(
             "!#$%&'*+-.^_`|~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
-
-        private static void ValidateToken(string name)
-        {
-            for (var i = 0; i < name.Length; i++)
-            {
-                if (!_tchar.Contains(name[i]))
-                    throw new ArgumentOutOfRangeException(nameof(name), $"'{name[i]}' is not a valid token character.");
-            }
-        }
 
         private static bool TryValidateToken(string name)
         {
@@ -235,18 +230,37 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        #endregion
+        private static void ValidateToken(string name)
+        {
+            for (var i = 0; i < name.Length; i++)
+            {
+                if (!_tchar.Contains(name[i]))
+                    throw new ArgumentOutOfRangeException(nameof(name), $"'{name[i]}' is not a valid token character.");
+            }
+        }
+
+        #endregion Token - https://tools.ietf.org/html/rfc7230#section-3.2.6
 
         #region Equatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as FieldExpression);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(FieldExpression other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -258,7 +272,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -274,68 +290,19 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
         }
 
-        #endregion
+        #endregion Equatable
 
         #region String
 
-        /// <summary>Returns a string that represents the current object.</summary>
-        /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        private static bool StartsWith(string s, string cmp, int index)
         {
-            var sb = new StringBuilder();
-            ToString(sb);
-            return sb.ToString();
-        }
-
-        internal void ToString(StringBuilder sb)
-        {
-            switch (ExpressionType)
+            for (var i = 0; i < cmp.Length; i++)
             {
-                case FieldExpressionType.Url: sb.Append("$url"); return;
-                case FieldExpressionType.Method: sb.Append("$method"); return;
-                case FieldExpressionType.StatusCode: sb.Append("$statusCode"); return;
-                case FieldExpressionType.Request: sb.Append("$request."); break;
-                case FieldExpressionType.Response: sb.Append("$response."); break;
+                if (index >= s.Length) return false;
+                if (s[index] != cmp[i]) return false;
+                index++;
             }
-
-            switch (ExpressionSource)
-            {
-                case FieldExpressionSource.Header: sb.Append("header.").Append(Name); break;
-                case FieldExpressionSource.Query: sb.Append("query.").Append(Name); break;
-                case FieldExpressionSource.Path: sb.Append("path.").Append(Name); break;
-                case FieldExpressionSource.Body: sb.Append("body#").Append(Pointer.ToString()); break;
-            }
-        }
-
-        /// <summary>
-        /// Converts the string representation of a field expression to its structured equivalent.
-        /// </summary>
-        /// <param name="s">A string containing a field expression to convert.</param>
-        /// <returns>The structured equivalent of the field expression contained in <paramref name="s"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
-        public static FieldExpression Parse(string s)
-        {
-            if (!TryParse(s, out var result)) throw new FormatException("The expression is not a valid field expression.");
-            return result;
-        }
-
-        /// <summary>
-        /// Converts the string representation of a field expression to its structured equivalent.
-        /// A return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="s">A string containing a field expression to convert.</param>
-        /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the field expression contained in <paramref name="s"/>,
-        /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
-        /// is not in a format compliant with the Open API field expression specification. This parameter is passed uninitialized;
-        /// any value originally supplied in result will be overwritten.
-        /// </param>
-        /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string s, out FieldExpression result)
-        {
-            var i = 0;
-            return TryParse(s, out result, ref i, false);
+            return true;
         }
 
         internal static bool TryParse(string s, out FieldExpression result, ref int index, bool respectDelimiter)
@@ -493,17 +460,73 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        private static bool StartsWith(string s, string cmp, int index)
+        internal void ToString(StringBuilder sb)
         {
-            for (var i = 0; i < cmp.Length; i++)
+            switch (ExpressionType)
             {
-                if (index >= s.Length) return false;
-                if (s[index] != cmp[i]) return false;
-                index++;
+                case FieldExpressionType.Url: sb.Append("$url"); return;
+                case FieldExpressionType.Method: sb.Append("$method"); return;
+                case FieldExpressionType.StatusCode: sb.Append("$statusCode"); return;
+                case FieldExpressionType.Request: sb.Append("$request."); break;
+                case FieldExpressionType.Response: sb.Append("$response."); break;
             }
-            return true;
+
+            switch (ExpressionSource)
+            {
+                case FieldExpressionSource.Header: sb.Append("header.").Append(Name); break;
+                case FieldExpressionSource.Query: sb.Append("query.").Append(Name); break;
+                case FieldExpressionSource.Path: sb.Append("path.").Append(Name); break;
+                case FieldExpressionSource.Body: sb.Append("body#").Append(Pointer.ToString()); break;
+            }
         }
 
-        #endregion
+        /// <summary>
+        ///   Converts the string representation of a field expression to its structured equivalent.
+        /// </summary>
+        /// <param name="s">A string containing a field expression to convert.</param>
+        /// <returns>
+        ///   The structured equivalent of the field expression contained in <paramref name="s"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
+        /// <exception cref="FormatException">
+        ///   <paramref name="s"/> is not in a format compliant with the Open API specification.
+        /// </exception>
+        public static FieldExpression Parse(string s)
+        {
+            if (!TryParse(s, out var result)) throw new FormatException("The expression is not a valid field expression.");
+            return result;
+        }
+
+        /// <summary>
+        ///   Converts the string representation of a field expression to its structured equivalent.
+        ///   A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="s">A string containing a field expression to convert.</param>
+        /// <param name="result">
+        ///   When this method returns, contains the structured equivalent of the field expression
+        ///   contained in <paramref name="s"/>, if the conversion succeeded, or default if the
+        ///   conversion failed. The conversion fails if the <paramref name="s"/> parameter is not in
+        ///   a format compliant with the Open API field expression specification. This parameter is
+        ///   passed uninitialized; any value originally supplied in result will be overwritten.
+        /// </param>
+        /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
+        public static bool TryParse(string s, out FieldExpression result)
+        {
+            var i = 0;
+            return TryParse(s, out result, ref i, false);
+        }
+
+        /// <summary>
+        ///   Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            ToString(sb);
+            return sb.ToString();
+        }
+
+        #endregion String
     }
 }

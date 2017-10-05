@@ -5,39 +5,45 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Represents either a reference object or a value.
+    ///   Represents either a reference object or a value.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     public struct Referable<T> : IEquatable<Referable<T>>
         where T : class, IEquatable<T>
     {
-        /// <summary>
-        /// Gets the contained value.
-        /// </summary>
-        public T Value { get; }
+        #region Properties
 
         /// <summary>
-        /// Gets the contained reference.
-        /// </summary>
-        public Reference Reference { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the referable is a reference.
-        /// </summary>
-        public bool IsReference => Reference.HasValue;
-
-        /// <summary>
-        /// Gets a value indicating whether the reference is a value.
-        /// </summary>
-        public bool IsValue => Value != null;
-
-        /// <summary>
-        /// Gets a value indicating whether the reference is null.
+        ///   Gets a value indicating whether the reference is null.
         /// </summary>
         public bool HasValue => IsReference || IsValue;
 
         /// <summary>
-        /// Creates a new value <see cref="Referable{T}"/>.
+        ///   Gets a value indicating whether the referable is a reference.
+        /// </summary>
+        public bool IsReference => Reference.HasValue;
+
+        /// <summary>
+        ///   Gets a value indicating whether the reference is a value.
+        /// </summary>
+        public bool IsValue => Value != null;
+
+        /// <summary>
+        ///   Gets the contained reference.
+        /// </summary>
+        public Reference Reference { get; }
+
+        /// <summary>
+        ///   Gets the contained value.
+        /// </summary>
+        public T Value { get; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        ///   Creates a new value <see cref="Referable{T}"/>.
         /// </summary>
         /// <param name="value">The value.</param>
         public Referable(T value)
@@ -47,7 +53,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new internal reference <see cref="Referable{T}"/>.
+        ///   Creates a new internal reference <see cref="Referable{T}"/>.
         /// </summary>
         /// <param name="reference">The reference.</param>
         public Referable(Reference reference)
@@ -58,7 +64,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new internal reference <see cref="Referable{T}"/>.
+        ///   Creates a new internal reference <see cref="Referable{T}"/>.
         /// </summary>
         /// <param name="internalReference">The internal reference.</param>
         public Referable(JsonPointer internalReference)
@@ -69,7 +75,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new external reference <see cref="Referable{T}"/>.
+        ///   Creates a new external reference <see cref="Referable{T}"/>.
         /// </summary>
         /// <param name="url">The external reference URL.</param>
         /// <param name="reference">The external reference pointer.</param>
@@ -80,14 +86,40 @@ namespace SourceCode.Clay.OpenApi
             Reference = new Reference(url, reference);
         }
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        #endregion Constructors
+
+        #region Methods
+
+        public static implicit operator Referable<T>(T value) => new Referable<T>(value);
+
+        public static implicit operator Referable<T>(JsonPointer internalReference) => new Referable<T>(internalReference);
+
+        public static implicit operator Referable<T>(Uri reference) => new Referable<T>(reference);
+
+        public static implicit operator Referable<T>(string reference) => new Referable<T>(reference);
+
+        public static bool operator !=(Referable<T> referable1, Referable<T> referable2) => !(referable1 == referable2);
+
+        public static bool operator ==(Referable<T> referable1, Referable<T> referable2) => referable1.Equals(referable2);
+
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => obj is Referable<T> o && Equals(o);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(Referable<T> other)
         {
             if (IsReference != other.IsReference) return false;
@@ -95,7 +127,9 @@ namespace SourceCode.Clay.OpenApi
             return EqualityComparer<T>.Default.Equals(Value, other.Value);
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -110,7 +144,9 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        /// <summary>Returns the string representation of the reference.</summary>
+        /// <summary>
+        ///   Returns the string representation of the reference.
+        /// </summary>
         /// <returns>The string representation of the reference.</returns>
         public override string ToString()
         {
@@ -119,16 +155,6 @@ namespace SourceCode.Clay.OpenApi
             else return string.Empty;
         }
 
-        public static bool operator ==(Referable<T> referable1, Referable<T> referable2) => referable1.Equals(referable2);
-
-        public static bool operator !=(Referable<T> referable1, Referable<T> referable2) => !(referable1 == referable2);
-
-        public static implicit operator Referable<T>(T value) => new Referable<T>(value);
-
-        public static implicit operator Referable<T>(JsonPointer internalReference) => new Referable<T>(internalReference);
-
-        public static implicit operator Referable<T>(Uri reference) => new Referable<T>(reference);
-
-        public static implicit operator Referable<T>(string reference) => new Referable<T>(reference);
+        #endregion Methods
     }
 }

@@ -10,14 +10,14 @@ using System.Threading.Tasks.Dataflow;
 namespace SourceCode.Clay.Threading
 {
     /// <summary>
-    /// Provides support for asynchronous looping.
+    ///   Provides support for asynchronous looping.
     /// </summary>
     public static class ParallelAsync
     {
         #region For
 
         /// <summary>
-        /// Executes a For loop in which executions may run asynchronously.
+        ///   Executes a For loop in which executions may run asynchronously.
         /// </summary>
         /// <param name="fromInclusive">The start index, inclusive.</param>
         /// <param name="toExclusive">The end index, exclusive.</param>
@@ -44,7 +44,8 @@ namespace SourceCode.Clay.Threading
         }
 
         /// <summary>
-        /// Executes a For loop in which executions may run in parallel. Returns a set of correlated values.
+        ///   Executes a For loop in which executions may run in parallel. Returns a set of
+        ///   correlated values.
         /// </summary>
         /// <typeparam name="TValue">The type of items to return.</typeparam>
         /// <param name="fromInclusive">The start index, inclusive.</param>
@@ -82,12 +83,12 @@ namespace SourceCode.Clay.Threading
             return dict;
         }
 
-        #endregion
+        #endregion For
 
         #region ForEach
 
         /// <summary>
-        /// Executes a ForEach loop in which executions may run in parallel.
+        ///   Executes a ForEach loop in which executions may run in parallel.
         /// </summary>
         /// <typeparam name="TSource">The type of items in the source data.</typeparam>
         /// <param name="source">An enumerable data source.</param>
@@ -114,7 +115,8 @@ namespace SourceCode.Clay.Threading
         }
 
         /// <summary>
-        /// Executes a ForEach loop in which executions may run in parallel. Returns a set of correlated values.
+        ///   Executes a ForEach loop in which executions may run in parallel. Returns a set of
+        ///   correlated values.
         /// </summary>
         /// <typeparam name="TSource">The type of items in the source data.</typeparam>
         /// <typeparam name="TValue">The type of items to return.</typeparam>
@@ -154,7 +156,7 @@ namespace SourceCode.Clay.Threading
             return dict;
         }
 
-        #endregion
+        #endregion ForEach
 
         #region Helpers
 
@@ -166,6 +168,6 @@ namespace SourceCode.Clay.Threading
             MaxDegreeOfParallelism = options == null ? -1 : options.MaxDegreeOfParallelism
         };
 
-        #endregion
+        #endregion Helpers
     }
 }

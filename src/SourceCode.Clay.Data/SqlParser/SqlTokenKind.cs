@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Data.SqlParser
+namespace SourceCode.Clay.Data.SqlParser
 {
     public enum SqlTokenKind : byte
     {

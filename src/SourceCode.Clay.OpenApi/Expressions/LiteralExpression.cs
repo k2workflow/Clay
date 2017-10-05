@@ -3,20 +3,28 @@ using System;
 namespace SourceCode.Clay.OpenApi.Expressions
 {
     /// <summary>
-    /// Represents a literal expression.
+    ///   Represents a literal expression.
     /// </summary>
     public sealed class LiteralExpression : ExpressionComponent, IEquatable<LiteralExpression>
     {
-        /// <summary>
-        /// Gets the literal value.
-        /// </summary>
-        public string Value { get; }
+        #region Properties
 
-        /// <summary>Gets the component type.</summary>
+        /// <summary>
+        ///   Gets the component type.
+        /// </summary>
         public override ExpressionComponentType ComponentType => ExpressionComponentType.Literal;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="LiteralExpression"/> class.
+        ///   Gets the literal value.
+        /// </summary>
+        public string Value { get; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        ///   Creates a new instance of the <see cref="LiteralExpression"/> class.
         /// </summary>
         /// <param name="value">The literal value.</param>
         public LiteralExpression(string value)
@@ -24,14 +32,27 @@ namespace SourceCode.Clay.OpenApi.Expressions
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        /// <summary>Determines whether the specified object is equal to the current object.</summary>
+        #endregion Constructors
+
+        #region Methods
+
+        /// <summary>
+        ///   Determines whether the specified object is equal to the current object.
+        /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the specified object is equal to the current object; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as LiteralExpression);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(LiteralExpression other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -39,7 +60,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
@@ -52,8 +75,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
         }
 
-        /// <summary>Returns a string that represents the current object.</summary>
+        /// <summary>
+        ///   Returns a string that represents the current object.
+        /// </summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() => Value;
+
+        #endregion Methods
     }
 }

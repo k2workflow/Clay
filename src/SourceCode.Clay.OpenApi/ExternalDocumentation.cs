@@ -3,29 +3,29 @@ using System;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Allows referencing an external resource for extended documentation.
+    ///   Allows referencing an external resource for extended documentation.
     /// </summary>
     public class ExternalDocumentation : IEquatable<ExternalDocumentation>
     {
         #region Properties
 
         /// <summary>
-        /// Get the short description of the target documentation.
+        ///   Get the short description of the target documentation.
         /// </summary>
-        /// <remarks>
-        /// CommonMark syntax MAY be used for rich text representation.
-        /// </remarks>
+        /// <remarks>CommonMark syntax MAY be used for rich text representation.</remarks>
         public string Description { get; }
 
         /// <summary>
-        /// Gets the URL for the target documentation.
+        ///   Gets the URL for the target documentation.
         /// </summary>
         public Uri Url { get; }
 
-        #endregion
+        #endregion Properties
+
+        #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ExternalDocumentation"/> class.
+        ///   Creates a new instance of the <see cref="ExternalDocumentation"/> class.
         /// </summary>
         /// <param name="description">The short description of the target documentation.</param>
         /// <param name="url">The URL for the target documentation.</param>
@@ -37,16 +37,38 @@ namespace SourceCode.Clay.OpenApi
             Url = url;
         }
 
+        #endregion Constructors
+
         #region IEquatable
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        public static bool operator !=(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
+                    => !(externalDocumentation1 == externalDocumentation2);
+
+        public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
+        {
+            if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
+            if (ReferenceEquals(externalDocumentation1, null) || ReferenceEquals(externalDocumentation2, null)) return false;
+            return externalDocumentation1.Equals((object)externalDocumentation2);
+        }
+
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => Equals(obj as ExternalDocumentation);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(ExternalDocumentation other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -58,7 +80,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -73,16 +97,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
-        {
-            if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
-            if (ReferenceEquals(externalDocumentation1, null) || ReferenceEquals(externalDocumentation2, null)) return false;
-            return externalDocumentation1.Equals((object)externalDocumentation2);
-        }
-
-        public static bool operator !=(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
-            => !(externalDocumentation1 == externalDocumentation2);
-
-        #endregion
+        #endregion IEquatable
     }
 }

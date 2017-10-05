@@ -6,33 +6,39 @@ using System.Text;
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
-    /// Represents a JSON count validation.
+    ///   Represents a JSON count validation.
     /// </summary>
     public struct CountRange : IEquatable<CountRange>
     {
-        /// <summary>
-        /// Gets the minimum value.
-        /// </summary>
-        public uint? Minimum { get; }
+        #region Properties
 
         /// <summary>
-        /// Gets the maximum value.
-        /// </summary>
-        public uint? Maximum { get; }
-
-        /// <summary>
-        /// Gets the range options.
-        /// </summary>
-        public RangeOptions RangeOptions { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether either <see cref="Minimum"/> or <see cref="Maximum"/>
-        /// has a value.
+        ///   Gets a value indicating whether either <see cref="Minimum"/> or <see cref="Maximum"/>
+        ///   has a value.
         /// </summary>
         public bool HasValue => Minimum.HasValue || Maximum.HasValue;
 
         /// <summary>
-        /// Creates a new inclusive <see cref="NumberRange"/> value.
+        ///   Gets the maximum value.
+        /// </summary>
+        public uint? Maximum { get; }
+
+        /// <summary>
+        ///   Gets the minimum value.
+        /// </summary>
+        public uint? Minimum { get; }
+
+        /// <summary>
+        ///   Gets the range options.
+        /// </summary>
+        public RangeOptions RangeOptions { get; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        ///   Creates a new inclusive <see cref="NumberRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
@@ -42,7 +48,7 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new <see cref="NumberRange"/> value.
+        ///   Creates a new <see cref="NumberRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum count.</param>
         /// <param name="maximum">The maximum count.</param>
@@ -58,14 +64,28 @@ namespace SourceCode.Clay.OpenApi
             RangeOptions = rangeOptions;
         }
 
-        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        #endregion Constructors
+
+        #region Methods
+
+        /// <summary>
+        ///   Indicates whether this instance and a specified object are equal.
+        /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        /// <returns>
+        ///   true if <paramref name="obj">obj</paramref> and this instance are the same type and
+        ///   represent the same value; otherwise, false.
+        /// </returns>
         public override bool Equals(object obj) => obj is NumberRange o && Equals(o);
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <summary>
+        ///   Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
         /// <param name="other">An object to compare with this object.</param>
-        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        /// <returns>
+        ///   true if the current object is equal to the <paramref name="other">other</paramref>
+        ///   parameter; otherwise, false.
+        /// </returns>
         public bool Equals(CountRange other)
         {
             if (!EqualityComparer<Number?>.Default.Equals(Minimum, other.Minimum)) return false;
@@ -75,7 +95,9 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        ///   Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
@@ -89,7 +111,9 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        /// <summary>Returns the fully qualified type name of this instance.</summary>
+        /// <summary>
+        ///   Returns the fully qualified type name of this instance.
+        /// </summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString()
         {
@@ -111,5 +135,7 @@ namespace SourceCode.Clay.OpenApi
 
             return sb.ToString();
         }
+
+        #endregion Methods
     }
 }

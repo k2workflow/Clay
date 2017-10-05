@@ -1,4 +1,4 @@
-﻿using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = EmptyDictionaryImpl<string, SqlParamInfo>.ReadOnlyValue;
 
-        #endregion
+        #endregion Constants
 
         #region Procedure
 
@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        #endregion
+        #endregion Procedure
 
         #region Function
 
@@ -179,20 +179,24 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        #endregion
+        #endregion Function
 
         #region Helpers
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool ParseSymbol(IEnumerator<SqlTokenInfo> tokenizer, char expected)
+        private static bool ParseDefault(IEnumerator<SqlTokenInfo> tokenizer, out bool isNullable)
         {
-            if (tokenizer.Current.Kind != SqlTokenKind.Symbol)
+            isNullable = false;
+
+            if (!ParseSymbol(tokenizer, '='))
                 return false;
 
-            if (tokenizer.Current.Value == null) return false;
-            if (tokenizer.Current.Value.Length != 1) return false;
-            if (tokenizer.Current.Value[0] != expected) return false;
+            if (tokenizer.Current.Kind != SqlTokenKind.Literal
+                && tokenizer.Current.Kind != SqlTokenKind.QuotedString)
+                return false;
 
+            isNullable = ParseLiteral(tokenizer, "NULL");
+
+            // Fail if EOF
             var more = tokenizer.MoveNext();
             return more;
         }
@@ -232,40 +236,6 @@ namespace SourceCode.Clay.Data.SqlParser
                 && !StringComparer.OrdinalIgnoreCase.Equals(tokenizer.Current.Value, expected3))
                 return false;
 
-            var more = tokenizer.MoveNext();
-            return more;
-        }
-
-        private static bool ParseParamName(IEnumerator<SqlTokenInfo> tokenizer, out string name)
-        {
-            name = null;
-
-            if (tokenizer.Current.Kind != SqlTokenKind.Literal)
-                return false;
-
-            if (!tokenizer.Current.Value.StartsWith("@"))
-                return false;
-
-            name = tokenizer.Current.Value;
-
-            var more = tokenizer.MoveNext();
-            return more;
-        }
-
-        private static bool ParseDefault(IEnumerator<SqlTokenInfo> tokenizer, out bool isNullable)
-        {
-            isNullable = false;
-
-            if (!ParseSymbol(tokenizer, '='))
-                return false;
-
-            if (tokenizer.Current.Kind != SqlTokenKind.Literal
-                && tokenizer.Current.Kind != SqlTokenKind.QuotedString)
-                return false;
-
-            isNullable = ParseLiteral(tokenizer, "NULL");
-
-            // Fail if EOF
             var more = tokenizer.MoveNext();
             return more;
         }
@@ -312,6 +282,36 @@ namespace SourceCode.Clay.Data.SqlParser
             schema = str0;
             name = str1;
             return true;
+        }
+
+        private static bool ParseParamName(IEnumerator<SqlTokenInfo> tokenizer, out string name)
+        {
+            name = null;
+
+            if (tokenizer.Current.Kind != SqlTokenKind.Literal)
+                return false;
+
+            if (!tokenizer.Current.Value.StartsWith("@"))
+                return false;
+
+            name = tokenizer.Current.Value;
+
+            var more = tokenizer.MoveNext();
+            return more;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool ParseSymbol(IEnumerator<SqlTokenInfo> tokenizer, char expected)
+        {
+            if (tokenizer.Current.Kind != SqlTokenKind.Symbol)
+                return false;
+
+            if (tokenizer.Current.Value == null) return false;
+            if (tokenizer.Current.Value.Length != 1) return false;
+            if (tokenizer.Current.Value[0] != expected) return false;
+
+            var more = tokenizer.MoveNext();
+            return more;
         }
 
         private static bool ParseTypeName(IEnumerator<SqlTokenInfo> tokenizer, out string schema, out string type)
@@ -420,6 +420,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return true;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

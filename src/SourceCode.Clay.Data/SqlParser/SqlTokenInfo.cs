@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
         public string Value { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Data.SqlParser
             Value = new string(value, offset, count);
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -61,6 +61,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return base.ToString();
         }
 
-        #endregion
+        #endregion Methods
     }
 }

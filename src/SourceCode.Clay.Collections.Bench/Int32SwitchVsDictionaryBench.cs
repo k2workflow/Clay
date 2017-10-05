@@ -1,4 +1,4 @@
-﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using SourceCode.Clay.Collections.Generic;
 using System.Collections.Generic;
@@ -7,11 +7,16 @@ namespace SourceCode.Clay.Collections.Bench
 {
     public class Int32SwitchVsDictionaryBench
     {
-        private const int ItemCount = 50;
-        private const int InvokeCount = 1000;
+        #region Fields
 
-        private readonly Dictionary<int, int> dict;
+        private const int InvokeCount = 1000;
+        private const int ItemCount = 50;
         private readonly IDynamicSwitch<int, int> @switch;
+        private readonly Dictionary<int, int> dict;
+
+        #endregion Fields
+
+        #region Constructors
 
         public Int32SwitchVsDictionaryBench()
         {
@@ -23,6 +28,10 @@ namespace SourceCode.Clay.Collections.Bench
             // Build switch
             @switch = dict.ToDynamicSwitch();
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = ItemCount * InvokeCount)]
         public int Lookup()
@@ -59,5 +68,7 @@ namespace SourceCode.Clay.Collections.Bench
 
             return total;
         }
+
+        #endregion Methods
     }
 }

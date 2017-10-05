@@ -1,9 +1,11 @@
-﻿using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Running;
 
 namespace SourceCode.Clay.Collections.Bench
 {
     public static class Program
     {
+        #region Methods
+
         public static void Main(string[] args)
         {
             var test1 = new Int32SwitchVsDictionaryBench();
@@ -12,5 +14,7 @@ namespace SourceCode.Clay.Collections.Bench
 
             var summary1 = BenchmarkRunner.Run<Int32SwitchVsDictionaryBench>();
         }
+
+        #endregion Methods
     }
 }
