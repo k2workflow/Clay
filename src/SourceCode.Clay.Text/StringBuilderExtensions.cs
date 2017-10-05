@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Text;
 
 namespace SourceCode.Clay.Text
@@ -8,6 +15,8 @@ namespace SourceCode.Clay.Text
     /// </summary>
     public static class StringBuilderExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Appends a formatted string (using zero or more format items) to this instance,
         /// followed by the default line terminator.
@@ -161,5 +170,7 @@ namespace SourceCode.Clay.Text
 
             return concat;
         }
+
+        #endregion
     }
 }

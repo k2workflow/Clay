@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -38,6 +45,11 @@ namespace SourceCode.Clay.Collections.Generic
         #region IDynamicSwitch
 
         /// <summary>
+        /// The number of items in the switch.
+        /// </summary>
+        public int Count => _values.Count;
+
+        /// <summary>
         /// Gets the value with the specified key.
         /// </summary>
         /// <value>
@@ -46,11 +58,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="key">The key.</param>
         /// <returns></returns>
         public TValue this[TKey key] => _values[_indexer(key)];
-
-        /// <summary>
-        /// The number of items in the switch.
-        /// </summary>
-        public int Count => _values.Count;
 
         /// <summary>
         /// Checks whether the specified key is present in the switch.
@@ -79,14 +86,6 @@ namespace SourceCode.Clay.Collections.Generic
         #endregion
 
         #region Helpers
-
-        /// <summary>
-        /// Override this method if the keys need to be transformed in some manner before
-        /// being compared. For example, changing string keys to their lowercase equivalent.
-        /// </summary>
-        /// <param name="key">The key value to be transformed.</param>
-        /// <returns>The transformed key value.</returns>
-        protected virtual TKey NormalizeKey(TKey key) => key;
 
         /// <summary>
         /// A persistent pointer to the <see cref="NormalizeKey(TKey)"/> method.
@@ -163,6 +162,14 @@ namespace SourceCode.Clay.Collections.Generic
             var func = expr.Compile();
             return (values, func);
         }
+
+        /// <summary>
+        /// Override this method if the keys need to be transformed in some manner before
+        /// being compared. For example, changing string keys to their lowercase equivalent.
+        /// </summary>
+        /// <param name="key">The key value to be transformed.</param>
+        /// <returns>The transformed key value.</returns>
+        protected virtual TKey NormalizeKey(TKey key) => key;
 
         #endregion
     }

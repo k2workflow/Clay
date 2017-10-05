@@ -1,4 +1,11 @@
-﻿using SourceCode.Clay.Collections.Generic;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class KeyedLookupTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor))]
         public static void KeyedLookup_KeyExtractor()
         {
@@ -69,5 +78,7 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Delegate, lookup["c"].Value);
             Assert.Throws<KeyNotFoundException>(() => lookup["C"]);
         }
+
+        #endregion
     }
 }

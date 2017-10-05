@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -96,18 +103,18 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="servers">The alternative server list to service all operations in this path.</param>
         /// <param name="parameters">The list of parameters that are applicable for all the operations described under this path.</param>
         public Path(
-            string summary,
-            string description,
-            Operation get,
-            Operation put,
-            Operation post,
-            Operation delete,
-            Operation options,
-            Operation head,
-            Operation patch,
-            Operation trace,
-            IReadOnlyList<Server> servers,
-            IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters)
+            string summary = default,
+            string description = default,
+            Operation get = default,
+            Operation put = default,
+            Operation post = default,
+            Operation delete = default,
+            Operation options = default,
+            Operation head = default,
+            Operation patch = default,
+            Operation trace = default,
+            IReadOnlyList<Server> servers = default,
+            IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters = default)
         {
             Summary = summary;
             Description = description;
@@ -126,6 +133,15 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        public static bool operator ==(Path path1, Path path2)
+        {
+            if (ReferenceEquals(path1, null) && ReferenceEquals(path2, null)) return true;
+            if (ReferenceEquals(path1, null) || ReferenceEquals(path2, null)) return false;
+            return path1.Equals((object)path2);
+        }
+
+        public static bool operator !=(Path path1, Path path2) => !(path1 == path2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -180,15 +196,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Path path1, Path path2)
-        {
-            if (ReferenceEquals(path1, null) && ReferenceEquals(path2, null)) return true;
-            if (ReferenceEquals(path1, null) || ReferenceEquals(path2, null)) return false;
-            return path1.Equals((object)path2);
-        }
-
-        public static bool operator !=(Path path1, Path path2) => !(path1 == path2);
 
         #endregion
     }

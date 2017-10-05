@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
@@ -8,6 +15,8 @@ namespace SourceCode.Clay
     /// </summary>
     public static class StringExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Returns the specified number of characters from the left of a string.
         /// Tolerates <paramref name="length"/> values that are too large or too small (or negative).
@@ -107,5 +116,7 @@ namespace SourceCode.Clay
 
             return x.Equals(y); // (s, t)
         }
+
+        #endregion
     }
 }

@@ -1,4 +1,11 @@
-﻿using SourceCode.Clay.Collections.Generic;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using SourceCode.Clay.Collections.Generic;
 using System;
 using Xunit;
 
@@ -6,6 +13,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class MemoryExtensionsTests
     {
+        #region Fields
+
         private static readonly ReadOnlyMemory<string> _null = new ReadOnlyMemory<string>();
 
         private static readonly string[] _list = new[]
@@ -15,6 +24,10 @@ namespace SourceCode.Clay.Collections.Tests
             "baz",
             "nin"
         };
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(MemoryEquals_both_null))]
@@ -192,5 +205,7 @@ namespace SourceCode.Clay.Collections.Tests
             equal = list.MemoryEquals(list2, false);
             Assert.False(equal);
         }
+
+        #endregion
     }
 }

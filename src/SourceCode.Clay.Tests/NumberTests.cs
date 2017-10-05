@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using Xunit;
 
@@ -8,8 +15,10 @@ namespace SourceCode.Clay.Tests
 
     public static class NumberTests
     {
+        #region Methods
+
         [
-            InlineData("null", null, NumberKind.Null, false),
+                    InlineData("null", null, NumberKind.Null, false),
             InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
             InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
             InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
@@ -403,6 +412,8 @@ namespace SourceCode.Clay.Tests
             aMax.CompareTo(bMin);
             aMax.CompareTo(bMax);
         }
+
+        #endregion
     }
 
 #   pragma warning restore xUnit1026 // Theory methods should use all of their parameters

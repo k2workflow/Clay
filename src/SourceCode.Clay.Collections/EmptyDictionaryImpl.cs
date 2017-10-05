@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -29,11 +36,9 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Properties
 
-        public TValue this[TKey key]
-        {
-            get => _dict[key]; // Leverage the underlying exception
-            set => throw new InvalidOperationException();
-        }
+        public int Count => 0;
+
+        public bool IsReadOnly => true;
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Array.Empty<TKey>();
 
@@ -43,9 +48,11 @@ namespace SourceCode.Clay.Collections.Generic
 
         IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Array.Empty<TValue>();
 
-        public int Count => 0;
-
-        public bool IsReadOnly => true;
+        public TValue this[TKey key]
+        {
+            get => _dict[key]; // Leverage the underlying exception
+            set => throw new InvalidOperationException();
+        }
 
         #endregion
 

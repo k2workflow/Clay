@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -48,6 +55,13 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
+        // Heap analysis shows Regex permanently holds onto last input string, which may be large
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        private static void Clear(Regex regex)
+        {
+            regex.IsMatch(string.Empty);
+        }
+
         public bool IsValid(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -58,13 +72,6 @@ namespace SourceCode.Clay.Json.Validation
             Clear(_regex.Value);
 
             return isMatch;
-        }
-
-        // Heap analysis shows Regex permanently holds onto last input string, which may be large
-        [MethodImpl(MethodImplOptions.NoOptimization)]
-        private static void Clear(Regex regex)
-        {
-            regex.IsMatch(string.Empty);
         }
 
         public override string ToString()

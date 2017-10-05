@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Json.Pointers;
 using System;
 using System.Collections.Generic;
@@ -11,6 +18,8 @@ namespace SourceCode.Clay.OpenApi
     public struct Referable<T> : IEquatable<Referable<T>>
         where T : class, IEquatable<T>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the contained value.
         /// </summary>
@@ -35,6 +44,10 @@ namespace SourceCode.Clay.OpenApi
         /// Gets a value indicating whether the reference is null.
         /// </summary>
         public bool HasValue => IsReference || IsValue;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new value <see cref="Referable{T}"/>.
@@ -80,6 +93,22 @@ namespace SourceCode.Clay.OpenApi
             Reference = new Reference(url, reference);
         }
 
+        #endregion
+
+        #region Methods
+
+        public static bool operator ==(Referable<T> referable1, Referable<T> referable2) => referable1.Equals(referable2);
+
+        public static bool operator !=(Referable<T> referable1, Referable<T> referable2) => !(referable1 == referable2);
+
+        public static implicit operator Referable<T>(T value) => new Referable<T>(value);
+
+        public static implicit operator Referable<T>(JsonPointer internalReference) => new Referable<T>(internalReference);
+
+        public static implicit operator Referable<T>(Uri reference) => new Referable<T>(reference);
+
+        public static implicit operator Referable<T>(string reference) => new Referable<T>(reference);
+
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -119,16 +148,6 @@ namespace SourceCode.Clay.OpenApi
             else return string.Empty;
         }
 
-        public static bool operator ==(Referable<T> referable1, Referable<T> referable2) => referable1.Equals(referable2);
-
-        public static bool operator !=(Referable<T> referable1, Referable<T> referable2) => !(referable1 == referable2);
-
-        public static implicit operator Referable<T>(T value) => new Referable<T>(value);
-
-        public static implicit operator Referable<T>(JsonPointer internalReference) => new Referable<T>(internalReference);
-
-        public static implicit operator Referable<T>(Uri reference) => new Referable<T>(reference);
-
-        public static implicit operator Referable<T>(string reference) => new Referable<T>(reference);
+        #endregion
     }
 }

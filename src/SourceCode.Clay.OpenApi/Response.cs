@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -44,10 +51,10 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="content">The map containing descriptions of potential response payloads.</param>
         /// <param name="links">The map of operations links that can be followed from the response.</param>
         public Response(
-            string description,
-            IReadOnlyDictionary<string, Referable<ParameterBody>> headers,
-            IReadOnlyDictionary<ContentType, MediaType> content,
-            IReadOnlyDictionary<string, Referable<Link>> links)
+            string description = default,
+            IReadOnlyDictionary<string, Referable<ParameterBody>> headers = default,
+            IReadOnlyDictionary<ContentType, MediaType> content = default,
+            IReadOnlyDictionary<string, Referable<Link>> links = default)
         {
             Description = description;
             Headers = headers ?? ReadOnlyDictionary.Empty<string, Referable<ParameterBody>>();
@@ -58,6 +65,15 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        public static bool operator ==(Response response1, Response response2)
+        {
+            if (ReferenceEquals(response1, null) && ReferenceEquals(response2, null)) return true;
+            if (ReferenceEquals(response1, null) || ReferenceEquals(response2, null)) return false;
+            return response1.Equals((object)response2);
+        }
+
+        public static bool operator !=(Response response1, Response response2) => !(response1 == response2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -96,15 +112,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Response response1, Response response2)
-        {
-            if (ReferenceEquals(response1, null) && ReferenceEquals(response2, null)) return true;
-            if (ReferenceEquals(response1, null) || ReferenceEquals(response2, null)) return false;
-            return response1.Equals((object)response2);
-        }
-
-        public static bool operator !=(Response response1, Response response2) => !(response1 == response2);
 
         #endregion
     }

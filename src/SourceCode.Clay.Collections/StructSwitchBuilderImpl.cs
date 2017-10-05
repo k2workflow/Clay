@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
@@ -12,6 +19,8 @@ namespace SourceCode.Clay.Collections.Generic
     internal sealed class StructSwitchBuilderImpl<TKey, TValue> : BaseSwitchBuilder<TKey, TValue>
         where TKey : struct, IEquatable<TKey>
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StructSwitchBuilderImpl{TKey, TValue}"/> class.
         /// </summary>
@@ -19,5 +28,7 @@ namespace SourceCode.Clay.Collections.Generic
         public StructSwitchBuilderImpl(IReadOnlyDictionary<TKey, TValue> cases)
             : base(cases)
         { }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -163,6 +170,14 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
+        #region Fields
+
+        private readonly HttpStatusCode? _httpStatusCode;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets a value indicating whether this response key is the default response.
         /// </summary>
@@ -173,7 +188,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public HttpStatusCode HttpStatusCode => _httpStatusCode ?? throw new InvalidOperationException("Cannot retrieve the status code from a default ResponseKey.");
 
-        private readonly HttpStatusCode? _httpStatusCode;
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="ResponseKey"/> value.
@@ -211,6 +228,16 @@ namespace SourceCode.Clay.OpenApi
                 throw new FormatException("The response key is not valid.");
         }
 
+        #endregion
+
+        #region Methods
+
+        public static bool operator ==(ResponseKey key1, ResponseKey key2) => key1.Equals(key2);
+
+        public static bool operator !=(ResponseKey key1, ResponseKey key2) => !(key1 == key2);
+
+        public static implicit operator ResponseKey(HttpStatusCode httpStatusCode) => new ResponseKey(httpStatusCode);
+
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -240,10 +267,6 @@ namespace SourceCode.Clay.OpenApi
             ? ((int)_httpStatusCode.Value).ToString(CultureInfo.InvariantCulture)
             : "default";
 
-        public static bool operator ==(ResponseKey key1, ResponseKey key2) => key1.Equals(key2);
-
-        public static bool operator !=(ResponseKey key1, ResponseKey key2) => !(key1 == key2);
-
-        public static implicit operator ResponseKey(HttpStatusCode httpStatusCode) => new ResponseKey(httpStatusCode);
+        #endregion
     }
 }

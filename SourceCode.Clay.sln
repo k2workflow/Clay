@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26929.2
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
 EndProject
@@ -38,6 +38,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading", "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj", "{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading.Tests", "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj", "{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{B2F708DF-EF63-4F62-A95D-9A148D01421E}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

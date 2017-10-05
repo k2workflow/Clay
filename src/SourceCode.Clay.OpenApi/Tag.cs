@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -35,9 +42,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="description">The short description for the tag.</param>
         /// <param name="externalDocumentation">The additional external documentation for the tag.</param>
         public Tag(
-            string name = null,
-            string description = null,
-            ExternalDocumentation externalDocumentation = null)
+            string name = default,
+            string description = default,
+            ExternalDocumentation externalDocumentation = default)
         {
             Name = name;
             Description = description;
@@ -47,6 +54,15 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        public static bool operator ==(Tag tag1, Tag tag2)
+        {
+            if (ReferenceEquals(tag1, null) && ReferenceEquals(tag2, null)) return true;
+            if (ReferenceEquals(tag1, null) || ReferenceEquals(tag2, null)) return false;
+            return tag1.Equals((object)tag2);
+        }
+
+        public static bool operator !=(Tag tag1, Tag tag2) => !(tag1 == tag2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -83,15 +99,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Tag tag1, Tag tag2)
-        {
-            if (ReferenceEquals(tag1, null) && ReferenceEquals(tag2, null)) return true;
-            if (ReferenceEquals(tag1, null) || ReferenceEquals(tag2, null)) return false;
-            return tag1.Equals((object)tag2);
-        }
-
-        public static bool operator !=(Tag tag1, Tag tag2) => !(tag1 == tag2);
 
         #endregion
     }

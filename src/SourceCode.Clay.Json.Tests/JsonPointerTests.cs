@@ -1,4 +1,11 @@
-﻿using SourceCode.Clay.Json.Pointers;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using SourceCode.Clay.Json.Pointers;
 using System;
 using System.Json;
 using System.Linq;
@@ -8,6 +15,8 @@ namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonPointerTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(JsonPointer_ToString))]
         public static void JsonPointer_ToString()
         {
@@ -179,5 +188,7 @@ namespace SourceCode.Clay.Json.Tests
             JsonPointer.Parse("/foo6/2").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
             JsonPointer.Parse("/foo6/-").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public struct ParameterKey : IEquatable<ParameterKey>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the name of the parameter.
         /// </summary>
@@ -16,6 +25,10 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the location of the parameter.
         /// </summary>
         public ParameterLocation Location { get; }
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="ParameterKey"/> value.
@@ -30,6 +43,14 @@ namespace SourceCode.Clay.OpenApi
             Name = name;
             Location = location;
         }
+
+        #endregion
+
+        #region Methods
+
+        public static bool operator ==(ParameterKey key1, ParameterKey key2) => key1.Equals(key2);
+
+        public static bool operator !=(ParameterKey key1, ParameterKey key2) => !(key1 == key2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -62,8 +83,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        public static bool operator ==(ParameterKey key1, ParameterKey key2) => key1.Equals(key2);
-
-        public static bool operator !=(ParameterKey key1, ParameterKey key2) => !(key1 == key2);
+        #endregion
     }
 }

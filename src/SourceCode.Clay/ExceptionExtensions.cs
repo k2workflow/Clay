@@ -1,4 +1,11 @@
-﻿using System;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
@@ -8,7 +15,9 @@ namespace SourceCode.Clay
     /// </summary>
     public static class ExceptionExtensions
     {
-#       pragma warning disable RECS0154 // Parameter is never used
+#pragma warning disable RECS0154 // Parameter is never used
+
+        #region Methods
 
         /// <summary>
         /// Does nothing.
@@ -24,6 +33,8 @@ namespace SourceCode.Clay
             return exception;
         }
 
-#       pragma warning restore RECS0154 // Parameter is never used
+        #endregion
+
+#pragma warning restore RECS0154 // Parameter is never used
     }
 }

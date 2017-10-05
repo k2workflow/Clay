@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -40,9 +47,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="default">The default value to use for substitution, and to send, if an alternate value is not supplied. </param>
         /// <param name="description">The description for the server variable.</param>
         public ServerVariable(
-            IReadOnlyList<string> @enum,
-            string @default,
-            string description)
+            IReadOnlyList<string> @enum = default,
+            string @default = default,
+            string description = default)
         {
             Enum = @enum ?? Array.Empty<string>();
             Default = @default;
@@ -52,6 +59,16 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        public static bool operator ==(ServerVariable serverVariable1, ServerVariable serverVariable2)
+        {
+            if (ReferenceEquals(serverVariable1, null) && ReferenceEquals(serverVariable2, null)) return true;
+            if (ReferenceEquals(serverVariable1, null) || ReferenceEquals(serverVariable2, null)) return false;
+            return serverVariable1.Equals((object)serverVariable2);
+        }
+
+        public static bool operator !=(ServerVariable serverVariable1, ServerVariable serverVariable2)
+                    => !(serverVariable1 == serverVariable2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -88,16 +105,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(ServerVariable serverVariable1, ServerVariable serverVariable2)
-        {
-            if (ReferenceEquals(serverVariable1, null) && ReferenceEquals(serverVariable2, null)) return true;
-            if (ReferenceEquals(serverVariable1, null) || ReferenceEquals(serverVariable2, null)) return false;
-            return serverVariable1.Equals((object)serverVariable2);
-        }
-
-        public static bool operator !=(ServerVariable serverVariable1, ServerVariable serverVariable2)
-            => !(serverVariable1 == serverVariable2);
 
         #endregion
     }

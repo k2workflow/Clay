@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SetExtensionsTests
     {
+        #region Fields
+
         private static readonly HashSet<string> _set = new HashSet<string>
         {
             "foo",
@@ -14,6 +23,10 @@ namespace SourceCode.Clay.Collections.Tests
             "baz",
             "nin"
         };
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(SetEquals_both_null))]
@@ -88,5 +101,7 @@ namespace SourceCode.Clay.Collections.Tests
             var equal = _set.NullableSetEquals(set2);
             Assert.False(equal);
         }
+
+        #endregion
     }
 }

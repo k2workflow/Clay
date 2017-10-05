@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 
@@ -53,8 +60,14 @@ namespace SourceCode.Clay
 
         private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
         {
+            #region Constructors
+
             internal StrictSemanticVersionComparer()
             { }
+
+            #endregion
+
+            #region Methods
 
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
@@ -100,12 +113,20 @@ namespace SourceCode.Clay
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
+
+            #endregion
         }
 
         private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
         {
+            #region Constructors
+
             internal StandardSemanticVersionComparer()
             { }
+
+            #endregion
+
+            #region Methods
 
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
@@ -146,6 +167,8 @@ namespace SourceCode.Clay
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
+
+            #endregion
         }
 
         #endregion

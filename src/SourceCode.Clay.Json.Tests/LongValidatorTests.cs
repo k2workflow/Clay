@@ -1,10 +1,19 @@
-﻿using SourceCode.Clay.Json.Validation;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using SourceCode.Clay.Json.Validation;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
     public static class LongValidatorTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_LongValidator))]
         [InlineData(-15, true)]
@@ -108,5 +117,7 @@ namespace SourceCode.Clay.Json.Units
 
             Assert.True(range.IsValid(value) == valid);
         }
+
+        #endregion
     }
 }

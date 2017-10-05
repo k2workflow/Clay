@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +15,8 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class SetExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
@@ -67,5 +76,7 @@ namespace SourceCode.Clay.Collections.Generic
             // Use native checks
             return x.SetEquals(y); // Uses the equality comparer from the first set
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.OpenApi.Expressions;
 using Xunit;
 
@@ -5,6 +12,8 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
 {
     public static class CompoundExpressionTests
     {
+        #region Methods
+
         [Fact(DisplayName = nameof(CompoundExpression_Parse))]
         public static void CompoundExpression_Parse()
         {
@@ -27,5 +36,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
             Assert.Equal("$method", sut[5].ToString());
             Assert.Equal("$statusCode", sut[6].ToString());
         }
+
+        #endregion
     }
 }

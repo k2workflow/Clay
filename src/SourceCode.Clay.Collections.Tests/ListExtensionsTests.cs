@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class ListExtensionsTests
     {
+        #region Fields
+
         private static readonly string[] _null = null;
 
         private static readonly string[] _list =
@@ -16,6 +25,10 @@ namespace SourceCode.Clay.Collections.Tests
             "baz",
             "nin"
         };
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(ListEquals_both_null))]
@@ -240,5 +253,7 @@ namespace SourceCode.Clay.Collections.Tests
             equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, false);
             Assert.False(equal);
         }
+
+        #endregion
     }
 }

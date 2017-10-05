@@ -1,10 +1,19 @@
-﻿using System.Text;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using System.Text;
 using Xunit;
 
 namespace SourceCode.Clay.Text.Tests
 {
     public static class StringBuilderTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 1 arg")]
         public static void When_append_format_line_1()
@@ -116,5 +125,7 @@ namespace SourceCode.Clay.Text.Tests
             Assert.Equal(expected.Length, actual.Length);
             Assert.Equal(expected, actual.ToString());
         }
+
+        #endregion
     }
 }

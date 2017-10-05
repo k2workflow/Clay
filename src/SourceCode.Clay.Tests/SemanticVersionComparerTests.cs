@@ -1,9 +1,18 @@
-﻿using Xunit;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class SemanticVersionComparerTests
     {
+        #region Methods
+
         [InlineData(
             0, 1, 2, null, null,
             0, 1, 2, null, null,
@@ -212,5 +221,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(strictResult < 0, strictActual < 0);
             Assert.Equal(strictResult > 0, strictActual > 0);
         }
+
+        #endregion
     }
 }

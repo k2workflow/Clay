@@ -1,4 +1,11 @@
-﻿using SourceCode.Clay.Data.SqlClient.Azure;
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+using SourceCode.Clay.Data.SqlClient.Azure;
 using System;
 using System.Data.SqlClient;
 using Xunit;
@@ -7,8 +14,14 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
+        #region Fields
+
         private const string dbToken = "database";
         private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
+
+        #endregion
+
+        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
@@ -120,5 +133,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 }
             }
         }
+
+        #endregion
     }
 }

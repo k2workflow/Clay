@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 
 namespace SourceCode.Clay.OpenApi
@@ -29,8 +36,8 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="name">The licese named used for the API.</param>
         /// <param name="url">The URL to the license used for the API.</param>
         public License(
-            string name = null,
-            Uri url = null)
+            string name = default,
+            Uri url = default)
         {
             Name = name;
             Url = url;
@@ -39,6 +46,15 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        public static bool operator ==(License license1, License license2)
+        {
+            if (ReferenceEquals(license1, null) && ReferenceEquals(license2, null)) return true;
+            if (ReferenceEquals(license1, null) || ReferenceEquals(license2, null)) return false;
+            return license1.Equals((object)license2);
+        }
+
+        public static bool operator !=(License license1, License license2) => !(license1 == license2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -73,15 +89,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(License license1, License license2)
-        {
-            if (ReferenceEquals(license1, null) && ReferenceEquals(license2, null)) return true;
-            if (ReferenceEquals(license1, null) || ReferenceEquals(license2, null)) return false;
-            return license1.Equals((object)license2);
-        }
-
-        public static bool operator !=(License license1, License license2) => !(license1 == license2);
 
         #endregion
     }

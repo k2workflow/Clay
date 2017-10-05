@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -7,6 +14,8 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SwitchExtensionsTests
     {
+        #region Methods
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(ToDynamicSwitch_Bool))]
         public static void ToDynamicSwitch_Bool()
@@ -90,5 +99,7 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Constructor, @switch[2]);
             Assert.Equal(AttributeTargets.Delegate, @switch[3]);
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Json.Pointers;
 using System;
 using System.Collections.Generic;
@@ -278,64 +285,15 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #region String
 
-        /// <summary>Returns a string that represents the current object.</summary>
-        /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        private static bool StartsWith(string s, string cmp, int index)
         {
-            var sb = new StringBuilder();
-            ToString(sb);
-            return sb.ToString();
-        }
-
-        internal void ToString(StringBuilder sb)
-        {
-            switch (ExpressionType)
+            for (var i = 0; i < cmp.Length; i++)
             {
-                case FieldExpressionType.Url: sb.Append("$url"); return;
-                case FieldExpressionType.Method: sb.Append("$method"); return;
-                case FieldExpressionType.StatusCode: sb.Append("$statusCode"); return;
-                case FieldExpressionType.Request: sb.Append("$request."); break;
-                case FieldExpressionType.Response: sb.Append("$response."); break;
+                if (index >= s.Length) return false;
+                if (s[index] != cmp[i]) return false;
+                index++;
             }
-
-            switch (ExpressionSource)
-            {
-                case FieldExpressionSource.Header: sb.Append("header.").Append(Name); break;
-                case FieldExpressionSource.Query: sb.Append("query.").Append(Name); break;
-                case FieldExpressionSource.Path: sb.Append("path.").Append(Name); break;
-                case FieldExpressionSource.Body: sb.Append("body#").Append(Pointer.ToString()); break;
-            }
-        }
-
-        /// <summary>
-        /// Converts the string representation of a field expression to its structured equivalent.
-        /// </summary>
-        /// <param name="s">A string containing a field expression to convert.</param>
-        /// <returns>The structured equivalent of the field expression contained in <paramref name="s"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
-        public static FieldExpression Parse(string s)
-        {
-            if (!TryParse(s, out var result)) throw new FormatException("The expression is not a valid field expression.");
-            return result;
-        }
-
-        /// <summary>
-        /// Converts the string representation of a field expression to its structured equivalent.
-        /// A return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="s">A string containing a field expression to convert.</param>
-        /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the field expression contained in <paramref name="s"/>,
-        /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
-        /// is not in a format compliant with the Open API field expression specification. This parameter is passed uninitialized;
-        /// any value originally supplied in result will be overwritten.
-        /// </param>
-        /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string s, out FieldExpression result)
-        {
-            var i = 0;
-            return TryParse(s, out result, ref i, false);
+            return true;
         }
 
         internal static bool TryParse(string s, out FieldExpression result, ref int index, bool respectDelimiter)
@@ -493,15 +451,64 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return true;
         }
 
-        private static bool StartsWith(string s, string cmp, int index)
+        internal void ToString(StringBuilder sb)
         {
-            for (var i = 0; i < cmp.Length; i++)
+            switch (ExpressionType)
             {
-                if (index >= s.Length) return false;
-                if (s[index] != cmp[i]) return false;
-                index++;
+                case FieldExpressionType.Url: sb.Append("$url"); return;
+                case FieldExpressionType.Method: sb.Append("$method"); return;
+                case FieldExpressionType.StatusCode: sb.Append("$statusCode"); return;
+                case FieldExpressionType.Request: sb.Append("$request."); break;
+                case FieldExpressionType.Response: sb.Append("$response."); break;
             }
-            return true;
+
+            switch (ExpressionSource)
+            {
+                case FieldExpressionSource.Header: sb.Append("header.").Append(Name); break;
+                case FieldExpressionSource.Query: sb.Append("query.").Append(Name); break;
+                case FieldExpressionSource.Path: sb.Append("path.").Append(Name); break;
+                case FieldExpressionSource.Body: sb.Append("body#").Append(Pointer.ToString()); break;
+            }
+        }
+
+        /// <summary>
+        /// Converts the string representation of a field expression to its structured equivalent.
+        /// </summary>
+        /// <param name="s">A string containing a field expression to convert.</param>
+        /// <returns>The structured equivalent of the field expression contained in <paramref name="s"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
+        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
+        public static FieldExpression Parse(string s)
+        {
+            if (!TryParse(s, out var result)) throw new FormatException("The expression is not a valid field expression.");
+            return result;
+        }
+
+        /// <summary>
+        /// Converts the string representation of a field expression to its structured equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="s">A string containing a field expression to convert.</param>
+        /// <param name="result">
+        /// When this method returns, contains the structured equivalent of the field expression contained in <paramref name="s"/>,
+        /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
+        /// is not in a format compliant with the Open API field expression specification. This parameter is passed uninitialized;
+        /// any value originally supplied in result will be overwritten.
+        /// </param>
+        /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
+        public static bool TryParse(string s, out FieldExpression result)
+        {
+            var i = 0;
+            return TryParse(s, out result, ref i, false);
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            ToString(sb);
+            return sb.ToString();
         }
 
         #endregion

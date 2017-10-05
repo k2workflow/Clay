@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -9,6 +16,8 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OAuthFlow : IEquatable<OAuthFlow>
     {
+        #region Properties
+
         /// <summary>
         /// Gets the authorization URL to be used for this flow.
         /// </summary>
@@ -36,6 +45,10 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<string, string> Scopes { get; }
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// Creates a new instance of the <see cref="OAuthFlow"/> class.
         /// </summary>
@@ -55,7 +68,19 @@ namespace SourceCode.Clay.OpenApi
             Scopes = scopes ?? ReadOnlyDictionary.Empty<string, string>();
         }
 
+        #endregion
+
         #region Equatable
+
+        public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
+        {
+            if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
+            if (ReferenceEquals(flow1, null) || ReferenceEquals(flow2, null)) return false;
+            return flow1.Equals((object)flow2);
+        }
+
+        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
+                    !(flow1 == flow2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -94,16 +119,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
-        {
-            if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
-            if (ReferenceEquals(flow1, null) || ReferenceEquals(flow2, null)) return false;
-            return flow1.Equals((object)flow2);
-        }
-
-        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
-            !(flow1 == flow2);
 
         #endregion
     }

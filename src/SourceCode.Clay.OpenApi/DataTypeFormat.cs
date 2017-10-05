@@ -1,18 +1,31 @@
-﻿namespace SourceCode.Clay.OpenApi
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
+namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Well-known data type formats.
     /// </summary>
     public static class DataTypeFormat
     {
+        #region Classes
+
         /// <summary>
         /// Standard formats as defined by the specification
         /// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#data-types
         /// </summary>
         public static class Standard
         {
+            #region Classes
+
             public static class Integer
             {
+                #region Fields
+
                 /// <summary>
                 /// Signed 32 bits.
                 /// </summary>
@@ -22,10 +35,14 @@
                 /// Signed 64 bits.
                 /// </summary>
                 public const string Int64 = "int64";
+
+                #endregion
             }
 
             public static class Number
             {
+                #region Fields
+
                 /// <summary>
                 /// Real 32 bits.
                 /// </summary>
@@ -35,10 +52,14 @@
                 /// Real 64 bits.
                 /// </summary>
                 public const string Double = "double";
+
+                #endregion
             }
 
             public static class String
             {
+                #region Fields
+
                 /// <summary>
                 /// Base64 encoded characters.
                 /// </summary>
@@ -65,8 +86,14 @@
                 /// <summary>
                 /// A hint to UIs to obscured input.
                 /// </summary>
-                public const string Password = "pass" + "word"; // FxCop complains
+                public const string Password = "pass" + "word";
+
+                #endregion
+
+                // FxCop complains
             }
+
+            #endregion
         }
 
         /// <summary>
@@ -74,8 +101,12 @@
         /// </summary>
         public static class Extended
         {
+            #region Classes
+
             public static class String
             {
+                #region Fields
+
                 /// <summary>
                 /// A timestamp.
                 /// </summary>
@@ -85,7 +116,13 @@
                 /// A GUID.
                 /// </summary>
                 public const string Guid = "uuid";
+
+                #endregion
             }
+
+            #endregion
         }
+
+        #endregion
     }
 }

@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
@@ -190,6 +197,15 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        public static bool operator ==(Schema schema1, Schema schema2)
+        {
+            if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
+            if (ReferenceEquals(schema1, null) || ReferenceEquals(schema2, null)) return false;
+            return schema1.Equals((object)schema2);
+        }
+
+        public static bool operator !=(Schema schema1, Schema schema2) => !(schema1 == schema2);
+
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -256,15 +272,6 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
-
-        public static bool operator ==(Schema schema1, Schema schema2)
-        {
-            if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
-            if (ReferenceEquals(schema1, null) || ReferenceEquals(schema2, null)) return false;
-            return schema1.Equals((object)schema2);
-        }
-
-        public static bool operator !=(Schema schema1, Schema schema2) => !(schema1 == schema2);
 
         #endregion
     }

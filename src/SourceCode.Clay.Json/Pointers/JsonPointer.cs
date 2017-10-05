@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,14 +28,14 @@ namespace SourceCode.Clay.Json.Pointers
 
         private readonly JsonPointerToken[] _tokens;
 
+        /// <summary>Gets the number of elements in the collection.</summary>
+        /// <returns>The number of elements in the collection.</returns>
+        public int Count => _tokens?.Length ?? 0;
+
         /// <summary>Gets the element at the specified index in the read-only list.</summary>
         /// <param name="index">The zero-based index of the element to get.</param>
         /// <returns>The element at the specified index in the read-only list.</returns>
         public JsonPointerToken this[int index] => (_tokens ?? Array.Empty<JsonPointerToken>())[index];
-
-        /// <summary>Gets the number of elements in the collection.</summary>
-        /// <returns>The number of elements in the collection.</returns>
-        public int Count => _tokens?.Length ?? 0;
 
         #endregion
 
