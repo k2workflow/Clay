@@ -12,6 +12,9 @@ using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
 {
+    /// <summary>
+    /// A single encoding definition applied to a single schema property.
+    /// </summary>
     public class PropertyEncoding : IEquatable<PropertyEncoding>
     {
         #region Properties

@@ -109,7 +109,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the external documentation.
         /// </summary>
-        public ExternalDocumentation ExternalDocs { get; }
+        public ExternalDocumentation ExternalDocumentation { get; }
 
         /// <summary>
         /// Gets the string validation pattern.
@@ -141,7 +141,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="items">The list of schemas that represent the array items that this schema must contain.</param>
         /// <param name="properties">The list of valid properties.</param>
         /// <param name="additionalProperties">The list of valid properties for children.</param>
-        /// <param name="externalDocs">The external documentation.</param>
+        /// <param name="externalDocumentation">The external documentation.</param>
         public Schema(
             SchemaType type = default,
             string format = null,
@@ -161,7 +161,7 @@ namespace SourceCode.Clay.OpenApi
             Referable<Schema> items = default,
             IReadOnlyDictionary<string, Referable<Schema>> properties = default,
             IReadOnlyDictionary<string, Referable<Schema>> additionalProperties = default,
-            ExternalDocumentation externalDocs = default)
+            ExternalDocumentation externalDocumentation = default)
         {
             Type = type;
             Title = title;
@@ -181,7 +181,7 @@ namespace SourceCode.Clay.OpenApi
             Items = items;
             Properties = properties ?? Dictionary.ReadOnlyEmpty<string, Referable<Schema>>();
             AdditionalProperties = additionalProperties ?? Dictionary.ReadOnlyEmpty<string, Referable<Schema>>();
-            ExternalDocs = externalDocs;
+            ExternalDocumentation = externalDocumentation;
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace SourceCode.Clay.OpenApi
             if (!ItemsRange.Equals(other.ItemsRange)) return false;
             if (!LengthRange.Equals(other.LengthRange)) return false;
             if (!PropertiesRange.Equals(other.PropertiesRange)) return false;
-            if (!ExternalDocs.Equals(other.ExternalDocs)) return false;
+            if (!ExternalDocumentation.Equals(other.ExternalDocumentation)) return false;
             if (!StringComparer.Ordinal.Equals(Title, other.Title)) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
             if (!StringComparer.Ordinal.Equals(Pattern, other.Pattern)) return false;
@@ -255,7 +255,7 @@ namespace SourceCode.Clay.OpenApi
                 hc = hc * 21 + ItemsRange.GetHashCode();
                 hc = hc * 21 + LengthRange.GetHashCode();
                 hc = hc * 21 + PropertiesRange.GetHashCode();
-                hc = hc * 21 + ExternalDocs.GetHashCode();
+                hc = hc * 21 + ExternalDocumentation.GetHashCode();
                 if (Title != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Title);
                 if (Format != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Format);
                 if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);
