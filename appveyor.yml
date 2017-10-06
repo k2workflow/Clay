@@ -24,6 +24,9 @@ dotnet_csproj:
   version: $(nuget_version)
   package_version: $(nuget_version)
   
+before_build:
+- appveyor-retry dotnet restore -v Minimal
+
 build:
  project: SourceCode.Clay.sln
  verbosity: minimal
