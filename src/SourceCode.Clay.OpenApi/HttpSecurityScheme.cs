@@ -21,7 +21,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="description">The short description for security scheme.</param>
         /// <param name="scheme">The name of the HTTP Authorization scheme to be used in the Authorization header.</param>
-        protected HttpSecurityScheme(
+        public HttpSecurityScheme(
             string description = default,
             string scheme = default,
             string bearerFormat = default)

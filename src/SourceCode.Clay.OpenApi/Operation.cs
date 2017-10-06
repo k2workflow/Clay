@@ -47,7 +47,7 @@ namespace SourceCode.Clay.OpenApi
         public string OperationIdentifier { get; set; }
 
         /// <summary>
-        /// Get the list of parameters that are applicable for this operation.
+        /// Gets the list of parameters that are applicable for this operation.
         /// </summary>
         public IReadOnlyDictionary<ParameterKey, Referable<Parameter>> Parameters { get; }
 

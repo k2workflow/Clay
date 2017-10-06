@@ -56,7 +56,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the external documentation.
         /// </summary>
-        public ExternalDocumentation ExternalDocs { get; }
+        public ExternalDocumentation ExternalDocumentation { get; }
 
         #endregion
 
@@ -72,7 +72,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="components">The list that holds various schemas for the specification.</param>
         /// <param name="security">The declaration of which security mechanisms can be used across the API.</param>
         /// <param name="tags">The list of tags used by the specification with additional metadata.</param>
-        /// <param name="externalDocs">The external documentation.</param>
+        /// <param name="externalDocumentation">The external documentation.</param>
         public Document(
             SemanticVersion? version = default,
             Information info = default,
@@ -81,7 +81,7 @@ namespace SourceCode.Clay.OpenApi
             Components components = default,
             IReadOnlyList<Referable<SecurityScheme>> security = default,
             IReadOnlyList<Tag> tags = default,
-            ExternalDocumentation externalDocs = default)
+            ExternalDocumentation externalDocumentation = default)
         {
             Version = version ?? new SemanticVersion(3, 0, 0);
             Info = info;
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.OpenApi
             Components = components;
             Security = security ?? Array.Empty<Referable<SecurityScheme>>();
             Tags = tags ?? Array.Empty<Tag>();
-            ExternalDocs = externalDocs;
+            ExternalDocumentation = externalDocumentation;
         }
 
         #endregion
@@ -126,7 +126,7 @@ namespace SourceCode.Clay.OpenApi
             if (!Components.NullableEquals(other.Components)) return false;
             if (!Security.ListEquals(other.Security, false)) return false;
             if (!Tags.ListEquals(other.Tags, false)) return false;
-            if (!ExternalDocs.NullableEquals(other.ExternalDocs)) return false;
+            if (!ExternalDocumentation.NullableEquals(other.ExternalDocumentation)) return false;
 
             return true;
         }
@@ -146,7 +146,7 @@ namespace SourceCode.Clay.OpenApi
                 if (Components != null) hc = hc * 21 + Components.GetHashCode();
                 hc = hc * 21 + Security.Count;
                 hc = hc * 21 + Tags.Count;
-                if (ExternalDocs != null) hc = hc * 21 + ExternalDocs.GetHashCode();
+                if (ExternalDocumentation != null) hc = hc * 21 + ExternalDocumentation.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
