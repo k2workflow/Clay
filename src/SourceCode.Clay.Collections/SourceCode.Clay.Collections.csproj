@@ -18,8 +18,9 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Collections</PackageId>
     <Authors>SourceCode</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with collections.</Description>
     <PackageTags>clay utility extension dictionary switch list set</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>
 </Project>

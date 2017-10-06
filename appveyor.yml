@@ -1,63 +1,57 @@
-version: '1.0.{build}'
+version: 'build-{build}'
+
+image: Visual Studio 2017
+
 configuration:
 - Release
+
 platform: Any CPU
+
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
 init:
-- ps: $Env:LABEL = "preview1-" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
+- cmd: git config --global core.autocrlf true
+- ps: $Env:NUGET_VERSION = "1.0.0-preview1-" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 - ps: if(-not $env:APPVEYOR_PULL_REQUEST_NUMBER) { $env:is_not_pr = "true"; }
 
-before_build:
-- appveyor-retry dotnet restore -v Minimal
+install:
+- pip install codecov 
 
-build_script:
-- dotnet build "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-- dotnet build "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-- dotnet build "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj" -c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
-
-after_build:
- - dotnet pack "src\SourceCode.Clay\SourceCode.Clay.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
- - dotnet pack "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj" -c %CONFIGURATION% --no-build --version-suffix %LABEL%
-
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: $(nuget_version)
+  package_version: $(nuget_version)
+  
+build:
+ project: SourceCode.Clay.sln
+ verbosity: minimal
+ 
 test_script:
-- dotnet test "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj" -c %CONFIGURATION% --no-build
-- dotnet test "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj" -c %CONFIGURATION% --no-build
+- ps: .\GenerateTestSolution.ps1 .\SourceCode.Clay.sln
+- >-
+    OpenCover.Console.exe
+    -target:"dotnet.exe"
+    -targetargs:"test SourceCode.Clay.Tests.sln -c %CONFIGURATION% --no-build"
+    -filter:"+[*]* -[*.Tests]*"
+    -output:"%APPVEYOR_BUILD_FOLDER%\coverage.xml"
+    -excludebyattribute:*.ExcludeFromCodeCoverage*
+    -oldStyle
+    -register:user
+    -mergebyhash
+    -hideskipped:File
+
+after_test:
+- >-
+    codecov 
+    -X gcov 
+    -f "%APPVEYOR_BUILD_FOLDER%\coverage.xml"
 
 artifacts:
   - path: '**\*.nupkg'
+  - path: 'coverage.xml'
+
 deploy:
   provider: NuGet
   api_key:

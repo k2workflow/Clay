@@ -22,8 +22,9 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Json</PackageId>
     <Authors>SourceCode</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with json.</Description>
     <PackageTags>clay utility extension json validate</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>
 </Project>
