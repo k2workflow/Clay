@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// License information for the exposed API.
     /// </summary>
-    public class LicenseBuilder
+    public class LicenseBuilder : IBuilder<License>
     {
         #region Properties
 

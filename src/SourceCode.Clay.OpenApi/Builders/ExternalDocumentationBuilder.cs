@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Allows referencing an external resource for extended documentation.
     /// </summary>
-    public class ExternalDocumentationBuilder
+    public class ExternalDocumentationBuilder : IBuilder<ExternalDocumentation>
     {
         #region Properties
 

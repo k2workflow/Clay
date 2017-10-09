@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Configuration details for a supported OAuth Flow.
     /// </summary>
-    public class OAuthFlowBuilder
+    public class OAuthFlowBuilder : IBuilder<OAuthFlow>
     {
         #region Properties
 
@@ -54,6 +54,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OAuthFlowBuilder()
         {
+            Scopes = new Dictionary<String, String>();
         }
 
         /// <summary>

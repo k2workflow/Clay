@@ -22,7 +22,7 @@ namespace SourceCode.Clay.OpenApi
         /// <remarks>
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
-        public string Description { get; }
+        public string Description { get; set; }
 
         #endregion
 

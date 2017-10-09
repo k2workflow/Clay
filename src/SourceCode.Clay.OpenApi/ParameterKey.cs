@@ -63,7 +63,7 @@ namespace SourceCode.Clay.OpenApi
         public bool Equals(ParameterKey other)
         {
             if (Location != other.Location) return false;
-            if (StringComparer.Ordinal.Equals(Name, other.Name)) return false;
+            if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;
 
             return true;
         }

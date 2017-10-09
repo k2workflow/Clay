@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single response from an API Operation.
     /// </summary>
-    public class ResponseBuilder
+    public class ResponseBuilder : IBuilder<Response>
     {
         #region Properties
 
@@ -48,6 +48,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ResponseBuilder()
         {
+            Headers = new Dictionary<string, Referable<ParameterBody>>();
+            Content = new Dictionary<ContentType, MediaType>();
+            Links = new Dictionary<string, Referable<Link>>();
         }
 
         /// <summary>

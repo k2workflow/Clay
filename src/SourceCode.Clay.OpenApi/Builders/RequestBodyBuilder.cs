@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single request body.
     /// </summary>
-    public class RequestBodyBuilder
+    public class RequestBodyBuilder : IBuilder<RequestBody>
     {
         #region Properties
 
@@ -46,6 +46,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public RequestBodyBuilder()
         {
+            Content = new Dictionary<ContentType, MediaType>();
         }
 
         /// <summary>

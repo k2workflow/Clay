@@ -16,7 +16,7 @@ namespace SourceCode.Clay.OpenApi
     /// defined within the components object will have no effect on the API unless they
     /// are explicitly referenced from properties outside the components object.
     /// </summary>
-    public class ComponentsBuilder
+    public class ComponentsBuilder : IBuilder<Components>
     {
         #region Properties
 
@@ -74,6 +74,15 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ComponentsBuilder()
         {
+            Schemas = new Dictionary<string, Referable<Schema>>();
+            Responses = new Dictionary<string, Referable<Response>>();
+            Parameters = new Dictionary<string, Referable<Parameter>>();
+            Examples = new Dictionary<string, Referable<Example>>();
+            RequestBodies = new Dictionary<string, Referable<RequestBody>>();
+            Headers = new Dictionary<string, Referable<ParameterBody>>();
+            SecuritySchemes = new Dictionary<string, Referable<SecurityScheme>>();
+            Links = new Dictionary<string, Referable<Link>>();
+            Callbacks = new Dictionary<string, Referable<Callback>>();
         }
 
         /// <summary>

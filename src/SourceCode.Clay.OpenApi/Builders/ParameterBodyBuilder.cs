@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single operation parameter.
     /// </summary>
-    public class ParameterBodyBuilder
+    public class ParameterBodyBuilder : IBuilder<ParameterBody>
     {
         #region Properties
 
@@ -61,6 +61,8 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ParameterBodyBuilder()
         {
+            Examples = new Dictionary<ContentType, Referable<Example>>();
+            Content = new Dictionary<ContentType, MediaType>();
         }
 
         /// <summary>
