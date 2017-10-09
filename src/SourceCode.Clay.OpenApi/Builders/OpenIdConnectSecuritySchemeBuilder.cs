@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Defines an API key security scheme that can be used by the operations.
     /// </summary>
-    public class OpenIdConnectSecuritySchemeBuilder : SecuritySchemeBuilder, IBuilder<OpenIdConnectSecurityScheme>
+    public class OpenIdConnectSecuritySchemeBuilder : SecuritySchemeBuilder, IOpenApiBuilder<OpenIdConnectSecurityScheme>
     {
         #region Properties
 

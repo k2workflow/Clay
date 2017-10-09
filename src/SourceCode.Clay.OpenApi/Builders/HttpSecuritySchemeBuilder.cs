@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Defines an HTTP security scheme that can be used by the operations.
     /// </summary>
-    public class HttpSecuritySchemeBuilder : SecuritySchemeBuilder, IBuilder<HttpSecurityScheme>
+    public class HttpSecuritySchemeBuilder : SecuritySchemeBuilder, IOpenApiBuilder<HttpSecurityScheme>
     {
         #region Properties
 

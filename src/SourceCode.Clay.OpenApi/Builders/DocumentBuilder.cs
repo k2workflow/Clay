@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// This is the root document object of the OpenAPI document.
     /// </summary>
-    public class DocumentBuilder : IBuilder<Document>
+    public class DocumentBuilder : IOpenApiBuilder<Document>
     {
         #region Properties
 

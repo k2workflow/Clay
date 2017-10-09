@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// clients if needed, and MAY be presented in editing or documentation generation
     /// tools for convenience.
     /// </summary>
-    public class InformationBuilder : IBuilder<Information>
+    public class InformationBuilder : IOpenApiBuilder<Information>
     {
         #region Properties
 

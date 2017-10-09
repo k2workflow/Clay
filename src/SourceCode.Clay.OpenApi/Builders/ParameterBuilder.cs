@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single operation parameter.
     /// </summary>
-    public class ParameterBuilder : ParameterBodyBuilder, IBuilder<Parameter>
+    public class ParameterBuilder : ParameterBodyBuilder, IOpenApiBuilder<Parameter>
     {
         #region Properties
 

@@ -13,7 +13,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Contact information for the exposed API.
     /// </summary>
-    public class ContactBuilder : IBuilder<Contact>
+    public class ContactBuilder : IOpenApiBuilder<Contact>
     {
         #region Properties
 

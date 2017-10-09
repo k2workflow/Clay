@@ -16,7 +16,7 @@ namespace SourceCode.Clay.OpenApi
     /// defined within the components object will have no effect on the API unless they
     /// are explicitly referenced from properties outside the components object.
     /// </summary>
-    public class ComponentsBuilder : IBuilder<Components>
+    public class ComponentsBuilder : IOpenApiBuilder<Components>
     {
         #region Properties
 
