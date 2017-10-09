@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single response from an API Operation.
     /// </summary>
-    public class ResponseBuilder
+    public class ResponseBuilder : IBuilder<Response>
     {
         #region Properties
 

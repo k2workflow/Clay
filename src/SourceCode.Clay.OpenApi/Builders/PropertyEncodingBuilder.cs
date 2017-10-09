@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// A single encoding definition applied to a single schema property.
     /// </summary>
-    public class PropertyEncodingBuilder
+    public class PropertyEncodingBuilder : IBuilder<PropertyEncoding>
     {
         #region Properties
 

@@ -9,7 +9,10 @@ using System;
 
 namespace SourceCode.Clay.OpenApi
 {
-    public class HttpSecuritySchemeBuilder : SecuritySchemeBuilder
+    /// <summary>
+    /// Defines an HTTP security scheme that can be used by the operations.
+    /// </summary>
+    public class HttpSecuritySchemeBuilder : SecuritySchemeBuilder, IBuilder<HttpSecurityScheme>
     {
         #region Properties
 

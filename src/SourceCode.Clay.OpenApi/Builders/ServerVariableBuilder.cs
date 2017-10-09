@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// An object representing a Server Variable for server URL template substitution.
     /// </summary>
-    public class ServerVariableBuilder
+    public class ServerVariableBuilder : IBuilder<ServerVariable>
     {
         #region Properties
 

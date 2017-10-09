@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// An object representing a Server.
     /// </summary>
-    public class ServerBuilder
+    public class ServerBuilder : IBuilder<Server>
     {
         #region Properties
 

@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Configuration details for a supported OAuth Flow.
     /// </summary>
-    public class OAuthFlowBuilder
+    public class OAuthFlowBuilder : IBuilder<OAuthFlow>
     {
         #region Properties
 

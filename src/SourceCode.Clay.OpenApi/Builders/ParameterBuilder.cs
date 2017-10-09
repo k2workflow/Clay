@@ -6,13 +6,15 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
 {
-    public class ParameterBuilder : ParameterBodyBuilder
+    /// <summary>
+    /// Describes a single operation parameter.
+    /// </summary>
+    public class ParameterBuilder : ParameterBodyBuilder, IBuilder<Parameter>
     {
         #region Properties
 

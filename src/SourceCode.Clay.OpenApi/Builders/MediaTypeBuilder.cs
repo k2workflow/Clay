@@ -11,7 +11,10 @@ using System.Collections.ObjectModel;
 
 namespace SourceCode.Clay.OpenApi
 {
-    public class MediaTypeBuilder
+    /// <summary>
+    /// Provides schema and examples for the media type identified by a key.
+    /// </summary>
+    public class MediaTypeBuilder : IBuilder<MediaType>
     {
         #region Properties
 

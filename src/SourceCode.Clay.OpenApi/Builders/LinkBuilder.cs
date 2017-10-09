@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents a possible design-time link for a response.
     /// </summary>
-    public class LinkBuilder
+    public class LinkBuilder : IBuilder<Link>
     {
         #region Properties
 

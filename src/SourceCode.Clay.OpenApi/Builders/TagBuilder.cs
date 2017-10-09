@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Adds metadata to a single tag that is used by <see cref="Operation"/>.
     /// </summary>
-    public class TagBuilder
+    public class TagBuilder : IBuilder<Tag>
     {
         #region Properties
 

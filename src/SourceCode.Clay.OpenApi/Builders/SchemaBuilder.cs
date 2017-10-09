@@ -11,7 +11,10 @@ using System.Collections.ObjectModel;
 
 namespace SourceCode.Clay.OpenApi
 {
-    public class SchemaBuilder
+    /// <summary>
+    /// Allows the definition of input and output data types.
+    /// </summary>
+    public class SchemaBuilder : IBuilder<Schema>
     {
         #region Properties
 
