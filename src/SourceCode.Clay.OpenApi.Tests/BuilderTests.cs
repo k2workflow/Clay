@@ -85,6 +85,50 @@ namespace SourceCode.Clay.OpenApi.Tests
             });
         }
 
+        [Fact(DisplayName = nameof(ComponentsBuilder_Build))]
+        public static void ComponentsBuilder_Build()
+        {
+            TestBuilder(new ComponentsBuilder()
+            {
+                Callbacks =
+                {
+                    ["cb1"] = "#/components/callbacks/1"
+                },
+                Examples =
+                {
+                    ["ex1"] = "#/components/examples/1"
+                },
+                Headers =
+                {
+                    ["hd1"] = "#/components/headers/1"
+                },
+                Links =
+                {
+                    ["li1"] = "#/components/links/1"
+                },
+                Parameters =
+                {
+                    ["pa1"] = "#/components/parameters/1"
+                },
+                RequestBodies =
+                {
+                    ["req1"] = "#/components/requestBodies/1"
+                },
+                Responses =
+                {
+                    ["res1"] = "#/components/responses/1"
+                },
+                Schemas =
+                {
+                    ["sch1"] = "#/components/schemas/1"
+                },
+                SecuritySchemes =
+                {
+                    ["sec1"] = "#/components/securitySchemas/1"
+                }
+            });
+        }
+
         [Fact(DisplayName = nameof(DocumentBuilder_Build))]
         public static void DocumentBuilder_Build()
         {
