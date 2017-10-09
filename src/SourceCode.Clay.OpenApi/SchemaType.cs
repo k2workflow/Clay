@@ -13,11 +13,6 @@ namespace SourceCode.Clay.OpenApi
     public enum SchemaType : byte
     {
         /// <summary>
-        /// The type is a reference.
-        /// </summary>
-        Reference = 0,
-
-        /// <summary>
         /// The type is a string.
         /// </summary>
         String = 1,

@@ -57,6 +57,7 @@ namespace SourceCode.Clay.OpenApi
             OAuthFlow passwordFlow = default,
             OAuthFlow clientCredentialsFlow = default,
             OAuthFlow authorizationCodeFlow = default)
+            : base(description)
         {
             ImplicitFlow = implicitFlow;
             PasswordFlow = passwordFlow;

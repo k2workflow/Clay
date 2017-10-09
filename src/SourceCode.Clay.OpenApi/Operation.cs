@@ -124,8 +124,8 @@ namespace SourceCode.Clay.OpenApi
             Responses = responses ?? ReadOnlyDictionary.Empty<ResponseKey, Referable<Response>>();
             Callbacks = callbacks ?? ReadOnlyDictionary.Empty<string, Referable<Callback>>();
             Options = options;
-            Security = security;
-            Servers = servers;
+            Security = security ?? Array.Empty<SecurityScheme>();
+            Servers = servers ?? Array.Empty<Server>();
         }
 
         #endregion
