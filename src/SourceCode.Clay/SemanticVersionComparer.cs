@@ -104,11 +104,13 @@ namespace SourceCode.Clay
 
                 unchecked
                 {
-                    hc = hc * 23 + obj.Major;
-                    hc = hc * 23 + obj.Minor;
-                    hc = hc * 23 + obj.Patch;
-                    if (obj.PreRelease != null) hc = hc * 23 + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
-                    if (obj.BuildMetadata != null) hc = hc * 23 + StringComparer.Ordinal.GetHashCode(obj.BuildMetadata);
+                    hc = (hc * 23) + obj.Major;
+                    hc = (hc * 23) + obj.Minor;
+                    hc = (hc * 23) + obj.Patch;
+                    if (obj.PreRelease != null)
+                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
+                    if (obj.BuildMetadata != null)
+                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.BuildMetadata);
                 }
 
                 return ((int)(hc >> 32)) ^ (int)hc;
@@ -159,10 +161,11 @@ namespace SourceCode.Clay
 
                 unchecked
                 {
-                    hc = hc * 23 + obj.Major;
-                    hc = hc * 23 + obj.Minor;
-                    hc = hc * 23 + obj.Patch;
-                    if (obj.PreRelease != null) hc = hc * 23 + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
+                    hc = (hc * 23) + obj.Major;
+                    hc = (hc * 23) + obj.Minor;
+                    hc = (hc * 23) + obj.Patch;
+                    if (obj.PreRelease != null)
+                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
                 }
 
                 return ((int)(hc >> 32)) ^ (int)hc;

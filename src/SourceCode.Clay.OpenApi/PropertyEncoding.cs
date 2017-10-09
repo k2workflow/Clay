@@ -105,10 +105,11 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (ContentType != null) hc = hc * 21 + ContentType.GetHashCode();
-                hc = hc * 21 + Headers.Count;
-                hc = hc * 21 + Style.GetHashCode();
-                hc = hc * 21 + Options.GetHashCode();
+                if (ContentType != null)
+                    hc = (hc * 23) + ContentType.GetHashCode();
+                hc = (hc * 23) + Headers.Count;
+                hc = (hc * 23) + Style.GetHashCode();
+                hc = (hc * 23) + Options.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

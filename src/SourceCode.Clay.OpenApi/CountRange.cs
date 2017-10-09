@@ -99,9 +99,12 @@ namespace SourceCode.Clay.OpenApi
             unchecked
             {
                 var hc = 17L;
-                if (Minimum.HasValue) hc = hc * 21 + Minimum.Value;
-                if (Maximum.HasValue) hc = hc * 21 + Maximum.Value;
-                hc = hc * 21 + RangeOptions.GetHashCode();
+                if (Minimum.HasValue)
+                    hc = (hc * 23) + Minimum.Value;
+                if (Maximum.HasValue)
+                    hc = (hc * 23) + Maximum.Value;
+                hc = (hc * 23) + RangeOptions.GetHashCode();
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

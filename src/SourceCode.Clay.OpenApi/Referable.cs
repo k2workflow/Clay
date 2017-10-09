@@ -132,8 +132,10 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (IsReference) hc = hc * 21 + Reference.GetHashCode();
-                if (IsValue) hc = hc * 21 + EqualityComparer<T>.Default.GetHashCode(Value);
+                if (IsReference)
+                    hc = (hc * 23) + Reference.GetHashCode();
+                if (IsValue)
+                    hc = (hc * 23) + EqualityComparer<T>.Default.GetHashCode(Value);
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

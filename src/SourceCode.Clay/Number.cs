@@ -713,12 +713,12 @@ namespace SourceCode.Clay
 
             unchecked
             {
-                hc = hc * 21 + _typeCode;
+                hc = (hc * 23) + _typeCode;
 
                 if (_typeCode == (byte)TypeCode.Decimal)
-                    hc = hc * 21 + _decimal.GetHashCode();
+                    hc = (hc * 23) + _decimal.GetHashCode();
                 else
-                    hc = hc * 21 + _int64.GetHashCode();
+                    hc = (hc * 23) + _int64.GetHashCode();
             }
 
             return ((int)(hc >> 32)) ^ (int)hc;

@@ -80,7 +80,8 @@ namespace SourceCode.Clay.OpenApi
                 var hc = 17L;
 
                 hc = hc * -1521134295 + base.GetHashCode();
-                if (Url != null) hc = hc * -1521134295 + Url.GetHashCode();
+                if (Url != null)
+                    hc = hc * -1521134295 + Url.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

@@ -139,14 +139,17 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Version.GetHashCode();
-                if (Info != null) hc = hc * 21 + Info.GetHashCode();
-                hc = hc * 21 + Servers.Count;
-                hc = hc * 21 + Paths.Count;
-                if (Components != null) hc = hc * 21 + Components.GetHashCode();
-                hc = hc * 21 + Security.Count;
-                hc = hc * 21 + Tags.Count;
-                if (ExternalDocumentation != null) hc = hc * 21 + ExternalDocumentation.GetHashCode();
+                hc = (hc * 23) + Version.GetHashCode();
+                if (Info != null)
+                    hc = (hc * 23) + Info.GetHashCode();
+                hc = (hc * 23) + Servers.Count;
+                hc = (hc * 23) + Paths.Count;
+                if (Components != null)
+                    hc = (hc * 23) + Components.GetHashCode();
+                hc = (hc * 23) + Security.Count;
+                hc = (hc * 23) + Tags.Count;
+                if (ExternalDocumentation != null)
+                    hc = (hc * 23) + ExternalDocumentation.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
