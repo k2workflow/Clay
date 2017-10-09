@@ -110,7 +110,7 @@ namespace SourceCode.Clay.Json.Validation
 
         public override string ToString()
         {
-            // Use mathematical notation for open/closed boundaries
+            // Use set notation for open/closed boundaries
 
             // Required
             var s = (Required ? "Required: " : string.Empty)

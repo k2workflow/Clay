@@ -18,15 +18,11 @@ namespace SourceCode.Clay
     /// Represents an efficient discriminated union across all the primitive number types.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)] // 17 bytes, aligned up to 20
-    public struct Number : IEquatable<Number>, IComparable, IComparable<Number>, IFormattable, IConvertible
+    public struct Number : IEquatable<Number>, IComparable<Number>, IFormattable, IConvertible
     {
         #region Constants
 
-        private static readonly double DoubleDecimalMinValue = (double)decimal.MinValue;
-        private static readonly double DoubleDecimalMaxValue = (double)decimal.MaxValue;
-
-        private static readonly float SingleDecimalMinValue = (float)decimal.MinValue;
-        private static readonly float SingleDecimalMaxValue = (float)decimal.MaxValue;
+        public static Number Null { get; }
 
         #endregion
 
@@ -35,46 +31,46 @@ namespace SourceCode.Clay
         // Signed
 
         [FieldOffset(0)] // [0..0]
-        private readonly sbyte _sbyte;
+        internal readonly sbyte _sbyte;
 
         [FieldOffset(0)] // [0..1]
-        private readonly short _int16;
+        internal readonly short _int16;
 
         [FieldOffset(0)] // [0..3]
-        private readonly int _int32;
+        internal readonly int _int32;
 
         [FieldOffset(0)] // [0..7]
-        private readonly long _int64;
+        internal readonly long _int64;
 
         // Unsigned
 
         [FieldOffset(0)] // [0..0]
-        private readonly byte _byte;
+        internal readonly byte _byte;
 
         [FieldOffset(0)] // [0..1]
-        private readonly ushort _uint16;
+        internal readonly ushort _uint16;
 
         [FieldOffset(0)] // [0..3]
-        private readonly uint _uint32;
+        internal readonly uint _uint32;
 
         [FieldOffset(0)] // [0..7]
-        private readonly ulong _uint64;
+        internal readonly ulong _uint64;
 
         // Float
 
         [FieldOffset(0)] // [0..3]
-        private readonly float _single;
+        internal readonly float _single;
 
         [FieldOffset(0)] // [0..7]
-        private readonly double _double;
+        internal readonly double _double;
 
         [FieldOffset(0)] // [0..15]
-        private readonly decimal _decimal;
+        internal readonly decimal _decimal;
 
         // Discriminator
 
         [FieldOffset(16)] // [16..16]
-        private readonly byte _typeCode;
+        internal readonly byte _typeCode;
 
         #endregion
 
@@ -100,11 +96,14 @@ namespace SourceCode.Clay
                     case TypeCode.UInt64:
                         return NumberKind.Integer;
 
-                    // Float
+                    // Real
                     case TypeCode.Single:
                     case TypeCode.Double:
-                    case TypeCode.Decimal:
                         return NumberKind.Real | NumberKind.Signed;
+
+                    // Decimal
+                    case TypeCode.Decimal:
+                        return NumberKind.Decimal | NumberKind.Signed;
 
                     // Empty
                     default:
@@ -630,19 +629,16 @@ namespace SourceCode.Clay
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="format">The format of the number to use.</param>
         /// <returns>A string representation of the number.</returns>
-        public string ToString(string format)
-            => ToString(format, CultureInfo.CurrentCulture);
+        public string ToString(string format) => ToString(format, CultureInfo.CurrentCulture);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="provider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
-        public string ToString(IFormatProvider provider)
-            => ToString(null, provider);
+        public string ToString(IFormatProvider provider) => ToString(null, provider);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <returns>A <see cref="T:System.String" /> containing the number.</returns>
-        public override string ToString()
-            => ToString(null, CultureInfo.CurrentCulture);
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="format">The format of the number to use.</param>
@@ -683,244 +679,35 @@ namespace SourceCode.Clay
         /// <param name="obj">The object to compare with the current instance.</param>
         public override bool Equals(object obj)
             => (ReferenceEquals(obj, null) && _typeCode == 0)
-            || (obj is Number o && Equals(o));
+            || (obj is Number num
+                && Equals(num));
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Number other)
-        {
-            if (_typeCode != other._typeCode) return false;
-
-            if (_typeCode == (byte)TypeCode.Decimal)
-            {
-                if (_decimal != other._decimal) return false;
-            }
-            else
-            {
-                if (_int64 != other._int64) return false;
-            }
-
-            return true;
-        }
+        public bool Equals(Number other) => NumberComparer.Default.Equals(this, other);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            var hc = 17L;
-
-            unchecked
-            {
-                hc = (hc * 23) + _typeCode;
-
-                if (_typeCode == (byte)TypeCode.Decimal)
-                    hc = (hc * 23) + _decimal.GetHashCode();
-                else
-                    hc = (hc * 23) + _int64.GetHashCode();
-            }
-
-            return ((int)(hc >> 32)) ^ (int)hc;
-        }
-
-        public static bool operator ==(Number x, Number y) => x.Equals(y);
-
-        public static bool operator !=(Number x, Number y) => !(x == y);
+        public override int GetHashCode() => NumberComparer.Default.GetHashCode(this);
 
         #endregion
 
         #region IComparable
 
         /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
-        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="obj" /> in the sort order. Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. Greater than zero This instance follows <paramref name="obj" /> in the sort order.</returns>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
-        ///   <paramref name="obj" /> is not the same type as this instance.</exception>
-        public int CompareTo(object obj)
-        {
-            if (ReferenceEquals(obj, null))
-            {
-                if (_typeCode == 0) return 0;
-                return 1;
-            }
-
-            if (!(obj is Number n)) throw new ArgumentOutOfRangeException(nameof(obj));
-
-            return CompareTo(n);
-        }
-
-        /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
         /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
         /// <param name="other">An object to compare with this instance.</param>
-        public int CompareTo(Number other)
-        {
-            if (_typeCode == 0 && other._typeCode == 0) return 0;
-            if (_typeCode == 0) return -1;
-            if (other._typeCode == 0) return 1;
+        public int CompareTo(Number other) => NumberComparer.Default.Compare(this, other);
 
-            switch (((uint)_typeCode << 5) | other._typeCode)
-            {
-                // this == SByte
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.SByte: return _sbyte.CompareTo(other._sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Byte: return _sbyte < 0 ? -1 : -other._byte.CompareTo((byte)_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Int16: return -other._int16.CompareTo(_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.UInt16: return _sbyte < 0 ? -1 : -other._uint16.CompareTo((ushort)_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Int32: return -other._int32.CompareTo(_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.UInt32: return _sbyte < 0 ? -1 : -other._uint32.CompareTo((uint)_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Int64: return -other._int64.CompareTo(_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.UInt64: return _sbyte < 0 ? -1 : -other._uint64.CompareTo((ulong)_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Single: return -other._single.CompareTo(_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Double: return -other._double.CompareTo(_sbyte);
-                case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.Decimal: return -other._decimal.CompareTo(_sbyte);
+        #endregion
 
-                // this == Byte
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.SByte: return other._sbyte < 0 ? 1 : _byte.CompareTo((byte)other._sbyte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Byte: return _byte.CompareTo(other._byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Int16: return other._int16 < 0 ? 1 : -other._int16.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.UInt16: return -other._uint16.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Int32: return other._int32 < 0 ? 1 : -other._int32.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.UInt32: return -other._uint32.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Int64: return other._int64 < 0 ? 1 : -other._int64.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.UInt64: return -other._uint64.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Single: return other._single < 0 ? 1 : -other._single.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Double: return other._double < 0 ? 1 : -other._double.CompareTo(_byte);
-                case (((uint)TypeCode.Byte) << 5) | (uint)TypeCode.Decimal: return other._decimal < 0 ? 1 : -other._decimal.CompareTo(_byte);
+        #region Operators
 
-                // this == Int16
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.SByte: return _int16.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Byte: return _int16 < 0 ? -1 : _int16.CompareTo(other._byte);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Int16: return _int16.CompareTo(other._int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.UInt16: return _int16 < 0 ? -1 : -other._uint16.CompareTo((ushort)_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Int32: return -other._int32.CompareTo(_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.UInt32: return _int16 < 0 ? -1 : -other._uint32.CompareTo((uint)_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Int64: return -other._int64.CompareTo(_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.UInt64: return _int16 < 0 ? -1 : -other._uint64.CompareTo((ulong)_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Single: return -other._single.CompareTo(_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Double: return -other._double.CompareTo(_int16);
-                case (((uint)TypeCode.Int16) << 5) | (uint)TypeCode.Decimal: return -other._decimal.CompareTo(_int16);
+        public static bool operator ==(Number x, Number y) => x.Equals(y);
 
-                // this == UInt16
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.SByte: return other._sbyte < 0 ? 1 : _uint16.CompareTo((ushort)other._sbyte);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Byte: return _uint16.CompareTo(other._byte);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Int16: return other._int16 < 0 ? 1 : _uint16.CompareTo((ushort)other._int16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.UInt16: return _uint16.CompareTo(other._uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Int32: return other._int32 < 0 ? 1 : -other._int32.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.UInt32: return -other._uint32.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Int64: return other._int64 < 0 ? 1 : -other._int64.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.UInt64: return -other._uint64.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Single: return other._single < 0 ? 1 : -other._single.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Double: return other._double < 0 ? 1 : -other._double.CompareTo(_uint16);
-                case (((uint)TypeCode.UInt16) << 5) | (uint)TypeCode.Decimal: return other._decimal < 0 ? 1 : -other._decimal.CompareTo(_uint16);
-
-                // this == Int32
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.SByte: return _int32.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Byte: return _int32 < 0 ? -1 : _int32.CompareTo(other._byte);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Int16: return _int32.CompareTo(other._int16);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.UInt16: return _int32 < 0 ? -1 : _int32.CompareTo(other._uint16);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Int32: return _int32.CompareTo(other._int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.UInt32: return _int32 < 0 ? -1 : -other._uint32.CompareTo((uint)_int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Int64: return -other._int64.CompareTo(_int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.UInt64: return _int32 < 0 ? -1 : -other._uint64.CompareTo((ulong)_int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Single: return -other._single.CompareTo(_int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Double: return -other._double.CompareTo(_int32);
-                case (((uint)TypeCode.Int32) << 5) | (uint)TypeCode.Decimal: return -other._decimal.CompareTo(_int32);
-
-                // this == UInt32
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.SByte: return other._sbyte < 0 ? 1 : _uint32.CompareTo((uint)other._sbyte);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Byte: return _uint32.CompareTo(other._byte);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Int16: return other._int16 < 0 ? 1 : _uint32.CompareTo((uint)other._int16);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.UInt16: return _uint32.CompareTo(other._uint16);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Int32: return other._int32 < 0 ? 1 : _uint32.CompareTo((uint)other._int32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.UInt32: return _uint32.CompareTo(other._uint32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Int64: return other._int64 < 0 ? 1 : -other._int64.CompareTo(_uint32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.UInt64: return -other._uint64.CompareTo(_uint32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Single: return other._single < 0 ? 1 : -other._single.CompareTo(_uint32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Double: return other._double < 0 ? 1 : -other._double.CompareTo(_uint32);
-                case (((uint)TypeCode.UInt32) << 5) | (uint)TypeCode.Decimal: return other._decimal < 0 ? 1 : -other._decimal.CompareTo(_uint32);
-
-                // this == Int64
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.SByte: return _int64.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Byte: return _int64 < 0 ? -1 : _int64.CompareTo(other._byte);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Int16: return _int64.CompareTo(other._int16);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.UInt16: return _int64 < 0 ? -1 : _int64.CompareTo(other._uint16);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Int32: return _int64.CompareTo(other._int32);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.UInt32: return _int64 < 0 ? -1 : _int64.CompareTo(other._uint32);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Int64: return _int64.CompareTo(other._int64);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.UInt64: return _int64 < 0 ? -1 : -other._uint64.CompareTo((ulong)_int64);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Single: return -((double)other._single).CompareTo(_int64);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Double: return -other._double.CompareTo(_int64);
-                case (((uint)TypeCode.Int64) << 5) | (uint)TypeCode.Decimal: return -other._decimal.CompareTo(_int64);
-
-                // this == UInt64
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.SByte: return other._sbyte < 0 ? 1 : _uint64.CompareTo((ulong)other._sbyte);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Byte: return _uint64.CompareTo(other._byte);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Int16: return other._int16 < 0 ? 1 : _uint64.CompareTo((ulong)other._int16);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.UInt16: return _uint64.CompareTo(other._uint16);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Int32: return other._int32 < 0 ? 1 : _uint64.CompareTo((ulong)other._int32);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.UInt32: return _uint64.CompareTo(other._uint32);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Int64: return other._int64 < 0 ? 1 : _uint64.CompareTo((ulong)other._int64);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.UInt64: return _uint64.CompareTo(other._uint64);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Single: return other._single < 0 ? 1 : -((double)other._single).CompareTo(_uint64);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Double: return other._double < 0 ? 1 : -other._double.CompareTo(_uint64);
-                case (((uint)TypeCode.UInt64) << 5) | (uint)TypeCode.Decimal: return other._decimal < 0 ? 1 : -other._decimal.CompareTo(_uint64);
-
-                // this == Single
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.SByte: return _single.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Byte: return _single < 0 ? -1 : _single.CompareTo(other._byte);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Int16: return _single.CompareTo(other._int16);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.UInt16: return _single < 0 ? -1 : _single.CompareTo(other._uint16);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Int32: return _single.CompareTo(other._int32);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.UInt32: return _single < 0 ? -1 : _single.CompareTo(other._uint32);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Int64: return ((double)_single).CompareTo(other._int64);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.UInt64: return _single < 0 ? -1 : ((double)_single).CompareTo(other._uint64);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Single: return _single.CompareTo(other._single);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Double: return -other._double.CompareTo(_single);
-                case (((uint)TypeCode.Single) << 5) | (uint)TypeCode.Decimal:
-                    return _single <= SingleDecimalMinValue || _single >= SingleDecimalMaxValue
-                        ? _single.CompareTo((float)other._decimal)
-                        : -other._decimal.CompareTo((decimal)_single);
-
-                // this == Double
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.SByte: return _double.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Byte: return _double < 0 ? -1 : _double.CompareTo(other._byte);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Int16: return _double.CompareTo(other._int16);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.UInt16: return _double < 0 ? -1 : _double.CompareTo(other._uint16);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Int32: return _double.CompareTo(other._int32);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.UInt32: return _double < 0 ? -1 : _double.CompareTo(other._uint32);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Int64: return _double.CompareTo(other._int64);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.UInt64: return _double < 0 ? -1 : _double.CompareTo(other._uint64);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Single: return _double.CompareTo(other._single);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Double: return _double.CompareTo(other._double);
-                case (((uint)TypeCode.Double) << 5) | (uint)TypeCode.Decimal:
-                    return _double <= DoubleDecimalMinValue || _double >= DoubleDecimalMaxValue
-                        ? _double.CompareTo((double)other._decimal)
-                        : -other._decimal.CompareTo((decimal)_double);
-
-                // this == Decimal
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.SByte: return _decimal.CompareTo(other._sbyte);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Byte: return _decimal < 0 ? -1 : _decimal.CompareTo(other._byte);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Int16: return _decimal.CompareTo(other._int16);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.UInt16: return _decimal < 0 ? -1 : _decimal.CompareTo(other._uint16);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Int32: return _decimal.CompareTo(other._int32);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.UInt32: return _decimal < 0 ? -1 : _decimal.CompareTo(other._uint32);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Int64: return _decimal.CompareTo(other._int64);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.UInt64: return _decimal < 0 ? -1 : _decimal.CompareTo(other._uint64);
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Single:
-                    return other._single <= SingleDecimalMinValue || other._single >= SingleDecimalMaxValue
-                        ? ((float)Decimal).CompareTo(other._single)
-                        : _decimal.CompareTo((decimal)other._single);
-
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Double:
-                    return other._double <= DoubleDecimalMinValue || other._double >= DoubleDecimalMaxValue
-                        ? ((double)Decimal).CompareTo(other._double)
-                        : _decimal.CompareTo((decimal)other._double);
-
-                case (((uint)TypeCode.Decimal) << 5) | (uint)TypeCode.Decimal: return _decimal.CompareTo(other._decimal);
-            }
-
-            return 0;
-        }
+        public static bool operator !=(Number x, Number y) => !(x == y);
 
         public static bool operator <(Number x, Number y) => x.CompareTo(y) < 0;
 
@@ -1394,7 +1181,9 @@ namespace SourceCode.Clay
 
         Integer = 2,
 
-        Real = 4
+        Real = 4,
+
+        Decimal = 8
     }
 
 #pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"

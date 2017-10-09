@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -22,17 +21,17 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the minimum value.
         /// </summary>
-        public Number? Minimum { get; }
+        public Number Minimum { get; }
 
         /// <summary>
         /// Gets the maximum value.
         /// </summary>
-        public Number? Maximum { get; }
+        public Number Maximum { get; }
 
         /// <summary>
         /// Gets a value that the range should be a multiple of.
         /// </summary>
-        public Number? MultipleOf { get; }
+        public Number MultipleOf { get; }
 
         /// <summary>
         /// Gets the range options.
@@ -54,8 +53,8 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
-        public NumberRange(Number? minimum, Number? maximum)
-            : this(minimum, maximum, null, RangeOptions.Inclusive)
+        public NumberRange(Number minimum, Number maximum)
+            : this(minimum, maximum, Number.Null, RangeOptions.Inclusive)
         {
         }
 
@@ -65,8 +64,8 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public NumberRange(Number? minimum, Number? maximum, RangeOptions rangeOptions)
-            : this(minimum, maximum, null, rangeOptions)
+        public NumberRange(Number minimum, Number maximum, RangeOptions rangeOptions)
+            : this(minimum, maximum, Number.Null, rangeOptions)
         {
         }
 
@@ -77,7 +76,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="maximum">The maximum value.</param>
         /// <param name="multipleOf">The value which the range should be a multiple of.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public NumberRange(Number? minimum, Number? maximum, Number? multipleOf, RangeOptions rangeOptions)
+        public NumberRange(Number minimum, Number maximum, Number multipleOf, RangeOptions rangeOptions)
         {
             rangeOptions &= RangeOptions.Inclusive;
             if (!minimum.HasValue) rangeOptions &= ~RangeOptions.MinimumInclusive;
@@ -91,7 +90,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Methods
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -103,8 +102,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(NumberRange other)
         {
-            if (!EqualityComparer<Number?>.Default.Equals(Minimum, other.Minimum)) return false;
-            if (!EqualityComparer<Number?>.Default.Equals(Maximum, other.Maximum)) return false;
+            if (!NumberComparer.Default.Equals(Minimum, other.Minimum)) return false;
+            if (!NumberComparer.Default.Equals(Maximum, other.Maximum)) return false;
             if (RangeOptions != other.RangeOptions) return false;
 
             return true;
@@ -114,18 +113,23 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
+            var hc = 17L;
+
             unchecked
             {
-                var hc = 17L;
                 if (Minimum.HasValue)
                     hc = (hc * 23) + Minimum.Value.GetHashCode();
                 if (Maximum.HasValue)
                     hc = (hc * 23) + Maximum.Value.GetHashCode();
                 hc = (hc * 23) + RangeOptions.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
             }
+
+            return ((int)(hc >> 32)) ^ (int)hc;
         }
+
+        #endregion
+
+        #region Operators
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
@@ -133,23 +137,33 @@ namespace SourceCode.Clay.OpenApi
         {
             if (!HasValue) return string.Empty;
 
+            // Use set notation for open/closed boundaries
             var sb = new StringBuilder();
 
-            if (RangeOptions.HasFlag(RangeOptions.MinimumInclusive)) sb.Append("[");
-            else sb.Append("(");
+            if (RangeOptions.HasFlag(RangeOptions.MinimumInclusive))
+                sb.Append("[");
+            else
+                sb.Append("(");
 
-            if (Minimum.HasValue) sb.Append(Minimum.Value.ToString(CultureInfo.InvariantCulture));
-            if (MultipleOf.HasValue) sb.Append(" / ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
+            if (Minimum.HasValue)
+                sb.Append(Minimum.ToString(CultureInfo.InvariantCulture));
+            if (MultipleOf.HasValue)
+                sb.Append(" / ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
 
             sb.Append(", ");
 
-            if (Maximum.HasValue) sb.Append(Maximum.Value.ToString(CultureInfo.InvariantCulture));
-            if (MultipleOf.HasValue) sb.Append(" / ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
+            if (Maximum.HasValue)
+                sb.Append(Maximum.ToString(CultureInfo.InvariantCulture));
+            if (MultipleOf.HasValue)
+                sb.Append(" / ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
 
-            if (RangeOptions.HasFlag(RangeOptions.MaximumInclusive)) sb.Append("]");
-            else sb.Append(")");
+            if (RangeOptions.HasFlag(RangeOptions.MaximumInclusive))
+                sb.Append("]");
+            else
+                sb.Append(")");
 
-            if (MultipleOf.HasValue) sb.Append(" * ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
+            if (MultipleOf.HasValue)
+                sb.Append(" * ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
 
             return sb.ToString();
         }
