@@ -48,6 +48,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public PropertyEncodingBuilder()
         {
+            Headers = new Dictionary<String, Referable<ParameterBody>>();
         }
 
         /// <summary>

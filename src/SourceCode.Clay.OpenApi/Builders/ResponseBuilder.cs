@@ -48,6 +48,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ResponseBuilder()
         {
+            Headers = new Dictionary<string, Referable<ParameterBody>>();
+            Content = new Dictionary<ContentType, MediaType>();
+            Links = new Dictionary<string, Referable<Link>>();
         }
 
         /// <summary>

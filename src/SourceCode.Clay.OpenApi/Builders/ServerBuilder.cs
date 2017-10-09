@@ -45,6 +45,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ServerBuilder()
         {
+            Variables = new Dictionary<String, ServerVariable>();
         }
 
         /// <summary>

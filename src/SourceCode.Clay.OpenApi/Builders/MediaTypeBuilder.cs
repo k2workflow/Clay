@@ -42,6 +42,8 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public MediaTypeBuilder()
         {
+            Examples = new Dictionary<string, Referable<Example>>();
+            Encoding = new Dictionary<string, PropertyEncoding>();
         }
 
         /// <summary>

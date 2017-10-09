@@ -19,12 +19,12 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets or sets the name of the HTTP Authorization scheme to be used in the Authorization header.
         /// </summary>
-        public string Scheme { get; }
+        public string Scheme { get; set; }
 
         /// <summary>
         /// Gets or sets the hint to the client to identify how the bearer token is formatted.
         /// </summary>
-        public string BearerFormat { get; }
+        public string BearerFormat { get; set; }
 
         #endregion
 

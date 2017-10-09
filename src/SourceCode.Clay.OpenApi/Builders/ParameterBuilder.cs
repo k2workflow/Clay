@@ -36,6 +36,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates a new instance of the <see cref="ParameterBuilder"/> class.
         /// </summary>
         public ParameterBuilder()
+            : base()
         {
         }
 

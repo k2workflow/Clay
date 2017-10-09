@@ -54,6 +54,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OAuthFlowBuilder()
         {
+            Scopes = new Dictionary<String, String>();
         }
 
         /// <summary>

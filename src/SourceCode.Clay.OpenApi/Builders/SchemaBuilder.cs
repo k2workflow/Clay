@@ -125,6 +125,13 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public SchemaBuilder()
         {
+            Enum = new List<ScalarValue>();
+            AllOf = new List<Referable<Schema>>();
+            OneOf = new List<Referable<Schema>>();
+            AnyOf = new List<Referable<Schema>>();
+            Not = new List<Referable<Schema>>();
+            Properties = new Dictionary<string, Referable<Schema>>();
+            AdditionalProperties = new Dictionary<string, Referable<Schema>>();
         }
 
         /// <summary>

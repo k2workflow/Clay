@@ -46,6 +46,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public RequestBodyBuilder()
         {
+            Content = new Dictionary<ContentType, MediaType>();
         }
 
         /// <summary>

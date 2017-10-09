@@ -90,6 +90,12 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OperationBuilder()
         {
+            Tags = new List<string>();
+            Parameters = new Dictionary<ParameterKey, Referable<Parameter>>();
+            Responses = new Dictionary<ResponseKey, Referable<Response>>();
+            Callbacks = new Dictionary<string, Referable<Callback>>();
+            Security = new List<SecurityScheme>();
+            Servers = new List<Server>();
         }
 
         /// <summary>

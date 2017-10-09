@@ -45,6 +45,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ServerVariableBuilder()
         {
+            Enum = new List<string>();
         }
 
         /// <summary>

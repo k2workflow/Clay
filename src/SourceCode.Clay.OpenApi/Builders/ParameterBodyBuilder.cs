@@ -61,6 +61,8 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ParameterBodyBuilder()
         {
+            Examples = new Dictionary<ContentType, Referable<Example>>();
+            Content = new Dictionary<ContentType, MediaType>();
         }
 
         /// <summary>

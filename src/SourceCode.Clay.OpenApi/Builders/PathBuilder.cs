@@ -92,6 +92,8 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public PathBuilder()
         {
+            Servers = new List<Server>();
+            Parameters = new Dictionary<ParameterKey, Referable<ParameterBody>>();
         }
 
         /// <summary>

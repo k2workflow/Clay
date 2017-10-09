@@ -67,6 +67,10 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public DocumentBuilder()
         {
+            Servers = new List<Server>();
+            Paths = new Dictionary<string, Referable<Path>>();
+            Security = new List<Referable<SecurityScheme>>();
+            Tags = new List<Tag>();
         }
 
         /// <summary>
