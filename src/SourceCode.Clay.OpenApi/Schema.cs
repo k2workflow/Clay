@@ -220,6 +220,7 @@ namespace SourceCode.Clay.OpenApi
             if (ReferenceEquals(this, other)) return true;
 
             if (Type != other.Type) return false;
+            if (Format != other.Format) return false;
             if (Options != other.Options) return false;
             if (!NumberRange.Equals(other.NumberRange)) return false;
             if (!ItemsRange.Equals(other.ItemsRange)) return false;
@@ -255,7 +256,7 @@ namespace SourceCode.Clay.OpenApi
                 hc = hc * 21 + ItemsRange.GetHashCode();
                 hc = hc * 21 + LengthRange.GetHashCode();
                 hc = hc * 21 + PropertiesRange.GetHashCode();
-                hc = hc * 21 + ExternalDocumentation.GetHashCode();
+                if (ExternalDocumentation != null) hc = hc * 21 + ExternalDocumentation.GetHashCode();
                 if (Title != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Title);
                 if (Format != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Format);
                 if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);

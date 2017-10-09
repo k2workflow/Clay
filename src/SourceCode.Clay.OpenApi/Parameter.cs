@@ -100,7 +100,7 @@ namespace SourceCode.Clay.OpenApi
                 var hc = 21L;
 
                 hc = hc * 17 + base.GetHashCode();
-                hc = hc * 17 + EqualityComparer<string>.Default.GetHashCode(Name);
+                if (Name != null) hc = hc * 17 + StringComparer.Ordinal.GetHashCode(Name);
                 hc = hc * 17 + Location.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;

@@ -53,7 +53,7 @@ namespace SourceCode.Clay.OpenApi
             RequestBodyOptions options = default)
         {
             Description = description;
-            Content = content;
+            Content = content ?? ReadOnlyDictionary.Empty<ContentType, MediaType>();
             Options = options;
         }
 
