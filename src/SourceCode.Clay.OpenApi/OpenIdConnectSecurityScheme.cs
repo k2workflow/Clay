@@ -79,9 +79,9 @@ namespace SourceCode.Clay.OpenApi
 
             unchecked
             {
-                hc = hc * 23 + base.GetHashCode();
+                hc = (hc * 23) + base.GetHashCode();
                 if (Url != null)
-                    hc = hc * 23 + Url.GetHashCode();
+                    hc = (hc * 23) + Url.GetHashCode();
             }
 
             return ((int)(hc >> 32)) ^ (int)hc;
