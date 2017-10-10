@@ -49,22 +49,6 @@ namespace SourceCode.Clay.Tests
 
             var actual = Number.CreateFromObject(expected);
             Assert.Equal(expected, actual.Value);
-
-            if (expected == null) return;
-
-            var t = expected.GetType();
-            var nullable = typeof(Nullable<>).MakeGenericType(t);
-            var nullableCtor = nullable.GetConstructor(new[] { t });
-
-            actual = Number.CreateFromObject(nullableCtor.Invoke(new[] { expected }));
-            Assert.Equal(expected, actual.Value);
-            Assert.Equal(kind, actual.Kind);
-            Assert.Equal(isZero, actual.IsZero);
-
-            actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
-            //Assert.False(actual.HasValue);
-            //Assert.Equal(NumberKind.Null, actual.Kind);
-            Assert.False(actual.IsZero);
         }
 
         [
@@ -239,7 +223,7 @@ namespace SourceCode.Clay.Tests
                 bHigh = (decimal)(double)bHigh;
             }
 
-            var nullNumber = new Number();
+            var defaultNumber = new Number(); // 0L
             var aLowNumber = Number.CreateFromObject(aLow);
             var bLowNumber = Number.CreateFromObject(bLow);
             var aHighNumber = Number.CreateFromObject(aHigh);
@@ -248,8 +232,8 @@ namespace SourceCode.Clay.Tests
             // Check against own type.
             Assert.True(aLowNumber.CompareTo(aLowNumber) == 0);
             Assert.True(aHighNumber.CompareTo(aHighNumber) == 0);
-            Assert.True(aLowNumber.CompareTo(nullNumber) > 0);
-            Assert.True(aHighNumber.CompareTo(nullNumber) > 0);
+            Assert.True(aLowNumber.CompareTo(defaultNumber) == aLowNumber.CompareTo(0L));
+            Assert.True(aHighNumber.CompareTo(defaultNumber) == aHighNumber.CompareTo(0L));
             Assert.True(aLowNumber.CompareTo(aHighNumber) < 0);
             Assert.True(aHighNumber.CompareTo(aLowNumber) > 0);
 

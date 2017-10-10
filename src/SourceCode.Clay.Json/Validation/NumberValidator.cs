@@ -29,12 +29,16 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Constructors
 
-        public NumberValidator(Number min, Number max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
+        public NumberValidator(Number? min, Number? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
         {
             // Ensure min and max are of the same general type (integer or real)
-            if (((min.Kind & NumberKind.Integer) > 0 && (max.Kind & NumberKind.Real) > 0)
-            || ((min.Kind & NumberKind.Real) > 0 && (max.Kind & NumberKind.Integer) > 0))
+            if (min.HasValue
+                && max.HasValue
+                && (((min.Value.Kind & NumberKind.Integer) > 0 && (max.Value.Kind & NumberKind.Real) > 0) ||
+                    ((min.Value.Kind & NumberKind.Real) > 0 && (max.Value.Kind & NumberKind.Integer) > 0)))
+            {
                 throw new ArgumentOutOfRangeException(nameof(max), $"{nameof(NumberValidator)} {nameof(min)} and {nameof(max)} should have the same {nameof(NumberKind)}");
+            }
 
             Min = min;
             if (Min.HasValue && minExclusive)
@@ -48,11 +52,11 @@ namespace SourceCode.Clay.Json.Validation
             MultipleOf = multipleOf;
         }
 
-        public NumberValidator(Number min, Number max, bool required)
+        public NumberValidator(Number? min, Number? max, bool required)
             : this(min, max, false, false, required, null)
         { }
 
-        public NumberValidator(Number min, Number max)
+        public NumberValidator(Number? min, Number? max)
             : this(min, max, false, false, false, null)
         { }
 
