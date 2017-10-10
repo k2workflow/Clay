@@ -7,8 +7,8 @@
 
 using SourceCode.Clay.OpenApi.Expressions;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.OpenApi
 {
