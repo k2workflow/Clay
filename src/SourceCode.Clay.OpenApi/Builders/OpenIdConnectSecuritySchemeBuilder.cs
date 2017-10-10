@@ -49,6 +49,10 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator OpenIdConnectSecurityScheme(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<OpenIdConnectSecurityScheme>(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
+
+        public static implicit operator Referable<SecurityScheme>(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
+
         public static implicit operator OpenIdConnectSecuritySchemeBuilder(OpenIdConnectSecurityScheme value) => ReferenceEquals(value, null) ? null : new OpenIdConnectSecuritySchemeBuilder(value);
 
         /// <summary>

@@ -61,6 +61,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Example(ExampleBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Example>(ExampleBuilder builder) => builder?.Build();
+
         public static implicit operator ExampleBuilder(Example value) => ReferenceEquals(value, null) ? null : new ExampleBuilder(value);
 
         /// <summary>

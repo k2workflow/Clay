@@ -23,7 +23,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Indicates that the parameter is not mandatory.
         /// </summary>
-        Optional = 1,
+        Required = 1,
 
         /// <summary>
         /// Specifies that a parameter is deprecated.

@@ -67,6 +67,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator RequestBody(RequestBodyBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<RequestBody>(RequestBodyBuilder builder) => builder?.Build();
+
         public static implicit operator RequestBodyBuilder(RequestBody value) => ReferenceEquals(value, null) ? null : new RequestBodyBuilder(value);
 
         /// <summary>

@@ -55,6 +55,10 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator HttpSecurityScheme(HttpSecuritySchemeBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<HttpSecurityScheme>(HttpSecuritySchemeBuilder builder) => builder?.Build();
+
+        public static implicit operator Referable<SecurityScheme>(HttpSecuritySchemeBuilder builder) => builder?.Build();
+
         public static implicit operator HttpSecuritySchemeBuilder(HttpSecurityScheme value) => ReferenceEquals(value, null) ? null : new HttpSecuritySchemeBuilder(value);
 
         /// <summary>

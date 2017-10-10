@@ -86,6 +86,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator ParameterBody(ParameterBodyBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<ParameterBody>(ParameterBodyBuilder builder) => builder?.Build();
+
         public static implicit operator ParameterBodyBuilder(ParameterBody value) => ReferenceEquals(value, null) ? null : new ParameterBodyBuilder(value);
 
         /// <summary>

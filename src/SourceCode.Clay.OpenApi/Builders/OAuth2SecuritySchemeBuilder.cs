@@ -67,6 +67,10 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator OAuth2SecurityScheme(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<OAuth2SecurityScheme>(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
+
+        public static implicit operator Referable<SecurityScheme>(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
+
         public static implicit operator OAuth2SecuritySchemeBuilder(OAuth2SecurityScheme value) => ReferenceEquals(value, null) ? null : new OAuth2SecuritySchemeBuilder(value);
 
         /// <summary>

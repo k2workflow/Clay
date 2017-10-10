@@ -123,6 +123,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Path(PathBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Path>(PathBuilder builder) => builder?.Build();
+
         public static implicit operator PathBuilder(Path value) => ReferenceEquals(value, null) ? null : new PathBuilder(value);
 
         /// <summary>

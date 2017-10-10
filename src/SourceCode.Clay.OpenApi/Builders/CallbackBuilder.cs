@@ -101,6 +101,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Callback(CallbackBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Callback>(CallbackBuilder builder) => builder?.Build();
+
         public static implicit operator CallbackBuilder(Callback value) => ReferenceEquals(value, null) ? null : new CallbackBuilder(value);
 
         /// <summary>

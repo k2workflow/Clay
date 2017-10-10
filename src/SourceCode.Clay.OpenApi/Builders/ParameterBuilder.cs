@@ -58,6 +58,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Parameter(ParameterBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Parameter>(ParameterBuilder builder) => builder?.Build();
+
         public static implicit operator ParameterBuilder(Parameter value) => ReferenceEquals(value, null) ? null : new ParameterBuilder(value);
 
         /// <summary>
