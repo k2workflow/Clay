@@ -180,18 +180,20 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (Summary != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Summary);
-                if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);
-                if (Get != null) hc = hc * 21 + 1;
-                if (Put != null) hc = hc * 21 + 2;
-                if (Post != null) hc = hc * 21 + 3;
-                if (Delete != null) hc = hc * 21 + 4;
-                if (Options != null) hc = hc * 21 + 5;
-                if (Head != null) hc = hc * 21 + 6;
-                if (Patch != null) hc = hc * 21 + 7;
-                if (Trace != null) hc = hc * 21 + 8;
-                hc = hc * 21 + Servers.Count;
-                hc = hc * 21 + Parameters.Count;
+                if (Summary != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Summary);
+                if (Description != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
+                if (Get != null) hc = (hc * 23) + 1;
+                if (Put != null) hc = (hc * 23) + 2;
+                if (Post != null) hc = (hc * 23) + 3;
+                if (Delete != null) hc = (hc * 23) + 4;
+                if (Options != null) hc = (hc * 23) + 5;
+                if (Head != null) hc = (hc * 23) + 6;
+                if (Patch != null) hc = (hc * 23) + 7;
+                if (Trace != null) hc = (hc * 23) + 8;
+                hc = (hc * 23) + Servers.Count;
+                hc = (hc * 23) + Parameters.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

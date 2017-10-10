@@ -97,11 +97,12 @@ namespace SourceCode.Clay.OpenApi
         {
             unchecked
             {
-                var hc = 21L;
+                var hc = 17L;
 
-                hc = hc * 17 + base.GetHashCode();
-                if (Name != null) hc = hc * 17 + StringComparer.Ordinal.GetHashCode(Name);
-                hc = hc * 17 + Location.GetHashCode();
+                hc = (hc * 23) + base.GetHashCode();
+                if (Name != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
+                hc = hc * 23 + Location.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

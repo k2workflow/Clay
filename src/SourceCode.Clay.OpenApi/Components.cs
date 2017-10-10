@@ -150,15 +150,15 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Schemas.Count;
-                hc = hc * 21 + Responses.Count;
-                hc = hc * 21 + Parameters.Count;
-                hc = hc * 21 + Examples.Count;
-                hc = hc * 21 + RequestBodies.Count;
-                hc = hc * 21 + Headers.Count;
-                hc = hc * 21 + SecuritySchemes.Count;
-                hc = hc * 21 + Links.Count;
-                hc = hc * 21 + Callbacks.Count;
+                hc = (hc * 23) + Schemas.Count;
+                hc = (hc * 23) + Responses.Count;
+                hc = (hc * 23) + Parameters.Count;
+                hc = (hc * 23) + Examples.Count;
+                hc = (hc * 23) + RequestBodies.Count;
+                hc = (hc * 23) + Headers.Count;
+                hc = (hc * 23) + SecuritySchemes.Count;
+                hc = (hc * 23) + Links.Count;
+                hc = (hc * 23) + Callbacks.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

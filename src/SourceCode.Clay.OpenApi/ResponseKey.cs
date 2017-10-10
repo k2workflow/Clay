@@ -255,7 +255,9 @@ namespace SourceCode.Clay.OpenApi
             unchecked
             {
                 var hc = 17L;
-                hc = hc * 21 + EqualityComparer<HttpStatusCode?>.Default.GetHashCode(_httpStatusCode);
+
+                hc = (hc * 23) + EqualityComparer<HttpStatusCode?>.Default.GetHashCode(_httpStatusCode);
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

@@ -126,12 +126,13 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);
-                hc = hc * 21 + Options.GetHashCode();
-                hc = hc * 21 + Style.GetHashCode();
-                hc = hc * 21 + Schema.GetHashCode();
-                hc = hc * 21 + Examples.Count;
-                hc = hc * 21 + Content.Count;
+                if (Description != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
+                hc = (hc * 23) + Options.GetHashCode();
+                hc = (hc * 23) + Style.GetHashCode();
+                hc = (hc * 23) + Schema.GetHashCode();
+                hc = (hc * 23) + Examples.Count;
+                hc = (hc * 23) + Content.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

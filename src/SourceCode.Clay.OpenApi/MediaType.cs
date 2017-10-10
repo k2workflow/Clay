@@ -98,9 +98,9 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Schema.GetHashCode();
-                hc = hc * 21 + Examples.Count;
-                hc = hc * 21 + Encoding.Count;
+                hc = (hc * 23) + Schema.GetHashCode();
+                hc = (hc * 23) + Examples.Count;
+                hc = (hc * 23) + Encoding.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

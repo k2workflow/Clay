@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Json.Validation
 
         public override string ToString()
         {
-            // Use mathematical notation for open/closed boundaries
+            // Use set notation for open/closed boundaries
 
             // Min
             var s = "["

@@ -106,11 +106,15 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + base.GetHashCode();
-                if (ImplicitFlow != null) hc = hc * 21 + ImplicitFlow.GetHashCode();
-                if (PasswordFlow != null) hc = hc * 21 + PasswordFlow.GetHashCode();
-                if (ClientCredentialsFlow != null) hc = hc * 21 + ClientCredentialsFlow.GetHashCode();
-                if (AuthorizationCodeFlow != null) hc = hc * 21 + AuthorizationCodeFlow.GetHashCode();
+                hc = (hc * 23) + base.GetHashCode();
+                if (ImplicitFlow != null)
+                    hc = (hc * 23) + ImplicitFlow.GetHashCode();
+                if (PasswordFlow != null)
+                    hc = (hc * 23) + PasswordFlow.GetHashCode();
+                if (ClientCredentialsFlow != null)
+                    hc = (hc * 23) + ClientCredentialsFlow.GetHashCode();
+                if (AuthorizationCodeFlow != null)
+                    hc = (hc * 23) + AuthorizationCodeFlow.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

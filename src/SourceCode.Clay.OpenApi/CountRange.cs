@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -85,8 +84,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(CountRange other)
         {
-            if (!EqualityComparer<Number?>.Default.Equals(Minimum, other.Minimum)) return false;
-            if (!EqualityComparer<Number?>.Default.Equals(Maximum, other.Maximum)) return false;
+            if (!NumberComparer.Default.Equals(Minimum, other.Minimum)) return false;
+            if (!NumberComparer.Default.Equals(Maximum, other.Maximum)) return false;
             if (RangeOptions != other.RangeOptions) return false;
 
             return true;
@@ -96,14 +95,18 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
+            var hc = 17L;
+
             unchecked
             {
-                var hc = 17L;
-                if (Minimum.HasValue) hc = hc * 21 + Minimum.Value;
-                if (Maximum.HasValue) hc = hc * 21 + Maximum.Value;
-                hc = hc * 21 + RangeOptions.GetHashCode();
-                return ((int)(hc >> 32)) ^ (int)hc;
+                if (Minimum.HasValue)
+                    hc = (hc * 23) + Minimum.Value;
+                if (Maximum.HasValue)
+                    hc = (hc * 23) + Maximum.Value;
+                hc = (hc * 23) + RangeOptions.GetHashCode();
             }
+
+            return ((int)(hc >> 32)) ^ (int)hc;
         }
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
