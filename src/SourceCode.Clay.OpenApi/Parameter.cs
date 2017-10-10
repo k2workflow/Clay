@@ -102,7 +102,7 @@ namespace SourceCode.Clay.OpenApi
                 hc = (hc * 23) + base.GetHashCode();
                 if (Name != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
-                hc = hc * 23 + Location.GetHashCode();
+                hc = (hc * 23) + Location.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
