@@ -101,12 +101,12 @@ namespace SourceCode.Clay.OpenApi
         /// Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.
         /// </summary>
         /// <param name="number">The number.</param>
-        public ScalarValue(Number number)
+        public ScalarValue(Number? number)
         {
             if (number.HasValue)
             {
-                _typeCode = (byte)number.ValueTypeCode;
-                _number = number;
+                _typeCode = (byte)number.Value.ValueTypeCode;
+                _number = number.Value;
                 _string = null;
             }
             else
@@ -179,13 +179,14 @@ namespace SourceCode.Clay.OpenApi
             unchecked
             {
                 var hc = 17L;
-                hc = hc * 21 + _typeCode;
+
+                hc = (hc * 23) + _typeCode;
 
                 switch (_typeCode)
                 {
                     case 0: break;
-                    case (byte)TypeCode.String: hc = hc * 21 + StringComparer.Ordinal.GetHashCode(_string); break;
-                    default: hc = hc * 21 + _number.GetHashCode(); break;
+                    case (byte)TypeCode.String: hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(_string); break;
+                    default: hc = (hc * 23) + _number.GetHashCode(); break;
                 }
 
                 return ((int)(hc >> 32)) ^ (int)hc;

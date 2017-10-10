@@ -178,15 +178,18 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Tags.Count;
-                if (Summary != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Summary);
-                if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);
-                if (OperationIdentifier != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(OperationIdentifier);
-                hc = hc * 21 + Parameters.Count;
-                hc = hc * 21 + Responses.Count;
-                hc = hc * 21 + Callbacks.Count;
-                hc = hc * 21 + Security.Count;
-                hc = hc * 21 + Servers.Count;
+                hc = (hc * 23) + Tags.Count;
+                if (Summary != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Summary);
+                if (Description != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
+                if (OperationIdentifier != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(OperationIdentifier);
+                hc = (hc * 23) + Parameters.Count;
+                hc = (hc * 23) + Responses.Count;
+                hc = (hc * 23) + Callbacks.Count;
+                hc = (hc * 23) + Security.Count;
+                hc = (hc * 23) + Servers.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

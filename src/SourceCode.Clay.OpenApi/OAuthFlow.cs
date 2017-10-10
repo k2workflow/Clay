@@ -111,10 +111,13 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (AuthorizationUrl != null) hc = hc * 21 + AuthorizationUrl.GetHashCode();
-                if (TokenUrl != null) hc = hc * 21 + TokenUrl.GetHashCode();
-                if (RefreshUrl != null) hc = hc * 21 + RefreshUrl.GetHashCode();
-                hc = hc * 21 + Scopes.Count;
+                if (AuthorizationUrl != null)
+                    hc = (hc * 23) + AuthorizationUrl.GetHashCode();
+                if (TokenUrl != null)
+                    hc = (hc * 23) + TokenUrl.GetHashCode();
+                if (RefreshUrl != null)
+                    hc = (hc * 23) + RefreshUrl.GetHashCode();
+                hc = (hc * 23) + Scopes.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

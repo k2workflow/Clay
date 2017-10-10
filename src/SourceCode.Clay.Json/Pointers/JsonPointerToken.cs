@@ -79,7 +79,8 @@ namespace SourceCode.Clay.Json.Pointers
 
             unchecked
             {
-                if (Value != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Value);
+                if (Value != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value);
             }
 
             return ((int)(hc >> 32)) ^ (int)hc;

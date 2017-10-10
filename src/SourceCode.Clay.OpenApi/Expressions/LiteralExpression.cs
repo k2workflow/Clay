@@ -63,8 +63,8 @@ namespace SourceCode.Clay.OpenApi.Expressions
             unchecked
             {
                 var hc = 17L;
-                hc = hc * 21 + base.GetHashCode();
-                hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Value);
+                hc = (hc * 23) + base.GetHashCode();
+                hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value);
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

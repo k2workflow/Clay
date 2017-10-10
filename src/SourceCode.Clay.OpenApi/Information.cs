@@ -121,15 +121,16 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            var hc = 17;
+            var hc = 17L;
 
             unchecked
             {
-                if (Title != null) hc = hc * 23 + StringComparer.Ordinal.GetHashCode(Title);
-                hc = hc * 23 + Version.GetHashCode();
-            }
+                if (Title != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Title);
+                hc = (hc * 23) + Version.GetHashCode();
 
-            return hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
         }
 
         #endregion

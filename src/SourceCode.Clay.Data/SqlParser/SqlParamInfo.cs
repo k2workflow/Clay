@@ -62,10 +62,10 @@ namespace SourceCode.Clay.Data.SqlParser
 
             unchecked
             {
-                hc = hc * 23 + (IsNullable ? 9 : 4);
-                hc = hc * 23 + ((int)Direction);
-                hc = hc * 23 + (HasDefault ? 2 : 21);
-                hc = hc * 23 + (IsReadOnly ? 17 : 8);
+                hc = (hc * 23) + (IsNullable ? 9 : 4);
+                hc = (hc * 23) + ((int)Direction);
+                hc = (hc * 23) + (HasDefault ? 2 : 21);
+                hc = (hc * 23) + (IsReadOnly ? 17 : 8);
             }
 
             return ((int)(hc >> 32)) ^ (int)hc;

@@ -124,7 +124,7 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Count;
+                hc = (hc * 23) + Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

@@ -87,8 +87,10 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                if (Description != null) hc = hc * 23 + StringComparer.Ordinal.GetHashCode(Description);
-                if (Url != null) hc = hc * 23 + Url.GetHashCode();
+                if (Description != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
+                if (Url != null)
+                    hc = (hc * 23) + Url.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

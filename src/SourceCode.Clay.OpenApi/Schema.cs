@@ -250,25 +250,30 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = hc * 21 + Type.GetHashCode();
-                hc = hc * 21 + Options.GetHashCode();
-                hc = hc * 21 + NumberRange.GetHashCode();
-                hc = hc * 21 + ItemsRange.GetHashCode();
-                hc = hc * 21 + LengthRange.GetHashCode();
-                hc = hc * 21 + PropertiesRange.GetHashCode();
-                if (ExternalDocumentation != null) hc = hc * 21 + ExternalDocumentation.GetHashCode();
-                if (Title != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Title);
-                if (Format != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Format);
-                if (Description != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Description);
-                if (Pattern != null) hc = hc * 21 + StringComparer.Ordinal.GetHashCode(Pattern);
-                hc = hc * 21 + Enum.Count;
-                hc = hc * 21 + AllOf.Count;
-                hc = hc * 21 + OneOf.Count;
-                hc = hc * 21 + AnyOf.Count;
-                hc = hc * 21 + Not.Count;
-                hc = hc * 21 + Items.GetHashCode();
-                hc = hc * 21 + Properties.Count;
-                hc = hc * 21 + AdditionalProperties.Count;
+                hc = (hc * 23) + Type.GetHashCode();
+                hc = (hc * 23) + Options.GetHashCode();
+                hc = (hc * 23) + NumberRange.GetHashCode();
+                hc = (hc * 23) + ItemsRange.GetHashCode();
+                hc = (hc * 23) + LengthRange.GetHashCode();
+                hc = (hc * 23) + PropertiesRange.GetHashCode();
+                if (ExternalDocumentation != null)
+                    hc = (hc * 23) + ExternalDocumentation.GetHashCode();
+                if (Title != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Title);
+                if (Format != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Format);
+                if (Description != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
+                if (Pattern != null)
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Pattern);
+                hc = (hc * 23) + Enum.Count;
+                hc = (hc * 23) + AllOf.Count;
+                hc = (hc * 23) + OneOf.Count;
+                hc = (hc * 23) + AnyOf.Count;
+                hc = (hc * 23) + Not.Count;
+                hc = (hc * 23) + Items.GetHashCode();
+                hc = (hc * 23) + Properties.Count;
+                hc = (hc * 23) + AdditionalProperties.Count;
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

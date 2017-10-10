@@ -300,7 +300,7 @@ namespace SourceCode.Clay.Json.Pointers
             unchecked
             {
                 if (_tokens != null)
-                    hc = hc * 21 + _tokens.Length;
+                    hc = (hc * 23) + _tokens.Length;
             }
 
             return ((int)(hc >> 32)) ^ (int)hc;

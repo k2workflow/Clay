@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Buffers
         internal const int FnvEmpty = unchecked((int)FnvOffsetBasis); // Marked internal for Unit visibility
 
         // Chosen hash for a null input. Thanks for all the fish
-        internal const int FnvNull = 42; // Marked internal for Unit visibility
+        internal const int FnvNull = -42; // Marked internal for Unit visibility
 
         #endregion
 

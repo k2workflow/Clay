@@ -13,9 +13,9 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Properties
 
-        public Number Min { get; }
+        public Number? Min { get; }
 
-        public Number Max { get; }
+        public Number? Max { get; }
 
         public bool MinExclusive { get; }
 
@@ -29,12 +29,16 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Constructors
 
-        public NumberValidator(Number min, Number max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
+        public NumberValidator(Number? min, Number? max, bool minExclusive, bool maxExclusive, bool required, long? multipleOf)
         {
             // Ensure min and max are of the same general type (integer or real)
-            if (((min.Kind & NumberKind.Integer) > 0 && (max.Kind & NumberKind.Real) > 0)
-            || ((min.Kind & NumberKind.Real) > 0 && (max.Kind & NumberKind.Integer) > 0))
+            if (min.HasValue
+                && max.HasValue
+                && (((min.Value.Kind & NumberKind.Integer) > 0 && (max.Value.Kind & NumberKind.Real) > 0) ||
+                    ((min.Value.Kind & NumberKind.Real) > 0 && (max.Value.Kind & NumberKind.Integer) > 0)))
+            {
                 throw new ArgumentOutOfRangeException(nameof(max), $"{nameof(NumberValidator)} {nameof(min)} and {nameof(max)} should have the same {nameof(NumberKind)}");
+            }
 
             Min = min;
             if (Min.HasValue && minExclusive)
@@ -48,11 +52,11 @@ namespace SourceCode.Clay.Json.Validation
             MultipleOf = multipleOf;
         }
 
-        public NumberValidator(Number min, Number max, bool required)
+        public NumberValidator(Number? min, Number? max, bool required)
             : this(min, max, false, false, required, null)
         { }
 
-        public NumberValidator(Number min, Number max)
+        public NumberValidator(Number? min, Number? max)
             : this(min, max, false, false, false, null)
         { }
 
@@ -60,7 +64,7 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
-        public bool IsValid(Number value)
+        public bool IsValid(Number? value)
         {
             // Check Required
             if (!value.HasValue)
@@ -89,17 +93,17 @@ namespace SourceCode.Clay.Json.Validation
             // MultipleOf
             if (MultipleOf.HasValue
                 && MultipleOf.Value != 0 // n % 0 == undefined
-                && !value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
+                && !value.Value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
             {
-                if ((value.Kind & NumberKind.Integer) > 0)
+                if ((value.Value.Kind & NumberKind.Integer) > 0)
                 {
-                    var val = value.ToInt64();
+                    var val = value.Value.ToInt64();
                     var zero = val % MultipleOf.Value == 0;
                     if (!zero) return false;
                 }
-                else if ((value.Kind & NumberKind.Real) > 0)
+                else if ((value.Value.Kind & NumberKind.Real) > 0)
                 {
-                    var val = value.ToDouble();
+                    var val = value.Value.ToDouble();
                     var zero = val % MultipleOf.Value == 0.0; // Modulus(Double) is a well-defined operation
                     if (!zero) return false;
                 }
@@ -110,7 +114,7 @@ namespace SourceCode.Clay.Json.Validation
 
         public override string ToString()
         {
-            // Use mathematical notation for open/closed boundaries
+            // Use set notation for open/closed boundaries
 
             // Required
             var s = (Required ? "Required: " : string.Empty)
