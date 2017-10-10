@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace SourceCode.Clay
@@ -16,6 +15,8 @@ namespace SourceCode.Clay
     /// </summary>
     public static class EnumConvert
     {
+        #region Nested
+
         private sealed class Checked { }
 
         private sealed class Unchecked { }
@@ -72,6 +73,8 @@ namespace SourceCode.Clay
                 ? Expression.ConvertChecked(value, type)
                 : Expression.Convert(value, type);
         }
+
+        #endregion
 
         #region Unchecked
 
