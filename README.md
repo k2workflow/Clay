@@ -5,6 +5,10 @@
 
 Tools and extensions to the .Net framework.
 
+### Prerequisites
+
+* .NET Core SDK 2.0 (https://www.microsoft.com/net/download/core)
+
 ### Getting started
 
 **Getting started with Git and GitHub**
