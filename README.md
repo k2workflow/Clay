@@ -5,6 +5,10 @@
 
 Tools and extensions to the .Net framework.
 
+### Prerequisites
+
+* .NET Core SDK 2.0 (https://www.microsoft.com/net/download/core)
+
 ### Getting started
 
 **Getting started with Git and GitHub**
@@ -25,7 +29,7 @@ Tools and extensions to the .Net framework.
      
 ### License
 
-Clay is licensed under the MIT license, which can be found in license.txt.
+Clay is licensed under the MIT license, which can be found in LICENSE.
 
 **Additional Restrictions**
 
