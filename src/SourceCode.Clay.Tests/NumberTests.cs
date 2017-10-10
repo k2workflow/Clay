@@ -18,7 +18,6 @@ namespace SourceCode.Clay.Tests
         #region Methods
 
         [
-            InlineData("null", null, NumberKind.Null, false),
             InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
             InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
             InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
@@ -63,8 +62,8 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(isZero, actual.IsZero);
 
             actual = Number.CreateFromObject(Activator.CreateInstance(nullable));
-            Assert.False(actual.HasValue);
-            Assert.Equal(NumberKind.Null, actual.Kind);
+            //Assert.False(actual.HasValue);
+            //Assert.Equal(NumberKind.Null, actual.Kind);
             Assert.False(actual.IsZero);
         }
 

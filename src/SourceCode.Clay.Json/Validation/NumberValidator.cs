@@ -13,9 +13,9 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Properties
 
-        public Number Min { get; }
+        public Number? Min { get; }
 
-        public Number Max { get; }
+        public Number? Max { get; }
 
         public bool MinExclusive { get; }
 
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
-        public bool IsValid(Number value)
+        public bool IsValid(Number? value)
         {
             // Check Required
             if (!value.HasValue)
@@ -89,17 +89,17 @@ namespace SourceCode.Clay.Json.Validation
             // MultipleOf
             if (MultipleOf.HasValue
                 && MultipleOf.Value != 0 // n % 0 == undefined
-                && !value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
+                && !value.Value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
             {
-                if ((value.Kind & NumberKind.Integer) > 0)
+                if ((value.Value.Kind & NumberKind.Integer) > 0)
                 {
-                    var val = value.ToInt64();
+                    var val = value.Value.ToInt64();
                     var zero = val % MultipleOf.Value == 0;
                     if (!zero) return false;
                 }
-                else if ((value.Kind & NumberKind.Real) > 0)
+                else if ((value.Value.Kind & NumberKind.Real) > 0)
                 {
-                    var val = value.ToDouble();
+                    var val = value.Value.ToDouble();
                     var zero = val % MultipleOf.Value == 0.0; // Modulus(Double) is a well-defined operation
                     if (!zero) return false;
                 }

@@ -101,12 +101,12 @@ namespace SourceCode.Clay.OpenApi
         /// Creates a new <see cref="ScalarValue"/> containing a <see cref="Number"/>.
         /// </summary>
         /// <param name="number">The number.</param>
-        public ScalarValue(Number number)
+        public ScalarValue(Number? number)
         {
             if (number.HasValue)
             {
-                _typeCode = (byte)number.ValueTypeCode;
-                _number = number;
+                _typeCode = (byte)number.Value.ValueTypeCode;
+                _number = number.Value;
                 _string = null;
             }
             else

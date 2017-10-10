@@ -14,7 +14,7 @@ namespace SourceCode.Clay
     /// <summary>
     /// Represents a way to compare different <see cref="Number"/> values.
     /// </summary>
-    public abstract class NumberComparer : IEqualityComparer<Number>, IComparer<Number>
+    public abstract class NumberComparer : IEqualityComparer<Number>, IEqualityComparer<Number?>, IComparer<Number>, IComparer<Number?>
     {
         #region Constants
 
@@ -43,6 +43,16 @@ namespace SourceCode.Clay
         /// <inheritdoc/>
         public abstract int Compare(Number x, Number y);
 
+        public int Compare(Number? x, Number? y)
+        {
+            if (!x.HasValue && !y.HasValue) return 0;
+            if (!x.HasValue) return -1;
+            if (!y.HasValue) return 1;
+
+            var cmp = Compare(x.Value, y.Value);
+            return cmp;
+        }
+
         #endregion
 
         #region IEqualityComparer
@@ -51,7 +61,24 @@ namespace SourceCode.Clay
         public abstract bool Equals(Number x, Number y);
 
         /// <inheritdoc/>
+        public bool Equals(Number? x, Number? y)
+        {
+            if (x.HasValue ^ y.HasValue) return false;
+            if (!x.HasValue) return true;
+
+            var equal = Equals(x.Value, y.Value);
+            return equal;
+        }
+
+        /// <inheritdoc/>
         public abstract int GetHashCode(Number obj);
+
+        public int GetHashCode(Number? obj)
+        {
+            if (!obj.HasValue) return -42;
+
+            return GetHashCode(obj.Value);
+        }
 
         #endregion
 
@@ -71,11 +98,7 @@ namespace SourceCode.Clay
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override int Compare(Number x, Number y)
             {
-                if (x._typeCode == 0 && y._typeCode == 0) return 0;
-                if (x._typeCode == 0) return -1;
-                if (y._typeCode == 0) return 1;
-
-                switch (((uint)x._typeCode << 5) | y._typeCode)
+                switch (((uint)x.ValueTypeCode << 5) | (uint)y.ValueTypeCode)
                 {
                     // this == SByte
                     case (((uint)TypeCode.SByte) << 5) | (uint)TypeCode.SByte: return x._sbyte.CompareTo(y._sbyte);
@@ -245,9 +268,9 @@ namespace SourceCode.Clay
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override bool Equals(Number x, Number y)
             {
-                if (x._typeCode != y._typeCode) return false;
+                if (x.ValueTypeCode != y.ValueTypeCode) return false;
 
-                if (x._typeCode == (byte)TypeCode.Decimal)
+                if (x.ValueTypeCode == TypeCode.Decimal)
                     return (x._decimal == y._decimal);
 
                 if ((x.Kind & NumberKind.Real) > 0)
@@ -264,9 +287,9 @@ namespace SourceCode.Clay
 
                 unchecked
                 {
-                    hc = (hc * 23) + (int)obj._typeCode;
+                    hc = (hc * 23) + (int)obj.ValueTypeCode;
 
-                    if (obj._typeCode == (byte)TypeCode.Decimal)
+                    if (obj.ValueTypeCode == TypeCode.Decimal)
                         hc = (hc * 23) + obj._decimal.GetHashCode();
                     else if ((obj.Kind & NumberKind.Real) > 0)
                         hc = (hc * 23) + obj._double.GetHashCode();

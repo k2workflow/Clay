@@ -21,17 +21,17 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the minimum value.
         /// </summary>
-        public Number Minimum { get; }
+        public Number? Minimum { get; }
 
         /// <summary>
         /// Gets the maximum value.
         /// </summary>
-        public Number Maximum { get; }
+        public Number? Maximum { get; }
 
         /// <summary>
         /// Gets a value that the range should be a multiple of.
         /// </summary>
-        public Number MultipleOf { get; }
+        public Number? MultipleOf { get; }
 
         /// <summary>
         /// Gets the range options.
@@ -49,34 +49,13 @@ namespace SourceCode.Clay.OpenApi
         #region Constructors
 
         /// <summary>
-        /// Creates a new inclusive <see cref="NumberRange"/> value.
-        /// </summary>
-        /// <param name="minimum">The minimum value.</param>
-        /// <param name="maximum">The maximum value.</param>
-        public NumberRange(Number minimum, Number maximum)
-            : this(minimum, maximum, Number.Null, RangeOptions.Inclusive)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="NumberRange"/> value.
-        /// </summary>
-        /// <param name="minimum">The minimum value.</param>
-        /// <param name="maximum">The maximum value.</param>
-        /// <param name="rangeOptions">The range options.</param>
-        public NumberRange(Number minimum, Number maximum, RangeOptions rangeOptions)
-            : this(minimum, maximum, Number.Null, rangeOptions)
-        {
-        }
-
-        /// <summary>
         /// Creates a new <see cref="NumberRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
         /// <param name="multipleOf">The value which the range should be a multiple of.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public NumberRange(Number minimum, Number maximum, Number multipleOf, RangeOptions rangeOptions)
+        public NumberRange(Number? minimum, Number? maximum, Number? multipleOf, RangeOptions rangeOptions)
         {
             rangeOptions &= RangeOptions.Inclusive;
             if (!minimum.HasValue) rangeOptions &= ~RangeOptions.MinimumInclusive;
@@ -87,6 +66,25 @@ namespace SourceCode.Clay.OpenApi
             MultipleOf = multipleOf;
             RangeOptions = rangeOptions;
         }
+
+        /// <summary>
+        /// Creates a new inclusive <see cref="NumberRange"/> value.
+        /// </summary>
+        /// <param name="minimum">The minimum value.</param>
+        /// <param name="maximum">The maximum value.</param>
+        public NumberRange(Number? minimum, Number? maximum)
+            : this(minimum, maximum, null, RangeOptions.Inclusive)
+        { }
+
+        /// <summary>
+        /// Creates a new <see cref="NumberRange"/> value.
+        /// </summary>
+        /// <param name="minimum">The minimum value.</param>
+        /// <param name="maximum">The maximum value.</param>
+        /// <param name="rangeOptions">The range options.</param>
+        public NumberRange(Number? minimum, Number? maximum, RangeOptions rangeOptions)
+            : this(minimum, maximum, null, rangeOptions)
+        { }
 
         #endregion
 
@@ -146,16 +144,16 @@ namespace SourceCode.Clay.OpenApi
                 sb.Append("(");
 
             if (Minimum.HasValue)
-                sb.Append(Minimum.ToString(CultureInfo.InvariantCulture));
+                sb.Append(Minimum.Value.ToString(CultureInfo.InvariantCulture));
             if (MultipleOf.HasValue)
-                sb.Append(" / ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
+                sb.Append(" / ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
 
             sb.Append(", ");
 
             if (Maximum.HasValue)
-                sb.Append(Maximum.ToString(CultureInfo.InvariantCulture));
+                sb.Append(Maximum.Value.ToString(CultureInfo.InvariantCulture));
             if (MultipleOf.HasValue)
-                sb.Append(" / ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
+                sb.Append(" / ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
 
             if (RangeOptions.HasFlag(RangeOptions.MaximumInclusive))
                 sb.Append("]");
@@ -163,7 +161,7 @@ namespace SourceCode.Clay.OpenApi
                 sb.Append(")");
 
             if (MultipleOf.HasValue)
-                sb.Append(" * ").Append(MultipleOf.ToString(CultureInfo.InvariantCulture));
+                sb.Append(" * ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
 
             return sb.ToString();
         }

@@ -20,12 +20,6 @@ namespace SourceCode.Clay
     [StructLayout(LayoutKind.Explicit)] // 17 bytes, aligned up to 20
     public struct Number : IEquatable<Number>, IComparable<Number>, IFormattable, IConvertible
     {
-        #region Constants
-
-        public static Number Null { get; }
-
-        #endregion
-
         #region Fields
 
         // Signed
@@ -70,7 +64,7 @@ namespace SourceCode.Clay
         // Discriminator
 
         [FieldOffset(16)] // [16..16]
-        internal readonly byte _typeCode;
+        private readonly byte _typeCode;
 
         #endregion
 
@@ -86,6 +80,7 @@ namespace SourceCode.Clay
                     case TypeCode.SByte:
                     case TypeCode.Int16:
                     case TypeCode.Int32:
+                    default:
                     case TypeCode.Int64:
                         return NumberKind.Integer | NumberKind.Signed;
 
@@ -104,10 +99,6 @@ namespace SourceCode.Clay
                     // Decimal
                     case TypeCode.Decimal:
                         return NumberKind.Decimal | NumberKind.Signed;
-
-                    // Empty
-                    default:
-                        return NumberKind.Null;
                 }
             }
         }
@@ -122,6 +113,7 @@ namespace SourceCode.Clay
                     case TypeCode.SByte:
                     case TypeCode.Int16:
                     case TypeCode.Int32:
+                    default:
                     case TypeCode.Int64:
 
                     // Unsigned
@@ -138,10 +130,6 @@ namespace SourceCode.Clay
                     // Decimal
                     case TypeCode.Decimal:
                         return _decimal == 0;
-
-                    // Empty
-                    default:
-                        return false;
                 }
             }
         }
@@ -150,72 +138,67 @@ namespace SourceCode.Clay
         /// Gets the value as a <see cref="sbyte"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.SByte"/>.</exception>
-        public sbyte? SByte => GetValue(_sbyte, TypeCode.SByte);
+        public sbyte SByte => GetValue(_sbyte, TypeCode.SByte);
 
         /// <summary>
         /// Gets the value as a <see cref="byte"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Byte"/>.</exception>
-        public byte? Byte => GetValue(_byte, TypeCode.Byte);
+        public byte Byte => GetValue(_byte, TypeCode.Byte);
 
         /// <summary>
         /// Gets the value as a <see cref="ushort"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt16"/>.</exception>
-        public ushort? UInt16 => GetValue(_uint16, TypeCode.UInt16);
+        public ushort UInt16 => GetValue(_uint16, TypeCode.UInt16);
 
         /// <summary>
         /// Gets the value as a <see cref="short"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int16"/>.</exception>
-        public short? Int16 => GetValue(_int16, TypeCode.Int16);
+        public short Int16 => GetValue(_int16, TypeCode.Int16);
 
         /// <summary>
         /// Gets the value as a <see cref="uint"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt32"/>.</exception>
-        public uint? UInt32 => GetValue(_uint32, TypeCode.UInt32);
+        public uint UInt32 => GetValue(_uint32, TypeCode.UInt32);
 
         /// <summary>
         /// Gets the value as a <see cref="int"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int32"/>.</exception>
-        public int? Int32 => GetValue(_int32, TypeCode.Int32);
+        public int Int32 => GetValue(_int32, TypeCode.Int32);
 
         /// <summary>
         /// Gets the value as a <see cref="ulong"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.UInt64"/>.</exception>
-        public ulong? UInt64 => GetValue(_uint64, TypeCode.UInt64);
+        public ulong UInt64 => GetValue(_uint64, TypeCode.UInt64);
 
         /// <summary>
         /// Gets the value as a <see cref="long"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Int64"/>.</exception>
-        public long? Int64 => GetValue(_int64, TypeCode.Int64);
+        public long Int64 => GetValue(_int64, TypeCode.Int64);
 
         /// <summary>
         /// Gets the value as a <see cref="float"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Single"/>.</exception>
-        public float? Single => GetValue(_single, TypeCode.Single);
+        public float Single => GetValue(_single, TypeCode.Single);
 
         /// <summary>
         /// Gets the value as a <see cref="double"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Double"/>.</exception>
-        public double? Double => GetValue(_double, TypeCode.Double);
+        public double Double => GetValue(_double, TypeCode.Double);
 
         /// <summary>
         /// Gets the value as a <see cref="decimal"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Decimal"/>.</exception>
-        public decimal? Decimal => GetValue(_decimal, TypeCode.Decimal);
-
-        /// <summary>
-        /// Determines whether a value is stored.
-        /// </summary>
-        public bool HasValue => _typeCode != 0;
+        public decimal Decimal => GetValue(_decimal, TypeCode.Decimal);
 
         /// <summary>
         /// Gets the value boxed in a <see cref="object"/>.
@@ -231,6 +214,7 @@ namespace SourceCode.Clay
                     case TypeCode.SByte: return _sbyte;
                     case TypeCode.Int16: return _int16;
                     case TypeCode.Int32: return _int32;
+                    default:
                     case TypeCode.Int64: return _int64;
 
                     // Unsigned
@@ -243,9 +227,6 @@ namespace SourceCode.Clay
                     case TypeCode.Single: return _single;
                     case TypeCode.Double: return _double;
                     case TypeCode.Decimal: return _decimal;
-
-                    // Empty
-                    default: return null;
                 }
             }
         }
@@ -253,7 +234,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Gets the <see cref="TypeCode"/> that indicates what the number type is.
         /// </summary>
-        public TypeCode ValueTypeCode => (TypeCode)_typeCode;
+        public TypeCode ValueTypeCode => _typeCode == 0 ? TypeCode.Int64 : (TypeCode)_typeCode;
 
         #endregion
 
@@ -264,38 +245,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(sbyte? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.SByte;
-                _sbyte = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(sbyte value) : this()
         {
             _typeCode = (byte)TypeCode.SByte;
             _sbyte = value;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(byte? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Byte;
-                _byte = value.Value;
-            }
         }
 
         /// <summary>
@@ -314,38 +267,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(short? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Int16;
-                _int16 = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(short value) : this()
         {
             _typeCode = (byte)TypeCode.Int16;
             _int16 = value;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(ushort? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.UInt16;
-                _uint16 = value.Value;
-            }
         }
 
         /// <summary>
@@ -364,38 +289,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(int? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Int32;
-                _int32 = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(int value) : this()
         {
             _typeCode = (byte)TypeCode.Int32;
             _int32 = value;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(uint? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.UInt32;
-                _uint32 = value.Value;
-            }
         }
 
         /// <summary>
@@ -414,38 +311,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(long? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Int64;
-                _int64 = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(long value) : this()
         {
             _typeCode = (byte)TypeCode.Int64;
             _int64 = value;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(ulong? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.UInt64;
-                _uint64 = value.Value;
-            }
         }
 
         /// <summary>
@@ -464,20 +333,6 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(float? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Single;
-                _single = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(float value) : this()
         {
             _typeCode = (byte)TypeCode.Single;
@@ -489,38 +344,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(double? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Double;
-                _double = value.Value;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(double value) : this()
         {
             _typeCode = (byte)TypeCode.Double;
             _double = value;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Number"/> struct.
-        /// </summary>
-        /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Number(decimal? value) : this()
-        {
-            if (value.HasValue)
-            {
-                _typeCode = (byte)TypeCode.Decimal;
-                _decimal = value.Value;
-            }
         }
 
         /// <summary>
@@ -546,7 +373,7 @@ namespace SourceCode.Clay
         /// <returns>The <see cref="Number"/> instance.</returns>
         public static Number CreateFromObject(object value)
             => ReferenceEquals(value, null)
-            ? default
+            ? throw new ArgumentNullException(nameof(value))
             : _objectFactory(value.GetType().TypeHandle, value);
 
         private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
@@ -576,23 +403,14 @@ namespace SourceCode.Clay
                 typeof(decimal)
             };
 
-            var cases = new SwitchCase[types.Length * 2];
+            var cases = new SwitchCase[types.Length];
             for (var i = 0; i < types.Length; i++)
             {
-                // T
-                var j = i * 2;
                 var type = types[i];
                 var ctor = typeof(Number).GetConstructor(new[] { type });
                 var cast = Expression.Convert(objParam, type);
                 var create = Expression.New(ctor, cast);
-                cases[j] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
-
-                // Nullable<T>
-                type = typeof(Nullable<>).MakeGenericType(type);
-                ctor = typeof(Number).GetConstructor(new[] { type });
-                cast = Expression.Convert(objParam, type);
-                create = Expression.New(ctor, cast);
-                cases[j + 1] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
+                cases[i] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
             }
 
             var thrwCtor = typeof(ArgumentOutOfRangeException).GetConstructor(new[] { typeof(string) });
@@ -618,10 +436,9 @@ namespace SourceCode.Clay
         #region Methods
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private T? GetValue<T>(T field, TypeCode typeCode)
+        private T GetValue<T>(T field, TypeCode typeCode)
             where T : struct
         {
-            if (_typeCode == 0) return default;
             if (_typeCode != (byte)typeCode) throw new InvalidOperationException();
             return field;
         }
@@ -653,6 +470,7 @@ namespace SourceCode.Clay
                 case TypeCode.SByte: return _sbyte.ToString(format, formatProvider);
                 case TypeCode.Int16: return _int16.ToString(format, formatProvider);
                 case TypeCode.Int32: return _int32.ToString(format, formatProvider);
+                default:
                 case TypeCode.Int64: return _int64.ToString(format, formatProvider);
 
                 // Unsigned
@@ -665,8 +483,6 @@ namespace SourceCode.Clay
                 case TypeCode.Single: return _single.ToString(format, formatProvider);
                 case TypeCode.Double: return _double.ToString(format, formatProvider);
                 case TypeCode.Decimal: return _decimal.ToString(format, formatProvider);
-
-                default: return string.Empty;
             }
         }
 
@@ -678,9 +494,8 @@ namespace SourceCode.Clay
         /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
         /// <param name="obj">The object to compare with the current instance.</param>
         public override bool Equals(object obj)
-            => (ReferenceEquals(obj, null) && _typeCode == 0)
-            || (obj is Number num
-                && Equals(num));
+            => obj is Number num
+            && Equals(num);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
@@ -722,67 +537,34 @@ namespace SourceCode.Clay
         #region IConvertible
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(sbyte? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(sbyte value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(byte? value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(byte value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(short? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(short value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(ushort? value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ushort value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(int? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(int value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(uint? value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(uint value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(long? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(long value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(ulong? value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ulong value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(float? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(float value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(double? value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(double value) => new Number(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Number(decimal? value) => new Number(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(decimal value) => new Number(value);
@@ -886,7 +668,6 @@ namespace SourceCode.Clay
                 case TypeCode.Double: return (decimal)_double;
                 case TypeCode.Decimal: return _decimal;
 
-                // Empty
                 default: return default;
             }
         }
@@ -931,7 +712,6 @@ namespace SourceCode.Clay
                 case TypeCode.Double: return _double;
                 case TypeCode.Decimal: return (double)_decimal;
 
-                // Empty
                 default: return default;
             }
         }
@@ -957,7 +737,6 @@ namespace SourceCode.Clay
                 case TypeCode.Double: return _double;
                 case TypeCode.Decimal: return Convert.ToDouble(_decimal);
 
-                // Empty
                 default: return default;
             }
         }
@@ -1021,7 +800,6 @@ namespace SourceCode.Clay
                 case TypeCode.Double: return (long)_double;
                 case TypeCode.Decimal: return (long)_decimal;
 
-                // Empty
                 default: return default;
             }
         }
@@ -1047,7 +825,6 @@ namespace SourceCode.Clay
                 case TypeCode.Double: return Convert.ToInt64(_double);
                 case TypeCode.Decimal: return Convert.ToInt64(_decimal);
 
-                // Empty
                 default: return default;
             }
         }
@@ -1175,8 +952,6 @@ namespace SourceCode.Clay
     [Flags]
     public enum NumberKind
     {
-        Null = 0, // Default
-
         Signed = 1,
 
         Integer = 2,
