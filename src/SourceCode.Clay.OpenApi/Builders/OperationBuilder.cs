@@ -49,7 +49,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the list of parameters that are applicable for this operation.
         /// </summary>
-        public IDictionary<ParameterKey, Referable<Parameter>> Parameters { get; }
+        public IDictionary<ParameterKey, Referable<ParameterBody>> Parameters { get; }
 
         /// <summary>
         /// Gets or sets the request body applicable for this operation.
@@ -91,7 +91,7 @@ namespace SourceCode.Clay.OpenApi
         public OperationBuilder()
         {
             Tags = new List<string>();
-            Parameters = new Dictionary<ParameterKey, Referable<Parameter>>();
+            Parameters = new Dictionary<ParameterKey, Referable<ParameterBody>>();
             Responses = new Dictionary<ResponseKey, Referable<Response>>();
             Callbacks = new Dictionary<string, Referable<Callback>>();
             Security = new List<SecurityScheme>();
@@ -110,7 +110,7 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             ExternalDocumentation = value.ExternalDocumentation;
             OperationIdentifier = value.OperationIdentifier;
-            Parameters = new Dictionary<ParameterKey, Referable<Parameter>>(value.Parameters);
+            Parameters = new Dictionary<ParameterKey, Referable<ParameterBody>>(value.Parameters);
             RequestBody = value.RequestBody;
             Responses = new Dictionary<ResponseKey, Referable<Response>>(value.Responses);
             Callbacks = new Dictionary<string, Referable<Callback>>(value.Callbacks);
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.OpenApi
             description: Description,
             externalDocumentation: ExternalDocumentation,
             operationIdentifier: OperationIdentifier,
-            parameters: new ReadOnlyDictionary<ParameterKey, Referable<Parameter>>(Parameters),
+            parameters: new ReadOnlyDictionary<ParameterKey, Referable<ParameterBody>>(Parameters),
             requestBody: RequestBody,
             responses: new ReadOnlyDictionary<ResponseKey, Referable<Response>>(Responses),
             callbacks: new ReadOnlyDictionary<string, Referable<Callback>>(Callbacks),

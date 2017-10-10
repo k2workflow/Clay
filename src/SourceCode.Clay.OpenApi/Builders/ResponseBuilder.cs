@@ -72,6 +72,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Response(ResponseBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Response>(ResponseBuilder builder) => builder?.Build();
+
         public static implicit operator ResponseBuilder(Response value) => ReferenceEquals(value, null) ? null : new ResponseBuilder(value);
 
         /// <summary>

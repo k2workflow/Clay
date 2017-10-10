@@ -168,6 +168,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Schema(SchemaBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Schema>(SchemaBuilder builder) => builder?.Build();
+
         public static implicit operator SchemaBuilder(Schema value) => ReferenceEquals(value, null) ? null : new SchemaBuilder(value);
 
         /// <summary>

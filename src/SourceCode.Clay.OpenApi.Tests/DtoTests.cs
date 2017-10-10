@@ -294,7 +294,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Operation_Equals))]
         public static void Operation_Equals()
         {
-            var param = new Dictionary<ParameterKey, Referable<Parameter>>()
+            var param = new Dictionary<ParameterKey, Referable<ParameterBody>>()
             {
                 [new ParameterKey("param1", ParameterLocation.Header)] = "#/components/parameters/param1"
             };

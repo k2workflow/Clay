@@ -55,6 +55,10 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator ApiKeySecurityScheme(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<ApiKeySecurityScheme>(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
+
+        public static implicit operator Referable<SecurityScheme>(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
+
         public static implicit operator ApiKeySecuritySchemeBuilder(ApiKeySecurityScheme value) => ReferenceEquals(value, null) ? null : new ApiKeySecuritySchemeBuilder(value);
 
         /// <summary>

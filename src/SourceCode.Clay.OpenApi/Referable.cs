@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents either a reference object or a value.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
-    public struct Referable<T> : IEquatable<Referable<T>>
+    public struct Referable<T> : IEquatable<Referable<T>>, IReferable
         where T : class, IEquatable<T>
     {
         #region Properties
@@ -44,6 +44,9 @@ namespace SourceCode.Clay.OpenApi
         /// Gets a value indicating whether the reference is null.
         /// </summary>
         public bool HasValue => IsReference || IsValue;
+
+        /// <summary>Gets the contained value.</summary>
+        object IReferable.Value => Value;
 
         #endregion
 

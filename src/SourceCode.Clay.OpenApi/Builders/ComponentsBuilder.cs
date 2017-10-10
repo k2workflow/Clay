@@ -74,15 +74,15 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public ComponentsBuilder()
         {
-            Schemas = new Dictionary<string, Referable<Schema>>();
-            Responses = new Dictionary<string, Referable<Response>>();
-            Parameters = new Dictionary<string, Referable<Parameter>>();
-            Examples = new Dictionary<string, Referable<Example>>();
-            RequestBodies = new Dictionary<string, Referable<RequestBody>>();
-            Headers = new Dictionary<string, Referable<ParameterBody>>();
-            SecuritySchemes = new Dictionary<string, Referable<SecurityScheme>>();
-            Links = new Dictionary<string, Referable<Link>>();
-            Callbacks = new Dictionary<string, Referable<Callback>>();
+            Schemas = new Dictionary<string, Referable<Schema>>(ComponentKeyStringComparer.ComponentKey);
+            Responses = new Dictionary<string, Referable<Response>>(ComponentKeyStringComparer.ComponentKey);
+            Parameters = new Dictionary<string, Referable<Parameter>>(ComponentKeyStringComparer.ComponentKey);
+            Examples = new Dictionary<string, Referable<Example>>(ComponentKeyStringComparer.ComponentKey);
+            RequestBodies = new Dictionary<string, Referable<RequestBody>>(ComponentKeyStringComparer.ComponentKey);
+            Headers = new Dictionary<string, Referable<ParameterBody>>(ComponentKeyStringComparer.ComponentKey);
+            SecuritySchemes = new Dictionary<string, Referable<SecurityScheme>>(ComponentKeyStringComparer.ComponentKey);
+            Links = new Dictionary<string, Referable<Link>>(ComponentKeyStringComparer.ComponentKey);
+            Callbacks = new Dictionary<string, Referable<Callback>>(ComponentKeyStringComparer.ComponentKey);
         }
 
         /// <summary>

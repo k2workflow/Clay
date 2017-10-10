@@ -49,7 +49,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the list of parameters that are applicable for this operation.
         /// </summary>
-        public IReadOnlyDictionary<ParameterKey, Referable<Parameter>> Parameters { get; }
+        public IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> Parameters { get; }
 
         /// <summary>
         /// Gets the request body applicable for this operation.
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.OpenApi
             string description = default,
             ExternalDocumentation externalDocumentation = default,
             string operationIdentifier = default,
-            IReadOnlyDictionary<ParameterKey, Referable<Parameter>> parameters = default,
+            IReadOnlyDictionary<ParameterKey, Referable<ParameterBody>> parameters = default,
             Referable<RequestBody> requestBody = default,
             IReadOnlyDictionary<ResponseKey, Referable<Response>> responses = default,
             IReadOnlyDictionary<string, Referable<Callback>> callbacks = default,
@@ -119,7 +119,7 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             ExternalDocumentation = externalDocumentation;
             OperationIdentifier = operationIdentifier;
-            Parameters = parameters ?? ReadOnlyDictionary.Empty<ParameterKey, Referable<Parameter>>();
+            Parameters = parameters ?? ReadOnlyDictionary.Empty<ParameterKey, Referable<ParameterBody>>();
             RequestBody = requestBody;
             Responses = responses ?? ReadOnlyDictionary.Empty<ResponseKey, Referable<Response>>();
             Callbacks = callbacks ?? ReadOnlyDictionary.Empty<string, Referable<Callback>>();

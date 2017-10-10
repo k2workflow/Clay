@@ -69,6 +69,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static implicit operator Link(LinkBuilder builder) => builder?.Build();
 
+        public static implicit operator Referable<Link>(LinkBuilder builder) => builder?.Build();
+
         public static implicit operator LinkBuilder(Link value) => ReferenceEquals(value, null) ? null : new LinkBuilder(value);
 
         /// <summary>
