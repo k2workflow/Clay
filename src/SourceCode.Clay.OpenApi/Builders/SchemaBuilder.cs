@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Allows the definition of input and output data types.
     /// </summary>
-    public class SchemaBuilder : IBuilder<Schema>
+    public class SchemaBuilder : IOpenApiBuilder<Schema>
     {
         #region Properties
 

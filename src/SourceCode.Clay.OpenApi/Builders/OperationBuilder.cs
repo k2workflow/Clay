@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Describes a single API operation on a path.
     /// </summary>
-    public class OperationBuilder : IBuilder<Operation>
+    public class OperationBuilder : IOpenApiBuilder<Operation>
     {
         #region Properties
 

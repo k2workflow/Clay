@@ -16,7 +16,7 @@ namespace SourceCode.Clay.OpenApi
     /// The path itself is still exposed to the documentation viewer but they will not know which operations
     /// and parameters are available.
     /// </summary>
-    public class PathBuilder : IBuilder<Path>
+    public class PathBuilder : IOpenApiBuilder<Path>
     {
         #region Properties
 

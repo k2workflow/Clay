@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Contains an example of how to use an entity in an Open API document.
     /// </summary>
-    public class ExampleBuilder : IBuilder<Example>
+    public class ExampleBuilder : IOpenApiBuilder<Example>
     {
         #region Properties
 

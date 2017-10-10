@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Defines an OAuth 2 security scheme that can be used by the operations.
     /// </summary>
-    public class OAuth2SecuritySchemeBuilder : SecuritySchemeBuilder, IBuilder<OAuth2SecurityScheme>
+    public class OAuth2SecuritySchemeBuilder : SecuritySchemeBuilder, IOpenApiBuilder<OAuth2SecurityScheme>
     {
         #region Properties
 

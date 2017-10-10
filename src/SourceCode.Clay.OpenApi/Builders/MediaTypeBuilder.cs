@@ -14,7 +14,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Provides schema and examples for the media type identified by a key.
     /// </summary>
-    public class MediaTypeBuilder : IBuilder<MediaType>
+    public class MediaTypeBuilder : IOpenApiBuilder<MediaType>
     {
         #region Properties
 

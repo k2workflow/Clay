@@ -18,7 +18,7 @@ namespace SourceCode.Clay.OpenApi
     /// the expected responses. The key value used to identify the callback object is an expression, evaluated
     /// at runtime, that identifies a URL to use for the callback operation.
     /// </summary>
-    public class CallbackBuilder : IDictionary<CompoundExpression, Referable<Path>>, IReadOnlyDictionary<CompoundExpression, Referable<Path>>, IBuilder<Callback>
+    public class CallbackBuilder : IDictionary<CompoundExpression, Referable<Path>>, IReadOnlyDictionary<CompoundExpression, Referable<Path>>, IOpenApiBuilder<Callback>
     {
         #region Fields
 

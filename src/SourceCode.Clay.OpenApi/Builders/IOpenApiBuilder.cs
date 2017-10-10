@@ -11,7 +11,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents a type that builds another type.
     /// </summary>
     /// <typeparam name="TBuilt">The type that will be built.</typeparam>
-    public interface IBuilder<out TBuilt>
+    public interface IOpenApiBuilder<out TBuilt>
     {
         #region Methods
 
