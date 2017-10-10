@@ -29,7 +29,7 @@ Tools and extensions to the .Net framework.
      
 ### License
 
-Clay is licensed under the MIT license, which can be found in license.txt.
+Clay is licensed under the MIT license, which can be found in LICENSE.
 
 **Additional Restrictions**
 
