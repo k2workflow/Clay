@@ -60,6 +60,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="serverVariable1">The server variable1.</param>
+        /// <param name="serverVariable2">The server variable2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(ServerVariable serverVariable1, ServerVariable serverVariable2)
         {
             if (ReferenceEquals(serverVariable1, null) && ReferenceEquals(serverVariable2, null)) return true;
@@ -67,8 +73,14 @@ namespace SourceCode.Clay.OpenApi
             return serverVariable1.Equals((object)serverVariable2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="serverVariable1">The server variable1.</param>
+        /// <param name="serverVariable2">The server variable2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(ServerVariable serverVariable1, ServerVariable serverVariable2)
-                    => !(serverVariable1 == serverVariable2);
+                            => !(serverVariable1 == serverVariable2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

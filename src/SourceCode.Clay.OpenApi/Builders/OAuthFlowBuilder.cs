@@ -74,8 +74,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuthFlowBuilder"/> to <see cref="OAuthFlow"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OAuthFlow(OAuthFlowBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuthFlow"/> to <see cref="OAuthFlowBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OAuthFlowBuilder(OAuthFlow value) => ReferenceEquals(value, null) ? null : new OAuthFlowBuilder(value);
 
         /// <summary>

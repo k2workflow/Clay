@@ -55,6 +55,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="tag1">The tag1.</param>
+        /// <param name="tag2">The tag2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Tag tag1, Tag tag2)
         {
             if (ReferenceEquals(tag1, null) && ReferenceEquals(tag2, null)) return true;
@@ -62,6 +68,12 @@ namespace SourceCode.Clay.OpenApi
             return tag1.Equals((object)tag2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="tag1">The tag1.</param>
+        /// <param name="tag2">The tag2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(Tag tag1, Tag tag2) => !(tag1 == tag2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>

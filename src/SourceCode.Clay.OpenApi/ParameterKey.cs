@@ -48,9 +48,22 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="key1">The key1.</param>
+        /// <param name="key2">The key2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(ParameterKey key1, ParameterKey key2) => key1.Equals(key2);
 
-        public static bool operator !=(ParameterKey key1, ParameterKey key2) => !(key1 == key2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="key1">The key1.</param>
+        /// <param name="key2">The key2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(ParameterKey key1, ParameterKey key2)
+            => !(key1 == key2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>

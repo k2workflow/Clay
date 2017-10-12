@@ -41,6 +41,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #region Equality
 
+        /// <summary>
+        /// Implements the == operator.
+        /// </summary>
+        /// <param name="expression1">The expression1.</param>
+        /// <param name="expression2">The expression2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(ExpressionComponent expression1, ExpressionComponent expression2)
         {
             if (ReferenceEquals(expression1, expression2)) return true;
@@ -49,6 +55,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return expression1.Equals(expression2);
         }
 
+        /// <summary>
+        /// Implements the != operator.
+        /// </summary>
+        /// <param name="expression1">The expression1.</param>
+        /// <param name="expression2">The expression2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(ExpressionComponent expression1, ExpressionComponent expression2) => !(expression1 == expression2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>

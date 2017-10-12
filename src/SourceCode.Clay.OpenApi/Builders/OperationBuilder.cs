@@ -123,8 +123,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OperationBuilder"/> to <see cref="Operation"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Operation(OperationBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Operation"/> to <see cref="OperationBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OperationBuilder(Operation value) => ReferenceEquals(value, null) ? null : new OperationBuilder(value);
 
         /// <summary>

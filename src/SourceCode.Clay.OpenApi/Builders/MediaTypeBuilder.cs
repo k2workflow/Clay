@@ -62,8 +62,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="MediaTypeBuilder"/> to <see cref="MediaType"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator MediaType(MediaTypeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="MediaType"/> to <see cref="MediaTypeBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator MediaTypeBuilder(MediaType value) => ReferenceEquals(value, null) ? null : new MediaTypeBuilder(value);
 
         /// <summary>

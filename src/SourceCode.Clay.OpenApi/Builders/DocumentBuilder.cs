@@ -94,8 +94,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="DocumentBuilder"/> to <see cref="Document"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Document(DocumentBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Document"/> to <see cref="DocumentBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator DocumentBuilder(Document value) => ReferenceEquals(value, null) ? null : new DocumentBuilder(value);
 
         /// <summary>

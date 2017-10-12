@@ -84,10 +84,25 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ParameterBodyBuilder"/> to <see cref="ParameterBody"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ParameterBody(ParameterBodyBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ParameterBodyBuilder"/> to <see cref="Referable{ParameterBody}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<ParameterBody>(ParameterBodyBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ParameterBody"/> to <see cref="ParameterBodyBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ParameterBodyBuilder(ParameterBody value) => ReferenceEquals(value, null) ? null : new ParameterBodyBuilder(value);
 
         /// <summary>

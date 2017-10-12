@@ -56,6 +56,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="contact1">The contact1.</param>
+        /// <param name="contact2">The contact2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Contact contact1, Contact contact2)
         {
             if (ReferenceEquals(contact1, null) && ReferenceEquals(contact2, null)) return true;
@@ -63,7 +69,14 @@ namespace SourceCode.Clay.OpenApi
             return contact1.Equals((object)contact2);
         }
 
-        public static bool operator !=(Contact contact1, Contact contact2) => !(contact1 == contact2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="contact1">The contact1.</param>
+        /// <param name="contact2">The contact2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Contact contact1, Contact contact2)
+            => !(contact1 == contact2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
