@@ -100,16 +100,48 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="referable1">The referable1.</param>
+        /// <param name="referable2">The referable2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Referable<T> referable1, Referable<T> referable2) => referable1.Equals(referable2);
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="referable1">The referable1.</param>
+        /// <param name="referable2">The referable2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(Referable<T> referable1, Referable<T> referable2) => !(referable1 == referable2);
 
+        /// <summary>
+        /// Performs an implicit conversion from <typeparamref name="T" /> to <see cref="OpenApi.Referable{T}" />.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<T>(T value) => new Referable<T>(value);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SourceCode.Clay.Json.Pointers.JsonPointer" /> to <see cref="SourceCode.Clay.OpenApi.Referable{T}" />.
+        /// </summary>
+        /// <param name="internalReference">The internal reference.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<T>(JsonPointer internalReference) => new Referable<T>(internalReference);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.Uri" /> to <see cref="SourceCode.Clay.OpenApi.Referable{T}" />.
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<T>(Uri reference) => new Referable<T>(reference);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.String" /> to <see cref="SourceCode.Clay.OpenApi.Referable{T}" />.
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<T>(string reference) => new Referable<T>(reference);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>

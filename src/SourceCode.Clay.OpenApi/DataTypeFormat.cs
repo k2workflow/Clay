@@ -22,6 +22,9 @@ namespace SourceCode.Clay.OpenApi
         {
             #region Classes
 
+            /// <summary>
+            /// Integer formats.
+            /// </summary>
             public static class Integer
             {
                 #region Fields
@@ -39,6 +42,9 @@ namespace SourceCode.Clay.OpenApi
                 #endregion
             }
 
+            /// <summary>
+            /// Number formats.
+            /// </summary>
             public static class Number
             {
                 #region Fields
@@ -56,6 +62,9 @@ namespace SourceCode.Clay.OpenApi
                 #endregion
             }
 
+            /// <summary>
+            /// String formats.
+            /// </summary>
             public static class String
             {
                 #region Fields
@@ -103,6 +112,9 @@ namespace SourceCode.Clay.OpenApi
         {
             #region Classes
 
+            /// <summary>
+            /// String formats.
+            /// </summary>
             public static class String
             {
                 #region Fields

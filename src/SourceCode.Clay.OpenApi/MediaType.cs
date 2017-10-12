@@ -61,6 +61,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="mediaType1">The media type1.</param>
+        /// <param name="mediaType2">The media type2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(MediaType mediaType1, MediaType mediaType2)
         {
             if (ReferenceEquals(mediaType1, null) && ReferenceEquals(mediaType2, null)) return true;
@@ -68,7 +74,14 @@ namespace SourceCode.Clay.OpenApi
             return mediaType1.Equals((object)mediaType2);
         }
 
-        public static bool operator !=(MediaType mediaType1, MediaType mediaType2) => !(mediaType1 == mediaType2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="mediaType1">The media type1.</param>
+        /// <param name="mediaType2">The media type2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(MediaType mediaType1, MediaType mediaType2)
+            => !(mediaType1 == mediaType2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

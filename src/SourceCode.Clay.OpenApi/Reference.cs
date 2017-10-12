@@ -51,7 +51,6 @@ namespace SourceCode.Clay.OpenApi
         /// Creates a new external <see cref="Reference"/> value.
         /// </summary>
         /// <param name="url">The external reference URL.</param>
-        /// <param name="pointer">The external reference pointer.</param>
         public Reference(Uri url)
             : this(url, default)
         {
@@ -84,8 +83,20 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="reference1">The reference1.</param>
+        /// <param name="reference2">The reference2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Reference reference1, Reference reference2) => reference1.Equals(reference2);
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="reference1">The reference1.</param>
+        /// <param name="reference2">The reference2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(Reference reference1, Reference reference2) => !(reference1 == reference2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
@@ -126,7 +137,7 @@ namespace SourceCode.Clay.OpenApi
         /// Converts the URL representation of a reference to its structured equivalent.
         /// </summary>
         /// <param name="url">A URL containing a reference to convert.</param>
-        /// <returns>The structured equivalent of the reference contained in <paramref name="s"/>.</returns>
+        /// <returns>The structured equivalent of the reference contained in <paramref name="url"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="url"/> is null.</exception>
         /// <exception cref="FormatException"><paramref name="url"/> is not in a format compliant with the Open API specification.</exception>
         public static Reference ParseUrl(Uri url)
@@ -199,10 +210,25 @@ namespace SourceCode.Clay.OpenApi
             return true;
         }
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="SourceCode.Clay.Json.Pointers.JsonPointer" /> to <see cref="SourceCode.Clay.OpenApi.Reference" />.
+        /// </summary>
+        /// <param name="pointer">The pointer.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Reference(JsonPointer pointer) => pointer.Count == 0 ? default : new Reference(pointer);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.Uri" /> to <see cref="SourceCode.Clay.OpenApi.Reference" />.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Reference(Uri url) => url == null ? default : ParseUrl(url);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.String" /> to <see cref="SourceCode.Clay.OpenApi.Reference" />.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Reference(string url)
         {
             if (string.IsNullOrEmpty(url)) return default;

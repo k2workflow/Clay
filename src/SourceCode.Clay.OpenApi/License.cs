@@ -47,6 +47,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="license1">The license1.</param>
+        /// <param name="license2">The license2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(License license1, License license2)
         {
             if (ReferenceEquals(license1, null) && ReferenceEquals(license2, null)) return true;
@@ -54,7 +60,14 @@ namespace SourceCode.Clay.OpenApi
             return license1.Equals((object)license2);
         }
 
-        public static bool operator !=(License license1, License license2) => !(license1 == license2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="license1">The license1.</param>
+        /// <param name="license2">The license2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(License license1, License license2)
+            => !(license1 == license2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

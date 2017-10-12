@@ -81,8 +81,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="InformationBuilder"/> to <see cref="Information"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Information(InformationBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Information"/> to <see cref="InformationBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator InformationBuilder(Information value) => ReferenceEquals(value, null) ? null : new InformationBuilder(value);
 
         /// <summary>

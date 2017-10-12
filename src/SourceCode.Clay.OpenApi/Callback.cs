@@ -89,6 +89,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="callback1">The callback1.</param>
+        /// <param name="callback2">The callback2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Callback callback1, Callback callback2)
         {
             if (ReferenceEquals(callback1, null) && ReferenceEquals(callback2, null)) return true;
@@ -96,7 +102,14 @@ namespace SourceCode.Clay.OpenApi
             return callback1.Equals((object)callback2);
         }
 
-        public static bool operator !=(Callback callback1, Callback callback2) => !(callback1 == callback2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="callback1">The callback1.</param>
+        /// <param name="callback2">The callback2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Callback callback1, Callback callback2)
+            => !(callback1 == callback2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

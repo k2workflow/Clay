@@ -64,8 +64,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ServerBuilder"/> to <see cref="Server"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Server(ServerBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Server"/> to <see cref="ServerBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ServerBuilder(Server value) => ReferenceEquals(value, null) ? null : new ServerBuilder(value);
 
         /// <summary>

@@ -97,6 +97,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="document1">The document1.</param>
+        /// <param name="document2">The document2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Document document1, Document document2)
         {
             if (ReferenceEquals(document1, null) && ReferenceEquals(document2, null)) return true;
@@ -104,7 +110,14 @@ namespace SourceCode.Clay.OpenApi
             return document1.Equals((object)document2);
         }
 
-        public static bool operator !=(Document document1, Document document2) => !(document1 == document2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="document1">The document1.</param>
+        /// <param name="document2">The document2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Document document1, Document document2)
+            => !(document1 == document2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

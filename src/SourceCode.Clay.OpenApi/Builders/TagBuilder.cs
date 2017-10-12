@@ -58,8 +58,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="TagBuilder"/> to <see cref="Tag"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Tag(TagBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Tag"/> to <see cref="TagBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator TagBuilder(Tag value) => ReferenceEquals(value, null) ? null : new TagBuilder(value);
 
         /// <summary>

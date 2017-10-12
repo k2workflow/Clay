@@ -72,6 +72,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="flow1">The flow1.</param>
+        /// <param name="flow2">The flow2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
         {
             if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
@@ -79,8 +85,14 @@ namespace SourceCode.Clay.OpenApi
             return flow1.Equals((object)flow2);
         }
 
-        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2) =>
-                    !(flow1 == flow2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="flow1">The flow1.</param>
+        /// <param name="flow2">The flow2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(OAuthFlow flow1, OAuthFlow flow2)
+            => !(flow1 == flow2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

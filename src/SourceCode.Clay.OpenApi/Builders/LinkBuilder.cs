@@ -67,10 +67,25 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="LinkBuilder"/> to <see cref="Link"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Link(LinkBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="LinkBuilder"/> to <see cref="Referable{Link}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<Link>(LinkBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="Link"/> to <see cref="LinkBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator LinkBuilder(Link value) => ReferenceEquals(value, null) ? null : new LinkBuilder(value);
 
         /// <summary>

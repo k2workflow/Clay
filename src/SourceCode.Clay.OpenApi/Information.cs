@@ -84,6 +84,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="information1">The information1.</param>
+        /// <param name="information2">The information2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Information information1, Information information2)
         {
             if (ReferenceEquals(information1, null) && ReferenceEquals(information2, null)) return true;
@@ -91,8 +97,14 @@ namespace SourceCode.Clay.OpenApi
             return information1.Equals((object)information2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="information1">The information1.</param>
+        /// <param name="information2">The information2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(Information information1, Information information2)
-                    => !(information1 == information2);
+            => !(information1 == information2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

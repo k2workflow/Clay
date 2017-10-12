@@ -66,6 +66,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="propertyEncoding1">The property encoding1.</param>
+        /// <param name="propertyEncoding2">The property encoding2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
         {
             if (ReferenceEquals(propertyEncoding1, null) && ReferenceEquals(propertyEncoding2, null)) return true;
@@ -73,8 +79,14 @@ namespace SourceCode.Clay.OpenApi
             return propertyEncoding1.Equals((object)propertyEncoding2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="propertyEncoding1">The property encoding1.</param>
+        /// <param name="propertyEncoding2">The property encoding2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
-                    => !(propertyEncoding1 == propertyEncoding2);
+            => !(propertyEncoding1 == propertyEncoding2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

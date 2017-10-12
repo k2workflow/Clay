@@ -53,12 +53,32 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ApiKeySecuritySchemeBuilder"/> to <see cref="ApiKeySecurityScheme"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ApiKeySecurityScheme(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ApiKeySecuritySchemeBuilder"/> to <see cref="Referable{ApiKeySecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<ApiKeySecurityScheme>(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ApiKeySecuritySchemeBuilder"/> to <see cref="Referable{SecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<SecurityScheme>(ApiKeySecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ApiKeySecurityScheme"/> to <see cref="ApiKeySecuritySchemeBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ApiKeySecuritySchemeBuilder(ApiKeySecurityScheme value) => ReferenceEquals(value, null) ? null : new ApiKeySecuritySchemeBuilder(value);
 
         /// <summary>
