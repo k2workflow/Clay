@@ -55,8 +55,8 @@ namespace SourceCode.Clay.OpenApi
 
         public static bool operator ==(ApiKeySecurityScheme scheme1, ApiKeySecurityScheme scheme2)
         {
-            if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
-            if (ReferenceEquals(scheme1, null) || ReferenceEquals(scheme2, null)) return false;
+            if (scheme1 is null && scheme2 is null) return true;
+            if (scheme1 is null || scheme2 is null) return false;
             return scheme1.Equals((object)scheme2);
         }
 
