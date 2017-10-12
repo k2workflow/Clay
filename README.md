@@ -1,7 +1,8 @@
 ## Clay
 
-[![Build status](https://ci.appveyor.com/api/projects/status/yg5vnimungm86hf1/branch/master?svg=true)](https://ci.appveyor.com/project/jcdickinson/clay/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/nmbe8qjavj0y2ws2?svg=true)](https://ci.appveyor.com/project/k2oss/clay)
 [![Code Coverage](https://codecov.io/gh/k2workflow/Clay/coverage.svg)](https://codecov.io/gh/k2workflow/Clay)
+[![CodeFactor](https://www.codefactor.io/repository/github/k2workflow/chasm/badge)](https://www.codefactor.io/repository/github/k2workflow/chasm)
 
 Tools and extensions to the .Net framework.
 
