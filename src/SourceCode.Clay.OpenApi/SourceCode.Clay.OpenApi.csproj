@@ -27,7 +27,6 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.OpenApi</PackageId>
     <Authors>SourceCode</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>DTOs for Open API 3.0.0.</Description>
     <PackageTags>clay json open-api swagger</PackageTags>
     <Version>1.0.0-local</Version>
