@@ -37,20 +37,41 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Span
+        #region Memory
 
         /// <summary>
-        /// Gets the default instance of the <see cref="ReadOnlySpan{T}"/> buffer comparer that uses FNV with default fidelity.
-        /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlySpan{T}"/>.
+        /// Gets the default instance of the <see cref="ReadOnlyMemory{T}"/> buffer comparer that uses FNV with default fidelity.
+        /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
-        public static BufferComparer<ReadOnlySpan<byte>> Span { get; } = new SpanBufferComparer(DefaultHashCodeFidelity);
+        public static BufferComparer<ReadOnlyMemory<byte>> Memory { get; } = new MemoryBufferComparer(DefaultHashCodeFidelity);
 
         #endregion
 
         #region Helpers
+
+        /// <summary>
+        /// Compare the contexts of two <see cref="ReadOnlyMemory{T}"/> buffers.
+        /// </summary>
+        /// <param name="x">Memory 1</param>
+        /// <param name="y">Memory 2</param>
+        /// <returns></returns>
+        [SecuritySafeCritical]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int CompareMemory(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y)
+        {
+            if (x.IsEmpty)
+            {
+                if (y.IsEmpty) return 0; // (null, null)
+                return -1; // (null, y)
+            }
+            if (y.IsEmpty) return 1; // (x, null)
+
+            var cmp = CompareSpan(x.Span, y.Span);
+            return cmp;
+        }
 
         /// <summary>
         /// Compare the contexts of two <see cref="ReadOnlySpan{T}"/> buffers.

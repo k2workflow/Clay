@@ -10,27 +10,27 @@ using System;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to compare the contents of <see cref="ReadOnlySpan{T}{T}"/> buffers.
+    /// Represents a way to compare the contents of <see cref="ReadOnlyMemory{T}"/> buffers.
     /// </summary>
-    public sealed class SpanBufferComparer : BufferComparer<ReadOnlySpan<byte>>
+    public sealed class MemoryBufferComparer : BufferComparer<ReadOnlyMemory<byte>>
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="SpanBufferComparer"/> class, that considers the full
+        /// Creates a new instance of the <see cref="MemoryBufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
         /// </summary>
-        public SpanBufferComparer()
+        public MemoryBufferComparer()
         { }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="SpanBufferComparer"/> class.
+        /// Creates a new instance of the <see cref="MemoryBufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
         /// The maximum number of octets processed when calculating a hashcode.
         /// Pass zero to disable the limit.
         /// </param>
-        public SpanBufferComparer(int hashCodeFidelity)
+        public MemoryBufferComparer(int hashCodeFidelity)
             : base(hashCodeFidelity)
         { }
 
@@ -46,14 +46,14 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
-        public override int Compare(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => BufferComparer.CompareSpan(x, y);
+        public override int Compare(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => BufferComparer.CompareMemory(x, y);
 
         #endregion
 
         #region IEqualityComparer
 
         /// <inheritdoc/>
-        public override bool Equals(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y) => BufferComparer.CompareSpan(x, y) == 0;
+        public override bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => BufferComparer.CompareMemory(x, y) == 0;
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -62,17 +62,17 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
-        public override int GetHashCode(ReadOnlySpan<byte> obj)
+        public override int GetHashCode(ReadOnlyMemory<byte> obj)
         {
-            // Note ReadOnly/Span is a struct, so cannot pass Null to it
+            // Note ReadOnly/Memory is a struct, so cannot pass null to it
 
             // Calculate on full length
             if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
-                return HashCode.Fnv(obj);
+                return HashCode.Fnv(obj.Span);
 
             // Calculate on prefix
-            var span = obj.Slice(0, HashCodeFidelity);
-            var hc = HashCode.Fnv(span);
+            var slice = obj.Slice(0, HashCodeFidelity);
+            var hc = HashCode.Fnv(slice.Span);
             return hc;
         }
 

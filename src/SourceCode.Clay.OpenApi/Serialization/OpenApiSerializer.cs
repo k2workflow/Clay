@@ -21,8 +21,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Creates a new instance of the <see cref="OpenApiSerializer"/> class.
         /// </summary>
         public OpenApiSerializer()
-        {
-        }
+        { }
 
         #endregion
 
