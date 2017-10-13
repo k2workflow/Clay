@@ -685,43 +685,16 @@ namespace SourceCode.Clay.OpenApi.Serialization
         {
             if (ReferenceEquals(value, null)) return null;
 
-            if (typeof(T) == typeof(ApiKeySecurityScheme)) return SerializeApiKeySecurityScheme((ApiKeySecurityScheme)(object)value);
-            if (typeof(T) == typeof(Callback)) return SerializeCallback((Callback)(object)value);
-            if (typeof(T) == typeof(Components)) return SerializeComponents((Components)(object)value);
-            if (typeof(T) == typeof(Contact)) return SerializeContact((Contact)(object)value);
-            if (typeof(T) == typeof(Document)) return SerializeDocument((Document)(object)value);
-            if (typeof(T) == typeof(Example)) return SerializeExample((Example)(object)value);
-            if (typeof(T) == typeof(ExternalDocumentation)) return SerializeExternalDocumentation((ExternalDocumentation)(object)value);
-            if (typeof(T) == typeof(HttpSecurityScheme)) return SerializeHttpSecurityScheme((HttpSecurityScheme)(object)value);
-            if (typeof(T) == typeof(Information)) return SerializeInformation((Information)(object)value);
-            if (typeof(T) == typeof(License)) return SerializeLicense((License)(object)value);
-            if (typeof(T) == typeof(Link)) return SerializeLink((Link)(object)value);
-            if (typeof(T) == typeof(MediaType)) return SerializeMediaType((MediaType)(object)value);
-            if (typeof(T) == typeof(OAuth2SecurityScheme)) return SerializeOAuth2SecurityScheme((OAuth2SecurityScheme)(object)value);
-            if (typeof(T) == typeof(OAuthFlow)) return SerializeOAuthFlow((OAuthFlow)(object)value);
-            if (typeof(T) == typeof(OpenIdConnectSecurityScheme)) return SerializeOpenIdConnectSecurityScheme((OpenIdConnectSecurityScheme)(object)value);
-            if (typeof(T) == typeof(Operation)) return SerializeOperation((Operation)(object)value);
-            if (typeof(T) == typeof(Parameter)) return SerializeParameter((Parameter)(object)value);
-            if (typeof(T) == typeof(ParameterBody)) return SerializeParameterBody((ParameterBody)(object)value);
-            if (typeof(T) == typeof(Path)) return SerializePath((Path)(object)value);
-            if (typeof(T) == typeof(PropertyEncoding)) return SerializePropertyEncoding((PropertyEncoding)(object)value);
-            if (typeof(T) == typeof(RequestBody)) return SerializeRequestBody((RequestBody)(object)value);
-            if (typeof(T) == typeof(Response)) return SerializeResponse((Response)(object)value);
-            if (typeof(T) == typeof(Schema)) return SerializeSchema((Schema)(object)value);
-            if (typeof(T) == typeof(SecurityScheme)) return SerializeSecurityScheme((SecurityScheme)(object)value);
-            if (typeof(T) == typeof(Server)) return SerializeServer((Server)(object)value);
-            if (typeof(T) == typeof(ServerVariable)) return SerializeServerVariable((ServerVariable)(object)value);
-            if (typeof(T) == typeof(Tag)) return SerializeTag((Tag)(object)value);
-            if (typeof(T) == typeof(Reference)) return SerializeReference((Reference)(object)value);
-
             if (typeof(T) == typeof(string)) return (string)(object)value;
 
             if (value is IReferable referable) return SerializeReferable(referable);
+
             if (typeof(T) == typeof(KeyValuePair<ParameterKey, ParameterBody>))
             {
                 var kvp = (KeyValuePair<ParameterKey, ParameterBody>)(object)value;
                 return SerializeParameter(kvp.Key, kvp.Value);
             }
+
             if (typeof(T) == typeof(KeyValuePair<ParameterKey, Referable<ParameterBody>>))
             {
                 var kvp = (KeyValuePair<ParameterKey, Referable<ParameterBody>>)(object)value;
