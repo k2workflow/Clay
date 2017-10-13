@@ -2,13 +2,21 @@ version: 'build-{build}'
 
 image: Visual Studio 2017
 
+pull_requests:
+  do_not_increment_build_number: true
+
+clone_depth: 1
+
+nuget:
+  disable_publish_on_pr: true
+
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
 configuration:
 - Release
 
 platform: Any CPU
-
-environment:
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 init:
 - cmd: git config --global core.autocrlf true
@@ -58,7 +66,7 @@ artifacts:
 deploy:
   provider: NuGet
   api_key:
-    secure: JlUgeUsCDsMvMo4u5DwopSnGM4+FByY6kc0WQw841Bt0BX7ntT09kiH2R6ybWAOO
+    secure: Ubo4zDdXC7mcppV1Rx7PLIgzmn4ewDwKddDw9jPga8SFvN+5pGTFjnB8pk8HboN8
   on:
     branch: master
     is_not_pr: true

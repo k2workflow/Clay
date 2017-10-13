@@ -27,10 +27,17 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.OpenApi</PackageId>
     <Authors>SourceCode</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>DTOs for Open API 3.0.0.</Description>
     <PackageTags>clay json open-api swagger</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp2.0\SourceCode.Clay.OpenApi.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\SourceCode.Clay.OpenApi.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

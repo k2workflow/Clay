@@ -50,6 +50,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="externalDocumentation1">The external documentation1.</param>
+        /// <param name="externalDocumentation2">The external documentation2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
         {
             if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
@@ -57,8 +63,14 @@ namespace SourceCode.Clay.OpenApi
             return externalDocumentation1.Equals((object)externalDocumentation2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="externalDocumentation1">The external documentation1.</param>
+        /// <param name="externalDocumentation2">The external documentation2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
-                    => !(externalDocumentation1 == externalDocumentation2);
+            => !(externalDocumentation1 == externalDocumentation2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>

@@ -134,6 +134,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="path1">The path1.</param>
+        /// <param name="path2">The path2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Path path1, Path path2)
         {
             if (ReferenceEquals(path1, null) && ReferenceEquals(path2, null)) return true;
@@ -141,7 +147,14 @@ namespace SourceCode.Clay.OpenApi
             return path1.Equals((object)path2);
         }
 
-        public static bool operator !=(Path path1, Path path2) => !(path1 == path2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="path1">The path1.</param>
+        /// <param name="path2">The path2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Path path1, Path path2)
+            => !(path1 == path2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

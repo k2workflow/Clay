@@ -131,7 +131,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="itemsRange">The range of valid item counts.</param>
         /// <param name="lengthRange">The range of valid lengths.</param>
         /// <param name="propertiesRange">The range of valid property counts.</param>
-        /// <param name="options">The schema options. <see cref="SchemaOptions.ItemsIsArray"/> will be automatically set.</param>
+        /// <param name="options">The schema options.</param>
         /// <param name="pattern">The regex validation for string values.</param>
         /// <param name="enum">The valid enum values.</param>
         /// <param name="allOf">The list of schemas that this schema must conform to.</param>
@@ -197,6 +197,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="schema1">The schema1.</param>
+        /// <param name="schema2">The schema2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Schema schema1, Schema schema2)
         {
             if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
@@ -204,6 +210,12 @@ namespace SourceCode.Clay.OpenApi
             return schema1.Equals((object)schema2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="schema1">The schema1.</param>
+        /// <param name="schema2">The schema2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(Schema schema1, Schema schema2) => !(schema1 == schema2);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>

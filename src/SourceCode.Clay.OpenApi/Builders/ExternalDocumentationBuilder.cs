@@ -55,8 +55,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ExternalDocumentationBuilder"/> to <see cref="ExternalDocumentation"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ExternalDocumentation(ExternalDocumentationBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="ExternalDocumentation"/> to <see cref="ExternalDocumentationBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ExternalDocumentationBuilder(ExternalDocumentation value) => ReferenceEquals(value, null) ? null : new ExternalDocumentationBuilder(value);
 
         /// <summary>

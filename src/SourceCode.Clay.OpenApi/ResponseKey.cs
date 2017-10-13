@@ -232,10 +232,27 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="key1">The key1.</param>
+        /// <param name="key2">The key2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(ResponseKey key1, ResponseKey key2) => key1.Equals(key2);
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="key1">The key1.</param>
+        /// <param name="key2">The key2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(ResponseKey key1, ResponseKey key2) => !(key1 == key2);
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="System.Net.HttpStatusCode" /> to <see cref="SourceCode.Clay.OpenApi.ResponseKey" />.
+        /// </summary>
+        /// <param name="httpStatusCode">The HTTP status code.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator ResponseKey(HttpStatusCode httpStatusCode) => new ResponseKey(httpStatusCode);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>

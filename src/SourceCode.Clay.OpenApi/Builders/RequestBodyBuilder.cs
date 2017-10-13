@@ -65,10 +65,25 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="RequestBodyBuilder"/> to <see cref="RequestBody"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator RequestBody(RequestBodyBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="RequestBodyBuilder"/> to <see cref="Referable{RequestBody}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<RequestBody>(RequestBodyBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="RequestBody"/> to <see cref="RequestBodyBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator RequestBodyBuilder(RequestBody value) => ReferenceEquals(value, null) ? null : new RequestBodyBuilder(value);
 
         /// <summary>

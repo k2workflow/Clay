@@ -65,12 +65,32 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuth2SecuritySchemeBuilder"/> to <see cref="OAuth2SecurityScheme"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OAuth2SecurityScheme(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuth2SecuritySchemeBuilder"/> to <see cref="Referable{OAuth2SecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<OAuth2SecurityScheme>(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuth2SecuritySchemeBuilder"/> to <see cref="Referable{SecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<SecurityScheme>(OAuth2SecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OAuth2SecurityScheme"/> to <see cref="OAuth2SecuritySchemeBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OAuth2SecuritySchemeBuilder(OAuth2SecurityScheme value) => ReferenceEquals(value, null) ? null : new OAuth2SecuritySchemeBuilder(value);
 
         /// <summary>

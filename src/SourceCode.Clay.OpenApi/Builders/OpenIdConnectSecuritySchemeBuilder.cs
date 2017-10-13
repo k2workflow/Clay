@@ -47,12 +47,32 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OpenIdConnectSecuritySchemeBuilder"/> to <see cref="OpenIdConnectSecurityScheme"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OpenIdConnectSecurityScheme(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OpenIdConnectSecuritySchemeBuilder"/> to <see cref="Referable{OpenIdConnectSecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<OpenIdConnectSecurityScheme>(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OpenIdConnectSecuritySchemeBuilder"/> to <see cref="Referable{SecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator Referable<SecurityScheme>(OpenIdConnectSecuritySchemeBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OpenIdConnectSecurityScheme"/> to <see cref="OpenIdConnectSecuritySchemeBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator OpenIdConnectSecuritySchemeBuilder(OpenIdConnectSecurityScheme value) => ReferenceEquals(value, null) ? null : new OpenIdConnectSecuritySchemeBuilder(value);
 
         /// <summary>

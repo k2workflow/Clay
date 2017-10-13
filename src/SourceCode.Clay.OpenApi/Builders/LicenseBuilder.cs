@@ -52,8 +52,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="LicenseBuilder"/> to <see cref="License"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator License(LicenseBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="License"/> to <see cref="LicenseBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator LicenseBuilder(License value) => ReferenceEquals(value, null) ? null : new LicenseBuilder(value);
 
         /// <summary>

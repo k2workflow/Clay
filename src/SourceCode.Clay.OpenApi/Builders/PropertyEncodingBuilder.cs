@@ -68,8 +68,18 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="PropertyEncodingBuilder"/> to <see cref="PropertyEncoding"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator PropertyEncoding(PropertyEncodingBuilder builder) => builder?.Build();
 
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="PropertyEncoding"/> to <see cref="PropertyEncodingBuilder"/>.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The result of the conversion.</returns>
         public static implicit operator PropertyEncodingBuilder(PropertyEncoding value) => ReferenceEquals(value, null) ? null : new PropertyEncodingBuilder(value);
 
         /// <summary>

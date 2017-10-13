@@ -10,7 +10,6 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents either a reference object or a value.
     /// </summary>
-    /// <typeparam name="T">The value type.</typeparam>
     public interface IReferable
     {
         #region Properties

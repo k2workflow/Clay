@@ -62,6 +62,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="parameter1">The parameter1.</param>
+        /// <param name="parameter2">The parameter2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(Parameter parameter1, Parameter parameter2)
         {
             if (ReferenceEquals(parameter1, null) && ReferenceEquals(parameter2, null)) return true;
@@ -69,7 +75,14 @@ namespace SourceCode.Clay.OpenApi
             return parameter1.Equals((object)parameter2);
         }
 
-        public static bool operator !=(Parameter parameter1, Parameter parameter2) => !(parameter1 == parameter2);
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="parameter1">The parameter1.</param>
+        /// <param name="parameter2">The parameter2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(Parameter parameter1, Parameter parameter2)
+            => !(parameter1 == parameter2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>

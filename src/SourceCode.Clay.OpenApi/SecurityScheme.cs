@@ -47,6 +47,12 @@ namespace SourceCode.Clay.OpenApi
 
         #region Equatable
 
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="scheme1">The scheme1.</param>
+        /// <param name="scheme2">The scheme2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator ==(SecurityScheme scheme1, SecurityScheme scheme2)
         {
             if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
@@ -54,6 +60,12 @@ namespace SourceCode.Clay.OpenApi
             return scheme1.Equals((object)scheme2);
         }
 
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="scheme1">The scheme1.</param>
+        /// <param name="scheme2">The scheme2.</param>
+        /// <returns>The result of the operator.</returns>
         public static bool operator !=(SecurityScheme scheme1, SecurityScheme scheme2) => !(scheme1 == scheme2);
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
