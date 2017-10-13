@@ -21,7 +21,6 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Threading</PackageId>
     <Authors>SourceCode</Authors>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Tools and extensions for working with threads.</Description>
     <PackageTags>clay utility extension thread task parallel</PackageTags>
     <Version>1.0.0-local</Version>
