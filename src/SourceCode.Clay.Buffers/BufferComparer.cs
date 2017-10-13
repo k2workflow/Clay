@@ -37,7 +37,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Span
+        #region Memory
 
         /// <summary>
         /// Gets the default instance of the <see cref="ReadOnlyMemory{T}"/> buffer comparer that uses FNV with default fidelity.

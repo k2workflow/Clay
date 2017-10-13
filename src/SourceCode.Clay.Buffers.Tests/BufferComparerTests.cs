@@ -50,15 +50,15 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Span))]
-        public static void BufferComparer_GetHashCode_Empty_Span()
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Memory))]
+        public static void BufferComparer_GetHashCode_Empty_Memory()
         {
             Assert.Equal(HashCode.FnvEmpty, BufferComparer.Memory.GetHashCode(Memory<byte>.Empty));
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_SpanShort))]
-        public static void BufferComparer_GetHashCode_SpanShort()
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryShort))]
+        public static void BufferComparer_GetHashCode_MemoryShort()
         {
             var bytes = GenerateSegment(0, 16);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
@@ -70,8 +70,8 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_SpanMedium))]
-        public static void BufferComparer_GetHashCode_SpanMedium()
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryMedium))]
+        public static void BufferComparer_GetHashCode_MemoryMedium()
         {
             var bytes = GenerateSegment(0, 712);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
@@ -83,8 +83,8 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_SpanLong))]
-        public static void BufferComparer_GetHashCode_SpanLong()
+        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryLong))]
+        public static void BufferComparer_GetHashCode_MemoryLong()
         {
             var bytes = GenerateSegment(0, 1024);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
@@ -227,8 +227,8 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_Span))]
-        public static void BufferComparer_Equals_Span()
+        [Fact(DisplayName = nameof(BufferComparer_Equals_Memory))]
+        public static void BufferComparer_Equals_Memory()
         {
             var a = GenerateSegment(0, 16);
             var a1 = GenerateSegment(10, 16); // Same
@@ -435,8 +435,8 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Span_With_Comparison))]
-        public static void BufferComparer_Compare_Span_With_Comparison()
+        [Fact(DisplayName = nameof(BufferComparer_Compare_Memory_With_Comparison))]
+        public static void BufferComparer_Compare_Memory_With_Comparison()
         {
             var expected = new byte[4] { 1, 2, 3, 4 }.AsReadOnlyMemory();
 
