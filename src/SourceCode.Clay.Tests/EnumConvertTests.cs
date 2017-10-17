@@ -14,6 +14,10 @@ namespace SourceCode.Clay.Tests
     {
         #region Enums
 
+        private enum EmptyEnum : byte
+        {
+        }
+
         private enum ByteEnum : byte
         {
             MinValue = byte.MinValue,
@@ -95,15 +99,22 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => EnumConvert.ToByte(0));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfByte))]
-        public static void EnumConvert_ToEnumCheckedOfByte()
-        {
-            Assert.Equal(ByteEnum.MinValue, EnumConvert.ToEnumChecked<ByteEnum>(byte.MinValue));
-            Assert.Equal(ByteEnum.MaxValue, EnumConvert.ToEnumChecked<ByteEnum>(byte.MaxValue));
+        // TODO: Negative tests should pass
+        //[Fact(DisplayName = nameof(EnumConvert_EmptyEnum))]
+        //public static void EnumConvert_EmptyEnum()
+        //{
+        //    var x = EnumConvert.ToEnum<EmptyEnum>(0);
+        //    var y = EnumConvert.ToEnum<EmptyEnum>(0);
 
-            Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<ByteEnum>(sbyte.MinValue));
-            Assert.Throws<OverflowException>(() => EnumConvert.ConvertToEnumChecked<ByteEnum>(ushort.MaxValue));
-        }
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ToEnum<EmptyEnum>(0));
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ToEnum<EmptyEnum>(1));
+
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<EmptyEnum>(0));
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<EmptyEnum>(1));
+
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ConvertToEnumChecked<EmptyEnum>(0));
+        //    Assert.Throws<OverflowException>(() => EnumConvert.ConvertToEnumChecked<EmptyEnum>(1));
+        //}
 
         [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfSByte))]
         public static void EnumConvert_ToEnumCheckedOfSByte()
@@ -409,6 +420,28 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(long.MaxValue, EnumConvert.ToInt64(Int64Enum.MaxValue));
 
             Assert.Equal(unchecked((long)ulong.MaxValue), EnumConvert.ToInt64(UInt64Enum.MaxValue));
+        }
+
+        #endregion
+
+        #region Cached
+
+        [Fact(DisplayName = nameof(EnumConvert_Cached_NonEnum))]
+        public static void EnumConvert_Cached_NonEnum()
+        {
+            Assert.Throws<InvalidCastException>(() => EnumConvert.Length<int>());
+        }
+
+        [Fact(DisplayName = nameof(EnumConvert_Cached_EmptyEnum))]
+        public static void EnumConvert_Cached_EmptyEnum()
+        {
+            Assert.Equal(Enum.GetValues(typeof(EmptyEnum)).Length, EnumConvert.Length<EmptyEnum>());
+        }
+
+        [Fact(DisplayName = nameof(EnumConvert_Cached_ValidEnum))]
+        public static void EnumConvert_Cached_ValidEnum()
+        {
+            Assert.Equal(Enum.GetValues(typeof(ByteEnum)).Length, EnumConvert.Length<ByteEnum>());
         }
 
         #endregion

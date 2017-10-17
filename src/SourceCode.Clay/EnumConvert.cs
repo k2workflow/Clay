@@ -7,6 +7,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SourceCode.Clay
 {
@@ -73,6 +74,32 @@ namespace SourceCode.Clay
                 ? Expression.ConvertChecked(value, type)
                 : Expression.Convert(value, type);
         }
+
+        private static class ValueCache<TEnum>
+            where TEnum : struct, IComparable, IConvertible, IFormattable
+        {
+#pragma warning disable S2743 // Static fields should not be used in generic types
+            internal static readonly Func<int> Length;
+#pragma warning restore S2743 // Static fields should not be used in generic types
+
+            static ValueCache()
+            {
+                var @enum = typeof(TEnum);
+                if (!@enum.IsEnum)
+                {
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
+                    Length = () => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
+                    return;
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
+                }
+
+                var values = (ulong[])typeof(Enum)
+                    .GetMethod("InternalGetValues", BindingFlags.Static | BindingFlags.NonPublic) // Also see InternalGetNames
+                    .Invoke(null, new[] { typeof(TEnum) });
+
+                Length = () => values.Length;
+            }
+        };
 
         #endregion
 
@@ -585,6 +612,19 @@ namespace SourceCode.Clay
         public static TEnum ToEnumChecked<TEnum>(sbyte value)
             where TEnum : struct, IComparable, IConvertible, IFormattable
             => Converter<TEnum, sbyte, Checked>.ConvertFrom(value);
+
+        #endregion
+
+        #region Cached
+
+        /// <summary>
+        /// Gets the number of items in the specified <see cref="Enum"/>.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
+        /// <returns>The member count.</returns>
+        public static int Length<TEnum>()
+            where TEnum : struct, IComparable, IConvertible, IFormattable
+            => ValueCache<TEnum>.Length();
 
         #endregion
     }
