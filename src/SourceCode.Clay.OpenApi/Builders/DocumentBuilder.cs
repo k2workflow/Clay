@@ -79,7 +79,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Document"/> to copy values from.</param>
         public DocumentBuilder(Document value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Version = value.Version;
             Info = value.Info;
             Servers = new List<Server>(value.Servers);
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator DocumentBuilder(Document value) => ReferenceEquals(value, null) ? null : new DocumentBuilder(value);
+        public static implicit operator DocumentBuilder(Document value) => value is null ? null : new DocumentBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Document"/> from this builder.

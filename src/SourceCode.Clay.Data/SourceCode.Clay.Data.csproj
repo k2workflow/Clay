@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.3.2" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.4.1.3596">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\SourceCode.Clay.Collections\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
+    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
   </ItemGroup>
 
   <PropertyGroup>

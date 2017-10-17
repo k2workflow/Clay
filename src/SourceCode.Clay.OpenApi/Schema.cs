@@ -205,8 +205,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Schema schema1, Schema schema2)
         {
-            if (ReferenceEquals(schema1, null) && ReferenceEquals(schema2, null)) return true;
-            if (ReferenceEquals(schema1, null) || ReferenceEquals(schema2, null)) return false;
+            if (schema1 is null && schema2 is null) return true;
+            if (schema1 is null || schema2 is null) return false;
             return schema1.Equals((object)schema2);
         }
 
@@ -228,7 +228,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(Schema other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (Type != other.Type) return false;

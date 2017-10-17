@@ -57,7 +57,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="PropertyEncoding"/> to copy values from.</param>
         public PropertyEncodingBuilder(PropertyEncoding value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             ContentType = value.ContentType;
             Headers = new Dictionary<String, Referable<ParameterBody>>(value.Headers);
             Style = value.Style;
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator PropertyEncodingBuilder(PropertyEncoding value) => ReferenceEquals(value, null) ? null : new PropertyEncodingBuilder(value);
+        public static implicit operator PropertyEncodingBuilder(PropertyEncoding value) => value is null ? null : new PropertyEncodingBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="PropertyEncoding"/> from this builder.

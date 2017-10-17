@@ -46,7 +46,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="ExternalDocumentation"/> to copy values from.</param>
         public ExternalDocumentationBuilder(ExternalDocumentation value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
             Url = value.Url;
         }
@@ -67,7 +67,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ExternalDocumentationBuilder(ExternalDocumentation value) => ReferenceEquals(value, null) ? null : new ExternalDocumentationBuilder(value);
+        public static implicit operator ExternalDocumentationBuilder(ExternalDocumentation value) => value is null ? null : new ExternalDocumentationBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="ExternalDocumentation"/> from this builder.

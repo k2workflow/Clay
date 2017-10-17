@@ -59,7 +59,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Response"/> to copy values from.</param>
         public ResponseBuilder(Response value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
             Headers = new Dictionary<string, Referable<ParameterBody>>(value.Headers);
             Content = new Dictionary<ContentType, MediaType>(value.Content);
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ResponseBuilder(Response value) => ReferenceEquals(value, null) ? null : new ResponseBuilder(value);
+        public static implicit operator ResponseBuilder(Response value) => value is null ? null : new ResponseBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Link"/> from this builder.

@@ -97,8 +97,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Callback callback1, Callback callback2)
         {
-            if (ReferenceEquals(callback1, null) && ReferenceEquals(callback2, null)) return true;
-            if (ReferenceEquals(callback1, null) || ReferenceEquals(callback2, null)) return false;
+            if (callback1 is null && callback2 is null) return true;
+            if (callback1 is null || callback2 is null) return false;
             return callback1.Equals((object)callback2);
         }
 
@@ -121,7 +121,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public virtual bool Equals(Callback other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (!this.DictionaryEquals(other)) return false;

@@ -277,12 +277,20 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(JsonPointer other)
         {
-            if (ReferenceEquals(_tokens, other._tokens)) return true;
-            if (ReferenceEquals(_tokens, null) || ReferenceEquals(other._tokens, null)) return false;
-            if (_tokens.Length != other._tokens.Length) return false;
+            if (_tokens is null ^ other._tokens is null) return false; // (x, null) or (null, y)
+            if (_tokens is null) return true; // (null, null)
+
+            // Both are not null; we can now test their values
+            if (ReferenceEquals(_tokens, other._tokens)) return true; // (x, x)
+
+            // If counts are different, not equal
+            if (_tokens.Length != other._tokens.Length) return false; // (n, m)
+
+            // Optimize for cases 0, 1, 2, N
             if (_tokens.Length == 0) return true;
 
             if (!_tokens[0].Equals(other._tokens[0])) return false;
+
             for (var i = 1; i < _tokens.Length; i++)
             {
                 if (!_tokens[i].Equals(other._tokens[i])) return false;

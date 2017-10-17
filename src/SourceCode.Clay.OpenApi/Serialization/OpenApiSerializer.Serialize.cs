@@ -27,7 +27,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeResponse(Response value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -49,7 +49,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeRequestBody(RequestBody value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializePropertyEncoding(PropertyEncoding value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializePath(Path value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeParameterBody(ParameterBody value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -162,7 +162,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeParameter(Parameter value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -193,7 +193,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeParameter(ParameterKey key, ParameterBody value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -211,7 +211,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeOperation(Operation value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -241,7 +241,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeOpenIdConnectSecurityScheme(OpenIdConnectSecurityScheme value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -259,7 +259,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeOAuthFlow(OAuthFlow value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -278,7 +278,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeOAuth2SecurityScheme(OAuth2SecurityScheme value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -304,7 +304,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeMediaType(MediaType value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -322,7 +322,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeLink(Link value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -341,7 +341,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeLicense(License value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -358,7 +358,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeInformation(Information value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -379,7 +379,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeHttpSecurityScheme(HttpSecurityScheme value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -428,7 +428,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeComponents(Components value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -452,7 +452,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeContact(Contact value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -470,7 +470,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeExternalDocumentation(ExternalDocumentation value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -487,7 +487,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeExample(Example value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -505,7 +505,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeDocument(Document value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -528,7 +528,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeCallback(Callback value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -549,7 +549,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeApiKeySecurityScheme(ApiKeySecurityScheme value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -568,7 +568,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeTag(Tag value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -586,7 +586,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeServerVariable(ServerVariable value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -604,7 +604,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeServer(Server value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 
@@ -630,7 +630,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeSchema(Schema value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 
             var json = new JsonObject();
 

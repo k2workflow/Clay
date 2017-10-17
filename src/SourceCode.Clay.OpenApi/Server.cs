@@ -68,8 +68,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Server server1, Server server2)
         {
-            if (ReferenceEquals(server1, null) && ReferenceEquals(server2, null)) return true;
-            if (ReferenceEquals(server1, null) || ReferenceEquals(server2, null)) return false;
+            if (server1 is null && server2 is null) return true;
+            if (server1 is null || server2 is null) return false;
             return server1.Equals((object)server2);
         }
 
@@ -91,7 +91,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public virtual bool Equals(Server other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (Url != other.Url) return false;

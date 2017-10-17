@@ -55,7 +55,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="RequestBody"/> to copy values from.</param>
         public RequestBodyBuilder(RequestBody value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
             Content = new Dictionary<ContentType, MediaType>(value.Content);
             Options = value.Options;
@@ -84,7 +84,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator RequestBodyBuilder(RequestBody value) => ReferenceEquals(value, null) ? null : new RequestBodyBuilder(value);
+        public static implicit operator RequestBodyBuilder(RequestBody value) => value is null ? null : new RequestBodyBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="RequestBody"/> from this builder.

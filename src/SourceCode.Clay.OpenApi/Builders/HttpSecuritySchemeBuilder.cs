@@ -44,7 +44,7 @@ namespace SourceCode.Clay.OpenApi
         public HttpSecuritySchemeBuilder(HttpSecurityScheme value)
             : base(value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Scheme = value.Scheme;
             BearerFormat = value.BearerFormat;
         }
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator HttpSecuritySchemeBuilder(HttpSecurityScheme value) => ReferenceEquals(value, null) ? null : new HttpSecuritySchemeBuilder(value);
+        public static implicit operator HttpSecuritySchemeBuilder(HttpSecurityScheme value) => value is null ? null : new HttpSecuritySchemeBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="HttpSecurityScheme"/> from this builder.

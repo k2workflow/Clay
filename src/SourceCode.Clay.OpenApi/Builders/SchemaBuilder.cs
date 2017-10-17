@@ -140,7 +140,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Schema"/> to copy values from.</param>
         public SchemaBuilder(Schema value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Type = value.Type;
             Format = value.Format;
             Title = value.Title;
@@ -185,7 +185,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator SchemaBuilder(Schema value) => ReferenceEquals(value, null) ? null : new SchemaBuilder(value);
+        public static implicit operator SchemaBuilder(Schema value) => value is null ? null : new SchemaBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Schema"/> from this builder.

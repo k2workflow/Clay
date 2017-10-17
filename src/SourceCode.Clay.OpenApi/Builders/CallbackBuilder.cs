@@ -91,7 +91,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Callback"/> to copy values from.</param>
         public CallbackBuilder(Callback value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             _dictionary = new Dictionary<CompoundExpression, Referable<Path>>(value);
         }
 
@@ -118,7 +118,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator CallbackBuilder(Callback value) => ReferenceEquals(value, null) ? null : new CallbackBuilder(value);
+        public static implicit operator CallbackBuilder(Callback value) => value is null ? null : new CallbackBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Callback"/> from this builder.

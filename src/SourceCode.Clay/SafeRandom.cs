@@ -16,11 +16,11 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class SafeRandom : Random
     {
-        #region Fields
+        #region Constants
 
         private static readonly RandomNumberGenerator _seedSource = RandomNumberGenerator.Create();
 
-        private static ThreadLocal<Random> _local = new ThreadLocal<Random>(() =>
+        private static readonly ThreadLocal<Random> _local = new ThreadLocal<Random>(() =>
         {
             var buffer = new byte[4];
             _seedSource.GetBytes(buffer);

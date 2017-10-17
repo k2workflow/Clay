@@ -9,6 +9,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+// This file is shared in Clay.Data and Clay.Threading
+
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>

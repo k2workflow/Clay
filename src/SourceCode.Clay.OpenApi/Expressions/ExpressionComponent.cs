@@ -50,7 +50,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         public static bool operator ==(ExpressionComponent expression1, ExpressionComponent expression2)
         {
             if (ReferenceEquals(expression1, expression2)) return true;
-            if (ReferenceEquals(expression1, null) || ReferenceEquals(expression2, null)) return false;
+            if (expression1 is null || expression2 is null) return false;
 
             return expression1.Equals(expression2);
         }
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         bool IEquatable<ExpressionComponent>.Equals(ExpressionComponent other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ComponentType != other.ComponentType) return false;
             return Equals(other);
         }

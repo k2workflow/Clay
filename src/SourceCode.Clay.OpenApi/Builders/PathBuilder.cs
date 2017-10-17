@@ -102,7 +102,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Path"/> to copy values from.</param>
         public PathBuilder(Path value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Summary = value.Summary;
             Description = value.Description;
             Get = value.Get;
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator PathBuilder(Path value) => ReferenceEquals(value, null) ? null : new PathBuilder(value);
+        public static implicit operator PathBuilder(Path value) => value is null ? null : new PathBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Path"/> from this builder.

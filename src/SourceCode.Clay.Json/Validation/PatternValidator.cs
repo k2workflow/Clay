@@ -44,7 +44,8 @@ namespace SourceCode.Clay.Json.Validation
             Pattern = pattern;
             Required = required;
 
-            _regex = new Lazy<Regex>(() => new Regex(pattern, options, timeout), LazyThreadSafetyMode.PublicationOnly);
+            Regex build() => new Regex(pattern, options, timeout); // Local function
+            _regex = new Lazy<Regex>(build, LazyThreadSafetyMode.PublicationOnly);
         }
 
         public PatternValidator(string pattern, bool required)

@@ -54,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Server"/> to copy values from.</param>
         public ServerBuilder(Server value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Url = value.Url;
             Description = value.Description;
             Variables = new Dictionary<String, ServerVariable>(value.Variables);
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ServerBuilder(Server value) => ReferenceEquals(value, null) ? null : new ServerBuilder(value);
+        public static implicit operator ServerBuilder(Server value) => value is null ? null : new ServerBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Server"/> from this builder.

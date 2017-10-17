@@ -21,12 +21,11 @@ namespace SourceCode.Clay
         public static bool NullableEquals<T>(this T x, T y)
             where T : IEquatable<T>
         {
-            var xNull = ReferenceEquals(x, null);
-            if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other
-            if (xNull) return true; // Both are null
+            if (ReferenceEquals(x, null) ^ ReferenceEquals(y, null)) return false; // (x, null) or (null, y)
+            if (ReferenceEquals(x, null)) return true; // (null, null)
 
             // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // Same reference
+            if (ReferenceEquals(x, y)) return true; // (x, x)
 
             return x.Equals(y);
         }

@@ -54,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
         public OAuth2SecuritySchemeBuilder(OAuth2SecurityScheme value)
             : base(value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             ImplicitFlow = value.ImplicitFlow;
             PasswordFlow = value.PasswordFlow;
             ClientCredentialsFlow = value.ClientCredentialsFlow;
@@ -91,7 +91,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OAuth2SecuritySchemeBuilder(OAuth2SecurityScheme value) => ReferenceEquals(value, null) ? null : new OAuth2SecuritySchemeBuilder(value);
+        public static implicit operator OAuth2SecuritySchemeBuilder(OAuth2SecurityScheme value) => value is null ? null : new OAuth2SecuritySchemeBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="OAuth2SecurityScheme"/> from this builder.

@@ -256,7 +256,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(FieldExpression other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ExpressionType != other.ExpressionType) return false;
             if (ExpressionSource != other.ExpressionSource) return false;
             if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;

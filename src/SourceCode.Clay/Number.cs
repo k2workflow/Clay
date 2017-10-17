@@ -372,7 +372,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value.</param>
         /// <returns>The <see cref="Number"/> instance.</returns>
         public static Number CreateFromObject(object value)
-            => ReferenceEquals(value, null)
+            => value is null
             ? throw new ArgumentNullException(nameof(value))
             : _objectFactory(value.GetType().TypeHandle, value);
 

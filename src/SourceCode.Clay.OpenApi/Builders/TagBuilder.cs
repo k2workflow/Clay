@@ -48,7 +48,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Tag"/> to copy values from.</param>
         public TagBuilder(Tag value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Name = value.Name;
             Description = value.Description;
             ExternalDocumentation = value.ExternalDocumentation;
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator TagBuilder(Tag value) => ReferenceEquals(value, null) ? null : new TagBuilder(value);
+        public static implicit operator TagBuilder(Tag value) => value is null ? null : new TagBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Tag"/> from this builder.

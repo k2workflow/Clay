@@ -55,8 +55,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(SecurityScheme scheme1, SecurityScheme scheme2)
         {
-            if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
-            if (ReferenceEquals(scheme1, null) || ReferenceEquals(scheme2, null)) return false;
+            if (scheme1 is null && scheme2 is null) return true;
+            if (scheme1 is null || scheme2 is null) return false;
             return scheme1.Equals((object)scheme2);
         }
 
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.OpenApi
         public bool Equals(SecurityScheme other)
         {
             if (ReferenceEquals(this, other)) return true;
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
 
             if (Type != other.Type) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;

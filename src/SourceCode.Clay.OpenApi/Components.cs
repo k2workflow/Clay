@@ -115,8 +115,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Components components1, Components components2)
         {
-            if (ReferenceEquals(components1, null) && ReferenceEquals(components2, null)) return true;
-            if (ReferenceEquals(components1, null) || ReferenceEquals(components2, null)) return false;
+            if (components1 is null && components2 is null) return true;
+            if (components1 is null || components2 is null) return false;
             return components1.Equals((object)components2);
         }
 
@@ -139,7 +139,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public virtual bool Equals(Components other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (!Schemas.DictionaryEquals(other.Schemas)) return false;

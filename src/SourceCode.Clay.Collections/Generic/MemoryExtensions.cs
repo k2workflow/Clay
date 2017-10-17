@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="Memory{T}"/> and <see cref="ReadOnlyMemory{T}{T}"/>.
+    /// Represents extensions for <see cref="ReadOnlyMemory{T}"/>.
     /// </summary>
     public static class MemoryExtensions
     {

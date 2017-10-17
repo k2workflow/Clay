@@ -70,8 +70,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Parameter parameter1, Parameter parameter2)
         {
-            if (ReferenceEquals(parameter1, null) && ReferenceEquals(parameter2, null)) return true;
-            if (ReferenceEquals(parameter1, null) || ReferenceEquals(parameter2, null)) return false;
+            if (parameter1 is null && parameter2 is null) return true;
+            if (parameter1 is null || parameter2 is null) return false;
             return parameter1.Equals((object)parameter2);
         }
 
@@ -94,7 +94,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(Parameter other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (Location != other.Location) return false;

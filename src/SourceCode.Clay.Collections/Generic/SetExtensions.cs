@@ -29,15 +29,14 @@ namespace SourceCode.Clay.Collections.Generic
         {
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
-            var xNull = ReferenceEquals(x, null);
-            if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other
-            if (xNull) return true; // Both are null
+            if (x is null ^ y is null) return false; // (x, null) or (null, y)
+            if (x is null) return true; // (null, null)
 
             // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // Same reference
+            if (ReferenceEquals(x, y)) return true; // (x, x)
 
             // If counts are different, not equal
-            if (x.Count != y.Count) return false;
+            if (x.Count != y.Count) return false; // (n, m)
 
             // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
             if (x.Count == 0) return true;
@@ -60,15 +59,14 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y) // Naming avoids conflict with native ISet.SetEquals method
         {
-            var xNull = ReferenceEquals(x, null);
-            if (xNull ^ ReferenceEquals(y, null)) return false; // One is null but not the other
-            if (xNull) return true; // Both are null
+            if (x is null ^ y is null) return false; // (x, null) or (null, y)
+            if (x is null) return true; // (null, null)
 
             // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // Same reference
+            if (ReferenceEquals(x, y)) return true; // (x, x)
 
             // If counts are different, not equal
-            if (x.Count != y.Count) return false;
+            if (x.Count != y.Count) return false; // (n, m)
 
             // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
             if (x.Count == 0) return true;

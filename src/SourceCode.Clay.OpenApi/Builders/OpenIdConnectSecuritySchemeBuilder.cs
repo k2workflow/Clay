@@ -39,7 +39,7 @@ namespace SourceCode.Clay.OpenApi
         public OpenIdConnectSecuritySchemeBuilder(OpenIdConnectSecurityScheme value)
             : base(value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Url = value.Url;
         }
 
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OpenIdConnectSecuritySchemeBuilder(OpenIdConnectSecurityScheme value) => ReferenceEquals(value, null) ? null : new OpenIdConnectSecuritySchemeBuilder(value);
+        public static implicit operator OpenIdConnectSecuritySchemeBuilder(OpenIdConnectSecurityScheme value) => value is null ? null : new OpenIdConnectSecuritySchemeBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="OpenIdConnectSecurityScheme"/> from this builder.
