@@ -43,7 +43,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="License"/> to copy values from.</param>
         public LicenseBuilder(License value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Name = value.Name;
             Url = value.Url;
         }
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator LicenseBuilder(License value) => ReferenceEquals(value, null) ? null : new LicenseBuilder(value);
+        public static implicit operator LicenseBuilder(License value) => value is null ? null : new LicenseBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="License"/> from this builder.

@@ -71,7 +71,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="ParameterBody"/> to copy values from.</param>
         public ParameterBodyBuilder(ParameterBody value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
             Options = value.Options;
             Style = value.Style;
@@ -103,7 +103,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ParameterBodyBuilder(ParameterBody value) => ReferenceEquals(value, null) ? null : new ParameterBodyBuilder(value);
+        public static implicit operator ParameterBodyBuilder(ParameterBody value) => value is null ? null : new ParameterBodyBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="ParameterBody"/> from this builder.

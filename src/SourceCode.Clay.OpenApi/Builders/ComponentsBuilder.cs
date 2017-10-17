@@ -91,7 +91,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Components"/> to copy values from.</param>
         public ComponentsBuilder(Components value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Schemas = new Dictionary<string, Referable<Schema>>(value.Schemas);
             Responses = new Dictionary<string, Referable<Response>>(value.Responses);
             Parameters = new Dictionary<string, Referable<Parameter>>(value.Parameters);
@@ -119,7 +119,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ComponentsBuilder(Components value) => ReferenceEquals(value, null) ? null : new ComponentsBuilder(value);
+        public static implicit operator ComponentsBuilder(Components value) => value is null ? null : new ComponentsBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Components"/> from this builder.

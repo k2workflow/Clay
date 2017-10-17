@@ -166,7 +166,7 @@ namespace SourceCode.Clay.Collections.Generic
             #region Constructors
 
             public KeyedCollectionImpl(Func<TValue, TKey> keyExtractor, IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
-                            : base(comparer, dictionaryCreationThreshold)
+                : base(comparer, dictionaryCreationThreshold)
             {
                 if (comparer == null) throw new ArgumentNullException(nameof(comparer));
                 if (dictionaryCreationThreshold < -1) throw new ArgumentOutOfRangeException(nameof(dictionaryCreationThreshold));

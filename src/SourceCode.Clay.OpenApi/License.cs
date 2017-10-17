@@ -55,8 +55,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(License license1, License license2)
         {
-            if (ReferenceEquals(license1, null) && ReferenceEquals(license2, null)) return true;
-            if (ReferenceEquals(license1, null) || ReferenceEquals(license2, null)) return false;
+            if (license1 is null && license2 is null) return true;
+            if (license1 is null || license2 is null) return false;
             return license1.Equals((object)license2);
         }
 
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public virtual bool Equals(License other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;

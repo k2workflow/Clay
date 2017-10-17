@@ -63,7 +63,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="OAuthFlow"/> to copy values from.</param>
         public OAuthFlowBuilder(OAuthFlow value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             AuthorizationUrl = value.AuthorizationUrl;
             TokenUrl = value.TokenUrl;
             RefreshUrl = value.RefreshUrl;
@@ -86,7 +86,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OAuthFlowBuilder(OAuthFlow value) => ReferenceEquals(value, null) ? null : new OAuthFlowBuilder(value);
+        public static implicit operator OAuthFlowBuilder(OAuthFlow value) => value is null ? null : new OAuthFlowBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="OAuthFlow"/> from this builder.

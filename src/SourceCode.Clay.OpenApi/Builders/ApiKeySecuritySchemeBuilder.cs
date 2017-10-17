@@ -44,7 +44,7 @@ namespace SourceCode.Clay.OpenApi
         public ApiKeySecuritySchemeBuilder(ApiKeySecurityScheme value)
             : base(value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Name = value.Name;
             Location = value.Location;
         }
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ApiKeySecuritySchemeBuilder(ApiKeySecurityScheme value) => ReferenceEquals(value, null) ? null : new ApiKeySecuritySchemeBuilder(value);
+        public static implicit operator ApiKeySecuritySchemeBuilder(ApiKeySecurityScheme value) => value is null ? null : new ApiKeySecuritySchemeBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="ApiKeySecurityScheme"/> from this builder.

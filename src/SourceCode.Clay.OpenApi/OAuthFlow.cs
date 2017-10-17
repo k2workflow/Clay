@@ -80,8 +80,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OAuthFlow flow1, OAuthFlow flow2)
         {
-            if (ReferenceEquals(flow1, null) && ReferenceEquals(flow2, null)) return true;
-            if (ReferenceEquals(flow1, null) || ReferenceEquals(flow2, null)) return false;
+            if (flow1 is null && flow2 is null) return true;
+            if (flow1 is null || flow2 is null) return false;
             return flow1.Equals((object)flow2);
         }
 
@@ -105,7 +105,7 @@ namespace SourceCode.Clay.OpenApi
         public bool Equals(OAuthFlow other)
         {
             if (ReferenceEquals(this, other)) return true;
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
 
             if (AuthorizationUrl != other.AuthorizationUrl) return false;
             if (TokenUrl != other.TokenUrl) return false;

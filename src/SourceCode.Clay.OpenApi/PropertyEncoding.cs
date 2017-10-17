@@ -74,8 +74,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(PropertyEncoding propertyEncoding1, PropertyEncoding propertyEncoding2)
         {
-            if (ReferenceEquals(propertyEncoding1, null) && ReferenceEquals(propertyEncoding2, null)) return true;
-            if (ReferenceEquals(propertyEncoding1, null) || ReferenceEquals(propertyEncoding2, null)) return false;
+            if (propertyEncoding1 is null && propertyEncoding2 is null) return true;
+            if (propertyEncoding1 is null || propertyEncoding2 is null) return false;
             return propertyEncoding1.Equals((object)propertyEncoding2);
         }
 
@@ -98,7 +98,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public virtual bool Equals(PropertyEncoding other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (!StringComparer.Ordinal.Equals(ContentType, other.ContentType)) return false;

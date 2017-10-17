@@ -49,7 +49,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Contact"/> to copy values from.</param>
         public ContactBuilder(Contact value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Name = value.Name;
             Url = value.Url;
             Email = value.Email;
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ContactBuilder(Contact value) => ReferenceEquals(value, null) ? null : new ContactBuilder(value);
+        public static implicit operator ContactBuilder(Contact value) => value is null ? null : new ContactBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Contact"/> from this builder.

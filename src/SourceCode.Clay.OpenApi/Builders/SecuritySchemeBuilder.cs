@@ -41,7 +41,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="SecurityScheme"/> to copy values from.</param>
         protected SecuritySchemeBuilder(SecurityScheme value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
         }
 

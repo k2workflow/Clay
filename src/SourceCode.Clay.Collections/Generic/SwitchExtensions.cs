@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<bool, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<bool, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<bool, T>(cases);
+            var impl = new SwitchBuilderImpl<bool, T>(cases);
             return impl;
         }
 
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<byte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<byte, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<byte, T>(cases);
+            var impl = new SwitchBuilderImpl<byte, T>(cases);
             return impl;
         }
 
@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<sbyte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<sbyte, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<sbyte, T>(cases);
+            var impl = new SwitchBuilderImpl<sbyte, T>(cases);
             return impl;
         }
 
@@ -62,7 +62,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<short, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<short, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<short, T>(cases);
+            var impl = new SwitchBuilderImpl<short, T>(cases);
             return impl;
         }
 
@@ -74,7 +74,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<ushort, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<ushort, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<ushort, T>(cases);
+            var impl = new SwitchBuilderImpl<ushort, T>(cases);
             return impl;
         }
 
@@ -86,7 +86,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<int, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<int, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<int, T>(cases);
+            var impl = new SwitchBuilderImpl<int, T>(cases);
             return impl;
         }
 
@@ -98,7 +98,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<uint, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<uint, T> cases)
         {
-            var impl = new StructSwitchBuilderImpl<uint, T>(cases);
+            var impl = new SwitchBuilderImpl<uint, T>(cases);
             return impl;
         }
 
@@ -116,16 +116,17 @@ namespace SourceCode.Clay.Collections.Generic
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
             if (valueExtractor == null) throw new ArgumentNullException(nameof(valueExtractor));
 
-            var dict = new Dictionary<int, TValue>(cases.Count);
+            var unique = new Dictionary<int, TValue>(cases.Count);
             foreach (var @case in cases)
             {
                 var key = keyExtractor(@case);
                 var value = valueExtractor(@case);
 
-                dict.Add(key, value); // Rely on this throwing if there are any duplicates
+                // Rely on this throwing if there are any duplicates
+                unique.Add(key, value);
             }
 
-            var impl = dict.ToDynamicSwitch();
+            var impl = unique.ToDynamicSwitch();
             return impl;
         }
 

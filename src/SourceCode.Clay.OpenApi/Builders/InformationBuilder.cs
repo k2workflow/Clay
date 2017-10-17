@@ -68,7 +68,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Information"/> to copy values from.</param>
         public InformationBuilder(Information value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Title = value.Title;
             Description = value.Description;
             TermsOfService = value.TermsOfService;
@@ -93,7 +93,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator InformationBuilder(Information value) => ReferenceEquals(value, null) ? null : new InformationBuilder(value);
+        public static implicit operator InformationBuilder(Information value) => value is null ? null : new InformationBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Information"/> from this builder.

@@ -71,7 +71,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         public bool Equals(CompoundExpression other)
         {
             if (ReferenceEquals(_components, other._components)) return true;
-            if (ReferenceEquals(_components, null) || ReferenceEquals(other._components, null)) return false;
+            if (_components is null || other._components is null) return false;
             if (_components.Length != other._components.Length) return false;
 
             for (var i = 0; i < _components.Length; i++)

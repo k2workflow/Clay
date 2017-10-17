@@ -58,8 +58,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(ExternalDocumentation externalDocumentation1, ExternalDocumentation externalDocumentation2)
         {
-            if (ReferenceEquals(externalDocumentation1, null) && ReferenceEquals(externalDocumentation2, null)) return true;
-            if (ReferenceEquals(externalDocumentation1, null) || ReferenceEquals(externalDocumentation2, null)) return false;
+            if (externalDocumentation1 is null && externalDocumentation2 is null) return true;
+            if (externalDocumentation1 is null || externalDocumentation2 is null) return false;
             return externalDocumentation1.Equals((object)externalDocumentation2);
         }
 
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(ExternalDocumentation other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;

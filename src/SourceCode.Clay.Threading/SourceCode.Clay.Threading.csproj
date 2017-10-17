@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SourceCode.Clay.Collections\EmptyDictionaryImpl.cs" Link="EmptyDictionaryImpl.cs" />
+    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="EmptyDictionaryImpl.cs" />
   </ItemGroup>
 
   <ItemGroup>

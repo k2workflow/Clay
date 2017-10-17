@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace SourceCode.Clay.Collections.Generic
 {
@@ -17,7 +16,8 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of keys.</typeparam>
     /// <typeparam name="TValue">The type of values.</typeparam>
-    internal abstract class BaseSwitchBuilder<TKey, TValue> : IDynamicSwitch<TKey, TValue>
+    internal sealed class SwitchBuilderImpl<TKey, TValue> : IDynamicSwitch<TKey, TValue>
+        where TKey : struct, IEquatable<TKey>
     {
         #region Fields
 
@@ -29,10 +29,10 @@ namespace SourceCode.Clay.Collections.Generic
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseSwitchBuilder{TKey, TValue}"/> class.
+        /// Initializes a new instance of the <see cref="SwitchBuilderImpl{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="cases">The cases.</param>
-        protected BaseSwitchBuilder(IReadOnlyDictionary<TKey, TValue> cases)
+        public SwitchBuilderImpl(IReadOnlyDictionary<TKey, TValue> cases)
         {
             var (values, indexer) = BuildSwitchExpression(cases);
 
@@ -88,11 +88,6 @@ namespace SourceCode.Clay.Collections.Generic
         #region Helpers
 
         /// <summary>
-        /// A persistent pointer to the <see cref="NormalizeKey(TKey)"/> method.
-        /// </summary>
-        private static readonly MethodInfo _normalize = typeof(BaseSwitchBuilder<TKey, TValue>).GetMethod(nameof(NormalizeKey), BindingFlags.Instance | BindingFlags.NonPublic);
-
-        /// <summary>
         /// Builds the underlying <see cref="Expression"/> based switch.
         /// </summary>
         /// <param name="cases">The cases to transform into a dynamic switch.</param>
@@ -117,42 +112,36 @@ namespace SourceCode.Clay.Collections.Generic
             else
             {
                 values = new TValue[cases.Count];
-                var normalizedCases = new Dictionary<TKey, int>(cases.Count);
+                var unique = new Dictionary<TKey, int>(cases.Count, EqualityComparer<TKey>.Default);
 
-                // Extract values and ensure normalized keys are unique
+                // Extract values and ensure keys are unique
                 var i = 0;
                 foreach (var @case in cases)
                 {
                     values[i] = @case.Value;
 
-                    // Expression MUST match #1 below
-                    var normalizedKey = NormalizeKey(@case.Key);
-                    normalizedCases.Add(normalizedKey, i); // Rely on this throwing if there are any duplicates
+                    // Rely on this throwing if there are any duplicates
+                    unique.Add(@case.Key, i);
 
                     i++;
                 }
 
-                // Expression MUST match #1 above
-                var @this = Expression.Constant(this);
-                var switchValue = Expression.Call(@this, _normalize, formalParam);
-
                 // Create <Key, SwitchCase>[] list
                 i = 0;
                 var switchCases = new SwitchCase[cases.Count];
-                foreach (var @case in normalizedCases)
+                foreach (var @case in unique)
                 {
-                    // Get normalized Key
-                    var key = Expression.Constant(@case.Key);
-
                     // Create Case Expression
+                    var key = Expression.Constant(@case.Key);
                     var value = Expression.Constant(@case.Value);
+
                     switchCases[i] = Expression.SwitchCase(value, key);
 
                     i++;
                 }
 
                 // Create Switch Expression
-                var switchExpr = Expression.Switch(switchValue, notFound, switchCases);
+                var switchExpr = Expression.Switch(formalParam, notFound, switchCases);
 
                 // Create final Expression
                 expr = Expression.Lambda<Func<TKey, int>>(switchExpr, formalParam);
@@ -162,14 +151,6 @@ namespace SourceCode.Clay.Collections.Generic
             var func = expr.Compile();
             return (values, func);
         }
-
-        /// <summary>
-        /// Override this method if the keys need to be transformed in some manner before
-        /// being compared. For example, changing string keys to their lowercase equivalent.
-        /// </summary>
-        /// <param name="key">The key value to be transformed.</param>
-        /// <returns>The transformed key value.</returns>
-        protected virtual TKey NormalizeKey(TKey key) => key;
 
         #endregion
     }

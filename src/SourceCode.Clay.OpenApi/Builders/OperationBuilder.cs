@@ -104,7 +104,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Operation"/> to copy values from.</param>
         public OperationBuilder(Operation value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Tags = new List<string>(value.Tags);
             Summary = value.Summary;
             Description = value.Description;
@@ -135,7 +135,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OperationBuilder(Operation value) => ReferenceEquals(value, null) ? null : new OperationBuilder(value);
+        public static implicit operator OperationBuilder(Operation value) => value is null ? null : new OperationBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Link"/> from this builder.

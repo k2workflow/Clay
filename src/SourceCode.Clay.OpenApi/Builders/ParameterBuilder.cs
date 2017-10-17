@@ -47,7 +47,7 @@ namespace SourceCode.Clay.OpenApi
         public ParameterBuilder(Parameter value)
             : base(value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Name = value.Name;
             Location = value.Location;
         }
@@ -75,7 +75,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ParameterBuilder(Parameter value) => ReferenceEquals(value, null) ? null : new ParameterBuilder(value);
+        public static implicit operator ParameterBuilder(Parameter value) => value is null ? null : new ParameterBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Parameter"/> from this builder.

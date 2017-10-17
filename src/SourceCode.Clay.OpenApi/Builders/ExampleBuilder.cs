@@ -49,7 +49,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="Example"/> to copy values from.</param>
         public ExampleBuilder(Example value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Summary = value.Summary;
             Description = value.Description;
             ExternalValue = value.ExternalValue;
@@ -78,7 +78,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ExampleBuilder(Example value) => ReferenceEquals(value, null) ? null : new ExampleBuilder(value);
+        public static implicit operator ExampleBuilder(Example value) => value is null ? null : new ExampleBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="Example"/> from this builder.

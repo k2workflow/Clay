@@ -51,7 +51,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(LiteralExpression other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (!StringComparer.Ordinal.Equals(Value, other.Value)) return false;
             return true;
         }

@@ -52,7 +52,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="MediaType"/> to copy values from.</param>
         public MediaTypeBuilder(MediaType value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Schema = value.Schema;
             Examples = new Dictionary<string, Referable<Example>>(value.Examples);
             Encoding = new Dictionary<string, PropertyEncoding>(value.Encoding);
@@ -74,7 +74,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator MediaTypeBuilder(MediaType value) => ReferenceEquals(value, null) ? null : new MediaTypeBuilder(value);
+        public static implicit operator MediaTypeBuilder(MediaType value) => value is null ? null : new MediaTypeBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="MediaType"/> from this builder.

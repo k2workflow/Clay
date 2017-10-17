@@ -77,8 +77,8 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OAuth2SecurityScheme scheme1, OAuth2SecurityScheme scheme2)
         {
-            if (ReferenceEquals(scheme1, null) && ReferenceEquals(scheme2, null)) return true;
-            if (ReferenceEquals(scheme1, null) || ReferenceEquals(scheme2, null)) return false;
+            if (scheme1 is null && scheme2 is null) return true;
+            if (scheme1 is null || scheme2 is null) return false;
             return scheme1.Equals((object)scheme2);
         }
 

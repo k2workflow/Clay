@@ -54,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="value">The <see cref="ServerVariable"/> to copy values from.</param>
         public ServerVariableBuilder(ServerVariable value)
         {
-            if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             Enum = new List<string>(value.Enum);
             Default = value.Default;
             Description = value.Description;
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator ServerVariableBuilder(ServerVariable value) => ReferenceEquals(value, null) ? null : new ServerVariableBuilder(value);
+        public static implicit operator ServerVariableBuilder(ServerVariable value) => value is null ? null : new ServerVariableBuilder(value);
 
         /// <summary>
         /// Creates the <see cref="ServerVariable"/> from this builder.
