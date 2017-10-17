@@ -159,7 +159,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             #region Methods
 
-            protected sealed override TKey GetKeyForItem(TValue item) => _keyExtractor(item);
+            protected override TKey GetKeyForItem(TValue item) => _keyExtractor(item);
 
             #endregion
 
