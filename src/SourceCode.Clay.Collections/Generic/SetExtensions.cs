@@ -24,29 +24,51 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Set 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y, IEqualityComparer<T> comparer) // Naming avoids conflict with native ISet.SetEquals method
+        public static bool NullableSetEquals<T>(this IEnumerable<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
         {
-            var cmpr = comparer ?? EqualityComparer<T>.Default;
-
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            // If counts are different, not equal
-            if (x.Count != y.Count) return false; // (n, m)
+            // ICollection is more common
+            if (x is ICollection<T> xc)
+            {
+                var isEqual = CheckCount(xc.Count);
+                if (isEqual.HasValue) return isEqual.Value;
+            }
+            // IReadOnlyCollection
+            else if (x is IReadOnlyCollection<T> xrc)
+            {
+                var isEqual = CheckCount(xrc.Count);
+                if (isEqual.HasValue) return isEqual.Value;
+            }
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-            if (x.Count == 0) return true;
+            var cmpr = comparer ?? EqualityComparer<T>.Default;
 
-            // Use native checks
-            var xSet = new HashSet<T>(x, cmpr);
-            foreach (var yItem in y)
-                if (!xSet.Remove(yItem))
-                    return false;
+            // ISet
+            var xss = new HashSet<T>(x, cmpr);
+            var yss = new HashSet<T>(y, cmpr);
 
-            return xSet.Count == 0;
+            return xss.SetEquals(yss);
+
+            // Local functions
+            bool? CheckCount(int xCount)
+            {
+                // ICollection is more common
+                if (y is ICollection<T> yc)
+                {
+                    if (xCount != yc.Count) return false; // (n, m)
+                    if (xCount == 0) return true; // (0, 0)
+                }
+                // IReadOnlyCollection
+                else if (y is IReadOnlyCollection<T> yrc)
+                {
+                    if (xCount != yrc.Count) return false; // (n, m)
+                    if (xCount == 0) return true; // (0, 0)
+                }
+
+                return null;
+            }
         }
 
         /// <summary>
@@ -56,23 +78,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Set 1</param>
         /// <param name="y">Set 2</param>
         /// <returns></returns>
-        public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y) // Naming avoids conflict with native ISet.SetEquals method
-        {
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // If counts are different, not equal
-            if (x.Count != y.Count) return false; // (n, m)
-
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-            if (x.Count == 0) return true;
-
-            // Use native checks
-            return x.SetEquals(y); // Uses the equality comparer from the first set
-        }
+        public static bool NullableSetEquals<T>(this IEnumerable<T> x, IEnumerable<T> y)
+            => NullableSetEquals(x, y, null);
 
         #endregion
     }

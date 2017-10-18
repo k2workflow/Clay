@@ -134,11 +134,11 @@ namespace SourceCode.Clay.OpenApi
 
             if (Version != other.Version) return false;
             if (!Info.NullableEquals(other.Info)) return false;
-            if (!Servers.ListEquals(other.Servers, true)) return false;
-            if (!Paths.DictionaryEquals(other.Paths)) return false;
+            if (!Servers.NullableListEquals(other.Servers)) return false;
+            if (!Paths.NullableDictionaryEquals(other.Paths)) return false;
             if (!Components.NullableEquals(other.Components)) return false;
-            if (!Security.ListEquals(other.Security, false)) return false;
-            if (!Tags.ListEquals(other.Tags, false)) return false;
+            if (!Security.NullableSetEquals(other.Security)) return false;
+            if (!Tags.NullableSetEquals(other.Tags)) return false;
             if (!ExternalDocumentation.NullableEquals(other.ExternalDocumentation)) return false;
 
             return true;

@@ -33,10 +33,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_both_null))]
         public static void MemoryEquals_both_null()
         {
-            var equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, false);
-            Assert.True(equal);
-
-            equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal, true);
+            var equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -47,10 +44,7 @@ namespace SourceCode.Clay.Collections.Tests
             var list1 = new ReadOnlyMemory<string>(Array.Empty<string>());
             var list2 = new ReadOnlyMemory<string>(new string[0]);
 
-            var equal = list1.MemoryEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
-
-            equal = list1.MemoryEquals(list2, StringComparer.Ordinal, true);
+            var equal = list1.MemoryEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -62,22 +56,13 @@ namespace SourceCode.Clay.Collections.Tests
             var list2 = new ReadOnlyMemory<string>(new string[] { "HI" });
             var list3 = new ReadOnlyMemory<string>(new string[] { "bye" });
 
-            var equal = list1.MemoryEquals(list2, StringComparer.OrdinalIgnoreCase, false);
+            var equal = list1.MemoryEquals(list2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = list1.MemoryEquals(list2, StringComparer.OrdinalIgnoreCase, true);
-            Assert.True(equal);
-
-            equal = list1.MemoryEquals(list2, StringComparer.Ordinal, false);
+            equal = list1.MemoryEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = list1.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = list1.MemoryEquals(list3, StringComparer.Ordinal, false);
-            Assert.False(equal);
-
-            equal = list1.MemoryEquals(list3, StringComparer.Ordinal, true);
+            equal = list1.MemoryEquals(list3, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -86,7 +71,7 @@ namespace SourceCode.Clay.Collections.Tests
         public static void MemoryEquals_one_null()
         {
             var list = new ReadOnlyMemory<string>(_list);
-            var equal = list.MemoryEquals(_null, StringComparer.Ordinal, false);
+            var equal = list.MemoryEquals(_null, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -102,13 +87,13 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[2]
             });
 
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
+            var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_IsEqual_sequential_true))]
-        public static void MemoryEquals_IsEqual_sequential_true()
+        [Fact(DisplayName = nameof(MemoryEquals_IsEqual))]
+        public static void MemoryEquals_IsEqual()
         {
             var list = new ReadOnlyMemory<string>(_list);
             var list2 = new ReadOnlyMemory<string>(new[]
@@ -119,36 +104,13 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[3]
             });
 
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
+            var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_IsEqual_sequential_false))]
-        public static void MemoryEquals_IsEqual_sequential_false()
-        {
-            var list = new ReadOnlyMemory<string>(_list);
-            var list2 = new ReadOnlyMemory<string>(new[]
-            {
-                _list[2],
-                _list[1],
-                _list[3],
-                _list[0]
-            });
-
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_NotEqual_sequential_true))]
-        public static void MemoryEquals_NotEqual_sequential_true()
+        [Fact(DisplayName = nameof(MemoryEquals_NotEqual))]
+        public static void MemoryEquals_NotEqual()
         {
             var list = new ReadOnlyMemory<string>(_list);
             var list2 = new ReadOnlyMemory<string>(new[]
@@ -159,30 +121,7 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[3]
             });
 
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_NotEqual_sequential_false))]
-        public static void MemoryEquals_NotEqual_sequential_false()
-        {
-            var list = new ReadOnlyMemory<string>(_list);
-            var list2 = new ReadOnlyMemory<string>(new[]
-            {
-                _list[2],
-                _list[1],
-                "a",
-                _list[0]
-            });
-
-            var equal = list.MemoryEquals(list2, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = list.MemoryEquals(list2, StringComparer.Ordinal, false);
+            var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -199,10 +138,7 @@ namespace SourceCode.Clay.Collections.Tests
                 _list[0]
             });
 
-            var equal = list.MemoryEquals(list2, true);
-            Assert.False(equal);
-
-            equal = list.MemoryEquals(list2, false);
+            var equal = list.MemoryEquals(list2);
             Assert.False(equal);
         }
 

@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
         public static void DictionaryEquals_both_null()
         {
-            var equal = ((Dictionary<string, string>)null).DictionaryEquals(null);
+            var equal = ((Dictionary<string, string>)null).NullableDictionaryEquals(null);
             Assert.True(equal);
         }
 
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Collections.Tests
             var dict1 = new Dictionary<string, string>();
             var dict2 = new Dictionary<string, string>();
 
-            var equal = dict1.DictionaryEquals(dict2);
+            var equal = dict1.NullableDictionaryEquals(dict2);
             Assert.True(equal);
         }
 
@@ -55,13 +55,13 @@ namespace SourceCode.Clay.Collections.Tests
             var dict2 = new Dictionary<string, string> { ["HI"] = "HI1" };
             var dict3 = new Dictionary<string, string> { ["bye"] = "bye1" };
 
-            var equal = dict1.DictionaryEquals(dict2);
+            var equal = dict1.NullableDictionaryEquals(dict2);
             Assert.False(equal);
 
-            equal = dict1.DictionaryEquals(dict2, StringComparer.OrdinalIgnoreCase);
+            equal = dict1.NullableDictionaryEquals(dict2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = dict1.DictionaryEquals(dict3);
+            equal = dict1.NullableDictionaryEquals(dict3);
             Assert.False(equal);
         }
 
@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
         public static void DictionaryEquals_one_null()
         {
-            var equal = _dict.DictionaryEquals(null);
+            var equal = _dict.NullableDictionaryEquals(null);
             Assert.False(equal);
         }
 
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Collections.Tests
             var dict2 = new Dictionary<string, string>(_dict);
             dict2.Remove("foo");
 
-            var equal = _dict.DictionaryEquals(dict2);
+            var equal = _dict.NullableDictionaryEquals(dict2);
             Assert.False(equal);
         }
 
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var dict2 = new Dictionary<string, string>(_dict);
 
-            var equal = _dict.DictionaryEquals(dict2);
+            var equal = _dict.NullableDictionaryEquals(dict2);
             Assert.True(equal);
         }
 
@@ -103,7 +103,7 @@ namespace SourceCode.Clay.Collections.Tests
                 ["xyz"] = "xyz1"
             };
 
-            var equal = _dict.DictionaryEquals(dict2);
+            var equal = _dict.NullableDictionaryEquals(dict2);
             Assert.False(equal);
         }
 

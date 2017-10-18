@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SetExtensionsTests
     {
-        #region Fields
+        #region Constants
 
         private static readonly HashSet<string> _set = new HashSet<string>
         {
@@ -51,14 +51,14 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_both_one))]
         public static void SetEquals_both_one()
         {
-            var set1 = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "hi" };
+            var set1 = new HashSet<string> { "hi" };
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = SetExtensions.NullableSetEquals(set1, set2);
+            var equal = set1.NullableSetEquals(set2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = set1.NullableSetEquals(set3);
+            equal = set1.NullableSetEquals(set3, StringComparer.OrdinalIgnoreCase);
             Assert.False(equal);
         }
 
@@ -95,8 +95,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_NotEqual))]
         public static void SetEquals_NotEqual()
         {
-            var set2 = new HashSet<string>(_set);
-            set2.Add("xyz");
+            var set2 = new HashSet<string>(_set)
+            {
+                "xyz"
+            };
 
             var equal = _set.NullableSetEquals(set2);
             Assert.False(equal);

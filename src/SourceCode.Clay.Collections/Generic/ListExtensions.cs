@@ -5,14 +5,12 @@
 
 #endregion
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="IReadOnlyList{T}"/>.
+    /// Represents extensions for <see cref="IList{T}"/> and <see cref="IReadOnlyList{T}"/>.
     /// </summary>
     public static class ListExtensions
     {
@@ -20,214 +18,159 @@ namespace SourceCode.Clay.Collections.Generic
 
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
+        /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool sequential)
+        public static bool NullableListEquals<T>(this IList<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
         {
+            if (x is null ^ y is null) return false; // (x, null) or (null, y)
+            if (x is null) return true; // (null, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            // ICollection is more likely
+            var isCollection = false;
+            if (y is ICollection<T> yc)
+            {
+                if (x.Count != yc.Count) return false; // (n, m)
+                if (x.Count == 0) return true; // (0, 0)
+
+                isCollection = true;
+            }
+            // IReadOnlyCollection
+            else if (y is IReadOnlyCollection<T> yrc)
+            {
+                if (x.Count != yrc.Count) return false; // (n, m)
+                if (x.Count == 0) return true; // (0, 0)
+
+                isCollection = true;
+            }
+
             var cmpr = comparer ?? EqualityComparer<T>.Default;
 
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // If counts are different, not equal
-            if (x.Count != y.Count) return false; // (n, m)
-
-            // Optimize for cases 0, 1, 2, N
-            switch (x.Count)
+            if (isCollection)
             {
-                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-                case 0: return true;
-
-                // If there is only 1 item, short-circuit
-                case 1: return cmpr.Equals(x[0], y[0]);
-
-                // If there are 2 items, short-circuit
-                case 2:
-                    {
-                        // Horizontal
-                        if (cmpr.Equals(x[0], y[0]))
-                            return cmpr.Equals(x[1], y[1]);
-
-                        // Diagnonal
-                        if (cmpr.Equals(x[0], y[1]))
-                            return cmpr.Equals(x[1], y[0]);
-                    }
-                    return false;
-
-                // Else we need to do more work
-                default: break;
-            }
-
-            var min = 0;
-            var max = x.Count - 1;
-            var bit = new BitArray(x.Count); // Optimize looping by tracking which positions have been matched
-
-            for (var i = 0; i < x.Count; i++)
-            {
-                // Colocated comparisons should be at the same position
-                if (sequential
-                    && !bit[i]
-                    && cmpr.Equals(x[i], y[i]))
+                // IList is more likely
+                if (y is IList<T> yl)
                 {
-                    bit[i] = true;
-                    if (i == min) min++;
+                    // Check items in sequential order
+                    for (var i = 0; i < x.Count; i++)
+                    {
+                        if (!cmpr.Equals(x[i], yl[i])) return false;
+                    }
 
-                    continue;
+                    return true;
                 }
 
-                var found = false;
-
-                var j = min;
-                for (; j <= max; j++)
+                // IReadOnlyList
+                if (y is IReadOnlyList<T> yrl)
                 {
-                    // Skip positions where a match was previously found
-                    if (bit[j]) continue;
-
-                    if (cmpr.Equals(x[i], y[j]))
+                    // Check items in sequential order
+                    for (var i = 0; i < x.Count; i++)
                     {
-                        found = true;
-
-                        bit[j] = true;
-                        if (j == min) min++;
-                        if (j == max) max--;
-
-                        break;
+                        if (!cmpr.Equals(x[i], yrl[i])) return false;
                     }
-                }
 
-                if (!found) return false;
+                    return true;
+                }
             }
 
-            return true;
-        }
-
-        /// <summary>
-        /// Performs an optimized item-by-item comparison.
-        /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
-        /// <param name="x">List 1</param>
-        /// <param name="y">List 2</param>
-        /// <param name="extractor">A delegate that extracts an embedded value from each item before comparing it using the specified comparer.</param>
-        /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
-        /// <returns></returns>
-        public static bool ListEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> extractor, IEqualityComparer<U> comparer, bool sequential)
-        {
-            if (extractor == null) throw new ArgumentNullException(nameof(extractor));
-
-            var cmpr = comparer ?? EqualityComparer<U>.Default;
-
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // If counts are different, not equal
-            if (x.Count != y.Count) return false; // (n, m)
-
-            // Optimize for cases 0, 1, 2, N
-            switch (x.Count)
-            {
-                // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-                case 0: return true;
-
-                // If there is only 1 item, short-circuit
-                case 1:
-                    {
-                        var x0 = extractor(x[0]);
-                        var y0 = extractor(y[0]);
-
-                        return cmpr.Equals(x0, y0);
-                    }
-
-                // If there are 2 items, short-circuit
-                case 2:
-                    {
-                        var x0 = extractor(x[0]);
-                        var y0 = extractor(y[0]);
-
-                        var x1 = extractor(x[1]);
-                        var y1 = extractor(y[1]);
-
-                        // Horizontal
-                        if (cmpr.Equals(x0, y0))
-                            return cmpr.Equals(x1, y1);
-
-                        // Diagonal
-                        if (cmpr.Equals(x0, y1))
-                            return cmpr.Equals(x1, y0);
-                    }
-                    return false;
-
-                // Else we need to do more work
-                default: break;
-            }
-
-            var min = 0;
-            var max = x.Count - 1;
-            var bit = new BitArray(x.Count); // Optimize looping by tracking which positions have been matched
-
-            for (var i = 0; i < x.Count; i++)
-            {
-                var xi = extractor(x[i]);
-                var yi = extractor(y[i]);
-
-                // Colocated comparisons should be at the same position
-                if (sequential
-                    && !bit[i]
-                    && cmpr.Equals(xi, yi))
-                {
-                    bit[i] = true;
-                    if (i == min) min++;
-
-                    continue;
-                }
-
-                var found = false;
-
-                var j = min;
-                for (; j <= max; j++)
-                {
-                    // Skip positions where a match was previously found
-                    if (bit[j]) continue;
-
-                    if (cmpr.Equals(xi, yi))
-                    {
-                        found = true;
-
-                        bit[j] = true;
-                        if (j == min) min++;
-                        if (j == max) max--;
-
-                        break;
-                    }
-                }
-
-                if (!found) return false;
-            }
-
-            return true;
+            // IEnumerable
+            var equal = EnumerableExtensions.CheckEnumerable(x, y, cmpr);
+            return equal;
         }
 
         /// <summary>
         /// Performs an optimized item-by-item comparison, using the default comparer for the type.
+        /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
         /// <typeparam name="T">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
-        /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
-        public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool sequential)
-            => x.ListEquals(y, null, sequential);
+        public static bool NullableListEquals<T>(this IList<T> x, IEnumerable<T> y)
+            => NullableListEquals(x, y, null);
+
+        /// <summary>
+        /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
+        /// The lists are required to have corresponding items in the same ordinal position.
+        /// </summary>
+        /// <typeparam name="T">The type of items.</typeparam>
+        /// <param name="x">List 1</param>
+        /// <param name="y">List 2</param>
+        /// <param name="comparer">The comparer to use to test for equality.</param>
+        /// <returns></returns>
+        public static bool NullableListEquals<T>(this IReadOnlyList<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
+        {
+            if (x is null ^ y is null) return false; // (x, null) or (null, y)
+            if (x is null) return true; // (null, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            // IReadOnlyCollection is more likely
+            var isCollection = false;
+            if (y is IReadOnlyCollection<T> yc)
+            {
+                if (x.Count != yc.Count) return false; // (n, m)
+                if (x.Count == 0) return true; // (0, 0)
+
+                isCollection = true;
+            }
+            // ICollection
+            else if (y is ICollection<T> yrc)
+            {
+                if (x.Count != yrc.Count) return false; // (n, m)
+                if (x.Count == 0) return true; // (0, 0)
+
+                isCollection = true;
+            }
+
+            var cmpr = comparer ?? EqualityComparer<T>.Default;
+
+            if (isCollection)
+            {
+                // IReadOnlyList is more likely
+                if (y is IReadOnlyList<T> yrl)
+                {
+                    // Check items in sequential order
+                    for (var i = 0; i < x.Count; i++)
+                    {
+                        if (!cmpr.Equals(x[i], yrl[i])) return false;
+                    }
+
+                    return true;
+                }
+
+                // IList
+                if (y is IList<T> yl)
+                {
+                    // Check items in sequential order
+                    for (var i = 0; i < x.Count; i++)
+                    {
+                        if (!cmpr.Equals(x[i], yl[i])) return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            // IEnumerable
+            var equal = EnumerableExtensions.CheckEnumerable(x, y, cmpr);
+            return equal;
+        }
+
+        /// <summary>
+        /// Performs an optimized item-by-item comparison, using the default comparer for the type.
+        /// The lists are required to have corresponding items in the same ordinal position.
+        /// </summary>
+        /// <typeparam name="T">The type of items.</typeparam>
+        /// <param name="x">List 1</param>
+        /// <param name="y">List 2</param>
+        /// <returns></returns>
+        public static bool NullableListEquals<T>(this IReadOnlyList<T> x, IEnumerable<T> y)
+            => NullableListEquals(x, y, null);
 
         #endregion
     }

@@ -5,13 +5,12 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="IReadOnlyDictionary{TKey, TValue}{T}"/>.
+    /// Represents extensions for <see cref="Dictionary{TKey, TValue}"/> and <see cref="IReadOnlyDictionary{TKey, TValue}{T}"/>.
     /// </summary>
     public static class DictionaryExtensions
     {
@@ -27,21 +26,16 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>
         /// <returns></returns>
-        public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
         {
-            var cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
-
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            // If counts are different, not equal
             if (x.Count != y.Count) return false; // (n, m)
+            if (x.Count == 0) return true; // (0, 0)
 
-            // If first count is 0 then, due to previous check, the second is guaranteed to be 0 (and thus equal)
-            if (x.Count == 0) return true;
+            var cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
 
             // For each key in the first dictionary...
             foreach (var yvp in y)
@@ -65,8 +59,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Dictionary 1</param>
         /// <param name="y">Dictionary 2</param>
         /// <returns></returns>
-        public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
-            => x.DictionaryEquals(y, null);
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
+            => NullableDictionaryEquals(x, y, null);
 
         #endregion
     }
