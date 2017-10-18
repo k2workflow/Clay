@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Json
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
             if (jv == null)
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Json
 
             value = null;
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Json
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.Json
 
             value = null;
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
@@ -96,7 +96,7 @@ namespace SourceCode.Clay.Json
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.Json
 
             value = null;
 
-            if (!jo.TryGetValue(key, out JsonValue jv))
+            if (!jo.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
