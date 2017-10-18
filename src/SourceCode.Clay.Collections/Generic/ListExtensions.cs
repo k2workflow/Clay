@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="IList{T}"/>.
+    /// Represents extensions for <see cref="IReadOnlyList{T}"/>.
     /// </summary>
     public static class ListExtensions
     {
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, IEqualityComparer<T> comparer, bool sequential)
         {
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            var cmpr = comparer ?? EqualityComparer<T>.Default;
 
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
@@ -47,18 +47,18 @@ namespace SourceCode.Clay.Collections.Generic
                 case 0: return true;
 
                 // If there is only 1 item, short-circuit
-                case 1: return comparer.Equals(x[0], y[0]);
+                case 1: return cmpr.Equals(x[0], y[0]);
 
                 // If there are 2 items, short-circuit
                 case 2:
                     {
                         // Horizontal
-                        if (comparer.Equals(x[0], y[0]))
-                            return comparer.Equals(x[1], y[1]);
+                        if (cmpr.Equals(x[0], y[0]))
+                            return cmpr.Equals(x[1], y[1]);
 
                         // Diagnonal
-                        if (comparer.Equals(x[0], y[1]))
-                            return comparer.Equals(x[1], y[0]);
+                        if (cmpr.Equals(x[0], y[1]))
+                            return cmpr.Equals(x[1], y[0]);
                     }
                     return false;
 
@@ -75,7 +75,7 @@ namespace SourceCode.Clay.Collections.Generic
                 // Colocated comparisons should be at the same position
                 if (sequential
                     && !bit[i]
-                    && comparer.Equals(x[i], y[i]))
+                    && cmpr.Equals(x[i], y[i]))
                 {
                     bit[i] = true;
                     if (i == min) min++;
@@ -91,7 +91,7 @@ namespace SourceCode.Clay.Collections.Generic
                     // Skip positions where a match was previously found
                     if (bit[j]) continue;
 
-                    if (comparer.Equals(x[i], y[j]))
+                    if (cmpr.Equals(x[i], y[j]))
                     {
                         found = true;
 
@@ -122,7 +122,8 @@ namespace SourceCode.Clay.Collections.Generic
         public static bool ListEquals<T, U>(this IReadOnlyList<T> x, IReadOnlyList<T> y, Func<T, U> extractor, IEqualityComparer<U> comparer, bool sequential)
         {
             if (extractor == null) throw new ArgumentNullException(nameof(extractor));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
+            var cmpr = comparer ?? EqualityComparer<U>.Default;
 
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
@@ -145,7 +146,7 @@ namespace SourceCode.Clay.Collections.Generic
                         var x0 = extractor(x[0]);
                         var y0 = extractor(y[0]);
 
-                        return comparer.Equals(x0, y0);
+                        return cmpr.Equals(x0, y0);
                     }
 
                 // If there are 2 items, short-circuit
@@ -158,12 +159,12 @@ namespace SourceCode.Clay.Collections.Generic
                         var y1 = extractor(y[1]);
 
                         // Horizontal
-                        if (comparer.Equals(x0, y0))
-                            return comparer.Equals(x1, y1);
+                        if (cmpr.Equals(x0, y0))
+                            return cmpr.Equals(x1, y1);
 
                         // Diagonal
-                        if (comparer.Equals(x0, y1))
-                            return comparer.Equals(x1, y0);
+                        if (cmpr.Equals(x0, y1))
+                            return cmpr.Equals(x1, y0);
                     }
                     return false;
 
@@ -183,7 +184,7 @@ namespace SourceCode.Clay.Collections.Generic
                 // Colocated comparisons should be at the same position
                 if (sequential
                     && !bit[i]
-                    && comparer.Equals(xi, yi))
+                    && cmpr.Equals(xi, yi))
                 {
                     bit[i] = true;
                     if (i == min) min++;
@@ -199,7 +200,7 @@ namespace SourceCode.Clay.Collections.Generic
                     // Skip positions where a match was previously found
                     if (bit[j]) continue;
 
-                    if (comparer.Equals(xi, yi))
+                    if (cmpr.Equals(xi, yi))
                     {
                         found = true;
 
@@ -226,7 +227,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="sequential">Optimizes the algorithm for cases when the inputs are expected to be ordered in the same manner.</param>
         /// <returns></returns>
         public static bool ListEquals<T>(this IReadOnlyList<T> x, IReadOnlyList<T> y, bool sequential)
-            => x.ListEquals(y, EqualityComparer<T>.Default, sequential);
+            => x.ListEquals(y, null, sequential);
 
         #endregion
     }

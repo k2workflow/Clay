@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
@@ -27,7 +26,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableSetEquals<T>(this ISet<T> x, ISet<T> y, IEqualityComparer<T> comparer) // Naming avoids conflict with native ISet.SetEquals method
         {
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            var cmpr = comparer ?? EqualityComparer<T>.Default;
 
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
@@ -42,7 +41,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (x.Count == 0) return true;
 
             // Use native checks
-            var xSet = new HashSet<T>(x);
+            var xSet = new HashSet<T>(x, cmpr);
             foreach (var yItem in y)
                 if (!xSet.Remove(yItem))
                     return false;

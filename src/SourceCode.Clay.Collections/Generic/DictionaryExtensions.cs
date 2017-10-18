@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
         {
-            if (valueComparer == null) throw new ArgumentNullException(nameof(valueComparer));
+            var cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
 
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Collections.Generic
                 if (!x.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
 
                 // And if so, whether the corresponding values match
-                if (!valueComparer.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer
+                if (!cmpr.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer
             }
 
             return true;
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <returns></returns>
         public static bool DictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
-            => x.DictionaryEquals(y, EqualityComparer<TValue>.Default);
+            => x.DictionaryEquals(y, null);
 
         #endregion
     }
