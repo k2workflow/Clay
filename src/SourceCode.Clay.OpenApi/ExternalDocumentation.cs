@@ -75,7 +75,9 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => Equals(obj as ExternalDocumentation);
+        public override bool Equals(object obj)
+            => obj is ExternalDocumentation other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>

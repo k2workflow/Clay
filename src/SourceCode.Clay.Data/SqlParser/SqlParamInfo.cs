@@ -58,17 +58,17 @@ namespace SourceCode.Clay.Data.SqlParser
 
         public override int GetHashCode()
         {
-            var hc = 17L;
-
             unchecked
             {
+                var hc = 17L;
+
                 hc = (hc * 23) + (IsNullable ? 9 : 4);
                 hc = (hc * 23) + ((int)Direction);
                 hc = (hc * 23) + (HasDefault ? 2 : 21);
                 hc = (hc * 23) + (IsReadOnly ? 17 : 8);
-            }
 
-            return ((int)(hc >> 32)) ^ (int)hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
         }
 
         #endregion

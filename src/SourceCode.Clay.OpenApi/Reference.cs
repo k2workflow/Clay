@@ -121,6 +121,7 @@ namespace SourceCode.Clay.OpenApi
             unchecked
             {
                 var hc = 17L;
+
                 if (Url != null)
                     hc = (hc * 23) + Url.GetHashCode();
                 hc = (hc * 23) + Pointer.GetHashCode();

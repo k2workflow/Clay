@@ -89,11 +89,13 @@ namespace SourceCode.Clay.OpenApi.Expressions
             unchecked
             {
                 var hc = 17L;
+
                 if (_components != null)
                 {
                     hc = (hc * 23) + _components.Length;
                     hc = (hc * 23) + _components[0].GetHashCode();
                 }
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

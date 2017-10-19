@@ -249,7 +249,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => Equals(obj as FieldExpression);
+        public override bool Equals(object obj)
+            => obj is FieldExpression other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -272,12 +274,14 @@ namespace SourceCode.Clay.OpenApi.Expressions
             unchecked
             {
                 var hc = 17L;
+
                 hc = (hc * 23) + base.GetHashCode();
                 hc = (hc * 23) + ExpressionType.GetHashCode();
                 hc = (hc * 23) + ExpressionSource.GetHashCode();
                 if (Name != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
                 hc = (hc * 23) + Pointer.GetHashCode();
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

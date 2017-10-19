@@ -75,15 +75,15 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hc = 17L;
-
             unchecked
             {
+                var hc = 17L;
+
                 if (Value != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value);
-            }
 
-            return ((int)(hc >> 32)) ^ (int)hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
         }
 
         #endregion

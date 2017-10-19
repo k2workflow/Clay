@@ -58,8 +58,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 unchecked
                 {
                     var hc = 17L;
+
                     hc = hc * 21 + GenericArgumentType.GetHashCode();
                     hc = hc * 21 + InstanceType.GetHashCode();
+
                     return ((int)(hc >> 32)) ^ (int)hc;
                 }
             }
