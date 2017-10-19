@@ -27,8 +27,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
             var cmpr = comparer ?? EqualityComparer<TSource>.Default;
@@ -72,8 +72,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
             var cmpr = comparer ?? EqualityComparer<TSource>.Default;

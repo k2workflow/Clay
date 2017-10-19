@@ -95,18 +95,18 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hc = 17L;
-
             unchecked
             {
+                var hc = 17L;
+
                 if (Minimum.HasValue)
                     hc = (hc * 23) + Minimum.Value;
                 if (Maximum.HasValue)
                     hc = (hc * 23) + Maximum.Value;
                 hc = (hc * 23) + RangeOptions.GetHashCode();
-            }
 
-            return ((int)(hc >> 32)) ^ (int)hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
         }
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>

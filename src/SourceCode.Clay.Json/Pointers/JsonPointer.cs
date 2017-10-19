@@ -277,8 +277,8 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(JsonPointer other)
         {
-            if (_tokens is null ^ other._tokens is null) return false; // (x, null) or (null, y)
-            if (_tokens is null) return true; // (null, null)
+            if (_tokens is null) return other._tokens is null; // (null, null) or (null, y)
+            if (other._tokens is null) return false; // (x, null)
             if (ReferenceEquals(_tokens, other._tokens)) return true; // (x, x)
 
             if (_tokens.Length != other._tokens.Length) return false; // (n, m)
@@ -297,15 +297,15 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            var hc = 17L;
-
             unchecked
             {
+                var hc = 17L;
+
                 if (_tokens != null)
                     hc = (hc * 23) + _tokens.Length;
-            }
 
-            return ((int)(hc >> 32)) ^ (int)hc;
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
         }
 
         #endregion

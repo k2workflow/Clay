@@ -133,10 +133,10 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            var hc = 17L;
-
             unchecked
             {
+                var hc = 17L;
+
                 if (Title != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Title);
                 hc = (hc * 23) + Version.GetHashCode();

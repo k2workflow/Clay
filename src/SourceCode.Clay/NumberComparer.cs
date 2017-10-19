@@ -63,8 +63,8 @@ namespace SourceCode.Clay
         /// <inheritdoc/>
         public bool Equals(Number? x, Number? y)
         {
-            if (x.HasValue ^ y.HasValue) return false;
-            if (!x.HasValue) return true;
+            if (!x.HasValue) return !y.HasValue; // (null, null) or (null, y)
+            if (!y.HasValue) return true; // (x, null)
 
             var equal = Equals(x.Value, y.Value);
             return equal;
@@ -283,10 +283,10 @@ namespace SourceCode.Clay
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override int GetHashCode(Number obj)
             {
-                var hc = 17L;
-
                 unchecked
                 {
+                    var hc = 17L;
+
                     hc = (hc * 23) + (int)obj.ValueTypeCode;
 
                     if (obj.ValueTypeCode == TypeCode.Decimal)
@@ -295,9 +295,9 @@ namespace SourceCode.Clay
                         hc = (hc * 23) + obj._double.GetHashCode();
                     else // Int
                         hc = (hc * 23) + obj._uint64.GetHashCode();
-                }
 
-                return ((int)(hc >> 32)) ^ (int)hc;
+                    return ((int)(hc >> 32)) ^ (int)hc;
+                }
             }
 
             #endregion

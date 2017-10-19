@@ -100,10 +100,10 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = 17L;
-
                 unchecked
                 {
+                    var hc = 17L;
+
                     hc = (hc * 23) + obj.Major;
                     hc = (hc * 23) + obj.Minor;
                     hc = (hc * 23) + obj.Patch;
@@ -111,9 +111,9 @@ namespace SourceCode.Clay
                         hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
                     if (obj.BuildMetadata != null)
                         hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.BuildMetadata);
-                }
 
-                return ((int)(hc >> 32)) ^ (int)hc;
+                    return ((int)(hc >> 32)) ^ (int)hc;
+                }
             }
 
             #endregion
@@ -157,18 +157,18 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = 17L;
-
                 unchecked
                 {
+                    var hc = 17L;
+
                     hc = (hc * 23) + obj.Major;
                     hc = (hc * 23) + obj.Minor;
                     hc = (hc * 23) + obj.Patch;
                     if (obj.PreRelease != null)
                         hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
-                }
 
-                return ((int)(hc >> 32)) ^ (int)hc;
+                    return ((int)(hc >> 32)) ^ (int)hc;
+                }
             }
 
             #endregion

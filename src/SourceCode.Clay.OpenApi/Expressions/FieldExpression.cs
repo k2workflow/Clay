@@ -272,12 +272,14 @@ namespace SourceCode.Clay.OpenApi.Expressions
             unchecked
             {
                 var hc = 17L;
+
                 hc = (hc * 23) + base.GetHashCode();
                 hc = (hc * 23) + ExpressionType.GetHashCode();
                 hc = (hc * 23) + ExpressionSource.GetHashCode();
                 if (Name != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
                 hc = (hc * 23) + Pointer.GetHashCode();
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

@@ -75,7 +75,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
             unchecked
             {
                 var hc = 17L;
+
                 hc = (hc * 23) + ComponentType.GetHashCode();
+
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }

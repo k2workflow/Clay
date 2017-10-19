@@ -27,8 +27,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableListEquals<TSource>(this IList<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
             // ICollection is more likely
@@ -105,8 +105,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableListEquals<TSource>(this IReadOnlyList<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
-            if (x is null ^ y is null) return false; // (x, null) or (null, y)
-            if (x is null) return true; // (null, null)
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
             // IReadOnlyCollection is more likely
