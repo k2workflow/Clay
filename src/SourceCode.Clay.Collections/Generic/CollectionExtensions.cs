@@ -79,13 +79,13 @@ namespace SourceCode.Clay.Collections.Generic
             var cmpr = comparer ?? EqualityComparer<T>.Default;
 
             // IReadOnlyList is more likely
-            if (x is IList<T> xl)
+            if (x is IReadOnlyList<T> xl)
             {
                 return xl.NullableListEquals(y, cmpr);
             }
 
             // IList
-            if (x is IReadOnlyList<T> xrl)
+            if (x is IList<T> xrl)
             {
                 return xrl.NullableListEquals(y, cmpr);
             }

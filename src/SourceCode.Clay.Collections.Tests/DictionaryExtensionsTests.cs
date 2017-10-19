@@ -14,18 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class DictionaryExtensionsTests
     {
-        #region Fields
-
-        private static readonly Dictionary<string, string> _dict = new Dictionary<string, string>()
-        {
-            ["foo"] = "foo1",
-            ["bar"] = "bar1",
-            ["baz"] = "baz1",
-            ["nin"] = "nin1"
-        };
-
-        #endregion
-
         #region Methods
 
         [Trait("Type", "Unit")]
@@ -69,7 +57,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
         public static void DictionaryEquals_one_null()
         {
-            var equal = _dict.NullableDictionaryEquals(null);
+            var equal = TestData.Dict.NullableDictionaryEquals(null);
             Assert.False(equal);
         }
 
@@ -77,10 +65,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_different_count))]
         public static void DictionaryEquals_different_count()
         {
-            var dict2 = new Dictionary<string, string>(_dict);
+            var dict2 = new Dictionary<string, string>(TestData.Dict);
             dict2.Remove("foo");
 
-            var equal = _dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
             Assert.False(equal);
         }
 
@@ -88,9 +76,9 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_IsEqual))]
         public static void DictionaryEquals_IsEqual()
         {
-            var dict2 = new Dictionary<string, string>(_dict);
+            var dict2 = new Dictionary<string, string>(TestData.Dict);
 
-            var equal = _dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
             Assert.True(equal);
         }
 
@@ -98,12 +86,12 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_NotEqual))]
         public static void DictionaryEquals_NotEqual()
         {
-            var dict2 = new Dictionary<string, string>(_dict)
+            var dict2 = new Dictionary<string, string>(TestData.Dict)
             {
                 ["xyz"] = "xyz1"
             };
 
-            var equal = _dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
             Assert.False(equal);
         }
 

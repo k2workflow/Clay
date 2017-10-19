@@ -13,27 +13,13 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class MemoryExtensionsTests
     {
-        #region Fields
-
-        private static readonly ReadOnlyMemory<string> _null = new ReadOnlyMemory<string>();
-
-        private static readonly string[] _list = new[]
-        {
-            "foo",
-            "bar",
-            "baz",
-            "nin"
-        };
-
-        #endregion
-
         #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(MemoryEquals_both_null))]
         public static void MemoryEquals_both_null()
         {
-            var equal = _null.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal);
+            var equal = ReadOnlyMemory<string>.Empty.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -70,8 +56,8 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_one_null))]
         public static void MemoryEquals_one_null()
         {
-            var list = new ReadOnlyMemory<string>(_list);
-            var equal = list.MemoryEquals(_null, StringComparer.Ordinal);
+            var list = new ReadOnlyMemory<string>(TestData.List);
+            var equal = list.MemoryEquals(ReadOnlyMemory<string>.Empty, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -79,12 +65,12 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_different_count))]
         public static void MemoryEquals_different_count()
         {
-            var list = new ReadOnlyMemory<string>(_list);
+            var list = new ReadOnlyMemory<string>(TestData.List);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[0],
-                _list[1],
-                _list[2]
+                TestData.List[0],
+                TestData.List[1],
+                TestData.List[2]
             });
 
             var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
@@ -95,13 +81,13 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_IsEqual))]
         public static void MemoryEquals_IsEqual()
         {
-            var list = new ReadOnlyMemory<string>(_list);
+            var list = new ReadOnlyMemory<string>(TestData.List);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[0],
-                _list[1],
-                _list[2],
-                _list[3]
+                TestData.List[0],
+                TestData.List[1],
+                TestData.List[2],
+                TestData.List[3]
             });
 
             var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
@@ -112,13 +98,13 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_NotEqual))]
         public static void MemoryEquals_NotEqual()
         {
-            var list = new ReadOnlyMemory<string>(_list);
+            var list = new ReadOnlyMemory<string>(TestData.List);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[0],
-                _list[1],
+                TestData.List[0],
+                TestData.List[1],
                 "a",
-                _list[3]
+                TestData.List[3]
             });
 
             var equal = list.MemoryEquals(list2, StringComparer.Ordinal);
@@ -129,13 +115,13 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_duplicates))]
         public static void MemoryEquals_duplicates()
         {
-            var list = new ReadOnlyMemory<string>(_list);
+            var list = new ReadOnlyMemory<string>(TestData.List);
             var list2 = new ReadOnlyMemory<string>(new[]
             {
-                _list[2],
-                _list[1],
-                _list[2],
-                _list[0]
+                TestData.List[2],
+                TestData.List[1],
+                TestData.List[2],
+                TestData.List[0]
             });
 
             var equal = list.MemoryEquals(list2);
