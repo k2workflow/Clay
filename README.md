@@ -5,6 +5,15 @@
 [![Code Coverage](https://codecov.io/gh/k2workflow/Clay/coverage.svg)](https://codecov.io/gh/k2workflow/Clay)
 [![CodeFactor](https://www.codefactor.io/repository/github/k2workflow/chasm/badge)](https://www.codefactor.io/repository/github/k2workflow/chasm)
 
+```
+   ______  _____          _     ____  ____  
+ .' ___  ||_   _|        / \   |_  _||_  _| 
+/ .'   \_|  | |         / _ \    \ \  / /   
+| |         | |   _    / ___ \    \ \/ /    
+\ `.___.'\ _| |__/ | _/ /   \ \_  _|  |_    
+ `.____ .'|________||____| |____||______| 
+```
+
 Tools and extensions to the .Net framework.
 
 ### Prerequisites
