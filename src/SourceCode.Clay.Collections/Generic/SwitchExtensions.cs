@@ -21,84 +21,84 @@ namespace SourceCode.Clay.Collections.Generic
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Boolean"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<bool, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<bool, T> cases)
+        public static IDynamicSwitch<bool, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<bool, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<bool, T>(cases);
+            var impl = new SwitchBuilderImpl<bool, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Byte"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<byte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<byte, T> cases)
+        public static IDynamicSwitch<byte, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<byte, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<byte, T>(cases);
+            var impl = new SwitchBuilderImpl<byte, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.SByte"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<sbyte, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<sbyte, T> cases)
+        public static IDynamicSwitch<sbyte, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<sbyte, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<sbyte, T>(cases);
+            var impl = new SwitchBuilderImpl<sbyte, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Int16"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<short, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<short, T> cases)
+        public static IDynamicSwitch<short, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<short, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<short, T>(cases);
+            var impl = new SwitchBuilderImpl<short, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.UInt16"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<ushort, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<ushort, T> cases)
+        public static IDynamicSwitch<ushort, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<ushort, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<ushort, T>(cases);
+            var impl = new SwitchBuilderImpl<ushort, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Int32"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<int, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<int, T> cases)
+        public static IDynamicSwitch<int, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<int, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<int, T>(cases);
+            var impl = new SwitchBuilderImpl<int, TSource>(cases);
             return impl;
         }
 
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.UInt32"/> keys.
         /// </summary>
-        /// <typeparam name="T">The type of the elements.</typeparam>
+        /// <typeparam name="TSource">The type of the elements.</typeparam>
         /// <param name="cases">The items to convert into a dynamic switch statement.</param>
         /// <returns>The compiled switch statement.</returns>
-        public static IDynamicSwitch<uint, T> ToDynamicSwitch<T>(this IReadOnlyDictionary<uint, T> cases)
+        public static IDynamicSwitch<uint, TSource> ToDynamicSwitch<TSource>(this IReadOnlyDictionary<uint, TSource> cases)
         {
-            var impl = new SwitchBuilderImpl<uint, T>(cases);
+            var impl = new SwitchBuilderImpl<uint, TSource>(cases);
             return impl;
         }
 

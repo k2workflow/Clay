@@ -22,27 +22,27 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableSequenceEquals<T>(this IEnumerable<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
+        public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            var cmpr = comparer ?? EqualityComparer<T>.Default;
+            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // ICollection is more common
-            if (x is ICollection<T> xc)
+            if (x is ICollection<TSource> xc)
             {
                 return xc.NullableCollectionEquals(y, cmpr);
             }
 
             // IReadOnlyCollection
-            if (x is IReadOnlyCollection<T> xrc)
+            if (x is IReadOnlyCollection<TSource> xrc)
             {
                 return xrc.NullableCollectionEquals(y, cmpr);
             }
@@ -56,11 +56,11 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">List 1</param>
         /// <param name="y">List 2</param>
         /// <returns></returns>
-        public static bool NullableSequenceEquals<T>(this IEnumerable<T> x, IEnumerable<T> y)
+        public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y)
             => NullableSequenceEquals(x, y, null);
 
         #endregion
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Collections.Generic
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool CheckEnumerable<T>(IEnumerable<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
+        internal static bool CheckEnumerable<TSource>(IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
             Debug.Assert(x != null);
             Debug.Assert(y != null);
