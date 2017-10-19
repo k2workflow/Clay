@@ -98,16 +98,16 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var set = new[]
             {
-                TestData.   List[2],
-                TestData.   List[1],
+                TestData.List[2],
+                TestData.List[1],
                 "awk",
-                TestData.  List[0]
+                TestData.List[0]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableCollectionEquals(set, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableCollectionEquals(set, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
