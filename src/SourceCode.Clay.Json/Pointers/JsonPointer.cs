@@ -279,19 +279,13 @@ namespace SourceCode.Clay.Json.Pointers
         {
             if (_tokens is null ^ other._tokens is null) return false; // (x, null) or (null, y)
             if (_tokens is null) return true; // (null, null)
-
-            // Both are not null; we can now test their values
             if (ReferenceEquals(_tokens, other._tokens)) return true; // (x, x)
 
-            // If counts are different, not equal
             if (_tokens.Length != other._tokens.Length) return false; // (n, m)
+            if (_tokens.Length == 0) return true; // (0, 0)
 
-            // Optimize for cases 0, 1, 2, N
-            if (_tokens.Length == 0) return true;
-
-            if (!_tokens[0].Equals(other._tokens[0])) return false;
-
-            for (var i = 1; i < _tokens.Length; i++)
+            // Check items in sequential order
+            for (var i = 0; i < _tokens.Length; i++)
             {
                 if (!_tokens[i].Equals(other._tokens[i])) return false;
             }

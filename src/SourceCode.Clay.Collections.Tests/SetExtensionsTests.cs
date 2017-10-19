@@ -14,18 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SetExtensionsTests
     {
-        #region Fields
-
-        private static readonly HashSet<string> _set = new HashSet<string>
-        {
-            "foo",
-            "bar",
-            "baz",
-            "nin"
-        };
-
-        #endregion
-
         #region Methods
 
         [Trait("Type", "Unit")]
@@ -51,14 +39,14 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_both_one))]
         public static void SetEquals_both_one()
         {
-            var set1 = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "hi" };
+            var set1 = new HashSet<string> { "hi" };
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = SetExtensions.NullableSetEquals(set1, set2);
+            var equal = set1.NullableSetEquals(set2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = set1.NullableSetEquals(set3);
+            equal = set1.NullableSetEquals(set3, StringComparer.OrdinalIgnoreCase);
             Assert.False(equal);
         }
 
@@ -66,7 +54,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_one_null))]
         public static void SetEquals_one_null()
         {
-            var equal = _set.NullableSetEquals(null);
+            var equal = TestData.Set.NullableSetEquals(null);
             Assert.False(equal);
         }
 
@@ -74,32 +62,95 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_different_count))]
         public static void SetEquals_different_count()
         {
-            var set2 = new HashSet<string>(_set);
+            var set2 = new HashSet<string>(TestData.Set);
             set2.Remove("foo");
 
-            var equal = _set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEquals(set2);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_IsEqual))]
-        public static void SetEquals_IsEqual()
+        [Fact(DisplayName = nameof(SetEquals_is_equal))]
+        public static void SetEquals_is_equal()
         {
-            var set2 = new HashSet<string>(_set);
+            var set2 = new HashSet<string>(TestData.Set);
 
-            var equal = _set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEquals(set2);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_NotEqual))]
-        public static void SetEquals_NotEqual()
+        [Fact(DisplayName = nameof(SetEquals_not_equal))]
+        public static void SetEquals_not_equal()
         {
-            var set2 = new HashSet<string>(_set);
-            set2.Add("xyz");
+            var set2 = new HashSet<string>(TestData.Set)
+            {
+                "xyz"
+            };
 
-            var equal = _set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEquals(set2);
             Assert.False(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_not_equal_1))]
+        public static void SetEquals_not_equal_1()
+        {
+            var set = new[]
+            {
+                TestData.List[2],
+                TestData.List[1],
+                "awk",
+                TestData.List[0]
+            };
+
+            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
+            Assert.False(equal);
+
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
+            Assert.False(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_is_equal_1))]
+        public static void SetEquals_is_equal_1()
+        {
+            var list2 = new[]
+            {
+                TestData.List[2],
+                TestData.List[1],
+                TestData.List[3],
+                TestData.List[0]
+            };
+
+            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IList<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IReadOnlyList<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            Assert.True(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_is_equal_duplicates))]
+        public static void SetEquals_is_equal_duplicates()
+        {
+            var equal = ((ICollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IReadOnlyCollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            Assert.True(equal);
+
+            equal = ((IReadOnlyList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            Assert.True(equal);
         }
 
         #endregion

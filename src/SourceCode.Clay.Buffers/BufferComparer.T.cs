@@ -27,15 +27,6 @@ namespace SourceCode.Clay.Buffers
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
-        /// buffer when calculating the hashcode.
-        /// </summary>
-        protected BufferComparer()
-        {
-            HashCodeFidelity = 0;
-        }
-
-        /// <summary>
         /// Creates a new instance of the <see cref="BufferComparer"/> class.
         /// </summary>
         /// <param name="hashCodeFidelity">
@@ -47,6 +38,15 @@ namespace SourceCode.Clay.Buffers
             if (hashCodeFidelity < 0) throw new ArgumentOutOfRangeException(nameof(hashCodeFidelity));
 
             HashCodeFidelity = hashCodeFidelity;
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
+        /// buffer when calculating the hashcode.
+        /// </summary>
+        protected BufferComparer()
+        {
+            HashCodeFidelity = 0;
         }
 
         #endregion

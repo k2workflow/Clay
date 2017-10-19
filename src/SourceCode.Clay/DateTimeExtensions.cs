@@ -14,7 +14,9 @@ namespace SourceCode.Clay
     /// </summary>
     public static class DateTimeExtensions
     {
-        #region Properties
+        #region Constants
+
+        // TODO: Remove these once this ships: https://github.com/dotnet/corefx/issues/24449
 
         /// <summary>
         /// Gets the Unix epoch as a <see cref="DateTime"/>.

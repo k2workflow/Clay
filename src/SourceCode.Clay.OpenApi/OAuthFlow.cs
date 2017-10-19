@@ -110,7 +110,7 @@ namespace SourceCode.Clay.OpenApi
             if (AuthorizationUrl != other.AuthorizationUrl) return false;
             if (TokenUrl != other.TokenUrl) return false;
             if (RefreshUrl != other.RefreshUrl) return false;
-            if (!Scopes.DictionaryEquals(other.Scopes)) return false;
+            if (!Scopes.NullableDictionaryEquals(other.Scopes)) return false;
 
             return true;
         }

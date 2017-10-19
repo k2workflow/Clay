@@ -96,7 +96,7 @@ namespace SourceCode.Clay.OpenApi
 
             if (Url != other.Url) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
-            if (!Variables.DictionaryEquals(other.Variables)) return false;
+            if (!Variables.NullableDictionaryEquals(other.Variables)) return false;
 
             return true;
         }

@@ -95,7 +95,7 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (!Enum.ListEquals(other.Enum, false)) return false;
+            if (!Enum.NullableSetEquals(other.Enum)) return false;
             if (!StringComparer.Ordinal.Equals(Default, other.Default)) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
 

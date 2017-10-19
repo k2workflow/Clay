@@ -14,30 +14,16 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class ListExtensionsTests
     {
-        #region Fields
-
-        private static readonly string[] _null = null;
-
-        private static readonly string[] _list =
-        {
-            "foo",
-            "bar",
-            "baz",
-            "nin"
-        };
-
-        #endregion
-
         #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(ListEquals_both_null))]
         public static void ListEquals_both_null()
         {
-            var equal = _null.ListEquals(null, StringComparer.Ordinal, false);
+            var equal = ((IList<string>)TestData.Null).NullableListEquals(null, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = _null.ListEquals(null, StringComparer.Ordinal, true);
+            equal = ((IReadOnlyList<string>)TestData.Null).NullableListEquals(null, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -48,10 +34,10 @@ namespace SourceCode.Clay.Collections.Tests
             var list1 = Array.Empty<string>();
             var list2 = new string[0];
 
-            var equal = list1.ListEquals(list2, StringComparer.Ordinal, false);
+            var equal = ((IList<string>)list1).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = list1.ListEquals(list2, StringComparer.Ordinal, true);
+            equal = ((IReadOnlyList<string>)list1).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -63,22 +49,22 @@ namespace SourceCode.Clay.Collections.Tests
             var list2 = new string[] { "HI" };
             var list3 = new string[] { "bye" };
 
-            var equal = list1.ListEquals(list2, StringComparer.OrdinalIgnoreCase, false);
+            var equal = ((IList<string>)list1).NullableListEquals(list2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = list1.ListEquals(list2, StringComparer.OrdinalIgnoreCase, true);
+            equal = ((IReadOnlyList<string>)list1).NullableListEquals(list2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = list1.ListEquals(list2, StringComparer.Ordinal, false);
+            equal = ((IList<string>)list1).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = list1.ListEquals(list2, StringComparer.Ordinal, true);
+            equal = ((IReadOnlyList<string>)list1).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = list1.ListEquals(list3, StringComparer.Ordinal, false);
+            equal = ((IList<string>)list1).NullableListEquals(list3, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = list1.ListEquals(list3, StringComparer.Ordinal, true);
+            equal = ((IReadOnlyList<string>)list1).NullableListEquals(list3, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -86,7 +72,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(ListEquals_one_null))]
         public static void ListEquals_one_null()
         {
-            var equal = _list.ListEquals((string[])null, StringComparer.Ordinal, false);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(null, StringComparer.Ordinal);
+            Assert.False(equal);
+
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(null, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -96,88 +85,72 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var list2 = new[]
             {
-                _list[0],
-                _list[1],
-                _list[2]
+                TestData.List[0],
+                TestData.List[1],
+                TestData.List[2]
             };
 
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
+            Assert.False(equal);
+
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
-        public static void ListEquals_IsEqual_sequential_true()
+        [Fact(DisplayName = nameof(ListEquals_is_equal))]
+        public static void ListEquals_is_equal()
         {
             var list2 = new[]
             {
-                _list[0],
-                _list[1],
-                _list[2],
-                _list[3]
+                TestData.List[0],
+                TestData.List[1],
+                TestData.List[2],
+                TestData.List[3]
             };
 
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false))]
-        public static void ListEquals_IsEqual_sequential_false()
+        [Fact(DisplayName = nameof(ListEquals_not_equal_1))]
+        public static void ListEquals_not_equal_1()
         {
             var list2 = new[]
             {
-                _list[2],
-                _list[1],
-                _list[3],
-                _list[0]
-            };
-
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
-        public static void ListEquals_NotEqual_sequential_true()
-        {
-            var list2 = new[]
-            {
-                _list[0],
-                _list[1],
+                TestData.List[0],
+                TestData.List[1],
                 "a",
-                _list[3]
+                TestData.List[3]
             };
 
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
-        public static void ListEquals_NotEqual_sequential_false()
+        [Fact(DisplayName = nameof(ListEquals_not_equal_2))]
+        public static void ListEquals_not_equal_2()
         {
             var list2 = new[]
             {
-                _list[2],
-                _list[1],
+                TestData.List[2],
+                TestData.List[1],
                 "a",
-                _list[0]
+                TestData.List[0]
             };
 
-            var equal = _list.ListEquals(list2, StringComparer.Ordinal, true);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = _list.ListEquals(list2, StringComparer.Ordinal, false);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -187,70 +160,16 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var list2 = new[]
             {
-                _list[2],
-                _list[1],
-                _list[2],
-                _list[0]
+                TestData.List[2],
+                TestData.List[1],
+                TestData.List[2],
+                TestData.List[0]
             };
 
-            var equal = _list.ListEquals(list2, true);
+            var equal = ((IList<string>)TestData.List).NullableListEquals(list2);
             Assert.False(equal);
 
-            equal = _list.ListEquals(list2, false);
-            Assert.False(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_Extract_IsEqual_sequential_true))]
-        public static void ListEquals_Extract_IsEqual_sequential_true()
-        {
-            var listA = new[]
-            {
-                new KeyValuePair<int,string>(1, _list[0]),
-                new KeyValuePair<int,string>(1, _list[1]),
-                new KeyValuePair<int,string>(1, _list[2]),
-                new KeyValuePair<int,string>(1, _list[3])
-            };
-
-            var listB = new[]
-            {
-                new KeyValuePair<int,string>(2, _list[0]),
-                new KeyValuePair<int,string>(2, _list[1]),
-                new KeyValuePair<int,string>(2, _list[2]),
-                new KeyValuePair<int,string>(2, _list[3])
-            };
-
-            var equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, true);
-            Assert.True(equal);
-
-            equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, false);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_Extract_NotEqual_sequential_true))]
-        public static void ListEquals_Extract_NotEqual_sequential_true()
-        {
-            var listA = new[]
-            {
-                new KeyValuePair<int,string>(1, _list[0]),
-                new KeyValuePair<int,string>(1, _list[1]),
-                new KeyValuePair<int,string>(1, _list[2]),
-                new KeyValuePair<int,string>(1, _list[3])
-            };
-
-            var listB = new[]
-            {
-                new KeyValuePair<int,string>(2, _list[0]),
-                new KeyValuePair<int,string>(2, _list[1]),
-                new KeyValuePair<int,string>(2, "a"),
-                new KeyValuePair<int,string>(2, _list[3])
-            };
-
-            var equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, true);
-            Assert.False(equal);
-
-            equal = listA.ListEquals(listB, n => n.Value, StringComparer.Ordinal, false);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableListEquals(list2);
             Assert.False(equal);
         }
 
