@@ -22,6 +22,24 @@ namespace SourceCode.Clay.Collections.Tests
             "nin"
         };
 
+        public static readonly string[] Dupe1 = new[]
+        {
+            List[2],
+            List[0], // Duplicate
+            List[1],
+            List[3],
+            List[0]
+        };
+
+        public static readonly string[] Dupe2 = new[]
+        {
+            List[2],
+            List[1],
+            List[3],
+            List[0], // Duplicate
+            List[0]
+        };
+
         public static readonly HashSet<string> Set = new HashSet<string>(List, StringComparer.Ordinal);
 
         public static readonly Dictionary<string, string> Dict = new Dictionary<string, string>()

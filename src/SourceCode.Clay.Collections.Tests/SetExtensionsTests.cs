@@ -70,8 +70,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_IsEqual))]
-        public static void SetEquals_IsEqual()
+        [Fact(DisplayName = nameof(SetEquals_is_equal))]
+        public static void SetEquals_is_equal()
         {
             var set2 = new HashSet<string>(TestData.Set);
 
@@ -80,8 +80,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_NotEqual))]
-        public static void SetEquals_NotEqual()
+        [Fact(DisplayName = nameof(SetEquals_not_equal))]
+        public static void SetEquals_not_equal()
         {
             var set2 = new HashSet<string>(TestData.Set)
             {
@@ -93,8 +93,27 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_IsEqual_sequential_false))]
-        public static void SetEquals_IsEqual_sequential_false()
+        [Fact(DisplayName = nameof(SetEquals_not_equal_1))]
+        public static void SetEquals_not_equal_1()
+        {
+            var set = new[]
+            {
+                TestData.   List[2],
+                TestData.   List[1],
+                "awk",
+                TestData.  List[0]
+            };
+
+            var equal = ((ICollection<string>)TestData.List).NullableCollectionEquals(set, StringComparer.Ordinal);
+            Assert.False(equal);
+
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableCollectionEquals(set, StringComparer.Ordinal);
+            Assert.False(equal);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(SetEquals_is_equal_1))]
+        public static void SetEquals_is_equal_1()
         {
             var list2 = new[]
             {
@@ -118,37 +137,19 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_IsEqual_sequential_false_duplicates))]
-        public static void SetEquals_IsEqual_sequential_false_duplicates()
+        [Fact(DisplayName = nameof(SetEquals_is_equal_duplicates))]
+        public static void SetEquals_is_equal_duplicates()
         {
-            var list1 = new[]
-            {
-                TestData.List[2],
-                TestData.List[0], // Duplicate
-                TestData.List[1],
-                TestData.List[3],
-                TestData.List[0]
-            };
-
-            var list2 = new[]
-            {
-                TestData.List[2],
-                TestData.List[1],
-                TestData.List[3],
-                TestData.List[0], // Duplicate
-                TestData.List[0]
-            };
-
-            var equal = ((ICollection<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IList<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyList<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 

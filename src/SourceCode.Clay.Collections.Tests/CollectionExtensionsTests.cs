@@ -17,8 +17,8 @@ namespace SourceCode.Clay.Collections.Tests
         #region Methods
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_null))]
-        public static void ListEquals_both_null()
+        [Fact(DisplayName = nameof(CollectionEquals_both_null))]
+        public static void CollectionEquals_both_null()
         {
             var equal = ((ICollection<string>)TestData.Null).NullableCollectionEquals(null, StringComparer.Ordinal);
             Assert.True(equal);
@@ -28,8 +28,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_empty))]
-        public static void ListEquals_both_empty()
+        [Fact(DisplayName = nameof(CollectionEquals_both_empty))]
+        public static void CollectionEquals_both_empty()
         {
             var list1 = Array.Empty<string>();
             var list2 = new string[0];
@@ -42,8 +42,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_one))]
-        public static void ListEquals_both_one()
+        [Fact(DisplayName = nameof(CollectionEquals_both_one))]
+        public static void CollectionEquals_both_one()
         {
             var list1 = new string[] { "hi" };
             var list2 = new string[] { "HI" };
@@ -69,8 +69,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_one_null))]
-        public static void ListEquals_one_null()
+        [Fact(DisplayName = nameof(CollectionEquals_one_null))]
+        public static void CollectionEquals_one_null()
         {
             var equal = ((ICollection<string>)TestData.List).NullableCollectionEquals(null, StringComparer.Ordinal);
             Assert.False(equal);
@@ -80,8 +80,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_different_count))]
-        public static void ListEquals_different_count()
+        [Fact(DisplayName = nameof(CollectionEquals_different_count))]
+        public static void CollectionEquals_different_count()
         {
             var list2 = new[]
             {
@@ -98,8 +98,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
-        public static void ListEquals_IsEqual_sequential_true()
+        [Fact(DisplayName = nameof(CollectionEquals_is_equal))]
+        public static void CollectionEquals_is_equal()
         {
             var list2 = new[]
             {
@@ -117,56 +117,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false))]
-        public static void ListEquals_IsEqual_sequential_false()
-        {
-            var list2 = new[]
-            {
-                TestData.List[2],
-                TestData.List[1],
-                TestData.List[3],
-                TestData.List[0]
-            };
-
-            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
-            Assert.True(equal);
-
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_false_duplicates))]
-        public static void ListEquals_IsEqual_sequential_false_duplicates()
-        {
-            var list1 = new[]
-            {
-                TestData.List[2],
-                TestData.List[0], // Duplicate
-                TestData.List[1],
-                TestData.List[3],
-                TestData.List[0]
-            };
-
-            var list2 = new[]
-            {
-                TestData.List[2],
-                TestData.List[1],
-                TestData.List[3],
-                TestData.List[0], // Duplicate
-                TestData.List[0]
-            };
-
-            var equal = ((ICollection<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
-            Assert.True(equal);
-
-            equal = ((IReadOnlyCollection<string>)list1).NullableSetEquals(list2, StringComparer.Ordinal);
-            Assert.True(equal);
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
-        public static void ListEquals_NotEqual_sequential_true()
+        [Fact(DisplayName = nameof(CollectionEquals_not_equal_1))]
+        public static void CollectionEquals_not_equal_1()
         {
             var list2 = new[]
             {
@@ -184,8 +136,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
-        public static void ListEquals_NotEqual_sequential_false()
+        [Fact(DisplayName = nameof(CollectionEquals_not_equal_2))]
+        public static void CollectionEquals_not_equal_2()
         {
             var list2 = new[]
             {
@@ -195,16 +147,16 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableCollectionEquals(list2, StringComparer.Ordinal);
+            var equal = ((IList<string>)TestData.List).NullableCollectionEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableCollectionEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableCollectionEquals(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_duplicates))]
-        public static void ListEquals_duplicates()
+        [Fact(DisplayName = nameof(CollectionEquals_duplicates))]
+        public static void CollectionEquals_duplicates()
         {
             var list2 = new[]
             {

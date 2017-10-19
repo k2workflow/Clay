@@ -98,8 +98,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_IsEqual_sequential_true))]
-        public static void ListEquals_IsEqual_sequential_true()
+        [Fact(DisplayName = nameof(ListEquals_is_equal))]
+        public static void ListEquals_is_equal()
         {
             var list2 = new[]
             {
@@ -117,8 +117,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_true))]
-        public static void ListEquals_NotEqual_sequential_true()
+        [Fact(DisplayName = nameof(ListEquals_not_equal_1))]
+        public static void ListEquals_not_equal_1()
         {
             var list2 = new[]
             {
@@ -136,8 +136,8 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_NotEqual_sequential_false))]
-        public static void ListEquals_NotEqual_sequential_false()
+        [Fact(DisplayName = nameof(ListEquals_not_equal_2))]
+        public static void ListEquals_not_equal_2()
         {
             var list2 = new[]
             {
