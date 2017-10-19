@@ -20,19 +20,19 @@ namespace SourceCode.Clay.Collections.Generic
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
         /// <param name="cmpr">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool MemoryEquals<T>(this ReadOnlyMemory<T> x, ReadOnlyMemory<T> y, IEqualityComparer<T> comparer)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x.Length != y.Length) return false; // (n, m)
             if (x.IsEmpty) return true; // (0, 0)
 
-            var cmpr = comparer ?? EqualityComparer<T>.Default;
+            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
-            // Memory<T>.Span throws if IsEmpty == true
+            // Memory.Span throws if IsEmpty == true
             var xs = x.Span;
             var ys = y.Span;
 
@@ -48,11 +48,11 @@ namespace SourceCode.Clay.Collections.Generic
         /// <summary>
         /// Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
         /// <returns></returns>
-        public static bool MemoryEquals<T>(this ReadOnlyMemory<T> x, ReadOnlyMemory<T> y)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y)
             => MemoryEquals(x, y, null);
 
         #endregion

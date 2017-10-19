@@ -26,28 +26,85 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>
         /// <returns></returns>
-        public static bool NullableDictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y, IEqualityComparer<TValue> valueComparer)
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y, IEqualityComparer<TValue> valueComparer)
         {
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            if (x.Count != y.Count) return false; // (n, m)
-            if (x.Count == 0) return true; // (0, 0)
-
             var cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
 
-            // For each key in the first dictionary...
+            // IDictionary is more likely
+            if (x is IDictionary<TKey, TValue> xd)
+            {
+                var isEqual = CheckCount(xd.Count);
+                if (isEqual.HasValue) return isEqual.Value;
+
+                // For each key in the second dictionary...
+                foreach (var yvp in y)
+                {
+                    // ...check if that same key exists in the first dictionary
+                    if (!xd.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+
+                    // And if so, whether the corresponding values match
+                    if (!cmpr.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer
+                }
+
+                return true;
+            }
+
+            // IReadOnlyDictionary
+            if (x is IReadOnlyDictionary<TKey, TValue> xrd)
+            {
+                var isEqual = CheckCount(xrd.Count);
+                if (isEqual.HasValue) return isEqual.Value;
+
+                // For each key in the second dictionary...
+                foreach (var yvp in y)
+                {
+                    // ...check if that same key exists in the first dictionary
+                    if (!xrd.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+
+                    // And if so, whether the corresponding values match
+                    if (!cmpr.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer
+                }
+
+                return true;
+            }
+
+            // Synthesize an IDictionary
+            var xdd = new Dictionary<TKey, TValue>(x);
+
+            // For each key in the second dictionary...
             foreach (var yvp in y)
             {
-                // ...check if that same key exists in the second dictionary
-                if (!x.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+                // ...check if that same key exists in the first dictionary
+                if (!xdd.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
 
                 // And if so, whether the corresponding values match
                 if (!cmpr.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer
             }
 
             return true;
+
+            // Local functions
+            bool? CheckCount(int xCount)
+            {
+                // ICollection is more common
+                if (y is ICollection<KeyValuePair<TKey, TValue>> yc)
+                {
+                    if (xCount != yc.Count) return false; // (n, m)
+                    if (xCount == 0) return true; // (0, 0)
+                }
+                // IReadOnlyCollection
+                else if (y is IReadOnlyCollection<KeyValuePair<TKey, TValue>> yrc)
+                {
+                    if (xCount != yrc.Count) return false; // (n, m)
+                    if (xCount == 0) return true; // (0, 0)
+                }
+
+                return null;
+            }
         }
 
         /// <summary>
@@ -59,7 +116,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Dictionary 1</param>
         /// <param name="y">Dictionary 2</param>
         /// <returns></returns>
-        public static bool NullableDictionaryEquals<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> x, IReadOnlyDictionary<TKey, TValue> y)
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y)
             => NullableDictionaryEquals(x, y, null);
 
         #endregion

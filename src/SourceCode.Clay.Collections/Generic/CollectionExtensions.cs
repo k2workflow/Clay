@@ -20,27 +20,27 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// The collections are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<T>(this ICollection<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
+        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            var cmpr = comparer ?? EqualityComparer<T>.Default;
+            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // IList is more likely
-            if (x is IList<T> xl)
+            if (x is IList<TSource> xl)
             {
                 return xl.NullableListEquals(y, cmpr);
             }
 
             // IReadOnlyList
-            if (x is IReadOnlyList<T> xrl)
+            if (x is IReadOnlyList<TSource> xrl)
             {
                 return xrl.NullableListEquals(y, cmpr);
             }
@@ -54,38 +54,38 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// The collections are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<T>(this ICollection<T> x, IEnumerable<T> y)
+        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, IEnumerable<TSource> y)
             => NullableCollectionEquals(x, y, null);
 
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// The collections are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<T>(this IReadOnlyCollection<T> x, IEnumerable<T> y, IEqualityComparer<T> comparer)
+        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x is null ^ y is null) return false; // (x, null) or (null, y)
             if (x is null) return true; // (null, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            var cmpr = comparer ?? EqualityComparer<T>.Default;
+            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // IReadOnlyList is more likely
-            if (x is IReadOnlyList<T> xl)
+            if (x is IReadOnlyList<TSource> xl)
             {
                 return xl.NullableListEquals(y, cmpr);
             }
 
             // IList
-            if (x is IList<T> xrl)
+            if (x is IList<TSource> xrl)
             {
                 return xrl.NullableListEquals(y, cmpr);
             }
@@ -99,11 +99,11 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an optimized item-by-item comparison, using the default comparer for the type.
         /// The collections are required to have corresponding items in the same ordinal position.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<T>(this IReadOnlyCollection<T> x, IEnumerable<T> y)
+        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, IEnumerable<TSource> y)
             => NullableCollectionEquals(x, y, null);
 
         #endregion
