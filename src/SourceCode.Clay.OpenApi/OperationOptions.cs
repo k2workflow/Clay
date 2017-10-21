@@ -5,11 +5,14 @@
 
 #endregion
 
+using System;
+
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Represents options for a <see cref="Operation"/>.
     /// </summary>
+    [Flags]
     public enum OperationOptions : byte
     {
         /// <summary>

@@ -5,11 +5,14 @@
 
 #endregion
 
+using System;
+
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Represents options for <see cref="RequestBody"/>.
     /// </summary>
+    [Flags]
     public enum RequestBodyOptions : byte
     {
         /// <summary>

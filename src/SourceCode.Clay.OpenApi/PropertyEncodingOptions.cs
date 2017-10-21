@@ -5,11 +5,14 @@
 
 #endregion
 
+using System;
+
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Represents the options for <see cref="PropertyEncoding"/>.
     /// </summary>
+    [Flags]
     public enum PropertyEncodingOptions : byte
     {
         /// <summary>

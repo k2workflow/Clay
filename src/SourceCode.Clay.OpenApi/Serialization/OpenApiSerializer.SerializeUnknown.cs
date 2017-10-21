@@ -150,7 +150,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
             // Null is significant in JSON.
 
-            if (ReferenceEquals(value, null)) return null;
+            if (value is null) return null;
 #pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             var mySerializers = _mySerializers;
