@@ -10,7 +10,6 @@ using System;
 namespace SourceCode.Clay
 {
 #pragma warning disable S2342 // Enumeration types should comply with a naming convention
-#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
 #pragma warning disable CA1720 // Identifier contains type name
 #pragma warning disable CA1028 // Enum Storage should be Int32
 
@@ -28,6 +27,5 @@ namespace SourceCode.Clay
 
 #pragma warning restore CA1028 // Enum Storage should be Int32
 #pragma warning restore CA1720 // Identifier contains type name
-#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
 #pragma warning restore S2342 // Enumeration types should comply with a naming convention
 }
