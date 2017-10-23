@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Buffers
     /// buffers allocated via <see cref="ArrayPool{T}.Rent(int)"/>.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public struct BufferSession : IDisposable // MUST be a struct, in order to lessen GC load
+    public struct BufferSession : IEquatable<BufferSession>, IDisposable // MUST be a struct, in order to lessen GC load
     {
         #region Properties
 
@@ -99,6 +99,35 @@ namespace SourceCode.Clay.Buffers
 
             System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
         }
+
+        #endregion
+
+        #region IEquatable
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+            => obj is BufferSession other
+            && Equals(other);
+
+        /// <inheritdoc/>
+        public bool Equals(BufferSession other)
+        {
+            if (!BufferComparer.Array.Equals(Buffer, other.Buffer)) return false;
+            if (!BufferComparer.Memory.Equals(Result, other.Result)) return false;
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode() => BufferComparer.Array.GetHashCode(Buffer);
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(BufferSession a, BufferSession b) => a.Equals(b);
+
+        public static bool operator !=(BufferSession a, BufferSession b) => !(a == b);
 
         #endregion
 

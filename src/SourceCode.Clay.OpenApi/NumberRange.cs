@@ -129,6 +129,26 @@ namespace SourceCode.Clay.OpenApi
 
         #region Operators
 
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="NumberRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="NumberRange"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="NumberRange"/> is equal to <see cref="NumberRange"/>.
+        /// </returns>
+        public static bool operator ==(NumberRange x, NumberRange y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="NumberRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="NumberRange"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="NumberRange"/> is not similar to <see cref="NumberRange"/>.
+        /// </returns>
+        public static bool operator !=(NumberRange x, NumberRange y) => !(x == y);
+
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString()

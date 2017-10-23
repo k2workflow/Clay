@@ -95,8 +95,8 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(EnumConvert_NonEnum))]
         public static void EnumConvert_NonEnum()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => EnumConvert.ToEnum<int>(0));
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => EnumConvert.ToByte(0));
+            Assert.Throws<InvalidCastException>(() => EnumConvert.ToEnum<int>(0));
+            Assert.Throws<InvalidCastException>(() => EnumConvert.ToByte(0));
         }
 
         // TODO: Negative tests should pass

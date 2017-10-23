@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Data.SqlParser
                     return _empty;
 
                 // [Name] or "Name"
-                if (!ParseModuleName(tokenizer, out string schema, out string name))
+                if (!ParseModuleName(tokenizer, out var schema, out var name))
                     return _empty;
 
                 // (
@@ -71,21 +71,21 @@ namespace SourceCode.Clay.Data.SqlParser
                     // Read next parameter
 
                     // @param
-                    if (!ParseParamName(tokenizer, out string pname))
+                    if (!ParseParamName(tokenizer, out var pname))
                         return _empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
-                    if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    if (!ParseTypeName(tokenizer, out var tschema, out var tname))
                         return _empty;
 
                     // VARYING
                     ParseLiteral(tokenizer, "VARYING");
 
                     // = <default>
-                    var hasDefault = ParseDefault(tokenizer, out bool isNullable);
+                    var hasDefault = ParseDefault(tokenizer, out var isNullable);
 
                     // OUT | OUTPUT
                     var dir = ParameterDirection.Input;
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.Data.SqlParser
                     return _empty;
 
                 // [Name] or "Name"
-                if (!ParseModuleName(tokenizer, out string schema, out string name))
+                if (!ParseModuleName(tokenizer, out var schema, out var name))
                     return _empty;
 
                 // (
@@ -158,18 +158,18 @@ namespace SourceCode.Clay.Data.SqlParser
                     // Read next parameter
 
                     // @param
-                    if (!ParseParamName(tokenizer, out string pname))
+                    if (!ParseParamName(tokenizer, out var pname))
                         return _empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
-                    if (!ParseTypeName(tokenizer, out string tschema, out string tname))
+                    if (!ParseTypeName(tokenizer, out var tschema, out var tname))
                         return _empty;
 
                     // = default
-                    var hasDefault = ParseDefault(tokenizer, out bool isNullable);
+                    var hasDefault = ParseDefault(tokenizer, out var isNullable);
 
                     // READONLY
                     var isReadOnly = ParseLiteral(tokenizer, "READONLY");
@@ -250,7 +250,7 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Literal)
                 return false;
 
-            if (!tokenizer.Current.Value.StartsWith("@"))
+            if (!tokenizer.Current.Value.StartsWith("@", StringComparison.Ordinal))
                 return false;
 
             name = tokenizer.Current.Value;

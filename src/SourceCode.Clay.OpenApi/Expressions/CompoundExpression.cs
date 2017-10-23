@@ -46,7 +46,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #endregion
 
-        #region Enumerable
+        #region IEnumerable
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -99,6 +99,30 @@ namespace SourceCode.Clay.OpenApi.Expressions
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="CompoundExpression"/> to compare.</param>
+        /// <param name="y">The second <see cref="CompoundExpression"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="CompoundExpression"/> is equal to <see cref="CompoundExpression"/>.
+        /// </returns>
+        public static bool operator ==(CompoundExpression x, CompoundExpression y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="CompoundExpression"/> to compare.</param>
+        /// <param name="y">The second <see cref="CompoundExpression"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="CompoundExpression"/> is not similar to <see cref="CompoundExpression"/>.
+        /// </returns>
+        public static bool operator !=(CompoundExpression x, CompoundExpression y) => !(x == y);
 
         #endregion
 

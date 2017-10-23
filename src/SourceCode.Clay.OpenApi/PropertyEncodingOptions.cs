@@ -5,12 +5,17 @@
 
 #endregion
 
+using System;
+
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Represents the options for <see cref="PropertyEncoding"/>.
     /// </summary>
+    [Flags]
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum PropertyEncodingOptions : byte
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         /// The default options.

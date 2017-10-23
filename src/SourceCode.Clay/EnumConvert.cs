@@ -28,9 +28,11 @@ namespace SourceCode.Clay
 #pragma warning restore S2436 // Classes and methods should not have too many generic parameters
             where TEnum : struct, IComparable, IConvertible, IFormattable
         {
+#pragma warning disable CA1000 // Do not declare static members on generic types
             private static bool _isChecked = typeof(TChecked) == typeof(Checked);
             public static Func<TEnum, TInteger> ConvertTo { get; }
             public static Func<TInteger, TEnum> ConvertFrom { get; }
+#pragma warning restore CA1000 // Do not declare static members on generic types
 
             static Converter()
             {
@@ -38,8 +40,8 @@ namespace SourceCode.Clay
                 if (!@enum.IsEnum)
                 {
 #pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
-                    ConvertTo = _ => throw new ArgumentOutOfRangeException("value", "value is not an enum.");
-                    ConvertFrom = _ => throw new ArgumentOutOfRangeException("value", "value is not an enum.");
+                    ConvertTo = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
+                    ConvertFrom = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
                     return;
 #pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
                 }
@@ -78,27 +80,17 @@ namespace SourceCode.Clay
         private static class ValueCache<TEnum>
             where TEnum : struct, IComparable, IConvertible, IFormattable
         {
-#pragma warning disable S2743 // Static fields should not be used in generic types
-            internal static readonly Func<int> Length;
-#pragma warning restore S2743 // Static fields should not be used in generic types
-
-            static ValueCache()
+            internal static readonly Func<int> Length = () =>
             {
                 var @enum = typeof(TEnum);
-                if (!@enum.IsEnum)
-                {
-#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
-                    Length = () => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
-                    return;
-#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
-                }
+                if (!@enum.IsEnum) throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
 
                 var values = (ulong[])typeof(Enum)
                     .GetMethod("InternalGetValues", BindingFlags.Static | BindingFlags.NonPublic) // Also see InternalGetNames
                     .Invoke(null, new[] { typeof(TEnum) });
 
-                Length = () => values.Length;
-            }
+                return values.Length;
+            };
         };
 
         #endregion

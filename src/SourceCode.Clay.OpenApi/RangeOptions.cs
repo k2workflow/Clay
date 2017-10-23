@@ -13,7 +13,9 @@ namespace SourceCode.Clay.OpenApi
     /// Indicates options for validating a range.
     /// </summary>
     [Flags]
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum RangeOptions : byte
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
 #       pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
         // Reasoning: self-documenting.

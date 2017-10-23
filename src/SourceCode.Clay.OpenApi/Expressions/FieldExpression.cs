@@ -244,7 +244,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>

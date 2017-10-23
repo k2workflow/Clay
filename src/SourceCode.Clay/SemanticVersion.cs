@@ -358,7 +358,9 @@ namespace SourceCode.Clay
         #region IEquatable
 
         /// <inheritdoc/>
-        public override bool Equals(object obj) => obj is SemanticVersion o && Equals(o);
+        public override bool Equals(object obj)
+            => obj is SemanticVersion other
+            && Equals(other);
 
         /// <inheritdoc/>
         public bool Equals(SemanticVersion other) => SemanticVersionComparer.Strict.Equals(this, other);

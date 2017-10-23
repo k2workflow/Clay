@@ -37,7 +37,7 @@ namespace SourceCode.Clay.OpenApi
         #region Properties
 
         /// <summary>Gets the type of the security scheme.</summary>
-        public override SecuritySchemeType Type => SecuritySchemeType.Http;
+        public override SecuritySchemeType SchemeType => SecuritySchemeType.Http;
 
         /// <summary>
         /// Gets the name of the HTTP Authorization scheme to be used in the Authorization header.
@@ -51,7 +51,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.

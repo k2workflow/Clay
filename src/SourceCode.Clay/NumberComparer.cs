@@ -273,7 +273,7 @@ namespace SourceCode.Clay
                 if (x.ValueTypeCode == TypeCode.Decimal)
                     return (x._decimal == y._decimal);
 
-                if ((x.Kind & NumberKind.Real) > 0)
+                if ((x.Kind & NumberKinds.Real) > 0)
                     return (x._double == y._double);
 
                 // Int
@@ -291,7 +291,7 @@ namespace SourceCode.Clay
 
                     if (obj.ValueTypeCode == TypeCode.Decimal)
                         hc = (hc * 23) + obj._decimal.GetHashCode();
-                    else if ((obj.Kind & NumberKind.Real) > 0)
+                    else if ((obj.Kind & NumberKinds.Real) > 0)
                         hc = (hc * 23) + obj._double.GetHashCode();
                     else // Int
                         hc = (hc * 23) + obj._uint64.GetHashCode();

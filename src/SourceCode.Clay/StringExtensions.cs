@@ -114,7 +114,7 @@ namespace SourceCode.Clay
             if (x == y) return true; // (null, null) or (s, s)
             if (x == null || y == null) return false; // (s, null) or (null, t)
 
-            return x.Equals(y); // (s, t)
+            return StringComparer.Ordinal.Equals(x, y); // (s, t)
         }
 
         #endregion

@@ -72,12 +72,14 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Methods
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is NumberRange o && Equals(o);
+        public override bool Equals(object obj)
+            => obj is NumberRange other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -131,6 +133,30 @@ namespace SourceCode.Clay.OpenApi
 
             return sb.ToString();
         }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="CountRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="CountRange"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="CountRange"/> is equal to <see cref="CountRange"/>.
+        /// </returns>
+        public static bool operator ==(CountRange x, CountRange y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="CountRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="CountRange"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="CountRange"/> is not similar to <see cref="CountRange"/>.
+        /// </returns>
+        public static bool operator !=(CountRange x, CountRange y) => !(x == y);
 
         #endregion
     }

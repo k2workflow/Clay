@@ -10,7 +10,10 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents the different JSON schema types.
     /// </summary>
+#pragma warning disable CA1028 // Enum Storage should be Int32
+
     public enum SchemaType : byte
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         /// The type is a string.

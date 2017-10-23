@@ -21,7 +21,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the general type of the schema.
         /// </summary>
-        public SchemaType Type { get; }
+        public SchemaType JsonType { get; }
 
         /// <summary>
         /// Gets the title of the schema.
@@ -163,7 +163,7 @@ namespace SourceCode.Clay.OpenApi
             IReadOnlyDictionary<string, Referable<Schema>> additionalProperties = default,
             ExternalDocumentation externalDocumentation = default)
         {
-            Type = type;
+            JsonType = type;
             Title = title;
             Format = format;
             Description = description;
@@ -191,11 +191,11 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString()
-            => $"{Type}";
+            => $"{JsonType}";
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -233,7 +233,7 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (Type != other.Type) return false;
+            if (JsonType != other.JsonType) return false;
             if (Format != other.Format) return false;
             if (Options != other.Options) return false;
             if (!NumberRange.Equals(other.NumberRange)) return false;
@@ -264,7 +264,7 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = (hc * 23) + Type.GetHashCode();
+                hc = (hc * 23) + JsonType.GetHashCode();
                 hc = (hc * 23) + Options.GetHashCode();
                 hc = (hc * 23) + NumberRange.GetHashCode();
                 hc = (hc * 23) + ItemsRange.GetHashCode();

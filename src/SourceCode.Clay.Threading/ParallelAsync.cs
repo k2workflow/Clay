@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Threading
             }
 
             block.Complete();
-            await block.Completion;
+            await block.Completion.ConfigureAwait(false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace SourceCode.Clay.Threading
             }
 
             block.Complete();
-            await block.Completion;
+            await block.Completion.ConfigureAwait(false);
 
             return dict;
         }
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Threading
             }
 
             block.Complete();
-            await block.Completion;
+            await block.Completion.ConfigureAwait(false);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace SourceCode.Clay.Threading
             }
 
             block.Complete();
-            await block.Completion;
+            await block.Completion.ConfigureAwait(false);
 
             return dict;
         }
@@ -166,8 +166,7 @@ namespace SourceCode.Clay.Threading
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static ExecutionDataflowBlockOptions Build(ParallelOptions options)
-        => new ExecutionDataflowBlockOptions
+        private static ExecutionDataflowBlockOptions Build(ParallelOptions options) => new ExecutionDataflowBlockOptions
         {
             CancellationToken = options == null ? CancellationToken.None : options.CancellationToken,
             MaxDegreeOfParallelism = options == null ? -1 : options.MaxDegreeOfParallelism

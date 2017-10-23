@@ -21,7 +21,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets or sets the general type of the schema.
         /// </summary>
-        public SchemaType Type { get; set; }
+        public SchemaType JsonType { get; set; }
 
         /// <summary>
         /// Gets or sets the title of the schema.
@@ -141,7 +141,7 @@ namespace SourceCode.Clay.OpenApi
         public SchemaBuilder(Schema value)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
-            Type = value.Type;
+            JsonType = value.JsonType;
             Format = value.Format;
             Title = value.Title;
             Description = value.Description;
@@ -192,7 +192,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="Schema"/>.</returns>
         public Schema Build() => new Schema(
-            type: Type,
+            type: JsonType,
             format: Format,
             title: Title,
             description: Description,

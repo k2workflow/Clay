@@ -10,7 +10,10 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents the different styles for a parameter.
     /// </summary>
+#pragma warning disable CA1028 // Enum Storage should be Int32
+
     public enum ParameterStyle : byte
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         /// The default style will be used.

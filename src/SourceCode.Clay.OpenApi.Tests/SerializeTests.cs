@@ -331,7 +331,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                             },
                             PropertiesRange = new CountRange(100, 200),
                             Title = "Schema1",
-                            Type = SchemaType.Object
+                            JsonType = SchemaType.Object
                         }
                     },
                     SecuritySchemes =
