@@ -181,7 +181,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JsonValue"/>.</returns>
         protected virtual JsonValue SerializeParameter(ParameterKey key, Referable<ParameterBody> value)
         {
-            if (value.IsReference) return SerializeReference(value.Reference);
+            if (value.IsReference) return SerializeReferable(value);
             return SerializeParameter(key, value.Value);
         }
 
