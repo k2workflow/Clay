@@ -28,7 +28,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the name of an existing, resolvable OAS operation, as defined with a unique operation identifier.
         /// </summary>
-        public string OperationIdentifier { get; set; }
+        public string OperationIdentifier { get; }
 
         /// <summary>
         /// Get the description of the link.
@@ -36,12 +36,12 @@ namespace SourceCode.Clay.OpenApi
         /// <remarks>
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
-        public string Description { get; set; }
+        public string Description { get; }
 
         /// <summary>
         /// A server object to be used by the target operation.
         /// </summary>
-        public Server Server { get; set; }
+        public Server Server { get; }
 
         #endregion
 

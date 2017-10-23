@@ -308,7 +308,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
             }
             else if (value.IsReference)
             {
-                container.Add(key, SerializeReference(value.Reference));
+                container.Add(key, SerializeReferable(value));
             }
             else
             {

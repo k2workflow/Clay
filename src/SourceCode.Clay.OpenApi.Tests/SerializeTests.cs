@@ -451,10 +451,17 @@ namespace SourceCode.Clay.OpenApi.Tests
                                         ["url"] = "http://example.org/"
                                     },
                                     ["operationId"] = "Operation 1",
-                                    ["parameters"] = new JsonArray() {
-                                        "#/components/parameters/parameter1"
+                                    ["parameters"] = new JsonArray()
+                                    {
+                                        new JsonObject()
+                                        {
+                                            [ "$ref" ] = "#/components/parameters/parameter1"
+                                        }
                                     },
-                                    ["requestBody"] = "#/components/requestBodies/requestBody1",
+                                    ["requestBody"] = new JsonObject()
+                                    {
+                                        ["$ref"] = "#/components/requestBodies/requestBody1"
+                                    },
                                     ["responses"] = new JsonObject()
                                     {
                                         ["default"] = new JsonObject()
@@ -477,8 +484,12 @@ namespace SourceCode.Clay.OpenApi.Tests
                                 {
                                     ["description"] = "Options"
                                 },
-                                ["parameters"] = new JsonArray() {
-                                    "#/components/parameters/parameter1"
+                                ["parameters"] = new JsonArray()
+                                {
+                                    new JsonObject()
+                                    {
+                                        [ "$ref" ] = "#/components/parameters/parameter1"
+                                    }
                                 },
                                 ["patch"] = new JsonObject()
                                 {
@@ -541,7 +552,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                                             ["$ref"] = "#/components/examples/example1"
                                         }
                                     },
-                                    ["schema"] = "#/components/schemas/schema1"
+                                    ["schema"] = new JsonObject()
+                                    {
+                                        ["$ref"] = "#/components/schemas/schema1"
+                                    }
                                 }
                             }
                         }
@@ -563,7 +577,8 @@ namespace SourceCode.Clay.OpenApi.Tests
                                     {
                                         ["default"] = "Value",
                                         ["description"] = "Description",
-                                        ["enum"] = new JsonArray() {
+                                        ["enum"] = new JsonArray()
+                                        {
                                             "Value",
                                             "Value1"
                                         }
@@ -582,7 +597,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                             {
                                 ["application/json"] = new JsonObject()
                                 {
-                                    ["schema"] = "#/components/schemas/schema1"
+                                    ["schema"] = new JsonObject()
+                                    {
+                                        ["$ref"] = "#/components/schemas/schema1"
+                                    }
                                 }
                             },
                             ["deprecated"] = true,
@@ -598,7 +616,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["in"] = "header",
                             ["name"] = "parameter1",
                             ["required"] = true,
-                            ["schema"] = "#/components/schemas/schema1",
+                            ["schema"] = new JsonObject()
+                            {
+                                ["$ref"] = "#/components/schemas/schema1"
+                            },
                             ["style"] = "matrix"
                         }
                     },
@@ -610,7 +631,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                             {
                                 ["application/json"] = new JsonObject()
                                 {
-                                    ["schema"] = "#/components/schemas/schema1"
+                                    ["schema"] = new JsonObject()
+                                    {
+                                        ["$ref"] = "#/components/schemas/schema1"
+                                    }
                                 }
                             },
                             ["description"] = "Description",
@@ -625,7 +649,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                             {
                                 ["application/json"] = new JsonObject()
                                 {
-                                    ["schema"] = "#/components/schemas/schema1"
+                                    ["schema"] = new JsonObject()
+                                    {
+                                        ["$ref"] = "#/components/schemas/schema1"
+                                    }
                                 }
                             },
                             ["description"] = "Description",
@@ -666,7 +693,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                                 ["url"] = "http://example.org/docs"
                             },
                             ["format"] = "Format",
-                            ["items"] = "#/components/schemas/schema1",
+                            ["items"] = new JsonObject()
+                            {
+                                ["$ref"] = "#/components/schemas/schema1"
+                            },
                             ["maxLength"] = 300,
                             ["maxProperties"] = 200,
                             ["maximum"] = 400,
@@ -778,7 +808,8 @@ namespace SourceCode.Clay.OpenApi.Tests
                 },
                 ["security"] = new JsonArray()
                 {
-                    new JsonObject() {
+                    new JsonObject()
+                    {
                         [ "$ref" ] = "#/components/security/sec1"
                     }
                 }

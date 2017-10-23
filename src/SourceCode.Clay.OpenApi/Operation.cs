@@ -26,7 +26,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the short summary of what the operation does.
         /// </summary>
-        public string Summary { get; set; }
+        public string Summary { get; }
 
         /// <summary>
         /// Gets the verbose explanation of the operation behavior.
@@ -34,17 +34,17 @@ namespace SourceCode.Clay.OpenApi
         /// <remarks>
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
-        public string Description { get; set; }
+        public string Description { get; }
 
         /// <summary>
         /// Gets the additional external documentation for this operation.
         /// </summary>
-        public ExternalDocumentation ExternalDocumentation { get; set; }
+        public ExternalDocumentation ExternalDocumentation { get; }
 
         /// <summary>
         /// Gets the unique string used to identify the operation.
         /// </summary>
-        public string OperationIdentifier { get; set; }
+        public string OperationIdentifier { get; }
 
         /// <summary>
         /// Gets the list of parameters that are applicable for this operation.
@@ -54,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the request body applicable for this operation.
         /// </summary>
-        public Referable<RequestBody> RequestBody { get; set; }
+        public Referable<RequestBody> RequestBody { get; }
 
         /// <summary>
         /// Gets the list of possible responses as they are returned from executing this operation.
