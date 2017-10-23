@@ -150,7 +150,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -192,6 +192,30 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="ScalarValue"/> to compare.</param>
+        /// <param name="y">The second <see cref="ScalarValue"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="ScalarValue"/> is equal to <see cref="ScalarValue"/>.
+        /// </returns>
+        public static bool operator ==(ScalarValue x, ScalarValue y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="ScalarValue"/> to compare.</param>
+        /// <param name="y">The second <see cref="ScalarValue"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="ScalarValue"/> is not similar to <see cref="ScalarValue"/>.
+        /// </returns>
+        public static bool operator !=(ScalarValue x, ScalarValue y) => !(x == y);
 
         #endregion
 

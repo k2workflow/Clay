@@ -17,7 +17,7 @@ namespace SourceCode.Clay.OpenApi
         #region Properties
 
         /// <summary>Gets the type of the security scheme.</summary>
-        public override SecuritySchemeType Type => SecuritySchemeType.OpenIdConnect;
+        public override SecuritySchemeType SchemeType => SecuritySchemeType.OpenIdConnect;
 
         /// <summary>
         /// Gets the OpenId Connect URL to discover OAuth2 configuration values.
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.

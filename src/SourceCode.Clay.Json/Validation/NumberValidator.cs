@@ -34,10 +34,10 @@ namespace SourceCode.Clay.Json.Validation
             // Ensure min and max are of the same general type (integer or real)
             if (min.HasValue
                 && max.HasValue
-                && (((min.Value.Kind & NumberKind.Integer) > 0 && (max.Value.Kind & NumberKind.Real) > 0) ||
-                    ((min.Value.Kind & NumberKind.Real) > 0 && (max.Value.Kind & NumberKind.Integer) > 0)))
+                && (((min.Value.Kind & NumberKinds.Integer) > 0 && (max.Value.Kind & NumberKinds.Real) > 0) ||
+                    ((min.Value.Kind & NumberKinds.Real) > 0 && (max.Value.Kind & NumberKinds.Integer) > 0)))
             {
-                throw new ArgumentOutOfRangeException(nameof(max), $"{nameof(NumberValidator)} {nameof(min)} and {nameof(max)} should have the same {nameof(NumberKind)}");
+                throw new ArgumentOutOfRangeException(nameof(max), $"{nameof(NumberValidator)} {nameof(min)} and {nameof(max)} should have the same {nameof(NumberKinds)}");
             }
 
             Min = min;
@@ -95,13 +95,13 @@ namespace SourceCode.Clay.Json.Validation
                 && MultipleOf.Value != 0 // n % 0 == undefined
                 && !value.Value.IsZero) // 0 % n == 0 (we already know value.HasValue is true)
             {
-                if ((value.Value.Kind & NumberKind.Integer) > 0)
+                if ((value.Value.Kind & NumberKinds.Integer) > 0)
                 {
                     var val = value.Value.ToInt64();
                     var zero = val % MultipleOf.Value == 0;
                     if (!zero) return false;
                 }
-                else if ((value.Value.Kind & NumberKind.Real) > 0)
+                else if ((value.Value.Kind & NumberKinds.Real) > 0)
                 {
                     var val = value.Value.ToDouble();
                     var zero = val % MultipleOf.Value == 0.0; // Modulus(Double) is a well-defined operation

@@ -17,7 +17,7 @@ namespace SourceCode.Clay.OpenApi
         #region Properties
 
         /// <summary>Gets the type of the security scheme.</summary>
-        public override SecuritySchemeType Type => SecuritySchemeType.OAuth2;
+        public override SecuritySchemeType SchemeType => SecuritySchemeType.OAuth2;
 
         /// <summary>
         /// Gets the configuration for the OAuth Implicit flow.
@@ -67,7 +67,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.

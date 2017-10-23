@@ -73,7 +73,27 @@ namespace SourceCode.Clay.Data.SqlParser
 
         #endregion
 
-        #region Override
+        #region Operators
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="SqlParamInfo"/> to compare.</param>
+        /// <param name="y">The second <see cref="SqlParamInfo"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="SqlParamInfo"/> is equal to <see cref="SqlParamInfo"/>.
+        /// </returns>
+        public static bool operator ==(SqlParamInfo x, SqlParamInfo y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="SqlParamInfo"/> to compare.</param>
+        /// <param name="y">The second <see cref="SqlParamInfo"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="SqlParamInfo"/> is not similar to <see cref="SqlParamInfo"/>.
+        /// </returns>
+        public static bool operator !=(SqlParamInfo x, SqlParamInfo y) => !(x == y);
 
         public override string ToString()
             => $"{Direction}"

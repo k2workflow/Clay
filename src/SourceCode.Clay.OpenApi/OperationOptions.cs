@@ -13,7 +13,9 @@ namespace SourceCode.Clay.OpenApi
     /// Represents options for a <see cref="Operation"/>.
     /// </summary>
     [Flags]
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum OperationOptions : byte
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         /// No options are set.

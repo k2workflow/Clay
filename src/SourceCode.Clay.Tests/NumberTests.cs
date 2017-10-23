@@ -18,30 +18,30 @@ namespace SourceCode.Clay.Tests
         #region Methods
 
         [
-            InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(SByte), (sbyte)1, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(Byte) + "=0", (byte)0, NumberKind.Integer, true),
-            InlineData(nameof(Byte), (byte)2, NumberKind.Integer, false),
-            InlineData(nameof(Int16) + "=0", (short)0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int16), (short)3, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt16) + "=0", (ushort)0, NumberKind.Integer, true),
-            InlineData(nameof(UInt16), (ushort)4, NumberKind.Integer, false),
-            InlineData(nameof(Int32) + "=0", 0, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int32), 5, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt32) + "=0", 0U, NumberKind.Integer, true),
-            InlineData(nameof(UInt32), 6U, NumberKind.Integer, false),
-            InlineData(nameof(Int64) + "=0", 0L, NumberKind.Integer | NumberKind.Signed, true),
-            InlineData(nameof(Int64), 7L, NumberKind.Integer | NumberKind.Signed, false),
-            InlineData(nameof(UInt64) + "=0", 0UL, NumberKind.Integer, true),
-            InlineData(nameof(UInt64), 8UL, NumberKind.Integer, false),
-            InlineData(nameof(Single) + "=0", 0.0F, NumberKind.Real | NumberKind.Signed, true),
-            InlineData(nameof(Single), 9.0F, NumberKind.Real | NumberKind.Signed, false),
-            InlineData(nameof(Double) + "=0", 0.0, NumberKind.Real | NumberKind.Signed, true),
-            InlineData(nameof(Double), 10.0, NumberKind.Real | NumberKind.Signed, false),
-            InlineData(nameof(Decimal), 10.0, NumberKind.Decimal | NumberKind.Signed, false)
+            InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKinds.Integer | NumberKinds.Signed, true),
+            InlineData(nameof(SByte), (sbyte)1, NumberKinds.Integer | NumberKinds.Signed, false),
+            InlineData(nameof(Byte) + "=0", (byte)0, NumberKinds.Integer, true),
+            InlineData(nameof(Byte), (byte)2, NumberKinds.Integer, false),
+            InlineData(nameof(Int16) + "=0", (short)0, NumberKinds.Integer | NumberKinds.Signed, true),
+            InlineData(nameof(Int16), (short)3, NumberKinds.Integer | NumberKinds.Signed, false),
+            InlineData(nameof(UInt16) + "=0", (ushort)0, NumberKinds.Integer, true),
+            InlineData(nameof(UInt16), (ushort)4, NumberKinds.Integer, false),
+            InlineData(nameof(Int32) + "=0", 0, NumberKinds.Integer | NumberKinds.Signed, true),
+            InlineData(nameof(Int32), 5, NumberKinds.Integer | NumberKinds.Signed, false),
+            InlineData(nameof(UInt32) + "=0", 0U, NumberKinds.Integer, true),
+            InlineData(nameof(UInt32), 6U, NumberKinds.Integer, false),
+            InlineData(nameof(Int64) + "=0", 0L, NumberKinds.Integer | NumberKinds.Signed, true),
+            InlineData(nameof(Int64), 7L, NumberKinds.Integer | NumberKinds.Signed, false),
+            InlineData(nameof(UInt64) + "=0", 0UL, NumberKinds.Integer, true),
+            InlineData(nameof(UInt64), 8UL, NumberKinds.Integer, false),
+            InlineData(nameof(Single) + "=0", 0.0F, NumberKinds.Real | NumberKinds.Signed, true),
+            InlineData(nameof(Single), 9.0F, NumberKinds.Real | NumberKinds.Signed, false),
+            InlineData(nameof(Double) + "=0", 0.0, NumberKinds.Real | NumberKinds.Signed, true),
+            InlineData(nameof(Double), 10.0, NumberKinds.Real | NumberKinds.Signed, false),
+            InlineData(nameof(Decimal), 10.0, NumberKinds.Decimal | NumberKinds.Signed, false)
         ]
         [Theory(DisplayName = nameof(Number_ContructGet))]
-        public static void Number_ContructGet(string description, object expected, NumberKind kind, bool isZero)
+        public static void Number_ContructGet(string description, object expected, NumberKinds kind, bool isZero)
         {
             // InlineData does not like decimal literals (eg 10.0m)
             if (description == nameof(Decimal))

@@ -81,7 +81,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.

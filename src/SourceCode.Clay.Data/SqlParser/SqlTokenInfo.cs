@@ -5,11 +5,12 @@
 
 #endregion
 
+using System;
 using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    public struct SqlTokenInfo
+    public struct SqlTokenInfo : IEquatable<SqlTokenInfo>
     {
         #region Properties
 
@@ -47,7 +48,65 @@ namespace SourceCode.Clay.Data.SqlParser
 
         #endregion
 
-        #region Methods
+        #region IEquatable
+
+        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        /// <param name="obj">The object to compare with the current instance.</param>
+        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        public override bool Equals(object obj)
+            => obj is SqlTokenInfo other
+            && Equals(other);
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        public bool Equals(SqlTokenInfo other)
+        {
+            if (Kind != other.Kind) return false;
+            if (!StringComparer.Ordinal.Equals(Value, other.Value)) return false;
+
+            return true;
+        }
+
+        /// <summary>Returns the hash code for this instance.</summary>
+        /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hc = 17L;
+
+                hc = (hc * 23) + (int)Kind;
+                if (Value != null)
+                    hc = (hc * 23) + Value.GetHashCode();
+
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
+        }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="SqlTokenInfo"/> to compare.</param>
+        /// <param name="y">The second <see cref="SqlTokenInfo"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="SqlTokenInfo"/> is equal to <see cref="SqlTokenInfo"/>.
+        /// </returns>
+        public static bool operator ==(SqlTokenInfo x, SqlTokenInfo y) => x.Equals(y);
+
+        /// <summary>
+        /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+        /// </summary>
+        /// <param name="x">The first <see cref="SqlTokenInfo"/> to compare.</param>
+        /// <param name="y">The second <see cref="SqlTokenInfo"/> to compare.</param>
+        /// <returns>
+        /// A value indicating whether the first <see cref="SqlTokenInfo"/> is not similar to <see cref="SqlTokenInfo"/>.
+        /// </returns>
+        public static bool operator !=(SqlTokenInfo x, SqlTokenInfo y) => !(x == y);
 
         public override string ToString()
         {

@@ -12,7 +12,10 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <NoWarn>1701;1702;1705;S3242</NoWarn>
+    <!-- RS0010	Avoid using cref tags with a prefix -->
+    <!-- S3242 Consider using more general type ... -->
+    <!-- CA1707	Remove the underscores from member name ... -->
+    <NoWarn>1701;1702;1705;S3242;RS0010;CA1707</NoWarn>
   </PropertyGroup>
 
   <!-- TODO: Remove this when OpenCover supports portable PDBs -->
@@ -25,6 +28,12 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- TODO: Remove this when Roslyn ships IOperation -->
+  <!-- https://developercommunity.visualstudio.com/content/problem/133059/vs2017-code-analysis-not-working.html -->
+  <PropertyGroup>
+    <Features>IOperation</Features>
   </PropertyGroup>
 
   <PropertyGroup>

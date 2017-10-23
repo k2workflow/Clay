@@ -70,7 +70,7 @@ namespace SourceCode.Clay
 
         #region Properties
 
-        public NumberKind Kind
+        public NumberKinds Kind
         {
             get
             {
@@ -82,23 +82,23 @@ namespace SourceCode.Clay
                     case TypeCode.Int32:
                     default:
                     case TypeCode.Int64:
-                        return NumberKind.Integer | NumberKind.Signed;
+                        return NumberKinds.Integer | NumberKinds.Signed;
 
                     // Unsigned
                     case TypeCode.Byte:
                     case TypeCode.UInt16:
                     case TypeCode.UInt32:
                     case TypeCode.UInt64:
-                        return NumberKind.Integer;
+                        return NumberKinds.Integer;
 
                     // Real
                     case TypeCode.Single:
                     case TypeCode.Double:
-                        return NumberKind.Real | NumberKind.Signed;
+                        return NumberKinds.Real | NumberKinds.Signed;
 
                     // Decimal
                     case TypeCode.Decimal:
-                        return NumberKind.Decimal | NumberKind.Signed;
+                        return NumberKinds.Decimal | NumberKinds.Signed;
                 }
             }
         }
@@ -133,6 +133,8 @@ namespace SourceCode.Clay
                 }
             }
         }
+
+#pragma warning disable CA1720 // Identifier contains type name
 
         /// <summary>
         /// Gets the value as a <see cref="sbyte"/>.
@@ -199,6 +201,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <exception cref="InvalidOperationException">The value of <see cref="ValueTypeCode"/> is not <see cref="TypeCode.Decimal"/>.</exception>
         public decimal Decimal => GetValue(_decimal, TypeCode.Decimal);
+
+#pragma warning restore CA1720 // Identifier contains type name
 
         /// <summary>
         /// Gets the value boxed in a <see cref="object"/>.
@@ -454,7 +458,7 @@ namespace SourceCode.Clay
         public string ToString(IFormatProvider provider) => ToString(null, provider);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
-        /// <returns>A <see cref="T:System.String" /> containing the number.</returns>
+        /// <returns>A <see cref="System.String" /> containing the number.</returns>
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
@@ -945,22 +949,4 @@ namespace SourceCode.Clay
 
         #endregion
     }
-
-#pragma warning disable S2342 // Enumeration types should comply with a naming convention
-#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
-
-    [Flags]
-    public enum NumberKind
-    {
-        Signed = 1,
-
-        Integer = 2,
-
-        Real = 4,
-
-        Decimal = 8
-    }
-
-#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
-#pragma warning restore S2342 // Enumeration types should comply with a naming convention
 }

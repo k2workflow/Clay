@@ -33,7 +33,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the type of the security scheme.
         /// </summary>
-        public abstract SecuritySchemeType Type { get; }
+        public abstract SecuritySchemeType SchemeType { get; }
 
         /// <summary>
         /// Gets the short description for security scheme.
@@ -45,7 +45,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Equatable
+        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -81,7 +81,7 @@ namespace SourceCode.Clay.OpenApi
             if (ReferenceEquals(this, other)) return true;
             if (other is null) return false;
 
-            if (Type != other.Type) return false;
+            if (SchemeType != other.SchemeType) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
 
             return true;
@@ -95,7 +95,7 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = (hc * 23) + Type.GetHashCode();
+                hc = (hc * 23) + SchemeType.GetHashCode();
                 if (Description != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
 
