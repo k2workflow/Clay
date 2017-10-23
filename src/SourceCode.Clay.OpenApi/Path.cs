@@ -23,7 +23,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the string summary intended to apply to all operations in this path.
         /// </summary>
-        public string Summary { get; set; }
+        public string Summary { get; }
 
         /// <summary>
         /// Gets the string description intended to apply to all operations in this path.
@@ -31,47 +31,47 @@ namespace SourceCode.Clay.OpenApi
         /// <remarks>
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
-        public string Description { get; set; }
+        public string Description { get; }
 
         /// <summary>
         /// Gets the definition of a GET operation on this path.
         /// </summary>
-        public Operation Get { get; set; }
+        public Operation Get { get; }
 
         /// <summary>
         /// Gets the definition of a PUT operation on this path.
         /// </summary>
-        public Operation Put { get; set; }
+        public Operation Put { get; }
 
         /// <summary>
         /// Gets the definition of a POST operation on this path.
         /// </summary>
-        public Operation Post { get; set; }
+        public Operation Post { get; }
 
         /// <summary>
         /// Gets the definition of a DELETE operation on this path.
         /// </summary>
-        public Operation Delete { get; set; }
+        public Operation Delete { get; }
 
         /// <summary>
         /// Gets the definition of a OPTIONS operation on this path.
         /// </summary>
-        public Operation Options { get; set; }
+        public Operation Options { get; }
 
         /// <summary>
         /// Gets the definition of a HEAD operation on this path.
         /// </summary>
-        public Operation Head { get; set; }
+        public Operation Head { get; }
 
         /// <summary>
         /// Gets the definition of a PATCH operation on this path.
         /// </summary>
-        public Operation Patch { get; set; }
+        public Operation Patch { get; }
 
         /// <summary>
         /// Gets the definition of a TRACE operation on this path.
         /// </summary>
-        public Operation Trace { get; set; }
+        public Operation Trace { get; }
 
         /// <summary>
         /// Gets the alternative server array to service all operations in this path.
