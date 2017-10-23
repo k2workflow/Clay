@@ -432,7 +432,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         {
             TestBuilder(new SchemaBuilder()
             {
-                Type = SchemaType.String,
+                JsonType = SchemaType.String,
                 Format = "uuid",
                 Title = "Unique Identifier",
                 Description = "Description",

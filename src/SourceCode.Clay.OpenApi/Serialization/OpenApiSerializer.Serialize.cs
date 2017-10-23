@@ -636,7 +636,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             SetJsonValue(json, PropertyConstants.Title, value.Title);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.Type, ToJsonValue(value.Type));
+            SetJsonValue(json, PropertyConstants.Type, ToJsonValue(value.JsonType));
             SetJsonValue(json, PropertyConstants.Format, value.Format);
 
             SetJsonValue(json, PropertyConstants.Pattern, value.Pattern);
