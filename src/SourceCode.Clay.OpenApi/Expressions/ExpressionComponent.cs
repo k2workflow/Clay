@@ -23,7 +23,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #endregion
 
-        #region Ctor
+        #region Constructors
 
 #pragma warning disable S3442 // "abstract" classes should not have "public" constructors
         // Reasoning: external inheritance not supported.

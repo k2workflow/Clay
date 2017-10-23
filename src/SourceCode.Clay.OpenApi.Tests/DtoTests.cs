@@ -138,7 +138,8 @@ namespace SourceCode.Clay.OpenApi.Tests
             TestDtoEquality(() => new Contact(
                 "Jonathan",
                 new Uri("http://example.org/jonathan"),
-                new MailAddress("jonathan@example.org")
+                new MailAddress("jonathan@example.org"),
+                default
             ));
         }
 
@@ -163,7 +164,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 new Components(schemas, default, default, default, default, default, default, default, default),
                 new[] { new Referable<SecurityScheme>(new HttpSecurityScheme("Http", default, default)) },
                 new[] { new Tag("Tag1", default, default) },
-                new ExternalDocumentation("External docs", default)
+                new ExternalDocumentation("External docs", default, default)
             ));
         }
 
@@ -182,7 +183,8 @@ namespace SourceCode.Clay.OpenApi.Tests
         {
             TestDtoEquality(() => new ExternalDocumentation(
                 "Description",
-                new Uri("http://example.org/docs")
+                new Uri("http://example.org/docs"),
+                default
             ));
         }
 
@@ -203,7 +205,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 "Title",
                 "Description",
                 new Uri("http://example.org/tos"),
-                new Contact("Name", default, default),
+                new Contact("Name", default, default, default),
                 new License("MIT", default),
                 new SemanticVersion(1, 0, 0)
             ));
@@ -313,7 +315,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 new[] { "Tag1" },
                 "Summary",
                 "Description",
-                new ExternalDocumentation("Description", default),
+                new ExternalDocumentation("Description", default, default),
                 "Operation 1",
                 param,
                 "#/components/requestBodies/rb1",
@@ -494,7 +496,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 "#/components/schemas/items",
                 properties,
                 additionalProperties,
-                new ExternalDocumentation("Description", default)
+                new ExternalDocumentation("Description", default, default)
             ));
         }
 
@@ -529,7 +531,7 @@ namespace SourceCode.Clay.OpenApi.Tests
             TestDtoEquality(() => new Tag(
                 "Name",
                 "Description",
-                new ExternalDocumentation("Description", default)
+                new ExternalDocumentation("Description", default, default)
             ));
         }
 
