@@ -71,6 +71,7 @@ namespace SourceCode.Clay.OpenApi
             Paths = new Dictionary<string, Referable<Path>>();
             Security = new List<Referable<SecurityScheme>>();
             Tags = new List<Tag>();
+            Version = new SemanticVersion(3, 0, 0);
         }
 
         /// <summary>

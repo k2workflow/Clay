@@ -638,7 +638,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                                 }
                             },
                             ["description"] = "Description",
-                            ["requestBodies"] = true
+                            ["required"] = true
                         }
                     },
                     ["responses"] = new JsonObject()
