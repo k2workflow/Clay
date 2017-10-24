@@ -5,8 +5,10 @@
 
 #endregion
 
+using SourceCode.Clay.Json;
 using SourceCode.Clay.OpenApi.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Json;
 using System.Net.Mail;
 
@@ -15,62 +17,29 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Contact information for the exposed API.
     /// </summary>
-    public sealed class Contact : IEquatable<Contact>
+    public sealed class Contact : IHasVendorExtensions, IEquatable<Contact>
     {
-        #region Fields
-
-        private readonly JsonObject _json;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
         /// Gets the identifying name of the contact person/organization.
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                if (_json.TryGetValue(OpenApiSerializer.PropertyConstants.Name, out var jv))
-                    return jv;
-
-                return null;
-            }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the URL pointing to the contact information.
         /// </summary>
-        public Uri Url
-        {
-            get
-            {
-                if (_json.TryGetValue(OpenApiSerializer.PropertyConstants.Url, out var jv))
-                    return new Uri(jv);
-
-                return null;
-            }
-        }
+        public Uri Url { get; }
 
         /// <summary>
         /// Gets email address of the contact person/organization.
         /// </summary>
-        public MailAddress Email
-        {
-            get
-            {
-                if (_json.TryGetValue(OpenApiSerializer.PropertyConstants.Email, out var jv))
-                    return new MailAddress(jv);
-
-                return null;
-            }
-        }
+        public MailAddress Email { get; }
 
         /// <summary>
         /// Gets custom properties.
         /// </summary>
-        public VendorExtensions VendorExtensions { get; }
+        public IReadOnlyDictionary<string, JsonValue> VendorExtensions { get; }
 
         #endregion
 
@@ -89,18 +58,15 @@ namespace SourceCode.Clay.OpenApi
             MailAddress email = default,
             JsonObject vendorExtensions = default)
         {
-            _json = new JsonObject
-            {
-                [OpenApiSerializer.PropertyConstants.Name] = name,
-                [OpenApiSerializer.PropertyConstants.Url] = url.ToString(),
-                [OpenApiSerializer.PropertyConstants.Email] = email.ToString()
-            };
+            Name = name;
+            Url = url;
+            Email = email;
 
             // Vendor extensions
-            if (vendorExtensions != null && vendorExtensions.Count > 0)
-            {
-                VendorExtensions = new VendorExtensions(_json, OpenApiSerializer.PropertyConstants.Name, OpenApiSerializer.PropertyConstants.Url, OpenApiSerializer.PropertyConstants.Email);
-            }
+            VendorExtensions = new VendorExtensions(vendorExtensions,
+                OpenApiSerializer.PropertyConstants.Name,
+                OpenApiSerializer.PropertyConstants.Url,
+                OpenApiSerializer.PropertyConstants.Email);
         }
 
         #endregion
@@ -119,21 +85,17 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(Contact other)
         {
-            if (this is null) return other is null; // (null, null) or (null, y)
             if (other is null) return false; // (x, null)
             if (ReferenceEquals(this, other)) return true; // (x, x)
 
-            if (_json is null) return other._json is null; // (null, null) or (null, y)
-            if (other._json is null) return false; // (x, null)
-
             if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;
             if (Url != other.Url) return false;
-
             if (!ReferenceEquals(Email, other.Email))
             {
                 if (Email is null || other.Email is null) return false;
                 return Email.Equals(other.Email);
             }
+            if (VendorExtensions != other.VendorExtensions) return false;
 
             return true;
         }
@@ -152,9 +114,49 @@ namespace SourceCode.Clay.OpenApi
                     hc = (hc * 23) + Url.GetHashCode();
                 if (Email != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Email);
+                if (VendorExtensions != null)
+                    hc = (hc * 23) + VendorExtensions.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
+        }
+
+        #endregion
+
+        #region De/Serialization
+
+        public static Contact Parse(JsonObject json)
+        {
+            string name = null;
+            if (json.TryGetValue(OpenApiSerializer.PropertyConstants.Name, JsonType.String, true, out var jv))
+                name = jv;
+
+            Uri url = null;
+            if (json.TryGetValue(OpenApiSerializer.PropertyConstants.Url, JsonType.String, true, out jv))
+                url = new Uri(jv);
+
+            MailAddress email = null;
+            if (json.TryGetValue(OpenApiSerializer.PropertyConstants.Email, JsonType.String, true, out jv))
+                email = new MailAddress(jv);
+
+            var result = new Contact(name, url, email, json);
+            return result;
+        }
+
+        public override string ToString()
+        {
+            var json = new JsonObject
+            {
+                [OpenApiSerializer.PropertyConstants.Name] = Name,
+                [OpenApiSerializer.PropertyConstants.Url] = Url.ToString(),
+                [OpenApiSerializer.PropertyConstants.Email] = Email.ToString()
+            };
+
+            foreach (var item in VendorExtensions)
+                json.Add(item);
+
+            var str = json.ToString();
+            return str;
         }
 
         #endregion

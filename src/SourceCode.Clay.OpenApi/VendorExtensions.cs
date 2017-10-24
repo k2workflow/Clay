@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,45 +16,50 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     ///
     /// </summary>
-    public sealed class VendorExtensions : IReadOnlyDictionary<string, JsonValue>
+    internal sealed class VendorExtensions : IReadOnlyDictionary<string, JsonValue>, IEquatable<VendorExtensions>
     {
         #region Fields
 
-        private readonly JsonObject _json;
+        private readonly IDictionary<string, string> _map;
 
         #endregion
 
         #region Properties
 
-        public int Count => _json.Count;
+        public int Count => _map.Count;
 
-        public JsonValue this[string key] => _json[key];
+        public JsonValue this[string key]
+        {
+            get
+            {
+                var value = _map[key];
+                var json = JsonValue.Parse(value);
+                return json;
+            }
+        }
 
         #endregion
 
         #region Constructors
 
-        public VendorExtensions(JsonObject json, params string[] wellKnownKeys)
+        internal VendorExtensions(JsonObject json, params string[] wellKnownKeys)
         {
             if (json == null || json.Count == 0)
             {
-                _json = null;
+                _map = Dictionary.Empty<string, string>();
                 return;
             }
 
             var keys = new HashSet<string>(wellKnownKeys, StringComparer.Ordinal); // Expensive!
 
-            _json = new JsonObject();
+            _map = new Dictionary<string, string>(json.Count, StringComparer.Ordinal);
             foreach (var item in json)
             {
                 // Don't add well-known properties
-                if (!keys.Contains(item.Key))
-                {
-                    var str = item.Value.ToString();
-                    var clone = JsonValue.Parse(str); // Expensive!
+                if (keys.Contains(item.Key)) continue;
 
-                    _json.Add(item.Key, clone); // Leverage error handling in Add()
-                }
+                // Leverage error handling in Add()
+                _map.Add(item.Key, item.Value);
             }
         }
 
@@ -61,21 +67,94 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
-        public bool ContainsKey(string key) => _json.ContainsKey(key);
+        public bool ContainsKey(string key) => _map.ContainsKey(key);
 
-        public bool TryGetValue(string key, out JsonValue value) => _json.TryGetValue(key, out value);
+        public bool TryGetValue(string key, out JsonValue value)
+        {
+            value = default;
+
+            if (!_map.TryGetValue(key, out var str))
+                return false;
+
+            value = str;
+            return true;
+        }
 
         #endregion
 
         #region IEnumerable
 
-        public IEnumerable<string> Keys => _json.Keys;
+        public IEnumerable<JsonValue> Values
+        {
+            get
+            {
+                foreach (var item in _map)
+                    yield return item.Value;
+            }
+        }
 
-        public IEnumerable<JsonValue> Values => _json.Values;
+        public IEnumerable<string> Keys => _map.Keys;
 
-        public IEnumerator<KeyValuePair<string, JsonValue>> GetEnumerator() => _json.GetEnumerator();
+        public IEnumerator<KeyValuePair<string, JsonValue>> GetEnumerator()
+        {
+            foreach (var item in _map)
+                yield return new KeyValuePair<string, JsonValue>(item.Key, item.Value);
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => _json.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _map.GetEnumerator();
+
+        #endregion
+
+        #region IEquatable
+
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="x">The first item.</param>
+        /// <param name="y">The second item.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(VendorExtensions x, VendorExtensions y)
+        {
+            if (x is null) return y is null;
+            if (y is null) return false;
+
+            return x.Equals(y);
+        }
+
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="x">The first item.</param>
+        /// <param name="y">The second item.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(VendorExtensions x, VendorExtensions y) => !(x == y);
+
+        /// <summary>Indicates whether this instance and a specified object are equal.</summary>
+        /// <param name="obj">The object to compare with the current instance.</param>
+        /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        public override bool Equals(object obj)
+            => obj is VendorExtensions other
+            && Equals(other);
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        public bool Equals(VendorExtensions other)
+            => _map.NullableDictionaryEquals(other._map, StringComparer.Ordinal);
+
+        /// <summary>Returns the hash code for this instance.</summary>
+        /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hc = 17L;
+
+                hc = (hc * 23) + _map.GetHashCode();
+
+                return ((int)(hc >> 32)) ^ (int)hc;
+            }
+        }
 
         #endregion
     }
