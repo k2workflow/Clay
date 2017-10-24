@@ -58,7 +58,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             SetJsonValue(json, PropertyConstants.Description, value.Description);
             SetJsonMap(json, PropertyConstants.Content, content);
-            SetJsonFlag(json, PropertyConstants.RequestBodies, value.Options, RequestBodyOptions.Required);
+            SetJsonFlag(json, PropertyConstants.Required, value.Options, RequestBodyOptions.Required);
 
             return json;
         }
