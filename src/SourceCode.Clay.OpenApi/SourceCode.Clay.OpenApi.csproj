@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj" />
     <ProjectReference Include="..\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" />
-    <ProjectReference Include="..\SourceCode.Clay\SourceCode.Clay.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

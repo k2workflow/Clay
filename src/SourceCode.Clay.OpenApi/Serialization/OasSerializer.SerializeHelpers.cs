@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json;
 using System;
 using System.Collections.Generic;
 using System.Json;
@@ -267,7 +268,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         protected virtual void SetJsonNumber(JsonObject container, string key, Number? value, bool required = false)
         {
             if (value.HasValue)
-                container.Add(key, value.Value.ToValue());
+                container.Add(key, value.Value.ToJson());
             else if (required)
                 container.Add(key, null);
         }

@@ -10,9 +10,9 @@ using System.Json;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SourceCode.Clay.OpenApi.Serialization
+namespace SourceCode.Clay.Json
 {
-    internal static class NumberExtensions
+    public static class NumberExtensions
     {
         #region Fields
 
@@ -28,10 +28,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
             var param = Expression.Parameter(t, "primitive");
             var prop = t.GetProperty("Value", BindingFlags.NonPublic | BindingFlags.Instance);
             var expr = Expression.Property(param, prop);
-            return Expression.Lambda<Func<JsonPrimitive, object>>(expr, param).Compile();
+
+            var func = Expression.Lambda<Func<JsonPrimitive, object>>(expr, param);
+            return func.Compile();
         }
 
-        public static JsonValue ToValue(this Number number)
+        public static JsonPrimitive ToJson(this Number number)
         {
             switch (number.ValueTypeCode)
             {
@@ -45,20 +47,25 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 case TypeCode.UInt16: return new JsonPrimitive(number.UInt16);
                 case TypeCode.UInt32: return new JsonPrimitive(number.UInt32);
                 case TypeCode.UInt64: return new JsonPrimitive(number.UInt64);
-#               pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-                default: return null;
-#               pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+
+                default: return default;
             }
         }
 
         public static Number ToNumber(this JsonValue value)
         {
             if (value == null) return default;
+
             if (value.JsonType != JsonType.Number) throw new ArgumentOutOfRangeException(nameof(value));
+
             var primitive = (JsonPrimitive)value;
-            var val = GetValueFromPrimitive(primitive);
-            if (val is Decimal d) val = (double)d;
-            return Number.CreateFromObject(val);
+
+            var obj = GetValueFromPrimitive(primitive);
+            if (obj is Decimal d)
+                obj = (double)d;
+
+            var num = Number.CreateFromObject(obj);
+            return num;
         }
 
         #endregion
