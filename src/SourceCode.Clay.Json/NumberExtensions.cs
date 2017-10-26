@@ -14,24 +14,25 @@ namespace SourceCode.Clay.Json
 {
     public static class NumberExtensions
     {
-        #region Fields
+        #region Helpers
 
         private static readonly Func<JsonPrimitive, object> GetValueFromPrimitive = CreateGetValueFromPrimitive();
 
-        #endregion
-
-        #region Methods
-
         private static Func<JsonPrimitive, object> CreateGetValueFromPrimitive()
         {
-            var t = typeof(JsonPrimitive);
-            var param = Expression.Parameter(t, "primitive");
-            var prop = t.GetProperty("Value", BindingFlags.NonPublic | BindingFlags.Instance);
+            var prim = typeof(JsonPrimitive);
+            var prop = prim.GetProperty("Value", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            var param = Expression.Parameter(prim, "primitive");
             var expr = Expression.Property(param, prop);
 
             var func = Expression.Lambda<Func<JsonPrimitive, object>>(expr, param);
             return func.Compile();
         }
+
+        #endregion
+
+        #region Methods
 
         public static JsonPrimitive ToJson(this Number number)
         {
