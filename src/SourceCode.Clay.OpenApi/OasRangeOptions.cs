@@ -13,19 +13,17 @@ namespace SourceCode.Clay.OpenApi
     /// Indicates options for validating a range.
     /// </summary>
     [Flags]
-#pragma warning disable CA1028 // Enum Storage should be Int32
-    public enum OasRangeOptions : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasRangeOptions
     {
-#       pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
         // Reasoning: self-documenting.
+#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
 
         /// <summary>
         /// The range is exclusive for both minimum and maximum.
         /// </summary>
         Exclusive = 0,
 
-#       pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
+#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
 
         /// <summary>
         /// The range is inclusive for minimum.

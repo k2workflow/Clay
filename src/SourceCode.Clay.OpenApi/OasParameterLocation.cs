@@ -10,10 +10,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents the different locations a parameter can occur.
     /// </summary>
-#pragma warning disable CA1028 // Enum Storage should be Int32
-
-    public enum OasParameterLocation : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasParameterLocation
     {
         /// <summary>
         /// The parameter occurs in the query.

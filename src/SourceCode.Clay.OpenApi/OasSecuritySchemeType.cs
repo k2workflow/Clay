@@ -10,10 +10,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents the different security scheme types.
     /// </summary>
-#pragma warning disable CA1028 // Enum Storage should be Int32
-
-    public enum OasSecuritySchemeType : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasSecuritySchemeType
     {
         /// <summary>
         /// The HTTP authorization security scheme.

@@ -10,10 +10,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// <summary>
     /// Represents the different expression types.
     /// </summary>
-#pragma warning disable CA1028 // Enum Storage should be Int32
-
-    public enum OasFieldExpressionType : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasFieldExpressionType
     {
         /// <summary>
         /// The expression retrieves a value from a URL.

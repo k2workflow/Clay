@@ -7,13 +7,13 @@
 
 namespace SourceCode.Clay.OpenApi
 {
+    // Reasoning: Refers to system types.
+#pragma warning disable CA1720 // Identifier contains type name
+
     /// <summary>
     /// Represents the different JSON schema types.
     /// </summary>
-#pragma warning disable CA1028 // Enum Storage should be Int32
-
-    public enum OasSchemaType : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasSchemaType
     {
         /// <summary>
         /// The type is a string.
@@ -45,4 +45,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         Integer = 6
     }
+
+#pragma warning restore CA1720 // Identifier contains type name
 }

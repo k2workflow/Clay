@@ -13,9 +13,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents the options for <see cref="OasPropertyEncoding"/>.
     /// </summary>
     [Flags]
-#pragma warning disable CA1028 // Enum Storage should be Int32
-    public enum OasPropertyEncodingOptions : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasPropertyEncodingOptions
     {
         /// <summary>
         /// The default options.
