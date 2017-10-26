@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Fnv(ReadOnlySpan<byte> span)
         {
-            // ReadOnly/Span is a struct, nore do its ctors permit null. So null check is redundant.
+            // ReadOnly/Span is a struct, nor do its ctors permit null. So null check is redundant.
             if (span.Length == 0) return FnvEmpty;
 
             var hc = FnvOffsetBasis;

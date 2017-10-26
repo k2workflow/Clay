@@ -103,76 +103,76 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OpenApiSerializer_Serialize))]
         public static void OpenApiSerializer_Serialize()
         {
-            var sut = new OpenApiSerializer();
+            var sut = new OasSerializer();
 
             #region Graph
 
-            var actualGraphBuilder = new DocumentBuilder()
+            var actualGraphBuilder = new OasDocumentBuilder()
             {
-                Components = new ComponentsBuilder()
+                Components = new OasComponentsBuilder()
                 {
                     Callbacks =
                     {
-                        [ "callback1" ] = new CallbackBuilder()
+                        [ "callback1" ] = new OasCallbackBuilder()
                         {
-                            [ CompoundExpression.Parse("http://foo{$statusCode}") ] = new PathBuilder()
+                            [ OasExpression.Parse("http://foo{$statusCode}") ] = new OasPathBuilder()
                             {
                                 Description = "path1",
-                                Delete = new OperationBuilder()
+                                Delete = new OasOperationBuilder()
                                 {
                                     Callbacks =
                                     {
                                         [ "callback1" ] = "#/components/callbacks/callback1"
                                     },
                                     Description = "Delete operation",
-                                    ExternalDocumentation = new ExternalDocumentationBuilder()
+                                    ExternalDocumentation = new OasExternalDocumentationBuilder()
                                     {
                                         Description = "External docs 1",
                                         Url = new Uri("http://example.org")
                                     },
                                     OperationIdentifier = "Operation 1",
-                                    Options = OperationOptions.Deprecated,
+                                    Options = OasOperationOptions.Deprecated,
                                     Parameters =
                                     {
-                                        [ new ParameterKey("p1") ] = "#/components/parameters/parameter1"
+                                        [ new OasParameterKey("p1") ] = "#/components/parameters/parameter1"
                                     },
                                     RequestBody = "#/components/requestBodies/requestBody1",
                                     Responses =
                                     {
-                                        [ResponseKey.Default] = "#/components/responses/response1"
+                                        [OasResponseKey.Default] = "#/components/responses/response1"
                                     },
                                     Summary = "Delete operation summary"
                                 },
-                                Get = new OperationBuilder()
+                                Get = new OasOperationBuilder()
                                 {
                                     Description = "Get"
                                 },
-                                Head = new OperationBuilder()
+                                Head = new OasOperationBuilder()
                                 {
                                     Description = "Head"
                                 },
-                                Options = new OperationBuilder()
+                                Options = new OasOperationBuilder()
                                 {
                                     Description = "Options"
                                 },
                                 Parameters =
                                 {
-                                    [ new ParameterKey("p1") ] = "#/components/parameters/parameter1"
+                                    [ new OasParameterKey("p1") ] = "#/components/parameters/parameter1"
                                 },
-                                Patch = new OperationBuilder()
+                                Patch = new OasOperationBuilder()
                                 {
                                     Description = "Patch"
                                 },
-                                Post = new OperationBuilder()
+                                Post = new OasOperationBuilder()
                                 {
                                     Description = "Post"
                                 },
-                                Put = new OperationBuilder()
+                                Put = new OasOperationBuilder()
                                 {
                                     Description = "Put"
                                 },
                                 Summary = "Summary",
-                                Trace = new OperationBuilder()
+                                Trace = new OasOperationBuilder()
                                 {
                                     Description = "Trace"
                                 }
@@ -181,7 +181,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                     },
                     Examples =
                     {
-                        [ "example1" ] = new ExampleBuilder()
+                        [ "example1" ] = new OasExampleBuilder()
                         {
                             Description = "Description",
                             ExternalValue = new Uri("http://example.org/example"),
@@ -190,23 +190,23 @@ namespace SourceCode.Clay.OpenApi.Tests
                     },
                     Headers =
                     {
-                        [ "header1" ] = new ParameterBodyBuilder()
+                        [ "header1" ] = new OasParameterBodyBuilder()
                         {
                             Content =
                             {
-                                [ new ContentType("application/json") ] = new MediaTypeBuilder()
+                                [ new ContentType("application/json") ] = new OasMediaTypeBuilder()
                                 {
                                     Encoding =
                                     {
-                                        [ "header1" ] = new PropertyEncodingBuilder()
+                                        [ "header1" ] = new OasPropertyEncodingBuilder()
                                         {
                                             ContentType = new ContentType("application/json"),
                                             Headers =
                                             {
                                                 [ "header1" ] = "#/components/headers/header1"
                                             },
-                                            Options = PropertyEncodingOptions.AllowReserved | PropertyEncodingOptions.Explode,
-                                            Style = ParameterStyle.DeepObject
+                                            Options = OasPropertyEncodingOptions.AllowReserved | OasPropertyEncodingOptions.Explode,
+                                            Style = OasParameterStyle.DeepObject
                                         }
                                     },
                                     Examples =
@@ -220,18 +220,18 @@ namespace SourceCode.Clay.OpenApi.Tests
                     },
                     Links =
                     {
-                        [ "link1" ] = new LinkBuilder()
+                        [ "link1" ] = new OasLinkBuilder()
                         {
                             Description = "Description",
                             OperationIdentifier = "operation1",
                             OperationReference = "http://example.org/#/operation1",
-                            Server = new ServerBuilder()
+                            Server = new OasServerBuilder()
                             {
                                 Description = "Description",
                                 Url = new Uri("http://example.org"),
                                 Variables =
                                 {
-                                    [ "variable1" ] = new ServerVariableBuilder()
+                                    [ "variable1" ] = new OasServerVariableBuilder()
                                     {
                                         Default = "Value",
                                         Description = "Description",
@@ -246,11 +246,11 @@ namespace SourceCode.Clay.OpenApi.Tests
                     },
                     Parameters =
                     {
-                        [ "parameter1" ] = new ParameterBuilder()
+                        [ "parameter1" ] = new OasParameterBuilder()
                         {
                             Content =
                             {
-                                [ new ContentType("application/json")] = new MediaTypeBuilder()
+                                [ new ContentType("application/json")] = new OasMediaTypeBuilder()
                                 {
                                     Schema = "#/components/schemas/schema1"
                                 }
@@ -260,35 +260,35 @@ namespace SourceCode.Clay.OpenApi.Tests
                             {
                                 [ new ContentType("application/json") ] = "#/components/examples/example1"
                             },
-                            Location = ParameterLocation.Header,
+                            Location = OasParameterLocation.Header,
                             Name = "parameter1",
-                            Options = ParameterOptions.AllowEmptyValue | ParameterOptions.AllowReserved | ParameterOptions.Deprecated | ParameterOptions.Explode | ParameterOptions.Required,
+                            Options = OasParameterOptions.AllowEmptyValue | OasParameterOptions.AllowReserved | OasParameterOptions.Deprecated | OasParameterOptions.Explode | OasParameterOptions.Required,
                             Schema = "#/components/schemas/schema1",
-                            Style = ParameterStyle.Matrix
+                            Style = OasParameterStyle.Matrix
                         }
                     },
                     RequestBodies =
                     {
-                        [ "requestbody1" ] = new RequestBodyBuilder()
+                        [ "requestbody1" ] = new OasRequestBodyBuilder()
                         {
                             Content =
                             {
-                                [ new ContentType("application/json" )] = new MediaTypeBuilder()
+                                [ new ContentType("application/json" )] = new OasMediaTypeBuilder()
                                 {
                                     Schema = "#/components/schemas/schema1"
                                 }
                             },
                             Description = "Description",
-                            Options = RequestBodyOptions.Required
+                            Options = OasRequestBodyOptions.Required
                         }
                     },
                     Responses =
                     {
-                        [ "response1" ] = new ResponseBuilder()
+                        [ "response1" ] = new OasResponseBuilder()
                         {
                             Content =
                             {
-                                [ new ContentType("application/json") ] = new MediaTypeBuilder()
+                                [ new ContentType("application/json") ] = new OasMediaTypeBuilder()
                                 {
                                     Schema = "#/components/schemas/schema1"
                                 }
@@ -306,56 +306,56 @@ namespace SourceCode.Clay.OpenApi.Tests
                     },
                     Schemas =
                     {
-                        [ "schema1" ] = new SchemaBuilder()
+                        [ "schema1" ] = new OasSchemaBuilder()
                         {
                             AdditionalProperties =
                             {
                                 [ "prop1" ] = "#/components/schemas/schema1"
                             },
                             Description = "Description",
-                            ExternalDocumentation = new ExternalDocumentationBuilder()
+                            ExternalDocumentation = new OasExternalDocumentationBuilder()
                             {
                                 Description = "Description",
                                 Url = new Uri("http://example.org/docs")
                             },
                             Format = "Format",
                             Items = "#/components/schemas/schema1",
-                            ItemsRange = new CountRange(100, 200, RangeOptions.Inclusive),
-                            LengthRange = new CountRange(200, 300, RangeOptions.Exclusive),
-                            NumberRange = new NumberRange(300, 400, RangeOptions.Exclusive),
-                            Options = SchemaOptions.Deprecated | SchemaOptions.Nullable | SchemaOptions.Required | SchemaOptions.UniqueItems,
+                            ItemsRange = new OasCountRange(100, 200, OasRangeOptions.Inclusive),
+                            LengthRange = new OasCountRange(200, 300, OasRangeOptions.Exclusive),
+                            NumberRange = new OasNumberRange(300, 400, OasRangeOptions.Exclusive),
+                            Options = OasSchemaOptions.Deprecated | OasSchemaOptions.Nullable | OasSchemaOptions.Required | OasSchemaOptions.UniqueItems,
                             Pattern = "[a-z]",
                             Properties =
                             {
                                 [ "prop1" ] = "#/components/schemas/schema1"
                             },
-                            PropertiesRange = new CountRange(100, 200),
+                            PropertiesRange = new OasCountRange(100, 200),
                             Title = "Schema1",
-                            JsonType = SchemaType.Object
+                            JsonType = OasSchemaType.Object
                         }
                     },
                     SecuritySchemes =
                     {
-                        [ "sec1" ] = new HttpSecuritySchemeBuilder()
+                        [ "sec1" ] = new OasHttpSecuritySchemeBuilder()
                         {
                             BearerFormat = "Bearer",
                             Description = "Description",
                             Scheme = "Schema"
                         },
-                        [ "sec2" ] = new ApiKeySecuritySchemeBuilder()
+                        [ "sec2" ] = new OasApiKeySecuritySchemeBuilder()
                         {
                             Description = "Description",
-                            Location = ParameterLocation.Cookie,
+                            Location = OasParameterLocation.Cookie,
                             Name = "Name"
                         },
-                        [ "sec3" ] = new OpenIdConnectSecuritySchemeBuilder()
+                        [ "sec3" ] = new OasOidcSecuritySchemeBuilder()
                         {
                             Description = "Description",
                             Url = new Uri("http://example.org/openid")
                         },
-                        [ "sec4" ] = new OAuth2SecuritySchemeBuilder()
+                        [ "sec4" ] = new OasOAuth2SecuritySchemeBuilder()
                         {
-                            AuthorizationCodeFlow = new OAuthFlowBuilder()
+                            AuthorizationCodeFlow = new OasOAuthFlowBuilder()
                             {
                                 AuthorizationUrl = new Uri("http://example.org/auth/auth"),
                                 RefreshUrl = new Uri("http://example.org/auth/refresh"),
@@ -365,37 +365,37 @@ namespace SourceCode.Clay.OpenApi.Tests
                                     [ "user:details" ] = "Get the user details"
                                 }
                             },
-                            ClientCredentialsFlow = new OAuthFlowBuilder()
+                            ClientCredentialsFlow = new OasOAuthFlowBuilder()
                             {
                                 AuthorizationUrl = new Uri("http://example.org/cli/auth")
                             },
                             Description = "Description",
-                            ImplicitFlow = new OAuthFlowBuilder()
+                            ImplicitFlow = new OasOAuthFlowBuilder()
                             {
                                 AuthorizationUrl = new Uri("http://example.org/imp/auth")
                             },
-                            PasswordFlow = new OAuthFlowBuilder()
+                            PasswordFlow = new OasOAuthFlowBuilder()
                             {
                                 AuthorizationUrl = new Uri("http://example.org/pwd/auth")
                             }
                         }
                     }
                 },
-                ExternalDocumentation = new ExternalDocumentationBuilder()
+                ExternalDocumentation = new OasExternalDocumentationBuilder()
                 {
                     Description = "Description",
                     Url = new Uri("http://example.org/docs")
                 },
-                Info = new InformationBuilder()
+                Info = new OasInformationBuilder()
                 {
-                    Contact = new ContactBuilder()
+                    Contact = new OasContactBuilder()
                     {
                         Email = new MailAddress("jonathan@example.org"),
                         Name = "Jonathan",
                         Url = new Uri("http://example.org/jonathan")
                     },
                     Description = "Description",
-                    License = new LicenseBuilder()
+                    License = new OasLicenseBuilder()
                     {
                         Name = "MIT",
                         Url = new Uri("https://opensource.org/licenses/MIT")
@@ -407,7 +407,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 Version = new SemanticVersion(3, 0, 1),
                 Paths =
                 {
-                    [ "path1" ] = new PathBuilder()
+                    [ "path1" ] = new OasPathBuilder()
                     {
                         Description = "Description"
                     }

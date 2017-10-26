@@ -17,16 +17,16 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
         [Fact(DisplayName = nameof(CompoundExpression_Parse))]
         public static void CompoundExpression_Parse()
         {
-            var sut = CompoundExpression.Parse("http://example.com/api/foo?bar={$request.body#/bar}&baz={$url}&foo={$method}{$statusCode}");
+            var sut = OasExpression.Parse("http://example.com/api/foo?bar={$request.body#/bar}&baz={$url}&foo={$method}{$statusCode}");
 
             Assert.Equal(7, sut.Count);
-            Assert.Equal(ExpressionComponentType.Literal, sut[0].ComponentType);
-            Assert.Equal(ExpressionComponentType.Field, sut[1].ComponentType);
-            Assert.Equal(ExpressionComponentType.Literal, sut[2].ComponentType);
-            Assert.Equal(ExpressionComponentType.Field, sut[3].ComponentType);
-            Assert.Equal(ExpressionComponentType.Literal, sut[4].ComponentType);
-            Assert.Equal(ExpressionComponentType.Field, sut[5].ComponentType);
-            Assert.Equal(ExpressionComponentType.Field, sut[6].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Literal, sut[0].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Field, sut[1].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Literal, sut[2].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Field, sut[3].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Literal, sut[4].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Field, sut[5].ComponentType);
+            Assert.Equal(OasExpressionComponentType.Field, sut[6].ComponentType);
 
             Assert.Equal("http://example.com/api/foo?bar=", sut[0].ToString());
             Assert.Equal("$request.body#/bar", sut[1].ToString());
