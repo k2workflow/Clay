@@ -348,7 +348,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                             Location = OasParameterLocation.Cookie,
                             Name = "Name"
                         },
-                        [ "sec3" ] = new OasOpenIdConnectSecuritySchemeBuilder()
+                        [ "sec3" ] = new OasOidcSecuritySchemeBuilder()
                         {
                             Description = "Description",
                             Url = new Uri("http://example.org/openid")

@@ -285,7 +285,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OpenIdConnectSecurityScheme_Equals))]
         public static void OpenIdConnectSecurityScheme_Equals()
         {
-            TestDtoEquality(() => new OasOpenIdConnectSecurityScheme(
+            TestDtoEquality(() => new OasOidcSecurityScheme(
                 "Description",
                 new Uri("http://example.org/openid")
             ));

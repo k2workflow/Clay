@@ -234,11 +234,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Serializes a <see cref="OasOpenIdConnectSecurityScheme"/> value.
+        /// Serializes a <see cref="OasOidcSecurityScheme"/> value.
         /// </summary>
-        /// <param name="value">The <see cref="OasOpenIdConnectSecurityScheme"/> value to serialize.</param>
+        /// <param name="value">The <see cref="OasOidcSecurityScheme"/> value to serialize.</param>
         /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeOpenIdConnectSecurityScheme(OasOpenIdConnectSecurityScheme value)
+        protected virtual JsonValue SerializeOpenIdConnectSecurityScheme(OasOidcSecurityScheme value)
         {
             if (value is null) return null;
 

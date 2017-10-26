@@ -269,7 +269,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OpenIdConnectSecuritySchemeBuilder_Build))]
         public static void OpenIdConnectSecuritySchemeBuilder_Build()
         {
-            TestBuilder(new OasOpenIdConnectSecuritySchemeBuilder()
+            TestBuilder(new OasOidcSecuritySchemeBuilder()
             {
                 Description = "Description",
                 Url = new Uri("http://example.org/openid")
