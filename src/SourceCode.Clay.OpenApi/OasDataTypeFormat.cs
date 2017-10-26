@@ -5,13 +5,6 @@
 
 #endregion
 
-#region License
-
-// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
-
-#endregion
-
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
@@ -34,17 +27,17 @@ namespace SourceCode.Clay.OpenApi
             /// </summary>
             public static class Integral
             {
-                #region Fields
+                #region Constants
 
                 /// <summary>
                 /// Signed 32 bits.
                 /// </summary>
-                public const string Int32 = "int32";
+                public const string Integer32 = "int32";
 
                 /// <summary>
                 /// Signed 64 bits.
                 /// </summary>
-                public const string Int64 = "int64";
+                public const string Integer64 = "int64";
 
                 #endregion
             }
@@ -54,17 +47,17 @@ namespace SourceCode.Clay.OpenApi
             /// </summary>
             public static class Numeric
             {
-                #region Fields
+                #region Constants
 
                 /// <summary>
                 /// Real 32 bits.
                 /// </summary>
-                public const string Single = "float";
+                public const string SinglePrecision = "float";
 
                 /// <summary>
                 /// Real 64 bits.
                 /// </summary>
-                public const string Double = "double";
+                public const string DoublePrecision = "double";
 
                 #endregion
             }
@@ -74,18 +67,18 @@ namespace SourceCode.Clay.OpenApi
             /// </summary>
             public static class Text
             {
-                #region Fields
+                #region Constants
 
                 /// <summary>
                 /// Base64 encoded characters.
                 /// </summary>
-                public const string Byte = "byte";
+                public const string Base64 = "byte";
 
                 /// <summary>
                 /// Any sequence of octets.
                 /// https://en.wikipedia.org/wiki/Octet_(computing)
                 /// </summary>
-                public const string Binary = "binary";
+                public const string BinaryOctet = "binary";
 
                 /// <summary>
                 /// As defined by full-date.
@@ -102,11 +95,9 @@ namespace SourceCode.Clay.OpenApi
                 /// <summary>
                 /// A hint to UIs to obscured input.
                 /// </summary>
-                public const string Password = "pass" + "word";
+                public const string Password = "pass" + "word"; // FxCop complains
 
                 #endregion
-
-                // FxCop complains
             }
 
             #endregion
@@ -122,19 +113,19 @@ namespace SourceCode.Clay.OpenApi
             /// <summary>
             /// String formats.
             /// </summary>
-            public static class String
+            public static class Text
             {
-                #region Fields
+                #region Constants
 
                 /// <summary>
                 /// A timestamp.
                 /// </summary>
-                public const string TimeStamp = "timestamp";
+                public const string Timestamp = "timestamp";
 
                 /// <summary>
-                /// A GUID.
+                /// A guid.
                 /// </summary>
-                public const string Guid = "uuid";
+                public const string Uuid = "uuid";
 
                 #endregion
             }
