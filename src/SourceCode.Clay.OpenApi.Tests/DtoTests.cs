@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using System;
 using System.Collections.Generic;
@@ -138,8 +139,7 @@ namespace SourceCode.Clay.OpenApi.Tests
             TestDtoEquality(() => new OasContact(
                 "Jonathan",
                 new Uri("http://example.org/jonathan"),
-                new MailAddress("jonathan@example.org"),
-                default
+                new MailAddress("jonathan@example.org")
             ));
         }
 
@@ -204,7 +204,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 "Title",
                 "Description",
                 new Uri("http://example.org/tos"),
-                new OasContact("Name", default, default, null),
+                new OasContact("Name", default, default),
                 new OasLicense("MIT", default),
                 new SemanticVersion(1, 0, 0)
             ));
@@ -481,10 +481,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                 "uuid",
                 "Unique Identifier",
                 "Description",
-                new OasNumberRange(1, 100),
-                new OasCountRange(2, 200),
-                new OasCountRange(3, 300),
-                new OasCountRange(4, 400),
+                new NumberConstraint(1, 100),
+                new CountConstraint(2, 200),
+                new CountConstraint(3, 300),
+                new CountConstraint(4, 400),
                 OasSchemaOptions.Required,
                 "[a-z]",
                 new[] { new OasScalarValue(true) },

@@ -45,22 +45,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the number range validation details.
         /// </summary>
-        public NumberRange NumberRange { get; }
+        public NumberConstraint NumberRange { get; }
 
         /// <summary>
         /// Gets the item count validation details.
         /// </summary>
-        public CountRange ItemsRange { get; }
+        public CountConstraint ItemsRange { get; }
 
         /// <summary>
         /// Gets the length validation details.
         /// </summary>
-        public CountRange LengthRange { get; }
+        public CountConstraint LengthRange { get; }
 
         /// <summary>
         /// Gets the property count validation details.
         /// </summary>
-        public CountRange PropertiesRange { get; }
+        public CountConstraint PropertiesRange { get; }
 
         /// <summary>
         /// Gets the schema options.
@@ -148,10 +148,10 @@ namespace SourceCode.Clay.OpenApi
             string format = null,
             string title = null,
             string description = null,
-            NumberRange numberRange = default,
-            CountRange itemsRange = default,
-            CountRange lengthRange = default,
-            CountRange propertiesRange = default,
+            NumberConstraint numberRange = default,
+            CountConstraint itemsRange = default,
+            CountConstraint lengthRange = default,
+            CountConstraint propertiesRange = default,
             OasSchemaOptions options = default,
             string pattern = default,
             IReadOnlyList<OasScalarValue> @enum = default,

@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using System;
 using System.Collections.Generic;
@@ -436,10 +437,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                 Format = "uuid",
                 Title = "Unique Identifier",
                 Description = "Description",
-                NumberRange = new OasNumberRange(1, 100),
-                ItemsRange = new OasCountRange(2, 200),
-                LengthRange = new OasCountRange(3, 300),
-                PropertiesRange = new OasCountRange(4, 400),
+                NumberRange = new NumberConstraint(1, 100),
+                ItemsRange = new CountConstraint(2, 200),
+                LengthRange = new CountConstraint(3, 300),
+                PropertiesRange = new CountConstraint(4, 400),
                 Options = OasSchemaOptions.Required,
                 Pattern = "[a-z]",
                 Enum = { new OasScalarValue(true) },

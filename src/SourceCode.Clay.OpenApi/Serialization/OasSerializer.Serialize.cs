@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
 using System.Json;
@@ -653,11 +654,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             SetJsonNumber(json, PropertyConstants.Minimum, value.NumberRange.Minimum);
             if (value.NumberRange.Minimum.HasValue)
-                SetJsonFlag(json, PropertyConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, OasRangeOptions.MinimumInclusive, invert: true);
+                SetJsonFlag(json, PropertyConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, RangeOptions.MinimumInclusive, invert: true);
 
             SetJsonNumber(json, PropertyConstants.Maximum, value.NumberRange.Maximum);
             if (value.NumberRange.Maximum.HasValue)
-                SetJsonFlag(json, PropertyConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, OasRangeOptions.MaximumInclusive, invert: true);
+                SetJsonFlag(json, PropertyConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, RangeOptions.MaximumInclusive, invert: true);
 
             SetJsonNumber(json, PropertyConstants.MultipleOf, value.NumberRange.MultipleOf);
 

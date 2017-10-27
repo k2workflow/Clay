@@ -117,32 +117,10 @@ namespace SourceCode.Clay.OpenApi
             if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            if (!x.Equals(y)) return false;
+            if (!x._json.Equals(y._json)) return false;
 
             return true;
         }
-
-        /// <summary>
-        /// Implements the operator == operator.
-        /// </summary>
-        /// <param name="x">The first item.</param>
-        /// <param name="y">The second item.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator ==(VendorExtensions x, VendorExtensions y)
-        {
-            if (x is null) return y is null;
-            if (y is null) return false;
-
-            return x.Equals(y);
-        }
-
-        /// <summary>
-        /// Implements the operator != operator.
-        /// </summary>
-        /// <param name="x">The first item.</param>
-        /// <param name="y">The second item.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator !=(VendorExtensions x, VendorExtensions y) => !(x == y);
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -154,8 +132,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-        public bool Equals(VendorExtensions other)
-            => _json.NullableJsonEquals(other?._json);
+        public bool Equals(VendorExtensions other) => Equals(this, other);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
@@ -170,6 +147,28 @@ namespace SourceCode.Clay.OpenApi
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="x">The first item.</param>
+        /// <param name="y">The second item.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(VendorExtensions x, VendorExtensions y) => Equals(x, y);
+
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="x">The first item.</param>
+        /// <param name="y">The second item.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(VendorExtensions x, VendorExtensions y) => !(x == y);
+
+        public override string ToString() => _json.ToString();
 
         #endregion
     }

@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,22 +45,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets or sets the number range validation details.
         /// </summary>
-        public OasNumberRange NumberRange { get; set; }
+        public NumberConstraint NumberRange { get; set; }
 
         /// <summary>
         /// Gets or sets the item count validation details.
         /// </summary>
-        public OasCountRange ItemsRange { get; set; }
+        public CountConstraint ItemsRange { get; set; }
 
         /// <summary>
         /// Gets or sets the length validation details.
         /// </summary>
-        public OasCountRange LengthRange { get; set; }
+        public CountConstraint LengthRange { get; set; }
 
         /// <summary>
         /// Gets or sets the property count validation details.
         /// </summary>
-        public OasCountRange PropertiesRange { get; set; }
+        public CountConstraint PropertiesRange { get; set; }
 
         /// <summary>
         /// Gets or sets the schema options.

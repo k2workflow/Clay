@@ -12,7 +12,10 @@ using System.Threading;
 
 namespace SourceCode.Clay.Json.Validation
 {
-    public sealed class PatternValidator
+    /// <summary>
+    /// Represents a Json pattern constraint.
+    /// </summary>
+    public sealed class PatternConstraint
     {
         #region Constants
 
@@ -31,13 +34,21 @@ namespace SourceCode.Clay.Json.Validation
 
         public string Pattern { get; }
 
+        /// <summary>
+        /// Gets a value specifying whether a value is required.
+        /// </summary>
         public bool Required { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether any of the constraints are specified.
+        /// </summary>
+        public bool IsConstrained => !string.IsNullOrWhiteSpace(Pattern) || Required;
 
         #endregion
 
         #region Constructors
 
-        public PatternValidator(string pattern, bool required, RegexOptions options, TimeSpan timeout)
+        public PatternConstraint(string pattern, bool required, RegexOptions options, TimeSpan timeout)
         {
             if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException(nameof(pattern));
 
@@ -48,7 +59,7 @@ namespace SourceCode.Clay.Json.Validation
             _regex = new Lazy<Regex>(build, LazyThreadSafetyMode.PublicationOnly);
         }
 
-        public PatternValidator(string pattern, bool required)
+        public PatternConstraint(string pattern, bool required)
             : this(pattern, required, DefaultOptions, DefaultTimeout)
         { }
 

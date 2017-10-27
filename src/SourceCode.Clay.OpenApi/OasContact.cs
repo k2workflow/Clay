@@ -18,7 +18,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Contact information for the exposed API.
     /// </summary>
-    public sealed class OasContact : IHasVendorExtensions, IEquatable<OasContact>
+    public sealed class OasContact : IEquatable<OasContact>
     {
         #region Properties
 
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets custom properties.
         /// </summary>
-        public IReadOnlyDictionary<string, JsonValue> VendorExtensions { get; }
+        //public IReadOnlyDictionary<string, JsonValue> VendorExtensions { get; }
 
         #endregion
 
@@ -52,22 +52,21 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="name">The name of the contact.</param>
         /// <param name="url">The URL of the contact.</param>
         /// <param name="email">The email of the contact.</param>
-        /// <param name="vendorExtensions">Custom vendor properties.</param>
         public OasContact(
             string name = default,
             Uri url = default,
-            MailAddress email = default,
-            JsonObject vendorExtensions = default)
+            MailAddress email = default)
+        //JsonObject vendorExtensions = default)
         {
             Name = name;
             Url = url;
             Email = email;
 
             // Vendor extensions
-            VendorExtensions = new VendorExtensions(vendorExtensions,
-                OasSerializer.PropertyConstants.Name,
-                OasSerializer.PropertyConstants.Url,
-                OasSerializer.PropertyConstants.Email);
+            //VendorExtensions = new VendorExtensions(vendorExtensions,
+            //    OasSerializer.PropertyConstants.Name,
+            //    OasSerializer.PropertyConstants.Url,
+            //    OasSerializer.PropertyConstants.Email);
         }
 
         #endregion
@@ -87,10 +86,10 @@ namespace SourceCode.Clay.OpenApi
             if (!ReferenceEquals(x.Email, y.Email))
             {
                 if (x.Email is null || y.Email is null) return false;
-                return x.Equals(y.Email);
+                return x.Email.Equals(y.Email);
             }
 
-            if (x.VendorExtensions != y.VendorExtensions) return false;
+            //if (x.VendorExtensions != y.VendorExtensions) return false;
 
             return true;
         }
@@ -124,8 +123,8 @@ namespace SourceCode.Clay.OpenApi
                 if (Email != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Email);
 
-                if (VendorExtensions != null)
-                    hc = (hc * 23) + VendorExtensions.GetHashCode();
+                //if (VendorExtensions != null)
+                //    hc = (hc * 23) + VendorExtensions.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
@@ -149,7 +148,7 @@ namespace SourceCode.Clay.OpenApi
             if (json.TryGetValue(OasSerializer.PropertyConstants.Email, JsonType.String, true, out jv))
                 email = new MailAddress(jv);
 
-            var result = new OasContact(name, url, email, json);
+            var result = new OasContact(name, url, email);
             return result;
         }
 
@@ -162,8 +161,8 @@ namespace SourceCode.Clay.OpenApi
                 [OasSerializer.PropertyConstants.Email] = Email.ToString()
             };
 
-            foreach (var item in VendorExtensions)
-                json.Add(item);
+            //foreach (var item in VendorExtensions)
+            //    json.Add(item);
 
             var str = json.ToString();
             return str;
@@ -176,16 +175,16 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Implements the operator == operator.
         /// </summary>
-        /// <param name="contact1">The contact1.</param>
-        /// <param name="contact2">The contact2.</param>
+        /// <param name="x">The contact1.</param>
+        /// <param name="y">The contact2.</param>
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasContact x, OasContact y) => Equals(x, y);
 
         /// <summary>
         /// Implements the operator != operator.
         /// </summary>
-        /// <param name="contact1">The contact1.</param>
-        /// <param name="contact2">The contact2.</param>
+        /// <param name="x">The contact1.</param>
+        /// <param name="y">The contact2.</param>
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(OasContact x, OasContact y) => !(x == y);
 

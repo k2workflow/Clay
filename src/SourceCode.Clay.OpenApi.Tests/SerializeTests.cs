@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using SourceCode.Clay.OpenApi.Serialization;
 using System;
@@ -320,16 +321,16 @@ namespace SourceCode.Clay.OpenApi.Tests
                             },
                             Format = "Format",
                             Items = "#/components/schemas/schema1",
-                            ItemsRange = new OasCountRange(100, 200, OasRangeOptions.Inclusive),
-                            LengthRange = new OasCountRange(200, 300, OasRangeOptions.Exclusive),
-                            NumberRange = new OasNumberRange(300, 400, OasRangeOptions.Exclusive),
+                            ItemsRange = new CountConstraint(100, 200),
+                            LengthRange = new CountConstraint(200, 300),
+                            NumberRange = new NumberConstraint(300, 400, RangeOptions.Exclusive),
                             Options = OasSchemaOptions.Deprecated | OasSchemaOptions.Nullable | OasSchemaOptions.Required | OasSchemaOptions.UniqueItems,
                             Pattern = "[a-z]",
                             Properties =
                             {
                                 [ "prop1" ] = "#/components/schemas/schema1"
                             },
-                            PropertiesRange = new OasCountRange(100, 200),
+                            PropertiesRange = new CountConstraint(100, 200),
                             Title = "Schema1",
                             JsonType = OasSchemaType.Object
                         }
