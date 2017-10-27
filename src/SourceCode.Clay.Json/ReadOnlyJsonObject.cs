@@ -145,7 +145,18 @@ namespace SourceCode.Clay.Json
 
         #region IEquatable
 
-        public bool Equals(ReadOnlyJsonObject other) => _json.NullableJsonEquals(other?._json);
+        private static bool Equals(ReadOnlyJsonObject x, ReadOnlyJsonObject y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            if (!x._json.NullableJsonEquals(y._json)) return false;
+
+            return true;
+        }
+
+        public bool Equals(ReadOnlyJsonObject other) => Equals(this, other);
 
         public override bool Equals(object obj)
             => obj is ReadOnlyJsonObject other
@@ -158,7 +169,7 @@ namespace SourceCode.Clay.Json
         #region Operators
 
         /// <inheritdoc/>
-        public static bool operator ==(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => x.Equals(y);
+        public static bool operator ==(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => Equals(x, y);
 
         /// <inheritdoc/>
         public static bool operator !=(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => !(x == y);
