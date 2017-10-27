@@ -51,12 +51,13 @@ namespace SourceCode.Clay.Json.Tests
             };
             var json = new ReadOnlyJsonObject(jobj);
 
+            Assert.True(json != null);
+
             var clone = json.Clone();
             Assert.Equal(json, clone);
             Assert.Equal(json.ToString(), clone.ToString());
 
             var mutable = json.ToJsonObject();
-            Assert.Equal(json, mutable);
             Assert.Equal(json.ToString(), mutable.ToString());
 
             Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out var jv) && (bool)jv);
