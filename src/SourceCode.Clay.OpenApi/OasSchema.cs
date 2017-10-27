@@ -6,6 +6,7 @@
 #endregion
 
 using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -44,22 +45,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the number range validation details.
         /// </summary>
-        public OasNumberRange NumberRange { get; }
+        public NumberRange NumberRange { get; }
 
         /// <summary>
         /// Gets the item count validation details.
         /// </summary>
-        public OasCountRange ItemsRange { get; }
+        public CountRange ItemsRange { get; }
 
         /// <summary>
         /// Gets the length validation details.
         /// </summary>
-        public OasCountRange LengthRange { get; }
+        public CountRange LengthRange { get; }
 
         /// <summary>
         /// Gets the property count validation details.
         /// </summary>
-        public OasCountRange PropertiesRange { get; }
+        public CountRange PropertiesRange { get; }
 
         /// <summary>
         /// Gets the schema options.
@@ -147,10 +148,10 @@ namespace SourceCode.Clay.OpenApi
             string format = null,
             string title = null,
             string description = null,
-            OasNumberRange numberRange = default,
-            OasCountRange itemsRange = default,
-            OasCountRange lengthRange = default,
-            OasCountRange propertiesRange = default,
+            NumberRange numberRange = default,
+            CountRange itemsRange = default,
+            CountRange lengthRange = default,
+            CountRange propertiesRange = default,
             OasSchemaOptions options = default,
             string pattern = default,
             IReadOnlyList<OasScalarValue> @enum = default,

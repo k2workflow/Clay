@@ -7,13 +7,13 @@
 
 using System;
 
-namespace SourceCode.Clay.OpenApi
+namespace SourceCode.Clay.Json.Validation
 {
     /// <summary>
     /// Indicates options for validating a range.
     /// </summary>
     [Flags]
-    public enum OasRangeOptions
+    public enum RangeOptions
     {
         // Reasoning: self-documenting.
 #pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
@@ -38,6 +38,6 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// The range is inclusive for both minimum and maximum.
         /// </summary>
-        Inclusive = MinimumInclusive | MaximumInclusive
+        Inclusive = MinimumInclusive | MaximumInclusive // 3
     }
 }

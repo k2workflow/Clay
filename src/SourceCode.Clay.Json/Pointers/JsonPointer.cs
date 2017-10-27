@@ -14,7 +14,7 @@ using System.Text;
 namespace SourceCode.Clay.Json.Pointers
 {
     /// <summary>
-    /// Represents a JSON pointer.
+    /// Represents a Json pointer.
     /// </summary>
     public struct JsonPointer : IReadOnlyList<JsonPointerToken>, IEquatable<JsonPointer>
     {
@@ -69,28 +69,28 @@ namespace SourceCode.Clay.Json.Pointers
         #region Conversion
 
         /// <summary>
-        /// Converts the string representation of a JSON pointer to its structured equivalent.
+        /// Converts the string representation of a Json pointer to its structured equivalent.
         /// </summary>
-        /// <param name="s">A string containing a JSON pointer to convert.</param>
-        /// <returns>The structured equivalent of the JSON pointer contained in <paramref name="s"/>.</returns>
+        /// <param name="s">A string containing a Json pointer to convert.</param>
+        /// <returns>The structured equivalent of the Json pointer contained in <paramref name="s"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="s"/> is null.</exception>
-        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the JSON pointer specification.</exception>
+        /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Json pointer specification.</exception>
         public static JsonPointer Parse(string s)
         {
             if (s == null) throw new ArgumentNullException(nameof(s));
-            if (!TryParse(s, out var result)) throw new FormatException("The specified value is not a valid JSON pointer.");
+            if (!TryParse(s, out var result)) throw new FormatException("The specified value is not a valid Json pointer.");
             return result;
         }
 
         /// <summary>
-        /// Converts the string representation of a JSON pointer to its structured equivalent.
+        /// Converts the string representation of a Json pointer to its structured equivalent.
         /// A return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="s">A string containing a JSON pointer to convert.</param>
+        /// <param name="s">A string containing a Json pointer to convert.</param>
         /// <param name="result">
-        /// When this method returns, contains the structured equivalent of the JSON pointer contained in <paramref name="s"/>,
+        /// When this method returns, contains the structured equivalent of the Json pointer contained in <paramref name="s"/>,
         /// if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
-        /// is not in a format compliant with the JSON pointer specification. This parameter is passed uninitialized;
+        /// is not in a format compliant with the Json pointer specification. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.
         /// </param>
         /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
@@ -158,8 +158,8 @@ namespace SourceCode.Clay.Json.Pointers
             return true;
         }
 
-        /// <summary>Returns the the JSON pointer as a string value.</summary>
-        /// <returns>The JSON pointer.</returns>
+        /// <summary>Returns the the Json pointer as a string value.</summary>
+        /// <returns>The Json pointer.</returns>
         public override string ToString()
         {
             if (_tokens == null) return string.Empty;
@@ -254,7 +254,7 @@ namespace SourceCode.Clay.Json.Pointers
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Unsupported JSON type {target.GetType()}.");
+                        throw new InvalidOperationException($"Unsupported Json type {target.GetType()}.");
                 }
             }
 

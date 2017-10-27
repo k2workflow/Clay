@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Json;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -73,6 +74,27 @@ namespace SourceCode.Clay.OpenApi
 
         #region IEquatable
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool Equals(OasContact x, OasContact y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            if (!StringComparer.Ordinal.Equals(x.Name, y.Name)) return false;
+            if (x.Url != y.Url) return false;
+
+            if (!ReferenceEquals(x.Email, y.Email))
+            {
+                if (x.Email is null || y.Email is null) return false;
+                return x.Equals(y.Email);
+            }
+
+            if (x.VendorExtensions != y.VendorExtensions) return false;
+
+            return true;
+        }
+
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
@@ -83,22 +105,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-        public bool Equals(OasContact other)
-        {
-            if (other is null) return false; // (x, null)
-            if (ReferenceEquals(this, other)) return true; // (x, x)
-
-            if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;
-            if (Url != other.Url) return false;
-            if (!ReferenceEquals(Email, other.Email))
-            {
-                if (Email is null || other.Email is null) return false;
-                return Email.Equals(other.Email);
-            }
-            if (VendorExtensions != other.VendorExtensions) return false;
-
-            return true;
-        }
+        public bool Equals(OasContact other) => Equals(this, other);
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
@@ -110,10 +117,13 @@ namespace SourceCode.Clay.OpenApi
 
                 if (Name != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
+
                 if (Url != null)
                     hc = (hc * 23) + Url.GetHashCode();
+
                 if (Email != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Email);
+
                 if (VendorExtensions != null)
                     hc = (hc * 23) + VendorExtensions.GetHashCode();
 
@@ -169,12 +179,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="contact1">The contact1.</param>
         /// <param name="contact2">The contact2.</param>
         /// <returns>The result of the operator.</returns>
-        public static bool operator ==(OasContact contact1, OasContact contact2)
-        {
-            if (contact1 is null && contact2 is null) return true;
-            if (contact1 is null || contact2 is null) return false;
-            return contact1.Equals((object)contact2);
-        }
+        public static bool operator ==(OasContact x, OasContact y) => Equals(x, y);
 
         /// <summary>
         /// Implements the operator != operator.
@@ -182,7 +187,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="contact1">The contact1.</param>
         /// <param name="contact2">The contact2.</param>
         /// <returns>The result of the operator.</returns>
-        public static bool operator !=(OasContact contact1, OasContact contact2) => !(contact1 == contact2);
+        public static bool operator !=(OasContact x, OasContact y) => !(x == y);
 
         #endregion
     }

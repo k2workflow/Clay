@@ -9,12 +9,12 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace SourceCode.Clay.OpenApi
+namespace SourceCode.Clay.Json.Validation
 {
     /// <summary>
-    /// Represents a JSON range validation.
+    /// Represents a Json range validation.
     /// </summary>
-    public struct OasNumberRange : IEquatable<OasNumberRange>
+    public struct NumberRange : IEquatable<NumberRange>
     {
         #region Properties
 
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the range options.
         /// </summary>
-        public OasRangeOptions RangeOptions { get; }
+        public RangeOptions RangeOptions { get; }
 
         /// <summary>
         /// Gets a value indicating whether either <see cref="Minimum"/> or <see cref="Maximum"/>
@@ -49,17 +49,17 @@ namespace SourceCode.Clay.OpenApi
         #region Constructors
 
         /// <summary>
-        /// Creates a new <see cref="OasNumberRange"/> value.
+        /// Creates a new <see cref="NumberRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
         /// <param name="multipleOf">The value which the range should be a multiple of.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public OasNumberRange(Number? minimum, Number? maximum, Number? multipleOf, OasRangeOptions rangeOptions)
+        public NumberRange(Number? minimum, Number? maximum, Number? multipleOf, RangeOptions rangeOptions)
         {
-            rangeOptions &= OasRangeOptions.Inclusive;
-            if (!minimum.HasValue) rangeOptions &= ~OasRangeOptions.MinimumInclusive;
-            if (!maximum.HasValue) rangeOptions &= ~OasRangeOptions.MaximumInclusive;
+            rangeOptions &= RangeOptions.Inclusive;
+            if (!minimum.HasValue) rangeOptions &= ~RangeOptions.MinimumInclusive;
+            if (!maximum.HasValue) rangeOptions &= ~RangeOptions.MaximumInclusive;
 
             Minimum = minimum;
             Maximum = maximum;
@@ -68,23 +68,34 @@ namespace SourceCode.Clay.OpenApi
         }
 
         /// <summary>
-        /// Creates a new inclusive <see cref="OasNumberRange"/> value.
-        /// </summary>
-        /// <param name="minimum">The minimum value.</param>
-        /// <param name="maximum">The maximum value.</param>
-        public OasNumberRange(Number? minimum, Number? maximum)
-            : this(minimum, maximum, null, OasRangeOptions.Inclusive)
-        { }
-
-        /// <summary>
-        /// Creates a new <see cref="OasNumberRange"/> value.
+        /// Creates a new <see cref="NumberRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public OasNumberRange(Number? minimum, Number? maximum, OasRangeOptions rangeOptions)
+        public NumberRange(Number? minimum, Number? maximum, RangeOptions rangeOptions)
             : this(minimum, maximum, null, rangeOptions)
         { }
+
+        /// <summary>
+        /// Creates a new inclusive <see cref="NumberRange"/> value.
+        /// </summary>
+        /// <param name="minimum">The minimum value.</param>
+        /// <param name="maximum">The maximum value.</param>
+        public NumberRange(Number? minimum, Number? maximum)
+            : this(minimum, maximum, null, RangeOptions.Inclusive)
+        { }
+
+        #endregion
+
+        #region Factory
+
+        /// <summary>
+        /// Creates a new <see cref="NumberRange"/> that requires an exact value.
+        /// </summary>
+        /// <param name="count">The exact value.</param>
+        /// <returns></returns>
+        public static NumberRange Exact(Number value) => new NumberRange(value, value);
 
         #endregion
 
@@ -93,12 +104,14 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
-        public override bool Equals(object obj) => obj is OasNumberRange o && Equals(o);
+        public override bool Equals(object obj)
+            => obj is NumberRange other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-        public bool Equals(OasNumberRange other)
+        public bool Equals(NumberRange other)
         {
             if (!NumberComparer.Default.Equals(Minimum, other.Minimum)) return false;
             if (!NumberComparer.Default.Equals(Maximum, other.Maximum)) return false;
@@ -132,22 +145,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
         /// </summary>
-        /// <param name="x">The first <see cref="OasNumberRange"/> to compare.</param>
-        /// <param name="y">The second <see cref="OasNumberRange"/> to compare.</param>
+        /// <param name="x">The first <see cref="NumberRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="NumberRange"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="OasNumberRange"/> is equal to <see cref="OasNumberRange"/>.
+        /// A value indicating whether the first <see cref="NumberRange"/> is equal to <see cref="NumberRange"/>.
         /// </returns>
-        public static bool operator ==(OasNumberRange x, OasNumberRange y) => x.Equals(y);
+        public static bool operator ==(NumberRange x, NumberRange y) => x.Equals(y);
 
         /// <summary>
         /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
         /// </summary>
-        /// <param name="x">The first <see cref="OasNumberRange"/> to compare.</param>
-        /// <param name="y">The second <see cref="OasNumberRange"/> to compare.</param>
+        /// <param name="x">The first <see cref="NumberRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="NumberRange"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="OasNumberRange"/> is not similar to <see cref="OasNumberRange"/>.
+        /// A value indicating whether the first <see cref="NumberRange"/> is not similar to <see cref="NumberRange"/>.
         /// </returns>
-        public static bool operator !=(OasNumberRange x, OasNumberRange y) => !(x == y);
+        public static bool operator !=(NumberRange x, NumberRange y) => !(x == y);
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
@@ -158,7 +171,7 @@ namespace SourceCode.Clay.OpenApi
             // Use set notation for open/closed boundaries
             var sb = new StringBuilder();
 
-            if (RangeOptions.HasFlag(OasRangeOptions.MinimumInclusive))
+            if (RangeOptions.HasFlag(RangeOptions.MinimumInclusive))
                 sb.Append("[");
             else
                 sb.Append("(");
@@ -175,7 +188,7 @@ namespace SourceCode.Clay.OpenApi
             if (MultipleOf.HasValue)
                 sb.Append(" / ").Append(MultipleOf.Value.ToString(CultureInfo.InvariantCulture));
 
-            if (RangeOptions.HasFlag(OasRangeOptions.MaximumInclusive))
+            if (RangeOptions.HasFlag(RangeOptions.MaximumInclusive))
                 sb.Append("]");
             else
                 sb.Append(")");

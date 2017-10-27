@@ -11,7 +11,7 @@ using System.Globalization;
 namespace SourceCode.Clay.Json.Pointers
 {
     /// <summary>
-    /// Represents a JSON pointer token.
+    /// Represents a Json pointer token.
     /// </summary>
     public struct JsonPointerToken : IEquatable<JsonPointerToken>
     {

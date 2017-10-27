@@ -9,12 +9,12 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace SourceCode.Clay.OpenApi
+namespace SourceCode.Clay.Json.Validation
 {
     /// <summary>
-    /// Represents a JSON count validation.
+    /// Represents a Json count validation.
     /// </summary>
-    public struct OasCountRange : IEquatable<OasCountRange>
+    public struct CountRange : IEquatable<CountRange>
     {
         #region Properties
 
@@ -31,7 +31,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the range options.
         /// </summary>
-        public OasRangeOptions RangeOptions { get; }
+        public RangeOptions RangeOptions { get; }
 
         /// <summary>
         /// Gets a value indicating whether either <see cref="Minimum"/> or <see cref="Maximum"/>
@@ -44,31 +44,41 @@ namespace SourceCode.Clay.OpenApi
         #region Constructors
 
         /// <summary>
-        /// Creates a new inclusive <see cref="OasNumberRange"/> value.
+        /// Creates a new inclusive <see cref="CountRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum value.</param>
         /// <param name="maximum">The maximum value.</param>
-        public OasCountRange(uint? minimum, uint? maximum)
-            : this(minimum, maximum, OasRangeOptions.Inclusive)
-        {
-        }
+        public CountRange(uint? minimum, uint? maximum)
+            : this(minimum, maximum, RangeOptions.Inclusive)
+        { }
 
         /// <summary>
-        /// Creates a new <see cref="OasNumberRange"/> value.
+        /// Creates a new <see cref="CountRange"/> value.
         /// </summary>
         /// <param name="minimum">The minimum count.</param>
         /// <param name="maximum">The maximum count.</param>
         /// <param name="rangeOptions">The range options.</param>
-        public OasCountRange(uint? minimum, uint? maximum, OasRangeOptions rangeOptions)
+        public CountRange(uint? minimum, uint? maximum, RangeOptions rangeOptions)
         {
-            rangeOptions &= OasRangeOptions.Inclusive;
-            if (!minimum.HasValue) rangeOptions &= ~OasRangeOptions.MinimumInclusive;
-            if (!maximum.HasValue) rangeOptions &= ~OasRangeOptions.MaximumInclusive;
+            rangeOptions &= RangeOptions.Inclusive;
+            if (!minimum.HasValue) rangeOptions &= ~RangeOptions.MinimumInclusive;
+            if (!maximum.HasValue) rangeOptions &= ~RangeOptions.MaximumInclusive;
 
             Minimum = minimum;
             Maximum = maximum;
             RangeOptions = rangeOptions;
         }
+
+        #endregion
+
+        #region Factory
+
+        /// <summary>
+        /// Creates a new <see cref="CountRange"/> that requires an exact count.
+        /// </summary>
+        /// <param name="count">The exact count.</param>
+        /// <returns></returns>
+        public static CountRange Exact(uint count) => new CountRange(count, count);
 
         #endregion
 
@@ -78,13 +88,13 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
         public override bool Equals(object obj)
-            => obj is OasNumberRange other
+            => obj is CountRange other
             && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-        public bool Equals(OasCountRange other)
+        public bool Equals(CountRange other)
         {
             if (!NumberComparer.Default.Equals(Minimum, other.Minimum)) return false;
             if (!NumberComparer.Default.Equals(Maximum, other.Maximum)) return false;
@@ -119,7 +129,7 @@ namespace SourceCode.Clay.OpenApi
 
             var sb = new StringBuilder();
 
-            if (RangeOptions.HasFlag(OasRangeOptions.MinimumInclusive)) sb.Append("[");
+            if (RangeOptions.HasFlag(RangeOptions.MinimumInclusive)) sb.Append("[");
             else sb.Append("(");
 
             if (Minimum.HasValue) sb.Append(Minimum.Value.ToString(CultureInfo.InvariantCulture));
@@ -128,7 +138,7 @@ namespace SourceCode.Clay.OpenApi
 
             if (Maximum.HasValue) sb.Append(Maximum.Value.ToString(CultureInfo.InvariantCulture));
 
-            if (RangeOptions.HasFlag(OasRangeOptions.MaximumInclusive)) sb.Append("]");
+            if (RangeOptions.HasFlag(RangeOptions.MaximumInclusive)) sb.Append("]");
             else sb.Append(")");
 
             return sb.ToString();
@@ -141,22 +151,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
         /// </summary>
-        /// <param name="x">The first <see cref="OasCountRange"/> to compare.</param>
-        /// <param name="y">The second <see cref="OasCountRange"/> to compare.</param>
+        /// <param name="x">The first <see cref="CountRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="CountRange"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="OasCountRange"/> is equal to <see cref="OasCountRange"/>.
+        /// A value indicating whether the first <see cref="CountRange"/> is equal to <see cref="CountRange"/>.
         /// </returns>
-        public static bool operator ==(OasCountRange x, OasCountRange y) => x.Equals(y);
+        public static bool operator ==(CountRange x, CountRange y) => x.Equals(y);
 
         /// <summary>
         /// Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
         /// </summary>
-        /// <param name="x">The first <see cref="OasCountRange"/> to compare.</param>
-        /// <param name="y">The second <see cref="OasCountRange"/> to compare.</param>
+        /// <param name="x">The first <see cref="CountRange"/> to compare.</param>
+        /// <param name="y">The second <see cref="CountRange"/> to compare.</param>
         /// <returns>
-        /// A value indicating whether the first <see cref="OasCountRange"/> is not similar to <see cref="OasCountRange"/>.
+        /// A value indicating whether the first <see cref="CountRange"/> is not similar to <see cref="CountRange"/>.
         /// </returns>
-        public static bool operator !=(OasCountRange x, OasCountRange y) => !(x == y);
+        public static bool operator !=(CountRange x, CountRange y) => !(x == y);
 
         #endregion
     }

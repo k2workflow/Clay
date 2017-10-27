@@ -5,12 +5,12 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using SourceCode.Clay.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Json;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -109,6 +109,18 @@ namespace SourceCode.Clay.OpenApi
         #endregion
 
         #region IEquatable
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool Equals(VendorExtensions x, VendorExtensions y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            if (!x.Equals(y)) return false;
+
+            return true;
+        }
 
         /// <summary>
         /// Implements the operator == operator.
