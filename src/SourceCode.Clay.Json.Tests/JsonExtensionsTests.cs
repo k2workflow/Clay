@@ -15,6 +15,28 @@ namespace SourceCode.Clay.Json.Tests
         #region Methods
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_ReadOnlyJsonObject_Null))]
+        public static void When_ReadOnlyJsonObject_Null()
+        {
+            ReadOnlyJsonObject json = null;
+
+            Assert.True(json == null);
+            Assert.False(json != null);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_ReadOnlyJsonObject_Empty))]
+        public static void When_ReadOnlyJsonObject_Empty()
+        {
+            var json = new ReadOnlyJsonObject();
+
+            Assert.True(json != null);
+
+            Assert.False(json.Equals(null));
+            Assert.False(json == null);
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_JsonObject_TryGetValue))]
         public static void When_JsonObject_TryGetValue()
         {
@@ -26,6 +48,9 @@ namespace SourceCode.Clay.Json.Tests
                 ["object"] = new JsonObject(),
                 ["array"] = new JsonArray()
             };
+
+            Assert.False(json.Equals(null));
+            Assert.True(json != null);
 
             var clone = json.Clone();
             Assert.Equal(json.ToString(), clone.ToString());
@@ -51,6 +76,7 @@ namespace SourceCode.Clay.Json.Tests
             };
             var json = new ReadOnlyJsonObject(jobj);
 
+            Assert.False(json.Equals(null));
             Assert.True(json != null);
 
             var clone = json.Clone();

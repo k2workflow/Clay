@@ -219,19 +219,7 @@ namespace SourceCode.Clay.Json
             if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            var xs = x.ToString();
-            var ys = y.ToString();
-            if (!StringComparer.Ordinal.Equals(xs, ys)) return false;
-
-            return true;
-        }
-
-        public static bool NullableJsonEquals(this ReadOnlyJsonObject x, ReadOnlyJsonObject y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
+            // Expensive but reliable
             var xs = x.ToString();
             var ys = y.ToString();
             if (!StringComparer.Ordinal.Equals(xs, ys)) return false;
