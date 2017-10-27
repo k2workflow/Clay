@@ -12,11 +12,11 @@ namespace SourceCode.Clay.Json
 {
     public static class JsonExtensions
     {
-        public static JsonValue GetValue(this JsonObject jo, string key, JsonType expectedType, bool nullable)
+        public static JsonValue GetValue(this JsonObject json, string key, JsonType expectedType, bool nullable)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out var jv))
+            if (!json.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
             if (jv == null)
@@ -35,13 +35,20 @@ namespace SourceCode.Clay.Json
             return jv;
         }
 
-        public static bool TryGetValue(this JsonObject jo, string key, JsonType expectedType, bool nullable, out JsonValue value)
+        public static JsonValue GetValue(this ReadOnlyJsonObject json, string key, JsonType expectedType, bool nullable)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            return json._json.GetValue(key, expectedType, nullable);
+        }
+
+        public static bool TryGetValue(this JsonObject json, string key, JsonType expectedType, bool nullable, out JsonValue value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
             value = null;
 
-            if (!jo.TryGetValue(key, out var jv))
+            if (!json.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
@@ -55,11 +62,18 @@ namespace SourceCode.Clay.Json
             return true;
         }
 
-        public static JsonObject GetObject(this JsonObject jo, string key)
+        public static bool TryGetValue(this ReadOnlyJsonObject json, string key, JsonType expectedType, bool nullable, out JsonValue value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out var jv))
+            return json._json.TryGetValue(key, expectedType, nullable, out value);
+        }
+
+        public static JsonObject GetObject(this JsonObject json, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            if (!json.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
@@ -73,13 +87,20 @@ namespace SourceCode.Clay.Json
             return o;
         }
 
-        public static bool TryGetObject(this JsonObject jo, string key, out JsonObject value)
+        public static JsonObject GetObject(this ReadOnlyJsonObject json, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            return json._json.GetObject(key);
+        }
+
+        public static bool TryGetObject(this JsonObject json, string key, out JsonObject value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
             value = null;
 
-            if (!jo.TryGetValue(key, out var jv))
+            if (!json.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
@@ -92,11 +113,18 @@ namespace SourceCode.Clay.Json
             return true;
         }
 
-        public static JsonArray GetArray(this JsonObject jo, string key)
+        public static bool TryGetObject(this ReadOnlyJsonObject json, string key, out JsonObject value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
-            if (!jo.TryGetValue(key, out var jv))
+            return json._json.TryGetObject(key, out value);
+        }
+
+        public static JsonArray GetArray(this JsonObject json, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            if (!json.TryGetValue(key, out var jv))
                 throw new FormatException($"Expected Json key {key}");
 
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
@@ -110,13 +138,20 @@ namespace SourceCode.Clay.Json
             return ja;
         }
 
-        public static bool TryGetArray(this JsonObject jo, string key, out JsonArray value)
+        public static JsonArray GetArray(this ReadOnlyJsonObject json, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            return json._json.GetArray(key);
+        }
+
+        public static bool TryGetArray(this JsonObject json, string key, out JsonArray value)
         {
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
 
             value = null;
 
-            if (!jo.TryGetValue(key, out var jv))
+            if (!json.TryGetValue(key, out var jv))
                 return false;
 
             if (jv == null)
@@ -127,6 +162,13 @@ namespace SourceCode.Clay.Json
 
             value = ja;
             return true;
+        }
+
+        public static bool TryGetArray(this ReadOnlyJsonObject json, string key, out JsonArray value)
+        {
+            if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+
+            return json._json.TryGetArray(key, out value);
         }
 
         public static JsonObject ParseJsonObject(this string json)
@@ -151,6 +193,50 @@ namespace SourceCode.Clay.Json
                 throw new FormatException($"Json should have type {nameof(JsonArray)}");
 
             return ja;
+        }
+
+        public static JsonValue Clone(this JsonValue json)
+        {
+            if (json == null) return default;
+
+            var str = json.ToString();
+            var clone = JsonValue.Parse(str);
+            return clone;
+        }
+
+        public static ReadOnlyJsonObject Clone(this ReadOnlyJsonObject json)
+        {
+            if (json == null) return default;
+
+            var jo = (JsonObject)json._json.Clone();
+            var clone = new ReadOnlyJsonObject(jo);
+            return clone;
+        }
+
+        public static bool NullableJsonEquals(this JsonValue x, JsonValue y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            var xs = x.ToString();
+            var ys = y.ToString();
+            if (!StringComparer.Ordinal.Equals(xs, ys)) return false;
+
+            return true;
+        }
+
+        public static bool NullableJsonEquals(this ReadOnlyJsonObject x, ReadOnlyJsonObject y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            var xs = x.ToString();
+            var ys = y.ToString();
+            if (!StringComparer.Ordinal.Equals(xs, ys)) return false;
+
+            return true;
         }
     }
 }

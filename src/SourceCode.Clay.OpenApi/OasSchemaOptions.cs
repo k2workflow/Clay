@@ -13,9 +13,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents options for a JSON schema.
     /// </summary>
     [Flags]
-#pragma warning disable CA1028 // Enum Storage should be Int32
-    public enum OasSchemaOptions : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasSchemaOptions
     {
         /// <summary>
         /// No options are set.

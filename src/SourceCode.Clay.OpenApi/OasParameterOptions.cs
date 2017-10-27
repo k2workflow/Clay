@@ -13,9 +13,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents the different options for <see cref="OasParameterBody"/>.
     /// </summary>
     [Flags]
-#pragma warning disable CA1028 // Enum Storage should be Int32
-    public enum OasParameterOptions : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasParameterOptions
     {
         /// <summary>
         /// The default options.

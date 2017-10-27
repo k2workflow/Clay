@@ -10,10 +10,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// <summary>
     /// Represents the different type of expression components.
     /// </summary>
-#pragma warning disable CA1028 // Enum Storage should be Int32
-
-    public enum OasExpressionComponentType : byte
-#pragma warning restore CA1028 // Enum Storage should be Int32
+    public enum OasExpressionComponentType
     {
         /// <summary>
         /// A literal value.
