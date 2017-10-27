@@ -15,8 +15,8 @@ namespace SourceCode.Clay.Json.Tests
         #region Methods
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_TryGetValue))]
-        public static void When_TryGetValue()
+        [Fact(DisplayName = nameof(When_JsonObject_TryGetValue))]
+        public static void When_JsonObject_TryGetValue()
         {
             var json = new JsonObject
             {
@@ -27,11 +27,43 @@ namespace SourceCode.Clay.Json.Tests
                 ["array"] = new JsonArray()
             };
 
-            Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out JsonValue jv) && (bool)jv);
+            var clone = json.Clone();
+            Assert.Equal(json.ToString(), clone.ToString());
+
+            Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out var jv) && (bool)jv);
             Assert.True(json.TryGetValue("int", JsonType.Number, false, out jv) && jv == 123);
             Assert.True(json.TryGetValue("string", JsonType.String, false, out jv) && jv == "hello");
-            Assert.True(json.TryGetObject("object", out JsonObject jo));
-            Assert.True(json.TryGetArray("array", out JsonArray ja));
+            Assert.True(json.TryGetObject("object", out var jo));
+            Assert.True(json.TryGetArray("array", out var ja));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_ReadOnlyJsonObject_TryGetValue))]
+        public static void When_ReadOnlyJsonObject_TryGetValue()
+        {
+            var jobj = new JsonObject
+            {
+                ["bool"] = new JsonPrimitive(true),
+                ["int"] = new JsonPrimitive(123),
+                ["string"] = new JsonPrimitive("hello"),
+                ["object"] = new JsonObject(),
+                ["array"] = new JsonArray()
+            };
+            var json = new ReadOnlyJsonObject(jobj);
+
+            var clone = json.Clone();
+            Assert.Equal(json, clone);
+            Assert.Equal(json.ToString(), clone.ToString());
+
+            var mutable = json.ToJsonObject();
+            Assert.Equal(json, mutable);
+            Assert.Equal(json.ToString(), mutable.ToString());
+
+            Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out var jv) && (bool)jv);
+            Assert.True(json.TryGetValue("int", JsonType.Number, false, out jv) && jv == 123);
+            Assert.True(json.TryGetValue("string", JsonType.String, false, out jv) && jv == "hello");
+            Assert.True(json.TryGetObject("object", out var jo));
+            Assert.True(json.TryGetArray("array", out var ja));
         }
 
         #endregion

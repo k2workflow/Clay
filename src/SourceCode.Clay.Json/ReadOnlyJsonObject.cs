@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Json;
@@ -16,7 +17,7 @@ namespace SourceCode.Clay.Json
     /// <summary>
     /// A readonly version of <see cref="JsonObject"/>.
     /// </summary>
-    public sealed class ReadOnlyJsonObject : IReadOnlyDictionary<string, JsonValue>
+    public sealed class ReadOnlyJsonObject : IReadOnlyDictionary<string, JsonValue>, IEquatable<ReadOnlyJsonObject>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
     {
         #region Fields
@@ -48,24 +49,6 @@ namespace SourceCode.Clay.Json
         #endregion
 
         #region Constructors
-
-        public ReadOnlyJsonObject(JsonObject json)
-        {
-            _json = new JsonObject();
-
-            if (json == null) return;
-
-            foreach (var kvp in json)
-            {
-                var value = kvp.Value;
-
-                // Clone to avoid call-site mutation post-facto
-                if (value != null)
-                    value = value.Clone();
-
-                _json.Add(kvp.Key, value);
-            }
-        }
 
         public ReadOnlyJsonObject(params KeyValuePair<string, JsonValue>[] items)
         {
@@ -127,7 +110,7 @@ namespace SourceCode.Clay.Json
         }
 
         /// <inheritdoc/>
-        public JsonObject ToJsonObject() => (JsonObject)_json.Clone();
+        public JsonObject ToJsonObject() => new JsonObject((JsonObject)_json.Clone());
 
         #endregion
 
@@ -157,6 +140,31 @@ namespace SourceCode.Clay.Json
 
         /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        #endregion
+
+        #region IEquatable
+
+        public bool Equals(ReadOnlyJsonObject other) => _json.NullableJsonEquals(other._json);
+
+        public override bool Equals(object obj)
+            => obj is ReadOnlyJsonObject other
+            && Equals(other);
+
+        public override int GetHashCode() => _json.GetHashCode();
+
+        #endregion
+
+        #region Operators
+
+        /// <inheritdoc/>
+        public static bool operator ==(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => x.Equals(y);
+
+        /// <inheritdoc/>
+        public static bool operator !=(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => !(x == y);
+
+        /// <inheritdoc/>
+        public override string ToString() => _json.ToString();
 
         #endregion
     }
