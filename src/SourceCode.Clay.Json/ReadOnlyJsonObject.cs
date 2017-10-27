@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Json;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Json
 {
@@ -145,6 +146,7 @@ namespace SourceCode.Clay.Json
 
         #region IEquatable
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Equals(ReadOnlyJsonObject x, ReadOnlyJsonObject y)
         {
             if (x is null) return y is null; // (null, null) or (null, y)

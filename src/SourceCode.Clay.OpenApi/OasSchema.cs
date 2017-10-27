@@ -6,6 +6,7 @@
 #endregion
 
 using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -44,22 +45,22 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets the number range validation details.
         /// </summary>
-        public OasNumberRange NumberRange { get; }
+        public NumberConstraint NumberRange { get; }
 
         /// <summary>
         /// Gets the item count validation details.
         /// </summary>
-        public OasCountRange ItemsRange { get; }
+        public CountConstraint ItemsRange { get; }
 
         /// <summary>
         /// Gets the length validation details.
         /// </summary>
-        public OasCountRange LengthRange { get; }
+        public CountConstraint LengthRange { get; }
 
         /// <summary>
         /// Gets the property count validation details.
         /// </summary>
-        public OasCountRange PropertiesRange { get; }
+        public CountConstraint PropertiesRange { get; }
 
         /// <summary>
         /// Gets the schema options.
@@ -147,10 +148,10 @@ namespace SourceCode.Clay.OpenApi
             string format = null,
             string title = null,
             string description = null,
-            OasNumberRange numberRange = default,
-            OasCountRange itemsRange = default,
-            OasCountRange lengthRange = default,
-            OasCountRange propertiesRange = default,
+            NumberConstraint numberRange = default,
+            CountConstraint itemsRange = default,
+            CountConstraint lengthRange = default,
+            CountConstraint propertiesRange = default,
             OasSchemaOptions options = default,
             string pattern = default,
             IReadOnlyList<OasScalarValue> @enum = default,
@@ -249,7 +250,7 @@ namespace SourceCode.Clay.OpenApi
             if (!OneOf.NullableSetEquals(other.OneOf)) return false;
             if (!AnyOf.NullableSetEquals(other.AnyOf)) return false;
             if (!Not.NullableSetEquals(other.Not)) return false;
-            if (!Items.NullableEquals(other.Items)) return false;
+            if (Items != other.Items) return false;
             if (!Properties.NullableDictionaryEquals(other.Properties)) return false;
             if (!AdditionalProperties.NullableDictionaryEquals(other.AdditionalProperties)) return false;
 

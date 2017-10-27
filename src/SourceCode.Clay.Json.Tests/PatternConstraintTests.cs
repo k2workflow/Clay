@@ -10,34 +10,34 @@ using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
-    public static class PatternValidatorTests
+    public static class PatternConstraintTests
     {
         #region Methods
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Simple_Optional_PatternValidator))]
+        [Theory(DisplayName = nameof(Test_Simple_Optional_PatternConstraint))]
         [InlineData("a", true)]
         [InlineData("A", true)]
         [InlineData("b", false)]
         [InlineData(null, true)]
-        public static void Test_Simple_Optional_PatternValidator(string value, bool valid)
+        public static void Test_Simple_Optional_PatternConstraint(string value, bool valid)
         {
             // (-∞, ∞)
-            var range = new PatternValidator("a", false);
+            var range = new PatternConstraint("a", false);
 
             Assert.True(range.IsValid(value) == valid);
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Simple_Required_PatternValidator))]
+        [Theory(DisplayName = nameof(Test_Simple_Required_PatternConstraint))]
         [InlineData("a", true)]
         [InlineData("A", true)]
         [InlineData("b", false)]
         [InlineData(null, false)]
-        public static void Test_Simple_Required_PatternValidator(string value, bool valid)
+        public static void Test_Simple_Required_PatternConstraint(string value, bool valid)
         {
             // (-∞, ∞)
-            var range = new PatternValidator("a", true);
+            var range = new PatternConstraint("a", true);
 
             Assert.True(range.IsValid(value) == valid);
         }

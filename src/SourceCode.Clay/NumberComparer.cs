@@ -64,7 +64,7 @@ namespace SourceCode.Clay
         public bool Equals(Number? x, Number? y)
         {
             if (!x.HasValue) return !y.HasValue; // (null, null) or (null, y)
-            if (!y.HasValue) return true; // (x, null)
+            if (!y.HasValue) return false; // (x, null)
 
             var equal = Equals(x.Value, y.Value);
             return equal;

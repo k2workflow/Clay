@@ -12,9 +12,124 @@ namespace SourceCode.Clay.OpenApi.Serialization
         #region Constants
 
         /// <summary>
+        /// Represents constants for OpenAPI enum values.
+        /// </summary>
+        protected static class EnumConstants
+        {
+            #region Fields
+
+            /// <summary>
+            /// Gets a constant containing "matrix".
+            /// </summary>
+            public const string Matrix = "matrix";
+
+            /// <summary>
+            /// Gets a constant containing "label".
+            /// </summary>
+            public const string Label = "label";
+
+            /// <summary>
+            /// Gets a constant containing "form".
+            /// </summary>
+            public const string Form = "form";
+
+            /// <summary>
+            /// Gets a constant containing "simple".
+            /// </summary>
+            public const string Simple = "simple";
+
+            /// <summary>
+            /// Gets a constant containing "spaceDelimited".
+            /// </summary>
+            public const string SpaceDelimited = "spaceDelimited";
+
+            /// <summary>
+            /// Gets a constant containing "pipeDelimited".
+            /// </summary>
+            public const string PipeDelimited = "pipeDelimited";
+
+            /// <summary>
+            /// Gets a constant containing "deepObject".
+            /// </summary>
+            public const string DeepObject = "deepObject";
+
+            /// <summary>
+            /// Gets a constant containing "query".
+            /// </summary>
+            public const string Query = "query";
+
+            /// <summary>
+            /// Gets a constant containing "header".
+            /// </summary>
+            public const string Header = "header";
+
+            /// <summary>
+            /// Gets a constant containing "path".
+            /// </summary>
+            public const string Path = "path";
+
+            /// <summary>
+            /// Gets a constant containing "cookie".
+            /// </summary>
+            public const string Cookie = "cookie";
+
+            /// <summary>
+            /// Gets a constant containing "array".
+            /// </summary>
+            public const string Array = "array";
+
+            /// <summary>
+            /// Gets a constant containing "boolean".
+            /// </summary>
+            public const string Boolean = "boolean";
+
+            /// <summary>
+            /// Gets a constant containing "number".
+            /// </summary>
+            public const string Number = "number";
+
+            /// <summary>
+            /// Gets a constant containing "object".
+            /// </summary>
+            public const string Object = "object";
+
+            /// <summary>
+            /// Gets a constant containing "string".
+            /// </summary>
+            public const string String = "string";
+
+            /// <summary>
+            /// Gets a constant containing "integer".
+            /// </summary>
+            public const string Integer = "integer";
+
+            /// <summary>
+            /// Gets a constant containing "apiKey".
+            /// </summary>
+            public const string ApiKey = "apiKey";
+
+            /// <summary>
+            /// Gets a constant containing "http".
+            /// </summary>
+            public const string Http = "http";
+
+            /// <summary>
+            /// Gets a constant containing "oauth2".
+            /// </summary>
+            public const string OAuth2 = "oauth2";
+
+            /// <summary>
+            /// Gets a constant containing "openIdConnect".
+            /// </summary>
+            public const string OpenIdConnect = "openIdConnect";
+
+            #endregion
+        }
+
+        /// <summary>
         /// Represents constants for OpenAPI property names.
         /// </summary>
-        protected static class PropertyConstants
+        internal static class PropertyConstants
         {
             #region Fields
 
@@ -467,121 +582,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
             /// Gets a constant containing "openIdConnectUrl".
             /// </summary>
             public const string OpenIdConnectUrl = "openIdConnectUrl";
-
-            #endregion
-        }
-
-        /// <summary>
-        /// Represents constants for OpenAPI enum values.
-        /// </summary>
-        protected static class EnumConstants
-        {
-            #region Fields
-
-            /// <summary>
-            /// Gets a constant containing "matrix".
-            /// </summary>
-            public const string Matrix = "matrix";
-
-            /// <summary>
-            /// Gets a constant containing "label".
-            /// </summary>
-            public const string Label = "label";
-
-            /// <summary>
-            /// Gets a constant containing "form".
-            /// </summary>
-            public const string Form = "form";
-
-            /// <summary>
-            /// Gets a constant containing "simple".
-            /// </summary>
-            public const string Simple = "simple";
-
-            /// <summary>
-            /// Gets a constant containing "spaceDelimited".
-            /// </summary>
-            public const string SpaceDelimited = "spaceDelimited";
-
-            /// <summary>
-            /// Gets a constant containing "pipeDelimited".
-            /// </summary>
-            public const string PipeDelimited = "pipeDelimited";
-
-            /// <summary>
-            /// Gets a constant containing "deepObject".
-            /// </summary>
-            public const string DeepObject = "deepObject";
-
-            /// <summary>
-            /// Gets a constant containing "query".
-            /// </summary>
-            public const string Query = "query";
-
-            /// <summary>
-            /// Gets a constant containing "header".
-            /// </summary>
-            public const string Header = "header";
-
-            /// <summary>
-            /// Gets a constant containing "path".
-            /// </summary>
-            public const string Path = "path";
-
-            /// <summary>
-            /// Gets a constant containing "cookie".
-            /// </summary>
-            public const string Cookie = "cookie";
-
-            /// <summary>
-            /// Gets a constant containing "array".
-            /// </summary>
-            public const string Array = "array";
-
-            /// <summary>
-            /// Gets a constant containing "boolean".
-            /// </summary>
-            public const string Boolean = "boolean";
-
-            /// <summary>
-            /// Gets a constant containing "number".
-            /// </summary>
-            public const string Number = "number";
-
-            /// <summary>
-            /// Gets a constant containing "object".
-            /// </summary>
-            public const string Object = "object";
-
-            /// <summary>
-            /// Gets a constant containing "string".
-            /// </summary>
-            public const string String = "string";
-
-            /// <summary>
-            /// Gets a constant containing "integer".
-            /// </summary>
-            public const string Integer = "integer";
-
-            /// <summary>
-            /// Gets a constant containing "apiKey".
-            /// </summary>
-            public const string ApiKey = "apiKey";
-
-            /// <summary>
-            /// Gets a constant containing "http".
-            /// </summary>
-            public const string Http = "http";
-
-            /// <summary>
-            /// Gets a constant containing "oauth2".
-            /// </summary>
-            public const string OAuth2 = "oauth2";
-
-            /// <summary>
-            /// Gets a constant containing "openIdConnect".
-            /// </summary>
-            public const string OpenIdConnect = "openIdConnect";
 
             #endregion
         }

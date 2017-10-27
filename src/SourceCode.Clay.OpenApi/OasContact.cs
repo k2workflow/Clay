@@ -5,15 +5,20 @@
 
 #endregion
 
+using SourceCode.Clay.Json;
+using SourceCode.Clay.OpenApi.Serialization;
 using System;
+using System.Collections.Generic;
+using System.Json;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.OpenApi
 {
     /// <summary>
     /// Contact information for the exposed API.
     /// </summary>
-    public class OasContact : IEquatable<OasContact>
+    public sealed class OasContact : IEquatable<OasContact>
     {
         #region Properties
 
@@ -32,6 +37,11 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public MailAddress Email { get; }
 
+        /// <summary>
+        /// Gets custom properties.
+        /// </summary>
+        //public IReadOnlyDictionary<string, JsonValue> VendorExtensions { get; }
+
         #endregion
 
         #region Constructors
@@ -46,37 +56,43 @@ namespace SourceCode.Clay.OpenApi
             string name = default,
             Uri url = default,
             MailAddress email = default)
+        //JsonObject vendorExtensions = default)
         {
             Name = name;
             Url = url;
             Email = email;
+
+            // Vendor extensions
+            //VendorExtensions = new VendorExtensions(vendorExtensions,
+            //    OasSerializer.PropertyConstants.Name,
+            //    OasSerializer.PropertyConstants.Url,
+            //    OasSerializer.PropertyConstants.Email);
         }
 
         #endregion
 
         #region IEquatable
 
-        /// <summary>
-        /// Implements the operator == operator.
-        /// </summary>
-        /// <param name="contact1">The contact1.</param>
-        /// <param name="contact2">The contact2.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator ==(OasContact contact1, OasContact contact2)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool Equals(OasContact x, OasContact y)
         {
-            if (contact1 is null && contact2 is null) return true;
-            if (contact1 is null || contact2 is null) return false;
-            return contact1.Equals((object)contact2);
-        }
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
 
-        /// <summary>
-        /// Implements the operator != operator.
-        /// </summary>
-        /// <param name="contact1">The contact1.</param>
-        /// <param name="contact2">The contact2.</param>
-        /// <returns>The result of the operator.</returns>
-        public static bool operator !=(OasContact contact1, OasContact contact2)
-            => !(contact1 == contact2);
+            if (!StringComparer.Ordinal.Equals(x.Name, y.Name)) return false;
+            if (x.Url != y.Url) return false;
+
+            if (!ReferenceEquals(x.Email, y.Email))
+            {
+                if (x.Email is null || y.Email is null) return false;
+                return x.Email.Equals(y.Email);
+            }
+
+            //if (x.VendorExtensions != y.VendorExtensions) return false;
+
+            return true;
+        }
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -88,21 +104,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
-        public virtual bool Equals(OasContact other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            if (!StringComparer.Ordinal.Equals(Name, other.Name)) return false;
-            if (Url != other.Url) return false;
-            if (!ReferenceEquals(Email, other.Email))
-            {
-                if (Email is null || other.Email is null) return false;
-                return Email.Equals(other.Email);
-            }
-
-            return true;
-        }
+        public bool Equals(OasContact other) => Equals(this, other);
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
@@ -114,14 +116,77 @@ namespace SourceCode.Clay.OpenApi
 
                 if (Name != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
+
                 if (Url != null)
                     hc = (hc * 23) + Url.GetHashCode();
+
                 if (Email != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Email);
+
+                //if (VendorExtensions != null)
+                //    hc = (hc * 23) + VendorExtensions.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
         }
+
+        #endregion
+
+        #region De/Serialization
+
+        public static OasContact Parse(JsonObject json)
+        {
+            string name = null;
+            if (json.TryGetValue(OasSerializer.PropertyConstants.Name, JsonType.String, true, out var jv))
+                name = jv;
+
+            Uri url = null;
+            if (json.TryGetValue(OasSerializer.PropertyConstants.Url, JsonType.String, true, out jv))
+                url = new Uri(jv);
+
+            MailAddress email = null;
+            if (json.TryGetValue(OasSerializer.PropertyConstants.Email, JsonType.String, true, out jv))
+                email = new MailAddress(jv);
+
+            var result = new OasContact(name, url, email);
+            return result;
+        }
+
+        public override string ToString()
+        {
+            var json = new JsonObject
+            {
+                [OasSerializer.PropertyConstants.Name] = Name,
+                [OasSerializer.PropertyConstants.Url] = Url.ToString(),
+                [OasSerializer.PropertyConstants.Email] = Email.ToString()
+            };
+
+            //foreach (var item in VendorExtensions)
+            //    json.Add(item);
+
+            var str = json.ToString();
+            return str;
+        }
+
+        #endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Implements the operator == operator.
+        /// </summary>
+        /// <param name="x">The contact1.</param>
+        /// <param name="y">The contact2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(OasContact x, OasContact y) => Equals(x, y);
+
+        /// <summary>
+        /// Implements the operator != operator.
+        /// </summary>
+        /// <param name="x">The contact1.</param>
+        /// <param name="y">The contact2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(OasContact x, OasContact y) => !(x == y);
 
         #endregion
     }

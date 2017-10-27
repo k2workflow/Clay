@@ -37,7 +37,7 @@ namespace SourceCode.Clay.Tests
         [Theory(DisplayName = nameof(When_nullable_equals_int))]
         [InlineData(1, 1, true)]
         [InlineData(1, 2, false)]
-        public static void When_nullable_equals_int(int x, int y, bool expected)
+        public static void When_nullable_equals_int(int? x, int? y, bool expected)
         {
             Assert.Equal(expected, x.NullableEquals(y));
         }
