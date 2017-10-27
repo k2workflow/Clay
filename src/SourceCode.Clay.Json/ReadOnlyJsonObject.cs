@@ -145,7 +145,7 @@ namespace SourceCode.Clay.Json
 
         #region IEquatable
 
-        public bool Equals(ReadOnlyJsonObject other) => _json.NullableJsonEquals(other._json);
+        public bool Equals(ReadOnlyJsonObject other) => _json.NullableJsonEquals(other?._json);
 
         public override bool Equals(object obj)
             => obj is ReadOnlyJsonObject other
