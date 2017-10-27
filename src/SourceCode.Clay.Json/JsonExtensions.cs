@@ -152,5 +152,27 @@ namespace SourceCode.Clay.Json
 
             return ja;
         }
+
+        public static JsonValue Clone(this JsonValue jv)
+        {
+            if (jv == null) return default;
+
+            var json = jv.ToString();
+            var clone = JsonValue.Parse(json);
+            return clone;
+        }
+
+        public static bool NullableJsonEquals(this JsonValue x, JsonValue y)
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+            if (ReferenceEquals(x, y)) return true; // (x, x)
+
+            var xs = x.ToString();
+            var ys = y.ToString();
+            if (!StringComparer.Ordinal.Equals(xs, ys)) return false;
+
+            return true;
+        }
     }
 }

@@ -19,13 +19,23 @@ namespace SourceCode.Clay
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NullableEquals<T>(this T x, T y)
-            where T : IEquatable<T>
+            where T : class, IEquatable<T>
         {
-            if (ReferenceEquals(x, null)) return ReferenceEquals(y, null); // (null, null) or (null, y)
-            if (ReferenceEquals(y, null)) return false; // (x, null)
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
             return x.Equals(y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool NullableEquals<T>(this T? x, T? y)
+            where T : struct, IEquatable<T>
+        {
+            if (x is null) return y is null; // (null, null) or (null, y)
+            if (y is null) return false; // (x, null)
+
+            return x.Value.Equals(y.Value);
         }
 
         #endregion

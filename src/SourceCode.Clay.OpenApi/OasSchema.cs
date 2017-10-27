@@ -249,7 +249,7 @@ namespace SourceCode.Clay.OpenApi
             if (!OneOf.NullableSetEquals(other.OneOf)) return false;
             if (!AnyOf.NullableSetEquals(other.AnyOf)) return false;
             if (!Not.NullableSetEquals(other.Not)) return false;
-            if (!Items.NullableEquals(other.Items)) return false;
+            if (Items != other.Items) return false;
             if (!Properties.NullableDictionaryEquals(other.Properties)) return false;
             if (!AdditionalProperties.NullableDictionaryEquals(other.AdditionalProperties)) return false;
 
