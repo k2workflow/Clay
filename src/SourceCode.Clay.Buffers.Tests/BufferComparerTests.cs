@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Buffers.Tests
     {
         #region Helpers
 
-        private static ArraySegment<byte> GenerateSegment(ushort offset, ushort length, int delta = 0)
+        public static ArraySegment<byte> GenerateSegment(ushort offset, ushort length, int delta = 0)
         {
             var result = new byte[length + offset * 2]; // Add extra space at start and end
             for (var i = 1 + offset; i < length + offset; i++)
@@ -24,10 +24,10 @@ namespace SourceCode.Clay.Buffers.Tests
             return new ArraySegment<byte>(result, offset, length);
         }
 
-        private static ReadOnlyMemory<byte> AsReadOnlyMemory(this ArraySegment<byte> seg)
+        public static ReadOnlyMemory<byte> AsReadOnlyMemory(this ArraySegment<byte> seg)
             => (ReadOnlyMemory<byte>)seg;
 
-        private static ReadOnlyMemory<byte> AsReadOnlyMemory(this byte[] array)
+        public static ReadOnlyMemory<byte> AsReadOnlyMemory(this byte[] array)
             => (ReadOnlyMemory<byte>)array;
 
         #endregion
