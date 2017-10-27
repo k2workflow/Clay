@@ -6,6 +6,7 @@
 #endregion
 
 using SourceCode.Clay.Collections.Generic;
+using SourceCode.Clay.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,19 +21,19 @@ namespace SourceCode.Clay.OpenApi
     {
         #region Fields
 
-        private readonly IDictionary<string, string> _map;
+        private readonly ReadOnlyJsonObject _json;
 
         #endregion
 
         #region Properties
 
-        public int Count => _map.Count;
+        public int Count => _json.Count;
 
         public JsonValue this[string key]
         {
             get
             {
-                var value = _map[key];
+                var value = _json[key];
                 var json = JsonValue.Parse(value);
                 return json;
             }
@@ -46,34 +47,36 @@ namespace SourceCode.Clay.OpenApi
         {
             if (json == null || json.Count == 0)
             {
-                _map = Dictionary.Empty<string, string>();
+                _json = new ReadOnlyJsonObject();
                 return;
             }
 
             var keys = new HashSet<string>(wellKnownKeys, StringComparer.Ordinal); // Expensive!
 
-            _map = new Dictionary<string, string>(json.Count, StringComparer.Ordinal);
+            var jobj = new JsonObject();
             foreach (var item in json)
             {
                 // Don't add well-known properties
                 if (keys.Contains(item.Key)) continue;
 
                 // Leverage error handling in Add()
-                _map.Add(item.Key, item.Value);
+                jobj.Add(item.Key, item.Value);
             }
+
+            _json = new ReadOnlyJsonObject(jobj);
         }
 
         #endregion
 
         #region Methods
 
-        public bool ContainsKey(string key) => _map.ContainsKey(key);
+        public bool ContainsKey(string key) => _json.ContainsKey(key);
 
         public bool TryGetValue(string key, out JsonValue value)
         {
             value = default;
 
-            if (!_map.TryGetValue(key, out var str))
+            if (!_json.TryGetValue(key, out var str))
                 return false;
 
             value = str;
@@ -88,20 +91,20 @@ namespace SourceCode.Clay.OpenApi
         {
             get
             {
-                foreach (var item in _map)
+                foreach (var item in _json)
                     yield return item.Value;
             }
         }
 
-        public IEnumerable<string> Keys => _map.Keys;
+        public IEnumerable<string> Keys => _json.Keys;
 
         public IEnumerator<KeyValuePair<string, JsonValue>> GetEnumerator()
         {
-            foreach (var item in _map)
+            foreach (var item in _json)
                 yield return new KeyValuePair<string, JsonValue>(item.Key, item.Value);
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => _map.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _json.GetEnumerator();
 
         #endregion
 
@@ -140,7 +143,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(VendorExtensions other)
-            => _map.NullableDictionaryEquals(other._map, StringComparer.Ordinal);
+            => _json.NullableJsonEquals(other?._json);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
@@ -150,7 +153,7 @@ namespace SourceCode.Clay.OpenApi
             {
                 var hc = 17L;
 
-                hc = (hc * 23) + _map.GetHashCode();
+                hc = (hc * 23) + _json.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
