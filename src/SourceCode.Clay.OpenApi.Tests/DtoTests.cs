@@ -100,30 +100,30 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(ApiSecurityScheme_Equals))]
         public static void ApiSecurityScheme_Equals()
         {
-            TestDtoEquality(() => new ApiKeySecurityScheme(
+            TestDtoEquality(() => new OasApiKeySecurityScheme(
                 "Description",
                 "Name",
-                ParameterLocation.Header
+                OasParameterLocation.Header
             ));
         }
 
         [Fact(DisplayName = nameof(Callback_Equals))]
         public static void Callback_Equals()
         {
-            var cb1 = new Callback();
-            var cb2 = new Callback(new Dictionary<CompoundExpression, Referable<Path>>()
+            var cb1 = new OasCallback();
+            var cb2 = new OasCallback(new Dictionary<OasExpression, OasReferable<OasPath>>()
             {
-                [CompoundExpression.Parse("http://test/{$statusCode}")] = new Referable<Path>("#/test"),
-                [CompoundExpression.Parse("http://test/1/{$statusCode}")] = new Referable<Path>("#/test/1"),
+                [OasExpression.Parse("http://test/{$statusCode}")] = new OasReferable<OasPath>("#/test"),
+                [OasExpression.Parse("http://test/1/{$statusCode}")] = new OasReferable<OasPath>("#/test/1"),
             });
-            var cb3 = new Callback(new Dictionary<CompoundExpression, Referable<Path>>()
+            var cb3 = new OasCallback(new Dictionary<OasExpression, OasReferable<OasPath>>()
             {
-                [CompoundExpression.Parse("http://test/{$statusCode}")] = new Referable<Path>("#/test"),
-                [CompoundExpression.Parse("http://test/1/{$statusCode}")] = new Referable<Path>("#/test/1"),
+                [OasExpression.Parse("http://test/{$statusCode}")] = new OasReferable<OasPath>("#/test"),
+                [OasExpression.Parse("http://test/1/{$statusCode}")] = new OasReferable<OasPath>("#/test/1"),
             });
-            var cb4 = new Callback(new Dictionary<CompoundExpression, Referable<Path>>()
+            var cb4 = new OasCallback(new Dictionary<OasExpression, OasReferable<OasPath>>()
             {
-                [CompoundExpression.Parse("http://test/1/{$statusCode}")] = new Referable<Path>("#/test/1"),
+                [OasExpression.Parse("http://test/1/{$statusCode}")] = new OasReferable<OasPath>("#/test/1"),
             });
 
             Assert.False(cb1 == null);
@@ -135,7 +135,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Contact_Equals))]
         public static void Contact_Equals()
         {
-            TestDtoEquality(() => new Contact(
+            TestDtoEquality(() => new OasContact(
                 "Jonathan",
                 new Uri("http://example.org/jonathan"),
                 new MailAddress("jonathan@example.org"),
@@ -146,32 +146,32 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Document_Equals))]
         public static void Document_Equals()
         {
-            var paths = new Dictionary<string, Referable<Path>>()
+            var paths = new Dictionary<string, OasReferable<OasPath>>()
             {
                 ["/test"] = "#/components/path0"
             };
 
-            var schemas = new Dictionary<string, Referable<Schema>>()
+            var schemas = new Dictionary<string, OasReferable<OasSchema>>()
             {
                 ["schema1"] = "http://example.org/schema1"
             };
 
-            TestDtoEquality(() => new Document(
+            TestDtoEquality(() => new OasDocument(
                 new SemanticVersion(1, 0, 0),
-                new Information("Example API", default, default, default, default, default),
-                new[] { new Server(default, "Server 1", default) },
+                new OasInformation("Example API", default, default, default, default, default),
+                new[] { new OasServer(default, "Server 1", default) },
                 paths,
-                new Components(schemas, default, default, default, default, default, default, default, default),
-                new[] { new Referable<SecurityScheme>(new HttpSecurityScheme("Http", default, default)) },
-                new[] { new Tag("Tag1", default, default) },
-                new ExternalDocumentation("External docs", default, default)
+                new OasComponents(schemas, default, default, default, default, default, default, default, default),
+                new[] { new OasReferable<OasSecurityScheme>(new OasHttpSecurityScheme("Http", default, default)) },
+                new[] { new OasTag("Tag1", default, default) },
+                new OasExternalDocumentation("External docs", default)
             ));
         }
 
         [Fact(DisplayName = nameof(Example_Equals))]
         public static void Example_Equals()
         {
-            TestDtoEquality(() => new Example(
+            TestDtoEquality(() => new OasExample(
                 "Summary",
                 "Description",
                 new Uri("http://example.org/docs")
@@ -181,17 +181,16 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(ExternalDocumentation_Equals))]
         public static void ExternalDocumentation_Equals()
         {
-            TestDtoEquality(() => new ExternalDocumentation(
+            TestDtoEquality(() => new OasExternalDocumentation(
                 "Description",
-                new Uri("http://example.org/docs"),
-                default
+                new Uri("http://example.org/docs")
             ));
         }
 
         [Fact(DisplayName = nameof(HttpSecurityScheme_Equals))]
         public static void HttpSecurityScheme_Equals()
         {
-            TestDtoEquality(() => new HttpSecurityScheme(
+            TestDtoEquality(() => new OasHttpSecurityScheme(
                 "Description",
                 "Scheme",
                 "Bearer Format"
@@ -201,12 +200,12 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Information_Equals))]
         public static void Information_Equals()
         {
-            TestDtoEquality(() => new Information(
+            TestDtoEquality(() => new OasInformation(
                 "Title",
                 "Description",
                 new Uri("http://example.org/tos"),
-                new Contact("Name", default, default, default),
-                new License("MIT", default),
+                new OasContact("Name", default, default, null),
+                new OasLicense("MIT", default),
                 new SemanticVersion(1, 0, 0)
             ));
         }
@@ -214,7 +213,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(License_Equals))]
         public static void License_Equals()
         {
-            TestDtoEquality(() => new License(
+            TestDtoEquality(() => new OasLicense(
                 "MIT",
                 new Uri("https://opensource.org/licenses/MIT")
             ));
@@ -223,25 +222,25 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Link_Equals))]
         public static void Link_Equals()
         {
-            TestDtoEquality(() => new Link(
+            TestDtoEquality(() => new OasLink(
                 "http://example.org/linkOp",
                 "Operation ID",
                 "Description",
-                new Server(default, "Description", default)
+                new OasServer(default, "Description", default)
             ));
         }
 
         [Fact(DisplayName = nameof(MediaType_Equals))]
         public static void MediaType_Equals()
         {
-            var examples = new Dictionary<string, Referable<Example>>()
+            var examples = new Dictionary<string, OasReferable<OasExample>>()
             {
                 ["example1"] = "#/components/examples/example1"
             };
 
-            var encoding = new Dictionary<string, PropertyEncoding>()
+            var encoding = new Dictionary<string, OasPropertyEncoding>()
             {
-                ["application/json"] = new PropertyEncoding(
+                ["application/json"] = new OasPropertyEncoding(
                     new System.Net.Mime.ContentType("application/json"),
                     default,
                     default,
@@ -249,7 +248,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 )
             };
 
-            TestDtoEquality(() => new MediaType(
+            TestDtoEquality(() => new OasMediaType(
                 "#/components/schemas/schema1",
                 examples,
                 encoding
@@ -259,12 +258,12 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OAuth2SecurityScheme_Equals))]
         public static void OAuth2SecurityScheme_Equals()
         {
-            TestDtoEquality(() => new OAuth2SecurityScheme(
+            TestDtoEquality(() => new OasOAuth2SecurityScheme(
                 "Description",
-                new OAuthFlow(new Uri("http://example.org/implicit"), default, default, default),
-                new OAuthFlow(new Uri("http://example.org/password"), default, default, default),
-                new OAuthFlow(new Uri("http://example.org/credential"), default, default, default),
-                new OAuthFlow(new Uri("http://example.org/authorization"), default, default, default)
+                new OasOAuthFlow(new Uri("http://example.org/implicit"), default, default, default),
+                new OasOAuthFlow(new Uri("http://example.org/password"), default, default, default),
+                new OasOAuthFlow(new Uri("http://example.org/credential"), default, default, default),
+                new OasOAuthFlow(new Uri("http://example.org/authorization"), default, default, default)
             ));
         }
 
@@ -276,7 +275,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 ["user:name"] = "Get the user name"
             };
 
-            TestDtoEquality(() => new OAuthFlow(
+            TestDtoEquality(() => new OasOAuthFlow(
                 new Uri("http://example.org/authorization"),
                 new Uri("http://example.org/token"),
                 new Uri("http://example.org/refresh"),
@@ -287,7 +286,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OpenIdConnectSecurityScheme_Equals))]
         public static void OpenIdConnectSecurityScheme_Equals()
         {
-            TestDtoEquality(() => new OpenIdConnectSecurityScheme(
+            TestDtoEquality(() => new OasOidcSecurityScheme(
                 "Description",
                 new Uri("http://example.org/openid")
             ));
@@ -296,60 +295,60 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Operation_Equals))]
         public static void Operation_Equals()
         {
-            var param = new Dictionary<ParameterKey, Referable<ParameterBody>>()
+            var param = new Dictionary<OasParameterKey, OasReferable<OasParameterBody>>()
             {
-                [new ParameterKey("param1", ParameterLocation.Header)] = "#/components/parameters/param1"
+                [new OasParameterKey("param1", OasParameterLocation.Header)] = "#/components/parameters/param1"
             };
 
-            var responses = new Dictionary<ResponseKey, Referable<Response>>()
+            var responses = new Dictionary<OasResponseKey, OasReferable<OasResponse>>()
             {
                 [HttpStatusCode.InternalServerError] = "#/components/responses/error"
             };
 
-            var callbacks = new Dictionary<string, Referable<Callback>>()
+            var callbacks = new Dictionary<string, OasReferable<OasCallback>>()
             {
                 ["result"] = "#/components/callbacks/cb1"
             };
 
-            TestDtoEquality(() => new Operation(
+            TestDtoEquality(() => new OasOperation(
                 new[] { "Tag1" },
                 "Summary",
                 "Description",
-                new ExternalDocumentation("Description", default, default),
+                new OasExternalDocumentation("Description", default),
                 "Operation 1",
                 param,
                 "#/components/requestBodies/rb1",
                 responses,
                 callbacks,
-                OperationOptions.Deprecated,
-                new[] { new HttpSecurityScheme("Description", default, default) },
-                new[] { new Server(new Uri("http://example.org"), default, default) }
+                OasOperationOptions.Deprecated,
+                new[] { new OasHttpSecurityScheme("Description", default, default) },
+                new[] { new OasServer(new Uri("http://example.org"), default, default) }
             ));
         }
 
         [Fact(DisplayName = nameof(Parameter_Equals))]
         public static void Parameter_Equals()
         {
-            var examples = new Dictionary<ContentType, Referable<Example>>()
+            var examples = new Dictionary<ContentType, OasReferable<OasExample>>()
             {
                 [new ContentType("application/json")] = "#/components/examples/example1"
             };
 
-            var content = new Dictionary<ContentType, MediaType>()
+            var content = new Dictionary<ContentType, OasMediaType>()
             {
-                [new ContentType("application/json")] = new MediaType(
+                [new ContentType("application/json")] = new OasMediaType(
                     "#/components/schemas/schema1",
                     default,
                     default
                 )
             };
 
-            TestDtoEquality(() => new Parameter(
+            TestDtoEquality(() => new OasParameter(
                 "Name",
-                ParameterLocation.Header,
+                OasParameterLocation.Header,
                 "Description",
-                ParameterOptions.AllowReserved,
-                ParameterStyle.PipeDelimited,
+                OasParameterOptions.AllowReserved,
+                OasParameterStyle.PipeDelimited,
                 "#/components/schemas/schema1",
                 examples,
                 content
@@ -359,24 +358,24 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(ParameterBody_Equals))]
         public static void ParameterBody_Equals()
         {
-            var examples = new Dictionary<ContentType, Referable<Example>>()
+            var examples = new Dictionary<ContentType, OasReferable<OasExample>>()
             {
                 [new ContentType("application/json")] = "#/components/examples/example1"
             };
 
-            var content = new Dictionary<ContentType, MediaType>()
+            var content = new Dictionary<ContentType, OasMediaType>()
             {
-                [new ContentType("application/json")] = new MediaType(
+                [new ContentType("application/json")] = new OasMediaType(
                     "#/components/schemas/schema1",
                     default,
                     default
                 )
             };
 
-            TestDtoEquality(() => new ParameterBody(
+            TestDtoEquality(() => new OasParameterBody(
                 "Description",
-                ParameterOptions.AllowReserved,
-                ParameterStyle.PipeDelimited,
+                OasParameterOptions.AllowReserved,
+                OasParameterStyle.PipeDelimited,
                 "#/components/schemas/schema1",
                 examples,
                 content
@@ -386,23 +385,23 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Path_Equals))]
         public static void Path_Equals()
         {
-            var param = new Dictionary<ParameterKey, Referable<ParameterBody>>()
+            var param = new Dictionary<OasParameterKey, OasReferable<OasParameterBody>>()
             {
-                [new ParameterKey("Param1", default)] = "#/components/parameters/param1"
+                [new OasParameterKey("Param1", default)] = "#/components/parameters/param1"
             };
 
-            TestDtoEquality(() => new Path(
+            TestDtoEquality(() => new OasPath(
                 "Summary",
                 "Description",
-                new Operation(default, "Get", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Put", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Post", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Delete", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Options", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Head", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Patch", default, default, default, default, default, default, default, default, default, default),
-                new Operation(default, "Trace", default, default, default, default, default, default, default, default, default, default),
-                new[] { new Server(new Uri("http://example.org"), default, default) },
+                new OasOperation(default, "Get", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Put", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Post", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Delete", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Options", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Head", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Patch", default, default, default, default, default, default, default, default, default, default),
+                new OasOperation(default, "Trace", default, default, default, default, default, default, default, default, default, default),
+                new[] { new OasServer(new Uri("http://example.org"), default, default) },
                 param
             ));
         }
@@ -410,53 +409,53 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(PropertyEncoding_Equals))]
         public static void PropertyEncoding_Equals()
         {
-            var headers = new Dictionary<string, Referable<ParameterBody>>()
+            var headers = new Dictionary<string, OasReferable<OasParameterBody>>()
             {
                 ["header1"] = "#/components/parameters/param1"
             };
 
-            TestDtoEquality(() => new PropertyEncoding(
+            TestDtoEquality(() => new OasPropertyEncoding(
                 new ContentType("application/json"),
                 headers,
-                ParameterStyle.PipeDelimited,
-                PropertyEncodingOptions.Explode
+                OasParameterStyle.PipeDelimited,
+                OasPropertyEncodingOptions.Explode
             ));
         }
 
         [Fact(DisplayName = nameof(RequestBody_Equals))]
         public static void RequestBody_Equals()
         {
-            var content = new Dictionary<ContentType, MediaType>()
+            var content = new Dictionary<ContentType, OasMediaType>()
             {
-                [new ContentType("application/json")] = new MediaType("#/components/schemas/schema1")
+                [new ContentType("application/json")] = new OasMediaType("#/components/schemas/schema1")
             };
 
-            TestDtoEquality(() => new RequestBody(
+            TestDtoEquality(() => new OasRequestBody(
                 "Description",
                 content,
-                RequestBodyOptions.Required
+                OasRequestBodyOptions.Required
             ));
         }
 
         [Fact(DisplayName = nameof(Response_Equals))]
         public static void Response_Equals()
         {
-            var headers = new Dictionary<string, Referable<ParameterBody>>()
+            var headers = new Dictionary<string, OasReferable<OasParameterBody>>()
             {
                 ["header1"] = "#/components/parameters/param1"
             };
 
-            var content = new Dictionary<ContentType, MediaType>()
+            var content = new Dictionary<ContentType, OasMediaType>()
             {
-                [new ContentType("application/json")] = new MediaType("#/components/schemas/schema1")
+                [new ContentType("application/json")] = new OasMediaType("#/components/schemas/schema1")
             };
 
-            var links = new Dictionary<string, Referable<Link>>()
+            var links = new Dictionary<string, OasReferable<OasLink>>()
             {
                 ["link"] = "#/components/links/link1"
             };
 
-            TestDtoEquality(() => new Response(
+            TestDtoEquality(() => new OasResponse(
                 "Description",
                 headers,
                 content,
@@ -467,48 +466,48 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Schema_Equals))]
         public static void Schema_Equals()
         {
-            var properties = new Dictionary<string, Referable<Schema>>()
+            var properties = new Dictionary<string, OasReferable<OasSchema>>()
             {
                 ["prop1"] = "#/components/schemas/prop1"
             };
 
-            var additionalProperties = new Dictionary<string, Referable<Schema>>()
+            var additionalProperties = new Dictionary<string, OasReferable<OasSchema>>()
             {
                 ["prop1"] = "#/components/schemas/adprop1"
             };
 
-            TestDtoEquality(() => new Schema(
-                SchemaType.String,
+            TestDtoEquality(() => new OasSchema(
+                OasSchemaType.String,
                 "uuid",
                 "Unique Identifier",
                 "Description",
-                new NumberRange(1, 100),
-                new CountRange(2, 200),
-                new CountRange(3, 300),
-                new CountRange(4, 400),
-                SchemaOptions.Required,
+                new OasNumberRange(1, 100),
+                new OasCountRange(2, 200),
+                new OasCountRange(3, 300),
+                new OasCountRange(4, 400),
+                OasSchemaOptions.Required,
                 "[a-z]",
-                new[] { new ScalarValue(true) },
-                new Referable<Schema>[] { "#/components/schemas/allOf" },
-                new Referable<Schema>[] { "#/components/schemas/oneOf" },
-                new Referable<Schema>[] { "#/components/schemas/anyOf" },
-                new Referable<Schema>[] { "#/components/schemas/not" },
+                new[] { new OasScalarValue(true) },
+                new OasReferable<OasSchema>[] { "#/components/schemas/allOf" },
+                new OasReferable<OasSchema>[] { "#/components/schemas/oneOf" },
+                new OasReferable<OasSchema>[] { "#/components/schemas/anyOf" },
+                new OasReferable<OasSchema>[] { "#/components/schemas/not" },
                 "#/components/schemas/items",
                 properties,
                 additionalProperties,
-                new ExternalDocumentation("Description", default, default)
+                new OasExternalDocumentation("Description", default)
             ));
         }
 
         [Fact(DisplayName = nameof(Server_Equals))]
         public static void Server_Equals()
         {
-            var variables = new Dictionary<string, ServerVariable>()
+            var variables = new Dictionary<string, OasServerVariable>()
             {
-                ["var1"] = new ServerVariable(description: "var1")
+                ["var1"] = new OasServerVariable(description: "var1")
             };
 
-            TestDtoEquality(() => new Server(
+            TestDtoEquality(() => new OasServer(
                 new Uri("http://example.org"),
                 "Description",
                 variables
@@ -518,7 +517,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(ServerVariable_Equals))]
         public static void ServerVariable_Equals()
         {
-            TestDtoEquality(() => new ServerVariable(
+            TestDtoEquality(() => new OasServerVariable(
                 new[] { "Val1" },
                 "Val1",
                 "Variable1"
@@ -528,10 +527,10 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(Tag_Equals))]
         public static void Tag_Equals()
         {
-            TestDtoEquality(() => new Tag(
+            TestDtoEquality(() => new OasTag(
                 "Name",
                 "Description",
-                new ExternalDocumentation("Description", default, default)
+                new OasExternalDocumentation("Description", default)
             ));
         }
 
