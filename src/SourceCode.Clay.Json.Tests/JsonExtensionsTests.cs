@@ -6,6 +6,7 @@
 #endregion
 
 using System.Json;
+using System.Linq;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Tests
@@ -37,6 +38,35 @@ namespace SourceCode.Clay.Json.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_JsonObject_Parse))]
+        public static void When_JsonObject_Parse()
+        {
+            var arr = new JsonArray(new[] { new JsonPrimitive("hi"), new JsonPrimitive(456), new JsonPrimitive(false), null });
+            var expected = new JsonObject { ["Foo"] = arr, ["Bar"] = 123 };
+
+            var actual = expected.ToString().ParseJsonObject();
+            Assert.Equal(expected.ToString(), actual.ToString());
+
+            var ar1 = expected.GetArray("Foo");
+            Assert.Equal(arr.Count, ar1.Count);
+
+            var ar2 = ar1.ToString().ParseJsonArray();
+            Assert.Equal(ar2.ToString(), ar2.ToString());
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_ReadOnlyJsonObject_Parse))]
+        public static void When_ReadOnlyJsonObject_Parse()
+        {
+            var arr = new JsonArray(new[] { new JsonPrimitive("hi"), new JsonPrimitive(456), new JsonPrimitive(false), null });
+            var exp = new JsonObject { ["Foo"] = arr, ["Bar"] = 123 };
+            var expected = new ReadOnlyJsonObject(exp);
+
+            var actual = new ReadOnlyJsonObject(expected.ToString().ParseJsonObject());
+            Assert.Equal(expected, actual);
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_JsonObject_TryGetValue))]
         public static void When_JsonObject_TryGetValue()
         {
@@ -53,12 +83,27 @@ namespace SourceCode.Clay.Json.Tests
             Assert.True(json != null);
 
             var clone = json.Clone();
+            Assert.Equal(json.Count, clone.Count);
             Assert.Equal(json.ToString(), clone.ToString());
 
+            Assert.True(json.ContainsKey("bool"));
+            Assert.True(json["bool"].JsonType == JsonType.Boolean);
             Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out var jv) && (bool)jv);
+
+            Assert.True(json.ContainsKey("int"));
+            Assert.True(json["int"].JsonType == JsonType.Number);
             Assert.True(json.TryGetValue("int", JsonType.Number, false, out jv) && jv == 123);
+
+            Assert.True(json.ContainsKey("string"));
+            Assert.True(json["string"].JsonType == JsonType.String);
             Assert.True(json.TryGetValue("string", JsonType.String, false, out jv) && jv == "hello");
+
+            Assert.True(json.ContainsKey("object"));
+            Assert.True(json["object"].JsonType == JsonType.Object);
             Assert.True(json.TryGetObject("object", out var jo));
+
+            Assert.True(json.ContainsKey("array"));
+            Assert.True(json["array"].JsonType == JsonType.Array);
             Assert.True(json.TryGetArray("array", out var ja));
         }
 
@@ -78,19 +123,52 @@ namespace SourceCode.Clay.Json.Tests
 
             Assert.False(json.Equals(null));
             Assert.True(json != null);
+            Assert.Equal(jobj.Count, json.Count);
+            Assert.Equal(jobj.ToString(), json.ToString());
 
             var clone = json.Clone();
             Assert.Equal(json, clone);
+            Assert.True(json.Equals((object)clone));
+
+            Assert.Equal(json.Count, clone.Count);
+            Assert.Equal(json.Keys.Count(), clone.Keys.Count());
+            Assert.Equal(json.Values.Count(), clone.Values.Count());
             Assert.Equal(json.ToString(), clone.ToString());
 
             var mutable = json.ToJsonObject();
             Assert.Equal(json.ToString(), mutable.ToString());
 
-            Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out var jv) && (bool)jv);
+            Assert.True(json.ContainsKey("bool"));
+            Assert.True(json["bool"].JsonType == JsonType.Boolean);
+            Assert.True(json.GetValue("bool", JsonType.Boolean, false).JsonType == JsonType.Boolean);
+            Assert.True(json.TryGetValue("bool", out var jv) && (bool)jv);
+            Assert.True(json.TryGetValue("bool", JsonType.Boolean, false, out jv) && (bool)jv);
+
+            Assert.True(json.ContainsKey("int"));
+            Assert.True(json["int"].JsonType == JsonType.Number);
+            Assert.True(json.GetValue("int", JsonType.Number, false).JsonType == JsonType.Number);
+            Assert.True(json.TryGetValue("int", out jv) && jv == 123);
             Assert.True(json.TryGetValue("int", JsonType.Number, false, out jv) && jv == 123);
+
+            Assert.True(json.ContainsKey("string"));
+            Assert.True(json["string"].JsonType == JsonType.String);
+            Assert.True(json.GetValue("string", JsonType.String, false).JsonType == JsonType.String);
+            Assert.True(json.TryGetValue("string", out jv) && jv == "hello");
             Assert.True(json.TryGetValue("string", JsonType.String, false, out jv) && jv == "hello");
+
+            Assert.True(json.ContainsKey("object"));
+            Assert.True(json["object"].JsonType == JsonType.Object);
+            Assert.True(json.GetObject("object").JsonType == JsonType.Object);
             Assert.True(json.TryGetObject("object", out var jo));
+
+            Assert.True(json.ContainsKey("array"));
+            Assert.True(json["array"].JsonType == JsonType.Array);
+            Assert.True(json.GetArray("array").JsonType == JsonType.Array);
             Assert.True(json.TryGetArray("array", out var ja));
+
+            Assert.False(json.TryGetArray("dne", out ja));
+            Assert.False(json.TryGetObject("dne", out jo));
+            Assert.False(json.TryGetValue("dne", out jv));
         }
 
         #endregion

@@ -16,6 +16,14 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public struct CountConstraint : IEquatable<CountConstraint>
     {
+        #region Constants
+
+        public static CountConstraint ForByte { get; } = new CountConstraint(byte.MinValue, byte.MaxValue);
+
+        public static CountConstraint ForUInt16 { get; } = new CountConstraint(ushort.MinValue, ushort.MaxValue);
+
+        #endregion
+
         #region Properties
 
         /// <summary>

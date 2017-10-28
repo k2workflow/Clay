@@ -16,6 +16,22 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public struct Int64Constraint : IEquatable<Int64Constraint>
     {
+        #region Constants
+
+        public static Int64Constraint ForByte { get; } = new Int64Constraint(byte.MinValue, byte.MaxValue);
+
+        public static Int64Constraint ForSByte { get; } = new Int64Constraint(sbyte.MinValue, sbyte.MaxValue);
+
+        public static Int64Constraint ForInt16 { get; } = new Int64Constraint(short.MinValue, short.MaxValue);
+
+        public static Int64Constraint ForUInt16 { get; } = new Int64Constraint(ushort.MinValue, ushort.MaxValue);
+
+        public static Int64Constraint ForInt32 { get; } = new Int64Constraint(int.MinValue, int.MaxValue);
+
+        public static Int64Constraint ForUInt32 { get; } = new Int64Constraint(uint.MinValue, uint.MaxValue);
+
+        #endregion
+
         #region Properties
 
         /// <summary>

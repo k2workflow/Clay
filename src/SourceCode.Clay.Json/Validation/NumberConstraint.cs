@@ -16,6 +16,26 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public struct NumberConstraint : IEquatable<NumberConstraint>
     {
+        #region Constants
+
+        public static NumberConstraint ForByte { get; } = new NumberConstraint(byte.MinValue, byte.MaxValue);
+
+        public static NumberConstraint ForSByte { get; } = new NumberConstraint(sbyte.MinValue, sbyte.MaxValue);
+
+        public static NumberConstraint ForInt16 { get; } = new NumberConstraint(short.MinValue, short.MaxValue);
+
+        public static NumberConstraint ForUInt16 { get; } = new NumberConstraint(ushort.MinValue, ushort.MaxValue);
+
+        public static NumberConstraint ForInt32 { get; } = new NumberConstraint(int.MinValue, int.MaxValue);
+
+        public static NumberConstraint ForUInt32 { get; } = new NumberConstraint(uint.MinValue, uint.MaxValue);
+
+        public static NumberConstraint ForInt64 { get; } = new NumberConstraint(long.MinValue, long.MaxValue);
+
+        public static NumberConstraint ForUInt64 { get; } = new NumberConstraint(ulong.MinValue, ulong.MaxValue);
+
+        #endregion
+
         #region Properties
 
         /// <summary>

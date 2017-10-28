@@ -48,6 +48,7 @@ namespace SourceCode.Clay.Json
                 case TypeCode.UInt16: return new JsonPrimitive(number.UInt16);
                 case TypeCode.UInt32: return new JsonPrimitive(number.UInt32);
                 case TypeCode.UInt64: return new JsonPrimitive(number.UInt64);
+                case TypeCode.Decimal: return new JsonPrimitive(number.Decimal);
 
                 default: return default;
             }
@@ -62,8 +63,6 @@ namespace SourceCode.Clay.Json
             var primitive = (JsonPrimitive)value;
 
             var obj = GetValueFromPrimitive(primitive);
-            if (obj is Decimal d)
-                obj = (double)d;
 
             var num = Number.CreateFromObject(obj);
             return num;
