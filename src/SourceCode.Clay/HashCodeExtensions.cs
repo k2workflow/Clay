@@ -67,58 +67,6 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Computes a hash code for the specified values and adds them to the specified
-        /// <see cref="HashCode"/>, then returns the changed <see cref="HashCode"/> value.
-        /// </summary>
-        /// <typeparam name="T">The type of value.</typeparam>
-        /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
-        /// <param name="values">The values to hash and add to <paramref name="hashCode"/>.</param>
-        /// <returns>The changed <see cref="HashCode"/>.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyRange<T>(this HashCode hashCode, T[] values)
-        {
-            hashCode.AddRange(values);
-            return hashCode;
-        }
-
-        /// <summary>
-        /// Computes a hash code for the specified values and adds them to the specified
-        /// <see cref="HashCode"/>, then returns the changed <see cref="HashCode"/> value.
-        /// </summary>
-        /// <typeparam name="T">The type of value.</typeparam>
-        /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
-        /// <param name="values">The values to hash and add to <paramref name="hashCode"/>.</param>
-        /// <param name="count">The number of items in <paramref name="values"/>.</param>
-        /// <returns>The changed <see cref="HashCode"/>.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyRange<T>(this HashCode hashCode, T[] values, int index, int count)
-        {
-            hashCode.AddRange(values, index, count);
-            return hashCode;
-        }
-
-        /// <summary>
-        /// Computes a hash code for the specified values and adds them to the specified
-        /// <see cref="HashCode"/>, then returns the changed <see cref="HashCode"/> value.
-        /// </summary>
-        /// <typeparam name="T">The type of value.</typeparam>
-        /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
-        /// <param name="values">The values to hash and add to <paramref name="hashCode"/>.</param>
-        /// <param name="index">The starting index in <paramref name="values"/>.</param>
-        /// <param name="count">The number of items in <paramref name="values"/>.</param>
-        /// <param name="comparer">The comparer to use.</param>
-        /// <returns>The changed <see cref="HashCode"/>.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyRange<T>(this HashCode hashCode, T[] values, int index, int count, IEqualityComparer<T> comparer)
-        {
-            hashCode.AddRange(values, index, count, comparer);
-            return hashCode;
-        }
-
-        /// <summary>
         /// Adds the number of items in the specified collection to the specified <see cref="HashCode"/>.
         /// </summary>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
