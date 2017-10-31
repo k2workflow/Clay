@@ -18,6 +18,8 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
+        public static NumberConstraint Empty { get; }
+
         public static NumberConstraint ForByte { get; } = new NumberConstraint(byte.MinValue, byte.MaxValue);
 
         public static NumberConstraint ForSByte { get; } = new NumberConstraint(sbyte.MinValue, sbyte.MaxValue);

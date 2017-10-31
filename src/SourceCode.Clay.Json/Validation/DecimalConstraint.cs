@@ -16,6 +16,12 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public struct DecimalConstraint : IEquatable<DecimalConstraint>
     {
+        #region Constants
+
+        public static DecimalConstraint Empty { get; }
+
+        #endregion
+
         #region Properties
 
         /// <summary>

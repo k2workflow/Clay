@@ -54,7 +54,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_CountConstraint))]
+        [Theory(DisplayName = nameof(Test_InclusiveValue_CountConstraint))]
         [InlineData(-11, false)]
         [InlineData(3, true)]
         [InlineData(10, true)]
@@ -65,6 +65,22 @@ namespace SourceCode.Clay.Json.Units
             var range = new CountConstraint(3, 10);
 
             Assert.True(range.IsValid(value) == valid);
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(Test_Exact_CountConstraint))]
+        [InlineData(-11, false)]
+        [InlineData(3, false)]
+        [InlineData(10, true)]
+        [InlineData(11, false)]
+        public static void Test_Exact_CountConstraint(long value, bool valid)
+        {
+            // [10, 10]
+            var range = new CountConstraint(10, 10);
+            var exact = CountConstraint.Exact(10);
+
+            Assert.Equal(range, exact);
+            Assert.True(exact.IsValid(value) == valid);
         }
 
         #endregion
