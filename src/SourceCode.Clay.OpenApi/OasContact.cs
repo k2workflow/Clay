@@ -8,7 +8,6 @@
 using SourceCode.Clay.Json;
 using SourceCode.Clay.OpenApi.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Json;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
@@ -18,7 +17,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Contact information for the exposed API.
     /// </summary>
-    public sealed class OasContact : IEquatable<OasContact>
+    public class OasContact : IEquatable<OasContact>
     {
         #region Properties
 
@@ -37,11 +36,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public MailAddress Email { get; }
 
-        /// <summary>
-        /// Gets custom properties.
-        /// </summary>
-        //public IReadOnlyDictionary<string, JsonValue> VendorExtensions { get; }
-
         #endregion
 
         #region Constructors
@@ -56,17 +50,10 @@ namespace SourceCode.Clay.OpenApi
             string name = default,
             Uri url = default,
             MailAddress email = default)
-        //JsonObject vendorExtensions = default)
         {
             Name = name;
             Url = url;
             Email = email;
-
-            // Vendor extensions
-            //VendorExtensions = new VendorExtensions(vendorExtensions,
-            //    OasSerializer.PropertyConstants.Name,
-            //    OasSerializer.PropertyConstants.Url,
-            //    OasSerializer.PropertyConstants.Email);
         }
 
         #endregion
@@ -88,8 +75,6 @@ namespace SourceCode.Clay.OpenApi
                 if (x.Email is null || y.Email is null) return false;
                 return x.Email.Equals(y.Email);
             }
-
-            //if (x.VendorExtensions != y.VendorExtensions) return false;
 
             return true;
         }
@@ -122,9 +107,6 @@ namespace SourceCode.Clay.OpenApi
 
                 if (Email != null)
                     hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Email);
-
-                //if (VendorExtensions != null)
-                //    hc = (hc * 23) + VendorExtensions.GetHashCode();
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }
@@ -160,9 +142,6 @@ namespace SourceCode.Clay.OpenApi
                 [OasSerializer.PropertyConstants.Url] = Url.ToString(),
                 [OasSerializer.PropertyConstants.Email] = Email.ToString()
             };
-
-            //foreach (var item in VendorExtensions)
-            //    json.Add(item);
 
             var str = json.ToString();
             return str;
