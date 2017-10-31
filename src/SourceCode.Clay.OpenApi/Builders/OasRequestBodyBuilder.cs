@@ -90,7 +90,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasRequestBody"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasRequestBody"/>.</returns>
-        public OasRequestBody Build() => new OasRequestBody(
+        public virtual OasRequestBody Build() => new OasRequestBody(
             description: Description,
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content),
             options: Options);

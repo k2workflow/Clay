@@ -61,14 +61,14 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasParameter(OasParameterBuilder builder) => builder?.Build();
+        public static implicit operator OasParameter(OasParameterBuilder builder) => (OasParameter)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasParameterBuilder"/> to <see cref="OasReferable{Parameter}"/>.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasParameter>(OasParameterBuilder builder) => builder?.Build();
+        public static implicit operator OasReferable<OasParameter>(OasParameterBuilder builder) => (OasParameter)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasParameter"/> to <see cref="OasParameterBuilder"/>.
@@ -81,7 +81,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasParameter"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasParameter"/>.</returns>
-        public new OasParameter Build() => new OasParameter(
+        public override OasParameterBody Build() => new OasParameter(
             name: Name,
             location: Location,
             description: Description,
@@ -90,6 +90,12 @@ namespace SourceCode.Clay.OpenApi
             schema: Schema,
             examples: new ReadOnlyDictionary<ContentType, OasReferable<OasExample>>(Examples),
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content));
+
+        /// <summary>
+        /// Creates the <see cref="OasParameter"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasParameter"/>.</returns>
+        OasParameter IOasBuilder<OasParameter>.Build() => (OasParameter)Build();
 
         #endregion
     }

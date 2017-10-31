@@ -8,6 +8,7 @@
 using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using SourceCode.Clay.OpenApi.Serialization;
+using SourceCode.Clay.OpenApi.Tests.Mock;
 using System;
 using System.CodeDom.Compiler;
 using System.IO;
@@ -104,7 +105,7 @@ namespace SourceCode.Clay.OpenApi.Tests
         [Fact(DisplayName = nameof(OpenApiSerializer_Serialize))]
         public static void OpenApiSerializer_Serialize()
         {
-            var sut = new OasSerializer();
+            var sut = new MockOasSerializer();
 
             #region Graph
 
@@ -119,8 +120,9 @@ namespace SourceCode.Clay.OpenApi.Tests
                             [ OasExpression.Parse("http://foo{$statusCode}") ] = new OasPathBuilder()
                             {
                                 Description = "path1",
-                                Delete = new OasOperationBuilder()
+                                Delete = new MockOasOperationBuilder()
                                 {
+                                    OperationId = 1,
                                     Callbacks =
                                     {
                                         [ "callback1" ] = "#/components/callbacks/callback1"
@@ -470,7 +472,8 @@ namespace SourceCode.Clay.OpenApi.Tests
                                             ["$ref"] = "#/components/responses/response1"
                                         }
                                     },
-                                    ["summary"] = "Delete operation summary"
+                                    ["summary"] = "Delete operation summary",
+                                    ["x-k2-operation-id"] = "0000000000000001"
                                 },
                                 ["description"] = "path1",
                                 ["get"] = new JsonObject()

@@ -12,9 +12,14 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Defines a security scheme that can be used by the operations.
     /// </summary>
-    public abstract class OasSecuritySchemeBuilder
+    public abstract class OasSecuritySchemeBuilder : IOasBuilder<OasSecurityScheme>
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the security scheme type.
+        /// </summary>
+        public abstract OasSecuritySchemeType SchemeType { get; }
 
         /// <summary>
         /// Gets or sets the short description for security scheme.
@@ -44,6 +49,30 @@ namespace SourceCode.Clay.OpenApi
             if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OasSecuritySchemeBuilder"/> to <see cref="OasSecurityScheme"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator OasSecurityScheme(OasSecuritySchemeBuilder builder) => builder?.Build();
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="OasSecuritySchemeBuilder"/> to <see cref="OasReferable{OasSecurityScheme}"/>.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator OasReferable<OasSecurityScheme>(OasSecuritySchemeBuilder builder) => builder?.Build();
+
+        /// <summary>
+        /// Creates the <see cref="OasSecurityScheme"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasSecurityScheme"/>.</returns>
+        public abstract OasSecurityScheme Build();
 
         #endregion
     }

@@ -21,6 +21,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public Uri Url { get; set; }
 
+        /// <summary>Gets the security scheme type.</summary>
+        public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OpenIdConnect;
+
         #endregion
 
         #region Constructors
@@ -52,21 +55,14 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasOidcSecurityScheme(OasOidcSecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasOidcSecurityScheme(OasOidcSecuritySchemeBuilder builder) => (OasOidcSecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOidcSecuritySchemeBuilder"/> to <see cref="OasReferable{OpenIdConnectSecurityScheme}"/>.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasOidcSecurityScheme>(OasOidcSecuritySchemeBuilder builder) => builder?.Build();
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="OasOidcSecuritySchemeBuilder"/> to <see cref="OasReferable{SecurityScheme}"/>.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasSecurityScheme>(OasOidcSecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasReferable<OasOidcSecurityScheme>(OasOidcSecuritySchemeBuilder builder) => (OasOidcSecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOidcSecurityScheme"/> to <see cref="OasOidcSecuritySchemeBuilder"/>.
@@ -79,9 +75,15 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasOidcSecurityScheme"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasOidcSecurityScheme"/>.</returns>
-        public OasOidcSecurityScheme Build() => new OasOidcSecurityScheme(
+        public override OasSecurityScheme Build() => new OasOidcSecurityScheme(
             description: Description,
             url: Url);
+
+        /// <summary>
+        /// Creates the <see cref="OasOidcSecurityScheme"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasOidcSecurityScheme"/>.</returns>
+        OasOidcSecurityScheme IOasBuilder<OasOidcSecurityScheme>.Build() => (OasOidcSecurityScheme)Build();
 
         #endregion
     }

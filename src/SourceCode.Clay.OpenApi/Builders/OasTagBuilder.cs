@@ -76,7 +76,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasTag"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasTag"/>.</returns>
-        public OasTag Build() => new OasTag(
+        public virtual OasTag Build() => new OasTag(
             name: Name,
             description: Description,
             externalDocumentation: ExternalDocumentation);

@@ -26,9 +26,14 @@ namespace SourceCode.Clay.OpenApi.Tests
         {
             var builderType = builder.GetType();
             var buildMethod = builderType.GetMethod("Build", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
-            var builtType = buildMethod.ReturnType;
             var built = buildMethod.Invoke(builder, new object[0]);
             var reverseBuilder = builderType.GetConstructors().First(x => x.GetParameters().Length == 1).Invoke(new object[] { built });
+
+            var builtType = builderType
+                .GetInterfaces()
+                .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IOasBuilder<>))
+                .Select(x => x.GetGenericArguments()[0])
+                .Last();
 
             foreach (var builderProp in builderType.GetProperties())
             {

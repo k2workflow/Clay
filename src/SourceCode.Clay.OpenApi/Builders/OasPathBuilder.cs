@@ -146,7 +146,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasPath"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasPath"/>.</returns>
-        public OasPath Build() => new OasPath(
+        public virtual OasPath Build() => new OasPath(
             summary: Summary,
             description: Description,
             get: Get,

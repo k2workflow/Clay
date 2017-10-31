@@ -99,7 +99,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasInformation"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasInformation"/>.</returns>
-        public OasInformation Build() => new OasInformation(
+        public virtual OasInformation Build() => new OasInformation(
             title: Title,
             description: Description,
             termsOfService: TermsOfService,
