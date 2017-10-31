@@ -26,6 +26,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasParameterLocation Location { get; set; }
 
+        /// <summary>Gets the security scheme type.</summary>
+        public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.ApiKey;
+
         #endregion
 
         #region Constructors
@@ -58,21 +61,14 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasApiKeySecurityScheme(OasApiKeySecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasApiKeySecurityScheme(OasApiKeySecuritySchemeBuilder builder) => (OasApiKeySecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasApiKeySecuritySchemeBuilder"/> to <see cref="OasReferable{ApiKeySecurityScheme}"/>.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasApiKeySecurityScheme>(OasApiKeySecuritySchemeBuilder builder) => builder?.Build();
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="OasApiKeySecuritySchemeBuilder"/> to <see cref="OasReferable{SecurityScheme}"/>.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasSecurityScheme>(OasApiKeySecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasReferable<OasApiKeySecurityScheme>(OasApiKeySecuritySchemeBuilder builder) => (OasApiKeySecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasApiKeySecurityScheme"/> to <see cref="OasApiKeySecuritySchemeBuilder"/>.
@@ -85,10 +81,16 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasApiKeySecurityScheme"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasApiKeySecurityScheme"/>.</returns>
-        public OasApiKeySecurityScheme Build() => new OasApiKeySecurityScheme(
+        public override OasSecurityScheme Build() => new OasApiKeySecurityScheme(
             description: Description,
             name: Name,
             location: Location);
+
+        /// <summary>
+        /// Creates the <see cref="OasApiKeySecurityScheme"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasApiKeySecurityScheme"/>.</returns>
+        OasApiKeySecurityScheme IOasBuilder<OasApiKeySecurityScheme>.Build() => (OasApiKeySecurityScheme)Build();
 
         #endregion
     }

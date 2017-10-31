@@ -84,7 +84,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasExample"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasExample"/>.</returns>
-        public OasExample Build() => new OasExample(
+        public virtual OasExample Build() => new OasExample(
             summary: Summary,
             description: Description,
             externalValue: ExternalValue);

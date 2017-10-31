@@ -192,7 +192,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasSchema"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasSchema"/>.</returns>
-        public OasSchema Build() => new OasSchema(
+        public virtual OasSchema Build() => new OasSchema(
             type: JsonType,
             format: Format,
             title: Title,

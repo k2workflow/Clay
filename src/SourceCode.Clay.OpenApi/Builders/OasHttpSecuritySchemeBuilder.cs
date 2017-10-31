@@ -26,6 +26,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public string BearerFormat { get; set; }
 
+        /// <summary>Gets the security scheme type.</summary>
+        public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.Http;
+
         #endregion
 
         #region Constructors
@@ -58,21 +61,14 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasHttpSecurityScheme(OasHttpSecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasHttpSecurityScheme(OasHttpSecuritySchemeBuilder builder) => (OasHttpSecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasHttpSecuritySchemeBuilder"/> to <see cref="OasReferable{HttpSecurityScheme}"/>.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasHttpSecurityScheme>(OasHttpSecuritySchemeBuilder builder) => builder?.Build();
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="OasHttpSecuritySchemeBuilder"/> to <see cref="OasReferable{SecurityScheme}"/>.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasSecurityScheme>(OasHttpSecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasReferable<OasHttpSecurityScheme>(OasHttpSecuritySchemeBuilder builder) => (OasHttpSecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasHttpSecurityScheme"/> to <see cref="OasHttpSecuritySchemeBuilder"/>.
@@ -85,10 +81,16 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasHttpSecurityScheme"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasHttpSecurityScheme"/>.</returns>
-        public OasHttpSecurityScheme Build() => new OasHttpSecurityScheme(
+        public override OasSecurityScheme Build() => new OasHttpSecurityScheme(
             description: Description,
             scheme: Scheme,
             bearerFormat: BearerFormat);
+
+        /// <summary>
+        /// Creates the <see cref="OasHttpSecurityScheme"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasHttpSecurityScheme"/>.</returns>
+        OasHttpSecurityScheme IOasBuilder<OasHttpSecurityScheme>.Build() => (OasHttpSecurityScheme)Build();
 
         #endregion
     }

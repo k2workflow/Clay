@@ -116,12 +116,17 @@ namespace SourceCode.Clay.OpenApi.Serialization
                         (x, y) => throw new NotSupportedException($"Serializing the type {instType.FullName} is not supported."));
                 }
 
-                var serParam = Expression.Parameter(_serializerType, "serializer");
+                var serParam = Expression.Parameter(typeof(OasSerializer), "serializer");
                 var param = Expression.Parameter(argType, "value");
+
+                var ser = _serializerType == serParam.Type
+                    ? (Expression)serParam
+                    : Expression.Convert(serParam, _serializerType);
+
                 var conv = argType == instType
                     ? (Expression)param
                     : Expression.Convert(param, instType);
-                var call = Expression.Call(serParam, method, conv);
+                var call = Expression.Call(ser, method, conv);
                 return Expression.Lambda<Func<OasSerializer, T, JsonValue>>(call, serParam, param).Compile();
             }
 

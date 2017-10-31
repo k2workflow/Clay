@@ -77,7 +77,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasContact"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasContact"/>.</returns>
-        public OasContact Build() => new OasContact(
+        public virtual OasContact Build() => new OasContact(
             name: Name,
             url: Url,
             email: Email);

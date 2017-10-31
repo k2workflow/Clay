@@ -82,7 +82,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasServerVariable"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasServerVariable"/>.</returns>
-        public OasServerVariable Build() => new OasServerVariable(
+        public virtual OasServerVariable Build() => new OasServerVariable(
             @enum: new ReadOnlyCollection<String>(Enum),
             @default: Default,
             description: Description);

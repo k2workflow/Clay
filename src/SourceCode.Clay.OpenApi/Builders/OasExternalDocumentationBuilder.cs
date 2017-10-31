@@ -73,7 +73,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasExternalDocumentation"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasExternalDocumentation"/>.</returns>
-        public OasExternalDocumentation Build() => new OasExternalDocumentation(
+        public virtual OasExternalDocumentation Build() => new OasExternalDocumentation(
             description: Description,
             url: Url);
 

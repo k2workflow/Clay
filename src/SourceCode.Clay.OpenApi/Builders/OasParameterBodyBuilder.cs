@@ -109,7 +109,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasParameterBody"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasParameterBody"/>.</returns>
-        public OasParameterBody Build() => new OasParameterBody(
+        public virtual OasParameterBody Build() => new OasParameterBody(
             description: Description,
             options: Options,
             style: Style,

@@ -125,7 +125,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasComponents"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasComponents"/>.</returns>
-        public OasComponents Build() => new OasComponents(
+        public virtual OasComponents Build() => new OasComponents(
             schemas: new ReadOnlyDictionary<string, OasReferable<OasSchema>>(Schemas),
             responses: new ReadOnlyDictionary<string, OasReferable<OasResponse>>(Responses),
             parameters: new ReadOnlyDictionary<string, OasReferable<OasParameter>>(Parameters),

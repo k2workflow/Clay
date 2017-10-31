@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Buffers
     /// <summary>
     /// Represents a way to calculate hash codes.
     /// </summary>
-    public static partial class HashCode // .Fnv
+    public static partial class BinaryHashCode // .Fnv
     {
         #region Constants
 

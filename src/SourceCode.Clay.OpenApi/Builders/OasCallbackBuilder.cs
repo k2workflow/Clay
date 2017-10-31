@@ -124,7 +124,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasCallback"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasCallback"/>.</returns>
-        public OasCallback Build() => new OasCallback(
+        public virtual OasCallback Build() => new OasCallback(
             paths: this);
 
         /// <summary>Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"></see>.</summary>

@@ -80,7 +80,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasMediaType"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasMediaType"/>.</returns>
-        public OasMediaType Build() => new OasMediaType(
+        public virtual OasMediaType Build() => new OasMediaType(
             schema: Schema,
             examples: new ReadOnlyDictionary<string, OasReferable<OasExample>>(Examples),
             encoding: new ReadOnlyDictionary<string, OasPropertyEncoding>(Encoding));

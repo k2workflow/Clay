@@ -70,7 +70,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasLicense"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasLicense"/>.</returns>
-        public OasLicense Build() => new OasLicense(
+        public virtual OasLicense Build() => new OasLicense(
             name: Name,
             url: Url);
 

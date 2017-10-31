@@ -68,11 +68,11 @@ namespace SourceCode.Clay.Buffers
 
             // Calculate on full length
             if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
-                return HashCode.Fnv(obj.Span);
+                return BinaryHashCode.Fnv(obj.Span);
 
             // Calculate on prefix
             var slice = obj.Slice(0, HashCodeFidelity);
-            var hc = HashCode.Fnv(slice.Span);
+            var hc = BinaryHashCode.Fnv(slice.Span);
             return hc;
         }
 
