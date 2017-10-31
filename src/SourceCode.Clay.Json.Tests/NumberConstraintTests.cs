@@ -85,7 +85,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_Infinity_InclusiveValue_NumberConstraint))]
+        [Theory(DisplayName = nameof(OpenApi_Test_InclusiveValue_NumberConstraint))]
         [InlineData(-10.2, false)]
         [InlineData(-10.1, true)] // Inclusive
         [InlineData(-10, true)]

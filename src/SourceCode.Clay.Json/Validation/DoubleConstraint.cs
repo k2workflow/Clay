@@ -16,6 +16,12 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public struct DoubleConstraint : IEquatable<DoubleConstraint>
     {
+        #region Constants
+
+        public static DoubleConstraint Empty { get; }
+
+        #endregion
+
         #region Properties
 
         /// <summary>

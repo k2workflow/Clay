@@ -18,6 +18,8 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
+        public static CountConstraint Empty { get; }
+
         public static CountConstraint ForByte { get; } = new CountConstraint(byte.MinValue, byte.MaxValue);
 
         public static CountConstraint ForUInt16 { get; } = new CountConstraint(ushort.MinValue, ushort.MaxValue);
@@ -69,6 +71,16 @@ namespace SourceCode.Clay.Json.Validation
         public CountConstraint(uint exact)
             : this(exact, exact)
         { }
+
+        #endregion
+
+        #region Factory
+
+        /// <summary>
+        /// Implicitly converts from a <see cref="uint"/> to an exact <see cref="CountConstraint"/>.
+        /// </summary>
+        /// <param name="exact">The minimum and maximum value.</param>
+        public static CountConstraint Exact(uint count) => new CountConstraint(count, count);
 
         #endregion
 
@@ -150,6 +162,12 @@ namespace SourceCode.Clay.Json.Validation
         /// A value indicating whether the first <see cref="CountConstraint"/> is not similar to <see cref="CountConstraint"/>.
         /// </returns>
         public static bool operator !=(CountConstraint x, CountConstraint y) => !(x == y);
+
+        /// <summary>
+        /// Implicitly converts from a <see cref="uint"/> to an exact <see cref="CountConstraint"/>.
+        /// </summary>
+        /// <param name="exact">The minimum and maximum value.</param>
+        public static implicit operator CountConstraint(uint exact) => CountConstraint.Exact(exact);
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>

@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_DecimalConstraint))]
+        [Theory(DisplayName = nameof(Test_InclusiveValue_DecimalConstraint))]
         [InlineData(-10.2, false)]
         [InlineData(-10.1, true)] // Inclusive
         [InlineData(-10, true)]

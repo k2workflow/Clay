@@ -54,9 +54,10 @@ namespace SourceCode.Clay.Json.Validation
 
             Pattern = pattern;
             Required = required;
-
-            Regex build() => new Regex(pattern, options, timeout); // Local function
             _regex = new Lazy<Regex>(build, LazyThreadSafetyMode.PublicationOnly);
+
+            // Local function
+            Regex build() => new Regex(pattern, options, timeout);
         }
 
         public PatternConstraint(string pattern, bool required)
@@ -67,10 +68,11 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
-        // Heap analysis shows Regex permanently holds onto last input string, which may be large
-        [MethodImpl(MethodImplOptions.NoOptimization)]
+        [MethodImpl(MethodImplOptions.NoOptimization)] // We ignore result but want the side-effects
         private static void Clear(Regex regex)
         {
+            // Heap analysis shows Regex permanently holds onto last input string, which may be large
+
             regex.IsMatch(string.Empty);
         }
 
