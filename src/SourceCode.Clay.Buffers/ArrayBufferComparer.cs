@@ -66,15 +66,15 @@ namespace SourceCode.Clay.Buffers
         {
             // Fnv has consistent handling for Null
             if (obj == null)
-                return HashCode.Fnv(obj);
+                return BinaryHashCode.Fnv(obj);
 
             // Calculate on full length
             if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
-                return HashCode.Fnv(obj);
+                return BinaryHashCode.Fnv(obj);
 
             // Calculate on prefix
             var span = new ReadOnlySpan<byte>(obj, 0, HashCodeFidelity);
-            var hc = HashCode.Fnv(span);
+            var hc = BinaryHashCode.Fnv(span);
             return hc;
         }
 
