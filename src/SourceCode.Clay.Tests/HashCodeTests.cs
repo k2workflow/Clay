@@ -132,34 +132,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expectedB.ToHashCode(), sutB.ToHashCode());
         }
 
-        [Fact(DisplayName = nameof(HashCode_AddRange))]
-        public static void HashCode_AddRange()
-        {
-            var bytes = new byte[1000];
-            for (var i = 0; i < bytes.Length; i++)
-                bytes[i] = unchecked((byte)i);
-
-            var sut = new HashCode();
-            sut.AddRange(bytes);
-
-            Assert.Equal(-1861433025, sut.ToHashCode());
-        }
-
-        [Fact(DisplayName = nameof(HashCode_TallyRange))]
-        public static void HashCode_TallyRange()
-        {
-            var bytes = new byte[1000];
-            for (var i = 0; i < bytes.Length; i++)
-                bytes[i] = unchecked((byte)i);
-
-            var expected = new HashCode();
-            expected.AddRange(bytes);
-
-            var sut = new HashCode().TallyRange(bytes);
-
-            Assert.Equal(expected.ToHashCode(), sut.ToHashCode());
-        }
-
         [Fact(DisplayName = nameof(HashCode_TallyCount_Array))]
         public static void HashCode_TallyCount_Array()
         {
