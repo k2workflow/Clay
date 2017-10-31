@@ -14,163 +14,315 @@ using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
+#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable S1206 // "Equals(Object)" and "GetHashCode()" should be overridden in pairs
+
     /// <summary>
     /// Represents a way to create high quality hashcodes.
     /// </summary>
     [DebuggerDisplay("{_value,nq}")]
-    public struct HashCode : IEquatable<HashCode>
+    public struct HashCode
     {
         // Closely follows https://github.com/dotnet/corefx/issues/14354
-        // However, uses a fluent interface for Add is provided.
+        // TODO: Remove when that feature lands.
 
         #region Fields
 
-        private readonly ulong _value;
-        private readonly byte _index;
+        private ulong _value;
+        private byte _index;
 
         #endregion
 
-        #region Constructors
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private HashCode(ulong seed, byte index)
-        {
-            _value = seed;
-            _index = index;
-        }
-
-        #endregion
-
-        #region Methods
+        #region Add
 
         /// <summary>
         /// Adds the specified hashcode into this <see cref="HashCode"/>.
         /// </summary>
-        /// <param name="hashcode">The hashcode to add.</param>
+        /// <param name="value">The hashcode to add.</param>
         /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public HashCode Add(int hashcode) => Combine(this, hashcode);
-
-        /// <summary>
-        /// Adds the specified <see cref="HashCode"/> into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="hashcode">The <see cref="HashCode"/> to add.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public HashCode Add(HashCode hashcode) => Combine(this, hashcode);
-
-        /// <summary>
-        /// Adds the hashcode of the specified value into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="value">The value to hash and add.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public HashCode Add<T>(T value) => Combine(this, value, EqualityComparer<T>.Default);
+        public void Add(int value)
+        {
+            unchecked
+            {
+                _value = (_value * Prime(_index)) + (ulong)value;
+                _index = (byte)(_index + 1);
+            }
+        }
 
         /// <summary>
         /// Adds the hashcode of the specified value into this <see cref="HashCode"/>.
         /// </summary>
         /// <param name="value">The value to hash and add.</param>
-        /// <param name="equalityComparer">The equality comparer to use.</param>
         /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public HashCode Add<T>(T value, IEqualityComparer<T> equalityComparer) => Combine(this, value, equalityComparer);
+        public void Add<T>(T value) => Add(value, EqualityComparer<T>.Default);
+
+        /// <summary>
+        /// Adds the hashcode of the specified value into this <see cref="HashCode"/>.
+        /// </summary>
+        /// <param name="value">The value to hash and add.</param>
+        /// <param name="comparer">The equality comparer to use.</param>
+        /// <returns>The <see cref="HashCode"/> value with the additional hash code.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
+        public void Add<T>(T value, IEqualityComparer<T> comparer)
+        {
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
+            Add(comparer.GetHashCode(value));
+        }
+
+        /// <summary>
+        /// Adds the specified array of values to the hash code.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the array.</typeparam>
+        /// <param name="values">The array of items.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
+        public void AddRange<T>(T[] values)
+        {
+            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
+            AddRange(values, 0, values.Length, EqualityComparer<T>.Default);
+        }
+
+        /// <summary>
+        /// Adds the specified array of values to the hash code.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the array.</typeparam>
+        /// <param name="values">The array of items.</param>
+        /// <param name="index">The starting index in <paramref name="values"/>.</param>
+        /// <param name="count">The number of items in <paramref name="values"/>.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
+        public void AddRange<T>(T[] values, int index, int count)
+        {
+            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
+            AddRange(values, index, count, EqualityComparer<T>.Default);
+        }
+
+        /// <summary>
+        /// Adds the specified array of values to the hash code.
+        /// </summary>
+        /// <typeparam name="T">The type of items in the array.</typeparam>
+        /// <param name="values">The array of items.</param>
+        /// <param name="index">The starting index in <paramref name="values"/>.</param>
+        /// <param name="count">The number of items in <paramref name="values"/>.</param>
+        /// <param name="comparer">The equality comparer to use.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
+        public void AddRange<T>(T[] values, int index, int count, IEqualityComparer<T> comparer)
+        {
+            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
+            if (index < 0 || index >= values.Length) throw new ArgumentOutOfRangeException(nameof(index));
+            if (index + count > values.Length) throw new ArgumentOutOfRangeException(nameof(count));
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
+            var end = index + count;
+            for (var i = index; i < end; i++)
+                Add(values[i], comparer);
+        }
+
+        #endregion
+
+        #region Static Methods
+
+#       pragma warning disable S2436 // Classes and methods should not have too many generic parameters
+
+        /// <summary>
+        /// Creates a hash code from the specified object.
+        /// </summary>
+        /// <typeparam name="T1">The type of the object.</typeparam>
+        /// <param name="value1">The object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1>(T1 value1)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2>(T1 value1, T2 value2)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3>(T1 value1, T2 value2, T3 value3)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <typeparam name="T4">The type of the fourth object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <param name="value4">The fourth object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3, T4>(T1 value1, T2 value2, T3 value3, T4 value4)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            hc.Add(value4);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <typeparam name="T4">The type of the fourth object.</typeparam>
+        /// <typeparam name="T5">The type of the fifth object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <param name="value4">The fourth object.</param>
+        /// <param name="value5">The fifth object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3, T4, T5>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            hc.Add(value4);
+            hc.Add(value5);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <typeparam name="T4">The type of the fourth object.</typeparam>
+        /// <typeparam name="T5">The type of the fifth object.</typeparam>
+        /// <typeparam name="T6">The type of the sixth object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <param name="value4">The fourth object.</param>
+        /// <param name="value5">The fifth object.</param>
+        /// <param name="value6">The sixth object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3, T4, T5, T6>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            hc.Add(value4);
+            hc.Add(value5);
+            hc.Add(value6);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <typeparam name="T4">The type of the fourth object.</typeparam>
+        /// <typeparam name="T5">The type of the fifth object.</typeparam>
+        /// <typeparam name="T6">The type of the fifth object.</typeparam>
+        /// <typeparam name="T7">The type of the seventh object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <param name="value4">The fourth object.</param>
+        /// <param name="value5">The fifth object.</param>
+        /// <param name="value6">The sixth object.</param>
+        /// <param name="value7">The seventh object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3, T4, T5, T6, T7>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            hc.Add(value4);
+            hc.Add(value5);
+            hc.Add(value6);
+            hc.Add(value7);
+            return hc.ToHashCode();
+        }
+
+        /// <summary>
+        /// Creates a hash code from the specified objects.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first object.</typeparam>
+        /// <typeparam name="T2">The type of the second object.</typeparam>
+        /// <typeparam name="T3">The type of the third object.</typeparam>
+        /// <typeparam name="T4">The type of the fourth object.</typeparam>
+        /// <typeparam name="T5">The type of the fifth object.</typeparam>
+        /// <typeparam name="T6">The type of the fifth object.</typeparam>
+        /// <typeparam name="T7">The type of the seventh object.</typeparam>
+        /// <typeparam name="T8">The type of the eighth object.</typeparam>
+        /// <param name="value1">The first object.</param>
+        /// <param name="value2">The second object.</param>
+        /// <param name="value3">The third object.</param>
+        /// <param name="value4">The fourth object.</param>
+        /// <param name="value5">The fifth object.</param>
+        /// <param name="value6">The sixth object.</param>
+        /// <param name="value7">The seventh object.</param>
+        /// <param name="value8">The eighth object.</param>
+        /// <returns>The hash code.</returns>
+        public static int Combine<T1, T2, T3, T4, T5, T6, T7, T8>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8)
+        {
+            var hc = new HashCode();
+            hc.Add(value1);
+            hc.Add(value2);
+            hc.Add(value3);
+            hc.Add(value4);
+            hc.Add(value5);
+            hc.Add(value6);
+            hc.Add(value7);
+            hc.Add(value8);
+            return hc.ToHashCode();
+        }
+
+#       pragma warning restore S2436 // Classes and methods should not have too many generic parameters
 
         #endregion
 
         #region Operators
-
-        /// <summary>
-        /// Determines whether two <see cref="HashCode"/> values contain the same accumulator.
-        /// </summary>
-        /// <param name="left">The first <see cref="HashCode"/> to compare.</param>
-        /// <param name="right">The second <see cref="HashCode"/> to compare.</param>
-        /// <returns>A value indicating whether the values contain the same accumulator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static bool operator ==(HashCode code1, HashCode code2) => code1.Equals(code2);
-
-        /// <summary>
-        /// Determines whether two <see cref="HashCode"/> values do not
-        /// contain the same accumulator.
-        /// </summary>
-        /// <param name="left">The first <see cref="HashCode"/> to compare.</param>
-        /// <param name="right">The second <see cref="HashCode"/> to compare.</param>
-        /// <returns>A value indicating whether the values do not contain the same accumulator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static bool operator !=(HashCode code1, HashCode code2) => !(code1 == code2);
-
-        /// <summary>
-        /// Adds the specified hashcode into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="code1">The <see cref="HashCode"/> to add to.</param>
-        /// <param name="code2">The hashcode to add.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Combine(HashCode code1, int code2)
-        {
-            unchecked
-            {
-                var value = (code1._value * Prime(code1._index)) + (ulong)code2;
-                var index = (byte)(code1._index + 1);
-
-                return new HashCode(value, index);
-            }
-        }
-
-        /// <summary>
-        /// Adds the specified <see cref="HashCode"/> into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="code1">The <see cref="HashCode"/> to add to.</param>
-        /// <param name="code2">The <see cref="HashCode"/> to add.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Combine(HashCode code1, HashCode code2)
-        {
-            unchecked
-            {
-                var value1 = code1._value * Prime(code1._index);
-                var value2 = code2._value * Prime(code2._index);
-
-                var value = value1 + value2;
-                var index = (byte)((code1._index * 1619) ^ (code2._index * 1613));
-
-                return new HashCode(value, index);
-            }
-        }
-
-        /// <summary>
-        /// Adds the hashcode of the specified value into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="code">The <see cref="HashCode"/> to add to.</param>
-        /// <param name="value">The value to hash and add.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Combine<T>(HashCode code, T value)
-            => Combine(code, value, EqualityComparer<T>.Default);
-
-        /// <summary>
-        /// Adds the hashcode of the specified value into this <see cref="HashCode"/>.
-        /// </summary>
-        /// <param name="code">The <see cref="HashCode"/> to add to.</param>
-        /// <param name="value">The value to hash and add.</param>
-        /// <param name="equalityComparer">The equality comparer to use.</param>
-        /// <returns>The <see cref="HashCode"/> value with the additional hashcode.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Combine<T>(HashCode code, T value, IEqualityComparer<T> equalityComparer)
-        {
-            if (equalityComparer == null) throw new ArgumentNullException(nameof(equalityComparer));
-            return Combine(code, equalityComparer.GetHashCode(value));
-        }
 
         /// <summary>
         /// Converts this <see cref="HashCode"/> to a <see cref="int"/> hashcode.
@@ -198,25 +350,7 @@ namespace SourceCode.Clay
             }
         }
 
-        /// <summary>
-        /// Determines whether this and another <see cref="HashCode"/> values contain the same accumulator.
-        /// </summary>
-        /// <param name="obj">The <see cref="HashCode"/> to compare.</param>
-        /// <returns>A value indicating whether the values contain the same accumulator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public override bool Equals(object obj) => obj is HashCode o && Equals(o);
-
-        /// <summary>
-        /// Determines whether this and another <see cref="HashCode"/> values contain the same accumulator.
-        /// </summary>
-        /// <param name="other">The <see cref="HashCode"/> to compare.</param>
-        /// <returns>A value indicating whether the values contain the same accumulator.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public bool Equals(HashCode other) => _value == other._value;
-
-#       pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 
         /// <summary>
         /// Converts this <see cref="HashCode"/> to a <see cref="int"/> hashcode.
@@ -227,15 +361,7 @@ namespace SourceCode.Clay
         [Obsolete("Use ToHashCode to retrieve the computed hash code.", error: true)]
         public override int GetHashCode() => ToHashCode();
 
-#       pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
-
-        /// <summary>
-        /// Gets the contained hashcode as a string value.
-        /// </summary>
-        /// <returns>The hashcode value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public override string ToString() => ToHashCode().ToString(CultureInfo.CurrentCulture);
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         #endregion
 
@@ -512,4 +638,7 @@ namespace SourceCode.Clay
 
         #endregion
     }
+
+#pragma warning restore S1206 // "Equals(Object)" and "GetHashCode()" should be overridden in pairs
+#pragma warning restore CA1815 // Override equals and operator equals on value types
 }
