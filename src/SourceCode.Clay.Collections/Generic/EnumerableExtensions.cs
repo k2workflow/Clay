@@ -74,17 +74,17 @@ namespace SourceCode.Clay.Collections.Generic
             Debug.Assert(y != null);
             Debug.Assert(comparer != null);
 
-            using (var e1 = x.GetEnumerator())
-            using (var e2 = y.GetEnumerator())
+            using (var xe = x.GetEnumerator())
+            using (var ye = y.GetEnumerator())
             {
-                while (e1.MoveNext())
+                while (xe.MoveNext())
                 {
-                    if (!e2.MoveNext()) return false;
+                    if (!ye.MoveNext()) return false;
 
-                    if (!comparer.Equals(e1.Current, e2.Current)) return false;
+                    if (!comparer.Equals(xe.Current, ye.Current)) return false;
                 }
 
-                return !e2.MoveNext();
+                return !ye.MoveNext();
             }
         }
 

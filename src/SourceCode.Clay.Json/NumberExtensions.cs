@@ -7,31 +7,11 @@
 
 using System;
 using System.Json;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace SourceCode.Clay.Json
 {
     public static class NumberExtensions
     {
-        #region Helpers
-
-        private static readonly Func<JsonPrimitive, object> GetValueFromPrimitive = CreateGetValueFromPrimitive();
-
-        private static Func<JsonPrimitive, object> CreateGetValueFromPrimitive()
-        {
-            var prim = typeof(JsonPrimitive);
-            var prop = prim.GetProperty("Value", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            var param = Expression.Parameter(prim, "primitive");
-            var expr = Expression.Property(param, prop);
-
-            var func = Expression.Lambda<Func<JsonPrimitive, object>>(expr, param);
-            return func.Compile();
-        }
-
-        #endregion
-
         #region Methods
 
         public static JsonPrimitive ToJson(this Number number)
@@ -62,7 +42,7 @@ namespace SourceCode.Clay.Json
 
             var primitive = (JsonPrimitive)value;
 
-            var obj = GetValueFromPrimitive(primitive);
+            var obj = JsonExtensions.GetValueFromPrimitive(primitive);
 
             var num = Number.CreateFromObject(obj);
             return num;

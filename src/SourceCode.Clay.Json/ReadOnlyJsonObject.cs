@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Json
     {
         #region Fields
 
-        internal readonly JsonObject _json;
+        internal readonly JsonObject _json; // Extension methods need direct access to this field
 
         #endregion
 
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Json
 
         #endregion
 
-        #region Methods
+        #region IReadOnlyDictionary
 
         /// <inheritdoc/>
         public bool ContainsKey(string key) => _json.ContainsKey(key);
@@ -110,8 +110,15 @@ namespace SourceCode.Clay.Json
             return true;
         }
 
-        /// <inheritdoc/>
-        public JsonObject ToJsonObject() => new JsonObject((JsonObject)_json.Clone());
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Make a copy of the <see cref="ReadOnlyJsonObject"/> as a <see cref="JsonObject"/>.
+        /// </summary>
+        /// <returns></returns>
+        public JsonObject ToJsonObject() => (JsonObject)_json.Clone(); // Source is known to be a JsonObject
 
         #endregion
 
