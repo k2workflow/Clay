@@ -38,7 +38,7 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
 
-        #region Ctor
+        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasExample"/> class.
