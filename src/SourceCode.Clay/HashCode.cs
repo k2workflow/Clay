@@ -74,56 +74,6 @@ namespace SourceCode.Clay
             Add(comparer.GetHashCode(value));
         }
 
-        /// <summary>
-        /// Adds the specified array of values to the hash code.
-        /// </summary>
-        /// <typeparam name="T">The type of items in the array.</typeparam>
-        /// <param name="values">The array of items.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public void AddRange<T>(T[] values)
-        {
-            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
-            AddRange(values, 0, values.Length, EqualityComparer<T>.Default);
-        }
-
-        /// <summary>
-        /// Adds the specified array of values to the hash code.
-        /// </summary>
-        /// <typeparam name="T">The type of items in the array.</typeparam>
-        /// <param name="values">The array of items.</param>
-        /// <param name="index">The starting index in <paramref name="values"/>.</param>
-        /// <param name="count">The number of items in <paramref name="values"/>.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public void AddRange<T>(T[] values, int index, int count)
-        {
-            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
-            AddRange(values, index, count, EqualityComparer<T>.Default);
-        }
-
-        /// <summary>
-        /// Adds the specified array of values to the hash code.
-        /// </summary>
-        /// <typeparam name="T">The type of items in the array.</typeparam>
-        /// <param name="values">The array of items.</param>
-        /// <param name="index">The starting index in <paramref name="values"/>.</param>
-        /// <param name="count">The number of items in <paramref name="values"/>.</param>
-        /// <param name="comparer">The equality comparer to use.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public void AddRange<T>(T[] values, int index, int count, IEqualityComparer<T> comparer)
-        {
-            if (values == null) throw new ArgumentOutOfRangeException(nameof(values));
-            if (index < 0 || index >= values.Length) throw new ArgumentOutOfRangeException(nameof(index));
-            if (index + count > values.Length) throw new ArgumentOutOfRangeException(nameof(count));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
-
-            var end = index + count;
-            for (var i = index; i < end; i++)
-                Add(values[i], comparer);
-        }
-
         #endregion
 
         #region Static Methods
