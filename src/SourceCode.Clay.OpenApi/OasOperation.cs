@@ -140,8 +140,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasOperation operation1, OasOperation operation2)
         {
-            if (operation1 is null && operation2 is null) return true;
-            if (operation1 is null || operation2 is null) return false;
+            if (operation1 is null) return operation2 is null;
             return operation1.Equals((object)operation2);
         }
 
@@ -187,28 +186,17 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + Tags.Count;
-                if (Summary != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Summary);
-                if (Description != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
-                if (OperationIdentifier != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(OperationIdentifier);
-                hc = (hc * 23) + Parameters.Count;
-                hc = (hc * 23) + Responses.Count;
-                hc = (hc * 23) + Callbacks.Count;
-                hc = (hc * 23) + Security.Count;
-                hc = (hc * 23) + Servers.Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .TallyCount(Tags)
+            .Tally(Summary ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
+            .Tally(OperationIdentifier ?? string.Empty, StringComparer.Ordinal)
+            .TallyCount(Parameters)
+            .TallyCount(Responses)
+            .TallyCount(Callbacks)
+            .TallyCount(Security)
+            .TallyCount(Servers)
+            .ToHashCode();
 
         #endregion
     }

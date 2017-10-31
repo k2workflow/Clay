@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>1701;1702;1705;S3242;S4035</NoWarn>
+    <NoWarn>$(NoWarn);1701;1702;1705;S3242;S4035;CA2225;CA1043;CA1000</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

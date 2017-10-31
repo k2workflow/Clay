@@ -49,9 +49,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasExpressionComponent expression1, OasExpressionComponent expression2)
         {
-            if (ReferenceEquals(expression1, expression2)) return true;
-            if (expression1 is null || expression2 is null) return false;
-
+            if (expression1 is null) return expression2 is null;
             return expression1.Equals(expression2);
         }
 
@@ -70,17 +68,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + ComponentType.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode().Tally(ComponentType).ToHashCode();
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>

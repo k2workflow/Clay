@@ -78,7 +78,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
                 hc = (hc * 23) + (int)Kind;
                 if (Value != null)
-                    hc = (hc * 23) + Value.GetHashCode();
+                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value ?? string.Empty);
 
                 return ((int)(hc >> 32)) ^ (int)hc;
             }

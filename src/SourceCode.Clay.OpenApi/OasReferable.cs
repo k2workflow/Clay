@@ -163,20 +163,10 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (IsReference)
-                    hc = (hc * 23) + Reference.GetHashCode();
-                if (IsValue)
-                    hc = (hc * 23) + EqualityComparer<T>.Default.GetHashCode(Value);
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Reference)
+            .Tally(Value)
+            .ToHashCode();
 
         /// <summary>Returns the string representation of the reference.</summary>
         /// <returns>The string representation of the reference.</returns>

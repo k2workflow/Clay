@@ -13,6 +13,8 @@ using System.Text;
 
 namespace SourceCode.Clay.Json.Pointers
 {
+#pragma warning disable CA1710 // Identifiers should have correct suffix
+
     /// <summary>
     /// Represents a Json pointer.
     /// </summary>
@@ -297,15 +299,12 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hc = 17L;
+            var hc = new HashCode();
 
-                if (_tokens != null)
-                    hc = (hc * 23) + _tokens.Length;
+            if (_tokens != null)
+                hc = hc.TallyCount(_tokens).Tally(_tokens[0]);
 
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
+            return hc.ToHashCode();
         }
 
         #endregion
@@ -318,4 +317,6 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
     }
+
+#pragma warning restore CA1710 // Identifiers should have correct suffix
 }
