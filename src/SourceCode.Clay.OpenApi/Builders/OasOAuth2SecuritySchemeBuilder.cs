@@ -36,6 +36,9 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasOAuthFlow AuthorizationCodeFlow { get; set; }
 
+        /// <summary>Gets the security scheme type.</summary>
+        public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OAuth2;
+
         #endregion
 
         #region Constructors
@@ -70,21 +73,14 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasOAuth2SecurityScheme(OasOAuth2SecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasOAuth2SecurityScheme(OasOAuth2SecuritySchemeBuilder builder) => (OasOAuth2SecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOAuth2SecuritySchemeBuilder"/> to <see cref="OasReferable{OAuth2SecurityScheme}"/>.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasOAuth2SecurityScheme>(OasOAuth2SecuritySchemeBuilder builder) => builder?.Build();
-
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="OasOAuth2SecuritySchemeBuilder"/> to <see cref="OasReferable{SecurityScheme}"/>.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReferable<OasSecurityScheme>(OasOAuth2SecuritySchemeBuilder builder) => builder?.Build();
+        public static implicit operator OasReferable<OasOAuth2SecurityScheme>(OasOAuth2SecuritySchemeBuilder builder) => (OasOAuth2SecurityScheme)builder?.Build();
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOAuth2SecurityScheme"/> to <see cref="OasOAuth2SecuritySchemeBuilder"/>.
@@ -97,12 +93,18 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasOAuth2SecurityScheme"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasOAuth2SecurityScheme"/>.</returns>
-        public OasOAuth2SecurityScheme Build() => new OasOAuth2SecurityScheme(
+        public override OasSecurityScheme Build() => new OasOAuth2SecurityScheme(
             description: Description,
             implicitFlow: ImplicitFlow,
             passwordFlow: PasswordFlow,
             clientCredentialsFlow: ClientCredentialsFlow,
             authorizationCodeFlow: AuthorizationCodeFlow);
+
+        /// <summary>
+        /// Creates the <see cref="OasOAuth2SecurityScheme"/> from this builder.
+        /// </summary>
+        /// <returns>The <see cref="OasOAuth2SecurityScheme"/>.</returns>
+        OasOAuth2SecurityScheme IOasBuilder<OasOAuth2SecurityScheme>.Build() => (OasOAuth2SecurityScheme)Build();
 
         #endregion
     }

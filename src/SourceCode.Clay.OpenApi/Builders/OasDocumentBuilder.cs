@@ -113,7 +113,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasDocument"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasDocument"/>.</returns>
-        public OasDocument Build() => new OasDocument(
+        public virtual OasDocument Build() => new OasDocument(
             version: Version,
             info: Info,
             servers: new ReadOnlyCollection<OasServer>(Servers),

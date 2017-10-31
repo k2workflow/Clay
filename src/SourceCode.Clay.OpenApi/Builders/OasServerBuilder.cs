@@ -82,7 +82,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasServer"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasServer"/>.</returns>
-        public OasServer Build() => new OasServer(
+        public virtual OasServer Build() => new OasServer(
             url: Url,
             description: Description,
             variables: new ReadOnlyDictionary<String, OasServerVariable>(Variables));

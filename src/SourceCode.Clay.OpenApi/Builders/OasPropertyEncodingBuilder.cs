@@ -86,7 +86,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasPropertyEncoding"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasPropertyEncoding"/>.</returns>
-        public OasPropertyEncoding Build() => new OasPropertyEncoding(
+        public virtual OasPropertyEncoding Build() => new OasPropertyEncoding(
             contentType: ContentType,
             headers: new ReadOnlyDictionary<String, OasReferable<OasParameterBody>>(Headers),
             style: Style,

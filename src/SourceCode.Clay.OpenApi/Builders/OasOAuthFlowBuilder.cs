@@ -92,7 +92,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasOAuthFlow"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasOAuthFlow"/>.</returns>
-        public OasOAuthFlow Build() => new OasOAuthFlow(
+        public virtual OasOAuthFlow Build() => new OasOAuthFlow(
             authorizationUrl: AuthorizationUrl,
             tokenUrl: TokenUrl,
             refreshUrl: RefreshUrl,

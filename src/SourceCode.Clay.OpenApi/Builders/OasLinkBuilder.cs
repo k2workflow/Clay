@@ -92,7 +92,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasLink"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasLink"/>.</returns>
-        public OasLink Build() => new OasLink(
+        public virtual OasLink Build() => new OasLink(
             operationReference: OperationReference,
             operationIdentifier: OperationIdentifier,
             description: Description,

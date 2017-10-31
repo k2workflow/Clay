@@ -95,7 +95,7 @@ namespace SourceCode.Clay.OpenApi
         /// Creates the <see cref="OasLink"/> from this builder.
         /// </summary>
         /// <returns>The <see cref="OasLink"/>.</returns>
-        public OasResponse Build() => new OasResponse(
+        public virtual OasResponse Build() => new OasResponse(
             description: Description,
             headers: new ReadOnlyDictionary<string, OasReferable<OasParameterBody>>(Headers),
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content),
