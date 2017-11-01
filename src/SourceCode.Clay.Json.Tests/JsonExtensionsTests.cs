@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using System.Json;
 using System.Linq;
 using Xunit;
@@ -51,7 +52,13 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(arr.Count, ar1.Count);
 
             var ar2 = ar1.ToString().ParseJsonArray();
-            Assert.Equal(ar2.ToString(), ar2.ToString());
+            Assert.Equal(ar1.ToString(), ar2.ToString());
+
+            var pr1 = expected.GetPrimitive("Bar");
+            Assert.True(new JsonPrimitive(123).NullableJsonEquals(pr1));
+
+            var pr2 = pr1.ToString().ParseJsonPrimitive();
+            Assert.Equal(pr1.ToString(), pr2.ToString());
         }
 
         [Trait("Type", "Unit")]
@@ -169,6 +176,90 @@ namespace SourceCode.Clay.Json.Tests
             Assert.False(json.TryGetArray("dne", out ja));
             Assert.False(json.TryGetObject("dne", out jo));
             Assert.False(json.TryGetValue("dne", out jv));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_JsonPrimitive_Equal))]
+        public static void When_JsonPrimitive_Equal()
+        {
+            var primitives = new[]
+            {
+                new JsonPrimitive(false),
+                new JsonPrimitive(true),
+
+                new JsonPrimitive(new Uri("http://www.k2.com")),
+
+                new JsonPrimitive(TimeSpan.MinValue),
+                new JsonPrimitive(TimeSpan.Zero),
+                new JsonPrimitive(TimeSpan.MaxValue),
+
+                new JsonPrimitive(Guid.Empty),
+                new JsonPrimitive(Guid.NewGuid()),
+
+                new JsonPrimitive(DateTime.MinValue),
+                new JsonPrimitive(DateTime.Now),
+                new JsonPrimitive(DateTime.MaxValue),
+
+                new JsonPrimitive(DateTimeOffset.MinValue),
+                new JsonPrimitive(DateTimeOffset.Now),
+                new JsonPrimitive(DateTimeOffset.MaxValue),
+
+                new JsonPrimitive(byte.MinValue),
+                new JsonPrimitive(byte.MaxValue),
+
+                new JsonPrimitive(ushort.MinValue),
+                new JsonPrimitive(ushort.MaxValue),
+
+                new JsonPrimitive(ulong.MinValue),
+                new JsonPrimitive(ulong.MaxValue),
+
+                new JsonPrimitive(uint.MinValue),
+                new JsonPrimitive(uint.MaxValue),
+
+                new JsonPrimitive(sbyte.MinValue),
+                new JsonPrimitive(sbyte.MaxValue),
+
+                new JsonPrimitive(short.MinValue),
+                new JsonPrimitive((short)0),
+                new JsonPrimitive(short.MaxValue),
+
+                new JsonPrimitive(long.MinValue),
+                new JsonPrimitive((long)0),
+                new JsonPrimitive(long.MaxValue),
+
+                new JsonPrimitive(int.MinValue),
+                new JsonPrimitive(0),
+                new JsonPrimitive(int.MaxValue),
+
+                new JsonPrimitive(double.MinValue),
+                new JsonPrimitive((double)0),
+                new JsonPrimitive(double.MaxValue),
+
+                new JsonPrimitive(decimal.MinValue),
+                new JsonPrimitive(decimal.Zero),
+                new JsonPrimitive(decimal.MaxValue),
+
+                new JsonPrimitive(float.MinValue),
+                new JsonPrimitive((float)0),
+                new JsonPrimitive(float.MaxValue),
+
+                new JsonPrimitive(char.MinValue),
+                new JsonPrimitive(char.MaxValue),
+
+                new JsonPrimitive(string.Empty),
+                new JsonPrimitive("hi")
+            };
+
+            for (var i = 0; i < primitives.Length; i++)
+            {
+                for (var j = 0; j < primitives.Length; j++)
+                {
+                    if (i == j)
+                        Assert.True(primitives[i].NullableJsonEquals(primitives[j]));
+                    else
+                        Assert.False(primitives[i].NullableJsonEquals(primitives[j]));
+                }
+            }
         }
 
         #endregion
