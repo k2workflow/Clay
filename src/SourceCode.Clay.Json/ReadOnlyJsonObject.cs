@@ -153,7 +153,7 @@ namespace SourceCode.Clay.Json
 
         public override bool Equals(object obj)
             => obj is ReadOnlyJsonObject other
-            && JsonComparer.Default.Equals(this, other);
+            && JsonValueComparer.Default.Equals(this, other);
 
         public override int GetHashCode() => _json.GetHashCode();
 
