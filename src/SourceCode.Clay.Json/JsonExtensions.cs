@@ -6,11 +6,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Json;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Json
 {
@@ -302,120 +300,6 @@ namespace SourceCode.Clay.Json
             var jo = (JsonObject)Clone(json._json); // Source is known to be a JsonObject
             var clone = new ReadOnlyJsonObject(jo);
             return clone;
-        }
-
-        #endregion
-
-        #region Equals
-
-        public static bool NullableJsonEquals(this JsonArray x, JsonArray y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // Item count
-            if (x.Count != y.Count) return false; // (n, m)
-            if (x.Count == 0) return true; // (0, 0)
-
-            // Values
-            // Avoid string allocs by enumerating the array
-            for (var i = 0; i < x.Count; i++)
-            {
-                if (!JsonEqualsImpl(x[i], y[i])) return false;
-            }
-
-            return true;
-        }
-
-        public static bool NullableJsonEquals(this JsonObject x, JsonObject y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // Property count
-            if (x.Count != y.Count) return false; // (n, m)
-            if (x.Count == 0) return true; // (0, 0)
-
-            // Value
-            // Avoid string allocs by enumerating the properties
-            using (var xe = x.GetEnumerator())
-            using (var ye = y.GetEnumerator())
-            {
-                while (xe.MoveNext())
-                {
-                    if (!ye.MoveNext()) return false;
-
-                    if (!JsonEqualsImpl(xe.Current, ye.Current)) return false;
-                }
-
-                return !ye.MoveNext();
-            }
-        }
-
-        public static bool NullableJsonEquals(this JsonPrimitive x, JsonPrimitive y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // JsonType
-            if (x.JsonType != y.JsonType) return false;
-
-            // We could also compare the ToString() values here, though that incurs at
-            // least 1 string alloc, the size of which will depend on the specific primitive.
-            // On the other hand Linq expressions are slower than native code, and the
-            // implementation requires runtime resolution of Equals(obj, obj).
-            // TODO: May be worth benchmarking (if not a micro-optimization)
-
-            // Value
-            var xv = GetValueFromPrimitive(x);
-            var yv = GetValueFromPrimitive(y);
-            if (!xv.Equals(yv)) return false; // Runtime Object comparison
-
-            return true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool JsonEqualsImpl(KeyValuePair<string, JsonValue> x, KeyValuePair<string, JsonValue> y)
-        {
-            if (x.Equals(default)) return y.Equals(default); // (null, null) or (null, y)
-            if (y.Equals(default)) return false; // (x, null)
-
-            // Key
-            if (!StringComparer.Ordinal.Equals(x.Key, y.Key)) return false;
-
-            // Value
-            if (!JsonEqualsImpl(x.Value, y.Value)) return false;
-
-            return true;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool JsonEqualsImpl(JsonValue x, JsonValue y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            // We could also compare the ToString() values here, though that incurs at
-            // least 1 string alloc, the size of which will depend on the specific type.
-            // For example a JsonArray(n) would incur at least n allocs, while a
-            // JsonPrimitive would incur at least 1.
-
-            // Most likely
-            if (x is JsonPrimitive xp)
-                return (y is JsonPrimitive yp) && xp.NullableJsonEquals(yp);
-
-            if (x is JsonObject xo)
-                return (y is JsonObject yo) && xo.NullableJsonEquals(yo);
-
-            // Least likely
-            if (x is JsonArray xa)
-                return (y is JsonArray ya) && xa.NullableJsonEquals(ya);
-
-            return true;
         }
 
         #endregion

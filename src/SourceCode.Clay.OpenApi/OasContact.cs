@@ -5,10 +5,7 @@
 
 #endregion
 
-using SourceCode.Clay.Json;
-using SourceCode.Clay.OpenApi.Serialization;
 using System;
-using System.Json;
 using System.Net.Mail;
 
 namespace SourceCode.Clay.OpenApi

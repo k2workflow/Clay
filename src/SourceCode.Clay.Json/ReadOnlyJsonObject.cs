@@ -5,11 +5,9 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Json;
-using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Json
 {
@@ -18,7 +16,7 @@ namespace SourceCode.Clay.Json
     /// <summary>
     /// A readonly version of <see cref="JsonObject"/>.
     /// </summary>
-    public sealed class ReadOnlyJsonObject : IReadOnlyDictionary<string, JsonValue>, IEquatable<ReadOnlyJsonObject>
+    public sealed class ReadOnlyJsonObject : IReadOnlyDictionary<string, JsonValue>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
     {
         #region Fields
@@ -151,37 +149,17 @@ namespace SourceCode.Clay.Json
 
         #endregion
 
-        #region IEquatable
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool Equals(ReadOnlyJsonObject x, ReadOnlyJsonObject y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            if (!x._json.NullableJsonEquals(y._json)) return false;
-
-            return true;
-        }
-
-        public bool Equals(ReadOnlyJsonObject other) => Equals(this, other);
+        #region Equals
 
         public override bool Equals(object obj)
             => obj is ReadOnlyJsonObject other
-            && Equals(other);
+            && JsonComparer.Default.Equals(this, other);
 
         public override int GetHashCode() => _json.GetHashCode();
 
         #endregion
 
         #region Operators
-
-        /// <inheritdoc/>
-        public static bool operator ==(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => Equals(x, y);
-
-        /// <inheritdoc/>
-        public static bool operator !=(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => !(x == y);
 
         /// <inheritdoc/>
         public override string ToString() => _json.ToString();
