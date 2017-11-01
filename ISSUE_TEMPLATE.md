@@ -6,6 +6,12 @@ Describe what you expect to happen.
 
 Describe what actually happens.
 
+### Error
+
+```
+Paste in error details, if available.
+```
+
 ### Repro Steps
 
 1. Provide
