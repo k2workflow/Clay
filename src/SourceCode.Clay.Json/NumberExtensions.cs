@@ -16,21 +16,28 @@ namespace SourceCode.Clay.Json
 
         public static JsonPrimitive ToJson(this Number number)
         {
+            // We constrain to number types (not bool, guid, string, etc)
             switch (number.ValueTypeCode)
             {
-                case TypeCode.Byte: return new JsonPrimitive(number.Byte);
-                case TypeCode.Double: return new JsonPrimitive(number.Double);
+                // Signed
+                case TypeCode.SByte: return new JsonPrimitive(number.SByte);
                 case TypeCode.Int16: return new JsonPrimitive(number.Int16);
                 case TypeCode.Int32: return new JsonPrimitive(number.Int32);
                 case TypeCode.Int64: return new JsonPrimitive(number.Int64);
-                case TypeCode.SByte: return new JsonPrimitive(number.SByte);
-                case TypeCode.Single: return new JsonPrimitive(number.Single);
+
+                // Unsigned
+                case TypeCode.Byte: return new JsonPrimitive(number.Byte);
                 case TypeCode.UInt16: return new JsonPrimitive(number.UInt16);
                 case TypeCode.UInt32: return new JsonPrimitive(number.UInt32);
                 case TypeCode.UInt64: return new JsonPrimitive(number.UInt64);
+
+                // Numeric
+                case TypeCode.Single: return new JsonPrimitive(number.Single);
+                case TypeCode.Double: return new JsonPrimitive(number.Double);
                 case TypeCode.Decimal: return new JsonPrimitive(number.Decimal);
 
-                default: return default;
+                default:
+                    throw new InvalidCastException($"Unexpected {nameof(Number)} {nameof(Type)}");
             }
         }
 
@@ -41,7 +48,6 @@ namespace SourceCode.Clay.Json
             if (value.JsonType != JsonType.Number) throw new ArgumentOutOfRangeException(nameof(value));
 
             var primitive = (JsonPrimitive)value;
-
             var obj = JsonExtensions.GetValueFromPrimitive(primitive);
 
             var num = Number.CreateFromObject(obj);
