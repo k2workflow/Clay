@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 namespace SourceCode.Clay.Json
 {
     /// <summary>
-    /// Represents a way to compare Json values.
+    /// Represents a way to compare <see cref="JsonValue"/> and <see cref="ReadOnlyJsonObject"/> values.
     /// </summary>
     public abstract class JsonComparer :
         IEqualityComparer<JsonArray>, // We use specific logic for each JsonValue subtype
@@ -138,14 +138,14 @@ namespace SourceCode.Clay.Json
             // walks the tree regardless, so we can be sure this is not significantly
             // more expensive than that method.
 
-            // Most likely
+            // Heuristic: Check for most common first
             if (x is JsonPrimitive xp)
                 return (y is JsonPrimitive yp) && PrimitiveEquals(xp, yp);
 
             if (x is JsonObject xo)
                 return (y is JsonObject yo) && ObjectEquals(xo, yo);
 
-            // Least likely
+            // Least common last
             if (x is JsonArray xa)
                 return (y is JsonArray ya) && ArrayEquals(xa, ya);
 
@@ -167,7 +167,7 @@ namespace SourceCode.Clay.Json
                 // Avoid string allocs by enumerating colocated array members
                 for (var i = 0; i < a.Count; i++)
                 {
-                    if (!EqualsImpl(a[i], b[i])) return false;
+                    if (!EqualsImpl(a[i], b[i])) return false; // Recurse
                 }
 
                 return true;
@@ -208,7 +208,7 @@ namespace SourceCode.Clay.Json
                 if (!StringComparer.Ordinal.Equals(a.Key, b.Key)) return false;
 
                 // Value
-                if (!EqualsImpl(a.Value, b.Value)) return false;
+                if (!EqualsImpl(a.Value, b.Value)) return false; // Recurse
 
                 return true;
             }
@@ -232,7 +232,7 @@ namespace SourceCode.Clay.Json
                 var av = JsonExtensions.GetValueFromPrimitive(a);
                 var bv = JsonExtensions.GetValueFromPrimitive(b);
 
-                if (!av.Equals(bv)) return false; // Runtime Object comparison
+                if (!av.Equals(bv)) return false; // Runtime native Object comparison
 
                 return true;
             }
