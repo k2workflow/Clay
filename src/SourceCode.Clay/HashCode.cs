@@ -27,6 +27,7 @@ namespace SourceCode.Clay
         #region Constants
 
         private const uint QueueOffset = 4;
+        private const uint LengthOffset = 7;
         private const uint Prime1 = 2654435761U;
         private const uint Prime2 = 2246822519U;
         private const uint Prime3 = 3266489917U;
@@ -37,13 +38,18 @@ namespace SourceCode.Clay
 
         #region Fields
 
-        private readonly uint _seed;
+        // NB:
+        // It is remotely possible for off-spec things to happen with
+        // this optimization. However, 4294967295 fields ought to be
+        // enough for anyone.
 
-        private ulong _length;
-
-        // 0 -> 4 = v1 -> v4
-        // 4 -> 7 = queue
-        private fixed uint _state[7];
+        // 8x8 = 64 bytes = 1 x86 cache line
+        // +----+----+----+----+----+----+----+----+
+        // | 00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 |
+        // | xxHash State      | Queue        | Le |
+        // +----+----+----+----+----+----+----+----+
+        // 00 Contains the seed before init
+        private fixed uint _state[8];
 
         #endregion
 
@@ -56,7 +62,10 @@ namespace SourceCode.Clay
         public HashCode(int seed)
             : this()
         {
-            _seed = unchecked((uint)seed);
+            fixed (uint* v = _state)
+            {
+                v[0] = unchecked((uint)seed);
+            }
         }
 
         #endregion
@@ -79,7 +88,7 @@ namespace SourceCode.Clay
                 fixed (uint* v = _state)
                 {
                     var q = v + QueueOffset;
-                    var queuePosition = (uint)(_length & 0x3);
+                    var queuePosition = (uint)(v[LengthOffset] & 0x3);
 
                     if (queuePosition < 3)
                     {
@@ -94,9 +103,9 @@ namespace SourceCode.Clay
                         v[2] = FullRound(v[2], q[2]);
                         v[3] = FullRound(v[3], val);
                     }
-                }
 
-                ++_length;
+                    v[7]++;
+                }
             }
         }
 
@@ -110,9 +119,13 @@ namespace SourceCode.Clay
         {
             unchecked
             {
-                if (_length > 3) return;
+                var sentinel =
+                    v[1] | v[2] | v[3] | // any of these fields set?
+                    v[LengthOffset] & ~0x3U; // length greater than 3?
 
-                var seed = _seed;
+                if (sentinel != 0) return;
+
+                var seed = v[0];
                 v[0] = seed + Prime1 + Prime2;
                 v[1] = seed + Prime2;
                 v[2] = seed + 0;
@@ -133,11 +146,11 @@ namespace SourceCode.Clay
                 fixed (uint* v = _state)
                 {
                     var q = v + QueueOffset;
-                    var queuePosition = (int)(_length & 0x3);
+                    var queuePosition = (int)(v[LengthOffset] & 0x3);
 
-                    var hash = _length > 3
+                    var hash = v[LengthOffset] > 3
                         ? MixState(v)
-                        : MixEmptyState();
+                        : MixEmptyState(v);
 
                     for (var i = 0; i < queuePosition; i++)
                         hash = PartialRound(hash, q[i]);
@@ -158,13 +171,14 @@ namespace SourceCode.Clay
         /// <summary>
         /// Performs a mix on an empty state.
         /// </summary>
+        /// <param name="v">A pointer to the first state variable.</param>
         /// <returns>The hash.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        private uint MixEmptyState()
+        private uint MixEmptyState(uint* v)
         {
-            var hash = _seed + Prime5;
-            hash += (uint)(_length * 4);
+            var hash = v[0] + Prime5;
+            hash += v[LengthOffset] * 4;
             return hash;
         }
 
@@ -178,7 +192,7 @@ namespace SourceCode.Clay
         private uint MixState(uint* v)
         {
             var hash = RotateLeft(v[0], 1) + RotateLeft(v[1], 7) + RotateLeft(v[2], 12) + RotateLeft(v[3], 18);
-            hash += (uint)(_length * 4);
+            hash += v[LengthOffset] * 4;
             return hash;
         }
 
