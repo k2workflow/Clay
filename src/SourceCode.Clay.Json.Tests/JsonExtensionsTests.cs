@@ -251,12 +251,22 @@ namespace SourceCode.Clay.Json.Tests
 
             for (var i = 0; i < primitives.Length; i++)
             {
+                var ic = (JsonPrimitive)primitives[i].Clone();
+
                 for (var j = 0; j < primitives.Length; j++)
                 {
+                    var jc = (JsonPrimitive)primitives[j].Clone();
+
                     if (i == j)
+                    {
+                        Assert.Equal(ic, jc, JsonComparer.Default);
                         Assert.Equal(primitives[i], primitives[j], JsonComparer.Default);
+                    }
                     else
+                    {
+                        Assert.NotEqual(ic, jc, JsonComparer.Default);
                         Assert.NotEqual(primitives[i], primitives[j], JsonComparer.Default);
+                    }
                 }
             }
         }
