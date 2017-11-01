@@ -42,9 +42,9 @@ namespace SourceCode.Clay.Collections.Bench
         #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = ItemCount * InvokeCount)]
-        public int Lookup()
+        public long Lookup()
         {
-            var total = 0;
+            var total = 0l;
             for (var j = 0; j < InvokeCount; j++)
             {
                 for (var i = dict.Count - 1; i >= 0; i--)
@@ -60,9 +60,9 @@ namespace SourceCode.Clay.Collections.Bench
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = ItemCount * InvokeCount)]
-        public int Switch()
+        public long Switch()
         {
-            var total = 0;
+            var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
                 for (var i = dict.Count - 1; i >= 0; i--)
