@@ -302,6 +302,124 @@ namespace SourceCode.Clay.Json
             return clone;
         }
 
+        private static readonly Type typeGuid = typeof(Guid);
+        private static readonly Type typeUri = typeof(Uri);
+        private static readonly Type typeDateTimeOffset = typeof(DateTimeOffset);
+        private static readonly Type typeTimeSpan = typeof(TimeSpan);
+
+        private static JsonValue CloneImpl(JsonValue x)
+        {
+            if (x is null) return default;
+
+            // We could roundtrip via ToString() here, though that incurs at
+            // least 1 string alloc, the size of which will depend on the specific type.
+            // For example a JsonArray(n) would incur at least n allocs, while a
+            // JsonPrimitive would incur at least 1.
+            // So instead we walk the tree, cloning each item. Note that ToString()
+            // walks the tree regardless, so we can be sure this is not significantly
+            // more expensive than the latter method.
+
+            // Heuristic: Check for most common first
+            if (x is JsonPrimitive xp)
+                return ClonePrimitive(xp);
+
+            if (x is JsonObject xo)
+                return CloneObject(xo);
+
+            // Least common last
+            if (x is JsonArray xa)
+                return CloneArray(xa);
+
+            return true;
+
+            // Local functions
+
+            JsonArray CloneArray(JsonArray a)
+            {
+                if (a is null) return default;
+
+                // Item count
+                var array = new JsonArray();
+                if (a.Count == 0) return array;
+
+                // Values
+                // Avoid string allocs by enumerating array members
+                for (var i = 0; i < a.Count; i++)
+                {
+                    var clone = CloneImpl(a[i]); // Recurse
+                    array.Add(clone);
+                }
+
+                return array;
+            }
+
+            JsonObject CloneObject(JsonObject a)
+            {
+                if (a is null) return default;
+
+                // Property count
+                var obj = new JsonObject();
+                if (a.Count == 0) return obj;
+
+                // Value
+                // Avoid string allocs by enumerating properties
+                foreach (var ae in a)
+                {
+                    var clone = CloneImpl(ae.Value); // Recurse
+                    obj.Add(ae.Key, clone);
+                }
+
+                return obj;
+            }
+
+            JsonPrimitive ClonePrimitive(JsonPrimitive a)
+            {
+                if (a is null) return default;
+
+                // We could also roundtrip via ToString() here, though that incurs at
+                // least 1 string alloc, the size of which will depend on the specific primitive.
+
+                // Value
+                var av = GetValueFromPrimitive(a);
+
+                var type = av.GetType();
+                var typeCode = Type.GetTypeCode(type);
+                switch (typeCode)
+                {
+                    case TypeCode.Boolean: return new JsonPrimitive((bool)av);
+
+                    case TypeCode.SByte: return new JsonPrimitive((sbyte)av);
+                    case TypeCode.Int16: return new JsonPrimitive((short)av);
+                    case TypeCode.Int32: return new JsonPrimitive((int)av);
+                    case TypeCode.Int64: return new JsonPrimitive((long)av);
+
+                    case TypeCode.Byte: return new JsonPrimitive((byte)av);
+                    case TypeCode.UInt16: return new JsonPrimitive((ushort)av);
+                    case TypeCode.UInt32: return new JsonPrimitive((uint)av);
+                    case TypeCode.UInt64: return new JsonPrimitive((ulong)av);
+
+                    case TypeCode.Single: return new JsonPrimitive((float)av);
+                    case TypeCode.Double: return new JsonPrimitive((double)av);
+                    case TypeCode.Decimal: return new JsonPrimitive((decimal)av);
+
+                    case TypeCode.Char: return new JsonPrimitive((char)av);
+                    case TypeCode.String: return new JsonPrimitive((string)av);
+
+                    case TypeCode.DateTime: return new JsonPrimitive((DateTime)av);
+
+                    default:
+                        {
+                            if (type == typeGuid) return new JsonPrimitive((Guid)av);
+                            if (type == typeUri) return new JsonPrimitive((Uri)av);
+                            if (type == typeDateTimeOffset) return new JsonPrimitive((DateTimeOffset)av);
+                            if (type == typeTimeSpan) return new JsonPrimitive((TimeSpan)av);
+
+                            throw new InvalidCastException($"Unexpected {nameof(JsonPrimitive)} {nameof(Type)} {type}");
+                        }
+                }
+            }
+        }
+
         #endregion
 
         #region Value
