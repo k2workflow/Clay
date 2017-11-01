@@ -294,7 +294,7 @@ namespace SourceCode.Clay.Json
 
         public static ReadOnlyJsonObject Clone(this ReadOnlyJsonObject json)
         {
-            if (json == null) return default;
+            if (json == null || json._json == null) return default;
 
             var jo = (JsonObject)CloneImpl(json._json); // Source is known to be a JsonObject
             var clone = new ReadOnlyJsonObject(jo);
