@@ -176,21 +176,17 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            unchecked
+            var hc = new HashCode();
+
+            hc.Add(_typeCode);
+            switch (_typeCode)
             {
-                var hc = 17L;
-
-                hc = (hc * 23) + _typeCode;
-
-                switch (_typeCode)
-                {
-                    case 0: break;
-                    case (byte)TypeCode.String: hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(_string); break;
-                    default: hc = (hc * 23) + _number.GetHashCode(); break;
-                }
-
-                return ((int)(hc >> 32)) ^ (int)hc;
+                case 0: break;
+                case (byte)TypeCode.String: hc.Add(_string ?? string.Empty, StringComparer.Ordinal); break;
+                default: hc.Add(_number); break;
             }
+
+            return hc.ToHashCode();
         }
 
         #endregion

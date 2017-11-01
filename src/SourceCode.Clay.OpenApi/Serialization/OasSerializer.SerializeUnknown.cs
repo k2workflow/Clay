@@ -26,6 +26,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
         #region Structs
 
+#pragma warning disable CA2231
+
         private struct SerializerKey : IEquatable<SerializerKey>
         {
             #region Properties
@@ -53,21 +55,15 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 => GenericArgumentType.Equals(other.GenericArgumentType)
                 && InstanceType.Equals(other.InstanceType);
 
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    var hc = 17L;
-
-                    hc = hc * 21 + GenericArgumentType.GetHashCode();
-                    hc = hc * 21 + InstanceType.GetHashCode();
-
-                    return ((int)(hc >> 32)) ^ (int)hc;
-                }
-            }
+            public override int GetHashCode() => new HashCode()
+                .Tally(GenericArgumentType)
+                .Tally(InstanceType)
+                .ToHashCode();
 
             #endregion
         }
+
+#pragma warning restore CA2231
 
         #endregion
 

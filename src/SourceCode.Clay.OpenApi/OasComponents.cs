@@ -115,8 +115,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasComponents components1, OasComponents components2)
         {
-            if (components1 is null && components2 is null) return true;
-            if (components1 is null || components2 is null) return false;
+            if (components1 is null) return components2 is null;
             return components1.Equals((object)components2);
         }
 
@@ -159,25 +158,17 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + Schemas.Count;
-                hc = (hc * 23) + Responses.Count;
-                hc = (hc * 23) + Parameters.Count;
-                hc = (hc * 23) + Examples.Count;
-                hc = (hc * 23) + RequestBodies.Count;
-                hc = (hc * 23) + Headers.Count;
-                hc = (hc * 23) + SecuritySchemes.Count;
-                hc = (hc * 23) + Links.Count;
-                hc = (hc * 23) + Callbacks.Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .TallyCount(Schemas)
+            .TallyCount(Responses)
+            .TallyCount(Parameters)
+            .TallyCount(Examples)
+            .TallyCount(RequestBodies)
+            .TallyCount(Headers)
+            .TallyCount(SecuritySchemes)
+            .TallyCount(Links)
+            .TallyCount(Callbacks)
+            .ToHashCode();
 
         #endregion
     }

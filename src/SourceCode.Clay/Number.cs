@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
+#pragma warning disable CA2225 // Operator overloads have named alternates
+
     /// <summary>
     /// Represents an efficient discriminated union across all the primitive number types.
     /// </summary>
@@ -949,4 +951,6 @@ namespace SourceCode.Clay
 
         #endregion
     }
+
+#pragma warning restore CA2225 // Operator overloads have named alternates
 }

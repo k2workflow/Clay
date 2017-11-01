@@ -163,11 +163,15 @@ namespace SourceCode.Clay.Json.Validation
         /// </returns>
         public static bool operator !=(CountConstraint x, CountConstraint y) => !(x == y);
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
+
         /// <summary>
         /// Implicitly converts from a <see cref="uint"/> to an exact <see cref="CountConstraint"/>.
         /// </summary>
         /// <param name="exact">The minimum and maximum value.</param>
-        public static implicit operator CountConstraint(uint exact) => CountConstraint.Exact(exact);
+        public static implicit operator CountConstraint(uint exact) => Exact(exact);
+
+#pragma warning restore CA2225 // Operator overloads have named alternates
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>

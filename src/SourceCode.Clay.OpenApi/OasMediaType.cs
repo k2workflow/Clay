@@ -69,8 +69,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasMediaType mediaType1, OasMediaType mediaType2)
         {
-            if (mediaType1 is null && mediaType2 is null) return true;
-            if (mediaType1 is null || mediaType2 is null) return false;
+            if (mediaType1 is null) return mediaType2 is null;
             return mediaType1.Equals((object)mediaType2);
         }
 
@@ -107,19 +106,11 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + Schema.GetHashCode();
-                hc = (hc * 23) + Examples.Count;
-                hc = (hc * 23) + Encoding.Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Schema)
+            .TallyCount(Examples)
+            .TallyCount(Encoding)
+            .ToHashCode();
 
         #endregion
     }

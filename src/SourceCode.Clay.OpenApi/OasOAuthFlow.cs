@@ -80,8 +80,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasOAuthFlow flow1, OasOAuthFlow flow2)
         {
-            if (flow1 is null && flow2 is null) return true;
-            if (flow1 is null || flow2 is null) return false;
+            if (flow1 is null) return flow2 is null;
             return flow1.Equals((object)flow2);
         }
 
@@ -119,23 +118,12 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (AuthorizationUrl != null)
-                    hc = (hc * 23) + AuthorizationUrl.GetHashCode();
-                if (TokenUrl != null)
-                    hc = (hc * 23) + TokenUrl.GetHashCode();
-                if (RefreshUrl != null)
-                    hc = (hc * 23) + RefreshUrl.GetHashCode();
-                hc = (hc * 23) + Scopes.Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(AuthorizationUrl)
+            .Tally(TokenUrl)
+            .Tally(RefreshUrl)
+            .TallyCount(Scopes)
+            .ToHashCode();
 
         #endregion
     }

@@ -372,7 +372,7 @@ namespace SourceCode.Clay.Json
             // Value
             var xv = GetValueFromPrimitive(x);
             var yv = GetValueFromPrimitive(y);
-            if (!xv.Equals(yv)) return false; // NetFx runtime Object comparison
+            if (!xv.Equals(yv)) return false; // Runtime Object comparison
 
             return true;
         }

@@ -83,19 +83,10 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (Name != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
-                hc = hc * 17 + Location.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Name ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Location)
+            .ToHashCode();
 
         #endregion
     }

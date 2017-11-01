@@ -105,8 +105,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasDocument document1, OasDocument document2)
         {
-            if (document1 is null && document2 is null) return true;
-            if (document1 is null || document2 is null) return false;
+            if (document1 is null) return document2 is null;
             return document1.Equals((object)document2);
         }
 
@@ -148,27 +147,16 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + Version.GetHashCode();
-                if (Info != null)
-                    hc = (hc * 23) + Info.GetHashCode();
-                hc = (hc * 23) + Servers.Count;
-                hc = (hc * 23) + Paths.Count;
-                if (Components != null)
-                    hc = (hc * 23) + Components.GetHashCode();
-                hc = (hc * 23) + Security.Count;
-                hc = (hc * 23) + Tags.Count;
-                if (ExternalDocumentation != null)
-                    hc = (hc * 23) + ExternalDocumentation.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Version)
+            .Tally(Info)
+            .TallyCount(Servers)
+            .TallyCount(Paths)
+            .Tally(Components)
+            .TallyCount(Security)
+            .TallyCount(Tags)
+            .Tally(ExternalDocumentation)
+            .ToHashCode();
 
         #endregion
     }

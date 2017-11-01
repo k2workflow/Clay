@@ -75,15 +75,11 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hc = 17L;
+            var hc = new HashCode();
 
-                if (Value != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value);
+            hc.Add(Value ?? string.Empty, StringComparer.Ordinal);
 
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
+            return hc.ToHashCode();
         }
 
         #endregion
@@ -94,7 +90,11 @@ namespace SourceCode.Clay.Json.Pointers
 
         public static bool operator !=(JsonPointerToken x, JsonPointerToken y) => !x.Equals(y);
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
+
         public static implicit operator JsonPointerToken(string value) => new JsonPointerToken(value);
+
+#pragma warning restore CA2225 // Operator overloads have named alternates
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>

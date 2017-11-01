@@ -60,18 +60,10 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + base.GetHashCode();
-                hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value);
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(base.GetHashCode())
+            .Tally(Value ?? string.Empty, StringComparer.Ordinal)
+            .ToHashCode();
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
