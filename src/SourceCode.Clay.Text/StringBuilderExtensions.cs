@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Text
         /// <returns>A reference to this instance with format appended.</returns>
         public static StringBuilder AppendFormatLine(this StringBuilder sb, string format, object arg0)
             => sb?
-            .AppendFormat(format, arg0)
+            .AppendFormat(null, format, arg0)
             .AppendLine();
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Text
         /// <returns>A reference to this instance with format appended.</returns>
         public static StringBuilder AppendFormatLine(this StringBuilder sb, string format, object arg0, object arg1)
             => sb?
-            .AppendFormat(format, arg0, arg1)
+            .AppendFormat(null, format, arg0, arg1)
             .AppendLine();
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SourceCode.Clay.Text
         /// <returns>A reference to this instance with format appended.</returns>
         public static StringBuilder AppendFormatLine(this StringBuilder sb, string format, object arg0, object arg1, object arg2)
             => sb?
-            .AppendFormat(format, arg0, arg1, arg2)
+            .AppendFormat(null, format, arg0, arg1, arg2)
             .AppendLine();
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Text
         /// <returns>A reference to this instance with format appended.</returns>
         public static StringBuilder AppendFormatLine(this StringBuilder sb, string format, params object[] args)
             => sb?
-            .AppendFormat(format, args)
+            .AppendFormat(null, format, args)
             .AppendLine();
 
         /// <summary>
