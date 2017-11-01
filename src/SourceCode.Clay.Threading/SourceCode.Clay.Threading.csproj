@@ -8,17 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="EmptyDictionaryImpl.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-25818-01" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.5.0.3766">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="EmptyDictionaryImpl.cs" />
   </ItemGroup>
 
   <PropertyGroup>

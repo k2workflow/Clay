@@ -123,8 +123,8 @@ namespace SourceCode.Clay.Json.Tests
                 ["bool"] = new JsonPrimitive(true),
                 ["int"] = new JsonPrimitive(123),
                 ["string"] = new JsonPrimitive("hello"),
-                ["object"] = new JsonObject(),
-                ["array"] = new JsonArray()
+                ["object"] = new JsonObject { ["dt"] = "abc" },
+                ["array"] = new JsonArray(new JsonValue[] { new JsonPrimitive(123.456), new JsonObject { ["dto"] = 456 } })
             };
             var json = new ReadOnlyJsonObject(jobj);
 

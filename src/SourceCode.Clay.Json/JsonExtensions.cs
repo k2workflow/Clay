@@ -284,17 +284,12 @@ namespace SourceCode.Clay.Json
 
         #region Clone
 
-        public static JsonValue Clone(this JsonValue json)
-        {
-            if (json == null) return default;
-
-            var clone = CloneImpl(json);
-            return clone;
-        }
+        public static JsonValue Clone(this JsonValue json) => CloneImpl(json);
 
         public static ReadOnlyJsonObject Clone(this ReadOnlyJsonObject json)
         {
-            if (json == null || json._json == null) return default;
+            if (json == null) return default; // Null
+            if (json._json == null) return new ReadOnlyJsonObject(); // Empty
 
             var jo = (JsonObject)CloneImpl(json._json); // Source is known to be a JsonObject
             var clone = new ReadOnlyJsonObject(jo);
@@ -339,7 +334,7 @@ namespace SourceCode.Clay.Json
                 if (a is null) return default;
 
                 // Item count
-                if (a.Count == 0) return new JsonArray();
+                if (a.Count == 0) return new JsonArray(); // Hopefully JsonArray can one day allocate zero length internally
 
                 // Values
                 // Avoid string allocs by enumerating array members
@@ -350,7 +345,7 @@ namespace SourceCode.Clay.Json
                     list[i] = clone;
                 }
 
-                var array = new JsonArray(list);
+                var array = new JsonArray(list); // Hopefully JsonArray will one day allocate according to input length
                 return array;
             }
 
@@ -359,7 +354,7 @@ namespace SourceCode.Clay.Json
                 if (a is null) return default;
 
                 // Property count
-                if (a.Count == 0) return new JsonObject();
+                if (a.Count == 0) return new JsonObject(); // Hopefully JsonObject can one day allocate zero length internally
 
                 // Value
                 // Avoid string allocs by enumerating properties
@@ -371,7 +366,7 @@ namespace SourceCode.Clay.Json
                     list[i++] = new KeyValuePair<string, JsonValue>(ae.Key, clone);
                 }
 
-                var obj = new JsonObject(list);
+                var obj = new JsonObject(list); // Hopefully JsonObject will one day allocate according to input length
                 return obj;
             }
 
@@ -389,31 +384,42 @@ namespace SourceCode.Clay.Json
 
                 switch (typeCode)
                 {
+                    // Scalar
                     case TypeCode.Boolean: return new JsonPrimitive((bool)av);
 
+                    // Signed
                     case TypeCode.SByte: return new JsonPrimitive((sbyte)av);
                     case TypeCode.Int16: return new JsonPrimitive((short)av);
                     case TypeCode.Int32: return new JsonPrimitive((int)av);
                     case TypeCode.Int64: return new JsonPrimitive((long)av);
 
+                    // Unsigned
                     case TypeCode.Byte: return new JsonPrimitive((byte)av);
                     case TypeCode.UInt16: return new JsonPrimitive((ushort)av);
                     case TypeCode.UInt32: return new JsonPrimitive((uint)av);
                     case TypeCode.UInt64: return new JsonPrimitive((ulong)av);
 
+                    // Numeric
                     case TypeCode.Single: return new JsonPrimitive((float)av);
                     case TypeCode.Double: return new JsonPrimitive((double)av);
                     case TypeCode.Decimal: return new JsonPrimitive((decimal)av);
 
+                    // Text
                     case TypeCode.Char: return new JsonPrimitive((char)av);
                     case TypeCode.String: return new JsonPrimitive((string)av);
 
+                    // Temporal
                     case TypeCode.DateTime: return new JsonPrimitive((DateTime)av);
 
                     default:
                         {
+                            // Scalar
                             if (type == typeGuid) return new JsonPrimitive((Guid)av);
+
+                            // Uri
                             if (type == typeUri) return new JsonPrimitive((Uri)av);
+
+                            // Temporal
                             if (type == typeDateTimeOffset) return new JsonPrimitive((DateTimeOffset)av);
                             if (type == typeTimeSpan) return new JsonPrimitive((TimeSpan)av);
 
