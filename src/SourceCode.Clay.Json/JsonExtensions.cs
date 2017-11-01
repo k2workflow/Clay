@@ -6,9 +6,11 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Json;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Json
 {
@@ -286,10 +288,7 @@ namespace SourceCode.Clay.Json
         {
             if (json == null) return default;
 
-            // TODO: Reliable but expensive considering the string allocation on the way out and the needless parsing/validation on the way back in.
-            // Try to find a more efficient method.
-            var str = json.ToString();
-            var clone = JsonValue.Parse(str);
+            var clone = CloneImpl(json);
             return clone;
         }
 
@@ -297,7 +296,7 @@ namespace SourceCode.Clay.Json
         {
             if (json == null) return default;
 
-            var jo = (JsonObject)Clone(json._json); // Source is known to be a JsonObject
+            var jo = (JsonObject)CloneImpl(json._json); // Source is known to be a JsonObject
             var clone = new ReadOnlyJsonObject(jo);
             return clone;
         }
@@ -307,6 +306,7 @@ namespace SourceCode.Clay.Json
         private static readonly Type typeDateTimeOffset = typeof(DateTimeOffset);
         private static readonly Type typeTimeSpan = typeof(TimeSpan);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static JsonValue CloneImpl(JsonValue x)
         {
             if (x is null) return default;
@@ -339,17 +339,18 @@ namespace SourceCode.Clay.Json
                 if (a is null) return default;
 
                 // Item count
-                var array = new JsonArray();
-                if (a.Count == 0) return array;
+                if (a.Count == 0) return new JsonArray();
 
                 // Values
                 // Avoid string allocs by enumerating array members
+                var list = new JsonValue[a.Count];
                 for (var i = 0; i < a.Count; i++)
                 {
                     var clone = CloneImpl(a[i]); // Recurse
-                    array.Add(clone);
+                    list[i] = clone;
                 }
 
+                var array = new JsonArray(list);
                 return array;
             }
 
@@ -358,17 +359,19 @@ namespace SourceCode.Clay.Json
                 if (a is null) return default;
 
                 // Property count
-                var obj = new JsonObject();
-                if (a.Count == 0) return obj;
+                if (a.Count == 0) return new JsonObject();
 
                 // Value
                 // Avoid string allocs by enumerating properties
+                var list = new KeyValuePair<string, JsonValue>[a.Count];
+                var i = 0;
                 foreach (var ae in a)
                 {
                     var clone = CloneImpl(ae.Value); // Recurse
-                    obj.Add(ae.Key, clone);
+                    list[i++] = new KeyValuePair<string, JsonValue>(ae.Key, clone);
                 }
 
+                var obj = new JsonObject(list);
                 return obj;
             }
 
@@ -381,9 +384,9 @@ namespace SourceCode.Clay.Json
 
                 // Value
                 var av = GetValueFromPrimitive(a);
-
                 var type = av.GetType();
                 var typeCode = Type.GetTypeCode(type);
+
                 switch (typeCode)
                 {
                     case TypeCode.Boolean: return new JsonPrimitive((bool)av);
