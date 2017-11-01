@@ -68,8 +68,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasExample example1, OasExample example2)
         {
-            if (example1 is null && example2 is null) return true;
-            if (example1 is null || example2 is null) return false;
+            if (example1 is null) return example2 is null;
             return example1.Equals((object)example2);
         }
 
@@ -106,22 +105,11 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (Summary != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Summary);
-                if (Description != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
-                if (ExternalValue != null)
-                    hc = (hc * 23) + ExternalValue.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Summary ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
+            .Tally(ExternalValue)
+            .ToHashCode();
 
         #endregion
     }

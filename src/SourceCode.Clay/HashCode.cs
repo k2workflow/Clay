@@ -22,22 +22,24 @@ namespace SourceCode.Clay
     [DebuggerDisplay("{_length,nq}")]
     public unsafe struct HashCode
     {
-        private const uint QueueOffset = 4;
-
         // TODO: Remove when https://github.com/dotnet/corefx/issues/14354 lands
 
+        #region Constants
+
+        private const uint QueueOffset = 4;
         private const uint Prime1 = 2654435761U;
         private const uint Prime2 = 2246822519U;
         private const uint Prime3 = 3266489917U;
         private const uint Prime4 = 0668265263U;
         private const uint Prime5 = 0374761393U;
 
+        #endregion
+
         #region Fields
 
         private readonly uint _seed;
 
         private ulong _length;
-        private byte _queuePosition;
 
         // 0 -> 4 = v1 -> v4
         // 4 -> 7 = queue
@@ -77,11 +79,11 @@ namespace SourceCode.Clay
                 fixed (uint* v = _state)
                 {
                     var q = v + QueueOffset;
+                    var queuePosition = (uint)(_length & 0x3);
 
-                    if (_queuePosition < 3)
+                    if (queuePosition < 3)
                     {
-                        q[_queuePosition] = val;
-                        ++_queuePosition;
+                        q[queuePosition] = val;
                     }
                     else
                     {
@@ -91,8 +93,6 @@ namespace SourceCode.Clay
                         v[1] = FullRound(v[1], q[1]);
                         v[2] = FullRound(v[2], q[2]);
                         v[3] = FullRound(v[3], val);
-
-                        _queuePosition = 0;
                     }
                 }
 
@@ -133,12 +133,13 @@ namespace SourceCode.Clay
                 fixed (uint* v = _state)
                 {
                     var q = v + QueueOffset;
+                    var queuePosition = (int)(_length & 0x3);
 
                     var hash = _length > 3
                         ? MixState(v)
                         : MixEmptyState();
 
-                    for (var i = 0; i < _queuePosition; i++)
+                    for (var i = 0; i < queuePosition; i++)
                         hash = PartialRound(hash, q[i]);
 
                     // Final mix

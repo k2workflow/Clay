@@ -99,6 +99,23 @@ namespace SourceCode.Clay.OpenApi
 
         #region Methods
 
+        /// <summary>Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.</summary>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        /// <exception cref="T:System.ArgumentNullException">
+        ///   <paramref name="array">array</paramref> is null.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        ///   <paramref name="arrayIndex">arrayIndex</paramref> is less than 0.</exception>
+        /// <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is greater than the available space from <paramref name="arrayIndex">arrayIndex</paramref> to the end of the destination <paramref name="array">array</paramref>.</exception>
+        protected void CopyTo(KeyValuePair<OasExpression, OasReferable<OasPath>>[] array, int arrayIndex)
+            => ((ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>)_dictionary).CopyTo(array, arrayIndex);
+
+        /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.</summary>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        /// <returns>true if <paramref name="item">item</paramref> is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.</returns>
+        protected bool Contains(KeyValuePair<OasExpression, OasReferable<OasPath>> item)
+            => ((ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>)_dictionary).Contains(item);
+
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasCallbackBuilder"/> to <see cref="OasCallback"/>.
         /// </summary>
@@ -189,13 +206,13 @@ namespace SourceCode.Clay.OpenApi
         ///   <paramref name="arrayIndex">arrayIndex</paramref> is less than 0.</exception>
         /// <exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is greater than the available space from <paramref name="arrayIndex">arrayIndex</paramref> to the end of the destination <paramref name="array">array</paramref>.</exception>
         void ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>.CopyTo(KeyValuePair<OasExpression, OasReferable<OasPath>>[] array, int arrayIndex)
-            => ((ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>)_dictionary).CopyTo(array, arrayIndex);
+            => CopyTo(array, arrayIndex);
 
         /// <summary>Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.</summary>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
         /// <returns>true if <paramref name="item">item</paramref> is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.</returns>
         bool ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>.Contains(KeyValuePair<OasExpression, OasReferable<OasPath>> item)
-            => ((ICollection<KeyValuePair<OasExpression, OasReferable<OasPath>>>)_dictionary).Contains(item);
+            => Contains(item);
 
         /// <summary>Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</summary>
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>

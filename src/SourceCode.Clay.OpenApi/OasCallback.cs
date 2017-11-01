@@ -97,8 +97,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasCallback callback1, OasCallback callback2)
         {
-            if (callback1 is null && callback2 is null) return true;
-            if (callback1 is null || callback2 is null) return false;
+            if (callback1 is null) return callback2 is null;
             return callback1.Equals((object)callback2);
         }
 
@@ -133,17 +132,9 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets as hash code suitable for storing this object in a hash table.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .TallyCount(this)
+            .ToHashCode();
 
         #endregion
     }

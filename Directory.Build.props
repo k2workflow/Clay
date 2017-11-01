@@ -15,7 +15,12 @@
     <!-- RS0010	Avoid using cref tags with a prefix -->
     <!-- S3242 Consider using more general type ... -->
     <!-- CA1707	Remove the underscores from member name ... -->
-    <NoWarn>1701;1702;1705;S3242;RS0010;CA1707</NoWarn>
+    <!-- CA1710 Rename ... to end in 'Dictionary'. -->
+    <!-- CA1801 (broken for nested methods) Parameter ... of method ... is never used... -->
+    <!-- CA1823 (broken for unknown reason) Unused field ... -->
+    <!-- CA1720 (broken for unknown reason) Identifier ... contains type name ... -->
+    <!-- CA1034	Do not nest type ... -->
+    <NoWarn>1701;1702;1705;S3242;RS0010;CA1707;CA1710;CA1801;CA1823;CA1720;CA1034</NoWarn>
   </PropertyGroup>
 
   <!-- TODO: Remove this when OpenCover supports portable PDBs -->

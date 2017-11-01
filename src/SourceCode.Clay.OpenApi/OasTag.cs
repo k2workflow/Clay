@@ -63,8 +63,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasTag tag1, OasTag tag2)
         {
-            if (tag1 is null && tag2 is null) return true;
-            if (tag1 is null || tag2 is null) return false;
+            if (tag1 is null) return tag2 is null;
             return tag1.Equals((object)tag2);
         }
 

@@ -74,8 +74,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasPropertyEncoding propertyEncoding1, OasPropertyEncoding propertyEncoding2)
         {
-            if (propertyEncoding1 is null && propertyEncoding2 is null) return true;
-            if (propertyEncoding1 is null || propertyEncoding2 is null) return false;
+            if (propertyEncoding1 is null) return propertyEncoding2 is null;
             return propertyEncoding1.Equals((object)propertyEncoding2);
         }
 
@@ -113,21 +112,12 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (ContentType != null)
-                    hc = (hc * 23) + ContentType.GetHashCode();
-                hc = (hc * 23) + Headers.Count;
-                hc = (hc * 23) + Style.GetHashCode();
-                hc = (hc * 23) + Options.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(ContentType)
+            .TallyCount(Headers)
+            .Tally(Style)
+            .Tally(Options)
+            .ToHashCode();
 
         #endregion
     }

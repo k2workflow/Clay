@@ -86,18 +86,12 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hc = 17L;
+            var hc = new HashCode();
 
-                if (_components != null)
-                {
-                    hc = (hc * 23) + _components.Length;
-                    hc = (hc * 23) + _components[0].GetHashCode();
-                }
+            if (_components != null)
+                hc = hc.TallyCount(_components).Tally(_components[0]);
 
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
+            return hc.ToHashCode();
         }
 
         #endregion

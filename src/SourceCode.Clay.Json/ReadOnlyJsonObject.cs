@@ -111,7 +111,7 @@ namespace SourceCode.Clay.Json
         }
 
         /// <inheritdoc/>
-        public JsonObject ToJsonObject() => new JsonObject((JsonObject)_json.Clone());
+        public JsonObject ToJsonObject() => (JsonObject)_json.Clone();
 
         #endregion
 

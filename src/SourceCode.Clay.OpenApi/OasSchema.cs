@@ -206,8 +206,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasSchema schema1, OasSchema schema2)
         {
-            if (schema1 is null && schema2 is null) return true;
-            if (schema1 is null || schema2 is null) return false;
+            if (schema1 is null) return schema2 is null;
             return schema1.Equals((object)schema2);
         }
 
@@ -259,40 +258,27 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + JsonType.GetHashCode();
-                hc = (hc * 23) + Options.GetHashCode();
-                hc = (hc * 23) + NumberRange.GetHashCode();
-                hc = (hc * 23) + ItemsRange.GetHashCode();
-                hc = (hc * 23) + LengthRange.GetHashCode();
-                hc = (hc * 23) + PropertiesRange.GetHashCode();
-                if (ExternalDocumentation != null)
-                    hc = (hc * 23) + ExternalDocumentation.GetHashCode();
-                if (Title != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Title);
-                if (Format != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Format);
-                if (Description != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
-                if (Pattern != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Pattern);
-                hc = (hc * 23) + Enum.Count;
-                hc = (hc * 23) + AllOf.Count;
-                hc = (hc * 23) + OneOf.Count;
-                hc = (hc * 23) + AnyOf.Count;
-                hc = (hc * 23) + Not.Count;
-                hc = (hc * 23) + Items.GetHashCode();
-                hc = (hc * 23) + Properties.Count;
-                hc = (hc * 23) + AdditionalProperties.Count;
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(JsonType)
+            .Tally(Options)
+            .Tally(NumberRange)
+            .Tally(ItemsRange)
+            .Tally(LengthRange)
+            .Tally(PropertiesRange)
+            .Tally(ExternalDocumentation)
+            .Tally(Title ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Format ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Pattern ?? string.Empty, StringComparer.Ordinal)
+            .TallyCount(Enum)
+            .TallyCount(AllOf)
+            .TallyCount(OneOf)
+            .TallyCount(AnyOf)
+            .TallyCount(Not)
+            .Tally(Items)
+            .TallyCount(Properties)
+            .TallyCount(AdditionalProperties)
+            .ToHashCode();
 
         #endregion
     }

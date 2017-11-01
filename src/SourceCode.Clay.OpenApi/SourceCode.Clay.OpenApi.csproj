@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>1701;1702;1705;S3242;S4035</NoWarn>
+    <!-- S4035 (Current equality system, issue logged) Seal class ... or implement 'IEqualityComparer<T>' instead. -->
+    <!-- CA2225 (Ctor and Build()) Provide a method named 'To...' or 'From...' as an alternate for operator op_Implicit -->
+    <!-- CA1043 (Indexers use validating types) Use Integral Or String Argument For Indexers -->
+    <!-- CA1000 (Used for constant grouping) Do not declare static members on generic types	... -->
+    <NoWarn>$(NoWarn)S4035;CA2225;CA1043;CA1000</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

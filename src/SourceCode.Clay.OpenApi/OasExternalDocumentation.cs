@@ -58,8 +58,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(OasExternalDocumentation externalDocumentation1, OasExternalDocumentation externalDocumentation2)
         {
-            if (externalDocumentation1 is null && externalDocumentation2 is null) return true;
-            if (externalDocumentation1 is null || externalDocumentation2 is null) return false;
+            if (externalDocumentation1 is null) return externalDocumentation2 is null;
             return externalDocumentation1.Equals((object)externalDocumentation2);
         }
 
@@ -95,20 +94,10 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (Description != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
-                if (Url != null)
-                    hc = (hc * 23) + Url.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => new HashCode()
+            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
+            .Tally(Url)
+            .GetHashCode();
 
         #endregion
     }
