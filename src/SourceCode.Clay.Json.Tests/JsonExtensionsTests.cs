@@ -55,7 +55,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(ar1.ToString(), ar2.ToString());
 
             var pr1 = expected.GetPrimitive("Bar");
-            Assert.True(new JsonPrimitive(123).NullableJsonEquals(pr1));
+            Assert.Equal(new JsonPrimitive(123), pr1, JsonComparer.Default);
 
             var pr2 = pr1.ToString().ParseJsonPrimitive();
             Assert.Equal(pr1.ToString(), pr2.ToString());
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json.Tests
             var expected = new ReadOnlyJsonObject(exp);
 
             var actual = new ReadOnlyJsonObject(expected.ToString().ParseJsonObject());
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual, JsonComparer.Default);
         }
 
         [Trait("Type", "Unit")]
@@ -134,8 +134,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(jobj.ToString(), json.ToString());
 
             var clone = json.Clone();
-            Assert.Equal(json, clone);
-            Assert.True(json.Equals((object)clone));
+            Assert.Equal(json, clone, JsonComparer.Default);
 
             Assert.Equal(json.Count, clone.Count);
             Assert.Equal(json.Keys.Count(), clone.Keys.Count());
@@ -252,12 +251,22 @@ namespace SourceCode.Clay.Json.Tests
 
             for (var i = 0; i < primitives.Length; i++)
             {
+                var ic = (JsonPrimitive)primitives[i].Clone();
+
                 for (var j = 0; j < primitives.Length; j++)
                 {
+                    var jc = (JsonPrimitive)primitives[j].Clone();
+
                     if (i == j)
-                        Assert.True(primitives[i].NullableJsonEquals(primitives[j]));
+                    {
+                        Assert.Equal(ic, jc, JsonComparer.Default);
+                        Assert.Equal(primitives[i], primitives[j], JsonComparer.Default);
+                    }
                     else
-                        Assert.False(primitives[i].NullableJsonEquals(primitives[j]));
+                    {
+                        Assert.NotEqual(ic, jc, JsonComparer.Default);
+                        Assert.NotEqual(primitives[i], primitives[j], JsonComparer.Default);
+                    }
                 }
             }
         }

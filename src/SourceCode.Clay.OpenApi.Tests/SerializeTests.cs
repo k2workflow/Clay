@@ -7,7 +7,6 @@
 
 using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
-using SourceCode.Clay.OpenApi.Serialization;
 using SourceCode.Clay.OpenApi.Tests.Mock;
 using System;
 using System.CodeDom.Compiler;

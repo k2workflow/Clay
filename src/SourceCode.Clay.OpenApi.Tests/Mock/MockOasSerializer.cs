@@ -6,11 +6,8 @@
 #endregion
 
 using SourceCode.Clay.OpenApi.Serialization;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Json;
-using System.Text;
 
 namespace SourceCode.Clay.OpenApi.Tests.Mock
 {
