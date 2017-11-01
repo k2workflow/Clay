@@ -15,28 +15,26 @@ namespace SourceCode.Clay.Json
     /// <summary>
     /// Represents a way to compare <see cref="JsonValue"/> and <see cref="ReadOnlyJsonObject"/> values.
     /// </summary>
-    public abstract class JsonComparer :
-        IEqualityComparer<JsonArray>, // We use specific logic for each JsonValue subtype
-        IEqualityComparer<JsonObject>,
-        IEqualityComparer<JsonPrimitive>,
+    public abstract class JsonValueComparer :
+        IEqualityComparer<JsonValue>,
         IEqualityComparer<ReadOnlyJsonObject>
     {
         #region Constants
 
         /// <summary>
-        /// Gets a <see cref="JsonComparer"/> that compares all fields of a <see cref="JsonValue"/>
+        /// Gets a <see cref="JsonValueComparer"/> that compares all fields of a <see cref="JsonValue"/>
         /// value in a strict manner (ordinal string comparisons, determinisitc ordering of members).
         /// </summary>
-        public static JsonComparer Default { get; } = new JsonStrictComparer();
+        public static JsonValueComparer Default { get; } = new JsonStrictComparer();
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of the <see cref="JsonComparer"/> class.
+        /// Creates a new instance of the <see cref="JsonValueComparer"/> class.
         /// </summary>
-        protected JsonComparer()
+        protected JsonValueComparer()
         { }
 
         #endregion
@@ -51,27 +49,7 @@ namespace SourceCode.Clay.Json
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        public abstract bool Equals(JsonArray x, JsonArray y);
-
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public abstract bool Equals(JsonObject x, JsonObject y);
-
-        /// <summary>
-        /// Determines whether the specified objects are equal.
-        /// </summary>
-        /// <param name="x">The first object to compare.</param>
-        /// <param name="y">The second object to compare.</param>
-        /// <returns>
-        /// true if the specified objects are equal; otherwise, false.
-        /// </returns>
-        public abstract bool Equals(JsonPrimitive x, JsonPrimitive y);
+        public abstract bool Equals(JsonValue x, JsonValue y);
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -90,25 +68,7 @@ namespace SourceCode.Clay.Json
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
-        public abstract int GetHashCode(JsonArray obj);
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        public abstract int GetHashCode(JsonObject obj);
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
-        /// </returns>
-        public abstract int GetHashCode(JsonPrimitive obj);
+        public abstract int GetHashCode(JsonValue obj);
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -135,7 +95,7 @@ namespace SourceCode.Clay.Json
             // For example a JsonArray(n) would incur at least n allocs, while a
             // JsonPrimitive would incur at least 1.
             // So instead we walk the tree, comparing each item. Note that ToString()
-            // walks the tree regardless, so we can be sure this is not significantly
+            // walks the tree regardless, so should not be significantly
             // more expensive than the latter method.
 
             // Heuristic: Check for most common first
@@ -247,9 +207,10 @@ namespace SourceCode.Clay.Json
         #region Concrete
 
         /// <summary>
-        /// Represents a way to compare two <see cref="JsonValue"/> instances in an case and order-sensitive manner.
+        /// Represents a way to compare two <see cref="JsonValue"/> or <see cref="ReadOnlyJsonObject"/> instances
+        /// in a case-sensitive and order-sensitive manner.
         /// </summary>
-        private sealed class JsonStrictComparer : JsonComparer
+        private sealed class JsonStrictComparer : JsonValueComparer
         {
             #region Constructors
 
@@ -259,28 +220,16 @@ namespace SourceCode.Clay.Json
 
             #endregion
 
-            #region IEqualityComparer
+            #region Methods
 
             /// <inheritdoc/>
-            public override bool Equals(JsonArray x, JsonArray y) => EqualsImpl(x, y);
-
-            /// <inheritdoc/>
-            public override bool Equals(JsonObject x, JsonObject y) => EqualsImpl(x, y);
-
-            /// <inheritdoc/>
-            public override bool Equals(JsonPrimitive x, JsonPrimitive y) => EqualsImpl(x, y);
+            public override bool Equals(JsonValue x, JsonValue y) => EqualsImpl(x, y);
 
             /// <inheritdoc/>
             public override bool Equals(ReadOnlyJsonObject x, ReadOnlyJsonObject y) => EqualsImpl(x?._json, y?._json);
 
             /// <inheritdoc/>
-            public override int GetHashCode(JsonArray obj) => GetHashCodeImpl(obj);
-
-            /// <inheritdoc/>
-            public override int GetHashCode(JsonObject obj) => GetHashCodeImpl(obj);
-
-            /// <inheritdoc/>
-            public override int GetHashCode(JsonPrimitive obj) => GetHashCodeImpl(obj);
+            public override int GetHashCode(JsonValue obj) => GetHashCodeImpl(obj);
 
             /// <inheritdoc/>
             public override int GetHashCode(ReadOnlyJsonObject obj) => GetHashCodeImpl(obj?._json);

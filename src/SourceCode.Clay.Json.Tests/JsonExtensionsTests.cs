@@ -22,6 +22,14 @@ namespace SourceCode.Clay.Json.Tests
         {
             ReadOnlyJsonObject json = null;
 
+            // Repros for: https://github.com/dotnet/corefx/issues/25005
+            //var a = new JsonArray(new JsonValue[] { "abc", 123, null });
+            //var b = new JsonArray(new JsonValue[] { "abc", 123 }); b.Add(null);
+            //var x = new JsonArray(new JsonValue[] { "abc", 123 }); x.Add(new JsonPrimitive((string)null));
+            //var p = new JsonPrimitive(Guid.NewGuid());
+            //var t = p.JsonType;
+            //var s = p.ToString();
+
             Assert.True(json == null);
             Assert.False(json != null);
         }
@@ -55,7 +63,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(ar1.ToString(), ar2.ToString());
 
             var pr1 = expected.GetPrimitive("Bar");
-            Assert.Equal(new JsonPrimitive(123), pr1, JsonComparer.Default);
+            Assert.Equal(new JsonPrimitive(123), pr1, JsonValueComparer.Default);
 
             var pr2 = pr1.ToString().ParseJsonPrimitive();
             Assert.Equal(pr1.ToString(), pr2.ToString());
@@ -70,7 +78,7 @@ namespace SourceCode.Clay.Json.Tests
             var expected = new ReadOnlyJsonObject(exp);
 
             var actual = new ReadOnlyJsonObject(expected.ToString().ParseJsonObject());
-            Assert.Equal(expected, actual, JsonComparer.Default);
+            Assert.Equal(expected, actual, JsonValueComparer.Default);
         }
 
         [Trait("Type", "Unit")]
@@ -134,7 +142,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(jobj.ToString(), json.ToString());
 
             var clone = json.Clone();
-            Assert.Equal(json, clone, JsonComparer.Default);
+            Assert.Equal(json, clone, JsonValueComparer.Default);
 
             Assert.Equal(json.Count, clone.Count);
             Assert.Equal(json.Keys.Count(), clone.Keys.Count());
@@ -259,13 +267,13 @@ namespace SourceCode.Clay.Json.Tests
 
                     if (i == j)
                     {
-                        Assert.Equal(ic, jc, JsonComparer.Default);
-                        Assert.Equal(primitives[i], primitives[j], JsonComparer.Default);
+                        Assert.Equal(ic, jc, JsonValueComparer.Default);
+                        Assert.Equal(primitives[i], primitives[j], JsonValueComparer.Default);
                     }
                     else
                     {
-                        Assert.NotEqual(ic, jc, JsonComparer.Default);
-                        Assert.NotEqual(primitives[i], primitives[j], JsonComparer.Default);
+                        Assert.NotEqual(ic, jc, JsonValueComparer.Default);
+                        Assert.NotEqual(primitives[i], primitives[j], JsonValueComparer.Default);
                     }
                 }
             }

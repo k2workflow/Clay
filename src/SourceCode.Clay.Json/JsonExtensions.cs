@@ -433,6 +433,8 @@ namespace SourceCode.Clay.Json
 
         #region Value
 
+        // These helpers would not be necessary if JsonPrimitive.Value was public
+
         internal static readonly Func<JsonPrimitive, object> GetValueFromPrimitive = GetValueFromPrimitiveImpl();
 
         private static Func<JsonPrimitive, object> GetValueFromPrimitiveImpl()
