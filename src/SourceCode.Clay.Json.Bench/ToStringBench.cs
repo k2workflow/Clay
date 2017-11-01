@@ -7,28 +7,32 @@
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
 using System.Json;
 
 namespace SourceCode.Clay.Json.Bench
 {
     [MemoryDiagnoser]
-    public class JsonCloneBench
+    public class ToStringBench
     {
         #region Fields
 
         private const int InvokeCount = 1;
 
         private readonly JsonObject _json;
+        private readonly JObject _newton;
 
         #endregion
 
         #region Constructors
 
-        public JsonCloneBench()
+        public ToStringBench()
         {
             var str = Resources.AdventureWorks;
+
             _json = (JsonObject)JsonValue.Parse(str);
+            _newton = JObject.Parse(str);
         }
 
         #endregion
@@ -36,29 +40,28 @@ namespace SourceCode.Clay.Json.Bench
         #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = InvokeCount)]
-        public long ToStringClone()
+        public long NewtonToString()
         {
             var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
-                var str = _json.ToString();
-                var clone = JsonValue.Parse(str);
+                var str = _newton.ToString();
 
-                total += clone.Count;
+                total += str.Length;
             }
 
             return total;
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
-        public long SmartClone()
+        public long JsonValueToString()
         {
             var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
-                var clone = _json.Clone();
+                var str = _json.ToString();
 
-                total += clone.Count;
+                total += str.Length;
             }
 
             return total;

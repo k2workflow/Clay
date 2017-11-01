@@ -152,25 +152,18 @@ namespace SourceCode.Clay.Json
                     {
                         if (!be.MoveNext()) return false;
 
-                        if (!KeyValueEquals(ae.Current, be.Current)) return false;
+                        var ac = ae.Current;
+                        var bc = be.Current;
+
+                        // Key
+                        if (!StringComparer.Ordinal.Equals(ac.Key, bc.Key)) return false;
+
+                        // Value
+                        if (!EqualsImpl(ac.Value, bc.Value)) return false; // Recurse
                     }
 
                     return !be.MoveNext();
                 }
-            }
-
-            bool KeyValueEquals(KeyValuePair<string, JsonValue> a, KeyValuePair<string, JsonValue> b)
-            {
-                if (a.Equals(default)) return b.Equals(default); // (null, null) or (null, y)
-                if (b.Equals(default)) return false; // (x, null)
-
-                // Key
-                if (!StringComparer.Ordinal.Equals(a.Key, b.Key)) return false;
-
-                // Value
-                if (!EqualsImpl(a.Value, b.Value)) return false; // Recurse
-
-                return true;
             }
 
             bool PrimitiveEquals(JsonPrimitive a, JsonPrimitive b)
