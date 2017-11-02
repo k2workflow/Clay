@@ -124,21 +124,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected.ToHashCode(), sut.ToHashCode());
         }
 
-        [Fact(DisplayName = nameof(HashCode_Tally_Null_Coalesce))]
-        public static void HashCode_Tally_Null_Coalesce()
-        {
-            int[] list = null;
-
-            var expected = new HashCode();
-            expected.Add(-42);
-            expected.Add("empty sentinel");
-            expected.Add(-1);
-
-            var sut = new HashCode().Tally(null, -42).Tally(null, "empty sentinel").TallyCount(list, -1);
-
-            Assert.Equal(expected.ToHashCode(), sut.ToHashCode());
-        }
-
         [Fact(DisplayName = nameof(HashCode_Add_256Values))]
         public static void HashCode_Add_256Values()
         {

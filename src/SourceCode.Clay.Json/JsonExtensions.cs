@@ -296,151 +296,115 @@ namespace SourceCode.Clay.Json
             return clone;
         }
 
-        // Caching frequently-hit typeof's has a small performance boost: https://stackoverflow.com/a/6215840
+        /*
+        We could roundtrip via ToString() here, though that incurs at
+        least 1 string alloc, the size of which will depend on the specific type.
+        For example a JsonArray(n) would incur at least n allocs, while a
+        JsonPrimitive would incur at least 1.
 
-        private static readonly Type typeGuid = typeof(Guid);
-        private static readonly Type typeUri = typeof(Uri);
-        private static readonly Type typeDateTimeOffset = typeof(DateTimeOffset);
-        private static readonly Type typeTimeSpan = typeof(TimeSpan);
+        So instead we walk the tree, cloning each item. Note that ToString()
+        walks the tree regardless, so we can be sure this is not significantly
+        more expensive than the latter method.
+
+        Benchmarks validate this approach: 2-3x improvement in both time & memory
+        https://github.com/dotnet/corefx/issues/25022
+
+                 Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |     Gen 0 |    Gen 1 |   Gen 2 | Allocated |
+        --------------- |---------:|----------:|----------:|-------:|---------:|----------:|---------:|--------:|----------:|
+          ToStringClone | 29.21 ms | 0.5792 ms | 0.5948 ms |   1.00 |     0.00 | 1562.5000 | 812.5000 | 62.5000 |   9.92 MB |
+        NewtonDeepClone | 19.16 ms | 0.3727 ms | 0.5101 ms |   0.66 |     0.02 | 1218.7500 | 562.5000 | 62.5000 |   7.02 MB |
+             SmartClone | 10.14 ms | 0.1964 ms | 0.4311 ms |   0.35 |     0.02 |  671.8750 | 312.5000 |       - |   3.94 MB |
+        */
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static JsonValue CloneImpl(JsonValue x)
+        private static JsonValue CloneImpl(JsonValue json)
         {
-            if (x is null) return default;
+            if (json is null) return default;
 
-            /*
-            We could roundtrip via ToString() here, though that incurs at
-            least 1 string alloc, the size of which will depend on the specific type.
-            For example a JsonArray(n) would incur at least n allocs, while a
-            JsonPrimitive would incur at least 1.
+            // Heuristic: We check in order of most-to-least likely/abundant
 
-            So instead we walk the tree, cloning each item. Note that ToString()
-            walks the tree regardless, so we can be sure this is not significantly
-            more expensive than the latter method.
-
-            Benchmarks validate this approach: 2-3x improvement in both time & memory
-            https://github.com/dotnet/corefx/issues/25022
-
-                     Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |     Gen 0 |    Gen 1 |   Gen 2 | Allocated |
-            --------------- |---------:|----------:|----------:|-------:|---------:|----------:|---------:|--------:|----------:|
-              ToStringClone | 29.21 ms | 0.5792 ms | 0.5948 ms |   1.00 |     0.00 | 1562.5000 | 812.5000 | 62.5000 |   9.92 MB |
-            NewtonDeepClone | 19.16 ms | 0.3727 ms | 0.5101 ms |   0.66 |     0.02 | 1218.7500 | 562.5000 | 62.5000 |   7.02 MB |
-                 SmartClone | 10.14 ms | 0.1964 ms | 0.4311 ms |   0.35 |     0.02 |  671.8750 | 312.5000 |       - |   3.94 MB |
-            */
-
-            // Heuristic: We assume primitives are most likely/abundant
-            if (x is JsonPrimitive xp)
-                return ClonePrimitive(xp);
-
-            if (x is JsonObject xo)
-                return CloneObject(xo);
-
-            // Least likely last
-            if (x is JsonArray xa)
-                return CloneArray(xa);
-
-            return true;
-
-            // Local functions
-
-            JsonArray CloneArray(JsonArray a)
+            if (json is JsonPrimitive jp)
             {
-                if (a is null) return default;
-
-                // Item count
-                if (a.Count == 0) return new JsonArray(); // Hopefully JsonArray can one day allocate zero length internally
-
-                // Values
-                // Avoid string allocs by enumerating array members
-                var list = new JsonValue[a.Count];
-                for (var i = 0; i < a.Count; i++)
-                {
-                    var clone = CloneImpl(a[i]); // Recurse
-                    list[i] = clone;
-                }
-
-                var array = new JsonArray(list); // Hopefully JsonArray will one day allocate according to input length
-                return array;
-            }
-
-            JsonObject CloneObject(JsonObject a)
-            {
-                if (a is null) return default;
-
-                // Property count
-                if (a.Count == 0) return new JsonObject(); // Hopefully JsonObject can one day allocate zero length internally
-
-                // Value
-                // Avoid string allocs by enumerating properties
-                var list = new KeyValuePair<string, JsonValue>[a.Count];
-                var i = 0;
-                foreach (var ae in a)
-                {
-                    var clone = CloneImpl(ae.Value); // Recurse
-                    list[i++] = new KeyValuePair<string, JsonValue>(ae.Key, clone);
-                }
-
-                var obj = new JsonObject(list); // Hopefully JsonObject will one day allocate according to input length
-                return obj;
-            }
-
-            JsonPrimitive ClonePrimitive(JsonPrimitive a)
-            {
-                if (a is null) return default;
-
                 // We could also roundtrip via ToString() here, though that incurs at
                 // least 1 string alloc, the size of which will depend on the specific primitive.
 
-                // Value
-                var av = GetValueFromPrimitive(a); // Might cause extra allocs
-                var type = av.GetType();
-                var typeCode = Type.GetTypeCode(type);
-
-                switch (typeCode)
+                var jv = GetValueFromPrimitive(jp); // Might cause extra allocs
+                switch (jv)
                 {
+                    // Most likely
+                    case string st: return new JsonPrimitive(st);
+                    case bool tf: return new JsonPrimitive(tf);
+                    case int i32: return new JsonPrimitive(i32);
+                    case double f64: return new JsonPrimitive(f64);
+                    case DateTime dt: return new JsonPrimitive(dt);
+                    case DateTimeOffset dto: return new JsonPrimitive(dto);
+
                     // Scalar
-                    case TypeCode.Boolean: return new JsonPrimitive((bool)av);
+                    case Guid gd: return new JsonPrimitive(gd);
 
                     // Signed
-                    case TypeCode.SByte: return new JsonPrimitive((sbyte)av);
-                    case TypeCode.Int16: return new JsonPrimitive((short)av);
-                    case TypeCode.Int32: return new JsonPrimitive((int)av);
-                    case TypeCode.Int64: return new JsonPrimitive((long)av);
+                    case sbyte i8: return new JsonPrimitive(i8);
+                    case short i16: return new JsonPrimitive(i16);
+                    case long i64: return new JsonPrimitive(i64);
 
                     // Unsigned
-                    case TypeCode.Byte: return new JsonPrimitive((byte)av);
-                    case TypeCode.UInt16: return new JsonPrimitive((ushort)av);
-                    case TypeCode.UInt32: return new JsonPrimitive((uint)av);
-                    case TypeCode.UInt64: return new JsonPrimitive((ulong)av);
+                    case byte u8: return new JsonPrimitive(u8);
+                    case ushort u16: return new JsonPrimitive(u16);
+                    case uint u32: return new JsonPrimitive(u32);
+                    case ulong u64: return new JsonPrimitive(u64);
 
                     // Numeric
-                    case TypeCode.Single: return new JsonPrimitive((float)av);
-                    case TypeCode.Double: return new JsonPrimitive((double)av);
-                    case TypeCode.Decimal: return new JsonPrimitive((decimal)av);
+                    case float f32: return new JsonPrimitive(f32);
+                    case decimal dc: return new JsonPrimitive(dc);
 
                     // Text
-                    case TypeCode.Char: return new JsonPrimitive((char)av);
-                    case TypeCode.String: return new JsonPrimitive((string)av);
+                    case char ch: return new JsonPrimitive(ch);
 
                     // Temporal
-                    case TypeCode.DateTime: return new JsonPrimitive((DateTime)av);
+                    case TimeSpan ts: return new JsonPrimitive(ts);
+
+                    // Uri
+                    case Uri uri: return new JsonPrimitive(uri);
 
                     default:
-                        {
-                            // Scalar
-                            if (type == typeGuid) return new JsonPrimitive((Guid)av);
-
-                            // Uri
-                            if (type == typeUri) return new JsonPrimitive((Uri)av);
-
-                            // Temporal
-                            if (type == typeDateTimeOffset) return new JsonPrimitive((DateTimeOffset)av);
-                            if (type == typeTimeSpan) return new JsonPrimitive((TimeSpan)av);
-
-                            throw new InvalidCastException($"Unexpected {nameof(JsonPrimitive)} {nameof(Type)} {type}");
-                        }
+                        throw new InvalidCastException($"Unexpected {nameof(JsonPrimitive)} {nameof(Type)} {jv.GetType()}");
                 }
             }
+
+            if (json is JsonObject jo)
+            {
+                var jCount = jo.Count;
+                if (jCount == 0) return new JsonObject(); // Hopefully JsonObject can one day allocate zero length internally
+
+                var array = new KeyValuePair<string, JsonValue>[jCount];
+                var i = 0;
+                foreach (var xi in jo)
+                {
+                    // Recurse
+                    var clone = CloneImpl(xi.Value);
+                    array[i++] = new KeyValuePair<string, JsonValue>(xi.Key, clone);
+                }
+
+                return new JsonObject(array); // Hopefully JsonObject will one day allocate according to input length
+            }
+
+            if (json is JsonArray ja)
+            {
+                var jCount = ja.Count;
+                if (jCount == 0) return new JsonArray(); // Hopefully JsonArray can one day allocate zero length internally
+
+                var array = new JsonValue[jCount];
+                for (var i = 0; i < jCount; i++)
+                {
+                    // Recurse
+                    array[i] = CloneImpl(ja[i]);
+                }
+
+                return new JsonArray(array); // Hopefully JsonArray will one day allocate according to input length
+            }
+
+            // Fallback for unknown subclasses of JsonValue
+            return JsonValue.Parse(json.ToString());
         }
 
         #endregion
@@ -451,6 +415,7 @@ namespace SourceCode.Clay.Json
 
         internal static readonly Func<JsonPrimitive, object> GetValueFromPrimitive = GetValueFromPrimitiveImpl();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Func<JsonPrimitive, object> GetValueFromPrimitiveImpl()
         {
             var prim = typeof(JsonPrimitive);
