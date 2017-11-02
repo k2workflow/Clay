@@ -15,16 +15,24 @@ namespace SourceCode.Clay.Json.Bench
 
         public static void Main(string[] args)
         {
-            //var test1 = new JsonCloneBench();
-            //var summary1 = BenchmarkRunner.Run<JsonCloneBench>();
+            //var test1 = new CloneBench();
+            //var summary1 = BenchmarkRunner.Run<CloneBench>();
 
-            //var test2 = new JsonEqualsBench();
-            //var summary2 = BenchmarkRunner.Run<JsonEqualsBench>();
+            //var test2 = new EqualsBench();
+            //var summary2 = BenchmarkRunner.Run<EqualsBench>();
+
+            //var test3 = new ParseBench();
+            //var summary3 = BenchmarkRunner.Run<ParseBench>();
+
+            //var test4 = new ToStringBench();
+            //var summary4 = BenchmarkRunner.Run<ToStringBench>();
 
             var switcher = new BenchmarkSwitcher(new[]
             {
-                typeof(JsonCloneBench),
-                typeof(JsonEqualsBench),
+                typeof(CloneBench),
+                typeof(EqualsBench),
+                typeof(ParseBench),
+                typeof(ToStringBench)
             });
             switcher.Run(args);
         }

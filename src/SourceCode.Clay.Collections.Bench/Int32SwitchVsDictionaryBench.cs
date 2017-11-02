@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Collections.Bench
         [Benchmark(Baseline = true, OperationsPerInvoke = ItemCount * InvokeCount)]
         public long Lookup()
         {
-            var total = 0l;
+            var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
                 for (var i = dict.Count - 1; i >= 0; i--)

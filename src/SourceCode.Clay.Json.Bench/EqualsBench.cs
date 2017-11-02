@@ -7,6 +7,7 @@
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
 using System;
 using System.Json;
@@ -14,7 +15,7 @@ using System.Json;
 namespace SourceCode.Clay.Json.Bench
 {
     [MemoryDiagnoser]
-    public class JsonEqualsBench
+    public class EqualsBench
     {
         #region Fields
 
@@ -23,15 +24,23 @@ namespace SourceCode.Clay.Json.Bench
         private readonly JsonObject _json1;
         private readonly JsonObject _json2;
 
+        private readonly JObject _newton1;
+        private readonly JObject _newton2;
+
         #endregion
 
         #region Constructors
 
-        public JsonEqualsBench()
+        public EqualsBench()
         {
-            var str = Resources.AdventureWorks;
-            _json1 = (JsonObject)JsonValue.Parse(str);
-            _json2 = (JsonObject)JsonValue.Parse(str);
+            var str1 = Resources.AdventureWorks;
+            var str2 = Resources.AdventureWorks + "\n"; // Mitigate interning
+
+            _json1 = (JsonObject)JsonValue.Parse(str1);
+            _json2 = (JsonObject)JsonValue.Parse(str2);
+
+            _newton1 = JObject.Parse(str1);
+            _newton2 = JObject.Parse(str2);
         }
 
         #endregion
@@ -48,6 +57,20 @@ namespace SourceCode.Clay.Json.Bench
                 var str2 = _json2.ToString();
 
                 var equal = StringComparer.Ordinal.Equals(str1, str2);
+
+                total += (equal ? 1 : 0);
+            }
+
+            return total;
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
+        public long NewtonDeepEquals()
+        {
+            var total = 0L;
+            for (var j = 0; j < InvokeCount; j++)
+            {
+                var equal = JToken.EqualityComparer.Equals(_newton1, _newton2);
 
                 total += (equal ? 1 : 0);
             }
