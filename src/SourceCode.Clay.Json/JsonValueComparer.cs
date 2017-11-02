@@ -90,22 +90,36 @@ namespace SourceCode.Clay.Json
             if (y is null) return false; // (x, null)
             if (ReferenceEquals(x, y)) return true; // (x, x)
 
-            // We could also compare the ToString() values here, though that incurs at
-            // least 1 string alloc, the size of which will depend on the specific type.
-            // For example a JsonArray(n) would incur at least n allocs, while a
-            // JsonPrimitive would incur at least 1.
-            // So instead we walk the tree, comparing each item. Note that ToString()
-            // walks the tree regardless, so should not be significantly
-            // more expensive than the latter method.
+            /*
+            We could also compare the ToString() values here, though that incurs at
+            least 1 string alloc, the size of which will depend on the specific type.
+            For example a JsonArray(n) would incur at least n allocs, while a
+            JsonPrimitive would incur at least 1.
 
-            // Heuristic: Check for most common first
+            So instead we walk the tree, comparing each item. Note that ToString()
+            walks the tree regardless, so should not be significantly
+            more expensive than the latter method.
+
+            Benchmarks validate this approach: 2x improvement in both time & memory
+            https://github.com/k2workflow/Clay/blob/master/src/SourceCode.Clay.Json.Bench/JsonEqualsBench.cs
+
+                      Method |      Mean |     Error |    StdDev | Scaled | ScaledSD |    Gen 0 |    Gen 1 |   Gen 2 | Allocated |
+            ---------------- |----------:|----------:|----------:|-------:|---------:|---------:|---------:|--------:|----------:|
+              ToStringEquals | 13.998 ms | 0.2782 ms | 0.5807 ms |   1.00 |     0.00 | 809.3750 | 434.3750 | 90.6250 | 6267600 B |
+            NewtonDeepEquals |  2.729 ms | 0.0514 ms | 0.0456 ms |   0.20 |     0.01 |        - |        - |       - |       0 B |
+                 SmartEquals |  6.817 ms | 0.1334 ms | 0.1638 ms |   0.49 |     0.02 | 789.0625 |        - |       - | 3323776 B |
+
+            The allocations are likely due to reflection/expression gymnastics required for JsonPrimitive.Value.
+            */
+
+            // Heuristic: We assume primitives are most likely/abundant
             if (x is JsonPrimitive xp)
                 return (y is JsonPrimitive yp) && PrimitiveEquals(xp, yp);
 
             if (x is JsonObject xo)
                 return (y is JsonObject yo) && ObjectEquals(xo, yo);
 
-            // Least common last
+            // Least likely last
             if (x is JsonArray xa)
                 return (y is JsonArray ya) && ArrayEquals(xa, ya);
 
@@ -177,8 +191,11 @@ namespace SourceCode.Clay.Json
 
                 // We could also compare the ToString() values here, though that incurs at
                 // least 1 string alloc, the size of which will depend on the specific primitive.
-                // On the other hand Linq expressions are slower than native code, and the
+                //
+                // On the other hand Linq expressions are slower than native code and the
                 // implementation requires runtime resolution of Equals(obj, obj).
+                // Might be where the extra allocs are coming from.
+                //
                 // TODO: May be worth benchmarking (if not a micro-optimization)
 
                 // Value
