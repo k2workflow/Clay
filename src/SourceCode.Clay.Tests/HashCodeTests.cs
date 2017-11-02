@@ -108,7 +108,7 @@ namespace SourceCode.Clay.Tests
         {
             var sut = new HashCode();
             sut.Add(1);
-            sut.Add<string>(null);
+            sut.Add((string)null);
             Assert.Equal(149775153, sut.ToHashCode());
         }
 
@@ -119,7 +119,22 @@ namespace SourceCode.Clay.Tests
             expected.Add(1);
             expected.Add<string>(null);
 
-            var sut = new HashCode().Tally(1).Tally<string>(null);
+            var sut = new HashCode().Tally(1).Tally((string)null);
+
+            Assert.Equal(expected.ToHashCode(), sut.ToHashCode());
+        }
+
+        [Fact(DisplayName = nameof(HashCode_Tally_Null_Coalesce))]
+        public static void HashCode_Tally_Null_Coalesce()
+        {
+            int[] list = null;
+
+            var expected = new HashCode();
+            expected.Add(-42);
+            expected.Add("empty sentinel");
+            expected.Add(-1);
+
+            var sut = new HashCode().Tally(null, -42).Tally(null, "empty sentinel").TallyCount(list, -1);
 
             Assert.Equal(expected.ToHashCode(), sut.ToHashCode());
         }
