@@ -43,7 +43,7 @@ namespace SourceCode.Clay
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Tally<T>(this HashCode hashCode, T value)
+        public static HashCode Tally<T>(this HashCode hashCode, T value, T coalesce = default)
         {
             hashCode.Add(value);
             return hashCode;
@@ -56,13 +56,33 @@ namespace SourceCode.Clay
         /// <typeparam name="T">The type of value.</typeparam>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
         /// <param name="value">The value to hash and add to <paramref name="hashCode"/>.</param>
-        /// <param name="comparer">The comparer to use.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="value"/> is <see langword="null"/>.</param>
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode Tally<T>(this HashCode hashCode, T value, IEqualityComparer<T> comparer)
+        public static HashCode Tally<T>(this HashCode hashCode, T? value, T coalesce = default)
+            where T : struct
         {
-            hashCode.Add(value, comparer);
+            hashCode.Add(value ?? coalesce);
+            return hashCode;
+        }
+
+        /// <summary>
+        /// Computes a hash code for the specified value and adds it to the specified
+        /// <see cref="HashCode"/>, then returns the changed <see cref="HashCode"/> value.
+        /// </summary>
+        /// <typeparam name="T">The type of value.</typeparam>
+        /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
+        /// <param name="value">The value to hash and add to <paramref name="hashCode"/>.</param>
+        /// <param name="comparer">The comparer to use.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="value"/> is <see langword="null"/>.</param>
+        /// <returns>The changed <see cref="HashCode"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
+        public static HashCode Tally<T>(this HashCode hashCode, T value, IEqualityComparer<T> comparer, T coalesce = default)
+        {
+            if (value == null) hashCode.Add(coalesce);
+            else hashCode.Add(value, comparer);
             return hashCode;
         }
 
@@ -71,12 +91,13 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
         /// <param name="collection">The collection to add.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="collection"/> is <see langword="null"/>.</param>
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyCount(this HashCode hashCode, System.Collections.ICollection collection)
+        public static HashCode TallyCount(this HashCode hashCode, System.Collections.ICollection collection, int coalesce = 0)
         {
-            if (collection == null) hashCode.Add(0);
+            if (collection == null) hashCode.Add(coalesce);
             else hashCode.Add(collection.Count);
             return hashCode;
         }
@@ -87,12 +108,13 @@ namespace SourceCode.Clay
         /// <typeparam name="T">The type of items in the collection.</typeparam>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
         /// <param name="array">The array to add.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="array"/> is <see langword="null"/>.</param>
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyCount<T>(this HashCode hashCode, T[] array)
+        public static HashCode TallyCount<T>(this HashCode hashCode, T[] array, int coalesce = 0)
         {
-            if (array == null) hashCode.Add(0);
+            if (array == null) hashCode.Add(coalesce);
             else hashCode.Add(array.Length);
             return hashCode;
         }
@@ -103,12 +125,13 @@ namespace SourceCode.Clay
         /// <typeparam name="T">The type of items in the collection.</typeparam>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
         /// <param name="collection">The collection to add.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="collection"/> is <see langword="null"/>.</param>
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyCount<T>(this HashCode hashCode, ICollection<T> collection)
+        public static HashCode TallyCount<T>(this HashCode hashCode, ICollection<T> collection, int coalesce = 0)
         {
-            if (collection == null) hashCode.Add(0);
+            if (collection == null) hashCode.Add(coalesce);
             else hashCode.Add(collection.Count);
             return hashCode;
         }
@@ -119,12 +142,13 @@ namespace SourceCode.Clay
         /// <typeparam name="T">The type of items in the collection.</typeparam>
         /// <param name="hashCode">The <see cref="HashCode"/> to change.</param>
         /// <param name="collection">The collection to add.</param>
+        /// <param name="coalesce">The constant to use if <paramref name="collection"/> is <see langword="null"/>.</param>
         /// <returns>The changed <see cref="HashCode"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [TargetedPatchingOptOut("Performance critical for inlining across NGen images.")]
-        public static HashCode TallyCount<T>(this HashCode hashCode, IReadOnlyCollection<T> collection)
+        public static HashCode TallyCount<T>(this HashCode hashCode, IReadOnlyCollection<T> collection, int coalesce = 0)
         {
-            if (collection == null) hashCode.Add(0);
+            if (collection == null) hashCode.Add(coalesce);
             else hashCode.Add(collection.Count);
             return hashCode;
         }
