@@ -319,7 +319,7 @@ namespace SourceCode.Clay.Json
             more expensive than the latter method.
 
             Benchmarks validate this approach: 2-3x improvement in both time & memory
-            https://github.com/k2workflow/Clay/blob/master/src/SourceCode.Clay.Json.Bench/JsonCloneBench.cs
+            https://github.com/dotnet/corefx/issues/25022
 
                      Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |     Gen 0 |    Gen 1 |   Gen 2 | Allocated |
             --------------- |---------:|----------:|----------:|-------:|---------:|----------:|---------:|--------:|----------:|

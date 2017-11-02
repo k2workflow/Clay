@@ -81,139 +81,6 @@ namespace SourceCode.Clay.Json
 
         #endregion
 
-        #region Helpers
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool EqualsImpl(JsonValue x, JsonValue y)
-        {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
-
-            /*
-            We could also compare the ToString() values here, though that incurs at
-            least 1 string alloc, the size of which will depend on the specific type.
-            For example a JsonArray(n) would incur at least n allocs, while a
-            JsonPrimitive would incur at least 1.
-
-            So instead we walk the tree, comparing each item. Note that ToString()
-            walks the tree regardless, so should not be significantly
-            more expensive than the latter method.
-
-            Benchmarks validate this approach: 2x improvement in both time & memory
-            https://github.com/k2workflow/Clay/blob/master/src/SourceCode.Clay.Json.Bench/JsonEqualsBench.cs
-
-                      Method |      Mean |     Error |    StdDev | Scaled | ScaledSD |    Gen 0 |    Gen 1 |   Gen 2 | Allocated |
-            ---------------- |----------:|----------:|----------:|-------:|---------:|---------:|---------:|--------:|----------:|
-              ToStringEquals | 13.998 ms | 0.2782 ms | 0.5807 ms |   1.00 |     0.00 | 809.3750 | 434.3750 | 90.6250 | 6267600 B |
-            NewtonDeepEquals |  2.729 ms | 0.0514 ms | 0.0456 ms |   0.20 |     0.01 |        - |        - |       - |       0 B |
-                 SmartEquals |  6.817 ms | 0.1334 ms | 0.1638 ms |   0.49 |     0.02 | 789.0625 |        - |       - | 3323776 B |
-
-            The allocations are likely due to reflection/expression gymnastics required for JsonPrimitive.Value.
-            */
-
-            // Heuristic: We assume primitives are most likely/abundant
-            if (x is JsonPrimitive xp)
-                return (y is JsonPrimitive yp) && PrimitiveEquals(xp, yp);
-
-            if (x is JsonObject xo)
-                return (y is JsonObject yo) && ObjectEquals(xo, yo);
-
-            // Least likely last
-            if (x is JsonArray xa)
-                return (y is JsonArray ya) && ArrayEquals(xa, ya);
-
-            return true;
-
-            // Local functions
-
-            bool ArrayEquals(JsonArray a, JsonArray b)
-            {
-                if (a is null) return b is null; // (null, null) or (null, y)
-                if (b is null) return false; // (x, null)
-                if (ReferenceEquals(a, b)) return true; // (x, x)
-
-                // Item count
-                if (a.Count != b.Count) return false; // (n, m)
-                if (a.Count == 0) return true; // (0, 0)
-
-                // Values
-                // Avoid string allocs by enumerating colocated array members
-                for (var i = 0; i < a.Count; i++)
-                {
-                    if (!EqualsImpl(a[i], b[i])) return false; // Recurse
-                }
-
-                return true;
-            }
-
-            bool ObjectEquals(JsonObject a, JsonObject b)
-            {
-                if (a is null) return b is null; // (null, null) or (null, y)
-                if (b is null) return false; // (x, null)
-                if (ReferenceEquals(a, b)) return true; // (x, x)
-
-                // Property count
-                if (a.Count != b.Count) return false; // (n, m)
-                if (a.Count == 0) return true; // (0, 0)
-
-                // Value
-                // Avoid string allocs by enumerating colocated properties
-                using (var ae = a.GetEnumerator())
-                using (var be = b.GetEnumerator())
-                {
-                    while (ae.MoveNext())
-                    {
-                        if (!be.MoveNext()) return false;
-
-                        var ac = ae.Current;
-                        var bc = be.Current;
-
-                        // Key
-                        if (!StringComparer.Ordinal.Equals(ac.Key, bc.Key)) return false;
-
-                        // Value
-                        if (!EqualsImpl(ac.Value, bc.Value)) return false; // Recurse
-                    }
-
-                    return !be.MoveNext();
-                }
-            }
-
-            bool PrimitiveEquals(JsonPrimitive a, JsonPrimitive b)
-            {
-                if (a is null) return b is null; // (null, null) or (null, y)
-                if (b is null) return false; // (x, null)
-                if (ReferenceEquals(a, b)) return true; // (x, x)
-
-                // JsonType
-                if (a.JsonType != b.JsonType) return false;
-
-                // We could also compare the ToString() values here, though that incurs at
-                // least 1 string alloc, the size of which will depend on the specific primitive.
-                //
-                // On the other hand Linq expressions are slower than native code and the
-                // implementation requires runtime resolution of Equals(obj, obj).
-                // Might be where the extra allocs are coming from.
-                //
-                // TODO: May be worth benchmarking (if not a micro-optimization)
-
-                // Value
-                var av = JsonExtensions.GetValueFromPrimitive(a);
-                var bv = JsonExtensions.GetValueFromPrimitive(b);
-
-                if (!av.Equals(bv)) return false; // Runtime native Object comparison
-
-                return true;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int GetHashCodeImpl(JsonValue json)
-            => json == null ? -42 : json.GetHashCode(); // Thanks for all the phish
-
-        #endregion
-
         #region Concrete
 
         /// <summary>
@@ -243,6 +110,141 @@ namespace SourceCode.Clay.Json
 
             /// <inheritdoc/>
             public override int GetHashCode(ReadOnlyJsonObject obj) => GetHashCodeImpl(obj?._json);
+
+            #endregion
+
+            #region Helpers
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool EqualsImpl(JsonValue x, JsonValue y)
+            {
+                if (x is null) return y is null; // (null, null) or (null, y)
+                if (y is null) return false; // (x, null)
+                if (ReferenceEquals(x, y)) return true; // (x, x)
+
+                /*
+                We could also compare the ToString() values here, though that incurs at
+                least 1 string alloc, the size of which will depend on the specific type.
+                For example a JsonArray(n) would incur at least n allocs, while a
+                JsonPrimitive would incur at least 1.
+
+                So instead we walk the tree, comparing each item. Note that ToString()
+                walks the tree regardless, so should not be significantly
+                more expensive than the latter method.
+
+                Benchmarks validate this approach: 2-3x improvement in both time & memory
+                https://github.com/dotnet/corefx/issues/25021
+
+                           Method |      Mean |     Error |    StdDev | Scaled |    Gen 0 |    Gen 1 |   Gen 2 | Allocated |
+                ----------------- |----------:|----------:|----------:|-------:|---------:|---------:|--------:|----------:|
+                   ToStringEquals | 13.818 ms | 0.3012 ms | 0.3347 ms |   1.00 | 808.4677 | 435.9879 | 89.7177 | 6267582 B |
+                 NewtonDeepEquals |  3.028 ms | 0.0657 ms | 0.1854 ms |   0.22 |        - |        - |       - |       0 B |
+                      SmartEquals |  5.940 ms | 0.1109 ms | 0.1187 ms |   0.43 | 531.2500 |        - |       - | 2258560 B |
+
+                The allocations are likely due to reflection/expression gymnastics required for JsonPrimitive.Value.
+                */
+
+                // Heuristic: We assume primitives are most likely/abundant
+                if (x is JsonPrimitive xp)
+                    return (y is JsonPrimitive yp) && PrimitiveEquals(ref xp, ref yp);
+
+                if (x is JsonObject xo)
+                    return (y is JsonObject yo) && ObjectEquals(ref xo, ref yo);
+
+                // Least likely last
+                if (x is JsonArray xa)
+                    return (y is JsonArray ya) && ArrayEquals(ref xa, ref ya);
+
+                return true;
+
+                // Local functions
+
+                bool ArrayEquals(ref JsonArray a, ref JsonArray b)
+                {
+                    if (a is null) return b is null; // (null, null) or (null, y)
+                    if (b is null) return false; // (x, null)
+                    if (ReferenceEquals(a, b)) return true; // (x, x)
+
+                    // Item count
+                    var aCount = a.Count;
+                    if (aCount != b.Count) return false; // (n, m)
+                    if (aCount == 0) return true; // (0, 0)
+
+                    // Values
+                    // Avoid string allocs by enumerating colocated array members
+                    for (var i = 0; i < a.Count; i++)
+                    {
+                        if (!EqualsImpl(a[i], b[i])) return false; // Recurse
+                    }
+
+                    return true;
+                }
+
+                bool ObjectEquals(ref JsonObject a, ref JsonObject b)
+                {
+                    if (a is null) return b is null; // (null, null) or (null, y)
+                    if (b is null) return false; // (x, null)
+                    if (ReferenceEquals(a, b)) return true; // (x, x)
+
+                    // Property count
+                    var aCount = a.Count;
+                    if (aCount != b.Count) return false; // (n, m)
+                    if (aCount == 0) return true; // (0, 0)
+
+                    // Value
+                    // Avoid string allocs by enumerating colocated properties
+                    using (var ae = a.GetEnumerator())
+                    using (var be = b.GetEnumerator())
+                    {
+                        while (ae.MoveNext())
+                        {
+                            if (!be.MoveNext()) return false;
+
+                            var ac = ae.Current;
+                            var bc = be.Current;
+
+                            // Key
+                            if (!StringComparer.Ordinal.Equals(ac.Key, bc.Key)) return false;
+
+                            // Value
+                            if (!EqualsImpl(ac.Value, bc.Value)) return false; // Recurse
+                        }
+
+                        return !be.MoveNext();
+                    }
+                }
+
+                bool PrimitiveEquals(ref JsonPrimitive a, ref JsonPrimitive b)
+                {
+                    if (a is null) return b is null; // (null, null) or (null, y)
+                    if (b is null) return false; // (x, null)
+                    if (ReferenceEquals(a, b)) return true; // (x, x)
+
+                    // JsonType
+                    if (a.JsonType != b.JsonType) return false;
+
+                    // We could also compare the ToString() values here, though that incurs at
+                    // least 1 string alloc, the size of which will depend on the specific primitive.
+                    //
+                    // On the other hand Linq expressions are slower than native code and the
+                    // implementation requires runtime resolution of Equals(obj, obj).
+                    // Might be where the extra allocs are coming from.
+                    //
+                    // TODO: May be worth benchmarking (if not a micro-optimization)
+
+                    // Value
+                    var av = JsonExtensions.GetValueFromPrimitive(a);
+                    var bv = JsonExtensions.GetValueFromPrimitive(b);
+
+                    if (!av.Equals(bv)) return false; // Runtime native Object comparison
+
+                    return true;
+                }
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static int GetHashCodeImpl(JsonValue json)
+                => json == null ? -42 : json.GetHashCode(); // Thanks for the phish
 
             #endregion
         }
