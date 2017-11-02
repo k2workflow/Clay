@@ -296,6 +296,8 @@ namespace SourceCode.Clay.Json
             return clone;
         }
 
+        // Caching frequently-hit typeof's has a small performance boost: https://stackoverflow.com/a/6215840
+
         private static readonly Type typeGuid = typeof(Guid);
         private static readonly Type typeUri = typeof(Uri);
         private static readonly Type typeDateTimeOffset = typeof(DateTimeOffset);
@@ -306,22 +308,34 @@ namespace SourceCode.Clay.Json
         {
             if (x is null) return default;
 
-            // We could roundtrip via ToString() here, though that incurs at
-            // least 1 string alloc, the size of which will depend on the specific type.
-            // For example a JsonArray(n) would incur at least n allocs, while a
-            // JsonPrimitive would incur at least 1.
-            // So instead we walk the tree, cloning each item. Note that ToString()
-            // walks the tree regardless, so we can be sure this is not significantly
-            // more expensive than the latter method.
+            /*
+            We could roundtrip via ToString() here, though that incurs at
+            least 1 string alloc, the size of which will depend on the specific type.
+            For example a JsonArray(n) would incur at least n allocs, while a
+            JsonPrimitive would incur at least 1.
 
-            // Heuristic: Check for most common first
+            So instead we walk the tree, cloning each item. Note that ToString()
+            walks the tree regardless, so we can be sure this is not significantly
+            more expensive than the latter method.
+
+            Benchmarks validate this approach: 2-3x improvement in both time & memory
+            https://github.com/dotnet/corefx/issues/25022
+
+                     Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |     Gen 0 |    Gen 1 |   Gen 2 | Allocated |
+            --------------- |---------:|----------:|----------:|-------:|---------:|----------:|---------:|--------:|----------:|
+              ToStringClone | 29.21 ms | 0.5792 ms | 0.5948 ms |   1.00 |     0.00 | 1562.5000 | 812.5000 | 62.5000 |   9.92 MB |
+            NewtonDeepClone | 19.16 ms | 0.3727 ms | 0.5101 ms |   0.66 |     0.02 | 1218.7500 | 562.5000 | 62.5000 |   7.02 MB |
+                 SmartClone | 10.14 ms | 0.1964 ms | 0.4311 ms |   0.35 |     0.02 |  671.8750 | 312.5000 |       - |   3.94 MB |
+            */
+
+            // Heuristic: We assume primitives are most likely/abundant
             if (x is JsonPrimitive xp)
                 return ClonePrimitive(xp);
 
             if (x is JsonObject xo)
                 return CloneObject(xo);
 
-            // Least common last
+            // Least likely last
             if (x is JsonArray xa)
                 return CloneArray(xa);
 
@@ -378,7 +392,7 @@ namespace SourceCode.Clay.Json
                 // least 1 string alloc, the size of which will depend on the specific primitive.
 
                 // Value
-                var av = GetValueFromPrimitive(a);
+                var av = GetValueFromPrimitive(a); // Might cause extra allocs
                 var type = av.GetType();
                 var typeCode = Type.GetTypeCode(type);
 
