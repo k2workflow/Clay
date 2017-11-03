@@ -5,10 +5,10 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json;
 using System;
 using System.Collections.Generic;
-using System.Json;
 using System.Net.Mail;
 using System.Net.Mime;
 
@@ -27,12 +27,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The type of value in the dictionary.</typeparam>
         /// <param name="dictionary">The dictionary.</param>
         /// <param name="required">A value indicating whether an empty object is required.</param>
-        /// <returns>The <see cref="JsonObject"/> representing the dictionary.</returns>
-        protected virtual JsonObject ToJsonMap<T>(IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
+        /// <returns>The <see cref="JObject"/> representing the dictionary.</returns>
+        protected virtual JObject ToJsonMap<T>(IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
         {
             if (dictionary == null)
             {
-                if (required) return new JsonObject();
+                if (required) return new JObject();
                 return null;
             }
 
@@ -40,11 +40,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
             {
                 if (!e.MoveNext())
                 {
-                    if (required) return new JsonObject();
+                    if (required) return new JObject();
                     return null;
                 }
 
-                var result = new JsonObject();
+                var result = new JObject();
                 do
                 {
                     result.Add(e.Current.Item1, Serialize(e.Current.Item2));
@@ -60,12 +60,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The type of value in the dictionary.</typeparam>
         /// <param name="dictionary">The dictionary.</param>
         /// <param name="required">A value indicating whether an empty object is required.</param>
-        /// <returns>The <see cref="JsonObject"/> representing the dictionary.</returns>
-        protected virtual JsonObject ToJsonMap<T>(IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
+        /// <returns>The <see cref="JObject"/> representing the dictionary.</returns>
+        protected virtual JObject ToJsonMap<T>(IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
         {
             if (dictionary == null)
             {
-                if (required) return new JsonObject();
+                if (required) return new JObject();
                 return null;
             }
 
@@ -73,11 +73,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
             {
                 if (!e.MoveNext())
                 {
-                    if (required) return new JsonObject();
+                    if (required) return new JObject();
                     return null;
                 }
 
-                var result = new JsonObject();
+                var result = new JObject();
                 do
                 {
                     result.Add(e.Current.Key, Serialize(e.Current.Value));
@@ -88,28 +88,28 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <typeparam name="T">The type of value in the dictionary.</typeparam>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="dictionary">The dictionary value.</param>
         /// <param name="required">A value indicating whether an empty object is required.</param>
-        protected virtual void SetJsonMap<T>(JsonObject container, string key, IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
+        protected virtual void SetJsonMap<T>(JObject container, string key, IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
         {
             var result = ToJsonMap(dictionary, required);
             if (result != null) container.Add(key, result);
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <typeparam name="T">The type of value in the dictionary.</typeparam>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="dictionary">The dictionary value.</param>
         /// <param name="required">A value indicating whether an empty object is required.</param>
-        protected virtual void SetJsonMap<T>(JsonObject container, string key, IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
+        protected virtual void SetJsonMap<T>(JObject container, string key, IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
         {
             var result = ToJsonMap(dictionary, required);
             if (result != null) container.Add(key, result);
@@ -121,12 +121,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The type of value in the list.</typeparam>
         /// <param name="list">The type of elements in the list.</param>
         /// <param name="required">A value indicating whether an empty array is required.</param>
-        /// <returns>The <see cref="JsonArray"/> containing the list.</returns>
-        protected virtual JsonArray ToJsonArray<T>(IEnumerable<T> list, bool required = false)
+        /// <returns>The <see cref="JArray"/> containing the list.</returns>
+        protected virtual JArray ToJsonArray<T>(IEnumerable<T> list, bool required = false)
         {
             if (list == null)
             {
-                if (required) return new JsonArray();
+                if (required) return new JArray();
                 return null;
             }
 
@@ -134,11 +134,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
             {
                 if (!e.MoveNext())
                 {
-                    if (required) return new JsonArray();
+                    if (required) return new JArray();
                     return null;
                 }
 
-                var result = new JsonArray();
+                var result = new JArray();
                 do
                 {
                     result.Add(Serialize(e.Current));
@@ -149,21 +149,21 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <typeparam name="T">The type of value in the list.</typeparam>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="list">The list value.</param>
         /// <param name="required">A value indicating whether an empty array is required.</param>
-        protected virtual void SetJsonArray<T>(JsonObject container, string key, IEnumerable<T> list, bool required = false)
+        protected virtual void SetJsonArray<T>(JObject container, string key, IEnumerable<T> list, bool required = false)
         {
             var result = ToJsonArray(list);
             if (result != null) container.Add(key, result);
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <param name="container">The object to set the property on.</param>
@@ -173,7 +173,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="defaultState">The default state of the flag.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
         /// <param name="invert">A value indicating whether to invert the flag check.</param>
-        protected virtual void SetJsonFlag<TEnum>(JsonObject container, string key, TEnum value, TEnum flag, bool defaultState = false, bool required = false, bool invert = false)
+        protected virtual void SetJsonFlag<TEnum>(JObject container, string key, TEnum value, TEnum flag, bool defaultState = false, bool required = false, bool invert = false)
             where TEnum : struct, IComparable, IConvertible, IFormattable
         {
             var v = EnumConvert.ToUInt64(value);
@@ -186,13 +186,13 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonValue(JsonObject container, string key, string value, bool required = false)
+        protected virtual void SetJsonValue(JObject container, string key, string value, bool required = false)
         {
             if (required && value == null)
                 container.Add(key, null);
@@ -201,26 +201,26 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonValue(JsonObject container, string key, JsonValue value, bool required = false)
+        protected virtual void SetJsonValue(JObject container, string key, JToken value, bool required = false)
         {
             if (required || value != null)
                 container.Add(key, value);
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonValue(JsonObject container, string key, Uri value, bool required = false)
+        protected virtual void SetJsonValue(JObject container, string key, Uri value, bool required = false)
         {
             if (value == null && required)
                 container.Add(key, null);
@@ -229,13 +229,13 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonValue(JsonObject container, string key, ContentType value, bool required = false)
+        protected virtual void SetJsonValue(JObject container, string key, ContentType value, bool required = false)
         {
             if (value == null && required)
                 container.Add(key, null);
@@ -244,13 +244,13 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonValue(JsonObject container, string key, MailAddress value, bool required = false)
+        protected virtual void SetJsonValue(JObject container, string key, MailAddress value, bool required = false)
         {
             if (value == null && required)
                 container.Add(key, null);
@@ -259,13 +259,13 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonNumber(JsonObject container, string key, Number? value, bool required = false)
+        protected virtual void SetJsonNumber(JObject container, string key, Number? value, bool required = false)
         {
             if (value.HasValue)
                 container.Add(key, value.Value.ToJson());
@@ -274,18 +274,18 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonObject<T>(JsonObject container, string key, T value, bool required = false)
+        protected virtual void SetJsonObject<T>(JObject container, string key, T value, bool required = false)
         {
             var js = Serialize(value);
             if (js == null)
             {
-                if (required) container.Add(key, new JsonObject());
+                if (required) container.Add(key, new JObject());
                 return;
             }
 
@@ -293,13 +293,13 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Sets a property in the specified <see cref="JsonObject"/>.
+        /// Sets a property in the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="container">The object to set the property on.</param>
         /// <param name="key">The property name in <paramref name="container"/>.</param>
         /// <param name="value">The value.</param>
         /// <param name="required">A value indicating whether the property is required.</param>
-        protected virtual void SetJsonObject<T>(JsonObject container, string key, OasReferable<T> value, bool required = false)
+        protected virtual void SetJsonObject<T>(JObject container, string key, OasReferable<T> value, bool required = false)
             where T : class, IEquatable<T>
         {
             if (!value.HasValue)
@@ -317,11 +317,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Converts the specified <see cref="OasParameterStyle"/> to a <see cref="JsonValue"/>.
+        /// Converts the specified <see cref="OasParameterStyle"/> to a <see cref="JToken"/>.
         /// </summary>
         /// <param name="parameterStyle">The <see cref="OasParameterStyle"/> to convert.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue ToJsonValue(OasParameterStyle parameterStyle)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken ToJsonValue(OasParameterStyle parameterStyle)
         {
             switch (parameterStyle)
             {
@@ -338,11 +338,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Converts the specified <see cref="OasSchemaType"/> to a <see cref="JsonValue"/>.
+        /// Converts the specified <see cref="OasSchemaType"/> to a <see cref="JToken"/>.
         /// </summary>
         /// <param name="schemaType">The <see cref="OasSchemaType"/> to convert.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue ToJsonValue(OasSchemaType schemaType)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken ToJsonValue(OasSchemaType schemaType)
         {
             switch (schemaType)
             {
@@ -357,11 +357,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Converts the specified <see cref="OasParameterLocation"/> to a <see cref="JsonValue"/>.
+        /// Converts the specified <see cref="OasParameterLocation"/> to a <see cref="JToken"/>.
         /// </summary>
         /// <param name="parameterLocation">The <see cref="OasParameterLocation"/> to convert.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue ToJsonValue(OasParameterLocation parameterLocation)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken ToJsonValue(OasParameterLocation parameterLocation)
         {
             switch (parameterLocation)
             {

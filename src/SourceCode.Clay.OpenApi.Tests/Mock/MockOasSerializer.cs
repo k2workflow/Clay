@@ -5,9 +5,9 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.OpenApi.Serialization;
 using System.Globalization;
-using System.Json;
 
 namespace SourceCode.Clay.OpenApi.Tests.Mock
 {
@@ -24,11 +24,11 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
         {
         }
 
-        protected virtual JsonValue SerializeMockOperation(MockOasOperation mockOperation)
+        protected virtual JToken SerializeMockOperation(MockOasOperation mockOperation)
         {
             if (mockOperation is null) return null;
 
-            var json = (JsonObject)SerializeOperation(mockOperation);
+            var json = (JObject)SerializeOperation(mockOperation);
 
             if (mockOperation.OperationId.HasValue)
                 json[GatewayPropertyConstants.OperationId] = mockOperation.OperationId.Value.ToString("x16", CultureInfo.InvariantCulture);

@@ -5,10 +5,10 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
-using System.Json;
 using System.Linq;
 
 namespace SourceCode.Clay.OpenApi.Serialization
@@ -24,12 +24,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasResponse"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasResponse"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeResponse(OasResponse value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeResponse(OasResponse value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             var content = value.Content
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));
@@ -46,12 +46,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasRequestBody"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasRequestBody"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeRequestBody(OasRequestBody value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeRequestBody(OasRequestBody value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             var content = value.Content
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));
@@ -67,12 +67,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasPropertyEncoding"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasPropertyEncoding"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializePropertyEncoding(OasPropertyEncoding value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializePropertyEncoding(OasPropertyEncoding value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.ContentType, value.ContentType);
             SetJsonMap(json, PropertyConstants.Headers, value.Headers);
@@ -87,12 +87,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasPath"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasPath"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializePath(OasPath value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializePath(OasPath value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Summary, value.Summary);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -114,12 +114,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasParameterBody"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasParameterBody"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeParameterBody(OasParameterBody value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeParameterBody(OasParameterBody value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SerializeParameterBody(value, json);
 
@@ -127,11 +127,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
         }
 
         /// <summary>
-        /// Serializes a <see cref="OasParameterBody"/> value into an existing <see cref="JsonObject"/> instance.
+        /// Serializes a <see cref="OasParameterBody"/> value into an existing <see cref="JObject"/> instance.
         /// </summary>
         /// <param name="value">The <see cref="OasParameterBody"/> value to serialize.</param>
-        /// <param name="json">The <see cref="JsonObject"/> to populate.</param>
-        protected virtual void SerializeParameterBody(OasParameterBody value, JsonObject json)
+        /// <param name="json">The <see cref="JObject"/> to populate.</param>
+        protected virtual void SerializeParameterBody(OasParameterBody value, JObject json)
         {
             if (value == null) return;
 
@@ -159,12 +159,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasParameter"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasParameter"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeParameter(OasParameter value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeParameter(OasParameter value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Name, value.Name, true);
             SetJsonValue(json, PropertyConstants.In, ToJsonValue(value.Location));
@@ -178,8 +178,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// </summary>
         /// <param name="key">The <see cref="OasParameterKey"/> component to serialize.</param>
         /// <param name="value">The referable <see cref="OasParameterBody"/> component to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeParameter(OasParameterKey key, OasReferable<OasParameterBody> value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeParameter(OasParameterKey key, OasReferable<OasParameterBody> value)
         {
             if (value.IsReference) return SerializeReferable(value);
             return SerializeParameter(key, value.Value);
@@ -190,12 +190,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// </summary>
         /// <param name="key">The <see cref="OasParameterKey"/> component to serialize.</param>
         /// <param name="value">The <see cref="OasParameterBody"/> component to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeParameter(OasParameterKey key, OasParameterBody value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeParameter(OasParameterKey key, OasParameterBody value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Name, key.Name, true);
             SetJsonValue(json, PropertyConstants.In, ToJsonValue(key.Location));
@@ -208,12 +208,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasOperation"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasOperation"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeOperation(OasOperation value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeOperation(OasOperation value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             var responses = value.Responses
                 .Select(x => ValueTuple.Create(x.Key.ToString(), x.Value));
@@ -238,12 +238,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasOidcSecurityScheme"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasOidcSecurityScheme"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeOpenIdConnectSecurityScheme(OasOidcSecurityScheme value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeOpenIdConnectSecurityScheme(OasOidcSecurityScheme value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Type, EnumConstants.OpenIdConnect);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -256,12 +256,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasOAuthFlow"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasOAuthFlow"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeOAuthFlow(OasOAuthFlow value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeOAuthFlow(OasOAuthFlow value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.AuthorizationUrl, value.AuthorizationUrl, true);
             SetJsonValue(json, PropertyConstants.TokenUrl, value.TokenUrl, true);
@@ -275,17 +275,17 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasOAuth2SecurityScheme"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasOAuth2SecurityScheme"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeOAuth2SecurityScheme(OasOAuth2SecurityScheme value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeOAuth2SecurityScheme(OasOAuth2SecurityScheme value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Type, EnumConstants.OAuth2);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
 
-            var flows = new JsonObject();
+            var flows = new JObject();
 
             SetJsonObject(flows, PropertyConstants.Implicit, value.ImplicitFlow);
             SetJsonObject(flows, PropertyConstants.Password, value.PasswordFlow);
@@ -301,12 +301,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasMediaType"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasMediaType"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeMediaType(OasMediaType value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeMediaType(OasMediaType value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonObject(json, PropertyConstants.Schema, value.Schema);
             SetJsonMap(json, PropertyConstants.Examples, value.Examples);
@@ -319,12 +319,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasLink"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasLink"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeLink(OasLink value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeLink(OasLink value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.OperationRef, SerializeReference(value.OperationReference));
             SetJsonValue(json, PropertyConstants.OperationId, value.OperationIdentifier);
@@ -338,12 +338,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasLicense"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasLicense"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeLicense(OasLicense value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeLicense(OasLicense value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Name, value.Name);
             SetJsonValue(json, PropertyConstants.Url, value.Url);
@@ -355,12 +355,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasInformation"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasInformation"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeInformation(OasInformation value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeInformation(OasInformation value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Title, value.Title);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -376,12 +376,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasHttpSecurityScheme"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasHttpSecurityScheme"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeHttpSecurityScheme(OasHttpSecurityScheme value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeHttpSecurityScheme(OasHttpSecurityScheme value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Type, EnumConstants.Http);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -395,8 +395,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasReference"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasReference"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeReference(OasReference value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeReference(OasReference value)
         {
             if (!value.HasValue) return null;
             return value.ToUri()?.ToString();
@@ -406,14 +406,14 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="IOasReferable"/> value.
         /// </summary>
         /// <param name="value">The <see cref="IOasReferable"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeReferable(IOasReferable value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeReferable(IOasReferable value)
         {
             if (!value.HasValue) return null;
             if (value.IsReference)
             {
                 var reference = Serialize(value.Reference);
-                return new JsonObject()
+                return new JObject()
                 {
                     [PropertyConstants.Reference] = reference
                 };
@@ -425,12 +425,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasContact"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasContact"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeComponents(OasComponents value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeComponents(OasComponents value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonMap(json, PropertyConstants.Schemas, value.Schemas);
             SetJsonMap(json, PropertyConstants.Responses, value.Responses);
@@ -449,12 +449,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasContact"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasContact"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeContact(OasContact value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeContact(OasContact value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Name, value.Name);
             SetJsonValue(json, PropertyConstants.Url, value.Url);
@@ -467,12 +467,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasExternalDocumentation"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasExternalDocumentation"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeExternalDocumentation(OasExternalDocumentation value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeExternalDocumentation(OasExternalDocumentation value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Description, value.Description);
             SetJsonValue(json, PropertyConstants.Url, value.Url, true);
@@ -484,12 +484,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasExample"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasExample"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeExample(OasExample value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeExample(OasExample value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Summary, value.Summary);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -502,12 +502,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasDocument"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasDocument"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeDocument(OasDocument value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeDocument(OasDocument value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.OpenApi, value.Version.ToString());
             SetJsonObject(json, PropertyConstants.Info, value.Info, true);
@@ -525,12 +525,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasCallback"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasCallback"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeCallback(OasCallback value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeCallback(OasCallback value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             foreach (var item in value)
             {
@@ -546,12 +546,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasApiKeySecurityScheme"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasApiKeySecurityScheme"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeApiKeySecurityScheme(OasApiKeySecurityScheme value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeApiKeySecurityScheme(OasApiKeySecurityScheme value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Type, EnumConstants.ApiKey);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -565,12 +565,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasTag"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasTag"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeTag(OasTag value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeTag(OasTag value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Name, value.Name);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -583,12 +583,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasServerVariable"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasServerVariable"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeServerVariable(OasServerVariable value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeServerVariable(OasServerVariable value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonArray(json, PropertyConstants.Enum, value.Enum);
             SetJsonValue(json, PropertyConstants.Default, value.Default);
@@ -601,12 +601,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasServer"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasServer"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeServer(OasServer value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeServer(OasServer value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Url, value.Url);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -619,20 +619,20 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// Serializes a <see cref="OasSecurityScheme"/> value.
         /// </summary>
         /// <param name="value">The <see cref="OasSecurityScheme"/> value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeSecurityScheme(OasSecurityScheme value) =>
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeSecurityScheme(OasSecurityScheme value) =>
             SerializeUnknown(value);
 
         /// <summary>
         /// Serializes a <see cref="OasSchema"/> value.
         /// </summary>
         /// <param name="value">The schema value to serialize.</param>
-        /// <returns>The <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeSchema(OasSchema value)
+        /// <returns>The <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeSchema(OasSchema value)
         {
             if (value is null) return null;
 
-            var json = new JsonObject();
+            var json = new JObject();
 
             SetJsonValue(json, PropertyConstants.Title, value.Title);
             SetJsonValue(json, PropertyConstants.Description, value.Description);
@@ -681,7 +681,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The type of the OpenAPI object.</typeparam>
         /// <param name="value">The instance of the OpenAPI object.</param>
         /// <returns>The serialized value.</returns>
-        public virtual JsonValue Serialize<T>(T value)
+        public virtual JToken Serialize<T>(T value)
         {
             if (ReferenceEquals(value, null)) return null;
 

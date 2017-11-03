@@ -5,8 +5,8 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using System;
-using System.Json;
 
 namespace SourceCode.Clay.OpenApi.Serialization
 {
@@ -31,7 +31,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The expected type of the OpenAPI object.</typeparam>
         /// <param name="value">The JSON value to deserialize.</param>
         /// <returns>The OpenAPI object.</returns>
-        public T Deserialize<T>(JsonValue value)
+        public T Deserialize<T>(JToken value)
         {
             throw new NotImplementedException();
         }

@@ -50,9 +50,6 @@ namespace SourceCode.Clay.Tests
 
             var actual = Number.CreateFromObject(expected);
             Assert.Equal(expected, actual.Value);
-
-            actual = actual.ToJson().ToNumber();
-            Assert.Equal(expected, actual.Value);
         }
 
         [
@@ -77,9 +74,6 @@ namespace SourceCode.Clay.Tests
 
             var actual = Number.CreateFromObject(expected);
             Assert.Equal(expected.ToString(), actual.ToString());
-
-            actual = actual.ToJson().ToNumber();
-            Assert.Equal(expected, actual.Value);
         }
 
         [

@@ -5,10 +5,10 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Json;
 using System.Text;
 
 namespace SourceCode.Clay.Json.Pointers
@@ -189,10 +189,10 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>
         /// Evaluates the current <see cref="JsonPointer"/> against the specified target.
         /// </summary>
-        /// <param name="target">The target <see cref="JsonValue"/>.</param>
+        /// <param name="target">The target <see cref="JToken"/>.</param>
         /// <param name="options">The evaluation options.</param>
         /// <returns>The result of the evaluation.</returns>
-        public JsonValue Evaluate(JsonValue target, JsonPointerEvaluationOptions options = default)
+        public JToken Evaluate(JToken target, JsonPointerEvaluationOptions options = default)
         {
             if (_tokens == null) return target;
 
@@ -200,25 +200,26 @@ namespace SourceCode.Clay.Json.Pointers
             {
                 var token = _tokens[i];
 
-                if (target == null)
+                if (target == null || target.Type == JTokenType.Null)
                 {
                     if (options.HasFlag(JsonPointerEvaluationOptions.NullCoalescing)) return target;
                     throw new InvalidOperationException($"Cannot evaluate the token '{token.Value}' on a null value.");
                 }
 
-                switch (target.JsonType)
+                switch (target.Type)
                 {
-                    case JsonType.String:
-                    case JsonType.Number:
-                    case JsonType.Boolean:
+                    case JTokenType.String:
+                    case JTokenType.Integer:
+                    case JTokenType.Float:
+                    case JTokenType.Boolean:
                         if (options.HasFlag(JsonPointerEvaluationOptions.PrimitiveMembersAndIndiciesAreNull)) target = null;
                         else throw new InvalidOperationException($"Cannot evaluate the token '{token.Value}' against the primitive value {target}.");
 
                         break;
 
-                    case JsonType.Object:
-                        var o = (JsonObject)target;
-                        if (!o.ContainsKey(token.Value))
+                    case JTokenType.Object:
+                        var o = (JObject)target;
+                        if (!o.TryGetValue(token.Value, out _))
                         {
                             if (options.HasFlag(JsonPointerEvaluationOptions.MissingMembersAreNull)) target = null;
                             else throw new InvalidOperationException($"The current evaluated object does not contain the member '{token.Value}'.");
@@ -228,7 +229,7 @@ namespace SourceCode.Clay.Json.Pointers
                         target = o[token.Value];
                         break;
 
-                    case JsonType.Array:
+                    case JTokenType.Array:
                         if (token.Value == "-")
                         {
                             if (options.HasFlag(JsonPointerEvaluationOptions.InvalidIndiciesAreNull)) target = null;
@@ -236,7 +237,7 @@ namespace SourceCode.Clay.Json.Pointers
                             continue;
                         }
 
-                        var a = (JsonArray)target;
+                        var a = (JArray)target;
                         var index = token.ArrayIndex;
                         if (!index.HasValue)
                         {

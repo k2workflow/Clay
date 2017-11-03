@@ -5,9 +5,9 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Pointers;
 using System;
-using System.Json;
 using System.Linq;
 using Xunit;
 
@@ -84,7 +84,7 @@ namespace SourceCode.Clay.Json.Tests
         [Fact(DisplayName = nameof(JsonPointer_Evaluate))]
         public static void JsonPointer_Evaluate()
         {
-            var json = JsonValue.Parse(@"
+            var json = JToken.Parse(@"
             {
                 ""foo"": [""bar"", ""baz""],
                 """": 0,
@@ -102,7 +102,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(json, result);
 
             result = JsonPointer.Parse("/foo").Evaluate(json);
-            Assert.Equal(new[] { "bar", "baz" }, ((JsonArray)result).Select(x => (string)x).ToArray());
+            Assert.Equal(new[] { "bar", "baz" }, ((JArray)result).Select(x => (string)x).ToArray());
 
             result = JsonPointer.Parse("/foo/0").Evaluate(json);
             Assert.Equal("bar", result);
@@ -138,7 +138,7 @@ namespace SourceCode.Clay.Json.Tests
         [Fact(DisplayName = nameof(JsonPointer_Evaluate_Errors))]
         public static void JsonPointer_Evaluate_Errors()
         {
-            var json = JsonValue.Parse(@"
+            var json = JToken.Parse(@"
             {
                 ""foo1"": 123,
                 ""foo2"": true,
