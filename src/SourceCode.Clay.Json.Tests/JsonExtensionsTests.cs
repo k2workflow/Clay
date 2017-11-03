@@ -103,7 +103,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.True(json.TryGetValue("bool", JTokenType.Boolean, false, out var jv) && (bool)jv);
 
             Assert.True(json["int"].Type == JTokenType.Integer);
-            Assert.True(json.TryGetValue("int", JTokenType.Integer, false, out jv) && jv.Value<int>() == 123);
+            Assert.True(json.TryGetValue("int", JTokenType.Integer, false, out jv) && jv.Value<long>() == 123);
 
             Assert.True(json["string"].Type == JTokenType.String);
             Assert.True(json.TryGetValue("string", JTokenType.String, false, out jv) && jv.Value<string>() == "hello");
@@ -150,8 +150,8 @@ namespace SourceCode.Clay.Json.Tests
 
             Assert.True(json["int"].Type == JTokenType.Integer);
             Assert.True(json.GetValue("int", JTokenType.Integer, false).Type == JTokenType.Integer);
-            Assert.True(json.TryGetValue("int", out jv) && jv.Value<int>() == 123);
-            Assert.True(json.TryGetValue("int", JTokenType.Integer, false, out jv) && jv.Value<int>() == 123);
+            Assert.True(json.TryGetValue("int", out jv) && jv.Value<long>() == 123);
+            Assert.True(json.TryGetValue("int", JTokenType.Integer, false, out jv) && jv.Value<long>() == 123);
 
             Assert.True(json["string"].Type == JTokenType.String);
             Assert.True(json.GetValue("string", JTokenType.String, false).Type == JTokenType.String);

@@ -219,14 +219,13 @@ namespace SourceCode.Clay.Json.Pointers
 
                     case JTokenType.Object:
                         var o = (JObject)target;
-                        if (!o.TryGetValue(token.Value, out _))
+                        if (!o.TryGetValue(token.Value, out target))
                         {
                             if (options.HasFlag(JsonPointerEvaluationOptions.MissingMembersAreNull)) target = null;
                             else throw new InvalidOperationException($"The current evaluated object does not contain the member '{token.Value}'.");
                             continue;
                         }
 
-                        target = o[token.Value];
                         break;
 
                     case JTokenType.Array:

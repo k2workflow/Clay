@@ -6,6 +6,7 @@
 #endregion
 
 using Newtonsoft.Json.Linq;
+using SourceCode.Clay.Json;
 using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using SourceCode.Clay.OpenApi.Tests.Mock;
@@ -820,7 +821,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
             #endregion
 
-            Assert.Equal(expectedJson.ToString(), actualJson.ToString());
+            Assert.Equal(expectedJson, actualJson, JObjectComparer.Default);
         }
 
         #endregion

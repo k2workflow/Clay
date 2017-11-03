@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Json
 
             if (value.Type == JTokenType.Integer)
             {
-                var val = value.Value<int>();
+                var val = value.Value<long>();
                 var number = new Number(val);
                 return number;
             }
