@@ -5,7 +5,7 @@
 
 #endregion
 
-using System.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SourceCode.Clay.OpenApi.Serialization
 {
@@ -22,7 +22,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The type of the OpenAPI object.</typeparam>
         /// <param name="value">The instance of the OpenAPI object.</param>
         /// <returns>The serialized value.</returns>
-        JsonValue Serialize<T>(T value);
+        JToken Serialize<T>(T value);
 
         /// <summary>
         /// Deserializes the specified OpenAPI object from a JSON value.
@@ -30,7 +30,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <typeparam name="T">The expected type of the OpenAPI object.</typeparam>
         /// <param name="value">The JSON value to deserialize.</param>
         /// <returns>The OpenAPI object.</returns>
-        T Deserialize<T>(JsonValue value);
+        T Deserialize<T>(JToken value);
 
         #endregion
     }

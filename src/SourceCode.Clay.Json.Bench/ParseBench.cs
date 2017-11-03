@@ -9,7 +9,8 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
-using System.Json;
+
+//using System.Json;
 
 namespace SourceCode.Clay.Json.Bench
 {
@@ -49,19 +50,19 @@ namespace SourceCode.Clay.Json.Bench
             return total;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
-        public long JsonValueParse()
-        {
-            var total = 0L;
-            for (var j = 0; j < InvokeCount; j++)
-            {
-                var json = JsonValue.Parse(_str);
+        //[Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
+        //public long JsonValueParse()
+        //{
+        //    var total = 0L;
+        //    for (var j = 0; j < InvokeCount; j++)
+        //    {
+        //        var json = JsonValue.Parse(_str);
 
-                total += json.Count;
-            }
+        //        total += json.Count;
+        //    }
 
-            return total;
-        }
+        //    return total;
+        //}
 
         #endregion
     }

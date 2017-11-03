@@ -9,7 +9,8 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
-using System.Json;
+
+//using System.Json;
 
 namespace SourceCode.Clay.Json.Bench
 {
@@ -20,7 +21,7 @@ namespace SourceCode.Clay.Json.Bench
 
         private const int InvokeCount = 1;
 
-        private readonly JsonObject _json;
+        //private readonly JsonObject _json;
         private readonly JObject _newton;
 
         #endregion
@@ -31,7 +32,7 @@ namespace SourceCode.Clay.Json.Bench
         {
             var str = Resources.AdventureWorks;
 
-            _json = (JsonObject)JsonValue.Parse(str);
+            //_json = (JsonObject)JsonValue.Parse(str);
             _newton = JObject.Parse(str);
         }
 
@@ -53,19 +54,19 @@ namespace SourceCode.Clay.Json.Bench
             return total;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
-        public long JsonValueToString()
-        {
-            var total = 0L;
-            for (var j = 0; j < InvokeCount; j++)
-            {
-                var str = _json.ToString();
+        //[Benchmark(Baseline = false, OperationsPerInvoke = InvokeCount)]
+        //public long JsonValueToString()
+        //{
+        //    var total = 0L;
+        //    for (var j = 0; j < InvokeCount; j++)
+        //    {
+        //        var str = _json.ToString();
 
-                total += str.Length;
-            }
+        //        total += str.Length;
+        //    }
 
-            return total;
-        }
+        //    return total;
+        //}
 
         #endregion
     }

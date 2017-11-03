@@ -5,13 +5,14 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
+using SourceCode.Clay.Json;
 using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using SourceCode.Clay.OpenApi.Tests.Mock;
 using System;
 using System.CodeDom.Compiler;
 using System.IO;
-using System.Json;
 using System.Net.Mail;
 using System.Net.Mime;
 using Xunit;
@@ -26,7 +27,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
 #if DEBUG
 
-        private static string GenerateExpectedCode(JsonValue value)
+        private static string GenerateExpectedCode(JToken value)
         {
             using (var sw = new StringWriter())
             using (var iw = new IndentedTextWriter(sw))
@@ -36,23 +37,23 @@ namespace SourceCode.Clay.OpenApi.Tests
             }
         }
 
-        private static void GenerateExpectedCode(JsonValue value, IndentedTextWriter writer)
+        private static void GenerateExpectedCode(JToken value, IndentedTextWriter writer)
         {
             if (value == null)
             {
                 writer.Write("null");
             }
-            else if (value is JsonPrimitive)
+            else if (value is JValue)
             {
                 writer.Write(value.ToString());
             }
-            else if (value is JsonArray a)
+            else if (value is JArray a)
             {
                 if (a.Count == 0)
-                    writer.Write("new JsonArray()");
+                    writer.Write("new JArray()");
                 else
                 {
-                    writer.WriteLine("new JsonArray() {");
+                    writer.WriteLine("new JArray() {");
                     writer.Indent++;
 
                     for (var i = 0; i < a.Count; i++)
@@ -66,13 +67,13 @@ namespace SourceCode.Clay.OpenApi.Tests
                     writer.Write("}");
                 }
             }
-            else if (value is JsonObject o)
+            else if (value is JObject o)
             {
                 if (o.Count == 0)
-                    writer.Write("new JsonObject()");
+                    writer.Write("new JObject()");
                 else
                 {
-                    writer.WriteLine("new JsonObject() {");
+                    writer.WriteLine("new JObject() {");
                     writer.Indent++;
 
                     var first = true;
@@ -426,47 +427,47 @@ namespace SourceCode.Clay.OpenApi.Tests
 
             #region JSON
 
-            var expectedJson = new JsonObject()
+            var expectedJson = new JObject()
             {
-                ["components"] = new JsonObject()
+                ["components"] = new JObject()
                 {
-                    ["callbacks"] = new JsonObject()
+                    ["callbacks"] = new JObject()
                     {
-                        ["callback1"] = new JsonObject()
+                        ["callback1"] = new JObject()
                         {
-                            ["http://foo{$statusCode}"] = new JsonObject()
+                            ["http://foo{$statusCode}"] = new JObject()
                             {
-                                ["delete"] = new JsonObject()
+                                ["delete"] = new JObject()
                                 {
-                                    ["callbacks"] = new JsonObject()
+                                    ["callbacks"] = new JObject()
                                     {
-                                        ["callback1"] = new JsonObject()
+                                        ["callback1"] = new JObject()
                                         {
                                             ["$ref"] = "#/components/callbacks/callback1"
                                         }
                                     },
                                     ["deprecated"] = true,
                                     ["description"] = "Delete operation",
-                                    ["externalDocs"] = new JsonObject()
+                                    ["externalDocs"] = new JObject()
                                     {
                                         ["description"] = "External docs 1",
                                         ["url"] = "http://example.org/"
                                     },
                                     ["operationId"] = "Operation 1",
-                                    ["parameters"] = new JsonArray()
+                                    ["parameters"] = new JArray()
                                     {
-                                        new JsonObject()
+                                        new JObject()
                                         {
                                             [ "$ref" ] = "#/components/parameters/parameter1"
                                         }
                                     },
-                                    ["requestBody"] = new JsonObject()
+                                    ["requestBody"] = new JObject()
                                     {
                                         ["$ref"] = "#/components/requestBodies/requestBody1"
                                     },
-                                    ["responses"] = new JsonObject()
+                                    ["responses"] = new JObject()
                                     {
-                                        ["default"] = new JsonObject()
+                                        ["default"] = new JObject()
                                         {
                                             ["$ref"] = "#/components/responses/response1"
                                         }
@@ -475,72 +476,72 @@ namespace SourceCode.Clay.OpenApi.Tests
                                     ["x-k2-operation-id"] = "0000000000000001"
                                 },
                                 ["description"] = "path1",
-                                ["get"] = new JsonObject()
+                                ["get"] = new JObject()
                                 {
                                     ["description"] = "Get"
                                 },
-                                ["head"] = new JsonObject()
+                                ["head"] = new JObject()
                                 {
                                     ["description"] = "Head"
                                 },
-                                ["options"] = new JsonObject()
+                                ["options"] = new JObject()
                                 {
                                     ["description"] = "Options"
                                 },
-                                ["parameters"] = new JsonArray()
+                                ["parameters"] = new JArray()
                                 {
-                                    new JsonObject()
+                                    new JObject()
                                     {
                                         [ "$ref" ] = "#/components/parameters/parameter1"
                                     }
                                 },
-                                ["patch"] = new JsonObject()
+                                ["patch"] = new JObject()
                                 {
                                     ["description"] = "Patch"
                                 },
-                                ["post"] = new JsonObject()
+                                ["post"] = new JObject()
                                 {
                                     ["description"] = "Post"
                                 },
-                                ["put"] = new JsonObject()
+                                ["put"] = new JObject()
                                 {
                                     ["description"] = "Put"
                                 },
                                 ["summary"] = "Summary",
-                                ["trace"] = new JsonObject()
+                                ["trace"] = new JObject()
                                 {
                                     ["description"] = "Trace"
                                 }
                             }
                         }
                     },
-                    ["examples"] = new JsonObject()
+                    ["examples"] = new JObject()
                     {
-                        ["example1"] = new JsonObject()
+                        ["example1"] = new JObject()
                         {
                             ["description"] = "Description",
                             ["externalValue"] = "http://example.org/example",
                             ["summary"] = "Summary"
                         }
                     },
-                    ["headers"] = new JsonObject()
+                    ["headers"] = new JObject()
                     {
-                        ["header1"] = new JsonObject()
+                        ["header1"] = new JObject()
                         {
-                            ["content"] = new JsonObject()
+                            ["content"] = new JObject()
                             {
-                                ["application/json"] = new JsonObject()
+                                ["application/json"] = new JObject()
                                 {
-                                    ["encoding"] = new JsonObject()
+                                    ["encoding"] = new JObject()
                                     {
-                                        ["header1"] = new JsonObject()
+                                        ["header1"] = new JObject()
                                         {
                                             ["allowReserved"] = true,
                                             ["contentType"] = "application/json",
                                             ["explode"] = true,
-                                            ["headers"] = new JsonObject()
+                                            ["headers"] = new JObject()
                                             {
-                                                ["header1"] = new JsonObject()
+                                                ["header1"] = new JObject()
                                                 {
                                                     ["$ref"] = "#/components/headers/header1"
                                                 }
@@ -548,14 +549,14 @@ namespace SourceCode.Clay.OpenApi.Tests
                                             ["style"] = "deepObject"
                                         }
                                     },
-                                    ["examples"] = new JsonObject()
+                                    ["examples"] = new JObject()
                                     {
-                                        ["Main Example"] = new JsonObject()
+                                        ["Main Example"] = new JObject()
                                         {
                                             ["$ref"] = "#/components/examples/example1"
                                         }
                                     },
-                                    ["schema"] = new JsonObject()
+                                    ["schema"] = new JObject()
                                     {
                                         ["$ref"] = "#/components/schemas/schema1"
                                     }
@@ -563,24 +564,24 @@ namespace SourceCode.Clay.OpenApi.Tests
                             }
                         }
                     },
-                    ["links"] = new JsonObject()
+                    ["links"] = new JObject()
                     {
-                        ["link1"] = new JsonObject()
+                        ["link1"] = new JObject()
                         {
                             ["description"] = "Description",
                             ["operationId"] = "operation1",
                             ["operationRef"] = "http://example.org/#/operation1",
-                            ["server"] = new JsonObject()
+                            ["server"] = new JObject()
                             {
                                 ["description"] = "Description",
                                 ["url"] = "http://example.org/",
-                                ["variables"] = new JsonObject()
+                                ["variables"] = new JObject()
                                 {
-                                    ["variable1"] = new JsonObject()
+                                    ["variable1"] = new JObject()
                                     {
                                         ["default"] = "Value",
                                         ["description"] = "Description",
-                                        ["enum"] = new JsonArray()
+                                        ["enum"] = new JArray()
                                         {
                                             "Value",
                                             "Value1"
@@ -590,17 +591,17 @@ namespace SourceCode.Clay.OpenApi.Tests
                             }
                         }
                     },
-                    ["parameters"] = new JsonObject()
+                    ["parameters"] = new JObject()
                     {
-                        ["parameter1"] = new JsonObject()
+                        ["parameter1"] = new JObject()
                         {
                             ["allowEmptyValue"] = true,
                             ["allowReserved"] = true,
-                            ["content"] = new JsonObject()
+                            ["content"] = new JObject()
                             {
-                                ["application/json"] = new JsonObject()
+                                ["application/json"] = new JObject()
                                 {
-                                    ["schema"] = new JsonObject()
+                                    ["schema"] = new JObject()
                                     {
                                         ["$ref"] = "#/components/schemas/schema1"
                                     }
@@ -608,9 +609,9 @@ namespace SourceCode.Clay.OpenApi.Tests
                             },
                             ["deprecated"] = true,
                             ["description"] = "Description",
-                            ["examples"] = new JsonObject()
+                            ["examples"] = new JObject()
                             {
-                                ["application/json"] = new JsonObject()
+                                ["application/json"] = new JObject()
                                 {
                                     ["$ref"] = "#/components/examples/example1"
                                 }
@@ -619,22 +620,22 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["in"] = "header",
                             ["name"] = "parameter1",
                             ["required"] = true,
-                            ["schema"] = new JsonObject()
+                            ["schema"] = new JObject()
                             {
                                 ["$ref"] = "#/components/schemas/schema1"
                             },
                             ["style"] = "matrix"
                         }
                     },
-                    ["requestBodies"] = new JsonObject()
+                    ["requestBodies"] = new JObject()
                     {
-                        ["requestbody1"] = new JsonObject()
+                        ["requestbody1"] = new JObject()
                         {
-                            ["content"] = new JsonObject()
+                            ["content"] = new JObject()
                             {
-                                ["application/json"] = new JsonObject()
+                                ["application/json"] = new JObject()
                                 {
-                                    ["schema"] = new JsonObject()
+                                    ["schema"] = new JObject()
                                     {
                                         ["$ref"] = "#/components/schemas/schema1"
                                     }
@@ -644,44 +645,44 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["required"] = true
                         }
                     },
-                    ["responses"] = new JsonObject()
+                    ["responses"] = new JObject()
                     {
-                        ["response1"] = new JsonObject()
+                        ["response1"] = new JObject()
                         {
-                            ["content"] = new JsonObject()
+                            ["content"] = new JObject()
                             {
-                                ["application/json"] = new JsonObject()
+                                ["application/json"] = new JObject()
                                 {
-                                    ["schema"] = new JsonObject()
+                                    ["schema"] = new JObject()
                                     {
                                         ["$ref"] = "#/components/schemas/schema1"
                                     }
                                 }
                             },
                             ["description"] = "Description",
-                            ["headers"] = new JsonObject()
+                            ["headers"] = new JObject()
                             {
-                                ["header1"] = new JsonObject()
+                                ["header1"] = new JObject()
                                 {
                                     ["$ref"] = "#/components/headers/header1"
                                 }
                             },
-                            ["links"] = new JsonObject()
+                            ["links"] = new JObject()
                             {
-                                ["link1"] = new JsonObject()
+                                ["link1"] = new JObject()
                                 {
                                     ["$ref"] = "#/components/links/link1"
                                 }
                             }
                         }
                     },
-                    ["schemas"] = new JsonObject()
+                    ["schemas"] = new JObject()
                     {
-                        ["schema1"] = new JsonObject()
+                        ["schema1"] = new JObject()
                         {
-                            ["additionalProperties"] = new JsonObject()
+                            ["additionalProperties"] = new JObject()
                             {
-                                ["prop1"] = new JsonObject()
+                                ["prop1"] = new JObject()
                                 {
                                     ["$ref"] = "#/components/schemas/schema1"
                                 }
@@ -690,13 +691,13 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["description"] = "Description",
                             ["exclusiveMaximum"] = true,
                             ["exclusiveMinimum"] = true,
-                            ["externalDocs"] = new JsonObject()
+                            ["externalDocs"] = new JObject()
                             {
                                 ["description"] = "Description",
                                 ["url"] = "http://example.org/docs"
                             },
                             ["format"] = "Format",
-                            ["items"] = new JsonObject()
+                            ["items"] = new JObject()
                             {
                                 ["$ref"] = "#/components/schemas/schema1"
                             },
@@ -708,9 +709,9 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["minimum"] = 300,
                             ["nullable"] = true,
                             ["pattern"] = "[a-z]",
-                            ["properties"] = new JsonObject()
+                            ["properties"] = new JObject()
                             {
-                                ["prop1"] = new JsonObject()
+                                ["prop1"] = new JObject()
                                 {
                                     ["$ref"] = "#/components/schemas/schema1"
                                 }
@@ -721,54 +722,54 @@ namespace SourceCode.Clay.OpenApi.Tests
                             ["uniqueItems"] = true
                         }
                     },
-                    ["securitySchemes"] = new JsonObject()
+                    ["securitySchemes"] = new JObject()
                     {
-                        ["sec1"] = new JsonObject()
+                        ["sec1"] = new JObject()
                         {
                             ["bearerFormat"] = "Bearer",
                             ["description"] = "Description",
                             ["scheme"] = "Schema",
                             ["type"] = "http"
                         },
-                        ["sec2"] = new JsonObject()
+                        ["sec2"] = new JObject()
                         {
                             ["description"] = "Description",
                             ["in"] = "cookie",
                             ["name"] = "Name",
                             ["type"] = "apiKey"
                         },
-                        ["sec3"] = new JsonObject()
+                        ["sec3"] = new JObject()
                         {
                             ["description"] = "Description",
                             ["openIdConnectUrl"] = "http://example.org/openid",
                             ["type"] = "openIdConnect"
                         },
-                        ["sec4"] = new JsonObject()
+                        ["sec4"] = new JObject()
                         {
                             ["description"] = "Description",
-                            ["flows"] = new JsonObject()
+                            ["flows"] = new JObject()
                             {
-                                ["authorizationCode"] = new JsonObject()
+                                ["authorizationCode"] = new JObject()
                                 {
                                     ["authorizationUrl"] = "http://example.org/auth/auth",
                                     ["refreshUrl"] = "http://example.org/auth/refresh",
-                                    ["scopes"] = new JsonObject()
+                                    ["scopes"] = new JObject()
                                     {
                                         ["user:details"] = "Get the user details"
                                     },
                                     ["tokenUrl"] = "http://example.org/auth/token"
                                 },
-                                ["clientCredentials"] = new JsonObject()
+                                ["clientCredentials"] = new JObject()
                                 {
                                     ["authorizationUrl"] = "http://example.org/cli/auth",
                                     ["tokenUrl"] = null
                                 },
-                                ["implicit"] = new JsonObject()
+                                ["implicit"] = new JObject()
                                 {
                                     ["authorizationUrl"] = "http://example.org/imp/auth",
                                     ["tokenUrl"] = null
                                 },
-                                ["password"] = new JsonObject()
+                                ["password"] = new JObject()
                                 {
                                     ["authorizationUrl"] = "http://example.org/pwd/auth",
                                     ["tokenUrl"] = null
@@ -778,21 +779,21 @@ namespace SourceCode.Clay.OpenApi.Tests
                         }
                     }
                 },
-                ["externalDocs"] = new JsonObject()
+                ["externalDocs"] = new JObject()
                 {
                     ["description"] = "Description",
                     ["url"] = "http://example.org/docs"
                 },
-                ["info"] = new JsonObject()
+                ["info"] = new JObject()
                 {
-                    ["contact"] = new JsonObject()
+                    ["contact"] = new JObject()
                     {
                         ["email"] = "jonathan@example.org",
                         ["name"] = "Jonathan",
                         ["url"] = "http://example.org/jonathan"
                     },
                     ["description"] = "Description",
-                    ["license"] = new JsonObject()
+                    ["license"] = new JObject()
                     {
                         ["name"] = "MIT",
                         ["url"] = "https://opensource.org/licenses/MIT"
@@ -802,16 +803,16 @@ namespace SourceCode.Clay.OpenApi.Tests
                     ["version"] = "1.2.3-pre1+build1"
                 },
                 ["openapi"] = "3.0.1",
-                ["paths"] = new JsonObject()
+                ["paths"] = new JObject()
                 {
-                    ["path1"] = new JsonObject()
+                    ["path1"] = new JObject()
                     {
                         ["description"] = "Description"
                     }
                 },
-                ["security"] = new JsonArray()
+                ["security"] = new JArray()
                 {
-                    new JsonObject()
+                    new JObject()
                     {
                         [ "$ref" ] = "#/components/security/sec1"
                     }
@@ -820,7 +821,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
             #endregion
 
-            Assert.Equal(expectedJson.ToString(), actualJson.ToString());
+            Assert.Equal(expectedJson, actualJson, JObjectComparer.Default);
         }
 
         #endregion

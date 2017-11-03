@@ -5,9 +5,9 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Json;
 
 namespace SourceCode.Clay.Json
 {
@@ -16,12 +16,12 @@ namespace SourceCode.Clay.Json
     /// <summary>
     /// A readonly version of <see cref="JsonObject"/>.
     /// </summary>
-    public sealed class ReadOnlyJsonObject : IReadOnlyDictionary<string, JsonValue>
+    public sealed class ReadOnlyJObject : IReadOnlyDictionary<string, JToken>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
     {
         #region Fields
 
-        internal readonly JsonObject _json; // Extension methods need direct access to this field
+        internal readonly JObject _json; // Extension methods need direct access to this field
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Json
         public int Count => _json.Count;
 
         /// <inheritdoc/>
-        public JsonValue this[string key]
+        public JToken this[string key]
         {
             get
             {
@@ -39,7 +39,7 @@ namespace SourceCode.Clay.Json
 
                 // Clone to avoid call-site mutation post-facto
                 if (json != null)
-                    json = json.Clone();
+                    json = json.DeepClone();
 
                 return json;
             }
@@ -49,9 +49,27 @@ namespace SourceCode.Clay.Json
 
         #region Constructors
 
-        public ReadOnlyJsonObject(params KeyValuePair<string, JsonValue>[] items)
+        public ReadOnlyJObject(JObject source)
         {
-            _json = new JsonObject();
+            _json = new JObject();
+
+            if (source == null) return;
+
+            foreach (var item in source)
+            {
+                var value = item.Value;
+
+                // Clone to avoid call-site mutation post-facto
+                if (value != null)
+                    value = value.DeepClone();
+
+                _json.Add(item.Key, value);
+            }
+        }
+
+        public ReadOnlyJObject(params KeyValuePair<string, JToken>[] items)
+        {
+            _json = new JObject();
 
             if (items == null) return;
 
@@ -61,15 +79,15 @@ namespace SourceCode.Clay.Json
 
                 // Clone to avoid call-site mutation post-facto
                 if (value != null)
-                    value = value.Clone();
+                    value = value.DeepClone();
 
                 _json.Add(items[i].Key, value);
             }
         }
 
-        public ReadOnlyJsonObject(IEnumerable<KeyValuePair<string, JsonValue>> items)
+        public ReadOnlyJObject(IEnumerable<KeyValuePair<string, JToken>> items)
         {
-            _json = new JsonObject();
+            _json = new JObject();
 
             if (items == null) return;
 
@@ -79,7 +97,7 @@ namespace SourceCode.Clay.Json
 
                 // Clone to avoid call-site mutation post-facto
                 if (value != null)
-                    value = value.Clone();
+                    value = value.DeepClone();
 
                 _json.Add(kvp.Key, value);
             }
@@ -90,10 +108,10 @@ namespace SourceCode.Clay.Json
         #region IReadOnlyDictionary
 
         /// <inheritdoc/>
-        public bool ContainsKey(string key) => _json.ContainsKey(key);
+        bool IReadOnlyDictionary<string, JToken>.ContainsKey(string key) => ((IDictionary<string, JToken>)_json).ContainsKey(key);
 
         /// <inheritdoc/>
-        public bool TryGetValue(string key, out JsonValue value)
+        public bool TryGetValue(string key, out JToken value)
         {
             value = null;
 
@@ -102,9 +120,8 @@ namespace SourceCode.Clay.Json
 
             // Clone to avoid call-site mutation post-facto
             if (json != null)
-                json = json.Clone();
+                value = json.DeepClone();
 
-            value = json;
             return true;
         }
 
@@ -112,48 +129,42 @@ namespace SourceCode.Clay.Json
 
         #region Methods
 
+        public ReadOnlyJObject DeepClone()
+        {
+            var json = (JObject)_json.DeepClone(); // Source is known to be a JObject
+            var clone = new ReadOnlyJObject(json);
+            return clone;
+        }
+
         /// <summary>
-        /// Make a copy of the <see cref="ReadOnlyJsonObject"/> as a <see cref="JsonObject"/>.
+        /// Make a copy of the <see cref="ReadOnlyJObject"/> as a <see cref="JObject"/>.
         /// </summary>
         /// <returns></returns>
-        public JsonObject ToJsonObject() => (JsonObject)_json.Clone(); // Source is known to be a JsonObject
+        public JObject ToJObject() => (JObject)_json.DeepClone(); // Source is known to be a JObject
 
         #endregion
 
         #region IEnumerable
 
         /// <inheritdoc/>
-        public IEnumerable<string> Keys => _json.Keys;
+        IEnumerable<string> IReadOnlyDictionary<string, JToken>.Keys => ((IDictionary<string, JToken>)_json).Keys;
 
         /// <inheritdoc/>
-        public IEnumerable<JsonValue> Values
-        {
-            get
-            {
-                // Clone to avoid call-site mutation post-facto
-                foreach (var item in _json)
-                    yield return item.Value.Clone();
-            }
-        }
+        IEnumerable<JToken> IReadOnlyDictionary<string, JToken>.Values => ((IDictionary<string, JToken>)_json).Values;
 
         /// <inheritdoc/>
-        public IEnumerator<KeyValuePair<string, JsonValue>> GetEnumerator()
-        {
-            // Clone to avoid call-site mutation post-facto
-            foreach (var item in _json)
-                yield return new KeyValuePair<string, JsonValue>(item.Key, item.Value.Clone());
-        }
+        IEnumerator<KeyValuePair<string, JToken>> IEnumerable<KeyValuePair<string, JToken>>.GetEnumerator() => _json.GetEnumerator();
 
         /// <inheritdoc/>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _json.GetEnumerator();
 
         #endregion
 
         #region Equals
 
         public override bool Equals(object obj)
-            => obj is ReadOnlyJsonObject other
-            && JsonValueComparer.Default.Equals(this, other);
+            => obj is ReadOnlyJObject other
+            && _json.Equals(other._json);
 
         public override int GetHashCode() => _json.GetHashCode();
 

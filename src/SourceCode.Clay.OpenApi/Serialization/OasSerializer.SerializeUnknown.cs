@@ -5,9 +5,9 @@
 
 #endregion
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
-using System.Json;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
             {
                 _serializerType = serializerType;
                 _methods = serializerType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(x => !x.IsAbstract && !x.IsGenericMethod && x.ReturnType == typeof(JsonValue) && x.GetParameters().Length == 1)
+                    .Where(x => !x.IsAbstract && !x.IsGenericMethod && x.ReturnType == typeof(JToken) && x.GetParameters().Length == 1)
                     .ToArray();
             }
 
@@ -108,7 +108,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 if (method == default)
                 {
                     instType = Type.GetTypeFromHandle(key.InstanceType);
-                    return new Func<OasSerializer, T, JsonValue>(
+                    return new Func<OasSerializer, T, JToken>(
                         (x, y) => throw new NotSupportedException($"Serializing the type {instType.FullName} is not supported."));
                 }
 
@@ -123,14 +123,14 @@ namespace SourceCode.Clay.OpenApi.Serialization
                     ? (Expression)param
                     : Expression.Convert(param, instType);
                 var call = Expression.Call(ser, method, conv);
-                return Expression.Lambda<Func<OasSerializer, T, JsonValue>>(call, serParam, param).Compile();
+                return Expression.Lambda<Func<OasSerializer, T, JToken>>(call, serParam, param).Compile();
             }
 
-            public JsonValue Serialize<T>(OasSerializer serializer, T value)
+            public JToken Serialize<T>(OasSerializer serializer, T value)
             {
                 var key = new SerializerKey(typeof(T).TypeHandle, value.GetType().TypeHandle);
                 var del = _delegates.GetOrAdd(key, CreateSerializer<T>);
-                return ((Func<OasSerializer, T, JsonValue>)del)(serializer, value);
+                return ((Func<OasSerializer, T, JToken>)del)(serializer, value);
             }
 
             #endregion
@@ -145,8 +145,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// </summary>
         /// <typeparam name="T">The type of the object. This may not reflect the exact object type.</typeparam>
         /// <param name="value">The object value.</param>
-        /// <returns>The serialized <see cref="JsonValue"/>.</returns>
-        protected virtual JsonValue SerializeUnknown<T>(T value)
+        /// <returns>The serialized <see cref="JToken"/>.</returns>
+        protected virtual JToken SerializeUnknown<T>(T value)
         {
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
             // Null is significant in JSON.
