@@ -9,6 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="JsonExtensionsTests.cs" />
+    <Compile Remove="JsonPointerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="JsonPointerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="JsonExtensionsTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0-preview-20171031-01" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="xunit" Version="2.3.1" />
