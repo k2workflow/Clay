@@ -7,11 +7,11 @@
 
 namespace SourceCode.Clay.Json
 {
-    public static partial class JsonConstants
+    public static class JsonConstants
     {
         #region Constants
 
-        public const string JsonNull = "null";
+        public const string Null = "null";
 
         #endregion
     }
