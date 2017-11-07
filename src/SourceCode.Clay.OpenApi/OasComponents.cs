@@ -158,17 +158,22 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .TallyCount(Schemas)
-            .TallyCount(Responses)
-            .TallyCount(Parameters)
-            .TallyCount(Examples)
-            .TallyCount(RequestBodies)
-            .TallyCount(Headers)
-            .TallyCount(SecuritySchemes)
-            .TallyCount(Links)
-            .TallyCount(Callbacks)
-            .ToHashCode();
+        public override int GetHashCode()
+        {
+            var hc = new HashCode();
+
+            hc.Add(Schemas.Count);
+            hc.Add(Responses.Count);
+            hc.Add(Parameters.Count);
+            hc.Add(Examples.Count);
+            hc.Add(RequestBodies.Count);
+            hc.Add(Headers.Count);
+            hc.Add(SecuritySchemes.Count);
+            hc.Add(Links.Count);
+            hc.Add(Callbacks.Count);
+
+            return hc.ToHashCode();
+        }
 
         #endregion
     }

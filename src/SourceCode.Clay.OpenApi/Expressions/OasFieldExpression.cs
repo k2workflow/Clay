@@ -269,13 +269,13 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(base.GetHashCode())
-            .Tally(ExpressionType)
-            .Tally(ExpressionSource)
-            .Tally(Name ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Pointer)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            base.GetHashCode(),
+            ExpressionType,
+            ExpressionSource,
+            StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
+            Pointer
+        );
 
         #endregion
 

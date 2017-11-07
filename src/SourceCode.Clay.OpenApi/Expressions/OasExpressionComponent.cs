@@ -68,7 +68,9 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode().Tally(ComponentType).ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            ComponentType
+        );
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>

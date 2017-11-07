@@ -258,27 +258,32 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(JsonType)
-            .Tally(Options)
-            .Tally(NumberRange)
-            .Tally(ItemsRange)
-            .Tally(LengthRange)
-            .Tally(PropertiesRange)
-            .Tally(ExternalDocumentation)
-            .Tally(Title ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Format ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Pattern ?? string.Empty, StringComparer.Ordinal)
-            .TallyCount(Enum)
-            .TallyCount(AllOf)
-            .TallyCount(OneOf)
-            .TallyCount(AnyOf)
-            .TallyCount(Not)
-            .Tally(Items)
-            .TallyCount(Properties)
-            .TallyCount(AdditionalProperties)
-            .ToHashCode();
+        public override int GetHashCode()
+        {
+            var hc = new HashCode();
+
+            hc.Add(JsonType);
+            hc.Add(Options);
+            hc.Add(NumberRange);
+            hc.Add(ItemsRange);
+            hc.Add(LengthRange);
+            hc.Add(PropertiesRange);
+            hc.Add(ExternalDocumentation);
+            hc.Add(Title ?? string.Empty, StringComparer.Ordinal);
+            hc.Add(Format ?? string.Empty, StringComparer.Ordinal);
+            hc.Add(Description ?? string.Empty, StringComparer.Ordinal);
+            hc.Add(Pattern ?? string.Empty, StringComparer.Ordinal);
+            hc.Add(Enum.Count);
+            hc.Add(AllOf.Count);
+            hc.Add(OneOf.Count);
+            hc.Add(AnyOf.Count);
+            hc.Add(Not.Count);
+            hc.Add(Items);
+            hc.Add(Properties.Count);
+            hc.Add(AdditionalProperties.Count);
+
+            return hc.ToHashCode();
+        }
 
         #endregion
     }

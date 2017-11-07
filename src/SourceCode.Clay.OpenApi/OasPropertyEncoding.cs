@@ -112,12 +112,12 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(ContentType)
-            .TallyCount(Headers)
-            .Tally(Style)
-            .Tally(Options)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            ContentType,
+            Headers.Count,
+            Style,
+            Options
+        );
 
         #endregion
     }

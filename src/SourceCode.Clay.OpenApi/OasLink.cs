@@ -116,12 +116,12 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(OperationReference)
-            .Tally(OperationIdentifier ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Description ?? string.Empty, StringComparer.Ordinal)
-            .Tally(Server)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            OperationReference,
+            StringComparer.Ordinal.GetHashCode(OperationIdentifier ?? string.Empty),
+            StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
+            Server
+        );
 
         #endregion
     }

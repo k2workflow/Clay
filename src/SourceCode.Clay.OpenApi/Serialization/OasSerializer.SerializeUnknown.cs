@@ -55,10 +55,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 => GenericArgumentType.Equals(other.GenericArgumentType)
                 && InstanceType.Equals(other.InstanceType);
 
-            public override int GetHashCode() => new HashCode()
-                .Tally(GenericArgumentType)
-                .Tally(InstanceType)
-                .ToHashCode();
+            public override int GetHashCode() => HashCode.Combine(
+                GenericArgumentType,
+                InstanceType
+            );
 
             #endregion
         }

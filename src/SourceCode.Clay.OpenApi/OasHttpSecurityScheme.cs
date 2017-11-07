@@ -95,11 +95,11 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(base.GetHashCode())
-            .Tally(Scheme ?? string.Empty, StringComparer.Ordinal)
-            .Tally(BearerFormat ?? string.Empty, StringComparer.Ordinal)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            base.GetHashCode(),
+            StringComparer.Ordinal.GetHashCode(Scheme ?? string.Empty),
+            StringComparer.Ordinal.GetHashCode(BearerFormat ?? string.Empty)
+        );
 
         #endregion
     }
