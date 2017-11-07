@@ -14,8 +14,8 @@ using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi.Serialization
 {
+    // Null is significant in Json.
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-    // Null is significant in JSON.
 
     partial class OasSerializer
     {
