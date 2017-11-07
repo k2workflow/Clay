@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Collections.Generic
 {
@@ -67,7 +66,6 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Helpers
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool CheckEnumerable<TSource>(IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
         {
             Debug.Assert(x != null);

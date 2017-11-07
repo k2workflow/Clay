@@ -211,7 +211,6 @@ namespace SourceCode.Clay
         /// </summary>
         public object Value
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 switch (ValueTypeCode)
