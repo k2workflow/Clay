@@ -137,9 +137,9 @@ namespace SourceCode.Clay.OpenApi
             var hc = new HashCode();
 
             hc.Add(Count);
-            if (Count != 0) hc.Add[0];
+            if (Count != 0) hc.Add(0);
 
-            return hc;
+            return hc.ToHashCode();
         }
 
         #endregion
