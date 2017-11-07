@@ -95,7 +95,6 @@ namespace SourceCode.Clay
 
             #region IComparer
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override int Compare(Number x, Number y)
             {
                 switch (((uint)x.ValueTypeCode << 5) | (uint)y.ValueTypeCode)
@@ -280,24 +279,19 @@ namespace SourceCode.Clay
                 return x._uint64 == y._uint64;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override int GetHashCode(Number obj)
             {
-                unchecked
-                {
-                    var hc = 17L;
+                var hc = new HashCode();
 
-                    hc = (hc * 23) + (int)obj.ValueTypeCode;
+                hc.Add(obj.ValueTypeCode);
+                if (obj.ValueTypeCode == TypeCode.Decimal)
+                    hc.Add(obj._decimal);
+                else if ((obj.Kind & NumberKinds.Real) > 0)
+                    hc.Add(obj._double);
+                else // Int
+                    hc.Add(obj._uint64);
 
-                    if (obj.ValueTypeCode == TypeCode.Decimal)
-                        hc = (hc * 23) + obj._decimal.GetHashCode();
-                    else if ((obj.Kind & NumberKinds.Real) > 0)
-                        hc = (hc * 23) + obj._double.GetHashCode();
-                    else // Int
-                        hc = (hc * 23) + obj._uint64.GetHashCode();
-
-                    return ((int)(hc >> 32)) ^ (int)hc;
-                }
+                return hc.ToHashCode();
             }
 
             #endregion

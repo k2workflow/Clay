@@ -80,7 +80,6 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Span 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CompareSpan(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
         {
             // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
@@ -133,7 +132,6 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Buffer 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int CompareArray(byte[] x, byte[] y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)

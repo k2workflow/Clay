@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="itemFactory">The item factory.</param>
         /// <returns>The value.</returns>
-        public static IList<T> ReadArray<T>(this JsonReader jr, Func<T> itemFactory)
+        public static IReadOnlyList<T> ReadArray<T>(this JsonReader jr, Func<T> itemFactory)
         {
             if (jr == null) throw new ArgumentNullException(nameof(jr));
             if (itemFactory == null) throw new ArgumentNullException(nameof(itemFactory));

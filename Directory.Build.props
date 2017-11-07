@@ -13,7 +13,6 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <!-- RS0010	Avoid using cref tags with a prefix -->
-    <!-- S3242 Consider using more general type ... -->
     <!-- CA1707	Remove the underscores from member name ... -->
     <!-- CA1710 Rename ... to end in 'Dictionary'. -->
     <!-- CA1801 (broken for nested methods) Parameter ... of method ... is never used... -->

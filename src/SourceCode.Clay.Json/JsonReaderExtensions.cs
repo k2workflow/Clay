@@ -12,12 +12,6 @@ namespace SourceCode.Clay.Json
 {
     public static partial class JsonReaderExtensions
     {
-        #region Constants
-
-        public const string JsonNull = "null";
-
-        #endregion
-
         #region Methods
 
         /// <summary>
@@ -32,7 +26,7 @@ namespace SourceCode.Clay.Json
             where TEnum : struct
         {
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str) || str == JsonNull)
+            if (string.IsNullOrEmpty(str) || str == JsonConstants.Null)
                 return null;
 
             var knd = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);

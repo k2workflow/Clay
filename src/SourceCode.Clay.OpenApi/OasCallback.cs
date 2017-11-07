@@ -135,11 +135,8 @@ namespace SourceCode.Clay.OpenApi
         public override int GetHashCode()
         {
             var hc = new HashCode();
-
             hc.Add(Count);
-            if (Count != 0) hc.Add[0];
-
-            return hc;
+            return hc.ToHashCode();
         }
 
         #endregion
