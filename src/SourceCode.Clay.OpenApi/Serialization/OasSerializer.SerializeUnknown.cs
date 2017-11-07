@@ -148,8 +148,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The serialized <see cref="JToken"/>.</returns>
         protected virtual JToken SerializeUnknown<T>(T value)
         {
+            // Null is significant in Json.
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-            // Null is significant in JSON.
 
             if (ReferenceEquals(value, null)) return null;
 #pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
