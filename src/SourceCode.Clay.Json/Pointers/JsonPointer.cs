@@ -302,7 +302,10 @@ namespace SourceCode.Clay.Json.Pointers
             var hc = new HashCode();
 
             if (_tokens != null)
-                hc = hc.TallyCount(_tokens).Tally(_tokens[0]);
+            {
+                hc.Add(_tokens.Length);
+                hc.Add(_tokens[0]);
+            }
 
             return hc.ToHashCode();
         }
