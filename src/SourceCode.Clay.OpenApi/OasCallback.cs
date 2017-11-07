@@ -132,9 +132,15 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets as hash code suitable for storing this object in a hash table.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .TallyCount(this)
-            .ToHashCode();
+        public override int GetHashCode()
+        {
+            var hc = new HashCode();
+
+            hc.Add(Count);
+            if (Count != 0) hc.Add[0];
+
+            return hc;
+        }
 
         #endregion
     }

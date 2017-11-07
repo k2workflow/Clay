@@ -89,7 +89,10 @@ namespace SourceCode.Clay.OpenApi.Expressions
             var hc = new HashCode();
 
             if (_components != null)
-                hc = hc.TallyCount(_components).Tally(_components[0]);
+            {
+                hc.Add(_components.Length);
+                hc.Add(_components[0]);
+            }
 
             return hc.ToHashCode();
         }

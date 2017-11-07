@@ -147,16 +147,16 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(Version)
-            .Tally(Info)
-            .TallyCount(Servers)
-            .TallyCount(Paths)
-            .Tally(Components)
-            .TallyCount(Security)
-            .TallyCount(Tags)
-            .Tally(ExternalDocumentation)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            Version,
+            Info,
+            Servers.Count,
+            Paths.Count,
+            Components,
+            Security.Count,
+            Tags.Count,
+            ExternalDocumentation
+        );
 
         #endregion
     }

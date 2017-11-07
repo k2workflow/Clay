@@ -267,9 +267,8 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(_httpStatusCode)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            _httpStatusCode);
 
         /// <summary>Returns the string representation of the status code.</summary>
         /// <returns>The string representation of the status code.</returns>

@@ -113,13 +113,13 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode() => new HashCode()
-            .Tally(base.GetHashCode())
-            .Tally(ImplicitFlow)
-            .Tally(PasswordFlow)
-            .Tally(ClientCredentialsFlow)
-            .Tally(AuthorizationCodeFlow)
-            .ToHashCode();
+        public override int GetHashCode() => HashCode.Combine(
+            base.GetHashCode(),
+            ImplicitFlow,
+            PasswordFlow,
+            ClientCredentialsFlow,
+            AuthorizationCodeFlow
+        );
 
         #endregion
     }
