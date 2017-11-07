@@ -12,12 +12,6 @@ namespace SourceCode.Clay.Json
 {
     public static partial class JsonReaderExtensions
     {
-        #region Constants
-
-        public const string JsonNull = "null";
-
-        #endregion
-
         #region Methods
 
         /// <summary>
