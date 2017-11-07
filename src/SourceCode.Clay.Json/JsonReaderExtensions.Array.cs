@@ -115,41 +115,6 @@ namespace SourceCode.Clay.Json
             }
         }
 
-        /// <summary>
-        /// Processes the current token value as Json array.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="itemFactory">The item factory.</param>
-        public static void ProcessArray(this JsonReader jr, Action itemFactory)
-        {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
-
-            // TODO: Check for JsonToken.Null
-
-            // '['
-            if (jr.TokenType == JsonToken.StartArray)
-                jr.Read();
-
-            while (true)
-            {
-                switch (jr.TokenType)
-                {
-                    // Item
-                    default:
-                        itemFactory?.Invoke();
-                        jr.Read();
-                        continue;
-
-                    // ']'
-                    case JsonToken.EndArray:
-                        return;
-                }
-            }
-        }
-
         #endregion
     }
 }
