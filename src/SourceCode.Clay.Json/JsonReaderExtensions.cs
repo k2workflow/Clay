@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Json
             where TEnum : struct
         {
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str) || str == JsonNull)
+            if (string.IsNullOrEmpty(str) || str == JsonConstants.JsonNull)
                 return null;
 
             var knd = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
