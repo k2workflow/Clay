@@ -10,11 +10,6 @@
 
   <ItemGroup>
     <Compile Remove="JsonExtensionsTests.cs" />
-    <Compile Remove="JsonPointerTests.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="JsonPointerTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

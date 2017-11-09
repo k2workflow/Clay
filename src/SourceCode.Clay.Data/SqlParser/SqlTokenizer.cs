@@ -462,9 +462,7 @@ namespace SourceCode.Clay.Data.SqlParser
                 if (idx >= 0)
                 {
                     // If it is an escaped delimiter
-#pragma warning disable S4142 // Duplicate values should not be passed as arguments
                     if (idx >= 1 && Contains(buffer, idx - 1, count, delimiter, delimiter))
-#pragma warning restore S4142 // Duplicate values should not be passed as arguments
                     {
                         // Keep going
                         sb.Append(buffer, 0, idx + 2);

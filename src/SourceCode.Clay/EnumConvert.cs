@@ -22,10 +22,7 @@ namespace SourceCode.Clay
 
         private sealed class Unchecked { }
 
-#pragma warning disable S2436 // Classes and methods should not have too many generic parameters
-
         private static class Converter<TEnum, TInteger, TChecked>
-#pragma warning restore S2436 // Classes and methods should not have too many generic parameters
             where TEnum : struct, IComparable, IConvertible, IFormattable
         {
 #pragma warning disable CA1000 // Do not declare static members on generic types
@@ -39,11 +36,9 @@ namespace SourceCode.Clay
                 var @enum = typeof(TEnum);
                 if (!@enum.IsEnum)
                 {
-#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
                     ConvertTo = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
                     ConvertFrom = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
                     return;
-#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
                 }
 
                 var integer = typeof(TInteger);

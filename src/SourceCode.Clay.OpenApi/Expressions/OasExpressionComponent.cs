@@ -25,17 +25,11 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         #region Constructors
 
-#pragma warning disable S3442 // "abstract" classes should not have "public" constructors
-        // Reasoning: external inheritance not supported.
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasExpressionComponent"/> class.
         /// </summary>
         internal OasExpressionComponent()
-        {
-        }
-
-#pragma warning restore S3442 // "abstract" classes should not have "public" constructors
+        { }
 
         #endregion
 

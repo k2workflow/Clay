@@ -13,9 +13,6 @@ using System.Linq;
 
 namespace SourceCode.Clay.OpenApi.Serialization
 {
-    // Null is significant in Json.
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-
     partial class OasSerializer
     {
         #region Serialize
@@ -706,6 +703,4 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
         #endregion
     }
-
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 }
