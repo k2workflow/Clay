@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
-        #region Fields
+        #region Constants
 
         private const string dbToken = "database";
         private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
@@ -22,6 +22,25 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         #endregion
 
         #region Methods
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_clear_inline_creds))]
+        public static void When_clear_inline_creds()
+        {
+            var sqlCsb = new SqlConnectionStringBuilder
+            {
+                DataSource = ".",
+                InitialCatalog = "AdventureWorks",
+                UserID = "admin",
+                Password = "innocuous " + "test code"
+            };
+            sqlCsb = sqlCsb.ClearInlineCredentials();
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.Equal(string.Empty, sqlCsb.UserID);
+            Assert.Equal(string.Empty, sqlCsb.Password);
+        }
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]

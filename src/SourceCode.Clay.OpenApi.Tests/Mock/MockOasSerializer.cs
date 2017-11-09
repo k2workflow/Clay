@@ -11,18 +11,9 @@ using System.Globalization;
 
 namespace SourceCode.Clay.OpenApi.Tests.Mock
 {
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-
     public class MockOasSerializer : OasSerializer
     {
-        protected static class GatewayPropertyConstants
-        {
-            public const string OperationId = "x-k2-operation-id";
-        }
-
-        public MockOasSerializer()
-        {
-        }
+        #region Methods
 
         protected virtual JToken SerializeMockOperation(MockOasOperation mockOperation)
         {
@@ -35,7 +26,28 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
 
             return json;
         }
-    }
 
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+        #endregion
+
+        #region Classes
+
+        protected static class GatewayPropertyConstants
+        {
+            #region Fields
+
+            public const string OperationId = "x-k2-operation-id";
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public MockOasSerializer()
+        {
+        }
+
+        #endregion
+    }
 }

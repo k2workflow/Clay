@@ -8,7 +8,6 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace SourceCode.Clay.Data.SqlClient
@@ -16,9 +15,51 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <summary>
     /// Represents extensions for <see cref="SqlConnection"/> instances.
     /// </summary>
-    /// <seealso cref="System.Data.SqlClient.SqlConnection"/>
+    /// <seealso cref="SqlConnection"/>
     public static class SqlConnectionExtensions
     {
+        #region SqlCommand
+
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <returns></returns>
+        public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType)
+        {
+            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
+
+            var cmd = new SqlCommand(commandText, sqlCon)
+            {
+                CommandType = commandType
+            };
+
+            return cmd;
+        }
+
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <param name="timeoutSeconds">The command timeout.</param>
+        /// <returns></returns>
+        public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, int timeoutSeconds)
+        {
+            var cmd = CreateCommand(sqlCon, commandText, commandType);
+            cmd.CommandTimeout = timeoutSeconds;
+
+            return cmd;
+        }
+
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Reopens the specified <see cref="SqlConnection"/>.
         /// </summary>
@@ -80,8 +121,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="impersonatedUsername">The username to be impersonated.</param>
         /// <returns>Cookie value that will be required to close the connection</returns>
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Static query with no user inputs")]
-        public static byte[] Open(this SqlConnection sqlCon, string impersonatedUsername)
+        public static byte[] OpenImpersonated(this SqlConnection sqlCon, string impersonatedUsername)
         {
             if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
@@ -90,9 +130,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
             // If username is null, empty or whitespace-only then don't try impersonate
             if (string.IsNullOrEmpty(impersonatedUsername))
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             // Set impersonation context using EXECUTE AS
             try
@@ -145,8 +183,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="impersonatedUsername">The username to be impersonated.</param>
         /// <returns>Cookie value that will be required to close the connection</returns>
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Static query with no user inputs")]
-        public static async Task<byte[]> OpenAsync(this SqlConnection sqlCon, string impersonatedUsername)
+        public static async Task<byte[]> OpenImpersonatedAsync(this SqlConnection sqlCon, string impersonatedUsername)
         {
             if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
@@ -207,7 +244,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
-        public static void Close(this SqlConnection sqlCon, byte[] cookie)
+        public static void CloseImpersonated(this SqlConnection sqlCon, byte[] cookie)
         {
             if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
@@ -242,7 +279,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
-        public static async Task CloseAsync(this SqlConnection sqlCon, byte[] cookie)
+        public static async Task CloseImpersonatedAsync(this SqlConnection sqlCon, byte[] cookie)
         {
             if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
 
@@ -270,5 +307,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 }
             }
         }
+
+        #endregion
     }
 }

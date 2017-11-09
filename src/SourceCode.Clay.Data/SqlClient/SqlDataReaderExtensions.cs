@@ -17,6 +17,8 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlDataReader"/>
     public static class SqlDataReaderExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Gets the value of the specified binary column as <see cref="System.Byte"/>[].
         /// </summary>
@@ -30,9 +32,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
             if (sqlDr.IsDBNull(ord))
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
 
             var val = sqlDr.GetSqlBytes(ord);
             return val.IsNull ? null : val.Buffer;
@@ -105,5 +105,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 return xml;
             }
         }
+
+        #endregion
     }
 }

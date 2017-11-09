@@ -15,15 +15,10 @@ namespace SourceCode.Clay.Json.Validation
     [Flags]
     public enum RangeOptions
     {
-        // Reasoning: self-documenting.
-#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
-
         /// <summary>
         /// The range is exclusive for both minimum and maximum.
         /// </summary>
         Exclusive = 0,
-
-#pragma warning restore S2346 // Flags enumerations zero-value members should be named "None"
 
         /// <summary>
         /// The range is inclusive for minimum.

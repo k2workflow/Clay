@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 {
     public static class SqlParamBlockParserTests
     {
-        #region Fields
+        #region Constants
 
         // Block comment is not closed
         private const string sqlBadComment = @"
