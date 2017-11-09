@@ -32,10 +32,7 @@ namespace SourceCode.Clay.Json
 
             // null
             if (jr.TokenType == JsonToken.Null)
-            {
-                jr.Read();
                 return default; // null for classes, default(T) for structs
-            }
 
             // '{'
             if (jr.TokenType == JsonToken.StartObject)
@@ -80,12 +77,16 @@ namespace SourceCode.Clay.Json
             if (jr == null) throw new ArgumentNullException(nameof(jr));
             if (propertySwitch == null) throw new ArgumentNullException(nameof(propertySwitch));
 
-            // '{'
-            while (jr.TokenType == JsonToken.StartObject
-                || jr.TokenType == JsonToken.None)
-            {
+            if (jr.TokenType == JsonToken.None)
                 jr.Read();
-            }
+
+            // null
+            if (jr.TokenType == JsonToken.Null)
+                return;
+
+            // '{'
+            if (jr.TokenType == JsonToken.StartObject)
+                jr.Read();
 
             while (true)
             {

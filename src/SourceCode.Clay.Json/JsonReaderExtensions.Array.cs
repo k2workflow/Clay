@@ -32,10 +32,7 @@ namespace SourceCode.Clay.Json
 
             // null
             if (jr.TokenType == JsonToken.Null)
-            {
-                jr.Read();
                 return default;
-            }
 
             // '['
             if (jr.TokenType == JsonToken.StartArray)
@@ -85,10 +82,7 @@ namespace SourceCode.Clay.Json
 
             // null
             if (jr.TokenType == JsonToken.Null)
-            {
-                jr.Read();
                 yield break;
-            }
 
             // '['
             if (jr.TokenType == JsonToken.StartArray)
@@ -124,12 +118,16 @@ namespace SourceCode.Clay.Json
         {
             if (jr == null) throw new ArgumentNullException(nameof(jr));
 
-            // '['
-            while (jr.TokenType == JsonToken.StartArray
-                || jr.TokenType == JsonToken.None)
-            {
+            if (jr.TokenType == JsonToken.None)
                 jr.Read();
-            }
+
+            // null
+            if (jr.TokenType == JsonToken.Null)
+                return;
+
+            // '['
+            if (jr.TokenType == JsonToken.StartArray)
+                jr.Read();
 
             while (true)
             {
