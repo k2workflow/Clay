@@ -19,13 +19,13 @@ namespace SourceCode.Clay.Json
         /// </summary>
         /// <typeparam name="T">The type of item to return.</typeparam>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertySwitch">The property switch.</param>
+        /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
         /// <returns>The value.</returns>
-        public static T ReadObject<T>(this JsonReader jr, Action<string> propertySwitch, Func<T> objectFactory)
+        public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
         {
             if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (propertySwitch == null) throw new ArgumentNullException(nameof(propertySwitch));
+            if (propertyHandler == null) throw new ArgumentNullException(nameof(propertyHandler));
 
             if (jr.TokenType == JsonToken.None)
                 jr.Read();
@@ -50,12 +50,21 @@ namespace SourceCode.Clay.Json
                             jr.Read();
 
                             // Value
-                            propertySwitch(name);
+                            var handled = propertyHandler(name);
+                            if (!handled)
+                                throw new JsonReaderException($"Json property {name} found but not processed");
+
                             jr.Read();
                         }
                         continue;
 
-                    case JsonToken.EndObject: // '}'
+                    // Skip
+                    case JsonToken.Comment:
+                        jr.Read();
+                        continue;
+
+                    // '}'
+                    case JsonToken.EndObject:
                         {
                             if (objectFactory == null) return default;
 
@@ -70,46 +79,18 @@ namespace SourceCode.Clay.Json
         /// Process the current token value as a Json object.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertySwitch">The property switch.</param>
+        /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
-        public static void ProcessObject(this JsonReader jr, Action<string> propertySwitch, Action objectFactory)
+        public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (propertySwitch == null) throw new ArgumentNullException(nameof(propertySwitch));
+            // Leverage shared logic, ignoring sentinel return <int> value
+            ReadObject(jr, propertyHandler, Curry);
 
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
-
-            // null
-            if (jr.TokenType == JsonToken.Null)
-                return;
-
-            // '{'
-            if (jr.TokenType == JsonToken.StartObject)
-                jr.Read();
-
-            while (true)
+            // Curry delegate into local function
+            int Curry()
             {
-                switch (jr.TokenType)
-                {
-                    // Property
-                    case JsonToken.PropertyName:
-                        {
-                            // Name
-                            var name = (string)jr.Value;
-                            jr.Read();
-
-                            // Value
-                            propertySwitch(name);
-                            jr.Read();
-                        }
-                        continue;
-
-                    // '}'
-                    case JsonToken.EndObject:
-                        objectFactory?.Invoke();
-                        return;
-                }
+                objectFactory?.Invoke();
+                return 0;
             }
         }
 

@@ -16,7 +16,50 @@ namespace SourceCode.Clay.Json
         #region Methods
 
         /// <summary>
-        /// Reads the current token value as a Json <see cref="IList{T}"/>.
+        /// Processes the current token value as Json array.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <param name="itemFactory">The item factory.</param>
+        public static void ProcessArray(this JsonReader jr, Action itemFactory)
+        {
+            if (jr == null) throw new ArgumentNullException(nameof(jr));
+
+            if (jr.TokenType == JsonToken.None)
+                jr.Read();
+
+            // null
+            if (jr.TokenType == JsonToken.Null)
+                return;
+
+            // '['
+            if (jr.TokenType == JsonToken.StartArray)
+                jr.Read();
+
+            while (true)
+            {
+                switch (jr.TokenType)
+                {
+                    // Item
+                    default:
+                        itemFactory?.Invoke();
+
+                        jr.Read();
+                        continue;
+
+                    // Skip
+                    case JsonToken.Comment:
+                        jr.Read();
+                        continue;
+
+                    // ']'
+                    case JsonToken.EndArray:
+                        return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the current token value as a Json <see cref="IReadOnlyList{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the array.</typeparam>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
@@ -24,44 +67,21 @@ namespace SourceCode.Clay.Json
         /// <returns>The value.</returns>
         public static IReadOnlyList<T> ReadArray<T>(this JsonReader jr, Func<T> itemFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (itemFactory == null) throw new ArgumentNullException(nameof(itemFactory));
+            var list = new List<T>(0); // ctor allocates singleton T[0]
 
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
+            ProcessArray(jr, Curry);
 
-            // null
-            if (jr.TokenType == JsonToken.Null)
-                return default;
+            return list;
 
-            // '['
-            if (jr.TokenType == JsonToken.StartArray)
-                jr.Read();
-
-            List<T> list = null;
-            while (true)
+            // Curry delegate into local function
+            void Curry()
             {
-                switch (jr.TokenType)
-                {
-                    // Item
-                    default:
-                        {
-                            var item = itemFactory();
+                var item = itemFactory();
 
-                            list = list ?? new List<T>();
-                            list.Add(item);
+                if (list.Count == 0)
+                    list = new List<T>();
 
-                            jr.Read();
-                        }
-                        continue;
-
-                    // ']'
-                    case JsonToken.EndArray:
-                        {
-                            if (list == null) return Array.Empty<T>();
-                            return list;
-                        }
-                }
+                list.Add(item);
             }
         }
 
@@ -102,47 +122,14 @@ namespace SourceCode.Clay.Json
                         }
                         continue;
 
-                    // ']'
-                    case JsonToken.EndArray:
-                        yield break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Processes the current token value as Json array.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="itemFactory">The item factory.</param>
-        public static void ProcessArray(this JsonReader jr, Action itemFactory)
-        {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
-
-            // null
-            if (jr.TokenType == JsonToken.Null)
-                return;
-
-            // '['
-            if (jr.TokenType == JsonToken.StartArray)
-                jr.Read();
-
-            while (true)
-            {
-                switch (jr.TokenType)
-                {
-                    // Item
-                    default:
-                        itemFactory?.Invoke();
-
+                    // Skip
+                    case JsonToken.Comment:
                         jr.Read();
                         continue;
 
                     // ']'
                     case JsonToken.EndArray:
-                        return;
+                        yield break;
                 }
             }
         }
