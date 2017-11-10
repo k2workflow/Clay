@@ -83,50 +83,14 @@ namespace SourceCode.Clay.Json
         /// <param name="objectFactory">The object factory.</param>
         public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (propertyHandler == null) throw new ArgumentNullException(nameof(propertyHandler));
+            // Leverage shared logic, ignoring sentinel return value
+            ReadObject(jr, propertyHandler, Curry);
 
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
-
-            // null
-            if (jr.TokenType == JsonToken.Null)
-                return;
-
-            // '{'
-            if (jr.TokenType == JsonToken.StartObject)
-                jr.Read();
-
-            while (true)
+            // Curry delegate into local function
+            int Curry()
             {
-                switch (jr.TokenType)
-                {
-                    // Property
-                    case JsonToken.PropertyName:
-                        {
-                            // Name
-                            var name = (string)jr.Value;
-                            jr.Read();
-
-                            // Value
-                            var handled = propertyHandler(name);
-                            if (!handled)
-                                throw new JsonReaderException($"Json property {name} found but not processed");
-
-                            jr.Read();
-                        }
-                        continue;
-
-                    // Skip
-                    case JsonToken.Comment:
-                        jr.Read();
-                        continue;
-
-                    // '}'
-                    case JsonToken.EndObject:
-                        objectFactory?.Invoke();
-                        return;
-                }
+                objectFactory?.Invoke();
+                return 0;
             }
         }
 
