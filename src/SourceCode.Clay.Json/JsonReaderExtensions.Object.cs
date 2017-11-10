@@ -83,7 +83,7 @@ namespace SourceCode.Clay.Json
         /// <param name="objectFactory">The object factory.</param>
         public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
-            // Leverage shared logic, ignoring sentinel return value
+            // Leverage shared logic, ignoring sentinel return <int> value
             ReadObject(jr, propertyHandler, Curry);
 
             // Curry delegate into local function

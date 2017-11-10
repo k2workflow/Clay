@@ -21,6 +21,7 @@ namespace SourceCode.Clay.Json.Units
             ""name"": ""joe"",
             ""last"": null,
             ""middle"": """",
+            // comment
             ""alive"": true,
             ""age"": 99,
             ""type"": ""TinyInt""
@@ -31,6 +32,7 @@ namespace SourceCode.Clay.Json.Units
             ""joe"",
             null,
             """",
+            // comment
             true,
             99
         ]";
