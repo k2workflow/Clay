@@ -821,7 +821,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
             #endregion
 
-            Assert.Equal(expectedJson, actualJson, JObjectComparer.Default);
+            Assert.Equal(expectedJson, actualJson, JTokenComparer.Default);
         }
 
         #endregion
