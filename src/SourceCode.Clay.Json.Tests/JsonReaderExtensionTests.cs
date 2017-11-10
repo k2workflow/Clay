@@ -14,31 +14,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class JsonReaderExtensionTests
     {
-        #region Constants
-
-        private const string jsonObject = @"
-        {
-            ""name"": ""joe"",
-            ""last"": null,
-            ""middle"": """",
-            // comment
-            ""alive"": true,
-            ""age"": 99,
-            ""type"": ""TinyInt""
-        }";
-
-        private const string jsonArray = @"
-        [
-            ""joe"",
-            null,
-            """",
-            // comment
-            true,
-            99
-        ]";
-
-        #endregion
-
         #region Empty
 
         [Trait("Type", "Unit")]
@@ -188,6 +163,29 @@ namespace SourceCode.Clay.Json.Units
 
         #region Simple
 
+        private const string jsonObject = @"
+        {
+            ""name"": ""joe"",
+            ""last"": null,
+            ""middle"": """",
+            // comment
+            ""alive"": true,
+            ""age"": 99,
+            ""type1"": ""tINyINt"",
+            ""type2"": """",
+            ""type3"": null
+        }";
+
+        private const string jsonArray = @"
+        [
+            ""joe"",
+            null,
+            """",
+            // comment
+            true,
+            99
+        ]";
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_read_simple_object))]
         public static void When_read_simple_object()
@@ -201,7 +199,7 @@ namespace SourceCode.Clay.Json.Units
                 var middle = "a";
                 var alive = false;
                 var age = -1L;
-                var type = System.Data.SqlDbType.BigInt;
+                var type = new System.Data.SqlDbType?[3];
 
                 var text = jr.ReadObject(n =>
                 {
@@ -212,7 +210,9 @@ namespace SourceCode.Clay.Json.Units
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
                         case "age": age = (long)jr.Value; return true;
-                        case "type": type = jr.ReadEnum<System.Data.SqlDbType>(true) ?? default; return true;
+                        case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                     }
 
                     return false;
@@ -225,7 +225,9 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(string.Empty, middle);
                 Assert.True(alive);
                 Assert.Equal(99, age);
-                Assert.Equal(System.Data.SqlDbType.TinyInt, type);
+                Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
+                Assert.Null(type[1]);
+                Assert.Null(type[2]);
             }
 
             // Process
@@ -238,7 +240,7 @@ namespace SourceCode.Clay.Json.Units
                 var alive = false;
                 var age = -1L;
                 string text = null;
-                var type = System.Data.SqlDbType.BigInt;
+                var type = new System.Data.SqlDbType?[3];
 
                 jr.ProcessObject(n =>
                 {
@@ -249,7 +251,9 @@ namespace SourceCode.Clay.Json.Units
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
                         case "age": age = (long)jr.Value; return true;
-                        case "type": type = jr.ReadEnum<System.Data.SqlDbType>(true) ?? default; return true;
+                        case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                     }
 
                     return false;
@@ -262,7 +266,9 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(string.Empty, middle);
                 Assert.True(alive);
                 Assert.Equal(99, age);
-                Assert.Equal(System.Data.SqlDbType.TinyInt, type);
+                Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
+                Assert.Null(type[1]);
+                Assert.Null(type[2]);
             }
         }
 
