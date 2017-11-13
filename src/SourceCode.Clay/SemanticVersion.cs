@@ -330,7 +330,7 @@ namespace SourceCode.Clay
                 compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.PreReleaseRemoved;
             else if (baseline.PreRelease != null && comparand.PreRelease != null)
             {
-                var cmp = StringComparer.Ordinal.Compare(baseline.PreRelease, comparand.PreRelease);
+                var cmp = string.CompareOrdinal(baseline.PreRelease, comparand.PreRelease);
                 if (cmp == -1) compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.NewerPreRelease;
                 else if (cmp == 1) compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.OlderPreRelease;
             }

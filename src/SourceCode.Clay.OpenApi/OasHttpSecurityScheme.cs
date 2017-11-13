@@ -36,6 +36,9 @@ namespace SourceCode.Clay.OpenApi
 
         #region Properties
 
+        /// <inheritdoc/>
+        //protected override Type EqualityContract => typeof(OasHttpSecurityScheme);
+
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.Http;
 
@@ -87,6 +90,10 @@ namespace SourceCode.Clay.OpenApi
         public bool Equals(OasHttpSecurityScheme other)
         {
             if (!base.Equals(other)) return false;
+
+            // https://github.com/dotnet/csharplang/issues/39#issuecomment-291602520
+            //if (EqualityContract != other.EqualityContract) return false;
+
             if (!StringComparer.Ordinal.Equals(Scheme, other.Scheme)) return false;
             if (!StringComparer.Ordinal.Equals(BearerFormat, other.BearerFormat)) return false;
 

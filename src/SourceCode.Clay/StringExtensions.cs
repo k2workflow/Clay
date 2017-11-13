@@ -110,12 +110,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsOrdinal(this string x, string y)
-        {
-            if (x == y) return true; // (null, null) or (s, s)
-            if (x == null || y == null) return false; // (s, null) or (null, t)
-
-            return StringComparer.Ordinal.Equals(x, y); // (s, t)
-        }
+            => StringComparer.Ordinal.Equals(x, y);
 
         #endregion
     }

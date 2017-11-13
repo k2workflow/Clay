@@ -11,8 +11,6 @@ using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
 using System;
 
-//using System.Json;
-
 namespace SourceCode.Clay.Json.Bench
 {
     [MemoryDiagnoser]
@@ -21,9 +19,6 @@ namespace SourceCode.Clay.Json.Bench
         #region Fields
 
         private const int InvokeCount = 1;
-
-        //private readonly JsonObject _json1;
-        //private readonly JsonObject _json2;
 
         private readonly JObject _newton1;
         private readonly JObject _newton2;
@@ -36,9 +31,6 @@ namespace SourceCode.Clay.Json.Bench
         {
             var str1 = Resources.AdventureWorks;
             var str2 = Resources.AdventureWorks + "\n"; // Mitigate interning
-
-            //_json1 = (JsonObject)JsonValue.Parse(str1);
-            //_json2 = (JsonObject)JsonValue.Parse(str2);
 
             _newton1 = JObject.Parse(str1);
             _newton2 = JObject.Parse(str2);
@@ -54,9 +46,6 @@ namespace SourceCode.Clay.Json.Bench
             var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
-                //var str1 = _json1.ToString();
-                //var str2 = _json2.ToString();
-
                 var str2 = _newton1.ToString();
                 var str1 = _newton2.ToString();
 

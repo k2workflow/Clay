@@ -31,6 +31,12 @@ namespace SourceCode.Clay.OpenApi
         #region Properties
 
         /// <summary>
+        /// Used for equality checking in inheritance schemes.
+        /// Ensure that this returns the delcared type of the class.
+        /// </summary>
+        //protected virtual Type EqualityContract => typeof(OasSecurityScheme);
+
+        /// <summary>
         /// Gets the type of the security scheme.
         /// </summary>
         public abstract OasSecuritySchemeType SchemeType { get; }
@@ -79,6 +85,9 @@ namespace SourceCode.Clay.OpenApi
         {
             if (ReferenceEquals(this, other)) return true;
             if (other is null) return false;
+
+            // https://github.com/dotnet/csharplang/issues/39#issuecomment-291602520
+            //if (EqualityContract != other.EqualityContract) return false;
 
             if (SchemeType != other.SchemeType) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
