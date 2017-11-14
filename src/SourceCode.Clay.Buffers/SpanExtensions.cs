@@ -129,7 +129,7 @@ namespace SourceCode.Clay.Buffers
         private static int PickPivot<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
             // Compute median-of-three.  But also partition them, since we've done the comparison.
-            var mid = lo + (hi - lo) / 2;
+            var mid = lo + ((hi - lo) / 2);
 
             // Sort lo, mid and hi appropriately, then pick mid as the pivot.
             SwapIfGreater(span, comparison, lo, mid);
@@ -145,8 +145,8 @@ namespace SourceCode.Clay.Buffers
 
             while (left < right)
             {
-                while (left < (hi - 1) && comparison(span[++left], pivot) < 0) ;
-                while (right > lo && comparison(pivot, span[--right]) < 0) ;
+                while (left < (hi - 1) && comparison(span[++left], pivot) < 0) { }
+                while (right > lo && comparison(pivot, span[--right]) < 0) { }
 
                 if (left >= right) break;
 
