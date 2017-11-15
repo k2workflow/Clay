@@ -72,6 +72,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
+            // TODO: Use HashCode class
             unchecked
             {
                 var hc = 17L;

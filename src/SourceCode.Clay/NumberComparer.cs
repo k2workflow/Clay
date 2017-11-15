@@ -14,7 +14,11 @@ namespace SourceCode.Clay
     /// <summary>
     /// Represents a way to compare different <see cref="Number"/> values.
     /// </summary>
-    public abstract class NumberComparer : IEqualityComparer<Number>, IEqualityComparer<Number?>, IComparer<Number>, IComparer<Number?>
+    public abstract class NumberComparer :
+        IEqualityComparer<Number>,
+        IComparer<Number>,
+        IEqualityComparer<Number?>,
+        IComparer<Number?>
     {
         #region Constants
 
@@ -262,11 +266,13 @@ namespace SourceCode.Clay
             {
                 if (x.ValueTypeCode != y.ValueTypeCode) return false;
 
-                if (x.ValueTypeCode == TypeCode.Decimal)
-                    return (x._decimal == y._decimal);
-
+                // Double
                 if ((x.Kind & NumberKinds.Real) > 0)
                     return (x._double == y._double);
+
+                // Decimal
+                if (x.ValueTypeCode == TypeCode.Decimal)
+                    return (x._decimal == y._decimal);
 
                 // Int
                 return x._uint64 == y._uint64;
@@ -274,17 +280,16 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(Number obj)
             {
-                var hc = new HashCode();
+                // Double
+                if ((obj.Kind & NumberKinds.Real) > 0)
+                    return HashCode.Combine(obj.ValueTypeCode, obj._double);
 
-                hc.Add(obj.ValueTypeCode);
+                // Decimal
                 if (obj.ValueTypeCode == TypeCode.Decimal)
-                    hc.Add(obj._decimal);
-                else if ((obj.Kind & NumberKinds.Real) > 0)
-                    hc.Add(obj._double);
-                else // Int
-                    hc.Add(obj._uint64);
+                    return HashCode.Combine(obj.ValueTypeCode, obj._decimal);
 
-                return hc.ToHashCode();
+                // Int
+                return HashCode.Combine(obj.ValueTypeCode, obj._uint64);
             }
 
             #endregion

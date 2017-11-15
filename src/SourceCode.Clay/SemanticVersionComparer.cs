@@ -93,20 +93,15 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                unchecked
-                {
-                    var hc = 17L;
+                var hc = HashCode.Combine(obj.Major, obj.Minor, obj.Patch);
 
-                    hc = (hc * 23) + obj.Major;
-                    hc = (hc * 23) + obj.Minor;
-                    hc = (hc * 23) + obj.Patch;
-                    if (obj.PreRelease != null)
-                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
-                    if (obj.BuildMetadata != null)
-                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.BuildMetadata);
+                if (obj.PreRelease != null)
+                    hc = HashCode.Combine(hc, HashCode.Combine(obj.PreRelease, StringComparer.Ordinal));
 
-                    return ((int)(hc >> 32)) ^ (int)hc;
-                }
+                if (obj.BuildMetadata != null)
+                    hc = HashCode.Combine(hc, HashCode.Combine(obj.BuildMetadata, StringComparer.Ordinal));
+
+                return hc;
             }
 
             #endregion
@@ -143,18 +138,12 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                unchecked
-                {
-                    var hc = 17L;
+                var hc = HashCode.Combine(obj.Major, obj.Minor, obj.Patch);
 
-                    hc = (hc * 23) + obj.Major;
-                    hc = (hc * 23) + obj.Minor;
-                    hc = (hc * 23) + obj.Patch;
-                    if (obj.PreRelease != null)
-                        hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(obj.PreRelease);
+                if (obj.PreRelease != null)
+                    hc = HashCode.Combine(hc, HashCode.Combine(obj.PreRelease, StringComparer.Ordinal));
 
-                    return ((int)(hc >> 32)) ^ (int)hc;
-                }
+                return hc;
             }
 
             #endregion

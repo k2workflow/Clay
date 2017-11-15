@@ -227,27 +227,7 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (Minimum.HasValue)
-                    hc = (hc * 23) + Minimum.Value.GetHashCode();
-
-                if (Maximum.HasValue)
-                    hc = (hc * 23) + Maximum.Value.GetHashCode();
-
-                hc = (hc * 23) + (int)RangeOptions;
-
-                if (MultipleOf.HasValue)
-                    hc = (hc * 23) + MultipleOf.Value.GetHashCode();
-
-                hc = (hc * 23) + (Required ? 1 : 0);
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+            => HashCode.Combine(Minimum ?? (default), Maximum ?? (default), RangeOptions, MultipleOf ?? (default), Required);
 
         #endregion
 

@@ -99,22 +99,12 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Serves as the default hash function.</summary>
         /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hc = 17L;
-
-                if (Name != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Name);
-                if (Description != null)
-                    hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Description);
-                if (ExternalDocumentation != null)
-                    hc = (hc * 23) + ExternalDocumentation.GetHashCode();
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine
+        (
+            StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
+            StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
+            ExternalDocumentation
+        );
 
         #endregion
     }
