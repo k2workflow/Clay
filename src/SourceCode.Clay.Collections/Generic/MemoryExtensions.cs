@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Memory 2</param>
         /// <param name="cmpr">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y, IEqualityComparer<TSource> comparer)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x.Length != y.Length) return false; // (n, m)
             if (x.IsEmpty) return true; // (0, 0)
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
         /// <returns></returns>
-        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y)
             => MemoryEquals(x, y, null);
 
         #endregion
