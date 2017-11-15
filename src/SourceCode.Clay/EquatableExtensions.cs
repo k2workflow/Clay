@@ -29,7 +29,7 @@ namespace SourceCode.Clay
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool NullableEquals<T>(this T? x, in T? y)
+        public static bool NullableEquals<T>(this T? x, T? y)
             where T : struct, IEquatable<T>
         {
             if (x is null) return y is null; // (null, null) or (null, y)

@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(MemoryEquals_both_null))]
         public static void MemoryEquals_both_null()
         {
-            var equal = ReadOnlyMemory<string>.Empty.MemoryEquals(ref Memory<string>.Empty, StringComparer.Ordinal);
+            var equal = ReadOnlyMemory<string>.Empty.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
