@@ -37,28 +37,28 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>The Posix timestamp.</returns>
-        public static long ToPosixFileTime(DateTime value) => value.ToFileTime() - UnixEpochDifference;
+        public static long ToPosixFileTime(this DateTime value) => value.ToFileTime() - UnixEpochDifference;
 
         /// <summary>
         /// Converts the specified <see cref="DateTime"/> to a UTC Posix timestamp.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>The UTC Posix timestamp.</returns>
-        public static long ToPosixFileTimeUtc(DateTime value) => value.ToFileTimeUtc() - UnixEpochDifference;
+        public static long ToPosixFileTimeUtc(this DateTime value) => value.ToFileTimeUtc() - UnixEpochDifference;
 
         /// <summary>
         /// Converts the specified Posix timestamp to a <see cref="DateTime"/>.
         /// </summary>
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
-        public static DateTime FromPosixFileTime(in long posix) => DateTime.FromFileTime(posix + UnixEpochDifference);
+        public static DateTime FromPosixFileTime(this long posix) => DateTime.FromFileTime(posix + UnixEpochDifference);
 
         /// <summary>
         /// Converts the specified Posix timestamp to a <see cref="DateTime"/>.
         /// </summary>
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
-        public static DateTime FromPosixFileTimeUtc(in long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
+        public static DateTime FromPosixFileTimeUtc(this long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
 
         #endregion
     }
