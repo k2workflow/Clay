@@ -120,7 +120,7 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
-        public bool IsValid(decimal? value)
+        public bool IsValid(in decimal? value)
         {
             // Check Required
             if (!value.HasValue)

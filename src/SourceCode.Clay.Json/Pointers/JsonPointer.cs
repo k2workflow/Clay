@@ -160,28 +160,6 @@ namespace SourceCode.Clay.Json.Pointers
             return true;
         }
 
-        /// <summary>Returns the the Json pointer as a string value.</summary>
-        /// <returns>The Json pointer.</returns>
-        public override string ToString()
-        {
-            if (_tokens == null) return string.Empty;
-
-            var sb = new StringBuilder(_tokens.Length * LengthHeuristic);
-            for (var i = 0; i < _tokens.Length; i++)
-            {
-                var token = _tokens[i].Value;
-                sb.Append('/');
-                for (var j = 0; j < token.Length; j++)
-                {
-                    var c = token[j];
-                    if (c == '/') sb.Append("~1");
-                    else if (c == '~') sb.Append("~0");
-                    else sb.Append(c);
-                }
-            }
-            return sb.ToString();
-        }
-
         #endregion
 
         #region Evaluate
@@ -317,6 +295,28 @@ namespace SourceCode.Clay.Json.Pointers
         public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
 
         public static bool operator !=(JsonPointer x, JsonPointer y) => !x.Equals(y);
+
+        /// <summary>Returns the the Json pointer as a string value.</summary>
+        /// <returns>The Json pointer.</returns>
+        public override string ToString()
+        {
+            if (_tokens == null) return string.Empty;
+
+            var sb = new StringBuilder(_tokens.Length * LengthHeuristic);
+            for (var i = 0; i < _tokens.Length; i++)
+            {
+                var token = _tokens[i].Value;
+                sb.Append('/');
+                for (var j = 0; j < token.Length; j++)
+                {
+                    var c = token[j];
+                    if (c == '/') sb.Append("~1");
+                    else if (c == '~') sb.Append("~0");
+                    else sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
 
         #endregion
     }

@@ -33,7 +33,7 @@ namespace SourceCode.Clay
 
         #region Constructors
 
-        protected NumberComparer()
+        private NumberComparer()
         { }
 
         #endregion
@@ -86,13 +86,6 @@ namespace SourceCode.Clay
 
         private sealed class DefaultComparer : NumberComparer
         {
-            #region Constructors
-
-            internal DefaultComparer()
-            { }
-
-            #endregion
-
             #region IComparer
 
             public override int Compare(Number x, Number y)
