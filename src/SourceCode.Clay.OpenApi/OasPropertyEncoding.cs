@@ -102,7 +102,7 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (!StringComparer.Ordinal.Equals(ContentType, other.ContentType)) return false;
+            if (!Equals(ContentType, other.ContentType)) return false;
             if (!Headers.NullableDictionaryEquals(other.Headers)) return false;
             if (Style != other.Style) return false;
             if (Options != other.Options) return false;

@@ -80,10 +80,10 @@ namespace SourceCode.Clay
                 cmp = x.Patch.CompareTo(y.Patch);
                 if (cmp != 0) return cmp;
 
-                cmp = StringComparer.Ordinal.Compare(x.PreRelease, y.PreRelease);
+                cmp = string.CompareOrdinal(x.PreRelease, y.PreRelease);
                 if (cmp != 0) return cmp;
 
-                cmp = StringComparer.Ordinal.Compare(x.BuildMetadata, y.BuildMetadata);
+                cmp = string.CompareOrdinal(x.BuildMetadata, y.BuildMetadata);
                 return cmp;
             }
 
@@ -141,7 +141,7 @@ namespace SourceCode.Clay
                 cmp = x.Patch.CompareTo(y.Patch);
                 if (cmp != 0) return cmp;
 
-                cmp = StringComparer.Ordinal.Compare(x.PreRelease, y.PreRelease);
+                cmp = string.CompareOrdinal(x.PreRelease, y.PreRelease);
                 return cmp;
             }
 
