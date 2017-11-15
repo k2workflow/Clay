@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Json.Pointers
     /// <summary>
     /// Represents a Json pointer.
     /// </summary>
-    public struct JsonPointer : IReadOnlyList<JsonPointerToken>, IEquatable<JsonPointer>
+    public readonly struct JsonPointer : IReadOnlyList<JsonPointerToken>, IEquatable<JsonPointer>
     {
         #region Constants
 

@@ -13,7 +13,7 @@ namespace SourceCode.Clay
     /// <summary>
     /// Represents a semantic version that conforms to the <a href="http://semver.org/spec/v2.0.0.html">v2.0.0 specification</a>.
     /// </summary>
-    public struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
+    public readonly struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
     {
         #region Constants
 

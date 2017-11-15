@@ -13,7 +13,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents a reference to an internal or external resource.
     /// </summary>
-    public struct OasReference : IEquatable<OasReference>
+    public readonly struct OasReference : IEquatable<OasReference>
     {
         #region Properties
 

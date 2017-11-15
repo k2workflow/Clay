@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Validation
     /// <summary>
     /// Represents a Json range constraint.
     /// </summary>
-    public struct NumberConstraint : IEquatable<NumberConstraint>
+    public readonly struct NumberConstraint : IEquatable<NumberConstraint>
     {
         #region Constants
 

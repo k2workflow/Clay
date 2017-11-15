@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Validation
     /// <summary>
     /// Represents a Json count constraint.
     /// </summary>
-    public struct CountConstraint : IEquatable<CountConstraint>
+    public readonly struct CountConstraint : IEquatable<CountConstraint>
     {
         #region Constants
 

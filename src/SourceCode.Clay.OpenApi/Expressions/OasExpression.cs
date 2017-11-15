@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// <summary>
     /// Represents an Open API expression.
     /// </summary>
-    public struct OasExpression : IReadOnlyList<OasExpressionComponent>, IEquatable<OasExpression>
+    public readonly struct OasExpression : IReadOnlyList<OasExpressionComponent>, IEquatable<OasExpression>
     {
         #region Properties
 

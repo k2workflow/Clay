@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Buffers
     /// buffers allocated via <see cref="ArrayPool{T}.Rent(int)"/>.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public struct BufferSession : IEquatable<BufferSession>, IDisposable // MUST be a struct, in order to lessen GC load
+    public readonly struct BufferSession : IEquatable<BufferSession>, IDisposable // MUST be a struct, in order to lessen GC load
     {
         #region Properties
 
@@ -33,7 +33,7 @@ namespace SourceCode.Clay.Buffers
         /// <value>
         /// The buffer.
         /// </value>
-        public byte[] Buffer { get; private set; }
+        public byte[] Buffer { get; }
 
         #endregion
 
@@ -142,7 +142,6 @@ namespace SourceCode.Clay.Buffers
                 return;
 
             System.Buffers.ArrayPool<byte>.Shared.Return(Buffer);
-            Buffer = null;
         }
 
         #endregion

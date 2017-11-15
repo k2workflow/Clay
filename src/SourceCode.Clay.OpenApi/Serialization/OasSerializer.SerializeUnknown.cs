@@ -28,7 +28,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
 #pragma warning disable CA2231
 
-        private struct SerializerKey : IEquatable<SerializerKey>
+        private readonly struct SerializerKey : IEquatable<SerializerKey>
         {
             #region Properties
 

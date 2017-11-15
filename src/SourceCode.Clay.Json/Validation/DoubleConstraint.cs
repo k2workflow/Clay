@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Validation
     /// <summary>
     /// Represents a Json Double value constraint.
     /// </summary>
-    public struct DoubleConstraint : IEquatable<DoubleConstraint>
+    public readonly struct DoubleConstraint : IEquatable<DoubleConstraint>
     {
         #region Constants
 

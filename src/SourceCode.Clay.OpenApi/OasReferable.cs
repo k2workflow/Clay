@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// Represents either a reference object or a value.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
-    public struct OasReferable<T> : IEquatable<OasReferable<T>>, IOasReferable
+    public readonly struct OasReferable<T> : IEquatable<OasReferable<T>>, IOasReferable
         where T : class, IEquatable<T>
     {
         #region Properties

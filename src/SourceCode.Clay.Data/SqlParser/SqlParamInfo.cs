@@ -10,7 +10,7 @@ using System.Data;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    public struct SqlParamInfo : IEquatable<SqlParamInfo>
+    public readonly struct SqlParamInfo : IEquatable<SqlParamInfo>
     {
         #region Constants
 

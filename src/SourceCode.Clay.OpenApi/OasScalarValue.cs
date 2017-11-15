@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents a JSON scalar value.
     /// </summary>
-    public struct OasScalarValue : IEquatable<OasScalarValue>, IFormattable
+    public readonly struct OasScalarValue : IEquatable<OasScalarValue>, IFormattable
     {
         #region Fields
 
