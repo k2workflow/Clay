@@ -120,7 +120,7 @@ namespace SourceCode.Clay.Json.Validation
 
         #region Methods
 
-        public bool IsValid(in double? value)
+        public bool IsValid(double? value)
         {
             // Check Required
             if (!value.HasValue)

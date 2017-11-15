@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="ignoreCase">True to ignore case; False to regard case.</param>
         /// <returns>The parsed enum value or null.</returns>
-        public static TEnum? ReadEnum<TEnum>(this JsonReader jr, in bool ignoreCase)
+        public static TEnum? ReadEnum<TEnum>(this JsonReader jr, bool ignoreCase)
             where TEnum : struct
         {
             var str = (string)jr.Value;
