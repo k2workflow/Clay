@@ -51,14 +51,14 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
-        public static DateTime FromPosixFileTime(this long posix) => DateTime.FromFileTime(posix + UnixEpochDifference);
+        public static DateTime FromPosixFileTime(long posix) => DateTime.FromFileTime(posix + UnixEpochDifference);
 
         /// <summary>
         /// Converts the specified Posix timestamp to a <see cref="DateTime"/>.
         /// </summary>
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
-        public static DateTime FromPosixFileTimeUtc(this long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
+        public static DateTime FromPosixFileTimeUtc(long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
 
         #endregion
     }
