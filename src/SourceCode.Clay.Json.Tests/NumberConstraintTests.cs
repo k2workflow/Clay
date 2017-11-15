@@ -118,6 +118,17 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(range.IsValid(value) == valid);
         }
 
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(OpenApi_Test_Decimal_NumberConstraint))]
+        public static void OpenApi_Test_Decimal_NumberConstraint()
+        {
+            // [-214748.3648, +214748.3647]
+            var expected = new NumberConstraint(System.Data.SqlTypes.SqlMoney.MinValue.Value, System.Data.SqlTypes.SqlMoney.MaxValue.Value);
+            var actual = expected;
+
+            Assert.True(expected == actual);
+        }
+
         #endregion
     }
 }
