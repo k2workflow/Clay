@@ -37,14 +37,14 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>The Posix timestamp.</returns>
-        public static long ToPosixFileTime(in this DateTime value) => value.ToFileTime() - UnixEpochDifference;
+        public static long ToPosixFileTime(DateTime value) => value.ToFileTime() - UnixEpochDifference;
 
         /// <summary>
         /// Converts the specified <see cref="DateTime"/> to a UTC Posix timestamp.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         /// <returns>The UTC Posix timestamp.</returns>
-        public static long ToPosixFileTimeUtc(in this DateTime value) => value.ToFileTimeUtc() - UnixEpochDifference;
+        public static long ToPosixFileTimeUtc(DateTime value) => value.ToFileTimeUtc() - UnixEpochDifference;
 
         /// <summary>
         /// Converts the specified Posix timestamp to a <see cref="DateTime"/>.

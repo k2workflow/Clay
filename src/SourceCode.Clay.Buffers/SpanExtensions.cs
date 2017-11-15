@@ -174,7 +174,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        public static void Sort<T>(in this Span<T> span, Comparison<T> comparison)
+        public static void Sort<T>(Span<T> span, Comparison<T> comparison)
         {
             if (comparison == null) throw new ArgumentNullException(nameof(comparison));
             if (span.IsEmpty || span.Length < 2) return;

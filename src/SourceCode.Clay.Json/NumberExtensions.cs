@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json
     {
         #region Methods
 
-        public static JValue ToJson(in this Number number)
+        public static JValue ToJson(Number number)
         {
             // We constrain to number types (not bool, guid, string, etc)
             switch (number.ValueTypeCode)
