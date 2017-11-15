@@ -25,6 +25,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new CountConstraint(null, null);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -38,6 +39,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new CountConstraint(0, null);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -51,6 +53,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new CountConstraint(null, 11);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -65,6 +68,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new CountConstraint(3, 10);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -81,6 +85,7 @@ namespace SourceCode.Clay.Json.Units
 
             Assert.Equal(range, exact);
             Assert.True(exact.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         #endregion

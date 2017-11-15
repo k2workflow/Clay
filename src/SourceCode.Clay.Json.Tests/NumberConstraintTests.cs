@@ -26,6 +26,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(default, default, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -40,6 +41,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(0.5, default, RangeOptions.MinimumInclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -54,6 +56,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(0.5, default, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -68,6 +71,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(default, 10.1, RangeOptions.MaximumInclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -82,6 +86,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(default, 10.1, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -99,6 +104,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(-10.1, 10.1, RangeOptions.Inclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -116,6 +122,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new NumberConstraint(-10.1, 10.1, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -123,10 +130,11 @@ namespace SourceCode.Clay.Json.Units
         public static void OpenApi_Test_Decimal_NumberConstraint()
         {
             // [-214748.3648, +214748.3647]
-            var expected = new NumberConstraint(System.Data.SqlTypes.SqlMoney.MinValue.Value, System.Data.SqlTypes.SqlMoney.MaxValue.Value);
-            var actual = expected;
+            var range = new NumberConstraint(System.Data.SqlTypes.SqlMoney.MinValue.Value, System.Data.SqlTypes.SqlMoney.MaxValue.Value);
+            var actual = range;
 
-            Assert.True(expected == actual);
+            Assert.True(range == actual);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         #endregion

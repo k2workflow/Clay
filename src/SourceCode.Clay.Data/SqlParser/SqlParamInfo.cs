@@ -58,6 +58,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
         public override int GetHashCode()
         {
+            // TODO: Use HashCode class
             unchecked
             {
                 var hc = 17L;

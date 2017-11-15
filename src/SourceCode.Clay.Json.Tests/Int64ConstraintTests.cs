@@ -26,6 +26,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(null, null, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -40,6 +41,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(-10, null, RangeOptions.MinimumInclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -54,6 +56,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(-10, default, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -68,6 +71,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(null, 10, RangeOptions.MaximumInclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -82,6 +86,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(null, 10, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -99,6 +104,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(-10, 10, RangeOptions.Inclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -116,6 +122,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new Int64Constraint(-10, 10, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(value) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         #endregion

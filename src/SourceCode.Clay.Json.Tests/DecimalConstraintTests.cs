@@ -29,6 +29,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(default, default, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -46,6 +47,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(0.5m, default, RangeOptions.MinimumInclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -63,6 +65,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(0.5m, default, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -80,6 +83,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(default, 10.1m, RangeOptions.MaximumInclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -97,6 +101,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(default, 10.1m, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -117,6 +122,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(-10.1m, 10.1m, RangeOptions.Inclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         [Trait("Type", "Unit")]
@@ -137,6 +143,7 @@ namespace SourceCode.Clay.Json.Units
             var range = new DecimalConstraint(-10.1m, 10.1m, RangeOptions.Exclusive);
 
             Assert.True(range.IsValid(dec) == valid);
+            Assert.NotEqual(0, range.GetHashCode());
         }
 
         #endregion
