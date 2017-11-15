@@ -276,17 +276,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-        {
-            var hc = new HashCode();
-
-            if (_tokens != null)
-            {
-                hc.Add(_tokens.Length);
-                hc.Add(_tokens[0]);
-            }
-
-            return hc.ToHashCode();
-        }
+            => _tokens == null ? 0 : HashCode.Combine(_tokens.Length, _tokens[0]);
 
         #endregion
 
