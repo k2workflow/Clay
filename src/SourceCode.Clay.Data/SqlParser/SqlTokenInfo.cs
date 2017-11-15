@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    public struct SqlTokenInfo : IEquatable<SqlTokenInfo>
+    public readonly struct SqlTokenInfo : IEquatable<SqlTokenInfo>
     {
         #region Properties
 

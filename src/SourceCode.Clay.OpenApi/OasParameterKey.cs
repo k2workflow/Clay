@@ -12,7 +12,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents a parameter key.
     /// </summary>
-    public struct OasParameterKey : IEquatable<OasParameterKey>
+    public readonly struct OasParameterKey : IEquatable<OasParameterKey>
     {
         #region Properties
 

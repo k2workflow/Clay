@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Validation
     /// <summary>
     /// Represents a Json Int64 value constraint.
     /// </summary>
-    public struct Int64Constraint : IEquatable<Int64Constraint>
+    public readonly struct Int64Constraint : IEquatable<Int64Constraint>
     {
         #region Constants
 

@@ -15,7 +15,7 @@ namespace SourceCode.Clay.OpenApi
     /// <summary>
     /// Represents an HTTP response key.
     /// </summary>
-    public struct OasResponseKey : IEquatable<OasResponseKey>
+    public readonly struct OasResponseKey : IEquatable<OasResponseKey>
     {
         #region Well-known
 

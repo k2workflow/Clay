@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Buffers
         /// <returns></returns>
         [SecuritySafeCritical]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CompareMemory(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y)
+        public static int CompareMemory(in ReadOnlyMemory<byte> x, in ReadOnlyMemory<byte> y)
         {
             if (x.IsEmpty)
             {
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="y">Span 2</param>
         /// <returns></returns>
         [SecuritySafeCritical]
-        public static int CompareSpan(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
+        public static int CompareSpan(in ReadOnlySpan<byte> x, in ReadOnlySpan<byte> y)
         {
             // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
             // public static bool operator ==

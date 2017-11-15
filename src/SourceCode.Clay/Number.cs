@@ -20,7 +20,7 @@ namespace SourceCode.Clay
     /// Represents an efficient discriminated union across all the primitive number types.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)] // 17 bytes, aligned up to 20
-    public struct Number : IEquatable<Number>, IComparable<Number>, IFormattable, IConvertible
+    public readonly struct Number : IEquatable<Number>, IComparable<Number>, IFormattable, IConvertible
     {
         #region Fields
 

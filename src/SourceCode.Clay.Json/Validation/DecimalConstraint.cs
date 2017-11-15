@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json.Validation
     /// <summary>
     /// Represents a Json Decimal value constraint.
     /// </summary>
-    public struct DecimalConstraint : IEquatable<DecimalConstraint>
+    public readonly struct DecimalConstraint : IEquatable<DecimalConstraint>
     {
         #region Constants
 

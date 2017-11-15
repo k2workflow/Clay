@@ -33,7 +33,7 @@ namespace SourceCode.Clay.Buffers
         /// The maximum number of octets processed when calculating a hashcode.
         /// Pass zero to disable the limit.
         /// </param>
-        protected BufferComparer(int hashCodeFidelity)
+        private protected BufferComparer(int hashCodeFidelity)
         {
             if (hashCodeFidelity < 0) throw new ArgumentOutOfRangeException(nameof(hashCodeFidelity));
 
@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Buffers
         /// Creates a new instance of the <see cref="BufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
         /// </summary>
-        protected BufferComparer()
+        private protected BufferComparer()
         {
             HashCodeFidelity = 0;
         }

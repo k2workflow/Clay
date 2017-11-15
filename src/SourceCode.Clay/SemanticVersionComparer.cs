@@ -34,7 +34,7 @@ namespace SourceCode.Clay
 
         #region Constructors
 
-        protected SemanticVersionComparer()
+        private SemanticVersionComparer()
         { }
 
         #endregion
@@ -60,13 +60,6 @@ namespace SourceCode.Clay
 
         private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
         {
-            #region Constructors
-
-            internal StrictSemanticVersionComparer()
-            { }
-
-            #endregion
-
             #region Methods
 
             public override int Compare(SemanticVersion x, SemanticVersion y)
@@ -121,13 +114,6 @@ namespace SourceCode.Clay
 
         private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
         {
-            #region Constructors
-
-            internal StandardSemanticVersionComparer()
-            { }
-
-            #endregion
-
             #region Methods
 
             public override int Compare(SemanticVersion x, SemanticVersion y)
