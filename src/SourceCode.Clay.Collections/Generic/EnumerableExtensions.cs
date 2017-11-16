@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Helpers
 
-        internal static bool CheckEnumerable<TSource>(IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        internal static bool CheckEnumerable<TSource>(in IEnumerable<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             Debug.Assert(x != null);
             Debug.Assert(y != null);

@@ -14,7 +14,7 @@ using System.Text;
 
 namespace SourceCode.Clay.Data.SqlParser
 {
-    public static partial class SqlParamBlockParser
+    public static class SqlParamBlockParser
     {
         #region Constants
 

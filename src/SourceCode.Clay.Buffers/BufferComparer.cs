@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace SourceCode.Clay.Buffers
@@ -23,10 +22,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         public const int DefaultHashCodeFidelity = 512;
 
-        #endregion
-
-        #region Array
-
         /// <summary>
         /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with default fidelity.
         /// </summary>
@@ -34,10 +29,6 @@ namespace SourceCode.Clay.Buffers
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
         public static BufferComparer<byte[]> Array { get; } = new ArrayBufferComparer(DefaultHashCodeFidelity);
-
-        #endregion
-
-        #region Memory
 
         /// <summary>
         /// Gets the default instance of the <see cref="ReadOnlyMemory{T}"/> buffer comparer that uses FNV with default fidelity.
@@ -50,28 +41,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Helpers
-
-        /// <summary>
-        /// Compare the contexts of two <see cref="ReadOnlyMemory{T}"/> buffers.
-        /// </summary>
-        /// <param name="x">Memory 1</param>
-        /// <param name="y">Memory 2</param>
-        /// <returns></returns>
-        [SecuritySafeCritical]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int CompareMemory(in ReadOnlyMemory<byte> x, in ReadOnlyMemory<byte> y)
-        {
-            if (x.IsEmpty)
-            {
-                if (y.IsEmpty) return 0; // (null, null)
-                return -1; // (null, y)
-            }
-            if (y.IsEmpty) return 1; // (x, null)
-
-            var cmp = CompareSpan(x.Span, y.Span);
-            return cmp;
-        }
+        #region Methods
 
         /// <summary>
         /// Compare the contexts of two <see cref="ReadOnlySpan{T}"/> buffers.
@@ -88,28 +58,36 @@ namespace SourceCode.Clay.Buffers
             // Note that this does *not* check to see if the *contents* are equal.
             if (x == y) return 0;
 
-            if (x.IsEmpty)
+            var cmp = x.Length.CompareTo(y.Length);
+            if (cmp != 0) return cmp; // ([n], [m])
+
+            // ([n], [n])
+            switch (x.Length)
             {
-                if (y.IsEmpty) return 0; // (null, null)
-                return -1; // (null, y)
-            }
-            if (y.IsEmpty) return 1; // (x, null)
-
-            if (x.Length < y.Length) return -1; // (m, n)
-            if (x.Length > y.Length) return 1;
-
-            switch (x.Length) // (n, n)
-            {
-                // (0, 0)
-                case 0: return 0;
-
-                // (m[0], n[0])
-                case 1:
-                    if (x[0] < y[0]) return -1;
-                    if (x[0] > y[0]) return 1;
+                case 0:
                     return 0;
 
-                // (m[0..N], n[0..N])
+                case 1:
+                    cmp = x[0].CompareTo(y[0]);
+                    return cmp;
+
+                case 2:
+                    cmp = x[0].CompareTo(y[0]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[1].CompareTo(y[1]);
+                    return cmp;
+
+                case 3:
+                    cmp = x[0].CompareTo(y[0]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[1].CompareTo(y[1]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[2].CompareTo(y[2]);
+                    return cmp;
+
                 default:
                     {
                         unsafe
@@ -117,7 +95,7 @@ namespace SourceCode.Clay.Buffers
                             fixed (byte* xp = &x.DangerousGetPinnableReference())
                             fixed (byte* yp = &y.DangerousGetPinnableReference())
                             {
-                                var cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                                cmp = NativeMethods.MemCompare(xp, yp, x.Length);
                                 return cmp;
                             }
                         }
@@ -126,45 +104,27 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
+        /// Compare the contexts of two <see cref="ReadOnlyMemory{T}"/> buffers.
+        /// </summary>
+        /// <param name="x">Memory 1</param>
+        /// <param name="y">Memory 2</param>
+        /// <returns></returns>
+        public static int CompareMemory(in ReadOnlyMemory<byte> x, in ReadOnlyMemory<byte> y)
+            => CompareSpan(x.Span, y.Span);
+
+        /// <summary>
         /// Compare the contents of two <see cref="Byte[]"/> buffers.
         /// </summary>
         /// <param name="x">Buffer 1</param>
         /// <param name="y">Buffer 2</param>
         /// <returns></returns>
-        [SecuritySafeCritical]
-        public static int CompareArray(byte[] x, byte[] y)
+        public static int CompareArray(in byte[] x, in byte[] y)
         {
             if (ReferenceEquals(x, y)) return 0; // (null, null) or (x, x)
             if (x == null) return -1; // (null, y)
             if (y == null) return 1; // (x, null)
 
-            if (x.Length < y.Length) return -1; // (m, n)
-            if (x.Length > y.Length) return 1;
-
-            switch (x.Length) // (n, n)
-            {
-                // (0, 0)
-                case 0: return 0;
-
-                // (m[0], n[0])
-                case 1:
-                    if (x[0] < y[0]) return -1;
-                    if (x[0] > y[0]) return 1;
-                    return 0;
-
-                // (m[0..N], n[0..N])
-                default:
-                    {
-                        unsafe
-                        {
-                            fixed (byte* xp = x, yp = y)
-                            {
-                                var cmp = NativeMethods.MemCompare(xp, yp, x.Length);
-                                return cmp;
-                            }
-                        }
-                    }
-            }
+            return CompareSpan(x, y);
         }
 
         #endregion

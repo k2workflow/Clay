@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Collection 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             if (x is null) return y is null; // (null, null) or (null, y)
             if (y is null) return false; // (x, null)
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, IEnumerable<TSource> y)
+        public static bool NullableCollectionEquals<TSource>(this ICollection<TSource> x, in IEnumerable<TSource> y)
             => NullableCollectionEquals(x, y, null);
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Collection 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             if (x is null) return y is null; // (null, null) or (null, y)
             if (y is null) return false; // (x, null)
@@ -103,7 +103,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Collection 1</param>
         /// <param name="y">Collection 2</param>
         /// <returns></returns>
-        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, IEnumerable<TSource> y)
+        public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, in IEnumerable<TSource> y)
             => NullableCollectionEquals(x, y, null);
 
         #endregion

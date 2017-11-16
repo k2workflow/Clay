@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public abstract class BufferComparer<T> : IEqualityComparer<T>, IComparer<T>
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         /// The prefix of the buffer that is considered for hashcode calculation.

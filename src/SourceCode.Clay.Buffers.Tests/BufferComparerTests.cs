@@ -299,6 +299,20 @@ namespace SourceCode.Clay.Buffers.Tests
         #region IComparer
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Null))]
+        public static void BufferComparer_Compare_Array_Null()
+        {
+            byte[] a = null;
+            byte[] b = null;
+            var c = new byte[0]; // empty
+
+            // Array
+            Assert.True(BufferComparer.Array.Compare(a, a) == 0);
+            Assert.True(BufferComparer.Array.Compare(a, b) == 0);
+            Assert.True(BufferComparer.Array.Compare(a, c) < 0);
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Length_One))]
         public static void BufferComparer_Compare_Array_Length_One()
         {

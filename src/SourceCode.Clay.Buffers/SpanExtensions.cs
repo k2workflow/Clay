@@ -20,6 +20,16 @@ namespace SourceCode.Clay.Buffers
 
         #region Methods
 
+        public static void Sort<T>(this Span<T> span, Comparison<T> comparison)
+        {
+            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+
+            if (span.IsEmpty || span.Length <= 1) return;
+            IntrospectiveSort(span, comparison, 0, span.Length - 1, 2 * FloorLog2(span.Length));
+        }
+
+        #endregion
+
         #region IntrospectiveSort
 
         private static int FloorLog2(int n)
@@ -170,15 +180,6 @@ namespace SourceCode.Clay.Buffers
                 Swap(span, lo, lo + i - 1);
                 DownHeap(span, comparison, 1, i - 1, lo);
             }
-        }
-
-        #endregion
-
-        public static void Sort<T>(this Span<T> span, Comparison<T> comparison)
-        {
-            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
-            if (span.IsEmpty || span.Length < 2) return;
-            IntrospectiveSort(span, comparison, 0, span.Length - 1, 2 * FloorLog2(span.Length));
         }
 
         #endregion

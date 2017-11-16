@@ -17,10 +17,12 @@ namespace SourceCode.Clay
     {
         #region Constants
 
+        private static readonly SemanticVersion _empty;
+
         /// <summary>
         /// Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
-        public static SemanticVersion Empty { get; }
+        public static ref readonly SemanticVersion Empty => ref _empty;
 
         #endregion
 

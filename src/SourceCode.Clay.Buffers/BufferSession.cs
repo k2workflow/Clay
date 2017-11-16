@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="result">The result.</param>
-        public BufferSession(byte[] buffer, ArraySegment<byte> result)
+        public BufferSession(in byte[] buffer, in ArraySegment<byte> result)
         {
             Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             Result = result;
@@ -54,7 +54,7 @@ namespace SourceCode.Clay.Buffers
         /// Initializes a new instance of the <see cref="BufferSession"/> struct.
         /// </summary>
         /// <param name="result">The result.</param>
-        public BufferSession(ArraySegment<byte> result)
+        public BufferSession(in ArraySegment<byte> result)
         {
             Buffer = null;
             Result = result;
@@ -93,7 +93,7 @@ namespace SourceCode.Clay.Buffers
         /// Returns the buffer.
         /// </summary>
         /// <param name="buffer">The buffer.</param>
-        public static void ReturnBuffer(byte[] buffer)
+        public static void ReturnBuffer(in byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
 

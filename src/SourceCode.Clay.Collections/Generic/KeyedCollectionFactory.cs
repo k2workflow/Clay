@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// (0 creates the lookup dictionary when the first item is added), or –1 to specify that a lookup dictionary is never created.
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(IEnumerable<TItem> items, Func<TItem, TKey> keyExtractor, IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
         {
             if (items == null) throw new ArgumentNullException(nameof(items));
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
@@ -56,7 +56,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// (0 creates the lookup dictionary when the first item is added), or –1 to specify that a lookup dictionary is never created.
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(Func<TItem, TKey> keyExtractor, IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
         {
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use.</param>
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(IEnumerable<TItem> items, Func<TItem, TKey> keyExtractor, IEqualityComparer<TKey> comparer)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
             if (items == null) throw new ArgumentNullException(nameof(items));
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
@@ -99,7 +99,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="comparer">The comparer to use.</param>
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(Func<TItem, TKey> keyExtractor, IEqualityComparer<TKey> comparer)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
             if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(IEnumerable<TItem> items, Func<TItem, TKey> keyExtractor)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor)
         {
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
 
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
         /// </param>
         /// <returns>An instance of the Dictionary.</returns>
-        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(Func<TItem, TKey> keyExtractor)
+        public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor)
         {
             if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
 
@@ -165,7 +165,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             #region Constructors
 
-            public KeyedCollectionImpl(Func<TValue, TKey> keyExtractor, IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
+            public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
                 : base(comparer, dictionaryCreationThreshold)
             {
                 if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -174,7 +174,7 @@ namespace SourceCode.Clay.Collections.Generic
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }
 
-            public KeyedCollectionImpl(Func<TValue, TKey> keyExtractor, IEqualityComparer<TKey> comparer)
+            public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
                 : base(comparer)
             {
                 if (comparer == null) throw new ArgumentNullException(nameof(comparer));
@@ -182,7 +182,7 @@ namespace SourceCode.Clay.Collections.Generic
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }
 
-            public KeyedCollectionImpl(Func<TValue, TKey> keyExtractor)
+            public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor)
             {
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }
