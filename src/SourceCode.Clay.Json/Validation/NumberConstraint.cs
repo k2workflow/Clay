@@ -18,23 +18,33 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
-        public static NumberConstraint Empty { get; }
+        private static readonly NumberConstraint _empty;
+        private static readonly NumberConstraint _forByte = new NumberConstraint(byte.MinValue, byte.MaxValue);
+        private static readonly NumberConstraint _forSByte = new NumberConstraint(sbyte.MinValue, sbyte.MaxValue);
+        private static readonly NumberConstraint _forInt16 = new NumberConstraint(short.MinValue, short.MaxValue);
+        private static readonly NumberConstraint _forUInt16 = new NumberConstraint(ushort.MinValue, ushort.MaxValue);
+        private static readonly NumberConstraint _forInt32 = new NumberConstraint(int.MinValue, int.MaxValue);
+        private static readonly NumberConstraint _forUInt32 = new NumberConstraint(uint.MinValue, uint.MaxValue);
+        private static readonly NumberConstraint _forInt64 = new NumberConstraint(long.MinValue, long.MaxValue);
+        private static readonly NumberConstraint _forUInt64 = new NumberConstraint(ulong.MinValue, ulong.MaxValue);
 
-        public static NumberConstraint ForByte { get; } = new NumberConstraint(byte.MinValue, byte.MaxValue);
+        public static ref readonly NumberConstraint Empty => ref _empty;
 
-        public static NumberConstraint ForSByte { get; } = new NumberConstraint(sbyte.MinValue, sbyte.MaxValue);
+        public static ref readonly NumberConstraint ForByte => ref _forByte;
 
-        public static NumberConstraint ForInt16 { get; } = new NumberConstraint(short.MinValue, short.MaxValue);
+        public static ref readonly NumberConstraint ForSByte => ref _forSByte;
 
-        public static NumberConstraint ForUInt16 { get; } = new NumberConstraint(ushort.MinValue, ushort.MaxValue);
+        public static ref readonly NumberConstraint ForInt16 => ref _forInt16;
 
-        public static NumberConstraint ForInt32 { get; } = new NumberConstraint(int.MinValue, int.MaxValue);
+        public static ref readonly NumberConstraint ForUInt16 => ref _forUInt16;
 
-        public static NumberConstraint ForUInt32 { get; } = new NumberConstraint(uint.MinValue, uint.MaxValue);
+        public static ref readonly NumberConstraint ForInt32 => ref _forInt32;
 
-        public static NumberConstraint ForInt64 { get; } = new NumberConstraint(long.MinValue, long.MaxValue);
+        public static ref readonly NumberConstraint ForUInt32 => ref _forUInt32;
 
-        public static NumberConstraint ForUInt64 { get; } = new NumberConstraint(ulong.MinValue, ulong.MaxValue);
+        public static ref readonly NumberConstraint ForInt64 => ref _forInt64;
+
+        public static ref readonly NumberConstraint ForUInt64 => ref _forUInt64;
 
         #endregion
 

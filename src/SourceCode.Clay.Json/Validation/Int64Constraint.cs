@@ -18,19 +18,27 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
-        public static Int64Constraint Empty { get; }
+        private static readonly Int64Constraint _empty;
+        private static readonly Int64Constraint _forByte = new Int64Constraint(byte.MinValue, byte.MaxValue);
+        private static readonly Int64Constraint _forSByte = new Int64Constraint(sbyte.MinValue, sbyte.MaxValue);
+        private static readonly Int64Constraint _forInt16 = new Int64Constraint(short.MinValue, short.MaxValue);
+        private static readonly Int64Constraint _forUInt16 = new Int64Constraint(ushort.MinValue, ushort.MaxValue);
+        private static readonly Int64Constraint _forInt32 = new Int64Constraint(int.MinValue, int.MaxValue);
+        private static readonly Int64Constraint _forUInt32 = new Int64Constraint(uint.MinValue, uint.MaxValue);
 
-        public static Int64Constraint ForByte { get; } = new Int64Constraint(byte.MinValue, byte.MaxValue);
+        public static ref readonly Int64Constraint Empty => ref _empty;
 
-        public static Int64Constraint ForSByte { get; } = new Int64Constraint(sbyte.MinValue, sbyte.MaxValue);
+        public static ref readonly Int64Constraint ForByte => ref _forByte;
 
-        public static Int64Constraint ForInt16 { get; } = new Int64Constraint(short.MinValue, short.MaxValue);
+        public static ref readonly Int64Constraint ForSByte => ref _forSByte;
 
-        public static Int64Constraint ForUInt16 { get; } = new Int64Constraint(ushort.MinValue, ushort.MaxValue);
+        public static ref readonly Int64Constraint ForInt16 => ref _forInt16;
 
-        public static Int64Constraint ForInt32 { get; } = new Int64Constraint(int.MinValue, int.MaxValue);
+        public static ref readonly Int64Constraint ForUInt16 => ref _forUInt16;
 
-        public static Int64Constraint ForUInt32 { get; } = new Int64Constraint(uint.MinValue, uint.MaxValue);
+        public static ref readonly Int64Constraint ForInt32 => ref _forInt32;
+
+        public static ref readonly Int64Constraint ForUInt32 => ref _forUInt32;
 
         #endregion
 

@@ -14,7 +14,9 @@ namespace SourceCode.Clay.Data.SqlParser
     {
         #region Constants
 
-        public static SqlParamInfo Empty { get; }
+        private static readonly SqlParamInfo _empty;
+
+        public static ref readonly SqlParamInfo Empty => ref _empty;
 
         #endregion
 

@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>
         /// <returns></returns>
-        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y, IEqualityComparer<TValue> valueComparer)
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y, in IEqualityComparer<TValue> valueComparer)
         {
             if (x is null) return y is null; // (null, null) or (null, y)
             if (y is null) return false; // (x, null)

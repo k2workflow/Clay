@@ -18,11 +18,15 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
-        public static CountConstraint Empty { get; }
+        private static readonly CountConstraint _empty;
+        private static readonly CountConstraint _forByte = new CountConstraint(byte.MinValue, byte.MaxValue);
+        private static readonly CountConstraint _forUInt16 = new CountConstraint(ushort.MinValue, ushort.MaxValue);
 
-        public static CountConstraint ForByte { get; } = new CountConstraint(byte.MinValue, byte.MaxValue);
+        public static ref readonly CountConstraint Empty => ref _empty;
 
-        public static CountConstraint ForUInt16 { get; } = new CountConstraint(ushort.MinValue, ushort.MaxValue);
+        public static ref readonly CountConstraint ForByte => ref _forByte;
+
+        public static ref readonly CountConstraint ForUInt16 => ref _forUInt16;
 
         #endregion
 
@@ -41,7 +45,7 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>
         /// Gets a value indicating whether <see cref="Maximum"/> has a value.
         /// </summary>
-        public bool IsBounded => Maximum.HasValue;
+        public bool IsBounded => Maximum.HasValue; // Minimum is not nullable
 
         #endregion
 

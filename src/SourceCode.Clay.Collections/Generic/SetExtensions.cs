@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Set 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             if (x is null) return y is null; // (null, null) or (null, y)
             if (y is null) return false; // (x, null)
@@ -78,7 +78,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="x">Set 1</param>
         /// <param name="y">Set 2</param>
         /// <returns></returns>
-        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y)
+        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, in IEnumerable<TSource> y)
             => NullableSetEquals(x, y, null);
 
         #endregion

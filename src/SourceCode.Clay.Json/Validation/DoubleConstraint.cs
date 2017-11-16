@@ -18,7 +18,12 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
-        public static DoubleConstraint Empty { get; }
+        private static readonly DoubleConstraint _empty;
+        private static readonly DoubleConstraint _forSingle = new DoubleConstraint(float.MinValue, float.MaxValue);
+
+        public static ref readonly DoubleConstraint Empty => ref _empty;
+
+        public static ref readonly DoubleConstraint ForSingle => ref _forSingle;
 
         #endregion
 

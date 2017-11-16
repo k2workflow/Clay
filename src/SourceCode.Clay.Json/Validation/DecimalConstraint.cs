@@ -18,7 +18,9 @@ namespace SourceCode.Clay.Json.Validation
     {
         #region Constants
 
-        public static DecimalConstraint Empty { get; }
+        private static readonly DecimalConstraint _empty;
+
+        public static ref readonly DecimalConstraint Empty => ref _empty;
 
         #endregion
 

@@ -27,7 +27,7 @@ namespace SourceCode.Clay.IO
         /// <param name="stream">The stream to write to.</param>
         /// <param name="memory">The memory to write.</param>
         /// <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
-        public static void Write(this Stream stream, ReadOnlyMemory<byte> memory, int bufferLength = 81920)
+        public static void Write(this Stream stream, in ReadOnlyMemory<byte> memory, int bufferLength = 81920)
             => Write(stream, memory.Span, bufferLength);
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SourceCode.Clay.IO
         /// <param name="stream">The stream to write to.</param>
         /// <param name="span">The span to write.</param>
         /// <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
-        public static void Write(this Stream stream, ReadOnlySpan<byte> span, int bufferLength = 81920)
+        public static void Write(this Stream stream, in ReadOnlySpan<byte> span, int bufferLength = 81920)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             if (bufferLength < 1) throw new ArgumentOutOfRangeException(nameof(bufferLength));
