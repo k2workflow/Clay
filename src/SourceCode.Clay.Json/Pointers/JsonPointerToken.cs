@@ -59,28 +59,19 @@ namespace SourceCode.Clay.Json.Pointers
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
         public override bool Equals(object obj)
-            => obj is JsonPointerToken jpt
-            && Equals(jpt);
+            => obj is JsonPointerToken other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(JsonPointerToken other)
-        {
-            if (!StringComparer.Ordinal.Equals(Value, other.Value)) return false;
-            return true;
-        }
+            => StringComparer.Ordinal.Equals(Value, other.Value);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-        {
-            var hc = new HashCode();
-
-            hc.Add(Value ?? string.Empty, StringComparer.Ordinal);
-
-            return hc.ToHashCode();
-        }
+            => HashCode.Combine(Value ?? string.Empty, StringComparer.Ordinal);
 
         #endregion
 
