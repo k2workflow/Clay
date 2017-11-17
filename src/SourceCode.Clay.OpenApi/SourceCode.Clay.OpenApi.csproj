@@ -32,7 +32,7 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.OpenApi</PackageId>
     <Authors>SourceCode</Authors>
-    <Description>Dtos for Open API 3.0.0.</Description>
+    <Description>Dtos for Open Api 3.0.0.</Description>
     <PackageTags>clay json open-api swagger</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>

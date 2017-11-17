@@ -46,14 +46,14 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
-        public override int Compare(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => BufferComparer.CompareMemory(x, y);
+        public override int Compare(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => CompareSpan(x.Span, y.Span);
 
         #endregion
 
         #region IEqualityComparer
 
         /// <inheritdoc/>
-        public override bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => BufferComparer.CompareMemory(x, y) == 0;
+        public override bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => CompareSpan(x.Span, y.Span) == 0;
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -64,16 +64,81 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public override int GetHashCode(ReadOnlyMemory<byte> obj)
         {
-            // Note ReadOnly/Memory is a struct, so cannot pass null to it
+            // Empty
+            if (obj.Length == 0) return FnvHashCode.FnvEmpty;
 
             // Calculate on full length
-            if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
-                return BinaryHashCode.Fnv(obj.Span);
+            var span = obj.Span;
 
             // Calculate on prefix
-            var slice = obj.Slice(0, HashCodeFidelity);
-            var hc = BinaryHashCode.Fnv(slice.Span);
+            if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
+                span = span.Slice(0, HashCodeFidelity);
+
+            var hc = FnvHashCode.Combine(span);
             return hc;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Compare the contexts of two <see cref="ReadOnlySpan{T}"/> buffers.
+        /// </summary>
+        /// <param name="x">Span 1</param>
+        /// <param name="y">Span 2</param>
+        /// <returns></returns>
+        public static int CompareSpan(in ReadOnlySpan<byte> x, in ReadOnlySpan<byte> y)
+        {
+            // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
+            // public static bool operator ==
+            // Returns true if left and right point at the same memory and have the same length.
+            // Note that this does *not* check to see if the *contents* are equal.
+            if (x == y) return 0;
+
+            var cmp = x.Length.CompareTo(y.Length);
+            if (cmp != 0) return cmp; // ([n], [m])
+
+            // ([n], [n])
+            switch (x.Length)
+            {
+                case 0:
+                    return 0;
+
+                case 1:
+                    cmp = x[0].CompareTo(y[0]);
+                    return cmp;
+
+                case 2:
+                    cmp = x[0].CompareTo(y[0]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[1].CompareTo(y[1]);
+                    return cmp;
+
+                case 3:
+                    cmp = x[0].CompareTo(y[0]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[1].CompareTo(y[1]);
+                    if (cmp != 0) return cmp;
+
+                    cmp = x[2].CompareTo(y[2]);
+                    return cmp;
+
+                default:
+                    {
+                        unsafe
+                        {
+                            fixed (byte* xp = &x.DangerousGetPinnableReference())
+                            fixed (byte* yp = &y.DangerousGetPinnableReference())
+                            {
+                                cmp = NativeMethods.MemCompare(xp, yp, x.Length);
+                                return cmp;
+                            }
+                        }
+                    }
+            }
         }
 
         #endregion

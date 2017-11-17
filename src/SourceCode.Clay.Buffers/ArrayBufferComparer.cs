@@ -46,14 +46,27 @@ namespace SourceCode.Clay.Buffers
         /// <returns>
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
-        public override int Compare(byte[] x, byte[] y) => BufferComparer.CompareArray(x, y);
+        public override int Compare(byte[] x, byte[] y)
+        {
+            if (x == y) return 0; // (null, null) or (x, x)
+            if (x == null) return -1; // (null, y)
+            if (y == null) return 1; // (x, null)
+
+            return MemoryBufferComparer.CompareSpan(x, y);
+        }
 
         #endregion
 
         #region IEqualityComparer
 
         /// <inheritdoc/>
-        public override bool Equals(byte[] x, byte[] y) => BufferComparer.CompareArray(x, y) == 0;
+        public override bool Equals(byte[] x, byte[] y)
+        {
+            if (x == y) return true; // (null, null) or (x, x)
+            if (x == null || y == null) return false; // (x, null) or (null, y)
+
+            return MemoryBufferComparer.CompareSpan(x, y) == 0;
+        }
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -64,17 +77,20 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public override int GetHashCode(byte[] obj)
         {
-            // Fnv has consistent handling for Null
-            if (obj == null)
-                return BinaryHashCode.Fnv(obj);
+            // Null
+            if (obj == null) return FnvHashCode.FnvNull;
+
+            // Empty
+            if (obj.Length == 0) return FnvHashCode.FnvEmpty;
 
             // Calculate on full length
-            if (HashCodeFidelity == 0 || obj.Length <= HashCodeFidelity) // Also handles Empty
-                return BinaryHashCode.Fnv(obj);
+            var span = obj.AsSpan();
 
             // Calculate on prefix
-            var span = new ReadOnlySpan<byte>(obj, 0, HashCodeFidelity);
-            var hc = BinaryHashCode.Fnv(span);
+            if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
+                span = span.Slice(0, HashCodeFidelity);
+
+            var hc = FnvHashCode.Combine(span);
             return hc;
         }
 
