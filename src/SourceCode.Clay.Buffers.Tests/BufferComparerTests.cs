@@ -38,22 +38,22 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Null_Array))]
         public static void BufferComparer_GetHashCode_Null_Array()
         {
-            Assert.Equal(BinaryHashCode.FnvNull, BufferComparer.Array.GetHashCode(default));
+            Assert.Equal(FnvHashCode.FnvNull, BufferComparer.Array.GetHashCode(default));
         }
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Array))]
         public static void BufferComparer_GetHashCode_Empty_Array()
         {
-            Assert.Equal(BinaryHashCode.FnvEmpty, BufferComparer.Array.GetHashCode(Array.Empty<byte>()));
-            Assert.Equal(BinaryHashCode.FnvEmpty, BufferComparer.Memory.GetHashCode(Array.Empty<byte>()));
+            Assert.Equal(FnvHashCode.FnvEmpty, BufferComparer.Array.GetHashCode(Array.Empty<byte>()));
+            Assert.Equal(FnvHashCode.FnvEmpty, BufferComparer.Memory.GetHashCode(Array.Empty<byte>()));
         }
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Memory))]
         public static void BufferComparer_GetHashCode_Empty_Memory()
         {
-            Assert.Equal(BinaryHashCode.FnvEmpty, BufferComparer.Memory.GetHashCode(Memory<byte>.Empty));
+            Assert.Equal(FnvHashCode.FnvEmpty, BufferComparer.Memory.GetHashCode(Memory<byte>.Empty));
         }
 
         [Trait("Type", "Unit")]

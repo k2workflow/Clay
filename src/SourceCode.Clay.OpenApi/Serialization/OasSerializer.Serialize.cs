@@ -31,10 +31,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
             var content = value.Content
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));
 
-            SetJsonValue(json, PropertyConstants.Description, value.Description, true);
-            SetJsonMap(json, PropertyConstants.Headers, value.Headers);
-            SetJsonMap(json, PropertyConstants.Content, content);
-            SetJsonMap(json, PropertyConstants.Links, value.Links);
+            SetJsonValue(json, PathConstants.Description, value.Description, true);
+            SetJsonMap(json, PathConstants.Headers, value.Headers);
+            SetJsonMap(json, PathConstants.Content, content);
+            SetJsonMap(json, PathConstants.Links, value.Links);
 
             return json;
         }
@@ -53,9 +53,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
             var content = value.Content
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));
 
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonMap(json, PropertyConstants.Content, content);
-            SetJsonFlag(json, PropertyConstants.Required, value.Options, OasRequestBodyOptions.Required);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonMap(json, PathConstants.Content, content);
+            SetJsonFlag(json, PathConstants.Required, value.Options, OasRequestBodyOptions.Required);
 
             return json;
         }
@@ -71,11 +71,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.ContentType, value.ContentType);
-            SetJsonMap(json, PropertyConstants.Headers, value.Headers);
-            SetJsonValue(json, PropertyConstants.Style, ToJsonValue(value.Style));
-            SetJsonFlag(json, PropertyConstants.Explode, value.Options, OasPropertyEncodingOptions.Explode);
-            SetJsonFlag(json, PropertyConstants.AllowReserved, value.Options, OasPropertyEncodingOptions.AllowReserved);
+            SetJsonValue(json, PathConstants.ContentType, value.ContentType);
+            SetJsonMap(json, PathConstants.Headers, value.Headers);
+            SetJsonValue(json, PathConstants.Style, ToJsonValue(value.Style));
+            SetJsonFlag(json, PathConstants.Explode, value.Options, OasPropertyEncodingOptions.Explode);
+            SetJsonFlag(json, PathConstants.AllowReserved, value.Options, OasPropertyEncodingOptions.AllowReserved);
 
             return json;
         }
@@ -91,18 +91,18 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Summary, value.Summary);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonObject(json, PropertyConstants.Get, value.Get);
-            SetJsonObject(json, PropertyConstants.Put, value.Put);
-            SetJsonObject(json, PropertyConstants.Post, value.Post);
-            SetJsonObject(json, PropertyConstants.Delete, value.Delete);
-            SetJsonObject(json, PropertyConstants.Options, value.Options);
-            SetJsonObject(json, PropertyConstants.Head, value.Head);
-            SetJsonObject(json, PropertyConstants.Patch, value.Patch);
-            SetJsonObject(json, PropertyConstants.Trace, value.Trace);
-            SetJsonArray(json, PropertyConstants.Servers, value.Servers);
-            SetJsonArray(json, PropertyConstants.Parameters, value.Parameters);
+            SetJsonValue(json, PathConstants.Summary, value.Summary);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonObject(json, PathConstants.Get, value.Get);
+            SetJsonObject(json, PathConstants.Put, value.Put);
+            SetJsonObject(json, PathConstants.Post, value.Post);
+            SetJsonObject(json, PathConstants.Delete, value.Delete);
+            SetJsonObject(json, PathConstants.Options, value.Options);
+            SetJsonObject(json, PathConstants.Head, value.Head);
+            SetJsonObject(json, PathConstants.Patch, value.Patch);
+            SetJsonObject(json, PathConstants.Trace, value.Trace);
+            SetJsonArray(json, PathConstants.Servers, value.Servers);
+            SetJsonArray(json, PathConstants.Parameters, value.Parameters);
 
             return json;
         }
@@ -138,18 +138,18 @@ namespace SourceCode.Clay.OpenApi.Serialization
             var content = value.Content
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));
 
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonFlag(json, PropertyConstants.Required, value.Options, OasParameterOptions.Required);
-            SetJsonFlag(json, PropertyConstants.Deprecated, value.Options, OasParameterOptions.Deprecated);
-            SetJsonFlag(json, PropertyConstants.AllowEmptyValue, value.Options, OasParameterOptions.AllowEmptyValue);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonFlag(json, PathConstants.Required, value.Options, OasParameterOptions.Required);
+            SetJsonFlag(json, PathConstants.Deprecated, value.Options, OasParameterOptions.Deprecated);
+            SetJsonFlag(json, PathConstants.AllowEmptyValue, value.Options, OasParameterOptions.AllowEmptyValue);
 
-            SetJsonValue(json, PropertyConstants.Style, ToJsonValue(value.Style));
-            SetJsonFlag(json, PropertyConstants.Explode, value.Options, OasParameterOptions.Explode);
-            SetJsonFlag(json, PropertyConstants.AllowReserved, value.Options, OasParameterOptions.AllowReserved);
-            SetJsonObject(json, PropertyConstants.Schema, value.Schema);
-            SetJsonMap(json, PropertyConstants.Examples, examples);
+            SetJsonValue(json, PathConstants.Style, ToJsonValue(value.Style));
+            SetJsonFlag(json, PathConstants.Explode, value.Options, OasParameterOptions.Explode);
+            SetJsonFlag(json, PathConstants.AllowReserved, value.Options, OasParameterOptions.AllowReserved);
+            SetJsonObject(json, PathConstants.Schema, value.Schema);
+            SetJsonMap(json, PathConstants.Examples, examples);
 
-            SetJsonMap(json, PropertyConstants.Content, content);
+            SetJsonMap(json, PathConstants.Content, content);
         }
 
         /// <summary>
@@ -163,8 +163,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Name, value.Name, true);
-            SetJsonValue(json, PropertyConstants.In, ToJsonValue(value.Location));
+            SetJsonValue(json, PathConstants.Name, value.Name, true);
+            SetJsonValue(json, PathConstants.In, ToJsonValue(value.Location));
             SerializeParameterBody(value, json);
 
             return json;
@@ -194,8 +194,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Name, key.Name, true);
-            SetJsonValue(json, PropertyConstants.In, ToJsonValue(key.Location));
+            SetJsonValue(json, PathConstants.Name, key.Name, true);
+            SetJsonValue(json, PathConstants.In, ToJsonValue(key.Location));
             SerializeParameterBody(value, json);
 
             return json;
@@ -215,18 +215,18 @@ namespace SourceCode.Clay.OpenApi.Serialization
             var responses = value.Responses
                 .Select(x => ValueTuple.Create(x.Key.ToString(), x.Value));
 
-            SetJsonArray(json, PropertyConstants.Tags, value.Tags);
-            SetJsonValue(json, PropertyConstants.Summary, value.Summary);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonObject(json, PropertyConstants.ExternalDocs, value.ExternalDocumentation);
-            SetJsonValue(json, PropertyConstants.OperationId, value.OperationIdentifier);
-            SetJsonArray(json, PropertyConstants.Parameters, value.Parameters);
-            SetJsonObject(json, PropertyConstants.RequestBody, value.RequestBody);
-            SetJsonMap(json, PropertyConstants.Responses, responses);
-            SetJsonMap(json, PropertyConstants.Callbacks, value.Callbacks);
-            SetJsonFlag(json, PropertyConstants.Deprecated, value.Options, OasOperationOptions.Deprecated);
-            SetJsonArray(json, PropertyConstants.Security, value.Security);
-            SetJsonArray(json, PropertyConstants.Servers, value.Servers);
+            SetJsonArray(json, PathConstants.Tags, value.Tags);
+            SetJsonValue(json, PathConstants.Summary, value.Summary);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonObject(json, PathConstants.ExternalDocs, value.ExternalDocumentation);
+            SetJsonValue(json, PathConstants.OperationId, value.OperationIdentifier);
+            SetJsonArray(json, PathConstants.Parameters, value.Parameters);
+            SetJsonObject(json, PathConstants.RequestBody, value.RequestBody);
+            SetJsonMap(json, PathConstants.Responses, responses);
+            SetJsonMap(json, PathConstants.Callbacks, value.Callbacks);
+            SetJsonFlag(json, PathConstants.Deprecated, value.Options, OasOperationOptions.Deprecated);
+            SetJsonArray(json, PathConstants.Security, value.Security);
+            SetJsonArray(json, PathConstants.Servers, value.Servers);
 
             return json;
         }
@@ -242,9 +242,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Type, EnumConstants.OpenIdConnect);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.OpenIdConnectUrl, value.Url);
+            SetJsonValue(json, PathConstants.Type, EnumConstants.OpenIdConnect);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.OpenIdConnectUrl, value.Url);
 
             return json;
         }
@@ -260,10 +260,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.AuthorizationUrl, value.AuthorizationUrl, true);
-            SetJsonValue(json, PropertyConstants.TokenUrl, value.TokenUrl, true);
-            SetJsonValue(json, PropertyConstants.RefreshUrl, value.RefreshUrl);
-            SetJsonMap(json, PropertyConstants.Scopes, value.Scopes);
+            SetJsonValue(json, PathConstants.AuthorizationUrl, value.AuthorizationUrl, true);
+            SetJsonValue(json, PathConstants.TokenUrl, value.TokenUrl, true);
+            SetJsonValue(json, PathConstants.RefreshUrl, value.RefreshUrl);
+            SetJsonMap(json, PathConstants.Scopes, value.Scopes);
 
             return json;
         }
@@ -279,17 +279,17 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Type, EnumConstants.OAuth2);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.Type, EnumConstants.OAuth2);
+            SetJsonValue(json, PathConstants.Description, value.Description);
 
             var flows = new JObject();
 
-            SetJsonObject(flows, PropertyConstants.Implicit, value.ImplicitFlow);
-            SetJsonObject(flows, PropertyConstants.Password, value.PasswordFlow);
-            SetJsonObject(flows, PropertyConstants.ClientCredentials, value.ClientCredentialsFlow);
-            SetJsonObject(flows, PropertyConstants.AuthorizationCode, value.AuthorizationCodeFlow);
+            SetJsonObject(flows, PathConstants.Implicit, value.ImplicitFlow);
+            SetJsonObject(flows, PathConstants.Password, value.PasswordFlow);
+            SetJsonObject(flows, PathConstants.ClientCredentials, value.ClientCredentialsFlow);
+            SetJsonObject(flows, PathConstants.AuthorizationCode, value.AuthorizationCodeFlow);
 
-            json.Add(PropertyConstants.Flows, flows);
+            json.Add(PathConstants.Flows, flows);
 
             return json;
         }
@@ -305,9 +305,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonObject(json, PropertyConstants.Schema, value.Schema);
-            SetJsonMap(json, PropertyConstants.Examples, value.Examples);
-            SetJsonMap(json, PropertyConstants.Encoding, value.Encoding);
+            SetJsonObject(json, PathConstants.Schema, value.Schema);
+            SetJsonMap(json, PathConstants.Examples, value.Examples);
+            SetJsonMap(json, PathConstants.Encoding, value.Encoding);
 
             return json;
         }
@@ -323,10 +323,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.OperationRef, SerializeReference(value.OperationReference));
-            SetJsonValue(json, PropertyConstants.OperationId, value.OperationIdentifier);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonObject(json, PropertyConstants.Server, value.Server);
+            SetJsonValue(json, PathConstants.OperationRef, SerializeReference(value.OperationReference));
+            SetJsonValue(json, PathConstants.OperationId, value.OperationIdentifier);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonObject(json, PathConstants.Server, value.Server);
 
             return json;
         }
@@ -342,8 +342,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Name, value.Name);
-            SetJsonValue(json, PropertyConstants.Url, value.Url);
+            SetJsonValue(json, PathConstants.Name, value.Name);
+            SetJsonValue(json, PathConstants.Url, value.Url);
 
             return json;
         }
@@ -359,12 +359,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Title, value.Title);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.TermsOfService, value.TermsOfService);
-            SetJsonObject(json, PropertyConstants.Contact, value.Contact);
-            SetJsonObject(json, PropertyConstants.License, value.License);
-            SetJsonValue(json, PropertyConstants.Version, value.Version.ToString());
+            SetJsonValue(json, PathConstants.Title, value.Title);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.TermsOfService, value.TermsOfService);
+            SetJsonObject(json, PathConstants.Contact, value.Contact);
+            SetJsonObject(json, PathConstants.License, value.License);
+            SetJsonValue(json, PathConstants.Version, value.Version.ToString());
 
             return json;
         }
@@ -380,10 +380,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Type, EnumConstants.Http);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.Scheme, value.Scheme, true);
-            SetJsonValue(json, PropertyConstants.BearerFormat, value.BearerFormat);
+            SetJsonValue(json, PathConstants.Type, EnumConstants.Http);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.Scheme, value.Scheme, true);
+            SetJsonValue(json, PathConstants.BearerFormat, value.BearerFormat);
 
             return json;
         }
@@ -412,7 +412,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 var reference = Serialize(value.Reference);
                 return new JObject()
                 {
-                    [PropertyConstants.Reference] = reference
+                    [PathConstants.Reference] = reference
                 };
             }
             return SerializeUnknown(value.Value);
@@ -429,15 +429,15 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonMap(json, PropertyConstants.Schemas, value.Schemas);
-            SetJsonMap(json, PropertyConstants.Responses, value.Responses);
-            SetJsonMap(json, PropertyConstants.Parameters, value.Parameters);
-            SetJsonMap(json, PropertyConstants.Examples, value.Examples);
-            SetJsonMap(json, PropertyConstants.RequestBodies, value.RequestBodies);
-            SetJsonMap(json, PropertyConstants.Headers, value.Headers);
-            SetJsonMap(json, PropertyConstants.SecuritySchemes, value.SecuritySchemes);
-            SetJsonMap(json, PropertyConstants.Links, value.Links);
-            SetJsonMap(json, PropertyConstants.Callbacks, value.Callbacks);
+            SetJsonMap(json, PathConstants.Schemas, value.Schemas);
+            SetJsonMap(json, PathConstants.Responses, value.Responses);
+            SetJsonMap(json, PathConstants.Parameters, value.Parameters);
+            SetJsonMap(json, PathConstants.Examples, value.Examples);
+            SetJsonMap(json, PathConstants.RequestBodies, value.RequestBodies);
+            SetJsonMap(json, PathConstants.Headers, value.Headers);
+            SetJsonMap(json, PathConstants.SecuritySchemes, value.SecuritySchemes);
+            SetJsonMap(json, PathConstants.Links, value.Links);
+            SetJsonMap(json, PathConstants.Callbacks, value.Callbacks);
 
             return json;
         }
@@ -453,9 +453,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Name, value.Name);
-            SetJsonValue(json, PropertyConstants.Url, value.Url);
-            SetJsonValue(json, PropertyConstants.Email, value.Email);
+            SetJsonValue(json, PathConstants.Name, value.Name);
+            SetJsonValue(json, PathConstants.Url, value.Url);
+            SetJsonValue(json, PathConstants.Email, value.Email);
 
             return json;
         }
@@ -471,8 +471,8 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.Url, value.Url, true);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.Url, value.Url, true);
 
             return json;
         }
@@ -488,9 +488,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Summary, value.Summary);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.ExternalValue, value.ExternalValue);
+            SetJsonValue(json, PathConstants.Summary, value.Summary);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.ExternalValue, value.ExternalValue);
 
             return json;
         }
@@ -506,14 +506,14 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.OpenApi, value.Version.ToString());
-            SetJsonObject(json, PropertyConstants.Info, value.Info, true);
-            SetJsonArray(json, PropertyConstants.Servers, value.Servers);
-            SetJsonMap(json, PropertyConstants.Paths, value.Paths, true);
-            SetJsonObject(json, PropertyConstants.Components, value.Components);
-            SetJsonArray(json, PropertyConstants.Security, value.Security);
-            SetJsonArray(json, PropertyConstants.Tags, value.Tags);
-            SetJsonObject(json, PropertyConstants.ExternalDocs, value.ExternalDocumentation);
+            SetJsonValue(json, PathConstants.OpenApi, value.Version.ToString());
+            SetJsonObject(json, PathConstants.Info, value.Info, true);
+            SetJsonArray(json, PathConstants.Servers, value.Servers);
+            SetJsonMap(json, PathConstants.Paths, value.Paths, true);
+            SetJsonObject(json, PathConstants.Components, value.Components);
+            SetJsonArray(json, PathConstants.Security, value.Security);
+            SetJsonArray(json, PathConstants.Tags, value.Tags);
+            SetJsonObject(json, PathConstants.ExternalDocs, value.ExternalDocumentation);
 
             return json;
         }
@@ -550,10 +550,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Type, EnumConstants.ApiKey);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.Name, value.Name);
-            SetJsonValue(json, PropertyConstants.In, ToJsonValue(value.Location));
+            SetJsonValue(json, PathConstants.Type, EnumConstants.ApiKey);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.Name, value.Name);
+            SetJsonValue(json, PathConstants.In, ToJsonValue(value.Location));
 
             return json;
         }
@@ -569,9 +569,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Name, value.Name);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonObject(json, PropertyConstants.ExternalDocs, value.ExternalDocumentation);
+            SetJsonValue(json, PathConstants.Name, value.Name);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonObject(json, PathConstants.ExternalDocs, value.ExternalDocumentation);
 
             return json;
         }
@@ -587,9 +587,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonArray(json, PropertyConstants.Enum, value.Enum);
-            SetJsonValue(json, PropertyConstants.Default, value.Default);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
+            SetJsonArray(json, PathConstants.Enum, value.Enum);
+            SetJsonValue(json, PathConstants.Default, value.Default);
+            SetJsonValue(json, PathConstants.Description, value.Description);
 
             return json;
         }
@@ -605,9 +605,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Url, value.Url);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonMap(json, PropertyConstants.Variables, value.Variables);
+            SetJsonValue(json, PathConstants.Url, value.Url);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonMap(json, PathConstants.Variables, value.Variables);
 
             return json;
         }
@@ -631,45 +631,45 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             var json = new JObject();
 
-            SetJsonValue(json, PropertyConstants.Title, value.Title);
-            SetJsonValue(json, PropertyConstants.Description, value.Description);
-            SetJsonValue(json, PropertyConstants.Type, ToJsonValue(value.JsonType));
-            SetJsonValue(json, PropertyConstants.Format, value.Format);
+            SetJsonValue(json, PathConstants.Title, value.Title);
+            SetJsonValue(json, PathConstants.Description, value.Description);
+            SetJsonValue(json, PathConstants.Type, ToJsonValue(value.JsonType));
+            SetJsonValue(json, PathConstants.Format, value.Format);
 
-            SetJsonValue(json, PropertyConstants.Pattern, value.Pattern);
-            SetJsonArray(json, PropertyConstants.EnumValue, value.Enum);
+            SetJsonValue(json, PathConstants.Pattern, value.Pattern);
+            SetJsonArray(json, PathConstants.EnumValue, value.Enum);
 
-            SetJsonFlag(json, PropertyConstants.Deprecated, value.Options, OasSchemaOptions.Deprecated);
-            SetJsonFlag(json, PropertyConstants.Nullable, value.Options, OasSchemaOptions.Nullable);
-            SetJsonFlag(json, PropertyConstants.Required, value.Options, OasSchemaOptions.Required);
-            SetJsonFlag(json, PropertyConstants.UniqueItems, value.Options, OasSchemaOptions.UniqueItems);
+            SetJsonFlag(json, PathConstants.Deprecated, value.Options, OasSchemaOptions.Deprecated);
+            SetJsonFlag(json, PathConstants.Nullable, value.Options, OasSchemaOptions.Nullable);
+            SetJsonFlag(json, PathConstants.Required, value.Options, OasSchemaOptions.Required);
+            SetJsonFlag(json, PathConstants.UniqueItems, value.Options, OasSchemaOptions.UniqueItems);
 
-            SetJsonArray(json, PropertyConstants.AllOf, value.AllOf);
-            SetJsonArray(json, PropertyConstants.AnyOf, value.AnyOf);
-            SetJsonArray(json, PropertyConstants.OneOf, value.OneOf);
-            SetJsonArray(json, PropertyConstants.Not, value.Not);
+            SetJsonArray(json, PathConstants.AllOf, value.AllOf);
+            SetJsonArray(json, PathConstants.AnyOf, value.AnyOf);
+            SetJsonArray(json, PathConstants.OneOf, value.OneOf);
+            SetJsonArray(json, PathConstants.Not, value.Not);
 
-            SetJsonNumber(json, PropertyConstants.Minimum, value.NumberRange.Minimum);
+            SetJsonNumber(json, PathConstants.Minimum, value.NumberRange.Minimum);
             if (value.NumberRange.Minimum.HasValue)
-                SetJsonFlag(json, PropertyConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, RangeOptions.MinimumInclusive, invert: true);
+                SetJsonFlag(json, PathConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, RangeOptions.MinimumInclusive, invert: true);
 
-            SetJsonNumber(json, PropertyConstants.Maximum, value.NumberRange.Maximum);
+            SetJsonNumber(json, PathConstants.Maximum, value.NumberRange.Maximum);
             if (value.NumberRange.Maximum.HasValue)
-                SetJsonFlag(json, PropertyConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, RangeOptions.MaximumInclusive, invert: true);
+                SetJsonFlag(json, PathConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, RangeOptions.MaximumInclusive, invert: true);
 
-            SetJsonNumber(json, PropertyConstants.MultipleOf, value.NumberRange.MultipleOf);
+            SetJsonNumber(json, PathConstants.MultipleOf, value.NumberRange.MultipleOf);
 
-            SetJsonValue(json, PropertyConstants.MinLength, value.LengthRange.Minimum);
-            SetJsonValue(json, PropertyConstants.MaxLength, value.LengthRange.Maximum);
+            SetJsonValue(json, PathConstants.MinLength, value.LengthRange.Minimum);
+            SetJsonValue(json, PathConstants.MaxLength, value.LengthRange.Maximum);
 
-            SetJsonValue(json, PropertyConstants.MinProperties, value.PropertiesRange.Minimum);
-            SetJsonValue(json, PropertyConstants.MaxProperties, value.PropertiesRange.Maximum);
+            SetJsonValue(json, PathConstants.MinProperties, value.PropertiesRange.Minimum);
+            SetJsonValue(json, PathConstants.MaxProperties, value.PropertiesRange.Maximum);
 
-            SetJsonObject(json, PropertyConstants.Items, value.Items);
-            SetJsonMap(json, PropertyConstants.Properties, value.Properties);
-            SetJsonMap(json, PropertyConstants.AdditionalProperties, value.AdditionalProperties);
+            SetJsonObject(json, PathConstants.Items, value.Items);
+            SetJsonMap(json, PathConstants.Properties, value.Properties);
+            SetJsonMap(json, PathConstants.AdditionalProperties, value.AdditionalProperties);
 
-            SetJsonObject(json, PropertyConstants.ExternalDocs, value.ExternalDocumentation);
+            SetJsonObject(json, PathConstants.ExternalDocs, value.ExternalDocumentation);
 
             return json;
         }
