@@ -68,6 +68,73 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
 
+        #region Append
+
+        /// <summary>
+        /// Create a new <see cref="JsonPointer"/> instance by appending
+        /// a <see cref="JsonPointerToken"/> to the current <see cref="JsonPointer"/>.
+        /// </summary>
+        /// <param name="token">The <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <returns></returns>
+        public JsonPointer Add(in JsonPointerToken token)
+        {
+            var array = new JsonPointerToken[Count + 1];
+
+            for (var i = 0; i < Count; i++)
+                array[i] = _tokens[i];
+
+            array[array.Length - 1] = token;
+
+            var result = new JsonPointer(array);
+            return result;
+        }
+
+        /// <summary>
+        /// Create a new <see cref="JsonPointer"/> instance by appending
+        /// two <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
+        /// </summary>
+        /// <param name="token1">The 1st <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <param name="token2">The 2nd <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <returns></returns>
+        public JsonPointer Add(in JsonPointerToken token1, in JsonPointerToken token2)
+        {
+            var array = new JsonPointerToken[Count + 2];
+
+            for (var i = 0; i < Count; i++)
+                array[i] = _tokens[i];
+
+            array[array.Length - 2] = token1;
+            array[array.Length - 1] = token2;
+
+            var result = new JsonPointer(array);
+            return result;
+        }
+
+        /// <summary>
+        /// Create a new <see cref="JsonPointer"/> instance by appending
+        /// three <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
+        /// </summary>
+        /// <param name="token1">The 1st <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <param name="token2">The 2nd <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <param name="token3">The 3rd <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <returns></returns>
+        public JsonPointer Add(in JsonPointerToken token1, in JsonPointerToken token2, in JsonPointerToken token3)
+        {
+            var array = new JsonPointerToken[Count + 3];
+
+            for (var i = 0; i < Count; i++)
+                array[i] = _tokens[i];
+
+            array[array.Length - 3] = token1;
+            array[array.Length - 2] = token2;
+            array[array.Length - 1] = token3;
+
+            var result = new JsonPointer(array);
+            return result;
+        }
+
+        #endregion
+
         #region Conversion
 
         /// <summary>
@@ -249,8 +316,8 @@ namespace SourceCode.Clay.Json.Pointers
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
         public override bool Equals(object obj)
-            => obj is JsonPointer jp
-            && Equals(jp);
+            => obj is JsonPointer other
+            && Equals(other);
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -285,6 +352,8 @@ namespace SourceCode.Clay.Json.Pointers
         public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
 
         public static bool operator !=(JsonPointer x, JsonPointer y) => !x.Equals(y);
+
+        public static JsonPointer operator +(JsonPointer x, JsonPointerToken y) => x.Add(y);
 
         /// <summary>Returns the the Json pointer as a string value.</summary>
         /// <returns>The Json pointer.</returns>
