@@ -20,6 +20,8 @@ namespace SourceCode.Clay.Json.Pointers
     /// </summary>
     public readonly struct JsonPointer : IReadOnlyList<JsonPointerToken>, IEquatable<JsonPointer>
     {
+#pragma warning restore CA1710 // Identifiers should have correct suffix
+
         #region Constants
 
         private const int LengthHeuristic = 5;
@@ -83,7 +85,7 @@ namespace SourceCode.Clay.Json.Pointers
             for (var i = 0; i < Count; i++)
                 array[i] = _tokens[i];
 
-            array[array.Length - 1] = token;
+            array[Count] = token;
 
             var result = new JsonPointer(array);
             return result;
@@ -91,20 +93,22 @@ namespace SourceCode.Clay.Json.Pointers
 
         /// <summary>
         /// Create a new <see cref="JsonPointer"/> instance by appending
-        /// two <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
+        /// multiple <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
         /// </summary>
-        /// <param name="token1">The 1st <see cref="JsonPointerToken"/> instance to append.</param>
-        /// <param name="token2">The 2nd <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <param name="tokens">The <see cref="JsonPointerToken"/> instances to append.</param>
         /// <returns></returns>
-        public JsonPointer Add(in JsonPointerToken token1, in JsonPointerToken token2)
+        public JsonPointer Merge(params JsonPointerToken[] tokens)
         {
-            var array = new JsonPointerToken[Count + 2];
+            if (tokens == null || tokens.Length == 0)
+                return this;
+
+            var array = new JsonPointerToken[Count + tokens.Length];
 
             for (var i = 0; i < Count; i++)
                 array[i] = _tokens[i];
 
-            array[array.Length - 2] = token1;
-            array[array.Length - 1] = token2;
+            for (var i = 0; i < tokens.Length; i++)
+                array[Count + i] = tokens[i];
 
             var result = new JsonPointer(array);
             return result;
@@ -112,22 +116,25 @@ namespace SourceCode.Clay.Json.Pointers
 
         /// <summary>
         /// Create a new <see cref="JsonPointer"/> instance by appending
-        /// three <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
+        /// multiple <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
         /// </summary>
-        /// <param name="token1">The 1st <see cref="JsonPointerToken"/> instance to append.</param>
-        /// <param name="token2">The 2nd <see cref="JsonPointerToken"/> instance to append.</param>
-        /// <param name="token3">The 3rd <see cref="JsonPointerToken"/> instance to append.</param>
+        /// <param name="pointer">The <see cref="JsonPointerToken"/> instances to append.</param>
         /// <returns></returns>
-        public JsonPointer Add(in JsonPointerToken token1, in JsonPointerToken token2, in JsonPointerToken token3)
+        public JsonPointer Merge(in JsonPointer pointer)
         {
-            var array = new JsonPointerToken[Count + 3];
+            if (pointer.Count == 0)
+                return this;
+
+            if (Count == 0)
+                return pointer;
+
+            var array = new JsonPointerToken[Count + pointer.Count];
 
             for (var i = 0; i < Count; i++)
                 array[i] = _tokens[i];
 
-            array[array.Length - 3] = token1;
-            array[array.Length - 2] = token2;
-            array[array.Length - 1] = token3;
+            for (var i = 0; i < pointer.Count; i++)
+                array[Count + i] = pointer._tokens[i];
 
             var result = new JsonPointer(array);
             return result;
@@ -379,6 +386,4 @@ namespace SourceCode.Clay.Json.Pointers
 
         #endregion
     }
-
-#pragma warning restore CA1710 // Identifiers should have correct suffix
 }
