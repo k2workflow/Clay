@@ -194,6 +194,16 @@ namespace SourceCode.Clay.OpenApi.Serialization
             internal const string ExclusiveMinimum = "exclusiveMinimum";
 
             /// <summary>
+            /// Gets a constant containing "minItems".
+            /// </summary>
+            internal const string MinItems = "minItems";
+
+            /// <summary>
+            /// Gets a constant containing "maxItems".
+            /// </summary>
+            internal const string MaxItems = "maxItems";
+
+            /// <summary>
             /// Gets a constant containing "minLength".
             /// </summary>
             internal const string MinLength = "minLength";
