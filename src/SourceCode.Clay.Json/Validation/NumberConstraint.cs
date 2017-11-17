@@ -27,6 +27,7 @@ namespace SourceCode.Clay.Json.Validation
         private static readonly NumberConstraint _forUInt32 = new NumberConstraint(uint.MinValue, uint.MaxValue);
         private static readonly NumberConstraint _forInt64 = new NumberConstraint(long.MinValue, long.MaxValue);
         private static readonly NumberConstraint _forUInt64 = new NumberConstraint(ulong.MinValue, ulong.MaxValue);
+        private static readonly NumberConstraint _forSingle = new NumberConstraint(float.MinValue, float.MaxValue);
 
         public static ref readonly NumberConstraint Empty => ref _empty;
 
@@ -45,6 +46,8 @@ namespace SourceCode.Clay.Json.Validation
         public static ref readonly NumberConstraint ForInt64 => ref _forInt64;
 
         public static ref readonly NumberConstraint ForUInt64 => ref _forUInt64;
+
+        public static ref readonly NumberConstraint ForSingle => ref _forSingle;
 
         #endregion
 

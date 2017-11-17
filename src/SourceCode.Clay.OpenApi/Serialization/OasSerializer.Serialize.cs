@@ -649,21 +649,30 @@ namespace SourceCode.Clay.OpenApi.Serialization
             SetJsonArray(json, PathConstants.OneOf, value.OneOf);
             SetJsonArray(json, PathConstants.Not, value.Not);
 
-            SetJsonNumber(json, PathConstants.Minimum, value.NumberRange.Minimum);
-            if (value.NumberRange.Minimum.HasValue)
-                SetJsonFlag(json, PathConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, RangeOptions.MinimumInclusive, invert: true);
+            if (value.NumberRange.IsConstrained)
+            {
+                SetJsonNumber(json, PathConstants.Minimum, value.NumberRange.Minimum);
+                if (value.NumberRange.Minimum.HasValue)
+                    SetJsonFlag(json, PathConstants.ExclusiveMinimum, value.NumberRange.RangeOptions, RangeOptions.MinimumInclusive, invert: true);
 
-            SetJsonNumber(json, PathConstants.Maximum, value.NumberRange.Maximum);
-            if (value.NumberRange.Maximum.HasValue)
-                SetJsonFlag(json, PathConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, RangeOptions.MaximumInclusive, invert: true);
+                SetJsonNumber(json, PathConstants.Maximum, value.NumberRange.Maximum);
+                if (value.NumberRange.Maximum.HasValue)
+                    SetJsonFlag(json, PathConstants.ExclusiveMaximum, value.NumberRange.RangeOptions, RangeOptions.MaximumInclusive, invert: true);
 
-            SetJsonNumber(json, PathConstants.MultipleOf, value.NumberRange.MultipleOf);
+                SetJsonNumber(json, PathConstants.MultipleOf, value.NumberRange.MultipleOf);
+            }
 
-            SetJsonValue(json, PathConstants.MinLength, value.LengthRange.Minimum);
-            SetJsonValue(json, PathConstants.MaxLength, value.LengthRange.Maximum);
+            if (value.LengthRange.IsBounded)
+            {
+                SetJsonValue(json, PathConstants.MinLength, value.LengthRange.Minimum);
+                SetJsonValue(json, PathConstants.MaxLength, value.LengthRange.Maximum);
+            }
 
-            SetJsonValue(json, PathConstants.MinProperties, value.PropertiesRange.Minimum);
-            SetJsonValue(json, PathConstants.MaxProperties, value.PropertiesRange.Maximum);
+            if (value.PropertiesRange.IsBounded)
+            {
+                SetJsonValue(json, PathConstants.MinProperties, value.PropertiesRange.Minimum);
+                SetJsonValue(json, PathConstants.MaxProperties, value.PropertiesRange.Maximum);
+            }
 
             SetJsonObject(json, PathConstants.Items, value.Items);
             SetJsonMap(json, PathConstants.Properties, value.Properties);
