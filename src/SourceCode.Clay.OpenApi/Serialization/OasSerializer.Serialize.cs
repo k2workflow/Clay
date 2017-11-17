@@ -662,6 +662,12 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 SetJsonNumber(json, PathConstants.MultipleOf, value.NumberRange.MultipleOf);
             }
 
+            if (value.ItemsRange.IsBounded)
+            {
+                SetJsonValue(json, PathConstants.MinItems, value.ItemsRange.Minimum);
+                SetJsonValue(json, PathConstants.MaxItems, value.ItemsRange.Maximum);
+            }
+
             if (value.LengthRange.IsBounded)
             {
                 SetJsonValue(json, PathConstants.MinLength, value.LengthRange.Minimum);
