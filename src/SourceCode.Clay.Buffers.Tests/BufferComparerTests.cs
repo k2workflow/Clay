@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Buffers.Tests
     {
         #region Helpers
 
-        public static ArraySegment<byte> GenerateSegment(ushort offset, ushort length, int delta = 0)
+        public static ArraySegment<byte> GenerateSegment(ushort offset, int length, int delta = 0)
         {
             var result = new byte[length + offset * 2]; // Add extra space at start and end
             for (var i = 1 + offset; i < length + offset; i++)

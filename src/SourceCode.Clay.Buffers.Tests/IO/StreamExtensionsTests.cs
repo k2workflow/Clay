@@ -13,7 +13,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SourceCode.Clay.Buffers.IO.Tests
+namespace SourceCode.Clay.IO.Tests
 {
     public static class StreamExtensionsTests
     {
