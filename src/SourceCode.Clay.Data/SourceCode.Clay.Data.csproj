@@ -18,10 +18,6 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
-  </ItemGroup>
-
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Data</PackageId>
     <Authors>SourceCode</Authors>

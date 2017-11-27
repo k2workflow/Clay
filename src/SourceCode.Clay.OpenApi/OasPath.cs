@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -127,7 +128,7 @@ namespace SourceCode.Clay.OpenApi
             Patch = patch;
             Trace = trace;
             Servers = servers ?? Array.Empty<OasServer>();
-            Parameters = parameters ?? ReadOnlyDictionary.Empty<OasParameterKey, OasReferable<OasParameterBody>>();
+            Parameters = parameters ?? ImmutableDictionary<OasParameterKey, OasReferable<OasParameterBody>>.Empty;
         }
 
         #endregion

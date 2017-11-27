@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
@@ -53,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
             OasRequestBodyOptions options = default)
         {
             Description = description;
-            Content = content ?? ReadOnlyDictionary.Empty<ContentType, OasMediaType>();
+            Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
             Options = options;
         }
 

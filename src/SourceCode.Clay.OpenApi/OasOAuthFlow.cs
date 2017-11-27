@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -65,7 +66,7 @@ namespace SourceCode.Clay.OpenApi
             AuthorizationUrl = authorizationUrl;
             TokenUrl = tokenUrl;
             RefreshUrl = refreshUrl;
-            Scopes = scopes ?? ReadOnlyDictionary.Empty<string, string>();
+            Scopes = scopes ?? ImmutableDictionary<string, string>.Empty;
         }
 
         #endregion

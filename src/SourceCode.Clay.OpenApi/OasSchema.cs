@@ -9,6 +9,7 @@ using SourceCode.Clay.Collections.Generic;
 using SourceCode.Clay.Json.Validation;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -180,8 +181,8 @@ namespace SourceCode.Clay.OpenApi
             AnyOf = anyOf ?? Array.Empty<OasReferable<OasSchema>>();
             Not = not ?? Array.Empty<OasReferable<OasSchema>>();
             Items = items;
-            Properties = properties ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasSchema>>();
-            AdditionalProperties = additionalProperties ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasSchema>>();
+            Properties = properties ?? ImmutableDictionary<string, OasReferable<OasSchema>>.Empty;
+            AdditionalProperties = additionalProperties ?? ImmutableDictionary<string, OasReferable<OasSchema>>.Empty;
             ExternalDocumentation = externalDocumentation;
         }
 

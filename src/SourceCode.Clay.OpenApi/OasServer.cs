@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -53,7 +54,7 @@ namespace SourceCode.Clay.OpenApi
         {
             Url = url;
             Description = description;
-            Variables = variables ?? ReadOnlyDictionary.Empty<string, OasServerVariable>();
+            Variables = variables ?? ImmutableDictionary<string, OasServerVariable>.Empty;
         }
 
         #endregion
