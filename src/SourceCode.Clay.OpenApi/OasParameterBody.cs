@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
@@ -77,8 +78,8 @@ namespace SourceCode.Clay.OpenApi
             Options = options;
             Style = style;
             Schema = schema;
-            Examples = examples ?? ReadOnlyDictionary.Empty<ContentType, OasReferable<OasExample>>();
-            Content = content ?? ReadOnlyDictionary.Empty<ContentType, OasMediaType>();
+            Examples = examples ?? ImmutableDictionary<ContentType, OasReferable<OasExample>>.Empty;
+            Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
         }
 
         #endregion

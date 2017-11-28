@@ -5,9 +5,9 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Data.SqlParser
     {
         #region Constants
 
-        private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = EmptyDictionaryImpl<string, SqlParamInfo>.ReadOnlyValue;
+        private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = ImmutableDictionary<string, SqlParamInfo>.Empty;
 
         #endregion
 

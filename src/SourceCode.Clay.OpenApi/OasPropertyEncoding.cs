@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
@@ -57,7 +58,7 @@ namespace SourceCode.Clay.OpenApi
             OasPropertyEncodingOptions options = default)
         {
             ContentType = contentType;
-            Headers = headers ?? ReadOnlyDictionary.Empty<string, OasReferable<OasParameterBody>>();
+            Headers = headers ?? ImmutableDictionary<string, OasReferable<OasParameterBody>>.Empty;
             Style = style;
             Options = options;
         }

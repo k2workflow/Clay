@@ -5,10 +5,10 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -131,7 +131,7 @@ namespace SourceCode.Clay.Threading
         /// <returns></returns>
         public static async ValueTask<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
         {
-            if (source == null) return EmptyDictionaryImpl<TSource, TValue>.ReadOnlyValue;
+            if (source == null) return ImmutableDictionary<TSource, TValue>.Empty;
             if (func == null) throw new ArgumentNullException(nameof(func));
 
             var dict = new ConcurrentDictionary<TSource, TValue>();

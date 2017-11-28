@@ -10,6 +10,7 @@ using SourceCode.Clay.OpenApi.Expressions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -55,7 +56,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="paths">The dictionary containing expressions and paths.</param>
         public OasCallback(IReadOnlyDictionary<OasExpression, OasReferable<OasPath>> paths = default)
         {
-            _dictionary = paths ?? Dictionary.ReadOnlyEmpty<OasExpression, OasReferable<OasPath>>();
+            _dictionary = paths ?? ImmutableDictionary<OasExpression, OasReferable<OasPath>>.Empty;
         }
 
         #endregion

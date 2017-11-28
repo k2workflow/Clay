@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -86,7 +87,7 @@ namespace SourceCode.Clay.OpenApi
             Version = version ?? new SemanticVersion(3, 0, 0);
             Info = info;
             Servers = servers ?? Array.Empty<OasServer>();
-            Paths = paths ?? ReadOnlyDictionary.Empty<string, OasReferable<OasPath>>();
+            Paths = paths ?? ImmutableDictionary<string, OasReferable<OasPath>>.Empty;
             Components = components;
             Security = security ?? Array.Empty<OasReferable<OasSecurityScheme>>();
             Tags = tags ?? Array.Empty<OasTag>();

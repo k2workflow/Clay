@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -119,10 +120,10 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             ExternalDocumentation = externalDocumentation;
             OperationIdentifier = operationIdentifier;
-            Parameters = parameters ?? ReadOnlyDictionary.Empty<OasParameterKey, OasReferable<OasParameterBody>>();
+            Parameters = parameters ?? ImmutableDictionary<OasParameterKey, OasReferable<OasParameterBody>>.Empty;
             RequestBody = requestBody;
-            Responses = responses ?? ReadOnlyDictionary.Empty<OasResponseKey, OasReferable<OasResponse>>();
-            Callbacks = callbacks ?? ReadOnlyDictionary.Empty<string, OasReferable<OasCallback>>();
+            Responses = responses ?? ImmutableDictionary<OasResponseKey, OasReferable<OasResponse>>.Empty;
+            Callbacks = callbacks ?? ImmutableDictionary<string, OasReferable<OasCallback>>.Empty;
             Options = options;
             Security = security ?? Array.Empty<OasSecurityScheme>();
             Servers = servers ?? Array.Empty<OasServer>();

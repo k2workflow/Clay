@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Net.Mime;
 
 namespace SourceCode.Clay.OpenApi
@@ -57,9 +58,9 @@ namespace SourceCode.Clay.OpenApi
             IReadOnlyDictionary<string, OasReferable<OasLink>> links = default)
         {
             Description = description;
-            Headers = headers ?? ReadOnlyDictionary.Empty<string, OasReferable<OasParameterBody>>();
-            Content = content ?? ReadOnlyDictionary.Empty<ContentType, OasMediaType>();
-            Links = links ?? ReadOnlyDictionary.Empty<string, OasReferable<OasLink>>();
+            Headers = headers ?? ImmutableDictionary<string, OasReferable<OasParameterBody>>.Empty;
+            Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
+            Links = links ?? ImmutableDictionary<string, OasReferable<OasLink>>.Empty;
         }
 
         #endregion

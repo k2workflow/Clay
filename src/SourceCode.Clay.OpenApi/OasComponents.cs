@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -92,15 +93,15 @@ namespace SourceCode.Clay.OpenApi
             IReadOnlyDictionary<string, OasReferable<OasLink>> links = default,
             IReadOnlyDictionary<string, OasReferable<OasCallback>> callbacks = default)
         {
-            Schemas = schemas ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasSchema>>();
-            Responses = responses ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasResponse>>();
-            Parameters = parameters ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasParameter>>();
-            Examples = examples ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasExample>>();
-            RequestBodies = requestBodies ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasRequestBody>>();
-            Headers = headers ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasParameterBody>>();
-            SecuritySchemes = securitySchemes ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasSecurityScheme>>();
-            Links = links ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasLink>>();
-            Callbacks = callbacks ?? Dictionary.ReadOnlyEmpty<string, OasReferable<OasCallback>>();
+            Schemas = schemas ?? ImmutableDictionary<string, OasReferable<OasSchema>>.Empty;
+            Responses = responses ?? ImmutableDictionary<string, OasReferable<OasResponse>>.Empty;
+            Parameters = parameters ?? ImmutableDictionary<string, OasReferable<OasParameter>>.Empty;
+            Examples = examples ?? ImmutableDictionary<string, OasReferable<OasExample>>.Empty;
+            RequestBodies = requestBodies ?? ImmutableDictionary<string, OasReferable<OasRequestBody>>.Empty;
+            Headers = headers ?? ImmutableDictionary<string, OasReferable<OasParameterBody>>.Empty;
+            SecuritySchemes = securitySchemes ?? ImmutableDictionary<string, OasReferable<OasSecurityScheme>>.Empty;
+            Links = links ?? ImmutableDictionary<string, OasReferable<OasLink>>.Empty;
+            Callbacks = callbacks ?? ImmutableDictionary<string, OasReferable<OasCallback>>.Empty;
         }
 
         #endregion

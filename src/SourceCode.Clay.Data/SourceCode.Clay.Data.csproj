@@ -14,12 +14,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.3.0-beta1">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Memory" Version="4.5.0-preview2-25707-02" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\SourceCode.Clay.Collections\Generic\EmptyDictionaryImpl.cs" Link="SqlParser\EmptyDictionaryImpl.cs" />
   </ItemGroup>
 
   <PropertyGroup>

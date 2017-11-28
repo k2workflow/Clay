@@ -8,6 +8,7 @@
 using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -53,8 +54,8 @@ namespace SourceCode.Clay.OpenApi
             IReadOnlyDictionary<string, OasPropertyEncoding> encoding = default)
         {
             Schema = schema;
-            Examples = examples ?? ReadOnlyDictionary.Empty<string, OasReferable<OasExample>>();
-            Encoding = encoding ?? ReadOnlyDictionary.Empty<string, OasPropertyEncoding>();
+            Examples = examples ?? ImmutableDictionary<string, OasReferable<OasExample>>.Empty;
+            Encoding = encoding ?? ImmutableDictionary<string, OasPropertyEncoding>.Empty;
         }
 
         #endregion
