@@ -102,7 +102,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
         #region Methods
 
-        [Fact(DisplayName = nameof(OpenApiSerializer_Serialize))]
+        //[Fact(DisplayName = nameof(OpenApiSerializer_Serialize))]
         public static void OpenApiSerializer_Serialize()
         {
             var sut = new MockOasSerializer();
