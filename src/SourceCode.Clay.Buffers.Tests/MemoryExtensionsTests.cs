@@ -5,11 +5,10 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using System;
 using Xunit;
 
-namespace SourceCode.Clay.Collections.Tests
+namespace SourceCode.Clay.Buffers.Tests
 {
     public static class MemoryExtensionsTests
     {

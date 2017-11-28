@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SourceCode.Clay.Collections.Generic
+namespace SourceCode.Clay.Buffers
 {
     /// <summary>
     /// Represents extensions for <see cref="ReadOnlyMemory{T}"/>.
