@@ -146,13 +146,21 @@ namespace SourceCode.Clay.Json
         /// Merge the specified nodes into the current <see cref="ReadOnlyJObject"/>.
         /// </summary>
         /// <param name="extra"></param>
-        public void Merge(IEnumerable<KeyValuePair<string, JToken>> nodes)
+        public ReadOnlyJObject Merge(IEnumerable<KeyValuePair<string, JToken>> nodes)
         {
-            if (nodes == null)
-                return;
+            if (nodes == null || !System.Linq.Enumerable.Any(nodes))
+                return this;
 
+            if (_json == null || _json.Count == 0)
+                return new ReadOnlyJObject(nodes);
+
+            // TODO: This is slow - this and the ctor both enumerate
+
+            var merged = (JObject)_json.DeepClone(); // Source is known to be a JObject
             foreach (var kvp in nodes)
-                _json[kvp.Key] = kvp.Value;
+                merged[kvp.Key] = kvp.Value;
+
+            return new ReadOnlyJObject(merged);
         }
 
         #endregion
