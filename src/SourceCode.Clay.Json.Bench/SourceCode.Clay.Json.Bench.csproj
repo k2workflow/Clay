@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.0-beta3-62314-05">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="BenchmarkDotNet" Version="0.10.10" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.10.11" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
   </ItemGroup>
 
