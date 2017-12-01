@@ -7,6 +7,7 @@
 
 using Newtonsoft.Json;
 using System;
+using System.Threading;
 
 namespace SourceCode.Clay.Json
 {
@@ -76,7 +77,7 @@ namespace SourceCode.Clay.Json
         }
 
         /// <summary>
-        /// Process the current token value as a Json object.
+        /// Processes the current token value as a Json object.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
@@ -92,6 +93,39 @@ namespace SourceCode.Clay.Json
                 objectFactory?.Invoke();
                 return 0;
             }
+        }
+
+        /// <summary>
+        /// Processes the current token value as a Json object but ignores all values.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        public static int SkipCountObject(this JsonReader jr)
+        {
+            var count = 0;
+
+            // Leverage shared logic, ignoring sentinel return <int> value
+            ReadObject(jr, CurryHandler, CurryFactory);
+
+            return count;
+
+            // Curry delegate into local function
+            bool CurryHandler(string name)
+            {
+                switch (jr.TokenType)
+                {
+                    case JsonToken.StartArray:
+                    case JsonToken.StartObject:
+                        jr.Skip(); // Skip the children of the current token
+                        break;
+                }
+
+                count = Interlocked.Increment(ref count);
+
+                return true;
+            }
+
+            // Curry delegate into local function
+            int CurryFactory() => 0;
         }
 
         #endregion

@@ -44,6 +44,16 @@ namespace SourceCode.Clay.Json.Units
 
                 Assert.Equal(1, actual);
             }
+
+            // Skip
+            using (var tr = new StringReader(json))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountObject();
+
+                Assert.True(jr.TokenType == JsonToken.EndObject);
+                Assert.Equal(0, actualCount);
+            }
         }
 
         [Trait("Type", "Unit")]
@@ -74,6 +84,16 @@ namespace SourceCode.Clay.Json.Units
             {
                 var actualCount = 0;
                 jr.ProcessArray(() => actualCount++);
+                Assert.Equal(0, actualCount);
+            }
+
+            // Skip
+            using (var tr = new StringReader(json))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountArray();
+
+                Assert.True(jr.TokenType == JsonToken.EndArray);
                 Assert.Equal(0, actualCount);
             }
         }
@@ -125,6 +145,16 @@ namespace SourceCode.Clay.Json.Units
 
                 Assert.Null(actual);
             }
+
+            // Skip
+            using (var tr = new StringReader(json))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountObject();
+
+                Assert.True(jr.TokenType == JsonToken.EndObject);
+                Assert.Equal(1, actualCount);
+            }
         }
 
         [Trait("Type", "Unit")]
@@ -157,6 +187,16 @@ namespace SourceCode.Clay.Json.Units
                 jr.ProcessArray(() => actual.Add((string)jr.Value));
                 Assert.Equal(new string[] { null }, actual);
             }
+
+            // Skip
+            using (var tr = new StringReader(json))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountArray();
+
+                Assert.True(jr.TokenType == JsonToken.EndArray);
+                Assert.Equal(1, actualCount);
+            }
         }
 
         #endregion
@@ -173,7 +213,9 @@ namespace SourceCode.Clay.Json.Units
             ""age"": 99,
             ""type1"": ""tINyINt"",
             ""type2"": """",
-            ""type3"": null
+            ""type3"": null,
+            ""object"": { ""foo"": 123 },
+            ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ]
         }";
 
         private const string jsonArray = @"
@@ -213,6 +255,8 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "object": jr.SkipCountObject(); return true;
+                        case "array": jr.SkipCountArray(); return true;
                     }
 
                     return false;
@@ -254,6 +298,8 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "object": jr.SkipCountObject(); return true;
+                        case "array": jr.SkipCountArray(); return true;
                     }
 
                     return false;
@@ -269,6 +315,16 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
+            }
+
+            // Skip
+            using (var tr = new StringReader(jsonObject))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountObject();
+
+                Assert.True(jr.TokenType == JsonToken.EndObject);
+                Assert.Equal(10, actualCount);
             }
         }
 
@@ -299,6 +355,16 @@ namespace SourceCode.Clay.Json.Units
                 var actual = new List<object>();
                 jr.ProcessArray(() => actual.Add(jr.Value));
                 Assert.Collection(actual, n => Assert.Equal("joe", n), n => Assert.Null(n), n => Assert.Equal(string.Empty, n), n => Assert.True((bool)n), n => Assert.Equal(99L, n));
+            }
+
+            // Skip
+            using (var tr = new StringReader(jsonArray))
+            using (var jr = new JsonTextReader(tr))
+            {
+                var actualCount = jr.SkipCountArray();
+
+                Assert.True(jr.TokenType == JsonToken.EndArray);
+                Assert.Equal(5, actualCount);
             }
         }
 
