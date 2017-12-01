@@ -8,6 +8,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SourceCode.Clay.Json
 {
@@ -131,6 +132,36 @@ namespace SourceCode.Clay.Json
                     case JsonToken.EndArray:
                         yield break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Skips all items in a Json array, but returns the count.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The number of items skipped.</returns>
+        public static int SkipCountArray(this JsonReader jr)
+        {
+            if (jr == null) throw new ArgumentNullException(nameof(jr));
+
+            var count = 0;
+
+            ProcessArray(jr, Curry);
+
+            return count;
+
+            // Curry delegate into local function
+            void Curry()
+            {
+                switch (jr.TokenType)
+                {
+                    case JsonToken.StartArray:
+                    case JsonToken.StartObject:
+                        jr.Skip(); // Skip the children of the current token
+                        break;
+                }
+
+                count = Interlocked.Increment(ref count);
             }
         }
 

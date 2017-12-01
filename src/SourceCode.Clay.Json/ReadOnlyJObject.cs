@@ -142,6 +142,19 @@ namespace SourceCode.Clay.Json
         /// <returns></returns>
         public JObject ToJObject() => (JObject)_json.DeepClone(); // Source is known to be a JObject
 
+        /// <summary>
+        /// Merge the specified nodes into the current <see cref="ReadOnlyJObject"/>.
+        /// </summary>
+        /// <param name="extra"></param>
+        public void Merge(IEnumerable<KeyValuePair<string, JToken>> nodes)
+        {
+            if (nodes == null)
+                return;
+
+            foreach (var kvp in nodes)
+                _json[kvp.Key] = kvp.Value;
+        }
+
         #endregion
 
         #region IEnumerable
