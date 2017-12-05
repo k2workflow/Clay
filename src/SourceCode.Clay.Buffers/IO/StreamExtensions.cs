@@ -86,7 +86,7 @@ namespace SourceCode.Clay.IO
                     {
                         var toCopy = Math.Min(bufferLength, memory.Length - offset);
                         memory.Span.Slice(offset, toCopy).CopyTo(ba);
-                        await stream.WriteAsync(ba, 0, toCopy, cancellationToken);
+                        await stream.WriteAsync(ba, 0, toCopy, cancellationToken).ConfigureAwait(false);
                         offset += toCopy;
                     }
                 }

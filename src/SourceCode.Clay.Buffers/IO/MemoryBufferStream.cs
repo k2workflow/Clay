@@ -25,88 +25,6 @@ namespace SourceCode.Clay.IO
 
         #endregion
 
-        #region Classes
-
-        private sealed class CompletedWaitHandle : WaitHandle
-        {
-            #region Fields
-
-            public static readonly CompletedWaitHandle Instance = new CompletedWaitHandle();
-
-            #endregion
-
-            #region Constructors
-
-            public CompletedWaitHandle()
-            {
-                GC.SuppressFinalize(this);
-            }
-
-            #endregion
-
-            #region Methods
-
-            public override bool WaitOne() => true;
-
-            public override bool WaitOne(int millisecondsTimeout) => true;
-
-            public override bool WaitOne(int millisecondsTimeout, bool exitContext) => true;
-
-            public override bool WaitOne(TimeSpan timeout) => true;
-
-            public override bool WaitOne(TimeSpan timeout, bool exitContext) => true;
-
-            public override void Close()
-            {
-            }
-
-            #endregion
-        }
-
-        private sealed class SyncAsyncResult : IAsyncResult
-        {
-            #region Properties
-
-            public object AsyncState { get; }
-
-            public WaitHandle AsyncWaitHandle => CompletedWaitHandle.Instance;
-
-            public bool CompletedSynchronously => true;
-
-            public bool IsCompleted => true;
-
-            public int BytesCopied { get; }
-
-            public AsyncCallback AsyncCallback { get; }
-
-            #endregion
-
-            #region Constructors
-
-            public SyncAsyncResult(object asyncState, int bytesCopied, AsyncCallback asyncCallback)
-            {
-                AsyncState = asyncState;
-                BytesCopied = bytesCopied;
-                AsyncCallback = asyncCallback;
-            }
-
-            #endregion
-
-            #region Methods
-
-            public void ThreadPoolWorkItem(object state)
-            {
-                using (AsyncWaitHandle)
-                {
-                    AsyncCallback?.Invoke(this);
-                }
-            }
-
-            #endregion
-        }
-
-        #endregion
-
         #region Properties
 
         public override bool CanRead => true;
@@ -226,9 +144,9 @@ namespace SourceCode.Clay.IO
         public IAsyncResult BeginRead(Memory<byte> buffer, AsyncCallback callback, object state)
         {
             var read = Read(buffer.Span);
-            var async = new SyncAsyncResult(state, read, callback);
-            ThreadPool.QueueUserWorkItem(async.ThreadPoolWorkItem);
-            return async;
+            var result = new SyncAsyncResult(state, read, callback);
+            ThreadPool.QueueUserWorkItem(result.ThreadPoolWorkItem);
+            return result;
         }
 
         public override int EndRead(IAsyncResult asyncResult)
@@ -292,7 +210,7 @@ namespace SourceCode.Clay.IO
                     source.Slice(0, toCopy).Span.CopyTo(buffer);
                     source = source.Slice(toCopy);
 
-                    await destination.WriteAsync(buffer, 0, toCopy, cancellationToken);
+                    await destination.WriteAsync(buffer, 0, toCopy, cancellationToken).ConfigureAwait(false);
                     _position = i;
                 }
 

@@ -36,9 +36,6 @@ namespace SourceCode.Clay.OpenApi
 
         #region Properties
 
-        /// <inheritdoc/>
-        //protected override Type EqualityContract => typeof(OasHttpSecurityScheme);
-
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.Http;
 

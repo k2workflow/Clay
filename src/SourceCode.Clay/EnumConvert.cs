@@ -34,12 +34,16 @@ namespace SourceCode.Clay
             static Converter()
             {
                 var @enum = typeof(TEnum);
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+                // Exceptions are not raised in this method.
+
                 if (!@enum.IsEnum)
                 {
                     ConvertTo = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
                     ConvertFrom = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
                     return;
                 }
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
                 var integer = typeof(TInteger);
 
@@ -62,8 +66,12 @@ namespace SourceCode.Clay
                 }
                 catch (Exception e)
                 {
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+                    // Exceptions are not raised in this method.
+
                     ConvertTo = _ => throw e;
                     ConvertFrom = _ => throw e;
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
                 }
             }
 

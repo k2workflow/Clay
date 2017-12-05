@@ -31,12 +31,6 @@ namespace SourceCode.Clay.OpenApi
         #region Properties
 
         /// <summary>
-        /// Used for equality checking in inheritance schemes.
-        /// Ensure that this returns the delcared type of the class.
-        /// </summary>
-        //protected virtual Type EqualityContract => typeof(OasSecurityScheme);
-
-        /// <summary>
         /// Gets the type of the security scheme.
         /// </summary>
         public abstract OasSecuritySchemeType SchemeType { get; }
