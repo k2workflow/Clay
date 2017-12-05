@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Security;
 using Xunit;
 
@@ -25,17 +24,36 @@ namespace SourceCode.Clay.Tests
 
             // Empty
             actual = new SecureString();
+            actual.MakeReadOnly();
             Assert.Equal(string.Empty, actual.ToUnsecureString());
 
             // Single
+            actual = new SecureString();
+            actual.AppendChar((char)0);
+            actual.MakeReadOnly();
+            Assert.Equal(string.Empty, actual.ToUnsecureString());
+
+            // Single
+            actual = new SecureString();
             actual.AppendChar('h');
+            actual.MakeReadOnly();
             Assert.Equal("h", actual.ToUnsecureString());
 
+            // Surrogate
+            actual = new SecureString();
+            actual.AppendChar(TestVectors.SurrogatePair[0]);
+            actual.AppendChar(TestVectors.SurrogatePair[1]);
+            actual.MakeReadOnly();
+            Assert.Equal(TestVectors.SurrogatePair, actual.ToUnsecureString());
+
             // Short
+            actual = new SecureString();
+            actual.AppendChar('h');
             actual.AppendChar('e');
             actual.AppendChar('l');
             actual.AppendChar('L');
             actual.AppendChar('0');
+            actual.MakeReadOnly();
             Assert.Equal("helL0", actual.ToUnsecureString());
 
             // Large
