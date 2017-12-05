@@ -25,7 +25,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static string ToUnsecureString(this SecureString ss)
         {
-            if (ss == null) throw new ArgumentNullException(nameof(ss));
+            if (ss == null) return null;
 
             // https://blogs.msdn.microsoft.com/fpintos/2009/06/12/how-to-properly-convert-securestring-to-string/
             var ptr = IntPtr.Zero;

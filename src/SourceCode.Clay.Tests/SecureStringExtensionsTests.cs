@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Tests
         {
             // Null
             SecureString actual = null;
-            Assert.Throws<ArgumentNullException>(() => actual.ToUnsecureString());
+            Assert.Null(actual.ToUnsecureString());
 
             // Empty
             actual = new SecureString();
