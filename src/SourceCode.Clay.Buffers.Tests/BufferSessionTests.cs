@@ -18,20 +18,18 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferSession_Full_Lifecycle))]
         public static void BufferSession_Full_Lifecycle()
         {
-            var buffer = BufferSession.RentBuffer(100);
+            var buffer = BufferSession.Rent(100).Result.Array;
             Assert.True(buffer.Length >= 100);
 
-            var result = new ArraySegment<byte>(buffer);
-            result.Array[0] = 123;
+            buffer[0] = 123;
 
-            var session = new BufferSession(buffer, result);
+            var session = BufferSession.Rented(buffer);
             {
                 Assert.Equal(123, session.Result.Array[0]);
-                Assert.True(session.Buffer.Length == buffer.Length);
+                Assert.True(session.Result.Count == buffer.Length);
             }
             session.Dispose(); // Call explicitly
-
-            Assert.Null(session.Buffer);
+            Assert.Empty(session.Result);
         }
 
         #endregion

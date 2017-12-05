@@ -5,7 +5,9 @@
 
 #endregion
 
+using SourceCode.Clay.IO;
 using System;
+using System.IO;
 
 namespace SourceCode.Clay.Buffers
 {
@@ -17,87 +19,85 @@ namespace SourceCode.Clay.Buffers
     /// <seealso cref="System.IDisposable" />
     public struct BufferSession : IEquatable<BufferSession>, IDisposable // MUST be a struct, in order to lessen GC load
     {
+        /// <summary>
+        /// Gets a reference to an empty <see cref="BufferSession"/>.
+        /// </summary>
+        public static BufferSession Empty => new BufferSession(Array.Empty<byte>());
+
         #region Properties
 
+        private ArraySegment<byte> _result;
+
         /// <summary>
-        /// Gets the delineated result (<see cref="BufferSession.Buffer"/> may be overallocated).
+        /// Gets the delineated result.
         /// </summary>
         /// <value>
         /// The result.
         /// </value>
-        public ArraySegment<byte> Result { get; }
+        public ArraySegment<byte> Result => _result.Array == null
+            ? new ArraySegment<byte>(Array.Empty<byte>())
+            : _result;
 
         /// <summary>
-        /// Gets the original rented buffer.
+        /// Returns the session as memory.
         /// </summary>
-        /// <value>
-        /// The buffer.
-        /// </value>
-        public byte[] Buffer { get; private set; }
+        public Memory<byte> Memory => Result;
+
+        /// <summary>
+        /// Returns the session as a span.
+        /// </summary>
+        public Span<byte> Span => Memory.Span;
 
         #endregion
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession"/> struct.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="result">The result.</param>
-        public BufferSession(in byte[] buffer, in ArraySegment<byte> result)
+        private BufferSession(ArraySegment<byte> result)
         {
-            Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-            Result = result;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession"/> struct.
-        /// </summary>
-        /// <param name="result">The result.</param>
-        public BufferSession(in ArraySegment<byte> result)
-        {
-            Buffer = null;
-            Result = result;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BufferSession" /> struct.
-        /// </summary>
-        /// <param name="minimumLength">The minimum length.</param>
-        public BufferSession(int minimumLength)
-        {
-            if (minimumLength < 0) throw new ArgumentOutOfRangeException(nameof(minimumLength));
-
-            Buffer = RentBuffer(minimumLength);
-            Result = default;
+            _result = result;
         }
 
         #endregion
 
-        #region Methods
+        #region Factory
 
         /// <summary>
-        /// Rents the buffer.
+        /// Rents a buffer and wraps it in a <see cref="BufferSession"/>.
         /// </summary>
-        /// <param name="minimumLength">The minimum length.</param>
-        /// <returns></returns>
-        public static byte[] RentBuffer(int minimumLength)
+        /// <param name="minimumLength">The minimum length of the buffer.</param>
+        /// <returns>The <see cref="BufferSession"/>.</returns>
+        public static BufferSession Rent(int minimumLength)
         {
             if (minimumLength < 0) throw new ArgumentOutOfRangeException(nameof(minimumLength));
+            if (minimumLength == 0) return Empty;
 
             var buffer = System.Buffers.ArrayPool<byte>.Shared.Rent(minimumLength);
-            return buffer;
+            return new BufferSession(new ArraySegment<byte>(buffer, 0, minimumLength));
         }
 
         /// <summary>
-        /// Returns the buffer.
+        /// Wraps a rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
+        /// that will return the buffer to the pool when disposed.
         /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        public static void ReturnBuffer(in byte[] buffer)
+        /// <param name="buffer">The rented buffer.</param>
+        /// <returns>The <see cref="BufferSession"/>.</returns>
+        public static BufferSession Rented(ArraySegment<byte> buffer)
+        {
+            return new BufferSession(buffer);
+        }
+
+        /// <summary>
+        /// Wraps a rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
+        /// that will return the buffer to the pool when disposed.
+        /// </summary>
+        /// <param name="buffer">The rented buffer.</param>
+        /// <param name="offset">The offset into <paramref name="buffer"/> where the result begins.</param>
+        /// <param name="count">The length of the result.</param>
+        /// <returns>The <see cref="BufferSession"/>.</returns>
+        public static BufferSession Rented(byte[] buffer, int offset, int count)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-
-            System.Buffers.ArrayPool<byte>.Shared.Return(buffer);
+            return new BufferSession(new ArraySegment<byte>(buffer, offset, count));
         }
 
         #endregion
@@ -112,22 +112,61 @@ namespace SourceCode.Clay.Buffers
         /// <inheritdoc/>
         public bool Equals(BufferSession other)
         {
-            if (!BufferComparer.Array.Equals(Buffer, other.Buffer)) return false;
             if (!BufferComparer.Memory.Equals(Result, other.Result)) return false;
 
             return true;
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode() => BufferComparer.Array.GetHashCode(Buffer);
+        public override int GetHashCode() => BufferComparer.Memory.GetHashCode(Memory);
 
         #endregion
 
         #region Operators
 
+        /// <summary>
+        /// Transfers the buffer contained by this <see cref="BufferSession"/> to a
+        /// new <see cref="Stream"/>.
+        /// </summary>
+        /// <returns>The stream containing the buffer.</returns>
+        public Stream ToStream()
+        {
+            var stream = new BufferSessionStream(this);
+            _result = default;
+            return stream;
+        }
+
+        /// <summary>
+        /// Transfers the buffer contained by this <see cref="BufferSession"/> to a
+        /// new read-only <see cref="Stream"/>.
+        /// </summary>
+        /// <returns>The stream containing the buffer.</returns>
+        public Stream ToReadOnlyStream()
+        {
+            var stream = new BufferSessionStream(this).MakeReadOnly();
+            _result = default;
+            return stream;
+        }
+
         public static bool operator ==(BufferSession a, BufferSession b) => a.Equals(b);
 
         public static bool operator !=(BufferSession a, BufferSession b) => !(a == b);
+
+#pragma warning disable CA2225 // Operator overloads have named alternates
+
+        // Provided by properties and constructors
+
+        public static implicit operator ArraySegment<byte>(BufferSession session) => session.Result;
+
+        public static implicit operator Memory<byte>(BufferSession session) => session.Memory;
+
+        public static implicit operator ReadOnlyMemory<byte>(BufferSession session) => session.Memory;
+
+        public static implicit operator Span<byte>(BufferSession session) => session.Span;
+
+        public static implicit operator ReadOnlySpan<byte>(BufferSession session) => session.Span;
+
+#pragma warning restore CA2225 // Operator overloads have named alternates
 
         #endregion
 
@@ -138,11 +177,10 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         public void Dispose()
         {
-            if (Buffer == null)
-                return;
+            if (_result.Array == null) return;
 
-            System.Buffers.ArrayPool<byte>.Shared.Return(Buffer);
-            Buffer = null;
+            System.Buffers.ArrayPool<byte>.Shared.Return(_result.Array);
+            _result = default;
         }
 
         #endregion

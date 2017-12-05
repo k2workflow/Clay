@@ -7,6 +7,8 @@
 
 namespace SourceCode.Clay.OpenApi
 {
+#pragma warning disable CA1034 // Nested types should not be visible
+
     /// <summary>
     /// Well-known data type formats.
     /// </summary>
@@ -135,4 +137,6 @@ namespace SourceCode.Clay.OpenApi
 
         #endregion
     }
+
+#pragma warning restore CA1034 // Nested types should not be visible
 }

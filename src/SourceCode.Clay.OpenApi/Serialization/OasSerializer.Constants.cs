@@ -7,6 +7,8 @@
 
 namespace SourceCode.Clay.OpenApi.Serialization
 {
+#pragma warning disable CA1034 // Nested types should not be visible
+
     partial class OasSerializer
     {
         #region Constants
@@ -598,4 +600,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
         #endregion
     }
+
+#pragma warning restore CA1034 // Nested types should not be visible
 }
