@@ -144,9 +144,9 @@ namespace SourceCode.Clay.IO
         public IAsyncResult BeginRead(Memory<byte> buffer, AsyncCallback callback, object state)
         {
             var read = Read(buffer.Span);
-            var async = new SyncAsyncResult(state, read, callback);
-            ThreadPool.QueueUserWorkItem(async.ThreadPoolWorkItem);
-            return async;
+            var result = new SyncAsyncResult(state, read, callback);
+            ThreadPool.QueueUserWorkItem(result.ThreadPoolWorkItem);
+            return result;
         }
 
         public override int EndRead(IAsyncResult asyncResult)

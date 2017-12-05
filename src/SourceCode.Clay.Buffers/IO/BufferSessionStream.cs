@@ -154,9 +154,9 @@ namespace SourceCode.Clay.IO
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
 
             var read = Read(buffer, offset, count);
-            var async = new SyncAsyncResult(state, read, callback);
-            ThreadPool.QueueUserWorkItem(async.ThreadPoolWorkItem);
-            return async;
+            var result = new SyncAsyncResult(state, read, callback);
+            ThreadPool.QueueUserWorkItem(result.ThreadPoolWorkItem);
+            return result;
         }
 
         public override int EndRead(IAsyncResult asyncResult)
@@ -241,9 +241,9 @@ namespace SourceCode.Clay.IO
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
             Write(buffer, offset, count);
-            var async = new SyncAsyncResult(state, count, callback);
-            ThreadPool.QueueUserWorkItem(async.ThreadPoolWorkItem);
-            return async;
+            var result = new SyncAsyncResult(state, count, callback);
+            ThreadPool.QueueUserWorkItem(result.ThreadPoolWorkItem);
+            return result;
         }
 
         public override void EndWrite(IAsyncResult asyncResult)

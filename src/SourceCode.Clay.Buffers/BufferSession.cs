@@ -19,10 +19,12 @@ namespace SourceCode.Clay.Buffers
     /// <seealso cref="System.IDisposable" />
     public struct BufferSession : IEquatable<BufferSession>, IDisposable // MUST be a struct, in order to lessen GC load
     {
+        private static readonly BufferSession _empty = new BufferSession(Array.Empty<byte>());
+
         /// <summary>
         /// Gets a reference to an empty <see cref="BufferSession"/>.
         /// </summary>
-        public static BufferSession Empty => new BufferSession(Array.Empty<byte>());
+        public static ref readonly BufferSession Empty => ref _empty;
 
         #region Properties
 
@@ -76,7 +78,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Wraps a rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
+        /// Wraps an external rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
         /// that will return the buffer to the pool when disposed.
         /// </summary>
         /// <param name="buffer">The rented buffer.</param>
@@ -87,7 +89,7 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Wraps a rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
+        /// Wraps an external rented <see cref="ArraySegment{T}"/> in a <see cref="BufferSession"/>
         /// that will return the buffer to the pool when disposed.
         /// </summary>
         /// <param name="buffer">The rented buffer.</param>
@@ -111,14 +113,11 @@ namespace SourceCode.Clay.Buffers
 
         /// <inheritdoc/>
         public bool Equals(BufferSession other)
-        {
-            if (!BufferComparer.Memory.Equals(Result, other.Result)) return false;
-
-            return true;
-        }
+            => BufferComparer.Memory.Equals(Result, other.Result);
 
         /// <inheritdoc/>
-        public override int GetHashCode() => BufferComparer.Memory.GetHashCode(Memory);
+        public override int GetHashCode()
+            => BufferComparer.Memory.GetHashCode(Memory);
 
         #endregion
 
