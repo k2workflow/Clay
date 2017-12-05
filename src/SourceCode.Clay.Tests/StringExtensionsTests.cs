@@ -12,15 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class StringExtensionsTests
     {
-        #region Fields
-
-        // https://en.wikipedia.org/wiki/Special:CiteThisPage?page=Rick_Astley
-        private const string LongStr = @"From Wikipedia: Astley was born on 6 February 1966 in Newton-le-Willows in Lancashire, the fourth child of his family. His parents divorced when he was five, and Astley was brought up by his father.[9] His musical career started when he was ten, singing in the local church choir.[10] During his schooldays, Astley formed and played the drums in a number of local bands, where he met guitarist David Morris.[2][11] After leaving school at sixteen, Astley was employed during the day as a driver in his father's market-gardening business and played drums on the Northern club circuit at night in bands such as Give Way – specialising in covering Beatles and Shadows songs – and FBI, which won several local talent competitions.[10]";
-
-        private const string SurrogatePair = "\uD869\uDE01";
-
-        #endregion
-
         #region Methods
 
         [Trait("Type", "Unit")]
@@ -181,11 +172,11 @@ namespace SourceCode.Clay.Tests
         [InlineData("A", 1, 1)]
         [InlineData("A", 2, 1)]
         // Wide-1
-        [InlineData(SurrogatePair, -1, 2)]
-        [InlineData(SurrogatePair, 0, 2)]
-        [InlineData(SurrogatePair, 1, 2)]
-        [InlineData(SurrogatePair, 2, 2)]
-        [InlineData(SurrogatePair, 3, 2)]
+        [InlineData(TestVectors.SurrogatePair, -1, 2)]
+        [InlineData(TestVectors.SurrogatePair, 0, 2)]
+        [InlineData(TestVectors.SurrogatePair, 1, 2)]
+        [InlineData(TestVectors.SurrogatePair, 2, 2)]
+        [InlineData(TestVectors.SurrogatePair, 3, 2)]
         // Narrow-2
         [InlineData("AB", -1, 2)]
         [InlineData("AB", 0, 2)]
@@ -193,14 +184,14 @@ namespace SourceCode.Clay.Tests
         [InlineData("AB", 2, 2)]
         [InlineData("AB", 3, 2)]
         // Wide-2
-        [InlineData(SurrogatePair + SurrogatePair, -1, 4)]
-        [InlineData(SurrogatePair + SurrogatePair, 0, 4)]
-        [InlineData(SurrogatePair + SurrogatePair, 1, 4)]
-        [InlineData(SurrogatePair + SurrogatePair, 2, 4)]
-        [InlineData(SurrogatePair + SurrogatePair, 3, 3)]
-        [InlineData(SurrogatePair + SurrogatePair, 4, 4)]
-        [InlineData(SurrogatePair + SurrogatePair, 5, 4)]
-        // Narrow-3
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, -1, 4)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 0, 4)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 1, 4)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 2, 4)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 3, 3)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 4, 4)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair, 5, 4)]
+        // Narrow-3 TestVectors.
         [InlineData("ABC", -1, 3)]
         [InlineData("ABC", 0, 3)]
         [InlineData("ABC", 1, 3)]
@@ -208,15 +199,15 @@ namespace SourceCode.Clay.Tests
         [InlineData("ABC", 3, 3)]
         [InlineData("ABC", 4, 3)]
         // Wide-3
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, -1, 6)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 0, 6)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 1, 6)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 2, 6)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 3, 3)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 4, 3)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 5, 5)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 6, 6)]
-        [InlineData(SurrogatePair + SurrogatePair + SurrogatePair, 7, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, -1, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 0, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 1, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 2, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 3, 3)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 4, 3)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 5, 5)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 6, 6)]
+        [InlineData(TestVectors.SurrogatePair + TestVectors.SurrogatePair + TestVectors.SurrogatePair, 7, 6)]
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_elide_string_boundary))]
         public static void When_elide_string_boundary(string str, int totalWidth, int expected)
@@ -230,7 +221,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(null, "", false)]
         [InlineData(null, "a", false)]
         [InlineData("a", "a", true)]
-        [InlineData(LongStr, LongStr, true)]
+        [InlineData(TestVectors.LongStr, TestVectors.LongStr, true)]
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
         public static void When_String_EqualsOrdinal(string x, string y, bool expected)

@@ -31,12 +31,19 @@ namespace SourceCode.Clay.Tests
             actual.AppendChar('h');
             Assert.Equal("h", actual.ToUnsecureString());
 
-            // Multi
+            // Short
             actual.AppendChar('e');
             actual.AppendChar('l');
             actual.AppendChar('L');
             actual.AppendChar('0');
             Assert.Equal("helL0", actual.ToUnsecureString());
+
+            // Large
+            actual = new SecureString();
+            for (var i = 0; i < TestVectors.LongStr.Length; i++)
+                actual.AppendChar(TestVectors.LongStr[i]);
+            actual.MakeReadOnly();
+            Assert.Equal(TestVectors.LongStr, actual.ToUnsecureString());
         }
 
         #endregion
