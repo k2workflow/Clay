@@ -38,8 +38,21 @@ namespace SourceCode.Clay
             }
             finally
             {
-                Marshal.ZeroFreeGlobalAllocUnicode(ptr);
+                if (ptr != IntPtr.Zero)
+                    Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
+        }
+
+        public static SecureString ToSecureString(this string str)
+        {
+            if (str == null) return null;
+
+            var ss = new SecureString();
+            for (var i = 0; i < str.Length; i++)
+                ss.AppendChar(str[i]);
+
+            ss.MakeReadOnly();
+            return ss;
         }
 
         #endregion
