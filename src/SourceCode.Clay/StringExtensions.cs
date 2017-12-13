@@ -85,7 +85,7 @@ namespace SourceCode.Clay
                 if (char.IsLowSurrogate(ca[totalWidth - 1]))
                     n = 1;
 
-                // It it's the HIGH surrogate, we're replacing it regardless
+                // If it's the HIGH surrogate, we're replacing it regardless
             }
             // Low|High
             else
@@ -94,7 +94,7 @@ namespace SourceCode.Clay
                 if (char.IsHighSurrogate(ca[totalWidth - 1]))
                     n = 1;
 
-                // It it's the LOW surrogate, we're replacing it regardless
+                // If it's the LOW surrogate, we're replacing it regardless
             }
 
             ca[totalWidth - n - 1] = '…';
