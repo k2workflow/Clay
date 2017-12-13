@@ -34,12 +34,6 @@
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <!-- TODO: Remove this when Roslyn ships IOperation -->
-  <!-- https://developercommunity.visualstudio.com/content/problem/133059/vs2017-code-analysis-not-working.html -->
-  <PropertyGroup>
-    <Features>IOperation</Features>
-  </PropertyGroup>
-
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/k2workflow/Clay/</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/k2workflow/Clay/master/LICENSE</PackageLicenseUrl>
