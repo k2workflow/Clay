@@ -64,6 +64,51 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(TestVectors.LongStr, actual.ToUnsecureString());
         }
 
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_convert_string))]
+        public static void When_convert_string()
+        {
+            // Null
+            string actual = null;
+            Assert.Null(actual.ToSecureString());
+
+            // Empty
+            actual = string.Empty;
+            var ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal(string.Empty, ss.ToUnsecureString());
+
+            // Single
+            actual = new string(new char[] { (char)0 });
+            ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal(string.Empty, ss.ToUnsecureString());
+
+            // Single
+            actual = "h";
+            ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal("h", ss.ToUnsecureString());
+
+            // Surrogate
+            actual = TestVectors.SurrogatePair;
+            ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal(TestVectors.SurrogatePair, ss.ToUnsecureString());
+
+            // Short
+            actual = "helL0";
+            ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal("helL0", ss.ToUnsecureString());
+
+            // Large
+            actual = TestVectors.LongStr;
+            ss = actual.ToSecureString();
+            Assert.True(ss.IsReadOnly());
+            Assert.Equal(TestVectors.LongStr, ss.ToUnsecureString());
+        }
+
         #endregion
     }
 }
