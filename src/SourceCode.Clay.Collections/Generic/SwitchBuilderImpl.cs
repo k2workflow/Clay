@@ -92,7 +92,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// </summary>
         /// <param name="cases">The cases to transform into a dynamic switch.</param>
         /// <returns>A lambda that returns an index for a specified key value.</returns>
-        private (TValue[] ar, Func<TKey, int> func) BuildSwitchExpression(in IReadOnlyDictionary<TKey, TValue> cases)
+        private static (TValue[] ar, Func<TKey, int> func) BuildSwitchExpression(in IReadOnlyDictionary<TKey, TValue> cases)
         {
             TValue[] values;
             Expression<Func<TKey, int>> expr;

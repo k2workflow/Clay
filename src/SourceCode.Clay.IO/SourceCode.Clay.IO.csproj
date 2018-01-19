@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,14 +14,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Data.SqlClient" Version="4.4.2" />
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageId>SourceCode.Clay.Data</PackageId>
+    <PackageId>SourceCode.Clay.IO</PackageId>
     <Authors>SourceCode</Authors>
-    <Description>Tools and extensions for working with data.</Description>
-    <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
+    <Description>Tools and extensions for IO operations.</Description>
+    <PackageTags>clay io file stream lock</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>

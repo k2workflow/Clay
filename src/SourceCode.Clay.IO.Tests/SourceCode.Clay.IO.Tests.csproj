@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    <ProjectReference Include="..\SourceCode.Clay.IO\SourceCode.Clay.IO.csproj" />
   </ItemGroup>
 </Project>
