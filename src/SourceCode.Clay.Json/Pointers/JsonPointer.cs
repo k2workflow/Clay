@@ -178,7 +178,7 @@ namespace SourceCode.Clay.Json.Pointers
                 return false;
             }
 
-            if (s == string.Empty)
+            if (s.Length == 0)
             {
                 result = new JsonPointer();
                 return true;

@@ -54,6 +54,59 @@ namespace SourceCode.Clay.Data.SqlParser
 
         #endregion
 
+        #region Encode
+
+        public static string EncodeNameSquare(string identifier)
+        {
+            if (string.IsNullOrEmpty(identifier)) return identifier;
+
+            const string OpenSquare = "[";
+            const string CloseSquare = "]";
+            const string CloseSquareEscaped = CloseSquare + CloseSquare;
+
+            // Need 2 delimiters. Assume 1 escape.
+            var capacity = identifier.Length + 2 + 1;
+
+            var sb = new StringBuilder(OpenSquare, capacity);
+            {
+                sb.Append(identifier);
+                sb.Replace(CloseSquare, CloseSquareEscaped); // Escape embedded delimiters
+            }
+            sb.Append(CloseSquare);
+
+            var quoted = sb.ToString();
+            return quoted;
+        }
+
+        public static string EncodeNameQuotes(string identifier)
+        {
+            if (string.IsNullOrEmpty(identifier)) return identifier;
+
+            const string Quote = "\"";
+            const string QuoteEscaped = Quote + Quote;
+
+            // Need 2 delimiters. Assume 1 escape.
+            var capacity = identifier.Length + 2 + 1;
+
+            var sb = new StringBuilder("~", capacity); // Placeholder. See #1 below
+            {
+                sb.Append(identifier);
+                sb.Replace(Quote, QuoteEscaped); // Escape embedded delimiters
+            }
+            sb[0] = Quote[0]; // Replace placeholder. See #1 above
+            sb.Append(Quote);
+
+            var quoted = sb.ToString();
+            return quoted;
+        }
+
+        public static string EncodeName(string identifier, bool useQuotes)
+            => useQuotes ?
+            EncodeNameQuotes(identifier) :
+            EncodeNameSquare(identifier);
+
+        #endregion
+
         #region Helpers
 
         /// <summary>

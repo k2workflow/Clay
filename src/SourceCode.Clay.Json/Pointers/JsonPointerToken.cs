@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Json.Pointers
         public JsonPointerToken(string value)
         {
             _value = value ?? throw new ArgumentNullException(nameof(value));
-            if (_value == string.Empty) _value = null;
+            if (_value.Length == 0) _value = null;
         }
 
         #endregion

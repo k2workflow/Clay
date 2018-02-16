@@ -112,8 +112,8 @@ namespace SourceCode.Clay
             Major = major;
             Minor = minor;
             Patch = patch;
-            PreRelease = preRelease == string.Empty ? null : preRelease;
-            BuildMetadata = buildMetadata == string.Empty ? null : buildMetadata;
+            PreRelease = string.IsNullOrEmpty(preRelease) ? null : preRelease;
+            BuildMetadata = string.IsNullOrEmpty(buildMetadata) ? null : buildMetadata;
         }
 
         #endregion
