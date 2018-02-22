@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Threading.Tasks
 {
     /// <summary>
     /// Represents <see cref="Task"/> extensions.
