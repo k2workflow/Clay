@@ -16,7 +16,7 @@ using System.Text;
 namespace SourceCode.Clay.Algorithms
 {
     [DebuggerDisplay("{HierarchyPath,nq} {Node}")]
-    public struct TreeNode<T> : IEquatable<TreeNode<T>>, IStructuralEquatable
+    public readonly struct TreeNode<T> : IEquatable<TreeNode<T>>, IStructuralEquatable
     {
         #region Properties
 

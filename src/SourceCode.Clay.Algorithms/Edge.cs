@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace SourceCode.Clay.Algorithms
 {
     [DebuggerDisplay("{From} -> {To}")]
-    public struct Edge<T> : IEquatable<Edge<T>>, IStructuralEquatable
+    public readonly struct Edge<T> : IEquatable<Edge<T>>, IStructuralEquatable
     {
         #region Properties
 
