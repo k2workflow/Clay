@@ -128,7 +128,6 @@ namespace SourceCode.Clay.Algorithms
 
             // Identify cycles.
             var stack = new Stack<T>();
-            var epoch = 1;
             var index = 0;
             foreach (var node in _nodes)
             {
@@ -155,7 +154,6 @@ namespace SourceCode.Clay.Algorithms
             }
 
             // Add exit nodes.
-            epoch++;
             foreach (var node in _nodes)
             {
                 if (node.Value.Options.HasFlag(NodeOptions.Descendant)) continue;
