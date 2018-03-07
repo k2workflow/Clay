@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27110.0
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
 EndProject
@@ -54,6 +54,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO", "src\SourceCode.Clay.IO\SourceCode.Clay.IO.csproj", "{03B741C3-837F-41D5-9129-0674ECF7FB44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO.Tests", "src\SourceCode.Clay.IO.Tests\SourceCode.Clay.IO.Tests.csproj", "{14DA1C2D-3A63-4993-847A-15F6E4659E52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Algorithms", "src\SourceCode.Clay.Algorithms\SourceCode.Clay.Algorithms.csproj", "{712342E0-045F-4C8E-9E0C-618A330DE7E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Algorithms.Tests", "src\SourceCode.Clay.Algorithms.Tests\SourceCode.Clay.Algorithms.Tests.csproj", "{3A79B7F5-243E-4553-9EC7-1A7A838008AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +145,14 @@ Global
 		{14DA1C2D-3A63-4993-847A-15F6E4659E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14DA1C2D-3A63-4993-847A-15F6E4659E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14DA1C2D-3A63-4993-847A-15F6E4659E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{712342E0-045F-4C8E-9E0C-618A330DE7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{712342E0-045F-4C8E-9E0C-618A330DE7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{712342E0-045F-4C8E-9E0C-618A330DE7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{712342E0-045F-4C8E-9E0C-618A330DE7E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +169,7 @@ Global
 		{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{7AB59F3C-9B6B-4E3F-9BFE-95F99435CD6B} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{14DA1C2D-3A63-4993-847A-15F6E4659E52} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{3A79B7F5-243E-4553-9EC7-1A7A838008AA} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9F58E15-1F9A-4AAC-831F-9C7A81512C01}
