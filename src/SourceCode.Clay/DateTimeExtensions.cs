@@ -30,7 +30,7 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region Methods
+        #region Posix
 
         /// <summary>
         /// Converts the specified <see cref="DateTime"/> to a Posix timestamp.
@@ -59,6 +59,35 @@ namespace SourceCode.Clay
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
         public static DateTime FromPosixFileTimeUtc(long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
+
+        #endregion
+
+        #region Round
+
+        /// <summary>
+        /// Rounds down the specified <see cref="DateTime"/> to the current minute.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The rounded-down value.</returns>
+        public static DateTime RoundDownMinute(this DateTime value)
+            => new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0, value.Kind);
+
+        /// <summary>
+        /// Rounds down the specified <see cref="DateTime"/> to the current hour.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The rounded-down value.</returns>
+        public static DateTime RoundDownHour(this DateTime value)
+            => new DateTime(value.Year, value.Month, value.Day, value.Hour, 0, 0, value.Kind);
+
+        /// <summary>
+        /// Rounds down the specified <see cref="DateTime"/> to the current day.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The rounded-down value.</returns>
+        public static DateTime RoundDownDay(this DateTime value)
+            => new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, value.Kind);
+
 
         #endregion
     }
