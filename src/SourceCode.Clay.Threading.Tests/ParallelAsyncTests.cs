@@ -32,19 +32,12 @@ namespace SourceCode.Clay.Threading.Tests
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
-            Func<int, Task> action = null;
-            Assert.ThrowsAsync<ArgumentNullException>(() => ParallelAsync.ForEachAsync(data, options, action));
-
             var actual = 0;
-            action = n =>
-            {
-                Interlocked.Increment(ref actual);
-                return Task.CompletedTask;
-            };
+            Assert.ThrowsAsync<ArgumentNullException>(() => ParallelAsync.ForEachAsync(data, options, action));
 
             // Null source
             actual = 0;
-            ParallelAsync.ForEachAsync(null, options, action).Wait();
+            ParallelAsync.ForEachAsync((int[])null, options, action).Wait();
             Assert.Equal(0, actual);
 
             // Empty source
@@ -56,6 +49,13 @@ namespace SourceCode.Clay.Threading.Tests
             actual = 0;
             ParallelAsync.ForEachAsync(data, options, action).Wait();
             Assert.Equal(data.Length, actual);
+
+            // Local functions
+            Task action(int n)
+            {
+                Interlocked.Increment(ref actual);
+                return Task.CompletedTask;
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -70,15 +70,16 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task> action = n =>
+            ParallelAsync.ForEachAsync(data, options, action).Wait();
+
+            Assert.Collection(data, n => Assert.Equal(0, n), n => Assert.Equal(2, n), n => Assert.Equal(4, n));
+
+            // Local functions
+            Task action(int n)
             {
                 data[n] = n * 2;
                 return Task.CompletedTask;
             };
-
-            ParallelAsync.ForEachAsync(data, options, action).Wait();
-
-            Assert.Collection(data, n => Assert.Equal(0, n), n => Assert.Equal(2, n), n => Assert.Equal(4, n));
         }
 
         [Trait("Type", "Unit")]
@@ -94,17 +95,11 @@ namespace SourceCode.Clay.Threading.Tests
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
-            Func<int, Task> action = null;
+            var actual = 0;
             Assert.ThrowsAsync<ArgumentNullException>(() => ParallelAsync.ForAsync(0, data.Length, options, action));
 
-            var actual = 0;
-            action = n =>
-            {
-                Interlocked.Increment(ref actual);
-                return Task.CompletedTask;
-            };
-
             // Bad range
+            actual = 0;
             Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => ParallelAsync.ForAsync(0, -1, options, action));
 
             // Empty source (-1)
@@ -121,6 +116,13 @@ namespace SourceCode.Clay.Threading.Tests
             actual = 0;
             ParallelAsync.ForAsync(100, 100, options, action).Wait();
             Assert.Equal(0, actual);
+
+            // Local functions
+            Task action(int n)
+            {
+                Interlocked.Increment(ref actual);
+                return Task.CompletedTask;
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -135,15 +137,16 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task> action = i =>
+            ParallelAsync.ForAsync(0, data.Length, options, action).Wait();
+
+            Assert.Collection(data, n => Assert.Equal(0, n), n => Assert.Equal(2, n), n => Assert.Equal(4, n));
+
+            // Local functions
+            Task action(int i)
             {
                 data[i] = data[i] * 2;
                 return Task.CompletedTask;
             };
-
-            ParallelAsync.ForAsync(0, data.Length, options, action).Wait();
-
-            Assert.Collection(data, n => Assert.Equal(0, n), n => Assert.Equal(2, n), n => Assert.Equal(4, n));
         }
 
         [Trait("Type", "Unit")]
@@ -159,19 +162,12 @@ namespace SourceCode.Clay.Threading.Tests
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
-            Func<int, Task<KeyValuePair<int, int>>> func = null;
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await ParallelAsync.ForEachAsync(data, options, func));
-
             var actual = 0;
-            func = n =>
-            {
-                Interlocked.Increment(ref actual);
-                return Task.FromResult(new KeyValuePair<int, int>(n, n));
-            };
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await ParallelAsync.ForEachAsync(data, options, func));
 
             // Null source
             actual = 0;
-            var result = ParallelAsync.ForEachAsync(null, options, func).Result;
+            var result = ParallelAsync.ForEachAsync((int[])null, options, func).Result;
             Assert.Equal(0, actual);
             Assert.Empty(result);
 
@@ -180,6 +176,13 @@ namespace SourceCode.Clay.Threading.Tests
             result = ParallelAsync.ForEachAsync(Array.Empty<int>(), options, func).Result;
             Assert.Equal(0, actual);
             Assert.Empty(result);
+
+            // Local functions
+            Task<KeyValuePair<int, int>> func(int n)
+            {
+                Interlocked.Increment(ref actual);
+                return Task.FromResult(new KeyValuePair<int, int>(n, n));
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -194,14 +197,15 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task<KeyValuePair<int, int>>> func = n =>
-            {
-                return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
-            };
-
             var actual = ParallelAsync.ForEachAsync(data, options, func);
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
+
+            // Local functions
+            Task<KeyValuePair<int, int>> func(int n)
+            {
+                return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -217,17 +221,11 @@ namespace SourceCode.Clay.Threading.Tests
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
-            Func<int, Task<KeyValuePair<int, int>>> func = null;
+            var actual = 0;
             Assert.ThrowsAsync<ArgumentNullException>(() => ParallelAsync.ForAsync(0, data.Length, options, func));
 
-            var actual = 0;
-            func = n =>
-            {
-                Interlocked.Increment(ref actual);
-                return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
-            };
-
             // Bad range
+            actual = 0;
             Assert.ThrowsAsync<ArgumentNullException>(() => ParallelAsync.ForAsync(0, -1, options, func));
 
             // Empty source (-1)
@@ -247,6 +245,13 @@ namespace SourceCode.Clay.Threading.Tests
             result = ParallelAsync.ForAsync(100, 100, options, func).Result;
             Assert.Equal(0, actual);
             Assert.Empty(result);
+
+            // Local functions
+            Task<KeyValuePair<int, int>> func(int n)
+            {
+                Interlocked.Increment(ref actual);
+                return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -261,14 +266,15 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task<int>> func = i =>
-            {
-                return Task.FromResult(data[i] * 2);
-            };
-
             var actual = ParallelAsync.ForAsync(0, data.Length, options, func);
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
+
+            // Local functions
+            Task<int> func(int i)
+            {
+                return Task.FromResult(data[i] * 2);
+            };
         }
 
         #endregion
@@ -291,11 +297,6 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task> func = async i =>
-            {
-                Interlocked.Increment(ref actual);
-                await Task.Delay(delay);
-            };
 
             ParallelAsync.ForAsync(0, loops, options, func).Wait();
 
@@ -303,6 +304,13 @@ namespace SourceCode.Clay.Threading.Tests
 
             Assert.Equal(loops, actual);
             Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+
+            // Local functions
+            async Task func(int i)
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay).ConfigureAwait(false);
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -318,13 +326,6 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
-            {
-                Interlocked.Increment(ref actual);
-                await Task.Delay(delay);
-                return new KeyValuePair<int, int>(n, n * 2);
-            };
-
             var result = ParallelAsync.ForAsync(0, loops, options, func).Result;
 
             sw.Stop();
@@ -332,6 +333,14 @@ namespace SourceCode.Clay.Threading.Tests
             Assert.Equal(loops, actual);
             Assert.Equal(loops, result.Count);
             Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+
+            // Local functions
+            async Task<KeyValuePair<int, int>> func(int n)
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay).ConfigureAwait(false);
+                return new KeyValuePair<int, int>(n, n * 2);
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -347,18 +356,19 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task> func = async i =>
-            {
-                Interlocked.Increment(ref actual);
-                await Task.Delay(delay);
-            };
-
             ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Wait();
 
             sw.Stop();
 
             Assert.Equal(loops, actual);
             Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+
+            // Local functions
+            async Task func(int i)
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay).ConfigureAwait(false);
+            };
         }
 
         [Trait("Type", "Unit")]
@@ -374,19 +384,20 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
-            {
-                Interlocked.Increment(ref actual);
-                await Task.Delay(delay);
-                return new KeyValuePair<int, int>(n, n * 2);
-            };
-
             var result = ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Result;
 
             sw.Stop();
 
             Assert.Equal(loops, actual);
             Assert.True(sw.ElapsedMilliseconds < delay * loops); // Environmental factors mean we can't assert a lower boundary
+
+            // Local functions
+            async Task<KeyValuePair<int, int>> func(int n)
+            {
+                Interlocked.Increment(ref actual);
+                await Task.Delay(delay).ConfigureAwait(false);
+                return new KeyValuePair<int, int>(n, n * 2);
+            };
         }
 
         #endregion
