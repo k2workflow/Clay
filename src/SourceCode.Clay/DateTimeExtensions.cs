@@ -88,7 +88,6 @@ namespace SourceCode.Clay
         public static DateTime RoundDownDay(this DateTime value)
             => new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, value.Kind);
 
-
         #endregion
     }
 }
