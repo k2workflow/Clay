@@ -79,7 +79,7 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // IEnumerable
-            var equal = EnumerableExtensions.CheckEnumerable(x, y, cmpr);
+            var equal = EnumerableExtensions.EnumerableEquals(x, y, cmpr);
             return equal;
         }
 
@@ -157,7 +157,7 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // IEnumerable
-            var equal = EnumerableExtensions.CheckEnumerable(x, y, cmpr);
+            var equal = EnumerableExtensions.EnumerableEquals(x, y, cmpr);
             return equal;
         }
 

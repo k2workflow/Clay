@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // IEnumerable
-            var equal = CheckEnumerable(x, y, cmpr);
+            var equal = EnumerableEquals(x, y, cmpr);
             return equal;
         }
 
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Collections.Generic
 
         #region Helpers
 
-        internal static bool CheckEnumerable<TSource>(in IEnumerable<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
+        internal static bool EnumerableEquals<TSource>(in IEnumerable<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             Debug.Assert(x != null);
             Debug.Assert(y != null);
