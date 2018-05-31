@@ -70,11 +70,11 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task> action = n =>
+            Task action(int n)
             {
                 data[n] = n * 2;
                 return Task.CompletedTask;
-            };
+            }
 
             ParallelAsync.ForEachAsync(data, options, action).Wait();
 
@@ -135,11 +135,11 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task> action = i =>
+            Task action(int i)
             {
                 data[i] = data[i] * 2;
                 return Task.CompletedTask;
-            };
+            }
 
             ParallelAsync.ForAsync(0, data.Length, options, action).Wait();
 
@@ -194,10 +194,10 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task<KeyValuePair<int, int>>> func = n =>
+            Task<KeyValuePair<int, int>> func(int n)
             {
                 return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
-            };
+            }
 
             var actual = ParallelAsync.ForEachAsync(data, options, func);
 
@@ -261,10 +261,10 @@ namespace SourceCode.Clay.Threading.Tests
             var data = new int[] { 0, 1, 2 };
             var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
-            Func<int, Task<int>> func = i =>
+            Task<int> func(int i)
             {
                 return Task.FromResult(data[i] * 2);
-            };
+            }
 
             var actual = ParallelAsync.ForAsync(0, data.Length, options, func);
 
@@ -291,11 +291,11 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task> func = async i =>
+            async Task func(int i)
             {
                 Interlocked.Increment(ref actual);
                 await Task.Delay(delay);
-            };
+            }
 
             ParallelAsync.ForAsync(0, loops, options, func).Wait();
 
@@ -318,12 +318,12 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
+            async Task<KeyValuePair<int, int>> func(int n)
             {
                 Interlocked.Increment(ref actual);
                 await Task.Delay(delay);
                 return new KeyValuePair<int, int>(n, n * 2);
-            };
+            }
 
             var result = ParallelAsync.ForAsync(0, loops, options, func).Result;
 
@@ -347,11 +347,11 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task> func = async i =>
+            async Task func(int i)
             {
                 Interlocked.Increment(ref actual);
                 await Task.Delay(delay);
-            };
+            }
 
             ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Wait();
 
@@ -374,12 +374,12 @@ namespace SourceCode.Clay.Threading.Tests
             sw.Start();
 
             var actual = 0;
-            Func<int, Task<KeyValuePair<int, int>>> func = async n =>
+            async Task<KeyValuePair<int, int>> func(int n)
             {
                 Interlocked.Increment(ref actual);
                 await Task.Delay(delay);
                 return new KeyValuePair<int, int>(n, n * 2);
-            };
+            }
 
             var result = ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Result;
 

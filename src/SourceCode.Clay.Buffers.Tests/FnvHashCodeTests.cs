@@ -5,7 +5,7 @@
 
 #endregion
 
-using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using Xunit;
 
@@ -88,8 +88,8 @@ namespace SourceCode.Clay.Buffers.Tests
                 {
                     foreach (var c in Expected)
                     {
-                        var aSpan = new[] { a, b, c }.AsSpan().NonPortableCast<int, byte>();
-                        var bSpan = new[] { c, b, a }.AsSpan().NonPortableCast<int, byte>();
+                        var aSpan = MemoryMarshal.Cast<int, byte>(new[] { a, b, c });
+                        var bSpan = MemoryMarshal.Cast<int, byte>(new[] { c, b, a });
 
                         if (System.Linq.Enumerable.SequenceEqual(new[] { a, b, c }, new[] { c, b, a }))
                         {
@@ -117,8 +117,8 @@ namespace SourceCode.Clay.Buffers.Tests
                     {
                         foreach (var d in Expected)
                         {
-                            var aSpan = new[] { a, b, c, d }.AsSpan().NonPortableCast<int, byte>();
-                            var bSpan = new[] { d, c, b, a }.AsSpan().NonPortableCast<int, byte>();
+                            var aSpan = MemoryMarshal.Cast<int, byte>(new[] { a, b, c, d });
+                            var bSpan = MemoryMarshal.Cast<int, byte>(new[] { d, c, b, a });
 
                             if (System.Linq.Enumerable.SequenceEqual(new[] { a, b, c, d }, new[] { d, c, b, a }))
                             {
@@ -149,8 +149,8 @@ namespace SourceCode.Clay.Buffers.Tests
                         {
                             foreach (var e in Expected)
                             {
-                                var aSpan = new[] { a, b, c, d, e }.AsSpan().NonPortableCast<int, byte>();
-                                var bSpan = new[] { e, d, c, b, a }.AsSpan().NonPortableCast<int, byte>();
+                                var aSpan = MemoryMarshal.Cast<int, byte>(new[] { a, b, c, d, e });
+                                var bSpan = MemoryMarshal.Cast<int, byte>(new[] { e, d, c, b, a });
 
                                 if (System.Linq.Enumerable.SequenceEqual(new[] { a, b, c, d, e }, new[] { e, d, c, b, a }))
                                 {

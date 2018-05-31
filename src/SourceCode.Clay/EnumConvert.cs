@@ -26,7 +26,7 @@ namespace SourceCode.Clay
             where TEnum : struct, IComparable, IConvertible, IFormattable
         {
 #pragma warning disable CA1000 // Do not declare static members on generic types
-            private static bool _isChecked = typeof(TChecked) == typeof(Checked);
+            private static readonly bool s_isChecked = typeof(TChecked) == typeof(Checked);
             public static Func<TEnum, TInteger> ConvertTo { get; }
             public static Func<TInteger, TEnum> ConvertFrom { get; }
 #pragma warning restore CA1000 // Do not declare static members on generic types
@@ -75,7 +75,7 @@ namespace SourceCode.Clay
                 }
             }
 
-            private static Expression Convert(Expression value, Type type) => _isChecked
+            private static Expression Convert(Expression value, Type type) => s_isChecked
                 ? Expression.ConvertChecked(value, type)
                 : Expression.Convert(value, type);
         }

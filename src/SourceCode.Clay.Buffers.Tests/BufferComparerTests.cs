@@ -212,7 +212,10 @@ namespace SourceCode.Clay.Buffers.Tests
             byte[] b = null;
 
             Assert.Equal(a, b, BufferComparer.Array);
-            Assert.Throws<ArgumentNullException>(() => BufferComparer.Memory.Equals(a, b));
+            Assert.True(BufferComparer.Array.Equals(a, b));
+
+            Assert.Equal(a, b, BufferComparer.Memory);
+            Assert.True(BufferComparer.Memory.Equals(a, b));
         }
 
         [Trait("Type", "Unit")]

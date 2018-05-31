@@ -3,7 +3,7 @@
   <!-- Common properties defined in Directory.Build.props -->
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <OutputType>exe</OutputType>
@@ -16,10 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.0">
-      <PrivateAssets>All</PrivateAssets>
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BenchmarkDotNet" Version="0.10.12" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
   </ItemGroup>
 

@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay.Buffers
 {
@@ -70,11 +71,11 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Combine(int a, int b)
         {
-            var data = (Span<int>)stackalloc int[2];
+            Span<int> data = stackalloc int[2];
             data[0] = a;
             data[1] = b;
 
-            var hc = Combine(data.NonPortableCast<int, byte>());
+            var hc = Combine(MemoryMarshal.Cast<int, byte>(data));
             return hc;
         }
 
@@ -90,12 +91,12 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Combine(int a, int b, int c)
         {
-            var data = (Span<int>)stackalloc int[3];
+            Span<int> data = stackalloc int[3];
             data[0] = a;
             data[1] = b;
             data[2] = c;
 
-            var hc = Combine(data.NonPortableCast<int, byte>());
+            var hc = Combine(MemoryMarshal.Cast<int, byte>(data));
             return hc;
         }
 
@@ -112,13 +113,13 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Combine(int a, int b, int c, int d)
         {
-            var data = (Span<int>)stackalloc int[4];
+            Span<int> data = stackalloc int[4];
             data[0] = a;
             data[1] = b;
             data[2] = c;
             data[3] = d;
 
-            var hc = Combine(data.NonPortableCast<int, byte>());
+            var hc = Combine(MemoryMarshal.Cast<int, byte>(data));
             return hc;
         }
 
@@ -136,14 +137,14 @@ namespace SourceCode.Clay.Buffers
         /// </returns>
         public static int Combine(int a, int b, int c, int d, int e)
         {
-            var data = (Span<int>)stackalloc int[5];
+            Span<int> data = stackalloc int[5];
             data[0] = a;
             data[1] = b;
             data[2] = c;
             data[3] = d;
             data[4] = e;
 
-            var hc = Combine(data.NonPortableCast<int, byte>());
+            var hc = Combine(MemoryMarshal.Cast<int, byte>(data));
             return hc;
         }
 

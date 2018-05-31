@@ -102,7 +102,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (byte* src = &span.DangerousGetPinnableReference())
+                fixed (byte* src = span)
                 fixed (byte* dst = &_a0)
                 {
                     Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
@@ -231,7 +231,7 @@ namespace SourceCode.Clay
             unsafe
             {
                 fixed (byte* src = &_a0)
-                fixed (byte* dst = &span.DangerousGetPinnableReference())
+                fixed (byte* dst = span)
                 {
                     Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
                 }
@@ -484,7 +484,7 @@ namespace SourceCode.Clay
             if (hex == null)
                 return false;
 
-            var span = hex.AsReadOnlySpan();
+            var span = hex.AsSpan();
             return TryParse(span, out value);
         }
 
@@ -512,7 +512,7 @@ namespace SourceCode.Clay
         {
             if (hex == null) throw new ArgumentNullException(nameof(hex));
 
-            var span = hex.AsReadOnlySpan();
+            var span = hex.AsSpan();
             return Parse(span);
         }
 
@@ -543,10 +543,34 @@ namespace SourceCode.Clay
 
         public override int GetHashCode()
         {
-            var hc = HashCode.Combine(_a0, _a1, _a2, _a3, _b0, _b1, _b2, _b3);
-            hc = HashCode.Combine(hc, _c0, _c1, _c2, _c3, _d0, _d1);
-            hc = HashCode.Combine(hc, _d2, _d3, _e0, _e1, _e2, _e3);
+            var hash = new HashCode();
 
+            hash.Add(_a0);
+            hash.Add(_a1);
+            hash.Add(_a2);
+            hash.Add(_a3);
+
+            hash.Add(_b0);
+            hash.Add(_b1);
+            hash.Add(_b2);
+            hash.Add(_b3);
+
+            hash.Add(_c0);
+            hash.Add(_c1);
+            hash.Add(_c2);
+            hash.Add(_c3);
+
+            hash.Add(_d0);
+            hash.Add(_d1);
+            hash.Add(_d2);
+            hash.Add(_d3);
+
+            hash.Add(_e0);
+            hash.Add(_e1);
+            hash.Add(_e2);
+            hash.Add(_e3);
+
+            var hc = hash.ToHashCode();
             return hc;
         }
 

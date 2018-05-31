@@ -306,7 +306,7 @@ namespace SourceCode.Clay.Tests
             var sha1 = new Sha1();
 
             // Action
-            var actual = Assert.Throws<ArgumentNullException>(() => sha1.CopyTo(buffer.AsSpan()));
+            var actual = Assert.Throws<ArgumentOutOfRangeException>(() => sha1.CopyTo(buffer.AsSpan()));
         }
 
         [Trait("Type", "Unit")]

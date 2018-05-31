@@ -130,8 +130,8 @@ namespace SourceCode.Clay.Buffers
                     {
                         unsafe
                         {
-                            fixed (byte* xp = &x.DangerousGetPinnableReference())
-                            fixed (byte* yp = &y.DangerousGetPinnableReference())
+                            fixed (byte* xp = x)
+                            fixed (byte* yp = y)
                             {
                                 cmp = NativeMethods.MemCompare(xp, yp, x.Length);
                                 return cmp;
