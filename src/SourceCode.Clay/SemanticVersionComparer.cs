@@ -93,14 +93,22 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = HashCode.Combine(obj.Major, obj.Minor, obj.Patch);
+                var hash = new HashCode();
+                hash.Add(obj.Major);
+                hash.Add(obj.Minor);
+                hash.Add(obj.Patch);
 
                 if (obj.PreRelease != null)
-                    hc = HashCode.Combine(hc, HashCode.Combine(obj.PreRelease, StringComparer.Ordinal));
+                {
+                    hash.Add(obj.PreRelease, StringComparer.Ordinal);
+                }
 
                 if (obj.BuildMetadata != null)
-                    hc = HashCode.Combine(hc, HashCode.Combine(obj.BuildMetadata, StringComparer.Ordinal));
+                {
+                    hash.Add(obj.BuildMetadata, StringComparer.Ordinal);
+                }
 
+                var hc = hash.ToHashCode();
                 return hc;
             }
 
@@ -138,11 +146,17 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-                var hc = HashCode.Combine(obj.Major, obj.Minor, obj.Patch);
+                var hash = new HashCode();
+                hash.Add(obj.Major);
+                hash.Add(obj.Minor);
+                hash.Add(obj.Patch);
 
                 if (obj.PreRelease != null)
-                    hc = HashCode.Combine(hc, HashCode.Combine(obj.PreRelease, StringComparer.Ordinal));
+                {
+                    hash.Add(obj.PreRelease, StringComparer.Ordinal);
+                }
 
+                var hc = hash.ToHashCode();
                 return hc;
             }
 
