@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Tests
 {
     public static class DateTimeExtensionsTests
     {
-        #region Methods
+        #region Posix
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTime))]
@@ -44,6 +44,61 @@ namespace SourceCode.Clay.Tests
         {
             var dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);
             Assert.Equal(new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc), dt);
+        }
+
+        #endregion
+
+        #region Round
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_RoundMinute))]
+        public static void DateTimeExtensions_RoundMinute()
+        {
+            var tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownMinute();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc).RoundDownMinute();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 29, 33, 123, DateTimeKind.Utc).RoundDownMinute();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 59, 59, 999, DateTimeKind.Utc).RoundDownMinute();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 59, 0, 0, DateTimeKind.Utc), tt);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_RoundHour))]
+        public static void DateTimeExtensions_RoundHour()
+        {
+            var tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
+            Assert.Equal(new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc).RoundDownHour();
+            Assert.Equal(new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 23, 59, 59, 999, DateTimeKind.Utc).RoundDownHour();
+            Assert.Equal(new DateTime(1987, 01, 19, 23, 0, 0, 0, DateTimeKind.Utc), tt);
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(DateTimeExtensions_RoundDay))]
+        public static void DateTimeExtensions_RoundDay()
+        {
+            var tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();
+            Assert.Equal(new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();
+            Assert.Equal(new DateTime(1987, 01, 19, 0, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc).RoundDownDay();
+            Assert.Equal(new DateTime(1987, 01, 19, 0, 0, 0, 0, DateTimeKind.Utc), tt);
+
+            tt = new DateTime(1987, 01, 31, 23, 59, 59, 999, DateTimeKind.Utc).RoundDownDay();
+            Assert.Equal(new DateTime(1987, 01, 31, 0, 0, 0, 0, DateTimeKind.Utc), tt);
         }
 
         #endregion
