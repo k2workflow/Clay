@@ -69,7 +69,7 @@ namespace SourceCode.Clay.OpenApi
             {
                 if (url.IsAbsoluteUri && !string.IsNullOrEmpty(url.Fragment) && pointer.Count != 0)
                     throw new ArgumentOutOfRangeException(nameof(url), "The URL cannot have a fragment when a pointer is provided.");
-                else if (!url.IsAbsoluteUri && url.OriginalString.IndexOf('#') >= 0)
+                else if (!url.IsAbsoluteUri && url.OriginalString.IndexOf('#', StringComparison.Ordinal) >= 0)
                     throw new ArgumentOutOfRangeException(nameof(url), "The URL cannot have a fragment when a pointer is provided.");
             }
             else if (pointer.Count == 0)
@@ -175,7 +175,7 @@ namespace SourceCode.Clay.OpenApi
                     return false;
                 }
 
-                var fragIndex = url.OriginalString.IndexOf('#');
+                var fragIndex = url.OriginalString.IndexOf('#', StringComparison.Ordinal);
                 if (fragIndex < 0)
                 {
                     // Do nothing.

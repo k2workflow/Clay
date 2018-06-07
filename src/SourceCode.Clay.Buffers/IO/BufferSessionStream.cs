@@ -124,7 +124,7 @@ namespace SourceCode.Clay.IO
 
         #region Read
 
-        public int Read(Span<byte> buffer)
+        public override int Read(Span<byte> buffer)
         {
             lock (_lock)
             {
@@ -145,6 +145,9 @@ namespace SourceCode.Clay.IO
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             return Read(new Span<byte>(buffer, offset, count));
         }
+
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+            => new ValueTask<int>(Read(buffer.Span));
 
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             => Task.FromResult(Read(buffer, offset, count));
@@ -210,7 +213,7 @@ namespace SourceCode.Clay.IO
 
         #region Write
 
-        public void Write(ReadOnlySpan<byte> buffer)
+        public override void Write(ReadOnlySpan<byte> buffer)
         {
             if (_isReadOnly) throw CreateInvalidOperationException();
 
@@ -236,6 +239,12 @@ namespace SourceCode.Clay.IO
         {
             Write(buffer, offset, count);
             return Task.CompletedTask;
+        }
+
+        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            Write(buffer.Span);
+            return new ValueTask(Task.CompletedTask);
         }
 
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)

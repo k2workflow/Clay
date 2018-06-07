@@ -100,8 +100,8 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Gets the hash code for the specified string.</summary>
         /// <param name="obj">A string.</param>
         /// <returns>A 32-bit signed hash code calculated from the value of the <paramref name="obj">obj</paramref> parameter.</returns>
-        /// <exception cref="T:System.ArgumentException">Not enough memory is available to allocate the buffer that is required to compute the hash code.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentException">Not enough memory is available to allocate the buffer that is required to compute the hash code.</exception>
+        /// <exception cref="System.ArgumentNullException">
         ///   <paramref name="obj">obj</paramref> is null.</exception>
         public override int GetHashCode(string obj)
         {
