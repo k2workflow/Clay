@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph<int>.Create();
+            var g = Graph.Create<int>();
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);

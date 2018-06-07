@@ -67,7 +67,7 @@ namespace SourceCode.Clay.OpenApi
             /// <summary>
             /// String formats.
             /// </summary>
-            public static class Text
+            public static class Textual
             {
                 #region Constants
 

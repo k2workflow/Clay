@@ -104,7 +104,7 @@ namespace SourceCode.Clay.IO
 
         #region Read
 
-        public int Read(Span<byte> buffer)
+        public override int Read(Span<byte> buffer)
         {
             lock (_lock)
             {
@@ -129,11 +129,8 @@ namespace SourceCode.Clay.IO
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             => Task.FromResult(Read(buffer, offset, count));
 
-        public Task<int> ReadAsync(Memory<byte> buffer)
-            => ReadAsync(buffer, default);
-
-        public Task<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken)
-            => Task.FromResult(Read(buffer.Span));
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+            => new ValueTask<int>(Read(buffer.Span));
 
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
@@ -236,6 +233,12 @@ namespace SourceCode.Clay.IO
             => throw CreateNotSupportedException();
 
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            => throw CreateNotSupportedException();
+
+        public override void Write(ReadOnlySpan<byte> buffer)
+            => throw CreateNotSupportedException();
+
+        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
             => throw CreateNotSupportedException();
 
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)

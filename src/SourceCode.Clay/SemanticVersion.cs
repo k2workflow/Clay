@@ -210,7 +210,7 @@ namespace SourceCode.Clay
                 return false;
             }
 
-            var minorIndex = s.IndexOf('.');
+            var minorIndex = s.IndexOf('.', StringComparison.Ordinal);
             if (minorIndex <= 0 || minorIndex == s.Length - 1)
             {
                 result = default;
