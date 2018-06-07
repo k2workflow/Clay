@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Json.Pointers
             => (IEnumerator<JsonPointerToken>)(_tokens ?? Array.Empty<JsonPointerToken>()).GetEnumerator();
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
+        /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion

@@ -53,7 +53,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         public IEnumerator<OasExpressionComponent> GetEnumerator() => (IEnumerator<OasExpressionComponent>)_components.GetEnumerator();
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
+        /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion

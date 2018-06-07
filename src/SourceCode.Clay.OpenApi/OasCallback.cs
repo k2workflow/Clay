@@ -41,9 +41,9 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Gets the element that has the specified key in the read-only dictionary.</summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>The element that has the specified key in the read-only dictionary.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         ///   <paramref name="key">key</paramref> is null.</exception>
-        /// <exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key">key</paramref> is not found.</exception>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key">key</paramref> is not found.</exception>
         public OasReferable<OasPath> this[OasExpression key] => _dictionary[key];
 
         #endregion
@@ -66,15 +66,15 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Determines whether the read-only dictionary contains an element that has the specified key.</summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>true if the read-only dictionary contains an element that has the specified key; otherwise, false.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         ///   <paramref name="key">key</paramref> is null.</exception>
         public bool ContainsKey(OasExpression key) => _dictionary.ContainsKey(key);
 
         /// <summary>Gets the value that is associated with the specified key.</summary>
         /// <param name="key">The key to locate.</param>
         /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
-        /// <returns>true if the object that implements the <see cref="T:System.Collections.Generic.IReadOnlyDictionary`2"></see> interface contains an element that has the specified key; otherwise, false.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>true if the object that implements the <see cref="IReadOnlyDictionary{TKey, TValue}"></see> interface contains an element that has the specified key; otherwise, false.</returns>
+        /// <exception cref="System.ArgumentNullException">
         ///   <paramref name="key">key</paramref> is null.</exception>
         public bool TryGetValue(OasExpression key, out OasReferable<OasPath> value) => _dictionary.TryGetValue(key, out value);
 
@@ -83,7 +83,7 @@ namespace SourceCode.Clay.OpenApi
         public IEnumerator<KeyValuePair<OasExpression, OasReferable<OasPath>>> GetEnumerator() => _dictionary.GetEnumerator();
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
+        /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => _dictionary.GetEnumerator();
 
         #endregion
