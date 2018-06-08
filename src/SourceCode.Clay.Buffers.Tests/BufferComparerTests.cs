@@ -56,11 +56,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 16);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
 
             bytes = GenerateSegment(10, 16);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -69,11 +69,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 712);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 712);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -82,11 +82,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 1024);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 1024);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -95,11 +95,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 16).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span), hash);
 
             bytes = GenerateSegment(10, 16).AsReadOnlyMemory();
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -108,11 +108,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 712).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 712).AsReadOnlyMemory();
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -121,11 +121,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 1024).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 1024).AsReadOnlyMemory();
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 16).Array;
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -143,7 +143,7 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, BufferComparer.DefaultHashCodeFidelity).Array;
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -152,7 +152,7 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 1024).Array;
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -161,11 +161,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 16);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
 
             bytes = GenerateSegment(10, 16);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(-779918115, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -174,11 +174,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 712);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 712);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
@@ -187,11 +187,11 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             var bytes = GenerateSegment(0, 1024);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
             bytes = GenerateSegment(10, 1024);
             hash = BufferComparer.Memory.GetHashCode(bytes);
-            Assert.Equal(1507092677, hash);
+            Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
         }
 
         [Trait("Type", "Unit")]
