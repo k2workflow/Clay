@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public sealed class MemoryBufferComparer : BufferComparer<ReadOnlyMemory<byte>>
     {
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="MemoryBufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
@@ -34,10 +32,6 @@ namespace SourceCode.Clay.Buffers
             : base(hashCodeFidelity)
         { }
 
-        #endregion
-
-        #region IComparer
-
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
         /// </summary>
@@ -47,10 +41,6 @@ namespace SourceCode.Clay.Buffers
         /// A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
         /// </returns>
         public override int Compare(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => CompareSpan(x.Span, y.Span);
-
-        #endregion
-
-        #region IEqualityComparer
 
         /// <inheritdoc/>
         public override bool Equals(ReadOnlyMemory<byte> x, ReadOnlyMemory<byte> y) => CompareSpan(x.Span, y.Span) == 0;
@@ -65,7 +55,7 @@ namespace SourceCode.Clay.Buffers
         public override int GetHashCode(ReadOnlyMemory<byte> obj)
         {
             // Empty
-            if (obj.Length == 0) return FnvHashCode.FnvEmpty;
+            if (obj.Length == 0) return ArrayBufferComparer.EmptyHashCode;
 
             // Calculate on full length
             var span = obj.Span;
@@ -74,13 +64,9 @@ namespace SourceCode.Clay.Buffers
             if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
                 span = span.Slice(0, HashCodeFidelity);
 
-            var hc = FnvHashCode.Combine(span);
+            var hc = ByteHashCode.Combine(span);
             return hc;
         }
-
-        #endregion
-
-        #region Helpers
 
         /// <summary>
         /// Compare the contexts of two <see cref="ReadOnlySpan{T}"/> buffers.
@@ -140,7 +126,5 @@ namespace SourceCode.Clay.Buffers
                     }
             }
         }
-
-        #endregion
     }
 }

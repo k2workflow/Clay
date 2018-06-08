@@ -27,8 +27,6 @@ namespace SourceCode.Clay
     [StructLayout(LayoutKind.Sequential, Size = ByteLength)]
     public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
     {
-        #region Constants
-
         // Use a thread-local instance of the underlying crypto algorithm.
         private static readonly ThreadLocal<System.Security.Cryptography.SHA1> _sha1 = new ThreadLocal<System.Security.Cryptography.SHA1>(System.Security.Cryptography.SHA1.Create);
 
@@ -51,10 +49,6 @@ namespace SourceCode.Clay
         /// The zeroes <see cref="Sha1"/>.
         /// </value>
         public static ref readonly Sha1 Zero => ref _zero;
-
-        #endregion
-
-        #region Fields
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& fixed byte would require unsafe)
@@ -84,10 +78,6 @@ namespace SourceCode.Clay
         private readonly byte _e2;
         private readonly byte _e3;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
@@ -109,10 +99,6 @@ namespace SourceCode.Clay
                 }
             }
         }
-
-        #endregion
-
-        #region Hash
 
         /// <summary>
         /// Hashes the specified value using utf8 encoding.
@@ -210,10 +196,6 @@ namespace SourceCode.Clay
             return sha1;
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
         /// </summary>
@@ -239,10 +221,6 @@ namespace SourceCode.Clay
 
             return ByteLength;
         }
-
-        #endregion
-
-        #region ToString
 
         private const char FormatN = (char)0;
 
@@ -374,10 +352,6 @@ namespace SourceCode.Clay
             var kvp = new KeyValuePair<string, string>(key, val);
             return kvp;
         }
-
-        #endregion
-
-        #region Parse
 
         // Sentinel value for n/a (128)
         private const byte __ = 0b_1000_0000;
@@ -516,10 +490,6 @@ namespace SourceCode.Clay
             return Parse(span);
         }
 
-        #endregion
-
-        #region IEquatable
-
         public bool Equals(Sha1 other)
         {
             unsafe
@@ -574,10 +544,6 @@ namespace SourceCode.Clay
             return hc;
         }
 
-        #endregion
-
-        #region IComparable
-
         public int CompareTo(Sha1 other)
         {
             unsafe
@@ -598,10 +564,6 @@ namespace SourceCode.Clay
             return 0;
         }
 
-        #endregion
-
-        #region Operators
-
         public static bool operator ==(Sha1 x, Sha1 y) => x.Equals(y);
 
         public static bool operator !=(Sha1 x, Sha1 y) => !(x == y);
@@ -613,7 +575,5 @@ namespace SourceCode.Clay
         public static bool operator <=(Sha1 x, Sha1 y) => x.CompareTo(y) <= 0;
 
         public static bool operator <(Sha1 x, Sha1 y) => x.CompareTo(y) < 0;
-
-        #endregion
     }
 }

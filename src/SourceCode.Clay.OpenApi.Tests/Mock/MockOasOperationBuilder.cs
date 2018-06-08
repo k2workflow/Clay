@@ -11,13 +11,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
 {
     public class MockOasOperationBuilder : OasOperationBuilder, IOasBuilder<MockOasOperation>
     {
-        #region Properties
-
         public ulong? OperationId { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         public MockOasOperationBuilder()
             : base()
@@ -33,10 +27,6 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
         {
             OperationId = value.OperationId;
         }
-
-        #endregion
-
-        #region Methods
 
         public override OasOperation Build() => new MockOasOperation(
             tags: new ReadOnlyCollection<string>(Tags),
@@ -54,7 +44,5 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
             operationId: OperationId);
 
         MockOasOperation IOasBuilder<MockOasOperation>.Build() => (MockOasOperation)Build();
-
-        #endregion
     }
 }

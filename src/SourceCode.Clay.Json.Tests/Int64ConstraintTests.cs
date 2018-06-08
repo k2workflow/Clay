@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class Int64ConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_Int64Constraint))]
         [InlineData(-15, true)]
@@ -124,7 +122,5 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(range.IsValid(value) == valid);
             Assert.NotEqual(0, range.GetHashCode());
         }
-
-        #endregion
     }
 }

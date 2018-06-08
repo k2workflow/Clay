@@ -17,8 +17,6 @@ namespace SourceCode.Clay.IO
     /// </summary>
     public static class FileLock
     {
-        #region Methods
-
         /// <summary>
         /// Asynchronously waits for a lock on a file.
         /// </summary>
@@ -71,7 +69,5 @@ namespace SourceCode.Clay.IO
                 }
             }
         }
-
-        #endregion
     }
 }

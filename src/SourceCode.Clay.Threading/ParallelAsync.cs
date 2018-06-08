@@ -21,8 +21,6 @@ namespace SourceCode.Clay.Threading
     /// </summary>
     public static class ParallelAsync
     {
-        #region For
-
         /// <summary>
         /// Executes a For loop in which executions may run asynchronously.
         /// </summary>
@@ -88,10 +86,6 @@ namespace SourceCode.Clay.Threading
 
             return dict;
         }
-
-        #endregion
-
-        #region ForEach
 
         /// <summary>
         /// Executes a ForEach loop in which executions may run in parallel.
@@ -161,17 +155,11 @@ namespace SourceCode.Clay.Threading
             return dict;
         }
 
-        #endregion
-
-        #region Helpers
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ExecutionDataflowBlockOptions Build(ParallelOptions options) => new ExecutionDataflowBlockOptions
         {
             CancellationToken = options == null ? CancellationToken.None : options.CancellationToken,
             MaxDegreeOfParallelism = options == null ? -1 : options.MaxDegreeOfParallelism
         };
-
-        #endregion
     }
 }

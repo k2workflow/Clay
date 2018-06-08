@@ -17,8 +17,6 @@ namespace SourceCode.Clay
     {
 #pragma warning disable RECS0154 // Parameter is never used
 
-        #region Methods
-
         /// <summary>
         /// Does nothing.
         /// </summary>
@@ -32,8 +30,6 @@ namespace SourceCode.Clay
             // Do nothing by design
             return exception;
         }
-
-        #endregion
 
 #pragma warning restore RECS0154 // Parameter is never used
     }

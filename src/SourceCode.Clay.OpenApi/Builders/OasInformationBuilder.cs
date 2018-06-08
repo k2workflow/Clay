@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasInformationBuilder : IOasBuilder<OasInformation>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the title of the exposed API.
         /// </summary>
@@ -51,10 +49,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public SemanticVersion Version { get; set; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasInformationBuilder"/> class.
         /// </summary>
@@ -76,10 +70,6 @@ namespace SourceCode.Clay.OpenApi
             License = value.License;
             Version = value.Version;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasInformationBuilder"/> to <see cref="OasInformation"/>.
@@ -106,7 +96,5 @@ namespace SourceCode.Clay.OpenApi
             contact: Contact,
             license: License,
             version: Version);
-
-        #endregion
     }
 }

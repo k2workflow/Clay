@@ -15,24 +15,14 @@ namespace SourceCode.Clay.Algorithms
     [DebuggerDisplay("{From} -> {To}")]
     public readonly struct Edge<T> : IEquatable<Edge<T>>, IStructuralEquatable
     {
-        #region Properties
-
         public T From { get; }
         public T To { get; }
-
-        #endregion
-
-        #region Constructors
 
         public Edge(T from, T to)
         {
             From = from;
             To = to;
         }
-
-        #endregion
-
-        #region Methods
 
         public static bool operator ==(Edge<T> edge1, Edge<T> edge2) => edge1.Equals(edge2);
 
@@ -68,7 +58,5 @@ namespace SourceCode.Clay.Algorithms
             => other is Edge<T> e
             && (comparer ?? throw new ArgumentNullException(nameof(comparer))).Equals(From, e.From)
             && comparer.Equals(To, e.To);
-
-        #endregion
     }
 }

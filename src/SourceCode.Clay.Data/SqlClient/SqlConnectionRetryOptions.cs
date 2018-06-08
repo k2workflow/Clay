@@ -12,13 +12,7 @@ namespace SourceCode.Clay.Data.SqlClient
     /// </summary>
     public sealed class SqlConnectionRetryOptions
     {
-        #region Constants
-
         public static SqlConnectionRetryOptions Default { get; } = new SqlConnectionRetryOptions();
-
-        #endregion
-
-        #region Properties
 
         private byte? _connectRetryCount;
 
@@ -57,13 +51,7 @@ namespace SourceCode.Clay.Data.SqlClient
             set => _connectTimeout = value;
         }
 
-        #endregion
-
-        #region Constructors
-
         public SqlConnectionRetryOptions()
         { }
-
-        #endregion
     }
 }

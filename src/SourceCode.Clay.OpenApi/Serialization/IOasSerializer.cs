@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
     /// </summary>
     public interface IOasSerializer
     {
-        #region Methods
-
         /// <summary>
         /// Serializes the specified OpenAPI object to a JSON value.
         /// </summary>
@@ -31,7 +29,5 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="value">The JSON value to deserialize.</param>
         /// <returns>The OpenAPI object.</returns>
         T Deserialize<T>(JToken value);
-
-        #endregion
     }
 }

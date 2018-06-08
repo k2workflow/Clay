@@ -15,16 +15,10 @@ namespace SourceCode.Clay.IO
 {
     internal sealed class BufferSessionStream : Stream
     {
-        #region Fields
-
         private readonly object _lock;
         private BufferSession _session;
         private int _position;
         private bool _isReadOnly;
-
-        #endregion
-
-        #region Properties
 
         public override bool CanRead => true;
 
@@ -46,19 +40,11 @@ namespace SourceCode.Clay.IO
 
         public override long Length => _session.Result.Count;
 
-        #endregion
-
-        #region Constructors
-
         public BufferSessionStream(BufferSession session)
         {
             _session = session;
             _lock = new object();
         }
-
-        #endregion
-
-        #region Methods
 
         protected override void Dispose(bool disposing)
         {
@@ -119,10 +105,6 @@ namespace SourceCode.Clay.IO
         public override void Close()
         {
         }
-
-        #endregion
-
-        #region Read
 
         public override int Read(Span<byte> buffer)
         {
@@ -209,10 +191,6 @@ namespace SourceCode.Clay.IO
             ).ConfigureAwait(false);
         }
 
-        #endregion
-
-        #region Write
-
         public override void Write(ReadOnlySpan<byte> buffer)
         {
             if (_isReadOnly) throw CreateInvalidOperationException();
@@ -273,20 +251,10 @@ namespace SourceCode.Clay.IO
             }
         }
 
-        #endregion
-
-        #region Length
-
         public override void SetLength(long value)
             => throw new NotSupportedException("Changing the length of this stream is not supported.");
 
-        #endregion
-
-        #region Not Supported
-
         private static Exception CreateInvalidOperationException()
             => new InvalidOperationException("The stream is read-only.");
-
-        #endregion
     }
 }

@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class ExceptionExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_suppress_exception))]
         public static void When_suppress_exception()
@@ -31,7 +29,5 @@ namespace SourceCode.Clay.Tests
                 Assert.Equal(expected, actual);
             }
         }
-
-        #endregion
     }
 }

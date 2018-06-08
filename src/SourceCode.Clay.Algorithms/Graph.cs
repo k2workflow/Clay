@@ -10,24 +10,25 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Algorithms
 {
+    public static class Graph
+    {
+        public static Graph<T> Create<T>(IEqualityComparer<T> equalityComparer) => new Graph<T>(equalityComparer);
+
+        public static Graph<T> Create<T>() => Create<T>(null);
+    }
+
+#pragma warning disable CA1815
+
+    // Override equals and operator equals on value types
+    // No best-fit implementation
     public readonly partial struct Graph<T>
     {
-        #region Fields
-
         private readonly ConcurrentDictionary<T, Node> _nodes;
         private readonly IEqualityComparer<T> _equalityComparer;
-
-        #endregion
-
-        #region Methods
 
         private static Node CreateValue(T key) => new Node();
 
         private Node GetOrAdd(T key) => _nodes.GetOrAdd(key, CreateValue);
-
-        #endregion
-
-        #region Constructors
 
         public Graph(IEqualityComparer<T> equalityComparer)
         {
@@ -35,12 +36,6 @@ namespace SourceCode.Clay.Algorithms
             _equalityComparer = equalityComparer;
             _nodes = new ConcurrentDictionary<T, Node>(1, 1000, equalityComparer);
         }
-
-        #endregion
-
-        public static Graph<T> Create(IEqualityComparer<T> equalityComparer) => new Graph<T>(equalityComparer);
-
-        public static Graph<T> Create() => Create(null);
 
         public void Add(T from, T to)
         {
@@ -55,4 +50,6 @@ namespace SourceCode.Clay.Algorithms
             _nodes[to] = GetOrAdd(to).SetOptions(add: NodeOptions.Descendant);
         }
     }
+
+#pragma warning restore CA1815
 }

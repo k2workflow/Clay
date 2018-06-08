@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class EnumerableExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// The lists are required to have corresponding items in the same ordinal position.
@@ -62,10 +60,6 @@ namespace SourceCode.Clay.Collections.Generic
         public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y)
             => NullableSequenceEquals(x, y, null);
 
-        #endregion
-
-        #region Helpers
-
         internal static bool EnumerableEquals<TSource>(in IEnumerable<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
         {
             Debug.Assert(x != null);
@@ -85,7 +79,5 @@ namespace SourceCode.Clay.Collections.Generic
                 return !ye.MoveNext();
             }
         }
-
-        #endregion
     }
 }

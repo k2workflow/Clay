@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasPropertyEncoding : IEquatable<OasPropertyEncoding>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the Content-Type for encoding a specific property.
         /// </summary>
@@ -40,10 +38,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasPropertyEncodingOptions Options { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasPropertyEncoding"/> class.
         /// </summary>
@@ -62,10 +56,6 @@ namespace SourceCode.Clay.OpenApi
             Style = style;
             Options = options;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -119,7 +109,5 @@ namespace SourceCode.Clay.OpenApi
             Style,
             Options
         );
-
-        #endregion
     }
 }

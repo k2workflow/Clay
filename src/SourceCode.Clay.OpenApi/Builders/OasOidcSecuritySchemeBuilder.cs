@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOidcSecuritySchemeBuilder : OasSecuritySchemeBuilder, IOasBuilder<OasOidcSecurityScheme>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the OpenId Connect URL to discover OAuth2 configuration values.
         /// </summary>
@@ -23,10 +21,6 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets the security scheme type.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OpenIdConnect;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasOidcSecuritySchemeBuilder"/> class.
@@ -45,10 +39,6 @@ namespace SourceCode.Clay.OpenApi
             if (value is null) throw new ArgumentNullException(nameof(value));
             Url = value.Url;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOidcSecuritySchemeBuilder"/> to <see cref="OasOidcSecurityScheme"/>.
@@ -84,7 +74,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasOidcSecurityScheme"/>.</returns>
         OasOidcSecurityScheme IOasBuilder<OasOidcSecurityScheme>.Build() => (OasOidcSecurityScheme)Build();
-
-        #endregion
     }
 }

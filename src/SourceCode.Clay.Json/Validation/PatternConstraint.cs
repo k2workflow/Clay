@@ -17,20 +17,10 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public sealed class PatternConstraint
     {
-        #region Constants
-
         public const RegexOptions DefaultOptions = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant;
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMilliseconds(500);
 
-        #endregion
-
-        #region Fields
-
         private readonly Lazy<Regex> _regex;
-
-        #endregion
-
-        #region Properties
 
         public string Pattern { get; }
 
@@ -43,10 +33,6 @@ namespace SourceCode.Clay.Json.Validation
         /// Gets a value indicating whether any of the constraints are specified.
         /// </summary>
         public bool IsConstrained => !string.IsNullOrWhiteSpace(Pattern) || Required;
-
-        #endregion
-
-        #region Constructors
 
         public PatternConstraint(string pattern, bool required, RegexOptions options, TimeSpan timeout)
         {
@@ -63,10 +49,6 @@ namespace SourceCode.Clay.Json.Validation
         public PatternConstraint(string pattern, bool required)
             : this(pattern, required, DefaultOptions, DefaultTimeout)
         { }
-
-        #endregion
-
-        #region Methods
 
         [MethodImpl(MethodImplOptions.NoOptimization)] // We ignore result but want the side-effects
         private static void Clear(Regex regex)
@@ -90,7 +72,5 @@ namespace SourceCode.Clay.Json.Validation
 
         public override string ToString()
             => (Required ? "Required: " : string.Empty) + Pattern;
-
-        #endregion
     }
 }

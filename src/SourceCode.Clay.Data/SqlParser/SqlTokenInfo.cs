@@ -12,15 +12,9 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public readonly struct SqlTokenInfo : IEquatable<SqlTokenInfo>
     {
-        #region Properties
-
         public SqlTokenKind Kind { get; }
 
         public string Value { get; }
-
-        #endregion
-
-        #region Constructors
 
         internal SqlTokenInfo(SqlTokenKind kind, string value)
         {
@@ -46,10 +40,6 @@ namespace SourceCode.Clay.Data.SqlParser
             Value = new string(value, offset, count);
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -72,21 +62,12 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            // TODO: Use HashCode class
-            unchecked
-            {
-                var hc = 17L;
+            var hash = new HashCode();
+            hash.Add(Value, StringComparer.Ordinal);
 
-                hc = (hc * 23) + (int)Kind;
-                hc = (hc * 23) + StringComparer.Ordinal.GetHashCode(Value ?? string.Empty);
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
+            var hc = hash.ToHashCode();
+            return hc;
         }
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
@@ -126,7 +107,5 @@ namespace SourceCode.Clay.Data.SqlParser
 
             return base.ToString();
         }
-
-        #endregion
     }
 }

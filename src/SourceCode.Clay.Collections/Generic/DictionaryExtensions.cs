@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class DictionaryExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Performs an efficient item-by-item comparison
         /// using the <see cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons
@@ -118,7 +116,5 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y)
             => NullableDictionaryEquals(x, y, null);
-
-        #endregion
     }
 }

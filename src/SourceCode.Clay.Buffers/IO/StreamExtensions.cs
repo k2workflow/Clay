@@ -18,8 +18,6 @@ namespace SourceCode.Clay.IO
     /// </summary>
     public static class StreamExtensions
     {
-        #region Write
-
         /// <summary>
         /// Writes the specified <see cref="ReadOnlyMemory{T}" /> to the specified
         /// <see cref="Stream" />.
@@ -99,7 +97,5 @@ namespace SourceCode.Clay.IO
             if (memory.Length == 0) return Task.CompletedTask;
             return Impl();
         }
-
-        #endregion
     }
 }

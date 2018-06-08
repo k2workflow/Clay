@@ -11,8 +11,6 @@ namespace SourceCode.Clay.Json.Bench
 {
     public static class Program
     {
-        #region Methods
-
         public static void Main(string[] args)
         {
             //var test1 = new CloneBench();
@@ -36,7 +34,5 @@ namespace SourceCode.Clay.Json.Bench
             });
             switcher.Run(args);
         }
-
-        #endregion
     }
 }

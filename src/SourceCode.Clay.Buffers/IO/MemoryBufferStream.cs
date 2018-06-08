@@ -15,17 +15,11 @@ namespace SourceCode.Clay.IO
 {
     public sealed class MemoryBufferStream : Stream
     {
-        #region Fields
-
         private readonly ReadOnlyMemory<byte> _memory;
 
         private readonly object _lock;
 
         private int _position;
-
-        #endregion
-
-        #region Properties
 
         public override bool CanRead => true;
 
@@ -47,19 +41,11 @@ namespace SourceCode.Clay.IO
 
         public override long Length => _memory.Length;
 
-        #endregion
-
-        #region Constructors
-
         public MemoryBufferStream(ReadOnlyMemory<byte> memory)
         {
             _memory = memory;
             _lock = new object();
         }
-
-        #endregion
-
-        #region Methods
 
         public override void Flush()
         {
@@ -100,11 +86,7 @@ namespace SourceCode.Clay.IO
         {
         }
 
-        #endregion
-
-        #region Read
-
-        public int Read(Span<byte> buffer)
+        public override int Read(Span<byte> buffer)
         {
             lock (_lock)
             {
@@ -129,11 +111,8 @@ namespace SourceCode.Clay.IO
         public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             => Task.FromResult(Read(buffer, offset, count));
 
-        public Task<int> ReadAsync(Memory<byte> buffer)
-            => ReadAsync(buffer, default);
-
-        public Task<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken)
-            => Task.FromResult(Read(buffer.Span));
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+            => new ValueTask<int>(Read(buffer.Span));
 
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
@@ -222,10 +201,6 @@ namespace SourceCode.Clay.IO
             }
         }
 
-        #endregion
-
-        #region Not Supported
-
         private static Exception CreateNotSupportedException()
             => new NotSupportedException("The stream is not writeable.");
 
@@ -238,6 +213,12 @@ namespace SourceCode.Clay.IO
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             => throw CreateNotSupportedException();
 
+        public override void Write(ReadOnlySpan<byte> buffer)
+            => throw CreateNotSupportedException();
+
+        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+            => throw CreateNotSupportedException();
+
         public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
             => throw CreateNotSupportedException();
 
@@ -246,7 +227,5 @@ namespace SourceCode.Clay.IO
 
         public override void WriteByte(byte value)
             => throw CreateNotSupportedException();
-
-        #endregion
     }
 }

@@ -11,8 +11,6 @@ namespace SourceCode.Clay.Buffers.Tests
 {
     public static class BlitTests
     {
-        #region Methods
-
         [Fact(DisplayName = nameof(Blit_RotateLeft_Byte))]
         public static void Blit_RotateLeft_Byte()
         {
@@ -84,7 +82,5 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, Blit.RotateRight(sut, 2));
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
         }
-
-        #endregion
     }
 }

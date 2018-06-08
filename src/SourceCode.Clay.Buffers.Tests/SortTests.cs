@@ -6,16 +6,12 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
     public static class SortTests
     {
-        #region Methods
-
         private static int IntComparison(byte a, byte b) => a.CompareTo(b);
 
         private static void HeapSortAndAssert(Span<byte> array)
@@ -97,7 +93,5 @@ namespace SourceCode.Clay.Buffers.Tests
                 arr[i] = (byte)(i * i);
             HeapSortAndAssert(arr);
         }
-
-        #endregion
     }
 }

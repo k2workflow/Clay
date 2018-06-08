@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class EnumConvertTests
     {
-        #region Enums
-
         private enum EmptyEnum : byte
         {
         }
@@ -87,10 +85,6 @@ namespace SourceCode.Clay.Tests
 
             Int64MinValue = unchecked((ulong)long.MinValue)
         }
-
-        #endregion
-
-        #region Checked
 
         [Fact(DisplayName = nameof(EnumConvert_NonEnum))]
         public static void EnumConvert_NonEnum()
@@ -262,10 +256,6 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToInt64Checked(UInt64Enum.MaxValue));
         }
 
-        #endregion
-
-        #region Unchecked
-
         [Fact(DisplayName = nameof(EnumConvert_ToEnumOfByte))]
         public static void EnumConvert_ToEnumOfByte()
         {
@@ -422,10 +412,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((long)ulong.MaxValue), EnumConvert.ToInt64(UInt64Enum.MaxValue));
         }
 
-        #endregion
-
-        #region Cached
-
         [Fact(DisplayName = nameof(EnumConvert_Cached_NonEnum))]
         public static void EnumConvert_Cached_NonEnum()
         {
@@ -443,7 +429,5 @@ namespace SourceCode.Clay.Tests
         {
             Assert.Equal(Enum.GetValues(typeof(ByteEnum)).Length, EnumConvert.Length<ByteEnum>());
         }
-
-        #endregion
     }
 }

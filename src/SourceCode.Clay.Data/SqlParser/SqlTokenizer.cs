@@ -16,8 +16,6 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static class SqlTokenizer
     {
-        #region Tokenize
-
         /// <summary>
         ///
         /// </summary>
@@ -51,10 +49,6 @@ namespace SourceCode.Clay.Data.SqlParser
                 return tokens;
             }
         }
-
-        #endregion
-
-        #region Encode
 
         public static string EncodeNameSquare(string identifier)
         {
@@ -104,10 +98,6 @@ namespace SourceCode.Clay.Data.SqlParser
             => useQuotes ?
             EncodeNameQuotes(identifier) :
             EncodeNameSquare(identifier);
-
-        #endregion
-
-        #region Helpers
 
         /// <summary>
         ///
@@ -281,10 +271,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return true;
         }
 
-        #endregion
-
-        #region Whitespace
-
         /// <summary>
         ///
         /// </summary>
@@ -356,10 +342,6 @@ namespace SourceCode.Clay.Data.SqlParser
             var token = new SqlTokenInfo(SqlTokenKind.Whitespace, sb);
             return token;
         }
-
-        #endregion
-
-        #region String
 
         private static SqlTokenInfo ReadSquareString(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
@@ -544,10 +526,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
-
-        #region Comment
-
         /// <summary>
         ///
         /// </summary>
@@ -673,10 +651,6 @@ namespace SourceCode.Clay.Data.SqlParser
             return token;
         }
 
-        #endregion
-
-        #region Symbol
-
         private static SqlTokenInfo ReadSymbol(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
             Debug.Assert(peekBuffer != null);
@@ -724,10 +698,6 @@ namespace SourceCode.Clay.Data.SqlParser
             var token = new SqlTokenInfo(SqlTokenKind.Symbol, peekBuffer, 0, 1);
             return token;
         }
-
-        #endregion
-
-        #region Literal
 
         private static SqlTokenInfo ReadLiteral(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
@@ -815,7 +785,5 @@ namespace SourceCode.Clay.Data.SqlParser
             var token = new SqlTokenInfo(SqlTokenKind.Literal, sb);
             return token;
         }
-
-        #endregion
     }
 }

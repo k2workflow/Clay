@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class KeyedLookupTests
     {
-        #region Methods
-
         [Fact(DisplayName = nameof(KeyedLookup_KeyExtractor))]
         public static void KeyedLookup_KeyExtractor()
         {
@@ -78,7 +76,5 @@ namespace SourceCode.Clay.Collections.Tests
             Assert.Equal(AttributeTargets.Delegate, lookup["c"].Value);
             Assert.Throws<KeyNotFoundException>(() => lookup["C"]);
         }
-
-        #endregion
     }
 }

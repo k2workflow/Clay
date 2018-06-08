@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json
 {
     public static partial class JsonReaderExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Reads the current token value as a string, then converts it to a <see cref="Enum"/>.
         /// Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="string.Empty"/>.
@@ -32,7 +30,5 @@ namespace SourceCode.Clay.Json
             var knd = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
             return knd;
         }
-
-        #endregion
     }
 }

@@ -20,8 +20,6 @@ namespace SourceCode.Clay.OpenApi.Tests
 {
     public static class BuilderTests
     {
-        #region Methods
-
         private static void TestBuilder(object builder)
         {
             var builderType = builder.GetType();
@@ -47,10 +45,6 @@ namespace SourceCode.Clay.OpenApi.Tests
                 Assert.Equal(builtValue, reverseValue);
             }
         }
-
-        #endregion
-
-        #region Build
 
         [Fact(DisplayName = nameof(ApiKeySecuritySchemeBuilder_Build))]
         public static void ApiKeySecuritySchemeBuilder_Build()
@@ -501,7 +495,5 @@ namespace SourceCode.Clay.OpenApi.Tests
                 ExternalDocumentation = new OasExternalDocumentation("Description", default)
             });
         }
-
-        #endregion
     }
 }

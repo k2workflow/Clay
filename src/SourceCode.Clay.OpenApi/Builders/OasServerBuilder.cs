@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasServerBuilder : IOasBuilder<OasServer>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the URL to the target host.
         /// </summary>
@@ -35,10 +33,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the map between a variable name and its value.
         /// </summary>
         public IDictionary<String, OasServerVariable> Variables { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasServerBuilder"/> class.
@@ -59,10 +53,6 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             Variables = new Dictionary<String, OasServerVariable>(value.Variables);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasServerBuilder"/> to <see cref="OasServer"/>.
@@ -86,7 +76,5 @@ namespace SourceCode.Clay.OpenApi
             url: Url,
             description: Description,
             variables: new ReadOnlyDictionary<String, OasServerVariable>(Variables));
-
-        #endregion
     }
 }

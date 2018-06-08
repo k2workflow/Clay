@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json
 {
     public static class NumberExtensions
     {
-        #region Methods
-
         public static JValue ToJson(this Number number)
         {
             // We constrain to number types (not bool, guid, string, etc)
@@ -61,7 +59,5 @@ namespace SourceCode.Clay.Json
 
             throw new ArgumentOutOfRangeException(nameof(value));
         }
-
-        #endregion
     }
 }

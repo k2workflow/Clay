@@ -18,8 +18,6 @@ namespace SourceCode.Clay.Algorithms
     [DebuggerDisplay("{HierarchyPath,nq} {Node}")]
     public readonly struct TreeNode<T> : IEquatable<TreeNode<T>>, IStructuralEquatable
     {
-        #region Properties
-
         public IReadOnlyList<int> Hierarchy { get; }
         public T Node { get; }
 
@@ -36,10 +34,6 @@ namespace SourceCode.Clay.Algorithms
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         public TreeNode(T node, IReadOnlyList<int> hierarchy)
         {
             Hierarchy = hierarchy ?? throw new ArgumentNullException(nameof(hierarchy));
@@ -50,10 +44,6 @@ namespace SourceCode.Clay.Algorithms
             : this(node, (IReadOnlyList<int>)hierarchy)
         {
         }
-
-        #endregion
-
-        #region Methods
 
         public static bool operator ==(TreeNode<T> node1, TreeNode<T> node2) => node1.Equals(node2);
 
@@ -118,7 +108,5 @@ namespace SourceCode.Clay.Algorithms
             => other is TreeNode<T> e
             && (comparer ?? throw new ArgumentNullException(nameof(comparer))).Equals(Node, e.Node)
             && comparer.Equals(Hierarchy, e.Hierarchy);
-
-        #endregion
     }
 }

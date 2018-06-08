@@ -22,8 +22,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasCallback : IReadOnlyDictionary<OasExpression, OasReferable<OasPath>>, IEquatable<OasCallback>
     {
-        #region Properties
-
         private readonly IReadOnlyDictionary<OasExpression, OasReferable<OasPath>> _dictionary;
 
         /// <summary>Gets an enumerable collection that contains the keys in the read-only dictionary.</summary>
@@ -46,10 +44,6 @@ namespace SourceCode.Clay.OpenApi
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key">key</paramref> is not found.</exception>
         public OasReferable<OasPath> this[OasExpression key] => _dictionary[key];
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasCallback"/> class.
         /// </summary>
@@ -58,10 +52,6 @@ namespace SourceCode.Clay.OpenApi
         {
             _dictionary = paths ?? ImmutableDictionary<OasExpression, OasReferable<OasPath>>.Empty;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>Determines whether the read-only dictionary contains an element that has the specified key.</summary>
         /// <param name="key">The key to locate.</param>
@@ -85,10 +75,6 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
         /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => _dictionary.GetEnumerator();
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -139,7 +125,5 @@ namespace SourceCode.Clay.OpenApi
             hc.Add(Count);
             return hc.ToHashCode();
         }
-
-        #endregion
     }
 }

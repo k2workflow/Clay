@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </remarks>
     public class OasLink : IEquatable<OasLink>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the relative or absolute reference to an OAS operation.
         /// </summary>
@@ -43,10 +41,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasServer Server { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasLink"/> class.
         /// </summary>
@@ -65,10 +59,6 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             Server = server;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -122,7 +112,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
             Server
         );
-
-        #endregion
     }
 }

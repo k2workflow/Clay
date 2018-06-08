@@ -13,8 +13,6 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_command_from_connection))]
         public static void When_create_command_from_connection()
@@ -39,7 +37,5 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 }
             }
         }
-
-        #endregion
     }
 }

@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasExampleBuilder : IOasBuilder<OasExample>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the short description for the example.
         /// </summary>
@@ -31,10 +29,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the URL that points to the literal example.
         /// </summary>
         public Uri ExternalValue { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasExampleBuilder"/> class.
@@ -54,10 +48,6 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             ExternalValue = value.ExternalValue;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasExampleBuilder"/> to <see cref="OasExample"/>.
@@ -88,7 +78,5 @@ namespace SourceCode.Clay.OpenApi
             summary: Summary,
             description: Description,
             externalValue: ExternalValue);
-
-        #endregion
     }
 }

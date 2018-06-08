@@ -17,8 +17,6 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlDataReader"/>
     public static class SqlDataReaderExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Gets the value of the specified binary column as <see cref="System.Byte"/>[].
         /// </summary>
@@ -105,7 +103,5 @@ namespace SourceCode.Clay.Data.SqlClient
                 return xml;
             }
         }
-
-        #endregion
     }
 }

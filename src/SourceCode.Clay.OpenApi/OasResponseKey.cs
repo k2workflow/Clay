@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public readonly struct OasResponseKey : IEquatable<OasResponseKey>
     {
-        #region Well-known
-
         /// <summary>
         /// Gets the default response key.
         /// </summary>
@@ -168,15 +166,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Gets the response key for <see cref="HttpStatusCode.HttpVersionNotSupported"/>.</summary>
         public static OasResponseKey HttpVersionNotSupported { get; } = new OasResponseKey(505);
 
-        #endregion
-
-        #region Fields
-
         private readonly HttpStatusCode? _httpStatusCode;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether this response key is the default response.
@@ -187,10 +177,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the HTTP status code associated with this response.
         /// </summary>
         public HttpStatusCode HttpStatusCode => _httpStatusCode ?? throw new InvalidOperationException("Cannot retrieve the status code from a default ResponseKey.");
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="OasResponseKey"/> value.
@@ -227,10 +213,6 @@ namespace SourceCode.Clay.OpenApi
             else
                 throw new FormatException("The response key is not valid.");
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Implements the operator == operator.
@@ -276,7 +258,5 @@ namespace SourceCode.Clay.OpenApi
             => _httpStatusCode.HasValue
             ? ((int)_httpStatusCode.Value).ToString(CultureInfo.InvariantCulture)
             : "default";
-
-        #endregion
     }
 }

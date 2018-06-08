@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Text.Tests
 {
     public static class StringBuilderTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 1 arg")]
         public static void When_append_format_line_1()
@@ -125,7 +123,5 @@ namespace SourceCode.Clay.Text.Tests
             Assert.Equal(expected.Length, actual.Length);
             Assert.Equal(expected, actual.ToString());
         }
-
-        #endregion
     }
 }

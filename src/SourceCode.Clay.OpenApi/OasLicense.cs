@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasLicense : IEquatable<OasLicense>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the license name used for the API.
         /// </summary>
@@ -25,10 +23,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the URL to the license used for the API
         /// </summary>
         public Uri Url { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasLicense"/> class.
@@ -42,10 +36,6 @@ namespace SourceCode.Clay.OpenApi
             Name = name;
             Url = url;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -95,7 +85,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
             Url
         );
-
-        #endregion
     }
 }

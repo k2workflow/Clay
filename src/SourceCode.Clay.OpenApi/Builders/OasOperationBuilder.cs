@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOperationBuilder : IOasBuilder<OasOperation>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the list of tags for API documentation control.
         /// </summary>
@@ -81,10 +79,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IList<OasServer> Servers { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOperationBuilder"/> class.
         /// </summary>
@@ -119,10 +113,6 @@ namespace SourceCode.Clay.OpenApi
             Servers = new List<OasServer>(value.Servers);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOperationBuilder"/> to <see cref="OasOperation"/>.
         /// </summary>
@@ -154,7 +144,5 @@ namespace SourceCode.Clay.OpenApi
             options: Options,
             security: new ReadOnlyCollection<OasSecurityScheme>(Security),
             servers: new ReadOnlyCollection<OasServer>(Servers));
-
-        #endregion
     }
 }

@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     internal sealed class TestVectors : IEnumerable<object[]>
     {
-        #region Constants
-
         private static readonly List<object[]> _data = new List<object[]>
         {
             // Test Vector 1
@@ -39,14 +37,8 @@ namespace SourceCode.Clay.Tests
 
         // http://www.di-mgt.com.au/sha_testvectors.html
 
-        #endregion
-
-        #region Methods
-
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion
     }
 }

@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Tests
 {
     public static class ReadOnlyJObjectTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_ReadOnlyJObject_Parse))]
         public static void When_ReadOnlyJObject_Parse()
@@ -96,7 +94,5 @@ namespace SourceCode.Clay.Json.Tests
 
             Assert.False(json.TryGetValue("dne", out jv));
         }
-
-        #endregion
     }
 }

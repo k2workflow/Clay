@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public sealed class OasLiteralExpression : OasExpressionComponent, IEquatable<OasLiteralExpression>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the literal value.
         /// </summary>
@@ -23,10 +21,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Gets the component type.</summary>
         public override OasExpressionComponentType ComponentType => OasExpressionComponentType.Literal;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasLiteralExpression"/> class.
@@ -36,10 +30,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -68,7 +58,5 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() => Value;
-
-        #endregion
     }
 }

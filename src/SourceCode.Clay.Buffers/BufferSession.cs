@@ -26,8 +26,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         public static ref readonly BufferSession Empty => ref _empty;
 
-        #region Properties
-
         private ArraySegment<byte> _result;
 
         /// <summary>
@@ -50,18 +48,10 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         public Span<byte> Span => Memory.Span;
 
-        #endregion
-
-        #region Constructors
-
         private BufferSession(ArraySegment<byte> result)
         {
             _result = result;
         }
-
-        #endregion
-
-        #region Factory
 
         /// <summary>
         /// Rents a buffer and wraps it in a <see cref="BufferSession"/>.
@@ -102,10 +92,6 @@ namespace SourceCode.Clay.Buffers
             return new BufferSession(new ArraySegment<byte>(buffer, offset, count));
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <inheritdoc/>
         public override bool Equals(object obj)
             => obj is BufferSession other
@@ -118,10 +104,6 @@ namespace SourceCode.Clay.Buffers
         /// <inheritdoc/>
         public override int GetHashCode()
             => BufferComparer.Memory.GetHashCode(Memory);
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Transfers the buffer contained by this <see cref="BufferSession"/> to a
@@ -167,10 +149,6 @@ namespace SourceCode.Clay.Buffers
 
 #pragma warning restore CA2225 // Operator overloads have named alternates
 
-        #endregion
-
-        #region IDisposable
-
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -181,7 +159,5 @@ namespace SourceCode.Clay.Buffers
             System.Buffers.ArrayPool<byte>.Shared.Return(_result.Array);
             _result = default;
         }
-
-        #endregion
     }
 }

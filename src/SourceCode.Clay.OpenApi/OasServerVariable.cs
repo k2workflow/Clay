@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasServerVariable : IEquatable<OasServerVariable>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the enumeration of string values to be used if the substitution options are from a limited set.
         /// </summary>
@@ -36,10 +34,6 @@ namespace SourceCode.Clay.OpenApi
         /// </remarks>
         public string Description { get; }
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasServerVariable"/> class.
         /// </summary>
@@ -55,10 +49,6 @@ namespace SourceCode.Clay.OpenApi
             Default = @default;
             Description = description;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -110,7 +100,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Default ?? string.Empty),
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty)
         );
-
-        #endregion
     }
 }

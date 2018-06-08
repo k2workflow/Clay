@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasLinkBuilder : IOasBuilder<OasLink>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the relative or absolute reference to an OAS operation.
         /// </summary>
@@ -39,10 +37,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasServer Server { get; set; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasLinkBuilder"/> class.
         /// </summary>
@@ -62,10 +56,6 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             Server = value.Server;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasLinkBuilder"/> to <see cref="OasLink"/>.
@@ -97,7 +87,5 @@ namespace SourceCode.Clay.OpenApi
             operationIdentifier: OperationIdentifier,
             description: Description,
             server: Server);
-
-        #endregion
     }
 }

@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasDocument : IEquatable<OasDocument>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the semantic version number of the OpenAPI Specification version that the OpenAPI document uses.
         /// </summary>
@@ -59,10 +57,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasExternalDocumentation ExternalDocumentation { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasDocument"/> class.
         /// </summary>
@@ -93,10 +87,6 @@ namespace SourceCode.Clay.OpenApi
             Tags = tags ?? Array.Empty<OasTag>();
             ExternalDocumentation = externalDocumentation;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -158,7 +148,5 @@ namespace SourceCode.Clay.OpenApi
             Tags.Count,
             ExternalDocumentation
         );
-
-        #endregion
     }
 }

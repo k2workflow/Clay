@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlTokenizerTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_quote_square_null_empty))]
         public static void When_quote_square_null_empty()
@@ -59,7 +57,5 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
             var actual = SqlTokenizer.EncodeNameQuotes(identifier);
             Assert.Equal(expected, actual);
         }
-
-        #endregion
     }
 }

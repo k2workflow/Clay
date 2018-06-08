@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class CollectionExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// The collections are required to have corresponding items in the same ordinal position.
@@ -105,7 +103,5 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableCollectionEquals<TSource>(this IReadOnlyCollection<TSource> x, in IEnumerable<TSource> y)
             => NullableCollectionEquals(x, y, null);
-
-        #endregion
     }
 }

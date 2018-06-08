@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasServerVariableBuilder : IOasBuilder<OasServerVariable>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the enumeration of string values to be used if the substitution options are from a limited set.
         /// </summary>
@@ -35,10 +33,6 @@ namespace SourceCode.Clay.OpenApi
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
         public string Description { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasServerVariableBuilder"/> class.
@@ -59,10 +53,6 @@ namespace SourceCode.Clay.OpenApi
             Default = value.Default;
             Description = value.Description;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasServerVariableBuilder"/> to <see cref="OasServerVariable"/>.
@@ -86,7 +76,5 @@ namespace SourceCode.Clay.OpenApi
             @enum: new ReadOnlyCollection<String>(Enum),
             @default: Default,
             description: Description);
-
-        #endregion
     }
 }

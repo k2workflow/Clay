@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOAuth2SecuritySchemeBuilder : OasSecuritySchemeBuilder, IOasBuilder<OasOAuth2SecurityScheme>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the configuration for the OAuth Implicit flow.
         /// </summary>
@@ -39,10 +37,6 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Gets the security scheme type.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OAuth2;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOAuth2SecuritySchemeBuilder"/> class.
         /// </summary>
@@ -63,10 +57,6 @@ namespace SourceCode.Clay.OpenApi
             ClientCredentialsFlow = value.ClientCredentialsFlow;
             AuthorizationCodeFlow = value.AuthorizationCodeFlow;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOAuth2SecuritySchemeBuilder"/> to <see cref="OasOAuth2SecurityScheme"/>.
@@ -105,7 +95,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasOAuth2SecurityScheme"/>.</returns>
         OasOAuth2SecurityScheme IOasBuilder<OasOAuth2SecurityScheme>.Build() => (OasOAuth2SecurityScheme)Build();
-
-        #endregion
     }
 }

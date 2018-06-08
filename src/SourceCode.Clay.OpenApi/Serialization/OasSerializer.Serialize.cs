@@ -15,8 +15,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
 {
     partial class OasSerializer
     {
-        #region Serialize
-
         /// <summary>
         /// Serializes a <see cref="OasResponse"/> value.
         /// </summary>
@@ -715,7 +713,5 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             return SerializeUnknown(value);
         }
-
-        #endregion
     }
 }

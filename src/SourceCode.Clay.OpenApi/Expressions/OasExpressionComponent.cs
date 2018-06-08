@@ -14,26 +14,16 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public abstract class OasExpressionComponent : IEquatable<OasExpressionComponent>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the component type.
         /// </summary>
         public abstract OasExpressionComponentType ComponentType { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasExpressionComponent"/> class.
         /// </summary>
         internal OasExpressionComponent()
         { }
-
-        #endregion
-
-        #region Equality
 
         /// <summary>
         /// Implements the == operator.
@@ -75,7 +65,5 @@ namespace SourceCode.Clay.OpenApi.Expressions
             if (ComponentType != other.ComponentType) return false;
             return Equals(other);
         }
-
-        #endregion
     }
 }

@@ -15,8 +15,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasContactBuilder : IOasBuilder<OasContact>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the identifying name of the contact person/organization.
         /// </summary>
@@ -31,10 +29,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets email address of the contact person/organization.
         /// </summary>
         public MailAddress Email { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasContactBuilder"/> class.
@@ -54,10 +48,6 @@ namespace SourceCode.Clay.OpenApi
             Url = value.Url;
             Email = value.Email;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasContactBuilder"/> to <see cref="OasContact"/>.
@@ -81,7 +71,5 @@ namespace SourceCode.Clay.OpenApi
             name: Name,
             url: Url,
             email: Email);
-
-        #endregion
     }
 }

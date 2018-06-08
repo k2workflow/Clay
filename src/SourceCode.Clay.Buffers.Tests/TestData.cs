@@ -9,8 +9,6 @@ namespace SourceCode.Clay.Buffers.Tests
 {
     internal static class TestData
     {
-        #region Constants
-
         public static readonly string[] List =
         {
             "foo",
@@ -18,7 +16,5 @@ namespace SourceCode.Clay.Buffers.Tests
             "baz",
             "nin"
         };
-
-        #endregion
     }
 }

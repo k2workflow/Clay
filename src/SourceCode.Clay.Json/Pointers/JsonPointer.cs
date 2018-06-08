@@ -22,13 +22,7 @@ namespace SourceCode.Clay.Json.Pointers
     {
 #pragma warning restore CA1710 // Identifiers should have correct suffix
 
-        #region Constants
-
         private const int LengthHeuristic = 5;
-
-        #endregion
-
-        #region Properties
 
         private readonly JsonPointerToken[] _tokens;
 
@@ -41,10 +35,6 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>The element at the specified index in the read-only list.</returns>
         public JsonPointerToken this[int index] => (_tokens ?? Array.Empty<JsonPointerToken>())[index];
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new <see cref="JsonPointer"/> value.
         /// </summary>
@@ -55,10 +45,6 @@ namespace SourceCode.Clay.Json.Pointers
             if (_tokens.Length == 0) _tokens = null;
         }
 
-        #endregion
-
-        #region IEnumerable
-
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<JsonPointerToken> GetEnumerator()
@@ -67,10 +53,6 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
         /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion
-
-        #region Append
 
         /// <summary>
         /// Create a new <see cref="JsonPointer"/> instance by appending
@@ -139,10 +121,6 @@ namespace SourceCode.Clay.Json.Pointers
             var result = new JsonPointer(array);
             return result;
         }
-
-        #endregion
-
-        #region Conversion
 
         /// <summary>
         /// Converts the string representation of a Json pointer to its structured equivalent.
@@ -234,10 +212,6 @@ namespace SourceCode.Clay.Json.Pointers
             return true;
         }
 
-        #endregion
-
-        #region Evaluate
-
         /// <summary>
         /// Evaluates the current <see cref="JsonPointer"/> against the specified target.
         /// </summary>
@@ -315,10 +289,6 @@ namespace SourceCode.Clay.Json.Pointers
             return target;
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -352,10 +322,6 @@ namespace SourceCode.Clay.Json.Pointers
         public override int GetHashCode()
             => _tokens == null ? 0 : HashCode.Combine(_tokens.Length, _tokens[0]);
 
-        #endregion
-
-        #region Operators
-
         public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
 
         public static bool operator !=(JsonPointer x, JsonPointer y) => !x.Equals(y);
@@ -383,7 +349,5 @@ namespace SourceCode.Clay.Json.Pointers
             }
             return sb.ToString();
         }
-
-        #endregion
     }
 }

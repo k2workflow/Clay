@@ -17,37 +17,21 @@ namespace SourceCode.Clay.OpenApi.Serialization
 {
     partial class OasSerializer
     {
-        #region Fields
-
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, SerializerInfo> _serializers = new ConcurrentDictionary<RuntimeTypeHandle, SerializerInfo>();
         private SerializerInfo _mySerializers;
-
-        #endregion
-
-        #region Structs
 
 #pragma warning disable CA2231
 
         private readonly struct SerializerKey : IEquatable<SerializerKey>
         {
-            #region Properties
-
             public RuntimeTypeHandle GenericArgumentType { get; }
             public RuntimeTypeHandle InstanceType { get; }
-
-            #endregion
-
-            #region Constructors
 
             public SerializerKey(RuntimeTypeHandle genericArgumentType, RuntimeTypeHandle instanceType)
             {
                 GenericArgumentType = genericArgumentType;
                 InstanceType = instanceType;
             }
-
-            #endregion
-
-            #region Methods
 
             public override bool Equals(object obj) => obj is SerializerKey o && Equals(o);
 
@@ -59,27 +43,15 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 GenericArgumentType,
                 InstanceType
             );
-
-            #endregion
         }
 
 #pragma warning restore CA2231
 
-        #endregion
-
-        #region Classes
-
         private sealed class SerializerInfo
         {
-            #region Fields
-
             private readonly ConcurrentDictionary<SerializerKey, Delegate> _delegates = new ConcurrentDictionary<SerializerKey, Delegate>();
             private readonly Type _serializerType;
             private readonly MethodInfo[] _methods;
-
-            #endregion
-
-            #region Constructors
 
             public SerializerInfo(Type serializerType)
             {
@@ -88,10 +60,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
                     .Where(x => !x.IsAbstract && !x.IsGenericMethod && x.ReturnType == typeof(JToken) && x.GetParameters().Length == 1)
                     .ToArray();
             }
-
-            #endregion
-
-            #region Methods
 
             private Delegate CreateSerializer<T>(SerializerKey key)
             {
@@ -132,13 +100,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 var del = _delegates.GetOrAdd(key, CreateSerializer<T>);
                 return ((Func<OasSerializer, T, JToken>)del)(serializer, value);
             }
-
-            #endregion
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Serializes an unknown object type.
@@ -160,7 +122,5 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             return _mySerializers.Serialize(this, value);
         }
-
-        #endregion
     }
 }

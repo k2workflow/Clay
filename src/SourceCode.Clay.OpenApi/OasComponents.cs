@@ -19,8 +19,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasComponents : IEquatable<OasComponents>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the object that holds reusable <see cref="OasSchema"/> instances.
         /// </summary>
@@ -66,10 +64,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<string, OasReferable<OasCallback>> Callbacks { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasComponents"/> class.
         /// </summary>
@@ -103,10 +97,6 @@ namespace SourceCode.Clay.OpenApi
             Links = links ?? ImmutableDictionary<string, OasReferable<OasLink>>.Empty;
             Callbacks = callbacks ?? ImmutableDictionary<string, OasReferable<OasCallback>>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -175,7 +165,5 @@ namespace SourceCode.Clay.OpenApi
 
             return hc.ToHashCode();
         }
-
-        #endregion
     }
 }

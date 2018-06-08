@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class DecimalConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_DecimalConstraint))]
         [InlineData(0.49, true)]
@@ -145,7 +143,5 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(range.IsValid(dec) == valid);
             Assert.NotEqual(0, range.GetHashCode());
         }
-
-        #endregion
     }
 }

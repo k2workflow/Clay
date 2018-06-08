@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasTag : IEquatable<OasTag>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the name of the tag.
         /// </summary>
@@ -30,10 +28,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the additional external documentation for the tag.
         /// </summary>
         public OasExternalDocumentation ExternalDocumentation { get; }
-
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasTag"/> class.
@@ -50,10 +44,6 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             ExternalDocumentation = externalDocumentation;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -105,7 +95,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
             ExternalDocumentation
         );
-
-        #endregion
     }
 }

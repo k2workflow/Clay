@@ -16,13 +16,7 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static class SqlParamBlockParser
     {
-        #region Constants
-
         private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = ImmutableDictionary<string, SqlParamInfo>.Empty;
-
-        #endregion
-
-        #region Procedure
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
@@ -107,10 +101,6 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
-        #endregion
-
-        #region Function
-
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-function-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql)
         {
@@ -185,10 +175,6 @@ namespace SourceCode.Clay.Data.SqlParser
                 return parms;
             }
         }
-
-        #endregion
-
-        #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool ParseSymbol(IEnumerator<SqlTokenInfo> tokenizer, char expected)
@@ -426,7 +412,5 @@ namespace SourceCode.Clay.Data.SqlParser
             type = sb.ToString();
             return true;
         }
-
-        #endregion
     }
 }

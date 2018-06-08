@@ -19,14 +19,8 @@ namespace SourceCode.Clay.Collections.Generic
     internal sealed class SwitchBuilderImpl<TKey, TValue> : IDynamicSwitch<TKey, TValue>
         where TKey : struct, IEquatable<TKey>
     {
-        #region Fields
-
         private readonly IReadOnlyList<TValue> _values;
         private readonly Func<TKey, int> _indexer;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SwitchBuilderImpl{TKey, TValue}"/> class.
@@ -39,10 +33,6 @@ namespace SourceCode.Clay.Collections.Generic
             _values = values;
             _indexer = indexer;
         }
-
-        #endregion
-
-        #region IDynamicSwitch
 
         /// <summary>
         /// The number of items in the switch.
@@ -82,10 +72,6 @@ namespace SourceCode.Clay.Collections.Generic
             value = _values[ix];
             return true;
         }
-
-        #endregion
-
-        #region Helpers
 
         /// <summary>
         /// Builds the underlying <see cref="Expression"/> based switch.
@@ -151,7 +137,5 @@ namespace SourceCode.Clay.Collections.Generic
             var func = expr.Compile();
             return (values, func);
         }
-
-        #endregion
     }
 }

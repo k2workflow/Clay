@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class JsonReaderExtensionTests
     {
-        #region Empty
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_read_empty_object))]
         [InlineData("{}")]
@@ -97,10 +95,6 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(0, actualCount);
             }
         }
-
-        #endregion
-
-        #region Null
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_read_null_object))]
@@ -198,10 +192,6 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(1, actualCount);
             }
         }
-
-        #endregion
-
-        #region Simple
 
         private const string jsonObject = @"
         {
@@ -368,10 +358,6 @@ namespace SourceCode.Clay.Json.Units
             }
         }
 
-        #endregion
-
-        #region Negative
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_read_simple_object_negative))]
         public static void When_read_simple_object_negative()
@@ -434,7 +420,5 @@ namespace SourceCode.Clay.Json.Units
                 );
             }
         }
-
-        #endregion
     }
 }

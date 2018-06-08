@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
 {
     partial class OasSerializer
     {
-        #region JsonHelpers
-
         /// <summary>
         /// Converts the specified dictionary into its object representation.
         /// </summary>
@@ -369,7 +367,5 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 default: throw new ArgumentOutOfRangeException(nameof(parameterLocation));
             }
         }
-
-        #endregion
     }
 }

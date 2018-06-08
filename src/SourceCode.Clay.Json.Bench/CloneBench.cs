@@ -17,16 +17,10 @@ namespace SourceCode.Clay.Json.Bench
     [MemoryDiagnoser]
     public class CloneBench
     {
-        #region Fields
-
         private const int InvokeCount = 1;
 
         //private readonly JsonObject _json;
         private readonly JObject _newton;
-
-        #endregion
-
-        #region Constructors
 
         public CloneBench()
         {
@@ -35,10 +29,6 @@ namespace SourceCode.Clay.Json.Bench
             //_json = (JsonObject)JsonValue.Parse(str);
             _newton = JObject.Parse(str);
         }
-
-        #endregion
-
-        #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = InvokeCount)]
         public long ToStringClone()
@@ -85,7 +75,5 @@ namespace SourceCode.Clay.Json.Bench
 
         //    return total;
         //}
-
-        #endregion
     }
 }

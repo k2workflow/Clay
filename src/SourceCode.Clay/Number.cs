@@ -22,8 +22,6 @@ namespace SourceCode.Clay
     [StructLayout(LayoutKind.Explicit)] // 17 bytes, aligned up to 20
     public readonly struct Number : IEquatable<Number>, IComparable<Number>, IFormattable, IConvertible
     {
-        #region Fields
-
         // Signed
 
         [FieldOffset(0)] // [0..0]
@@ -67,10 +65,6 @@ namespace SourceCode.Clay
 
         [FieldOffset(16)] // [16..16]
         private readonly byte _typeCode;
-
-        #endregion
-
-        #region Properties
 
         public NumberKinds Kind
         {
@@ -241,10 +235,6 @@ namespace SourceCode.Clay
         /// </summary>
         public TypeCode ValueTypeCode => _typeCode == 0 ? TypeCode.Int64 : (TypeCode)_typeCode;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
@@ -366,10 +356,6 @@ namespace SourceCode.Clay
             _decimal = value;
         }
 
-        #endregion
-
-        #region Factory
-
         /// <summary>
         /// Creates a new instance of the <see cref="Number"/> struct, given an unknown
         /// value type.
@@ -436,10 +422,6 @@ namespace SourceCode.Clay
 
         private static bool TypeHandleEquals(RuntimeTypeHandle a, RuntimeTypeHandle b) => a.Equals(b);
 
-        #endregion
-
-        #region Methods
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private T GetValue<T>(T field, TypeCode typeCode)
             where T : struct
@@ -491,10 +473,6 @@ namespace SourceCode.Clay
             }
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -512,18 +490,10 @@ namespace SourceCode.Clay
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode() => NumberComparer.Default.GetHashCode(this);
 
-        #endregion
-
-        #region IComparable
-
         /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
         /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
         /// <param name="other">An object to compare with this instance.</param>
         public int CompareTo(Number other) => NumberComparer.Default.Compare(this, other);
-
-        #endregion
-
-        #region Operators
 
         public static bool operator ==(Number x, Number y) => x.Equals(y);
 
@@ -536,10 +506,6 @@ namespace SourceCode.Clay
         public static bool operator <=(Number x, Number y) => x.CompareTo(y) <= 0;
 
         public static bool operator >=(Number x, Number y) => x.CompareTo(y) >= 0;
-
-        #endregion
-
-        #region IConvertible
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(sbyte value) => new Number(value);
@@ -947,8 +913,6 @@ namespace SourceCode.Clay
                 default: return default;
             }
         }
-
-        #endregion
     }
 
 #pragma warning restore CA2225 // Operator overloads have named alternates

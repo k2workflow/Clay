@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasInformation : IEquatable<OasInformation>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the title of the exposed API.
         /// </summary>
@@ -51,10 +49,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public SemanticVersion Version { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasInformation"/> class.
         /// </summary>
@@ -79,10 +73,6 @@ namespace SourceCode.Clay.OpenApi
             License = license;
             Version = version;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -136,7 +126,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Title ?? string.Empty),
             Version
         );
-
-        #endregion
     }
 }

@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasHttpSecuritySchemeBuilder : OasSecuritySchemeBuilder, IOasBuilder<OasHttpSecurityScheme>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name of the HTTP Authorization scheme to be used in the Authorization header.
         /// </summary>
@@ -28,10 +26,6 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets the security scheme type.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.Http;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasHttpSecuritySchemeBuilder"/> class.
@@ -51,10 +45,6 @@ namespace SourceCode.Clay.OpenApi
             Scheme = value.Scheme;
             BearerFormat = value.BearerFormat;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasHttpSecuritySchemeBuilder"/> to <see cref="OasHttpSecurityScheme"/>.
@@ -91,7 +81,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasHttpSecurityScheme"/>.</returns>
         OasHttpSecurityScheme IOasBuilder<OasHttpSecurityScheme>.Build() => (OasHttpSecurityScheme)Build();
-
-        #endregion
     }
 }

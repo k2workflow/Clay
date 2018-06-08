@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasParameterBodyBuilder : IOasBuilder<OasParameterBody>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the brief description of the parameter.
         /// </summary>
@@ -52,10 +50,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IDictionary<ContentType, OasMediaType> Content { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasParameterBodyBuilder"/> class.
         /// </summary>
@@ -79,10 +73,6 @@ namespace SourceCode.Clay.OpenApi
             Examples = new Dictionary<ContentType, OasReferable<OasExample>>(value.Examples);
             Content = new Dictionary<ContentType, OasMediaType>(value.Content);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasParameterBodyBuilder"/> to <see cref="OasParameterBody"/>.
@@ -116,7 +106,5 @@ namespace SourceCode.Clay.OpenApi
             schema: Schema,
             examples: new ReadOnlyDictionary<ContentType, OasReferable<OasExample>>(Examples),
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content));
-
-        #endregion
     }
 }

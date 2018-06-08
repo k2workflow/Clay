@@ -17,8 +17,6 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
     /// <seealso cref="System.Data.SqlClient.SqlConnectionStringBuilder"/>
     public static class SqlConnectionStringBuilderAzureExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Add retry and timeout settings according to AzureDb best practices.
         /// </summary>
@@ -80,7 +78,5 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
 
             return sqlCsb;
         }
-
-        #endregion
     }
 }

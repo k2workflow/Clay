@@ -5,7 +5,6 @@
 
 #endregion
 
-using SourceCode.Clay.Json;
 using System;
 using Xunit;
 
@@ -16,8 +15,6 @@ namespace SourceCode.Clay.Tests
 
     public static class NumberTests
     {
-        #region Methods
-
         [
             InlineData(nameof(SByte) + "=0", (sbyte)0, NumberKinds.Integer | NumberKinds.Signed, true),
             InlineData(nameof(SByte), (sbyte)1, NumberKinds.Integer | NumberKinds.Signed, false),
@@ -396,8 +393,6 @@ namespace SourceCode.Clay.Tests
             aMax.CompareTo(bMin);
             aMax.CompareTo(bMax);
         }
-
-        #endregion
     }
 
 #   pragma warning restore xUnit1026 // Theory methods should use all of their parameters

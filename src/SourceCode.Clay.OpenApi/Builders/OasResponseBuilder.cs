@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasResponseBuilder : IOasBuilder<OasResponse>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the short description of the response.
         /// </summary>
@@ -38,10 +36,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the map of operations links that can be followed from the response.
         /// </summary>
         public IDictionary<string, OasReferable<OasLink>> Links { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasResponseBuilder"/> class.
@@ -65,10 +59,6 @@ namespace SourceCode.Clay.OpenApi
             Content = new Dictionary<ContentType, OasMediaType>(value.Content);
             Links = new Dictionary<string, OasReferable<OasLink>>(value.Links);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasResponseBuilder"/> to <see cref="OasResponse"/>.
@@ -100,7 +90,5 @@ namespace SourceCode.Clay.OpenApi
             headers: new ReadOnlyDictionary<string, OasReferable<OasParameterBody>>(Headers),
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content),
             links: new ReadOnlyDictionary<string, OasReferable<OasLink>>(Links));
-
-        #endregion
     }
 }

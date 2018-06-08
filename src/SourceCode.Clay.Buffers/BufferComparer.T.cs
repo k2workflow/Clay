@@ -15,16 +15,10 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public abstract class BufferComparer<T> : IEqualityComparer<T>, IComparer<T>
     {
-        #region Properties
-
         /// <summary>
         /// The prefix of the buffer that is considered for hashcode calculation.
         /// </summary>
         public int HashCodeFidelity { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="BufferComparer"/> class.
@@ -49,15 +43,7 @@ namespace SourceCode.Clay.Buffers
             HashCodeFidelity = 0;
         }
 
-        #endregion
-
-        #region IComparer
-
         public abstract int Compare(T x, T y);
-
-        #endregion
-
-        #region IEqualityComparer
 
         /// <summary>
         /// Determines whether the specified objects are equal.
@@ -77,7 +63,5 @@ namespace SourceCode.Clay.Buffers
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public abstract int GetHashCode(T obj);
-
-        #endregion
     }
 }

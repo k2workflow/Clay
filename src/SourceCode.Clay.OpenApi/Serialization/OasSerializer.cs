@@ -15,17 +15,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
     /// </summary>
     public partial class OasSerializer : IOasSerializer
     {
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasSerializer"/> class.
         /// </summary>
         public OasSerializer()
         { }
-
-        #endregion
-
-        #region Deserialize
 
         /// <summary>Deserializes the specified OpenAPI object from a JSON value.</summary>
         /// <typeparam name="T">The expected type of the OpenAPI object.</typeparam>
@@ -35,7 +29,5 @@ namespace SourceCode.Clay.OpenApi.Serialization
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

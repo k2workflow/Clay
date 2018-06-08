@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     public readonly struct OasReferable<T> : IEquatable<OasReferable<T>>, IOasReferable
         where T : class, IEquatable<T>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the contained value.
         /// </summary>
@@ -47,10 +45,6 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets the contained value.</summary>
         object IOasReferable.Value => Value;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new value <see cref="OasReferable{T}"/>.
@@ -95,10 +89,6 @@ namespace SourceCode.Clay.OpenApi
             Value = default;
             Reference = new OasReference(url, reference);
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -176,7 +166,5 @@ namespace SourceCode.Clay.OpenApi
             else if (IsValue) return Value.ToString();
             else return string.Empty;
         }
-
-        #endregion
     }
 }

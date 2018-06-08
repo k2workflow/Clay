@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class PatternConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Simple_Optional_PatternConstraint))]
         [InlineData("a", true)]
@@ -41,7 +39,5 @@ namespace SourceCode.Clay.Json.Units
 
             Assert.True(range.IsValid(value) == valid);
         }
-
-        #endregion
     }
 }

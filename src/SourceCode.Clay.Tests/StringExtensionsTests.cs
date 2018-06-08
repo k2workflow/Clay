@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class StringExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_left_string))]
         public static void When_left_string()
@@ -240,7 +238,5 @@ namespace SourceCode.Clay.Tests
             exp = StringComparer.Ordinal.Equals(y, x);
             Assert.Equal(exp, actual);
         }
-
-        #endregion
     }
 }

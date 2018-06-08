@@ -19,8 +19,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasPath : IEquatable<OasPath>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the string summary intended to apply to all operations in this path.
         /// </summary>
@@ -84,10 +82,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<OasParameterKey, OasReferable<OasParameterBody>> Parameters { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasPath"/> class.
         /// </summary>
@@ -130,10 +124,6 @@ namespace SourceCode.Clay.OpenApi
             Servers = servers ?? Array.Empty<OasServer>();
             Parameters = parameters ?? ImmutableDictionary<OasParameterKey, OasReferable<OasParameterBody>>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -208,7 +198,5 @@ namespace SourceCode.Clay.OpenApi
 
             return hc.ToHashCode();
         }
-
-        #endregion
     }
 }

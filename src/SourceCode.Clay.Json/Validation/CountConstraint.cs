@@ -16,8 +16,6 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct CountConstraint : IEquatable<CountConstraint>
     {
-        #region Constants
-
         private static readonly CountConstraint _empty;
         private static readonly CountConstraint _forByte = new CountConstraint(byte.MinValue, byte.MaxValue);
         private static readonly CountConstraint _forUInt16 = new CountConstraint(ushort.MinValue, ushort.MaxValue);
@@ -27,10 +25,6 @@ namespace SourceCode.Clay.Json.Validation
         public static ref readonly CountConstraint ForByte => ref _forByte;
 
         public static ref readonly CountConstraint ForUInt16 => ref _forUInt16;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the minimum value.
@@ -46,10 +40,6 @@ namespace SourceCode.Clay.Json.Validation
         /// Gets a value indicating whether <see cref="Maximum"/> has a value.
         /// </summary>
         public bool IsBounded => Maximum.HasValue; // Minimum is not nullable
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="CountConstraint"/> value.
@@ -76,19 +66,11 @@ namespace SourceCode.Clay.Json.Validation
             : this(exact, exact)
         { }
 
-        #endregion
-
-        #region Factory
-
         /// <summary>
         /// Implicitly converts from a <see cref="uint"/> to an exact <see cref="CountConstraint"/>.
         /// </summary>
         /// <param name="exact">The minimum and maximum value.</param>
         public static CountConstraint Exact(uint count) => new CountConstraint(count, count);
-
-        #endregion
-
-        #region Methods
 
         public bool IsValid(long value)
         {
@@ -103,10 +85,6 @@ namespace SourceCode.Clay.Json.Validation
 
             return true;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -130,10 +108,6 @@ namespace SourceCode.Clay.Json.Validation
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
             => HashCode.Combine(Minimum, Maximum ?? 0);
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
@@ -184,7 +158,5 @@ namespace SourceCode.Clay.Json.Validation
 
             return sb.ToString();
         }
-
-        #endregion
     }
 }

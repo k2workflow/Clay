@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasExternalDocumentationBuilder : IOasBuilder<OasExternalDocumentation>
     {
-        #region Properties
-
         /// <summary>
         /// Get or sets the short description of the target documentation.
         /// </summary>
@@ -28,10 +26,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the URL for the target documentation.
         /// </summary>
         public Uri Url { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasExternalDocumentationBuilder"/> class.
@@ -50,10 +44,6 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             Url = value.Url;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasExternalDocumentationBuilder"/> to <see cref="OasExternalDocumentation"/>.
@@ -76,7 +66,5 @@ namespace SourceCode.Clay.OpenApi
         public virtual OasExternalDocumentation Build() => new OasExternalDocumentation(
             description: Description,
             url: Url);
-
-        #endregion
     }
 }

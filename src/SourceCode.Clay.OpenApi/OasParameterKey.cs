@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public readonly struct OasParameterKey : IEquatable<OasParameterKey>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the name of the parameter.
         /// </summary>
@@ -25,10 +23,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the location of the parameter.
         /// </summary>
         public OasParameterLocation Location { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="OasParameterKey"/> value.
@@ -43,10 +37,6 @@ namespace SourceCode.Clay.OpenApi
             Name = name;
             Location = location;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Implements the operator == operator.
@@ -87,7 +77,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
             Location
         );
-
-        #endregion
     }
 }

@@ -15,18 +15,12 @@ namespace SourceCode.Clay
     /// </summary>
     public readonly struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
     {
-        #region Constants
-
         private static readonly SemanticVersion _empty;
 
         /// <summary>
         /// Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
         public static ref readonly SemanticVersion Empty => ref _empty;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the major version.
@@ -52,10 +46,6 @@ namespace SourceCode.Clay
         /// Gets the build metadata.
         /// </summary>
         public string BuildMetadata { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="SemanticVersion"/> with the specified
@@ -115,10 +105,6 @@ namespace SourceCode.Clay
             PreRelease = string.IsNullOrEmpty(preRelease) ? null : preRelease;
             BuildMetadata = string.IsNullOrEmpty(buildMetadata) ? null : buildMetadata;
         }
-
-        #endregion
-
-        #region Parse
 
         private static bool TryParseInt(string value, int startIndex, int endIndex, out int result)
         {
@@ -210,7 +196,7 @@ namespace SourceCode.Clay
                 return false;
             }
 
-            var minorIndex = s.IndexOf('.');
+            var minorIndex = s.IndexOf('.', StringComparison.Ordinal);
             if (minorIndex <= 0 || minorIndex == s.Length - 1)
             {
                 result = default;
@@ -273,10 +259,6 @@ namespace SourceCode.Clay
             result = new SemanticVersion(major, minor, patch, preRelease, buildMetadata);
             return true;
         }
-
-        #endregion
-
-        #region Compatible
 
         /// <summary>
         /// Determines how the specified <paramref name="comparand"/> is compatible with the specified <paramref name="baseline"/>.
@@ -348,16 +330,8 @@ namespace SourceCode.Clay
             return compatability;
         }
 
-        #endregion
-
-        #region Compare
-
         /// <inheritdoc/>
         public int CompareTo(SemanticVersion other) => SemanticVersionComparer.Strict.Compare(this, other);
-
-        #endregion
-
-        #region IEquatable
 
         /// <inheritdoc/>
         public override bool Equals(object obj)
@@ -369,10 +343,6 @@ namespace SourceCode.Clay
 
         /// <inheritdoc/>
         public override int GetHashCode() => SemanticVersionComparer.Strict.GetHashCode(this);
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Determines if <paramref name="a"/> is a smaller version than <paramref name="b"/>.
@@ -434,10 +404,6 @@ namespace SourceCode.Clay
         /// </returns>
         public static bool operator !=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) != 0;
 
-        #endregion
-
-        #region String
-
         private string ToDefinedFormatString(char format, IFormatProvider formatProvider)
         {
             FormattableString str;
@@ -496,7 +462,5 @@ namespace SourceCode.Clay
             if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
             return ToDefinedFormatString(format[0], formatProvider);
         }
-
-        #endregion
     }
 }

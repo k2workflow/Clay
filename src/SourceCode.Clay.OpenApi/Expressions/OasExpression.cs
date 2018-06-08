@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public readonly struct OasExpression : IReadOnlyList<OasExpressionComponent>, IEquatable<OasExpression>
     {
-        #region Properties
-
         private readonly OasExpressionComponent[] _components;
 
         /// <summary>Gets the number of elements in the collection.</summary>
@@ -30,10 +28,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>The element at the specified index in the read-only list.</returns>
         public OasExpressionComponent this[int index] => (_components ?? Array.Empty<OasExpressionComponent>())[index];
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new <see cref="OasExpression"/> value.
         /// </summary>
@@ -44,10 +38,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             if (_components.Length == 0) _components = null;
         }
 
-        #endregion
-
-        #region IEnumerable
-
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<OasExpressionComponent> GetEnumerator() => (IEnumerator<OasExpressionComponent>)_components.GetEnumerator();
@@ -55,10 +45,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
         /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -97,10 +83,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             return hc.ToHashCode();
         }
 
-        #endregion
-
-        #region Operators
-
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
         /// </summary>
@@ -120,10 +102,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// A value indicating whether the first <see cref="OasExpression"/> is not similar to <see cref="OasExpression"/>.
         /// </returns>
         public static bool operator !=(OasExpression x, OasExpression y) => !(x == y);
-
-        #endregion
-
-        #region String
 
         /// <summary>
         /// Converts the string representation of an expression to its structured equivalent.
@@ -241,7 +219,5 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
             return sb.ToString();
         }
-
-        #endregion
     }
 }

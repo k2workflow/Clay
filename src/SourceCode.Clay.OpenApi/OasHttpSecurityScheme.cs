@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasHttpSecurityScheme : OasSecurityScheme, IEquatable<OasHttpSecurityScheme>
     {
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasHttpSecurityScheme"/> class.
         /// </summary>
@@ -32,10 +30,6 @@ namespace SourceCode.Clay.OpenApi
             BearerFormat = bearerFormat;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.Http;
 
@@ -48,10 +42,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the hint to the client to identify how the bearer token is formatted.
         /// </summary>
         public string BearerFormat { get; }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -104,7 +94,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Scheme ?? string.Empty),
             StringComparer.Ordinal.GetHashCode(BearerFormat ?? string.Empty)
         );
-
-        #endregion
     }
 }

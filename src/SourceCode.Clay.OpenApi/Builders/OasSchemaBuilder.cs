@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasSchemaBuilder : IOasBuilder<OasSchema>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the general type of the schema.
         /// </summary>
@@ -117,10 +115,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasExternalDocumentation ExternalDocumentation { get; set; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasSchemaBuilder"/> class.
         /// </summary>
@@ -162,10 +156,6 @@ namespace SourceCode.Clay.OpenApi
             AdditionalProperties = new Dictionary<string, OasReferable<OasSchema>>(value.AdditionalProperties);
             ExternalDocumentation = value.ExternalDocumentation;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasSchemaBuilder"/> to <see cref="OasSchema"/>.
@@ -212,7 +202,5 @@ namespace SourceCode.Clay.OpenApi
             properties: new ReadOnlyDictionary<string, OasReferable<OasSchema>>(Properties),
             additionalProperties: new ReadOnlyDictionary<string, OasReferable<OasSchema>>(AdditionalProperties),
             externalDocumentation: ExternalDocumentation);
-
-        #endregion
     }
 }

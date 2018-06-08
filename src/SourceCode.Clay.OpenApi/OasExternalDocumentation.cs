@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasExternalDocumentation : IEquatable<OasExternalDocumentation>
     {
-        #region Properties
-
         /// <summary>
         /// Get the short description of the target documentation.
         /// </summary>
@@ -29,10 +27,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public Uri Url { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasExternalDocumentation"/> class.
         /// </summary>
@@ -45,10 +39,6 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             Url = url;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -98,7 +88,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
             Url
         );
-
-        #endregion
     }
 }

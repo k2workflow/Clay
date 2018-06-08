@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Algorithms.Tests
 {
     public class GraphTests
     {
-        #region Methods
-
         private static void AssertSetEqual<T>(HashSet<T> expected, HashSet<T> actual)
         {
             foreach (var item in expected)
@@ -52,7 +50,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph<int>.Create();
+            var g = Graph.Create<int>();
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);
@@ -124,7 +122,5 @@ namespace SourceCode.Clay.Algorithms.Tests
             AssertSetEqual(expectedCycles, actualCycles);
             AssertSetEqual(expectedTrees, actualTrees);
         }
-
-        #endregion
     }
 }

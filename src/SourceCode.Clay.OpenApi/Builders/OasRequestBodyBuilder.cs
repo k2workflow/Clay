@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasRequestBodyBuilder : IOasBuilder<OasRequestBody>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the brief description of the request body.
         /// </summary>
@@ -36,10 +34,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets the request body options.
         /// </summary>
         public OasRequestBodyOptions Options { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasRequestBodyBuilder"/> class.
@@ -60,10 +54,6 @@ namespace SourceCode.Clay.OpenApi
             Content = new Dictionary<ContentType, OasMediaType>(value.Content);
             Options = value.Options;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasRequestBodyBuilder"/> to <see cref="OasRequestBody"/>.
@@ -94,7 +84,5 @@ namespace SourceCode.Clay.OpenApi
             description: Description,
             content: new ReadOnlyDictionary<ContentType, OasMediaType>(Content),
             options: Options);
-
-        #endregion
     }
 }

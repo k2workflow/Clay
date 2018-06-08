@@ -16,8 +16,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class KeyedCollectionFactory
     {
-        #region Methods
-
         /// <summary>
         /// Creates a Dictionary that stores values containing embedded keys.
         /// </summary>
@@ -145,25 +143,11 @@ namespace SourceCode.Clay.Collections.Generic
             return impl;
         }
 
-        #endregion
-
-        #region Implementation
-
         private sealed class KeyedCollectionImpl<TKey, TValue> : KeyedCollection<TKey, TValue>
         {
-            #region Fields
-
             private readonly Func<TValue, TKey> _keyExtractor;
 
-            #endregion
-
-            #region Methods
-
             protected override TKey GetKeyForItem(TValue item) => _keyExtractor(item);
-
-            #endregion
-
-            #region Constructors
 
             public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
                 : base(comparer, dictionaryCreationThreshold)
@@ -186,10 +170,6 @@ namespace SourceCode.Clay.Collections.Generic
             {
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }
-
-            #endregion
         }
-
-        #endregion
     }
 }

@@ -15,16 +15,10 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasComponentKeyStringComparer : StringComparer
     {
-        #region Properties
-
         /// <summary>
         /// Gets a <see cref="StringComparer"/> that validates values for component keys.
         /// </summary>
         public static OasComponentKeyStringComparer ComponentKey { get; } = new OasComponentKeyStringComparer();
-
-        #endregion
-
-        #region Fields
 
         private readonly HashSet<char> _validCharacters;
 
@@ -33,10 +27,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public virtual IEnumerable<char> ValidCharacters => "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_";
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasComponentKeyStringComparer"/> class.
         /// </summary>
@@ -44,10 +34,6 @@ namespace SourceCode.Clay.OpenApi
         {
             _validCharacters = new HashSet<char>(ValidCharacters);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Validates the specified character value to determine if it is a valid
@@ -108,7 +94,5 @@ namespace SourceCode.Clay.OpenApi
             if (!Validate(obj)) throw new ArgumentOutOfRangeException(nameof(obj), "The value is not a valid component name.");
             return Ordinal.GetHashCode(obj);
         }
-
-        #endregion
     }
 }

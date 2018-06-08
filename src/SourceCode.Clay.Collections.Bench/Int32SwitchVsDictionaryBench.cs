@@ -14,17 +14,11 @@ namespace SourceCode.Clay.Collections.Bench
 {
     public class Int32SwitchVsDictionaryBench
     {
-        #region Fields
-
         private const int ItemCount = 50;
         private const int InvokeCount = 1000;
 
         private readonly Dictionary<int, int> dict;
         private readonly IDynamicSwitch<int, int> @switch;
-
-        #endregion
-
-        #region Constructors
 
         public Int32SwitchVsDictionaryBench()
         {
@@ -36,10 +30,6 @@ namespace SourceCode.Clay.Collections.Bench
             // Build switch
             @switch = dict.ToDynamicSwitch();
         }
-
-        #endregion
-
-        #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = ItemCount * InvokeCount)]
         public long Lookup()
@@ -76,7 +66,5 @@ namespace SourceCode.Clay.Collections.Bench
 
             return total;
         }
-
-        #endregion
     }
 }

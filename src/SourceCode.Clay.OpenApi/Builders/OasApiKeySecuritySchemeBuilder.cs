@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasApiKeySecuritySchemeBuilder : OasSecuritySchemeBuilder, IOasBuilder<OasApiKeySecurityScheme>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name of the header, query or cookie parameter to be used.
         /// </summary>
@@ -28,10 +26,6 @@ namespace SourceCode.Clay.OpenApi
 
         /// <summary>Gets the security scheme type.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.ApiKey;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasApiKeySecuritySchemeBuilder"/> class.
@@ -51,10 +45,6 @@ namespace SourceCode.Clay.OpenApi
             Name = value.Name;
             Location = value.Location;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasApiKeySecuritySchemeBuilder"/> to <see cref="OasApiKeySecurityScheme"/>.
@@ -91,7 +81,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasApiKeySecurityScheme"/>.</returns>
         OasApiKeySecurityScheme IOasBuilder<OasApiKeySecurityScheme>.Build() => (OasApiKeySecurityScheme)Build();
-
-        #endregion
     }
 }

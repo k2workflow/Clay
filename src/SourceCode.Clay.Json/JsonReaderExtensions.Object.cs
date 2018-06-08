@@ -13,8 +13,6 @@ namespace SourceCode.Clay.Json
 {
     partial class JsonReaderExtensions // .Object
     {
-        #region Methods
-
         /// <summary>
         /// Reads the current token value as a Json object.
         /// </summary>
@@ -127,7 +125,5 @@ namespace SourceCode.Clay.Json
             // Curry delegate into local function
             int CurryFactory() => 0;
         }
-
-        #endregion
     }
 }

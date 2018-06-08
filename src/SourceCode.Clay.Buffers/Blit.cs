@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class Blit
     {
-        #region Methods
-
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.
         /// </summary>
@@ -127,7 +125,5 @@ namespace SourceCode.Clay.Buffers
 
             return unchecked((value >> b) | (value << (64 - b)));
         }
-
-        #endregion
     }
 }

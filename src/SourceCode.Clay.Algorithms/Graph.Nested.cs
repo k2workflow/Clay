@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Algorithms
 {
     public partial struct Graph<T>
     {
-        #region Enums
-
         [Flags]
         private enum EdgeOptions : byte
         {
@@ -33,15 +31,9 @@ namespace SourceCode.Clay.Algorithms
             StrongConnectExecuted = 0b0001_0000,
         }
 
-        #endregion
-
-        #region Structs
-
         [DebuggerDisplay("Cycle={Cycle} Count={Edges.Count}")]
         private struct Node
         {
-            #region Fields
-
             public ConcurrentDictionary<T, EdgeOptions> Edges;
             public HashSet<T> Exits;
             public T Cycle;
@@ -49,20 +41,12 @@ namespace SourceCode.Clay.Algorithms
             public int LowLink;
             public NodeOptions Options;
 
-            #endregion
-
-            #region Methods
-
             public Node SetOptions(NodeOptions remove = NodeOptions.None, NodeOptions add = NodeOptions.None)
             {
                 var node = this;
                 node.Options = (node.Options & ~remove) | add;
                 return node;
             }
-
-            #endregion
         }
-
-        #endregion
     }
 }

@@ -15,8 +15,6 @@ namespace SourceCode.Clay
     /// </summary>
     public static class EquatableExtensions
     {
-        #region Methods
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NullableEquals<T>(this T x, T y)
             where T : class, IEquatable<T>
@@ -37,7 +35,5 @@ namespace SourceCode.Clay
 
             return x.Value.Equals(y.Value);
         }
-
-        #endregion
     }
 }

@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public abstract class OasSecurityScheme : IEquatable<OasSecurityScheme>
     {
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasSecurityScheme"/> class.
         /// </summary>
@@ -25,10 +23,6 @@ namespace SourceCode.Clay.OpenApi
         {
             Description = description;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the type of the security scheme.
@@ -42,10 +36,6 @@ namespace SourceCode.Clay.OpenApi
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
         public string Description { get; }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -94,7 +84,5 @@ namespace SourceCode.Clay.OpenApi
         public override int GetHashCode() => HashCode.Combine(
             SchemeType,
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty));
-
-        #endregion
     }
 }
