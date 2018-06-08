@@ -12,10 +12,6 @@ namespace SourceCode.Clay.Json
 {
     public static class JTokenComparer
     {
-        #region Constants
-
         public static IEqualityComparer<JToken> Default { get; } = new JTokenEqualityComparer();
-
-        #endregion
     }
 }

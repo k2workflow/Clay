@@ -5,15 +5,12 @@
 
 #endregion
 
-using System;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
     public static class BufferSessionTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(BufferSession_Full_Lifecycle))]
         public static void BufferSession_Full_Lifecycle()
@@ -31,7 +28,5 @@ namespace SourceCode.Clay.Buffers.Tests
             session.Dispose(); // Call explicitly
             Assert.Empty(session.Result);
         }
-
-        #endregion
     }
 }

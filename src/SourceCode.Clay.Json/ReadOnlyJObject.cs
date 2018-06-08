@@ -19,13 +19,7 @@ namespace SourceCode.Clay.Json
     public sealed class ReadOnlyJObject : IReadOnlyDictionary<string, JToken>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
     {
-        #region Fields
-
         internal readonly JObject _json; // Extension methods need direct access to this field
-
-        #endregion
-
-        #region Properties
 
         /// <inheritdoc/>
         public int Count => _json.Count;
@@ -44,10 +38,6 @@ namespace SourceCode.Clay.Json
                 return json;
             }
         }
-
-        #endregion
-
-        #region Constructors
 
         public ReadOnlyJObject(JObject source)
         {
@@ -103,10 +93,6 @@ namespace SourceCode.Clay.Json
             }
         }
 
-        #endregion
-
-        #region IReadOnlyDictionary
-
         /// <inheritdoc/>
         bool IReadOnlyDictionary<string, JToken>.ContainsKey(string key) => ((IDictionary<string, JToken>)_json).ContainsKey(key);
 
@@ -124,10 +110,6 @@ namespace SourceCode.Clay.Json
 
             return true;
         }
-
-        #endregion
-
-        #region Methods
 
         public ReadOnlyJObject DeepClone()
         {
@@ -163,10 +145,6 @@ namespace SourceCode.Clay.Json
             return new ReadOnlyJObject(merged);
         }
 
-        #endregion
-
-        #region IEnumerable
-
         /// <inheritdoc/>
         IEnumerable<string> IReadOnlyDictionary<string, JToken>.Keys => ((IDictionary<string, JToken>)_json).Keys;
 
@@ -179,23 +157,13 @@ namespace SourceCode.Clay.Json
         /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => _json.GetEnumerator();
 
-        #endregion
-
-        #region Equals
-
         public override bool Equals(object obj)
             => obj is ReadOnlyJObject other
             && _json.Equals(other._json);
 
         public override int GetHashCode() => _json.GetHashCode();
 
-        #endregion
-
-        #region Operators
-
         /// <inheritdoc/>
         public override string ToString() => _json.ToString();
-
-        #endregion
     }
 }

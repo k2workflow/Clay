@@ -15,8 +15,6 @@ namespace SourceCode.Clay
     /// </summary>
     public static class StringExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Returns the specified number of characters from the left of a string.
         /// Tolerates <paramref name="length"/> values that are too large or too small (or negative).
@@ -111,7 +109,5 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsOrdinal(this string x, string y)
             => StringComparer.Ordinal.Equals(x, y);
-
-        #endregion
     }
 }

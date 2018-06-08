@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonPointerTests
     {
-        #region Methods
-
         [Fact(DisplayName = nameof(JsonPointer_ToString))]
         public static void JsonPointer_ToString()
         {
@@ -188,7 +186,5 @@ namespace SourceCode.Clay.Json.Tests
             JsonPointer.Parse("/foo6/2").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
             JsonPointer.Parse("/foo6/-").Evaluate(json, JsonPointerEvaluationOptions.InvalidIndiciesAreNull);
         }
-
-        #endregion
     }
 }

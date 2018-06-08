@@ -15,8 +15,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public sealed class OasContact : IEquatable<OasContact>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the identifying name of the contact person/organization.
         /// </summary>
@@ -31,10 +29,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets email address of the contact person/organization.
         /// </summary>
         public MailAddress Email { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasContact"/> class.
@@ -51,10 +45,6 @@ namespace SourceCode.Clay.OpenApi
             Url = url;
             Email = email;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>Determines whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object.</param>
@@ -91,10 +81,6 @@ namespace SourceCode.Clay.OpenApi
             Email
         );
 
-        #endregion
-
-        #region Operators
-
         /// <summary>
         /// Implements the operator == operator.
         /// </summary>
@@ -114,7 +100,5 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="y">The contact2.</param>
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(OasContact x, OasContact y) => !(x == y);
-
-        #endregion
     }
 }

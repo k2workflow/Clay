@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Text
     /// </summary>
     public static class StringBuilderExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Appends a formatted string (using zero or more format items) to this instance,
         /// followed by the default line terminator.
@@ -170,7 +168,5 @@ namespace SourceCode.Clay.Text
 
             return concat;
         }
-
-        #endregion
     }
 }

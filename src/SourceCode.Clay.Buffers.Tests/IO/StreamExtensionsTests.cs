@@ -6,7 +6,6 @@
 #endregion
 
 using SourceCode.Clay.Buffers.Tests;
-using SourceCode.Clay.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,8 +16,6 @@ namespace SourceCode.Clay.IO.Tests
 {
     public static class StreamExtensionsTests
     {
-        #region Methods
-
         [Fact(DisplayName = nameof(StreamExtensions_Write))]
         public static void StreamExtensions_Write()
         {
@@ -56,7 +53,5 @@ namespace SourceCode.Clay.IO.Tests
                 Assert.Equal((IEnumerable<byte>)buffer, specimen.ToArray());
             }
         }
-
-        #endregion
     }
 }

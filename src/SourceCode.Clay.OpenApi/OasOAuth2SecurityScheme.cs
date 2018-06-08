@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOAuth2SecurityScheme : OasSecurityScheme, IEquatable<OasOAuth2SecurityScheme>
     {
-        #region Properties
-
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OAuth2;
 
@@ -39,10 +37,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasOAuthFlow AuthorizationCodeFlow { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOAuth2SecurityScheme"/> class.
         /// </summary>
@@ -64,10 +58,6 @@ namespace SourceCode.Clay.OpenApi
             ClientCredentialsFlow = clientCredentialsFlow;
             AuthorizationCodeFlow = authorizationCodeFlow;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -120,7 +110,5 @@ namespace SourceCode.Clay.OpenApi
             ClientCredentialsFlow,
             AuthorizationCodeFlow
         );
-
-        #endregion
     }
 }

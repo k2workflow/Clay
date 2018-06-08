@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasDocumentBuilder : IOasBuilder<OasDocument>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the semantic version number of the OpenAPI Specification version that the OpenAPI document uses.
         /// </summary>
@@ -58,10 +56,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasExternalDocumentation ExternalDocumentation { get; set; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasDocumentBuilder"/> class.
         /// </summary>
@@ -91,10 +85,6 @@ namespace SourceCode.Clay.OpenApi
             ExternalDocumentation = value.ExternalDocumentation;
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasDocumentBuilder"/> to <see cref="OasDocument"/>.
         /// </summary>
@@ -122,7 +112,5 @@ namespace SourceCode.Clay.OpenApi
             security: new ReadOnlyCollection<OasReferable<OasSecurityScheme>>(Security),
             tags: new ReadOnlyCollection<OasTag>(Tags),
             externalDocumentation: ExternalDocumentation);
-
-        #endregion
     }
 }

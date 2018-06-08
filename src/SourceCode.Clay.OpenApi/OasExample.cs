@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </remarks>
     public class OasExample : IEquatable<OasExample>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the short description for the example.
         /// </summary>
@@ -36,10 +34,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public Uri ExternalValue { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasExample"/> class.
         /// </summary>
@@ -55,10 +49,6 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             ExternalValue = externalValue;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -110,7 +100,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
             ExternalValue
         );
-
-        #endregion
     }
 }

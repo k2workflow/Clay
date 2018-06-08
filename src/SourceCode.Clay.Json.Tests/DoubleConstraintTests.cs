@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class DoubleConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_DoubleConstraint))]
         [InlineData(0.49, true)]
@@ -124,7 +122,5 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(range.IsValid(value) == valid);
             Assert.NotEqual(0, range.GetHashCode());
         }
-
-        #endregion
     }
 }

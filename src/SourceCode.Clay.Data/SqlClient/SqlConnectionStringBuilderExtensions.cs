@@ -17,8 +17,6 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="System.Data.SqlClient.SqlConnectionStringBuilder"/>
     public static class SqlConnectionStringBuilderExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Clear any inline credentials store in the builder. This is useful for logging.
         /// </summary>
@@ -33,7 +31,5 @@ namespace SourceCode.Clay.Data.SqlClient
 
             return sqlCsb;
         }
-
-        #endregion
     }
 }

@@ -9,10 +9,6 @@ namespace SourceCode.Clay.Json
 {
     public static class JsonConstants
     {
-        #region Constants
-
         public const string Null = "null";
-
-        #endregion
     }
 }

@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasPathBuilder : IOasBuilder<OasPath>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the string summary intended to apply to all operations in this path.
         /// </summary>
@@ -83,10 +81,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IDictionary<OasParameterKey, OasReferable<OasParameterBody>> Parameters { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasPathBuilder"/> class.
         /// </summary>
@@ -116,10 +110,6 @@ namespace SourceCode.Clay.OpenApi
             Servers = new List<OasServer>(value.Servers);
             Parameters = new Dictionary<OasParameterKey, OasReferable<OasParameterBody>>(value.Parameters);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasPathBuilder"/> to <see cref="OasPath"/>.
@@ -159,7 +149,5 @@ namespace SourceCode.Clay.OpenApi
             trace: Trace,
             servers: new ReadOnlyCollection<OasServer>(Servers),
             parameters: new ReadOnlyDictionary<OasParameterKey, OasReferable<OasParameterBody>>(Parameters));
-
-        #endregion
     }
 }

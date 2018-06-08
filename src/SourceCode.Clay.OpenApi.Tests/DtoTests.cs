@@ -19,8 +19,6 @@ namespace SourceCode.Clay.OpenApi.Tests
 {
     public static class DtoTests
     {
-        #region Methods
-
         private static void TestDtoEquality<T>(Expression<Func<T>> constructor)
             where T : IEquatable<T>
         {
@@ -93,10 +91,6 @@ namespace SourceCode.Clay.OpenApi.Tests
 
             return arg;
         }
-
-        #endregion
-
-        #region Equals
 
         [Fact(DisplayName = nameof(ApiSecurityScheme_Equals))]
         public static void ApiSecurityScheme_Equals()
@@ -533,7 +527,5 @@ namespace SourceCode.Clay.OpenApi.Tests
                 new OasExternalDocumentation("Description", default)
             ));
         }
-
-        #endregion
     }
 }

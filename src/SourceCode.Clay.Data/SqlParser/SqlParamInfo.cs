@@ -12,15 +12,9 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public readonly struct SqlParamInfo : IEquatable<SqlParamInfo>
     {
-        #region Constants
-
         private static readonly SqlParamInfo _empty;
 
         public static ref readonly SqlParamInfo Empty => ref _empty;
-
-        #endregion
-
-        #region Properties
 
         public bool IsNullable { get; }
 
@@ -29,10 +23,6 @@ namespace SourceCode.Clay.Data.SqlParser
         public bool IsReadOnly { get; }
 
         public ParameterDirection Direction { get; }
-
-        #endregion
-
-        #region Constructors
 
         public SqlParamInfo(bool isNullable, bool hasDefault, bool isReadOnly, ParameterDirection direction)
         {
@@ -44,10 +34,6 @@ namespace SourceCode.Clay.Data.SqlParser
             Direction = direction;
         }
 
-        #endregion
-
-        #region IEquatable
-
         public bool Equals(SqlParamInfo other)
             => IsNullable == other.IsNullable
             && HasDefault == other.HasDefault
@@ -58,25 +44,7 @@ namespace SourceCode.Clay.Data.SqlParser
             => obj is SqlParamInfo prm
             && Equals(prm);
 
-        public override int GetHashCode()
-        {
-            // TODO: Use HashCode class
-            unchecked
-            {
-                var hc = 17L;
-
-                hc = (hc * 23) + (IsNullable ? 9 : 4);
-                hc = (hc * 23) + ((int)Direction);
-                hc = (hc * 23) + (HasDefault ? 2 : 21);
-                hc = (hc * 23) + (IsReadOnly ? 17 : 8);
-
-                return ((int)(hc >> 32)) ^ (int)hc;
-            }
-        }
-
-        #endregion
-
-        #region Operators
+        public override int GetHashCode() => HashCode.Combine(IsNullable, Direction, HasDefault, IsReadOnly);
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
@@ -103,7 +71,5 @@ namespace SourceCode.Clay.Data.SqlParser
             + (IsNullable ? ", Null" : string.Empty)
             + (HasDefault ? ", Default" : string.Empty)
             + (IsReadOnly ? ", ReadOnly" : string.Empty);
-
-        #endregion
     }
 }

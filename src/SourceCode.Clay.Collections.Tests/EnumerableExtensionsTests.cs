@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class EnumerableExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(SequenceEquals_both_null))]
         public static void SequenceEquals_both_null()
@@ -131,7 +129,5 @@ namespace SourceCode.Clay.Collections.Tests
             var equal = TestData.Dupe1.NullableSequenceEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.False(equal);
         }
-
-        #endregion
     }
 }

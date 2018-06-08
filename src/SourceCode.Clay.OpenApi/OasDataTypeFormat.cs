@@ -14,23 +14,17 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public static class OasDataTypeFormat
     {
-        #region Classes
-
         /// <summary>
         /// Standard formats as defined by the specification
         /// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#data-types
         /// </summary>
         public static class Standard
         {
-            #region Classes
-
             /// <summary>
             /// Integer formats.
             /// </summary>
             public static class Integral
             {
-                #region Constants
-
                 /// <summary>
                 /// Signed 32 bits.
                 /// </summary>
@@ -40,8 +34,6 @@ namespace SourceCode.Clay.OpenApi
                 /// Signed 64 bits.
                 /// </summary>
                 public const string Integer64 = "int64";
-
-                #endregion
             }
 
             /// <summary>
@@ -49,8 +41,6 @@ namespace SourceCode.Clay.OpenApi
             /// </summary>
             public static class Numeric
             {
-                #region Constants
-
                 /// <summary>
                 /// Real 32 bits.
                 /// </summary>
@@ -60,8 +50,6 @@ namespace SourceCode.Clay.OpenApi
                 /// Real 64 bits.
                 /// </summary>
                 public const string DoublePrecision = "double";
-
-                #endregion
             }
 
             /// <summary>
@@ -69,8 +57,6 @@ namespace SourceCode.Clay.OpenApi
             /// </summary>
             public static class Textual
             {
-                #region Constants
-
                 /// <summary>
                 /// Base64 encoded characters.
                 /// </summary>
@@ -98,11 +84,7 @@ namespace SourceCode.Clay.OpenApi
                 /// A hint to UIs to obscured input.
                 /// </summary>
                 public const string Password = "pass" + "word"; // FxCop complains
-
-                #endregion
             }
-
-            #endregion
         }
 
         /// <summary>
@@ -110,15 +92,11 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public static class Extended
         {
-            #region Classes
-
             /// <summary>
             /// String formats.
             /// </summary>
-            public static class Text
+            public static class Textual
             {
-                #region Constants
-
                 /// <summary>
                 /// A timestamp.
                 /// </summary>
@@ -128,14 +106,8 @@ namespace SourceCode.Clay.OpenApi
                 /// A guid.
                 /// </summary>
                 public const string Uuid = "uuid";
-
-                #endregion
             }
-
-            #endregion
         }
-
-        #endregion
     }
 
 #pragma warning restore CA1034 // Nested types should not be visible

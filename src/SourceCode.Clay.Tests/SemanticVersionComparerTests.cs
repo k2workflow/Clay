@@ -11,8 +11,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class SemanticVersionComparerTests
     {
-        #region Methods
-
         [InlineData(
             0, 1, 2, null, null,
             0, 1, 2, null, null,
@@ -221,7 +219,5 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(strictResult < 0, strictActual < 0);
             Assert.Equal(strictResult > 0, strictActual > 0);
         }
-
-        #endregion
     }
 }

@@ -17,8 +17,6 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="SqlTransaction"/>
     public static class SqlTransactionExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
@@ -56,7 +54,5 @@ namespace SourceCode.Clay.Data.SqlClient
 
             return cmd;
         }
-
-        #endregion
     }
 }

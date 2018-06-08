@@ -12,13 +12,7 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
 {
     public class MockOasOperation : OasOperation, IEquatable<MockOasOperation>
     {
-        #region Properties
-
         public ulong? OperationId { get; }
-
-        #endregion
-
-        #region Constructors
 
         public MockOasOperation(
             IReadOnlyList<string> tags = default,
@@ -38,10 +32,6 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
         {
             OperationId = operationId;
         }
-
-        #endregion
-
-        #region Methods
 
         public static bool operator ==(MockOasOperation operation1, MockOasOperation operation2)
         {
@@ -68,7 +58,5 @@ namespace SourceCode.Clay.OpenApi.Tests.Mock
             hashCode = hashCode * -1521134295 + OperationId.GetHashCode();
             return hashCode;
         }
-
-        #endregion
     }
 }

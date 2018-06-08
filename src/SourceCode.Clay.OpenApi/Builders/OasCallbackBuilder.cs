@@ -20,13 +20,7 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasCallbackBuilder : IDictionary<OasExpression, OasReferable<OasPath>>, IReadOnlyDictionary<OasExpression, OasReferable<OasPath>>, IOasBuilder<OasCallback>
     {
-        #region Fields
-
         private readonly Dictionary<OasExpression, OasReferable<OasPath>> _dictionary;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>Gets a value indicating whether the <see cref="ICollection{T}"></see> is read-only.</summary>
         /// <returns>true if the <see cref="ICollection{T}"></see> is read-only; otherwise, false.</returns>
@@ -57,10 +51,6 @@ namespace SourceCode.Clay.OpenApi
         IEnumerable<OasReferable<OasPath>> IReadOnlyDictionary<OasExpression, OasReferable<OasPath>>.Values
             => _dictionary.Values;
 
-        #endregion
-
-        #region Indexers
-
         /// <summary>Gets the element that has the specified key in the read-only dictionary.</summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>The element that has the specified key in the read-only dictionary.</returns>
@@ -72,10 +62,6 @@ namespace SourceCode.Clay.OpenApi
             get => _dictionary[key];
             set => _dictionary[key] = value;
         }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasCallbackBuilder"/> class.
@@ -94,10 +80,6 @@ namespace SourceCode.Clay.OpenApi
             if (value is null) throw new ArgumentNullException(nameof(value));
             _dictionary = new Dictionary<OasExpression, OasReferable<OasPath>>(value);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>Copies the elements of the <see cref="ICollection{T}"></see> to an <see cref="System.Array"></see>, starting at a particular <see cref="System.Array"></see> index.</summary>
         /// <param name="array">The one-dimensional <see cref="System.Array"></see> that is the destination of the elements copied from <see cref="ICollection{T}"></see>. The <see cref="System.Array"></see> must have zero-based indexing.</param>
@@ -224,7 +206,5 @@ namespace SourceCode.Clay.OpenApi
         /// <returns>An <see cref="System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() =>
             _dictionary.GetEnumerator();
-
-        #endregion
     }
 }

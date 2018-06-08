@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
     /// </summary>
     public sealed class OasFieldExpression : OasExpressionComponent, IEquatable<OasFieldExpression>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the type of the expression.
         /// </summary>
@@ -41,10 +39,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
 
         /// <summary>Gets the component type.</summary>
         public override OasExpressionComponentType ComponentType => OasExpressionComponentType.Field;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new simple <see cref="OasFieldExpression"/>.
@@ -146,10 +140,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             Pointer = pointer;
         }
 
-        #endregion
-
-        #region Factory
-
         /// <summary>
         /// Creates a new <see cref="OasFieldExpression"/> that retrieves the URL.
         /// </summary>
@@ -216,10 +206,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>The new <see cref="OasFieldExpression"/>.</returns>
         public static OasFieldExpression ResponseBody(JsonPointer pointer) => new OasFieldExpression(OasFieldExpressionType.Response, pointer);
 
-        #endregion
-
-        #region Token - https://tools.ietf.org/html/rfc7230#section-3.2.6
-
         private static readonly HashSet<char> _tchar = new HashSet<char>(
             "!#$%&'*+-.^_`|~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
@@ -241,10 +227,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
             return true;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -276,10 +258,6 @@ namespace SourceCode.Clay.OpenApi.Expressions
             StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
             Pointer
         );
-
-        #endregion
-
-        #region String
 
         private static bool StartsWith(string s, string cmp, int index)
         {
@@ -506,7 +484,5 @@ namespace SourceCode.Clay.OpenApi.Expressions
             ToString(sb);
             return sb.ToString();
         }
-
-        #endregion
     }
 }

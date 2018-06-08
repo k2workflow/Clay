@@ -16,16 +16,10 @@ namespace SourceCode.Clay.Collections.Generic
     /// <seealso cref="Expression.Switch"/>
     public interface IDynamicSwitch<in TKey, TValue>
     {
-        #region Properties
-
         /// <summary>
         /// The number of items in the switch.
         /// </summary>
         int Count { get; }
-
-        #endregion
-
-        #region Indexers
 
         /// <summary>
         /// Gets the value with the specified key.
@@ -33,10 +27,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="key">The key value.</param>
         /// <returns></returns>
         TValue this[TKey key] { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Checks whether the specified key is present in the switch.
@@ -52,7 +42,5 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="value">The value.</param>
         /// <returns></returns>
         bool TryGetValue(TKey key, out TValue value);
-
-        #endregion
     }
 }

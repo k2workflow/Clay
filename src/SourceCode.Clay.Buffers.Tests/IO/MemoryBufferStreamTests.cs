@@ -17,8 +17,6 @@ namespace SourceCode.Clay.IO.Tests
 {
     public static class MemoryBufferStreamTests
     {
-        #region Read
-
         [Fact(DisplayName = nameof(MemoryBufferStream_Read_SmallBuffer))]
         public static void MemoryBufferStream_Read_SmallBuffer()
         {
@@ -193,10 +191,6 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        #endregion
-
-        #region Seek
-
         [Fact(DisplayName = nameof(MemoryBufferStream_Seek))]
         public static void MemoryBufferStream_Seek()
         {
@@ -240,10 +234,6 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        #endregion
-
-        #region Copy
-
         [Fact(DisplayName = nameof(MemoryBufferStream_Copy))]
         public static void MemoryBufferStream_Copy()
         {
@@ -274,10 +264,6 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        #endregion
-
-        #region Not Supported
-
         [Fact(DisplayName = nameof(MemoryBufferStream_NotSupported))]
         public static void MemoryBufferStream_NotSupported()
         {
@@ -290,10 +276,6 @@ namespace SourceCode.Clay.IO.Tests
             Assert.Throws<NotSupportedException>(() => sut.WriteByte(default));
         }
 
-        #endregion
-
-        #region Properties
-
         [Fact(DisplayName = nameof(MemoryBufferStream_Properties))]
         public static void MemoryBufferStream_Properties()
         {
@@ -303,7 +285,5 @@ namespace SourceCode.Clay.IO.Tests
             Assert.False(sut.CanTimeout);
             Assert.False(sut.CanWrite);
         }
-
-        #endregion
     }
 }

@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasSchema : IEquatable<OasSchema>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the general type of the schema.
         /// </summary>
@@ -118,10 +116,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public string Pattern { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new <see cref="OasSchema"/> value.
         /// </summary>
@@ -186,18 +180,10 @@ namespace SourceCode.Clay.OpenApi
             ExternalDocumentation = externalDocumentation;
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString()
             => $"{JsonType}";
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -285,7 +271,5 @@ namespace SourceCode.Clay.OpenApi
 
             return hc.ToHashCode();
         }
-
-        #endregion
     }
 }

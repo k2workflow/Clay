@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasMediaTypeBuilder : IOasBuilder<OasMediaType>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the schema defining the type used for the request body.
         /// </summary>
@@ -32,10 +30,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the map between a property name and its encoding information.
         /// </summary>
         public IDictionary<string, OasPropertyEncoding> Encoding { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasMediaTypeBuilder"/> class.
@@ -57,10 +51,6 @@ namespace SourceCode.Clay.OpenApi
             Examples = new Dictionary<string, OasReferable<OasExample>>(value.Examples);
             Encoding = new Dictionary<string, OasPropertyEncoding>(value.Encoding);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasMediaTypeBuilder"/> to <see cref="OasMediaType"/>.
@@ -84,7 +74,5 @@ namespace SourceCode.Clay.OpenApi
             schema: Schema,
             examples: new ReadOnlyDictionary<string, OasReferable<OasExample>>(Examples),
             encoding: new ReadOnlyDictionary<string, OasPropertyEncoding>(Encoding));
-
-        #endregion
     }
 }

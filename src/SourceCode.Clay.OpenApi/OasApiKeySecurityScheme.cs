@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasApiKeySecurityScheme : OasSecurityScheme, IEquatable<OasApiKeySecurityScheme>
     {
-        #region Properties
-
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.ApiKey;
 
@@ -28,10 +26,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the location of the API key.
         /// </summary>
         public OasParameterLocation Location { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasApiKeySecurityScheme"/> class.
@@ -48,10 +42,6 @@ namespace SourceCode.Clay.OpenApi
             Name = name;
             Location = location;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -100,7 +90,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Name ?? string.Empty),
             Location
         );
-
-        #endregion
     }
 }

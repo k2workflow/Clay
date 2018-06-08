@@ -15,8 +15,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public readonly struct OasReference : IEquatable<OasReference>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the URL portion of the reference.
         /// </summary>
@@ -31,10 +29,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets a value indicating whether the reference has a value.
         /// </summary>
         public bool HasValue => Url != null || Pointer.Count != 0;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new internal <see cref="OasReference"/> value.
@@ -79,10 +73,6 @@ namespace SourceCode.Clay.OpenApi
             Pointer = pointer;
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>
         /// Implements the operator == operator.
         /// </summary>
@@ -120,10 +110,6 @@ namespace SourceCode.Clay.OpenApi
             Url,
             Pointer
         );
-
-        #endregion
-
-        #region Conversion
 
         /// <summary>
         /// Converts the URL representation of a reference to its structured equivalent.
@@ -249,7 +235,5 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>Returns reference formatted as a string.</summary>
         /// <returns>The reference formatted as a string.</returns>
         public override string ToString() => ToUri()?.ToString() ?? string.Empty;
-
-        #endregion
     }
 }

@@ -15,13 +15,7 @@ namespace SourceCode.Clay.Tests
 {
     public static class Sha1Tests
     {
-        #region Constants
-
         private const string _surrogatePair = "\uD869\uDE01";
-
-        #endregion
-
-        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_null_sha1))]
@@ -716,7 +710,5 @@ namespace SourceCode.Clay.Tests
             Assert.True(list[0] <= list[1]);
             Assert.True(list[2] >= list[1]);
         }
-
-        #endregion
     }
 }

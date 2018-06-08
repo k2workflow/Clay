@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasRequestBody : IEquatable<OasRequestBody>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the brief description of the request body.
         /// </summary>
@@ -38,10 +36,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public OasRequestBodyOptions Options { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasRequestBody"/> class.
         /// </summary>
@@ -57,10 +51,6 @@ namespace SourceCode.Clay.OpenApi
             Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
             Options = options;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -112,7 +102,5 @@ namespace SourceCode.Clay.OpenApi
             Content.Count,
             Options
         );
-
-        #endregion
     }
 }

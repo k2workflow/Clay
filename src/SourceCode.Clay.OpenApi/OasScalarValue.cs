@@ -14,15 +14,9 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public readonly struct OasScalarValue : IEquatable<OasScalarValue>, IFormattable
     {
-        #region Fields
-
         private readonly byte _typeCode;
         private readonly Number _number;
         private readonly string _string;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the <see cref="Number"/> value.
@@ -93,10 +87,6 @@ namespace SourceCode.Clay.OpenApi
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new <see cref="OasScalarValue"/> containing a <see cref="Number"/>.
         /// </summary>
@@ -148,10 +138,6 @@ namespace SourceCode.Clay.OpenApi
             _string = null;
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -189,10 +175,6 @@ namespace SourceCode.Clay.OpenApi
             return hc.ToHashCode();
         }
 
-        #endregion
-
-        #region Operators
-
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
         /// </summary>
@@ -212,10 +194,6 @@ namespace SourceCode.Clay.OpenApi
         /// A value indicating whether the first <see cref="OasScalarValue"/> is not similar to <see cref="OasScalarValue"/>.
         /// </returns>
         public static bool operator !=(OasScalarValue x, OasScalarValue y) => !(x == y);
-
-        #endregion
-
-        #region String
 
         /// <summary>Formats the value of the current instance.</summary>
         /// <returns>The value of the current instance.</returns>
@@ -240,7 +218,5 @@ namespace SourceCode.Clay.OpenApi
                 default: return _number.ToString(format, formatProvider);
             }
         }
-
-        #endregion
     }
 }

@@ -12,8 +12,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public interface IOasReferable
     {
-        #region Properties
-
         /// <summary>
         /// Gets the contained value.
         /// </summary>
@@ -38,7 +36,5 @@ namespace SourceCode.Clay.OpenApi
         /// Gets a value indicating whether the reference is null.
         /// </summary>
         bool HasValue { get; }
-
-        #endregion
     }
 }

@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOperation : IEquatable<OasOperation>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the list of tags for API documentation control.
         /// </summary>
@@ -82,10 +80,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyList<OasServer> Servers { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOperation"/> class.
         /// </summary>
@@ -128,10 +122,6 @@ namespace SourceCode.Clay.OpenApi
             Security = security ?? Array.Empty<OasSecurityScheme>();
             Servers = servers ?? Array.Empty<OasServer>();
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -203,7 +193,5 @@ namespace SourceCode.Clay.OpenApi
 
             return hc.ToHashCode();
         }
-
-        #endregion
     }
 }

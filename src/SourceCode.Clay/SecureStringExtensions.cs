@@ -16,8 +16,6 @@ namespace SourceCode.Clay
     /// </summary>
     public static class SecureStringExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Safely converts a <see cref="SecureString"/> to a <see cref="String"/>.
         /// </summary>
@@ -54,7 +52,5 @@ namespace SourceCode.Clay
             ss.MakeReadOnly();
             return ss;
         }
-
-        #endregion
     }
 }

@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasLicenseBuilder : IOasBuilder<OasLicense>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the license name used for the API.
         /// </summary>
@@ -25,10 +23,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets the URL to the license used for the API
         /// </summary>
         public Uri Url { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasLicenseBuilder"/> class.
@@ -47,10 +41,6 @@ namespace SourceCode.Clay.OpenApi
             Name = value.Name;
             Url = value.Url;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasLicenseBuilder"/> to <see cref="OasLicense"/>.
@@ -73,7 +63,5 @@ namespace SourceCode.Clay.OpenApi
         public virtual OasLicense Build() => new OasLicense(
             name: Name,
             url: Url);
-
-        #endregion
     }
 }

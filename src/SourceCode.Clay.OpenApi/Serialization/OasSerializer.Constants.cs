@@ -11,15 +11,11 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
     partial class OasSerializer
     {
-        #region Constants
-
         /// <summary>
         /// Represents constants for OpenAPI enum values.
         /// </summary>
         protected static class EnumConstants
         {
-            #region Constants
-
             /// <summary>
             /// Gets a constant containing "matrix".
             /// </summary>
@@ -124,8 +120,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
             /// Gets a constant containing "openIdConnect".
             /// </summary>
             public const string OpenIdConnect = "openIdConnect";
-
-            #endregion
         }
 
         /// <summary>
@@ -133,8 +127,6 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// </summary>
         public static class PathConstants
         {
-            #region Constants
-
             /// <summary>
             /// Gets a constant containing "$ref".
             /// </summary>
@@ -594,11 +586,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
             /// Gets a constant containing "components".
             /// </summary>
             public const string Components = "components";
-
-            #endregion
         }
-
-        #endregion
     }
 
 #pragma warning restore CA1034 // Nested types should not be visible

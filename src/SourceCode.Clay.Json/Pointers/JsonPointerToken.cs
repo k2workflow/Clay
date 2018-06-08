@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Json.Pointers
     /// </summary>
     public readonly struct JsonPointerToken : IEquatable<JsonPointerToken>
     {
-        #region Properties
-
         private readonly string _value;
 
         /// <summary>
@@ -37,10 +35,6 @@ namespace SourceCode.Clay.Json.Pointers
             }
         }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new <see cref="JsonPointerToken"/> value.
         /// </summary>
@@ -50,10 +44,6 @@ namespace SourceCode.Clay.Json.Pointers
             _value = value ?? throw new ArgumentNullException(nameof(value));
             if (_value.Length == 0) _value = null;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
@@ -73,10 +63,6 @@ namespace SourceCode.Clay.Json.Pointers
         public override int GetHashCode()
             => HashCode.Combine(Value ?? string.Empty, StringComparer.Ordinal);
 
-        #endregion
-
-        #region Operators
-
         public static bool operator ==(JsonPointerToken x, JsonPointerToken y) => x.Equals(y);
 
         public static bool operator !=(JsonPointerToken x, JsonPointerToken y) => !x.Equals(y);
@@ -90,7 +76,5 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>The fully qualified type name.</returns>
         public override string ToString() => Value;
-
-        #endregion
     }
 }

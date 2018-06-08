@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class SecureStringExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_convert_securestring))]
         public static void When_convert_securestring()
@@ -108,7 +106,5 @@ namespace SourceCode.Clay.Tests
             Assert.True(ss.IsReadOnly());
             Assert.Equal(TestVectors.LongStr, ss.ToUnsecureString());
         }
-
-        #endregion
     }
 }

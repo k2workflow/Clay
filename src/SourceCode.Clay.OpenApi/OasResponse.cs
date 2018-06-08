@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasResponse : IEquatable<OasResponse>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the short description of the response.
         /// </summary>
@@ -40,10 +38,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<string, OasReferable<OasLink>> Links { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasResponse"/> class.
         /// </summary>
@@ -62,10 +56,6 @@ namespace SourceCode.Clay.OpenApi
             Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
             Links = links ?? ImmutableDictionary<string, OasReferable<OasLink>>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -118,7 +108,5 @@ namespace SourceCode.Clay.OpenApi
             Content.Count,
             Links.Count
         );
-
-        #endregion
     }
 }

@@ -15,17 +15,11 @@ namespace SourceCode.Clay.IO
 {
     public sealed class MemoryBufferStream : Stream
     {
-        #region Fields
-
         private readonly ReadOnlyMemory<byte> _memory;
 
         private readonly object _lock;
 
         private int _position;
-
-        #endregion
-
-        #region Properties
 
         public override bool CanRead => true;
 
@@ -47,19 +41,11 @@ namespace SourceCode.Clay.IO
 
         public override long Length => _memory.Length;
 
-        #endregion
-
-        #region Constructors
-
         public MemoryBufferStream(ReadOnlyMemory<byte> memory)
         {
             _memory = memory;
             _lock = new object();
         }
-
-        #endregion
-
-        #region Methods
 
         public override void Flush()
         {
@@ -99,10 +85,6 @@ namespace SourceCode.Clay.IO
         public override void Close()
         {
         }
-
-        #endregion
-
-        #region Read
 
         public override int Read(Span<byte> buffer)
         {
@@ -219,10 +201,6 @@ namespace SourceCode.Clay.IO
             }
         }
 
-        #endregion
-
-        #region Not Supported
-
         private static Exception CreateNotSupportedException()
             => new NotSupportedException("The stream is not writeable.");
 
@@ -249,7 +227,5 @@ namespace SourceCode.Clay.IO
 
         public override void WriteByte(byte value)
             => throw CreateNotSupportedException();
-
-        #endregion
     }
 }

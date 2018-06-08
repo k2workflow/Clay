@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasPropertyEncodingBuilder : IOasBuilder<OasPropertyEncoding>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the Content-Type for encoding a specific property.
         /// </summary>
@@ -38,10 +36,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets the property options.
         /// </summary>
         public OasPropertyEncodingOptions Options { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasPropertyEncodingBuilder"/> class.
@@ -63,10 +57,6 @@ namespace SourceCode.Clay.OpenApi
             Style = value.Style;
             Options = value.Options;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasPropertyEncodingBuilder"/> to <see cref="OasPropertyEncoding"/>.
@@ -91,7 +81,5 @@ namespace SourceCode.Clay.OpenApi
             headers: new ReadOnlyDictionary<String, OasReferable<OasParameterBody>>(Headers),
             style: Style,
             options: Options);
-
-        #endregion
     }
 }

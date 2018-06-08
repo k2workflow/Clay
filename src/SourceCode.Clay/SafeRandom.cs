@@ -16,8 +16,6 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class SafeRandom : Random
     {
-        #region Constants
-
         private static readonly RandomNumberGenerator _seedSource = RandomNumberGenerator.Create();
 
         private static readonly ThreadLocal<Random> _local = new ThreadLocal<Random>(() =>
@@ -29,10 +27,6 @@ namespace SourceCode.Clay
             var rand = new Random(seed);
             return rand;
         });
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Returns a non-negative random integer.
@@ -74,7 +68,5 @@ namespace SourceCode.Clay
         /// A double-precision floating point number that is greater than or equal to 0.0, and less than 1.0.
         /// </returns>
         public override double NextDouble() => _local.Value.NextDouble();
-
-        #endregion
     }
 }

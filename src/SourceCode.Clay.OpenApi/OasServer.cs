@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasServer : IEquatable<OasServer>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the URL to the target host.
         /// </summary>
@@ -37,10 +35,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<string, OasServerVariable> Variables { get; }
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasServer"/> class.
         /// </summary>
@@ -56,10 +50,6 @@ namespace SourceCode.Clay.OpenApi
             Description = description;
             Variables = variables ?? ImmutableDictionary<string, OasServerVariable>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -110,7 +100,5 @@ namespace SourceCode.Clay.OpenApi
             StringComparer.Ordinal.GetHashCode(Description ?? string.Empty),
             Variables.Count
         );
-
-        #endregion
     }
 }

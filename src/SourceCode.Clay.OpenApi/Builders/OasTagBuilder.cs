@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasTagBuilder : IOasBuilder<OasTag>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name of the tag.
         /// </summary>
@@ -30,10 +28,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets the additional external documentation for the tag.
         /// </summary>
         public OasExternalDocumentation ExternalDocumentation { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasTagBuilder"/> class.
@@ -53,10 +47,6 @@ namespace SourceCode.Clay.OpenApi
             Description = value.Description;
             ExternalDocumentation = value.ExternalDocumentation;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasTagBuilder"/> to <see cref="OasTag"/>.
@@ -80,7 +70,5 @@ namespace SourceCode.Clay.OpenApi
             name: Name,
             description: Description,
             externalDocumentation: ExternalDocumentation);
-
-        #endregion
     }
 }

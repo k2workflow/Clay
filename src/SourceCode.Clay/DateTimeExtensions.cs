@@ -14,23 +14,10 @@ namespace SourceCode.Clay
     /// </summary>
     public static class DateTimeExtensions
     {
-        #region Constants
-
-        // TODO: Remove these once this ships: https://github.com/dotnet/corefx/issues/24449
-
-        /// <summary>
-        /// Gets the Unix epoch as a <see cref="DateTime"/>.
-        /// </summary>
-        public static DateTime UnixEpoch { get; } = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         /// <summary>
         /// Gets the difference between the Unix epoch and the Windows epoch.
         /// </summary>
-        public static long UnixEpochDifference { get; } = UnixEpoch.ToFileTimeUtc();
-
-        #endregion
-
-        #region Posix
+        public static long UnixEpochDifference { get; } = DateTime.UnixEpoch.ToFileTimeUtc();
 
         /// <summary>
         /// Converts the specified <see cref="DateTime"/> to a Posix timestamp.
@@ -60,10 +47,6 @@ namespace SourceCode.Clay
         /// <returns>The <see cref="DateTime"/>.</returns>
         public static DateTime FromPosixFileTimeUtc(long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
 
-        #endregion
-
-        #region Round
-
         /// <summary>
         /// Rounds down the specified <see cref="DateTime"/> to the current minute.
         /// </summary>
@@ -87,7 +70,5 @@ namespace SourceCode.Clay
         /// <returns>The rounded-down value.</returns>
         public static DateTime RoundDownDay(this DateTime value)
             => new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, value.Kind);
-
-        #endregion
     }
 }

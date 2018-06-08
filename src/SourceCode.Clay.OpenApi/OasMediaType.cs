@@ -21,8 +21,6 @@ namespace SourceCode.Clay.OpenApi
     /// </remarks>
     public class OasMediaType : IEquatable<OasMediaType>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the schema defining the type used for the request body.
         /// </summary>
@@ -37,10 +35,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the map between a property name and its encoding information.
         /// </summary>
         public IReadOnlyDictionary<string, OasPropertyEncoding> Encoding { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasMediaType"/> class.
@@ -57,10 +51,6 @@ namespace SourceCode.Clay.OpenApi
             Examples = examples ?? ImmutableDictionary<string, OasReferable<OasExample>>.Empty;
             Encoding = encoding ?? ImmutableDictionary<string, OasPropertyEncoding>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -112,7 +102,5 @@ namespace SourceCode.Clay.OpenApi
             Examples.Count,
             Encoding.Count
         );
-
-        #endregion
     }
 }

@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class SetExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
@@ -80,7 +78,5 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns></returns>
         public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, in IEnumerable<TSource> y)
             => NullableSetEquals(x, y, null);
-
-        #endregion
     }
 }

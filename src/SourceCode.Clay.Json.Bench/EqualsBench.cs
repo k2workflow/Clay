@@ -16,16 +16,10 @@ namespace SourceCode.Clay.Json.Bench
     [MemoryDiagnoser]
     public class EqualsBench
     {
-        #region Fields
-
         private const int InvokeCount = 1;
 
         private readonly JObject _newton1;
         private readonly JObject _newton2;
-
-        #endregion
-
-        #region Constructors
 
         public EqualsBench()
         {
@@ -35,10 +29,6 @@ namespace SourceCode.Clay.Json.Bench
             _newton1 = JObject.Parse(str1);
             _newton2 = JObject.Parse(str2);
         }
-
-        #endregion
-
-        #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = InvokeCount)]
         public long ToStringEquals()
@@ -84,7 +74,5 @@ namespace SourceCode.Clay.Json.Bench
 
         //    return total;
         //}
-
-        #endregion
     }
 }

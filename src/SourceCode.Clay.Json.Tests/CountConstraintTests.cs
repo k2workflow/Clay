@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class CountConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(Test_Empty_CountConstraint))]
         [InlineData(-1, false)] // < 0
@@ -87,7 +85,5 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(exact.IsValid(value) == valid);
             Assert.NotEqual(0, range.GetHashCode());
         }
-
-        #endregion
     }
 }

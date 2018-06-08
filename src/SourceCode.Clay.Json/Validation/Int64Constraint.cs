@@ -16,8 +16,6 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct Int64Constraint : IEquatable<Int64Constraint>
     {
-        #region Constants
-
         private static readonly Int64Constraint _empty;
         private static readonly Int64Constraint _forByte = new Int64Constraint(byte.MinValue, byte.MaxValue);
         private static readonly Int64Constraint _forSByte = new Int64Constraint(sbyte.MinValue, sbyte.MaxValue);
@@ -39,10 +37,6 @@ namespace SourceCode.Clay.Json.Validation
         public static ref readonly Int64Constraint ForInt32 => ref _forInt32;
 
         public static ref readonly Int64Constraint ForUInt32 => ref _forUInt32;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the minimum value.
@@ -73,10 +67,6 @@ namespace SourceCode.Clay.Json.Validation
         /// Gets a value indicating whether any of the constraints are specified.
         /// </summary>
         public bool IsConstrained => Minimum.HasValue || Maximum.HasValue || MultipleOf.HasValue || Required;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="Int64Constraint"/> value.
@@ -136,10 +126,6 @@ namespace SourceCode.Clay.Json.Validation
             : this(minimum, maximum, default, default, default)
         { }
 
-        #endregion
-
-        #region Methods
-
         public bool IsValid(long? value)
         {
             // Check Required
@@ -178,10 +164,6 @@ namespace SourceCode.Clay.Json.Validation
             return true;
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -207,10 +189,6 @@ namespace SourceCode.Clay.Json.Validation
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
             => HashCode.Combine(Minimum ?? 0, Maximum ?? 0, RangeOptions, MultipleOf ?? 0, Required);
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
@@ -269,7 +247,5 @@ namespace SourceCode.Clay.Json.Validation
 
             return sb.ToString();
         }
-
-        #endregion
     }
 }

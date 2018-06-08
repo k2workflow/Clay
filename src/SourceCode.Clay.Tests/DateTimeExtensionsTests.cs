@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class DateTimeExtensionsTests
     {
-        #region Posix
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DateTimeExtensions_ToPosixFileTime))]
         public static void DateTimeExtensions_ToPosixFileTime()
@@ -45,10 +43,6 @@ namespace SourceCode.Clay.Tests
             var dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);
             Assert.Equal(new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc), dt);
         }
-
-        #endregion
-
-        #region Round
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DateTimeExtensions_RoundMinute))]
@@ -100,7 +94,5 @@ namespace SourceCode.Clay.Tests
             tt = new DateTime(1987, 01, 31, 23, 59, 59, 999, DateTimeKind.Utc).RoundDownDay();
             Assert.Equal(new DateTime(1987, 01, 31, 0, 0, 0, 0, DateTimeKind.Utc), tt);
         }
-
-        #endregion
     }
 }

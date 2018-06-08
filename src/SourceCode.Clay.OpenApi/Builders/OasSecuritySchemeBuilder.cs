@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public abstract class OasSecuritySchemeBuilder : IOasBuilder<OasSecurityScheme>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the security scheme type.
         /// </summary>
@@ -28,10 +26,6 @@ namespace SourceCode.Clay.OpenApi
         /// CommonMark syntax MAY be used for rich text representation.
         /// </remarks>
         public string Description { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasSecuritySchemeBuilder"/> class.
@@ -49,10 +43,6 @@ namespace SourceCode.Clay.OpenApi
             if (value is null) throw new ArgumentNullException(nameof(value));
             Description = value.Description;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasSecuritySchemeBuilder"/> to <see cref="OasSecurityScheme"/>.
@@ -73,7 +63,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasSecurityScheme"/>.</returns>
         public abstract OasSecurityScheme Build();
-
-        #endregion
     }
 }

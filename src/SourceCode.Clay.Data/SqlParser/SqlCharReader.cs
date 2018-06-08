@@ -15,15 +15,9 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     internal sealed class SqlCharReader : IDisposable
     {
-        #region Fields
-
         private readonly Stack<ArraySegment<char>> _undo = new Stack<ArraySegment<char>>();
         private readonly TextReader _reader;
         private readonly bool _ownsReader;
-
-        #endregion
-
-        #region Constructors
 
         public SqlCharReader(string sql)
         {
@@ -38,10 +32,6 @@ namespace SourceCode.Clay.Data.SqlParser
             _reader = reader ?? throw new ArgumentNullException(nameof(reader));
             _ownsReader = false;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Attempty to fill the provided buffer with (at least) the specified number of characters.
@@ -141,10 +131,6 @@ namespace SourceCode.Clay.Data.SqlParser
             _undo.Push(seg);
         }
 
-        #endregion
-
-        #region IDisposable
-
         private bool _disposed;
 
         private void Dispose(bool disposing)
@@ -165,7 +151,5 @@ namespace SourceCode.Clay.Data.SqlParser
         {
             Dispose(true);
         }
-
-        #endregion
     }
 }

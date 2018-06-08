@@ -14,14 +14,8 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
-        #region Constants
-
         private const string dbToken = "database";
         private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
-
-        #endregion
-
-        #region Methods
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_clear_inline_creds))]
@@ -152,7 +146,5 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 }
             }
         }
-
-        #endregion
     }
 }

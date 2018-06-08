@@ -17,8 +17,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOAuthFlow : IEquatable<OasOAuthFlow>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the authorization URL to be used for this flow.
         /// </summary>
@@ -46,10 +44,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<string, string> Scopes { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOAuthFlow"/> class.
         /// </summary>
@@ -68,10 +62,6 @@ namespace SourceCode.Clay.OpenApi
             RefreshUrl = refreshUrl;
             Scopes = scopes ?? ImmutableDictionary<string, string>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -125,7 +115,5 @@ namespace SourceCode.Clay.OpenApi
             RefreshUrl,
             Scopes.Count
         );
-
-        #endregion
     }
 }

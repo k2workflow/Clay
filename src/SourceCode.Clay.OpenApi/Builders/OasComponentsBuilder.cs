@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasComponentsBuilder : IOasBuilder<OasComponents>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the object that holds reusable <see cref="OasSchema"/> instances.
         /// </summary>
@@ -65,10 +63,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IDictionary<string, OasReferable<OasCallback>> Callbacks { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasComponentsBuilder"/> class.
         /// </summary>
@@ -103,10 +97,6 @@ namespace SourceCode.Clay.OpenApi
             Callbacks = new Dictionary<string, OasReferable<OasCallback>>(value.Callbacks);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasComponentsBuilder"/> to <see cref="OasComponents"/>.
         /// </summary>
@@ -135,7 +125,5 @@ namespace SourceCode.Clay.OpenApi
             securitySchemes: new ReadOnlyDictionary<string, OasReferable<OasSecurityScheme>>(SecuritySchemes),
             links: new ReadOnlyDictionary<string, OasReferable<OasLink>>(Links),
             callbacks: new ReadOnlyDictionary<string, OasReferable<OasCallback>>(Callbacks));
-
-        #endregion
     }
 }

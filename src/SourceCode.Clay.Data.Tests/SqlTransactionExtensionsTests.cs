@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlTransactionExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_command_from_transaction))]
         public static void When_create_command_from_transaction()
@@ -51,7 +49,5 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 }
             }
         }
-
-        #endregion
     }
 }

@@ -15,8 +15,6 @@ namespace SourceCode.Clay
     /// </summary>
     public abstract class SemanticVersionComparer : IEqualityComparer<SemanticVersion>, IComparer<SemanticVersion>
     {
-        #region Constants
-
         /// <summary>
         /// Gets a <see cref="SemanticVersionComparer"/> that compares all fields of a <see cref="SemanticVersion"/>
         /// value.
@@ -30,23 +28,11 @@ namespace SourceCode.Clay
         /// </summary>
         public static SemanticVersionComparer Standard { get; } = new StandardSemanticVersionComparer();
 
-        #endregion
-
-        #region Constructors
-
         private SemanticVersionComparer()
         { }
 
-        #endregion
-
-        #region IComparer
-
         /// <inheritdoc/>
         public abstract int Compare(SemanticVersion x, SemanticVersion y);
-
-        #endregion
-
-        #region IEqualityComparer
 
         /// <inheritdoc/>
         public abstract bool Equals(SemanticVersion x, SemanticVersion y);
@@ -54,14 +40,8 @@ namespace SourceCode.Clay
         /// <inheritdoc/>
         public abstract int GetHashCode(SemanticVersion obj);
 
-        #endregion
-
-        #region Concrete
-
         private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
         {
-            #region Methods
-
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
                 var cmp = x.Major.CompareTo(y.Major);
@@ -111,14 +91,10 @@ namespace SourceCode.Clay
                 var hc = hash.ToHashCode();
                 return hc;
             }
-
-            #endregion
         }
 
         private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
         {
-            #region Methods
-
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
                 var cmp = x.Major.CompareTo(y.Major);
@@ -159,10 +135,6 @@ namespace SourceCode.Clay
                 var hc = hash.ToHashCode();
                 return hc;
             }
-
-            #endregion
         }
-
-        #endregion
     }
 }

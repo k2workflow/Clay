@@ -13,8 +13,6 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
 {
     public static class FieldExpressionTests
     {
-        #region Methods
-
         [Fact(DisplayName = nameof(FieldExpression_Parse_Url))]
         public static void FieldExpression_Parse_Url()
         {
@@ -118,7 +116,5 @@ namespace SourceCode.Clay.OpenApi.Tests.Expressions
             Assert.Equal(JsonPointer.Parse("/foo/bar"), sut.Pointer);
             Assert.Equal("$response.body#/foo/bar", sut.ToString());
         }
-
-        #endregion
     }
 }

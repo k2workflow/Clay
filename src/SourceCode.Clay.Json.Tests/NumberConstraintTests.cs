@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Json.Units
 {
     public static class NumberConstraintTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(OpenApi_Test_Empty_NumberConstraint))]
         [InlineData(0.49, true)]
@@ -136,7 +134,5 @@ namespace SourceCode.Clay.Json.Units
             Assert.True(range == actual);
             Assert.NotEqual(0, range.GetHashCode());
         }
-
-        #endregion
     }
 }

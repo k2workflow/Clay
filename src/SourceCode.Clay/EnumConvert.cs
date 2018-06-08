@@ -16,8 +16,6 @@ namespace SourceCode.Clay
     /// </summary>
     public static class EnumConvert
     {
-        #region Nested
-
         private sealed class Checked { }
 
         private sealed class Unchecked { }
@@ -95,10 +93,6 @@ namespace SourceCode.Clay
                 return values.Length;
             };
         };
-
-        #endregion
-
-        #region Unchecked
 
         /// <summary>
         /// Converts the specified <typeparamref name="TEnum"/> into
@@ -339,10 +333,6 @@ namespace SourceCode.Clay
         public static TEnum ToEnum<TEnum>(sbyte value)
             where TEnum : struct, IComparable, IConvertible, IFormattable
             => Converter<TEnum, sbyte, Unchecked>.ConvertFrom(value);
-
-        #endregion
-
-        #region Checked
 
         /// <summary>
         /// Converts the specified <typeparamref name="TEnum"/> into
@@ -608,10 +598,6 @@ namespace SourceCode.Clay
             where TEnum : struct, IComparable, IConvertible, IFormattable
             => Converter<TEnum, sbyte, Checked>.ConvertFrom(value);
 
-        #endregion
-
-        #region Cached
-
         /// <summary>
         /// Gets the number of items in the specified <see cref="Enum"/>.
         /// </summary>
@@ -620,7 +606,5 @@ namespace SourceCode.Clay
         public static int Length<TEnum>()
             where TEnum : struct, IComparable, IConvertible, IFormattable
             => ValueCache<TEnum>.Length();
-
-        #endregion
     }
 }

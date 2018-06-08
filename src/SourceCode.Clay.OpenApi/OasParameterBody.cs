@@ -18,8 +18,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasParameterBody : IEquatable<OasParameterBody>
     {
-        #region Properties
-
         /// <summary>
         /// Gets the brief description of the parameter.
         /// </summary>
@@ -53,10 +51,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IReadOnlyDictionary<ContentType, OasMediaType> Content { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasParameterBody"/> class.
         /// </summary>
@@ -81,10 +75,6 @@ namespace SourceCode.Clay.OpenApi
             Examples = examples ?? ImmutableDictionary<ContentType, OasReferable<OasExample>>.Empty;
             Content = content ?? ImmutableDictionary<ContentType, OasMediaType>.Empty;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -142,7 +132,5 @@ namespace SourceCode.Clay.OpenApi
             Examples.Count,
             Content.Count
         );
-
-        #endregion
     }
 }

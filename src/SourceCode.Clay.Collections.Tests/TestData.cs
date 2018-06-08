@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     internal static class TestData
     {
-        #region Constants
-
         public static readonly string[] List =
         {
             "foo",
@@ -51,7 +49,5 @@ namespace SourceCode.Clay.Collections.Tests
         };
 
         public static readonly string[] Null = null;
-
-        #endregion
     }
 }

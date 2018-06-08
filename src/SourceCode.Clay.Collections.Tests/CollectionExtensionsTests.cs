@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class CollectionExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(CollectionEquals_both_null))]
         public static void CollectionEquals_both_null()
@@ -172,7 +170,5 @@ namespace SourceCode.Clay.Collections.Tests
             equal = ((IReadOnlyCollection<string>)TestData.List).NullableCollectionEquals(list2);
             Assert.False(equal);
         }
-
-        #endregion
     }
 }

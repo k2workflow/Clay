@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class DictionaryExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
         public static void DictionaryEquals_both_null()
@@ -121,7 +119,5 @@ namespace SourceCode.Clay.Collections.Tests
             equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEquals(dict2);
             Assert.False(equal);
         }
-
-        #endregion
     }
 }

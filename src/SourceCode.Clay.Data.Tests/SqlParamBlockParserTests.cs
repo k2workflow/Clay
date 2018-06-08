@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Data.SqlParser.Tests
 {
     public static class SqlParamBlockParserTests
     {
-        #region Constants
-
         // Block comment is not closed
         private const string sqlBadComment = @"
 			CReaTE /*blah
@@ -106,10 +104,6 @@ AS RETURN
 				/* ok -- */
 			END;";
 
-        #endregion
-
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(Tokenize_bad_comment))]
         public static void Tokenize_bad_comment()
@@ -199,7 +193,5 @@ AS RETURN
             Assert.False(param.IsNullable);
             Assert.False(param.IsReadOnly);
         }
-
-        #endregion
     }
 }

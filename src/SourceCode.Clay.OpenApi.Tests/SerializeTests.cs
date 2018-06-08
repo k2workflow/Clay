@@ -6,7 +6,6 @@
 #endregion
 
 using Newtonsoft.Json.Linq;
-using SourceCode.Clay.Json;
 using SourceCode.Clay.Json.Validation;
 using SourceCode.Clay.OpenApi.Expressions;
 using SourceCode.Clay.OpenApi.Tests.Mock;
@@ -15,14 +14,11 @@ using System.CodeDom.Compiler;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
-using Xunit;
 
 namespace SourceCode.Clay.OpenApi.Tests
 {
     public static class SerializeTests
     {
-        #region Helpers
-
         // Actually check that the values are correct when using this.
 
 #if DEBUG
@@ -98,16 +94,10 @@ namespace SourceCode.Clay.OpenApi.Tests
 
 #endif
 
-        #endregion
-
-        #region Methods
-
         //[Fact(DisplayName = nameof(OpenApiSerializer_Serialize))]
         public static void OpenApiSerializer_Serialize()
         {
             var sut = new MockOasSerializer();
-
-            #region Graph
 
             var actualGraphBuilder = new OasDocumentBuilder()
             {
@@ -422,10 +412,6 @@ namespace SourceCode.Clay.OpenApi.Tests
             };
 
             var actualJson = sut.Serialize(actualGraphBuilder.Build());
-
-            #endregion
-
-            #region Json
 
             var expectedJson = new JObject()
             {
@@ -819,15 +805,11 @@ namespace SourceCode.Clay.OpenApi.Tests
                 }
             };
 
-            #endregion
-
             var ej = expectedJson.ToString();
             var aj = actualJson.ToString();
 
             // TODO: This fails
             //Assert.Equal(expectedJson, actualJson, JTokenComparer.Default);
         }
-
-        #endregion
     }
 }

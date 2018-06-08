@@ -11,8 +11,6 @@ namespace SourceCode.Clay.Tests
 {
     public static class SemanticVersionTests
     {
-        #region Methods
-
         [InlineData("123.4.56", 123, 4, 56, null, null)]
         [InlineData("123.4.56-pre-0", 123, 4, 56, "pre-0", null)]
         [InlineData("123.4.56+build-0.1", 123, 4, 56, null, "build-0.1")]
@@ -151,7 +149,5 @@ namespace SourceCode.Clay.Tests
             var compat = SemanticVersion.GetCompatabilities(sut1, sut2);
             Assert.Equal(expected, compat);
         }
-
-        #endregion
     }
 }

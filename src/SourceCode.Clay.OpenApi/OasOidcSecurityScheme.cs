@@ -14,8 +14,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOidcSecurityScheme : OasSecurityScheme, IEquatable<OasOidcSecurityScheme>
     {
-        #region Properties
-
         /// <summary>Gets the type of the security scheme.</summary>
         public override OasSecuritySchemeType SchemeType => OasSecuritySchemeType.OpenIdConnect;
 
@@ -23,10 +21,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets the OpenId Connect URL to discover OAuth2 configuration values.
         /// </summary>
         public Uri Url { get; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasOidcSecurityScheme"/>.
@@ -40,10 +34,6 @@ namespace SourceCode.Clay.OpenApi
         {
             Url = url;
         }
-
-        #endregion
-
-        #region IEquatable
 
         /// <summary>
         /// Implements the operator == operator.
@@ -90,7 +80,5 @@ namespace SourceCode.Clay.OpenApi
             base.GetHashCode(),
             Url
         );
-
-        #endregion
     }
 }

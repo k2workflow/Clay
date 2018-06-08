@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Collections.Tests
 {
     public static class SetExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(SetEquals_both_null))]
         public static void SetEquals_both_null()
@@ -152,7 +150,5 @@ namespace SourceCode.Clay.Collections.Tests
             equal = ((IReadOnlyList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
         }
-
-        #endregion
     }
 }

@@ -18,8 +18,6 @@ namespace SourceCode.Clay.Data.SqlClient
     /// <seealso cref="SqlConnection"/>
     public static class SqlConnectionExtensions
     {
-        #region SqlCommand
-
         /// <summary>
         /// Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
@@ -55,10 +53,6 @@ namespace SourceCode.Clay.Data.SqlClient
 
             return cmd;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Reopens the specified <see cref="SqlConnection"/>.
@@ -307,7 +301,5 @@ namespace SourceCode.Clay.Data.SqlClient
                 }
             }
         }
-
-        #endregion
     }
 }

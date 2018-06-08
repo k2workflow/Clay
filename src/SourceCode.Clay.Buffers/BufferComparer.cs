@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class BufferComparer
     {
-        #region Constants
-
         /// <summary>
         /// The prefix of octets processed when calculating a hashcode.
         /// </summary>
@@ -37,7 +35,5 @@ namespace SourceCode.Clay.Buffers
         /// The default instance of the buffer comparer that uses FNV.
         /// </value>
         public static BufferComparer<ReadOnlyMemory<byte>> Memory { get; } = new MemoryBufferComparer(DefaultHashCodeFidelity);
-
-        #endregion
     }
 }

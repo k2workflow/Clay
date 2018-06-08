@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasParameterBuilder : OasParameterBodyBuilder, IOasBuilder<OasParameter>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the name of the parameter.
         /// </summary>
@@ -27,10 +25,6 @@ namespace SourceCode.Clay.OpenApi
         /// Gets or sets the location of the parameter.
         /// </summary>
         public OasParameterLocation Location { get; set; }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the <see cref="OasParameterBuilder"/> class.
@@ -51,10 +45,6 @@ namespace SourceCode.Clay.OpenApi
             Name = value.Name;
             Location = value.Location;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasParameterBuilder"/> to <see cref="OasParameter"/>.
@@ -96,7 +86,5 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <returns>The <see cref="OasParameter"/>.</returns>
         OasParameter IOasBuilder<OasParameter>.Build() => (OasParameter)Build();
-
-        #endregion
     }
 }

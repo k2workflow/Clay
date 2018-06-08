@@ -16,18 +16,12 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct DoubleConstraint : IEquatable<DoubleConstraint>
     {
-        #region Constants
-
         private static readonly DoubleConstraint _empty;
         private static readonly DoubleConstraint _forSingle = new DoubleConstraint(float.MinValue, float.MaxValue);
 
         public static ref readonly DoubleConstraint Empty => ref _empty;
 
         public static ref readonly DoubleConstraint ForSingle => ref _forSingle;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the minimum value.
@@ -58,10 +52,6 @@ namespace SourceCode.Clay.Json.Validation
         /// Gets a value indicating whether any of the constraints are specified.
         /// </summary>
         public bool IsConstrained => Minimum.HasValue || Maximum.HasValue || MultipleOf.HasValue || Required;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new <see cref="DoubleConstraint"/> value.
@@ -121,10 +111,6 @@ namespace SourceCode.Clay.Json.Validation
             : this(minimum, maximum, default, default, default)
         { }
 
-        #endregion
-
-        #region Methods
-
         public bool IsValid(double? value)
         {
             // Check Required
@@ -163,10 +149,6 @@ namespace SourceCode.Clay.Json.Validation
             return true;
         }
 
-        #endregion
-
-        #region IEquatable
-
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         /// <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
@@ -192,10 +174,6 @@ namespace SourceCode.Clay.Json.Validation
         /// <returns>A 32-bit signed doubleeger that is the hash code for this instance.</returns>
         public override int GetHashCode()
             => HashCode.Combine(Minimum ?? 0, Maximum ?? 0, RangeOptions, MultipleOf ?? 0, Required);
-
-        #endregion
-
-        #region Operators
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
@@ -254,7 +232,5 @@ namespace SourceCode.Clay.Json.Validation
 
             return sb.ToString();
         }
-
-        #endregion
     }
 }

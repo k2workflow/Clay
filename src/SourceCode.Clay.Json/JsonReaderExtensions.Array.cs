@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Json
 {
     partial class JsonReaderExtensions // .Array
     {
-        #region Methods
-
         /// <summary>
         /// Processes the current token value as Json array.
         /// </summary>
@@ -164,7 +162,5 @@ namespace SourceCode.Clay.Json
                 count = Interlocked.Increment(ref count);
             }
         }
-
-        #endregion
     }
 }

@@ -16,8 +16,6 @@ namespace SourceCode.Clay.OpenApi
     /// </summary>
     public class OasOAuthFlowBuilder : IOasBuilder<OasOAuthFlow>
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the authorization URL to be used for this flow.
         /// </summary>
@@ -45,10 +43,6 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         public IDictionary<String, String> Scopes { get; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Creates a new instance of the <see cref="OasOAuthFlowBuilder"/> class.
         /// </summary>
@@ -69,10 +63,6 @@ namespace SourceCode.Clay.OpenApi
             RefreshUrl = value.RefreshUrl;
             Scopes = new Dictionary<String, String>(value.Scopes);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="OasOAuthFlowBuilder"/> to <see cref="OasOAuthFlow"/>.
@@ -97,7 +87,5 @@ namespace SourceCode.Clay.OpenApi
             tokenUrl: TokenUrl,
             refreshUrl: RefreshUrl,
             scopes: new ReadOnlyDictionary<String, String>(Scopes));
-
-        #endregion
     }
 }

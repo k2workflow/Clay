@@ -15,8 +15,6 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class MemoryExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Performs an optimized item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
@@ -54,7 +52,5 @@ namespace SourceCode.Clay.Buffers
         /// <returns></returns>
         public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y)
             => MemoryEquals(x, y, null);
-
-        #endregion
     }
 }

@@ -12,13 +12,7 @@ namespace SourceCode.Clay.Buffers
 {
     public static class SpanExtensions
     {
-        #region Fields
-
         private const int IntrosortSizeThreshold = 16;
-
-        #endregion
-
-        #region Methods
 
         public static void Sort<T>(this Span<T> span, Comparison<T> comparison)
         {
@@ -27,10 +21,6 @@ namespace SourceCode.Clay.Buffers
             if (span.IsEmpty || span.Length <= 1) return;
             IntrospectiveSort(span, comparison, 0, span.Length - 1, 2 * FloorLog2(span.Length));
         }
-
-        #endregion
-
-        #region IntrospectiveSort
 
         private static int FloorLog2(int n)
         {
@@ -181,7 +171,5 @@ namespace SourceCode.Clay.Buffers
                 DownHeap(span, comparison, 1, i - 1, lo);
             }
         }
-
-        #endregion
     }
 }

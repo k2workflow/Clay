@@ -12,8 +12,6 @@ namespace SourceCode.Clay.Buffers.Tests
 {
     public static class MemoryExtensionsTests
     {
-        #region Methods
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(MemoryEquals_both_null))]
         public static void MemoryEquals_both_null()
@@ -126,7 +124,5 @@ namespace SourceCode.Clay.Buffers.Tests
             var equal = list.MemoryEquals(list2);
             Assert.False(equal);
         }
-
-        #endregion
     }
 }

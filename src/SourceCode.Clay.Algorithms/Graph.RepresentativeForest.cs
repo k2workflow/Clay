@@ -13,8 +13,6 @@ namespace SourceCode.Clay.Algorithms
 {
     public partial struct Graph<T>
     {
-        #region Methods
-
         private void StrongConnect(T v, ref Node vstate, ref int index, Stack<T> stack, Action<Edge<T>> onCycle)
         {
             // Set the depth index for v to the smallest unused index.
@@ -171,7 +169,5 @@ namespace SourceCode.Clay.Algorithms
                 hierarchy[0]++;
             }
         }
-
-        #endregion
     }
 }

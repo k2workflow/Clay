@@ -20,8 +20,6 @@ namespace SourceCode.Clay
         IEqualityComparer<Number?>,
         IComparer<Number?>
     {
-        #region Constants
-
         private const double DoubleDecimalMinValue = (double)decimal.MinValue;
         private const double DoubleDecimalMaxValue = (double)decimal.MaxValue;
 
@@ -33,16 +31,8 @@ namespace SourceCode.Clay
         /// </summary>
         public static NumberComparer Default { get; } = new DefaultComparer();
 
-        #endregion
-
-        #region Constructors
-
         private NumberComparer()
         { }
-
-        #endregion
-
-        #region IComparer
 
         /// <inheritdoc/>
         public abstract int Compare(Number x, Number y);
@@ -56,10 +46,6 @@ namespace SourceCode.Clay
             var cmp = Compare(x.Value, y.Value);
             return cmp;
         }
-
-        #endregion
-
-        #region IEqualityComparer
 
         /// <inheritdoc/>
         public abstract bool Equals(Number x, Number y);
@@ -84,14 +70,8 @@ namespace SourceCode.Clay
             return GetHashCode(obj.Value);
         }
 
-        #endregion
-
-        #region Concrete
-
         private sealed class DefaultComparer : NumberComparer
         {
-            #region IComparer
-
             public override int Compare(Number x, Number y)
             {
                 switch (((uint)x.ValueTypeCode << 5) | (uint)y.ValueTypeCode)
@@ -257,10 +237,6 @@ namespace SourceCode.Clay
                 return 0;
             }
 
-            #endregion
-
-            #region IEqualityComparer
-
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override bool Equals(Number x, Number y)
             {
@@ -291,10 +267,6 @@ namespace SourceCode.Clay
                 // Int
                 return HashCode.Combine(obj.ValueTypeCode, obj._uint64);
             }
-
-            #endregion
         }
-
-        #endregion
     }
 }

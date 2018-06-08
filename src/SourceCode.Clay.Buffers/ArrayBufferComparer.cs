@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public sealed class ArrayBufferComparer : BufferComparer<byte[]>
     {
-        #region Constructors
+        internal static readonly int EmptyHashCode = ByteHashCode.Combine(Array.Empty<byte>());
 
         /// <summary>
         /// Creates a new instance of the <see cref="ArrayBufferComparer"/> class, that considers the full
@@ -34,10 +34,6 @@ namespace SourceCode.Clay.Buffers
             : base(hashCodeFidelity)
         { }
 
-        #endregion
-
-        #region IComparer
-
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
         /// </summary>
@@ -54,10 +50,6 @@ namespace SourceCode.Clay.Buffers
 
             return MemoryBufferComparer.CompareSpan(x, y);
         }
-
-        #endregion
-
-        #region IEqualityComparer
 
         /// <inheritdoc/>
         public override bool Equals(byte[] x, byte[] y)
@@ -78,10 +70,10 @@ namespace SourceCode.Clay.Buffers
         public override int GetHashCode(byte[] obj)
         {
             // Null
-            if (obj == null) return FnvHashCode.FnvNull;
+            if (obj == null) return 0;
 
             // Empty
-            if (obj.Length == 0) return FnvHashCode.FnvEmpty;
+            if (obj.Length == 0) return EmptyHashCode;
 
             // Calculate on full length
             var span = obj.AsSpan();
@@ -90,10 +82,8 @@ namespace SourceCode.Clay.Buffers
             if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
                 span = span.Slice(0, HashCodeFidelity);
 
-            var hc = FnvHashCode.Combine(span);
+            var hc = ByteHashCode.Combine(span);
             return hc;
         }
-
-        #endregion
     }
 }

@@ -12,8 +12,6 @@ namespace SourceCode.Clay.IO
 {
     internal sealed class SyncAsyncResult : IAsyncResult
     {
-        #region Properties
-
         public object AsyncState { get; }
 
         public WaitHandle AsyncWaitHandle => CompletedWaitHandle.Instance;
@@ -26,20 +24,12 @@ namespace SourceCode.Clay.IO
 
         public AsyncCallback AsyncCallback { get; }
 
-        #endregion
-
-        #region Constructors
-
         public SyncAsyncResult(object asyncState, int bytesCopied, AsyncCallback asyncCallback)
         {
             AsyncState = asyncState;
             BytesCopied = bytesCopied;
             AsyncCallback = asyncCallback;
         }
-
-        #endregion
-
-        #region Methods
 
         public void ThreadPoolWorkItem(object state)
         {
@@ -48,7 +38,5 @@ namespace SourceCode.Clay.IO
                 AsyncCallback?.Invoke(this);
             }
         }
-
-        #endregion
     }
 }

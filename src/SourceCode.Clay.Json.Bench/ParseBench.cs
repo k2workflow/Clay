@@ -17,24 +17,14 @@ namespace SourceCode.Clay.Json.Bench
     [MemoryDiagnoser]
     public class ParseBench
     {
-        #region Fields
-
         private const int InvokeCount = 1;
 
         private readonly string _str;
-
-        #endregion
-
-        #region Constructors
 
         public ParseBench()
         {
             _str = Resources.AdventureWorks;
         }
-
-        #endregion
-
-        #region Methods
 
         [Benchmark(Baseline = true, OperationsPerInvoke = InvokeCount)]
         public long NewtonParse()
@@ -63,7 +53,5 @@ namespace SourceCode.Clay.Json.Bench
 
         //    return total;
         //}
-
-        #endregion
     }
 }

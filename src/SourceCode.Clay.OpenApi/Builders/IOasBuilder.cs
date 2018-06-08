@@ -13,14 +13,10 @@ namespace SourceCode.Clay.OpenApi
     /// <typeparam name="TBuilt">The type that will be built.</typeparam>
     public interface IOasBuilder<out TBuilt>
     {
-        #region Methods
-
         /// <summary>
         /// Creates the <typeparamref name="TBuilt"/> from this builder.
         /// </summary>
         /// <returns>The <typeparamref name="TBuilt"/>.</returns>
         TBuilt Build();
-
-        #endregion
     }
 }

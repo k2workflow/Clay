@@ -16,8 +16,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// <seealso cref="Expression.Switch"/>
     public static class SwitchExtensions
     {
-        #region Methods
-
         /// <summary>
         /// Builds a dynamic switch with <see cref="System.Boolean"/> keys.
         /// </summary>
@@ -146,7 +144,5 @@ namespace SourceCode.Clay.Collections.Generic
             var impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);
             return impl;
         }
-
-        #endregion
     }
 }

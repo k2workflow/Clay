@@ -12,22 +12,12 @@ namespace SourceCode.Clay.IO
 {
     internal sealed class CompletedWaitHandle : WaitHandle
     {
-        #region Fields
-
         public static readonly CompletedWaitHandle Instance = new CompletedWaitHandle();
-
-        #endregion
-
-        #region Constructors
 
         private CompletedWaitHandle()
         {
             GC.SuppressFinalize(this);
         }
-
-        #endregion
-
-        #region Methods
 
         protected override void Dispose(bool explicitDisposing)
         {
@@ -47,7 +37,5 @@ namespace SourceCode.Clay.IO
         public override void Close()
         {
         }
-
-        #endregion
     }
 }

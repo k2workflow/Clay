@@ -18,13 +18,14 @@ namespace SourceCode.Clay.Algorithms
     }
 
 #pragma warning disable CA1815
+
     // Override equals and operator equals on value types
     // No best-fit implementation
     public readonly partial struct Graph<T>
     {
         private readonly ConcurrentDictionary<T, Node> _nodes;
         private readonly IEqualityComparer<T> _equalityComparer;
-        
+
         private static Node CreateValue(T key) => new Node();
 
         private Node GetOrAdd(T key) => _nodes.GetOrAdd(key, CreateValue);
@@ -49,5 +50,6 @@ namespace SourceCode.Clay.Algorithms
             _nodes[to] = GetOrAdd(to).SetOptions(add: NodeOptions.Descendant);
         }
     }
+
 #pragma warning restore CA1815
 }
