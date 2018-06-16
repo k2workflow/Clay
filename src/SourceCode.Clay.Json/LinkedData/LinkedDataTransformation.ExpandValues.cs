@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Json.LinkedData
             {
                 if (term.TypeMapping == LinkedDataKeywords.Id)
                 {
-                    if (value.Type != JTokenType.String)
+                    if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidIdValue);
                     return new JObject()
                     {
@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
                 else if (term.TypeMapping == LinkedDataKeywords.Vocab)
                 {
-                    if (value.Type != JTokenType.String)
+                    if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidIdValue);
                     return new JObject()
                     {
@@ -53,7 +53,7 @@ namespace SourceCode.Clay.Json.LinkedData
             if (hasTerm && term.TypeMapping != null)
                 result[LinkedDataKeywords.Type] = term.TypeMapping;
 
-            if (value.Type == JTokenType.String)
+            if (value.Is(JTokenType.String))
             {
                 if (hasTerm && term.Options.HasFlag(LinkedDataTermOptions.ClearLanguage)) { }
                 else if (hasTerm && term.Language != null)

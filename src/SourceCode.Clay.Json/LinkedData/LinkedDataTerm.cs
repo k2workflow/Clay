@@ -82,9 +82,9 @@ namespace SourceCode.Clay.Json.LinkedData
             // 6) If value is null or value is a dictionary containing the key-value pair @id-null, set the term
             //    definition in active context to null, set the value associated with defined's key term to true, and
             //    return.
-            if (value.Type == JTokenType.Null ||
+            if (value.Is(JTokenType.Null) ||
                 (value is JObject o && o.TryGetValue(LinkedDataKeywords.Id, out var idToken) &&
-                    idToken.Type == JTokenType.Null))
+                    idToken.Is(JTokenType.Null)))
             {
                 defined[term] = true;
                 yield return new LinkedDataTerm(
@@ -105,13 +105,13 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 7) Otherwise, if value is a string, convert it to a dictionary consisting of a single member whose key
             //    is @id and whose value is value. Set simple term to true.
-            if (value.Type == JTokenType.String)
+            if (value.Is(JTokenType.String))
             {
                 value = new JObject() { [LinkedDataKeywords.Id] = (string)value };
                 options |= LinkedDataTermOptions.SimpleTerm;
             }
 
-            if (value.Type != JTokenType.Object)
+            if (!value.Is(JTokenType.Object))
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidTermDefinition);
 
             // 8) Otherwise, value must be a JSON object, if not, an invalid term definition error has been detected
@@ -121,7 +121,7 @@ namespace SourceCode.Clay.Json.LinkedData
             // 10) If value contains the key @type:
             if (valueObject.TryGetValue(LinkedDataKeywords.Type, out var typeToken))
             {
-                if (typeToken.Type != JTokenType.String)
+                if (!typeToken.Is(JTokenType.String))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidTypeMapping);
                 typeMapping = LinkedDataTransformation.ExpandIri(
                     activeContext,
@@ -145,7 +145,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidReverseProperty);
                 // 11.2) If the value associated with the @reverse key is not a string, an invalid IRI mapping error
                 //       has been detected and processing is aborted.
-                if (reverseToken.Type != JTokenType.String)
+                if (!reverseToken.Is(JTokenType.String))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidIriMapping);
 
                 // 11.3) Otherwise, set the IRI mapping of definition to the result of using the IRI Expansion
@@ -164,8 +164,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 11.4) If value contains an @container member, set the container mapping of definition to its value
                 if (valueObject.TryGetValue(LinkedDataKeywords.Container, out var reverseContainerToken))
                 {
-                    if (reverseContainerToken.Type != JTokenType.String &&
-                        reverseContainerToken.Type != JTokenType.Null)
+                    if (!reverseContainerToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidReverseProperty);
 
                     containerMappings = Utils.ParseContainerMapping((string)reverseContainerToken);
@@ -186,9 +185,9 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 13) If value contains the key @id and its value does not equal term:
             if (valueObject.TryGetValue(LinkedDataKeywords.Id, out idToken) &&
-                (idToken.Type != JTokenType.String || (string)idToken != term))
+                (!idToken.Is(JTokenType.String) || (string)idToken != term))
             {
-                if (idToken.Type != JTokenType.String)
+                if (!idToken.Is(JTokenType.String))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidIriMapping);
 
                 // 13.2) Otherwise, set the IRI mapping of definition to the result of using the IRI Expansion
@@ -258,14 +257,14 @@ namespace SourceCode.Clay.Json.LinkedData
             if (valueObject.TryGetValue(LinkedDataKeywords.Language, out var languageToken) &&
                 !valueObject.ContainsKey(LinkedDataKeywords.Type))
             {
-                if (languageToken.Type == JTokenType.String)
+                if (languageToken.Is(JTokenType.Null))
+                    options |= LinkedDataTermOptions.ClearLanguage;
+                else if (languageToken.Is(JTokenType.String))
                 {
 #                   pragma warning disable CA1308 // Normalize strings to uppercase
                     language = ((string)languageToken).ToLowerInvariant();
 #                   pragma warning restore CA1308 // Normalize strings to uppercase
                 }
-                else if (languageToken.Type == JTokenType.Null)
-                    options |= LinkedDataTermOptions.ClearLanguage;
                 else
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageMapping);
             }

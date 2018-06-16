@@ -105,7 +105,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 Language);
 
             // 2) If local context is not an array, set it to an array containing only local context.
-            var localContextArray = localContext.Type == JTokenType.Array
+            var localContextArray = localContext.Is(JTokenType.Array)
                 ? (JArray)localContext
                 : new JArray(localContext);
 
@@ -113,7 +113,7 @@ namespace SourceCode.Clay.Json.LinkedData
             {
                 // 3.1) If context is null, set result to a newly-initialized active context
                 //      and continue with the next context.
-                if (context.Type == JTokenType.Null)
+                if (context.Is(JTokenType.Null))
                 {
                     result = new LinkedDataContext(
                         _remoteContexts,
@@ -127,7 +127,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
 
                 // 3.2) If context is a string,
-                if (context.Type == JTokenType.String)
+                if (context.Is(JTokenType.String))
                 {
                     // 3.2.1) Set context to the result of resolving value against the base IRI
                     var uri = result.Base;
@@ -175,7 +175,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
                 // 3.3) If context is not a JSON object, an invalid local context error has
                 //      been detected and processing is aborted.
-                if (context.Type != JTokenType.Object)
+                if (!context.Is(JTokenType.Object))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidLocalContext);
 
                 var contextObject = (JObject)context;
@@ -185,7 +185,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 if (_remoteContexts.Count == 0 &&
                     contextObject.TryGetValue(LinkedDataKeywords.Base, out var baseToken))
                 {
-                    if (baseToken.Type != JTokenType.String && baseToken.Type != JTokenType.Null)
+                    if (!baseToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidBaseIri);
 
                     var value = (string)baseToken;
@@ -216,7 +216,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 3.5) If context has an @vocab key:
                 if (contextObject.TryGetValue(LinkedDataKeywords.Vocab, out var vocabToken))
                 {
-                    if (vocabToken.Type != JTokenType.String && vocabToken.Type != JTokenType.Null)
+                    if (!vocabToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidVocabMapping);
 
                     var value = (string)vocabToken;
@@ -241,7 +241,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 3.6) If context has an @language key:
                 if (contextObject.TryGetValue(LinkedDataKeywords.Language, out var langToken))
                 {
-                    if (langToken.Type != JTokenType.String && langToken.Type != JTokenType.Null)
+                    if (!langToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidDefaultLanguage);
 
 #                   pragma warning disable CA1308 // Normalize strings to uppercase
