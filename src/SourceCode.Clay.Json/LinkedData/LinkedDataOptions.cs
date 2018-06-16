@@ -20,24 +20,37 @@ namespace SourceCode.Clay.Json.LinkedData
 
     public class LinkedDataOptions
     {
-        public string Base { get; }
-        public LinkedDataContext ExpandContext { get; }
-        public bool? Embed { get; }
-        public bool? Explicit { get; }
-        public bool? OmitDefault { get; }
+        protected internal string Base { get; }
+        protected internal LinkedDataContext ExpandContext { get; }
 
-        public LinkedDataOptions(
+        public LinkedDataOptions(string @base = null)
+            : this(@base, default)
+        { }
+
+        protected LinkedDataOptions(
             string @base = null,
-            LinkedDataContext expandContext = default,
-            bool? embed = null,
-            bool? @explicit = null,
-            bool? omitDefault = null)
+            LinkedDataContext expandContext = default)
         {
             Base = @base;
-            Embed = embed;
-            Explicit = @explicit;
-            OmitDefault = omitDefault;
             ExpandContext = expandContext.HasValue ? expandContext : new LinkedDataContext(this);
+        }
+
+        public async ValueTask<LinkedDataOptions> WithContextAsync(
+            JToken localContext,
+            CancellationToken cancellationToken = default)
+        {
+            var expanded = await CreateContextAsync(localContext, cancellationToken).ConfigureAwait(false);
+            return new LinkedDataOptions(Base, expanded);
+        }
+
+        protected async ValueTask<LinkedDataContext> CreateContextAsync(
+            JToken localContext,
+            CancellationToken cancellationToken)
+        {
+            if (!(localContext is JObject o) || !o.TryGetValue(LinkedDataKeywords.Context, out localContext))
+                throw new LinkedDataException(LinkedDataErrorCode.InvalidExpandContext);
+            var remoteContext = await ExpandContext.ParseAsync(localContext, cancellationToken).ConfigureAwait(false);
+            return remoteContext;
         }
 
         public virtual async ValueTask<JToken> GetContextAsync(string iri, CancellationToken cancellationToken)

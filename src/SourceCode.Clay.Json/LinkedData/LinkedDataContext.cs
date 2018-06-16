@@ -13,19 +13,21 @@ using System.Threading.Tasks;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
+#   pragma warning disable CA1815 // Override equals and operator equals on value types
+
     public readonly struct LinkedDataContext
     {
         private readonly HashSet<string> _remoteContexts;
         private readonly Dictionary<string, LinkedDataContext> _resolvedContexts;
         private readonly Dictionary<string, LinkedDataTerm> _terms;
 
-        public LinkedDataOptions Options { get; }
-        public string Base { get; }
-        public string Vocabulary { get; }
-        public string Language { get; }
-        public bool HasValue => _remoteContexts != null;
+        internal LinkedDataOptions Options { get; }
+        internal string Base { get; }
+        internal string Vocabulary { get; }
+        internal string Language { get; }
+        internal bool HasValue => _remoteContexts != null;
 
-        public LinkedDataContext(
+        internal LinkedDataContext(
             LinkedDataOptions options)
             : this(
                   new HashSet<string>(StringComparer.OrdinalIgnoreCase),
@@ -56,22 +58,39 @@ namespace SourceCode.Clay.Json.LinkedData
             Language = language;
         }
 
-        public bool TryGetTerm(string term, out LinkedDataTerm result)
-            => _terms.TryGetValue(term, out result);
+        internal bool TryGetTerm(string term, out LinkedDataTerm result)
+        {
+            if (term == null)
+            {
+                result = default;
+                return false;
+            }
+            return _terms.TryGetValue(term, out result);
+        }
 
-        public void AddTerms(LinkedDataContext activeContext, JObject contextObject)
+        internal void AddTerms(LinkedDataContext activeContext, JObject contextObject)
             => AddTerms(LinkedDataTerm.Parse(activeContext, contextObject));
 
-        public void AddTerm(LinkedDataContext activeContext, JObject localContext, string term, JToken token, Dictionary<string, bool> defined)
-            => AddTerms(LinkedDataTerm.Parse(activeContext, localContext, new KeyValuePair<string, JToken>(term, token), defined));
+        internal void AddTerm(
+            LinkedDataContext activeContext,
+            JObject localContext,
+            string term,
+            JToken token,
+            Dictionary<string, bool> defined)
+            => AddTerms(LinkedDataTerm.Parse(activeContext,
+                localContext,
+                new KeyValuePair<string, JToken>(term, token),
+                defined));
 
         private void AddTerms(IEnumerable<LinkedDataTerm> terms)
         {
             foreach (var term in terms)
-                _terms.Add(term.Term, term);
+                _terms[term.Term] = term;
         }
 
-        public async ValueTask<LinkedDataContext> ParseAsync(JToken localContext, CancellationToken cancellationToken)
+        internal async ValueTask<LinkedDataContext> ParseAsync(
+            JToken localContext,
+            CancellationToken cancellationToken)
         {
             if (_remoteContexts is null) throw new InvalidOperationException();
 
@@ -90,7 +109,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 ? (JArray)localContext
                 : new JArray(localContext);
 
-            foreach (var context in localContext)
+            foreach (var context in localContextArray)
             {
                 // 3.1) If context is null, set result to a newly-initialized active context
                 //      and continue with the next context.
@@ -100,10 +119,10 @@ namespace SourceCode.Clay.Json.LinkedData
                         _remoteContexts,
                         _resolvedContexts,
                         new Dictionary<string, LinkedDataTerm>(StringComparer.Ordinal),
-                        Options,
-                        Options.Base,
-                        Vocabulary,
-                        Language);
+                        result.Options,
+                        result.Options.Base,
+                        result.Vocabulary,
+                        result.Language);
                     continue;
                 }
 
@@ -120,6 +139,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     if (!_remoteContexts.Add(uri))
                         throw new LinkedDataException(LinkedDataErrorCode.RecursiveContextInclusion);
 
+                    // LD 1.1:
                     // 3.2.3) If context was previously dereferenced, then the processor MUST NOT do
                     //        a further dereference, and context is set to the previously established
                     //        internal representation.
@@ -130,7 +150,7 @@ namespace SourceCode.Clay.Json.LinkedData
                         continue;
                     }
 
-                    // 3.2.4) Otherwise, dereference context,
+                    // 3.2.3) Otherwise, dereference context,
                     JToken remoteContext;
                     try
                     {
@@ -142,19 +162,19 @@ namespace SourceCode.Clay.Json.LinkedData
                         throw new LinkedDataException(LinkedDataErrorCode.LoadingRemoteContextFailed, e);
                     }
 
-                    if (!(remoteContext is JObject o) || !o.TryGetValue(LDKeywords.Context, out remoteContext))
+                    if (!(remoteContext is JObject o) || !o.TryGetValue(LinkedDataKeywords.Context, out remoteContext))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidRemoteContext);
 
-                    // 3.2.5) Set result to the result of recursively calling this algorithm, passing
+                    // 3.2.4) Set result to the result of recursively calling this algorithm, passing
                     //        result for active context, context for local context, and a copy of remote
                     //        contexts.
-                    result = await ParseAsync(remoteContext, cancellationToken);
+                    result = await ParseAsync(remoteContext, cancellationToken).ConfigureAwait(false);
                     _remoteContexts.Remove(uri);
                     continue;
                 }
 
-                // 3.3) If context is not a dictionary, an invalid local context error has been
-                //      detected and processing is aborted.
+                // 3.3) If context is not a JSON object, an invalid local context error has
+                //      been detected and processing is aborted.
                 if (context.Type != JTokenType.Object)
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidLocalContext);
 
@@ -163,59 +183,63 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 3.4) If context has an @base key and remote contexts is empty, i.e., the
                 //      currently being processed context is not a remote context:
                 if (_remoteContexts.Count == 0 &&
-                    contextObject.TryGetValue(LDKeywords.Base, out var baseToken))
+                    contextObject.TryGetValue(LinkedDataKeywords.Base, out var baseToken))
                 {
                     if (baseToken.Type != JTokenType.String && baseToken.Type != JTokenType.Null)
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidBaseIri);
 
                     var value = (string)baseToken;
+
+                    // 3.4.2) If value is null, remove the base IRI of result.
                     if (value == null) { }
-                    else if (Uri.TryCreate(value, UriKind.Absolute, out var tmp)) { }
-                    else if (Uri.TryCreate(value, UriKind.Relative, out tmp)) value = Utils.Resolve(Base, value);
+                    // 3.4.3) Otherwise, if value is an absolute IRI, the base IRI of
+                    //        result is set to value.
+                    else if (Uri.IsWellFormedUriString(value, UriKind.Absolute)) { }
+                    // 3.4.4) Otherwise, if value is a relative IRI and the base IRI
+                    //        of result is not null, set the base IRI of result to the
+                    //        result of resolving value against the current base IRI of
+                    //        result.
+                    else if (Uri.IsWellFormedUriString(value, UriKind.Relative) && result.Base != null)
+                        value = Utils.Resolve(result.Base, value);
                     else throw new LinkedDataException(LinkedDataErrorCode.InvalidBaseIri);
 
                     result = new LinkedDataContext(
                         _remoteContexts,
                         _resolvedContexts,
                         result._terms,
-                        Options,
+                        result.Options,
                         value,
-                        Vocabulary,
-                        Language);
+                        result.Vocabulary,
+                        result.Language);
                 }
 
-                // 3.5) If context has an @version key:
-                if (contextObject.TryGetValue(LDKeywords.Version, out var versionToken))
-                {
-                    if (versionToken.Type != JTokenType.Float ||
-                        (float)versionToken != 1.1f)
-                        throw new LinkedDataException(LinkedDataErrorCode.InvalidVersionValue);
-                }
-
-                // 3.6) If context has an @vocab key:
-                if (contextObject.TryGetValue(LDKeywords.Vocab, out var vocabToken))
+                // 3.5) If context has an @vocab key:
+                if (contextObject.TryGetValue(LinkedDataKeywords.Vocab, out var vocabToken))
                 {
                     if (vocabToken.Type != JTokenType.String && vocabToken.Type != JTokenType.Null)
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidVocabMapping);
 
                     var value = (string)vocabToken;
+                    // 3.5.2) If value is null, remove any vocabulary mapping from result.
                     if (value == null) { }
-                    else if (value.Length == 0) value = Base;
-                    else if (Uri.TryCreate(value, UriKind.Absolute, out var tmp)) { }
+                    // 3.5.3) Otherwise, if value is an absolute IRI or blank node identifier,
+                    //        the vocabulary mapping of result is set to value.
+                    else if (value.StartsWith("_:", StringComparison.Ordinal) ||
+                        Uri.IsWellFormedUriString(value, UriKind.Absolute)) { }
                     else throw new LinkedDataException(LinkedDataErrorCode.InvalidVocabMapping);
 
                     result = new LinkedDataContext(
                         _remoteContexts,
                         _resolvedContexts,
                         result._terms,
-                        Options,
-                        Base,
+                        result.Options,
+                        result.Base,
                         value,
-                        Language);
+                        result.Language);
                 }
 
-                // 3.7) If context has an @language key:
-                if (contextObject.TryGetValue(LDKeywords.Language, out var langToken))
+                // 3.6) If context has an @language key:
+                if (contextObject.TryGetValue(LinkedDataKeywords.Language, out var langToken))
                 {
                     if (langToken.Type != JTokenType.String && langToken.Type != JTokenType.Null)
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidDefaultLanguage);
@@ -230,9 +254,9 @@ namespace SourceCode.Clay.Json.LinkedData
                         _remoteContexts,
                         _resolvedContexts,
                         result._terms,
-                        Options,
-                        Base,
-                        Vocabulary,
+                        result.Options,
+                        result.Base,
+                        result.Vocabulary,
                         value);
                 }
 
@@ -242,4 +266,6 @@ namespace SourceCode.Clay.Json.LinkedData
             return result;
         }
     }
+
+#   pragma warning restore CA1815 // Override equals and operator equals on value types
 }

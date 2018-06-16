@@ -8,15 +8,15 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
-    internal sealed class Utils
+    internal static class Utils
     {
-        public static HashSet<char> UrlGenDelims { get; } = new HashSet<char>()
-        {
-            ':', '/', '?', '#', '[', ']', '@'
-        };
+        public static IEnumerable<KeyValuePair<string, JToken>> OrderLexicographically(
+            this IEnumerable<KeyValuePair<string, JToken>> jObject)
+            => jObject.OrderBy(x => x.Key, StringComparer.Ordinal);
 
         public static string Resolve(string baseUri, string pathToResolve)
         {
@@ -26,6 +26,11 @@ namespace SourceCode.Clay.Json.LinkedData
             if (Uri.TryCreate(baseUri, UriKind.Absolute, out var uri))
             {
                 var builder = new UriBuilder(baseUri);
+
+                if (builder.Scheme == "http" && builder.Port == 80)
+                    builder.Port = -1;
+                else if (builder.Scheme == "https" && builder.Port == 443)
+                    builder.Port = -1;
 
                 if (pathToResolve.StartsWith("?", StringComparison.Ordinal))
                 {
@@ -57,18 +62,15 @@ namespace SourceCode.Clay.Json.LinkedData
 
         private static ContainerMappings ParseSingleContainerMapping(JToken containerMapping)
         {
-            if (containerMapping.Type == JTokenType.String)
+            if (containerMapping.Type != JTokenType.String)
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidContainerMapping);
 
             switch ((string)containerMapping)
             {
-                case LDKeywords.Graph: return ContainerMappings.Graph;
-                case LDKeywords.Id: return ContainerMappings.Id;
-                case LDKeywords.Index: return ContainerMappings.Index;
-                case LDKeywords.Language: return ContainerMappings.Language;
-                case LDKeywords.List: return ContainerMappings.List;
-                case LDKeywords.Set: return ContainerMappings.Set;
-                case LDKeywords.Type: return ContainerMappings.Type;
+                case LinkedDataKeywords.Index: return ContainerMappings.Index;
+                case LinkedDataKeywords.Language: return ContainerMappings.Language;
+                case LinkedDataKeywords.List: return ContainerMappings.List;
+                case LinkedDataKeywords.Set: return ContainerMappings.Set;
                 default: throw new LinkedDataException(LinkedDataErrorCode.InvalidContainerMapping);
             }
         }

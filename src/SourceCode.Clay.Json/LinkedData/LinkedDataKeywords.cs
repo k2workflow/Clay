@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
-    public static class LDKeywords
+    internal static class LinkedDataKeywords
     {
         public const string Id = "@id";
         public const string Type = "@type";
@@ -25,9 +25,6 @@ namespace SourceCode.Clay.Json.LinkedData
         public const string Index = "@index";
         public const string Base = "@base";
         public const string Vocab = "@vocab";
-        public const string Version = "@version";
-        public const string Nest = "@nest";
-        public const string Prefix = "@prefix";
 
         private static readonly HashSet<string> _keywords = new HashSet<string>(StringComparer.Ordinal)
         {

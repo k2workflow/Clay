@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Json.LinkedData
         InvalidLanguageTaggedString,
         InvalidIndexValue,
         ListOfLists,
-        InvalidReverseValue,
+        InvalidReversePropertyValue,
         RecursiveContextInclusion,
         LoadingRemoteContextFailed,
         InvalidRemoteContext,
@@ -39,5 +39,10 @@ namespace SourceCode.Clay.Json.LinkedData
         InvalidLanguageMapping,
         InvalidPrefixValue,
         InvalidGraph,
+        InvalidLanguageMapValue,
+        InvalidValueObject,
+        InvalidLanguageTaggedValue,
+        InvalidSetOrListObject,
+        InvalidExpandContext,
     }
 }

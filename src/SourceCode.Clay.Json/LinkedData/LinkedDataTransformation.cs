@@ -7,9 +7,7 @@
 
 namespace SourceCode.Clay.Json.LinkedData
 {
-    public enum LinkedDataMode
+    public static partial class LinkedDataTransformation
     {
-        JsonLD10 = 0,
-        JsonLD11 = 1
     }
 }
