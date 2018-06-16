@@ -18,6 +18,29 @@ namespace SourceCode.Clay.Json.LinkedData
             this IEnumerable<KeyValuePair<string, JToken>> jObject)
             => jObject.OrderBy(x => x.Key, StringComparer.Ordinal);
 
+        public static bool Is(this JToken jToken, JTokenType type)
+        {
+            if (type == JTokenType.Null)
+                return jToken == null || jToken.Type == JTokenType.Null;
+            if (jToken == null)
+                return false;
+
+            switch (jToken.Type)
+            {
+                case JTokenType.String:
+                case JTokenType.Date:
+                case JTokenType.Raw:
+                case JTokenType.Bytes:
+                case JTokenType.Guid:
+                case JTokenType.Uri:
+                case JTokenType.TimeSpan:
+                case JTokenType.Null:
+                    return type == JTokenType.String;
+            }
+
+            return jToken.Type == type;
+        }
+
         public static string Resolve(string baseUri, string pathToResolve)
         {
             if (baseUri == null) return pathToResolve;
@@ -47,11 +70,11 @@ namespace SourceCode.Clay.Json.LinkedData
 
         public static ContainerMappings ParseContainerMapping(JToken containerMapping)
         {
-            if (containerMapping.Type == JTokenType.Null) return default;
+            if (containerMapping.Is(JTokenType.Null)) return default;
 
-            if (containerMapping.Type == JTokenType.String)
+            if (containerMapping.Is(JTokenType.String))
                 return ParseSingleContainerMapping(containerMapping);
-            else if (containerMapping.Type != JTokenType.Array)
+            else if (!containerMapping.Is(JTokenType.Array))
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidContainerMapping);
 
             var result = ContainerMappings.None;
@@ -62,7 +85,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
         private static ContainerMappings ParseSingleContainerMapping(JToken containerMapping)
         {
-            if (containerMapping.Type != JTokenType.String)
+            if (!containerMapping.Is(JTokenType.String))
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidContainerMapping);
 
             switch ((string)containerMapping)

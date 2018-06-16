@@ -34,12 +34,12 @@ namespace SourceCode.Clay.Json.LinkedData
                 item = graph;
             }
             // Otherwise, if the result is null, set it to an empty array.
-            else if (item.Type == JTokenType.Null) return new JArray();
+            else if (item.Is(JTokenType.Null)) return new JArray();
 
             // Finally, if the result is not an array, then set the result to an array containing only the result.
-            return item.Type == JTokenType.Array
-            ? (JArray)item
-            : new JArray(item);
+            return item.Is(JTokenType.Array)
+                ? (JArray)item
+                : new JArray(item);
         }
 
         private static async ValueTask<JToken> ExpandAsync(
@@ -48,6 +48,14 @@ namespace SourceCode.Clay.Json.LinkedData
             string activeProperty,
             CancellationToken cancellationToken)
         {
+            if (element == null)
+                return await ExpandNullAsync(
+                        (JValue)element,
+                        activeContext,
+                        activeProperty,
+                        cancellationToken)
+                        .ConfigureAwait(false);
+
             JToken result;
             switch (element.Type)
             {
@@ -109,7 +117,7 @@ namespace SourceCode.Clay.Json.LinkedData
             activeContext,
             string activeProperty,
             CancellationToken cancellationToken)
-            => new ValueTask<JToken>(JValue.CreateNull());
+            => new ValueTask<JToken>(default(JToken));
 
         private static ValueTask<JToken> ExpandScalarAsync(
             JValue element,
@@ -118,7 +126,7 @@ namespace SourceCode.Clay.Json.LinkedData
             CancellationToken cancellationToken)
         {
             if (activeProperty == null || activeProperty == LinkedDataKeywords.Graph)
-                return new ValueTask<JToken>(JValue.CreateNull());
+                return new ValueTask<JToken>(default(JToken));
             return new ValueTask<JToken>(ExpandValue(activeContext, activeProperty, element));
         }
 
@@ -142,25 +150,25 @@ namespace SourceCode.Clay.Json.LinkedData
                     (activeContext.TryGetTerm(activeProperty, out var term) &&
                         term.ContainerMappings.HasFlag(ContainerMappings.List)))
                 {
-                    if (expandedItem.Type == JTokenType.Array ||
+                    if (expandedItem.Is(JTokenType.Array) ||
                         (expandedItem is JObject o && o.ContainsKey(LinkedDataKeywords.List)))
                         throw new LinkedDataException(LinkedDataErrorCode.ListOfLists);
                 }
 
                 // 3.2.3) If expanded item is an array, append each of its items to result.
-                if (expandedItem.Type == JTokenType.Array)
+                if (expandedItem.Is(JTokenType.Array))
                 {
                     var expandedArray = (JArray)expandedItem;
                     for (var j = 0; j < expandedArray.Count; j++)
                     {
                         var expandedArrayItem = expandedArray[j];
-                        if (expandedArrayItem.Type == JTokenType.Null) continue;
+                        if (expandedArrayItem.Is(JTokenType.Null)) continue;
                         expandedArray[j] = null;
                         result.Add(expandedArrayItem);
                     }
                 }
                 // Otherwise, if expanded item is not null, append it to result.
-                else if (expandedItem.Type != JTokenType.Null)
+                else if (!expandedItem.Is(JTokenType.Null))
                 {
                     result.Add(expandedItem);
                 }
@@ -212,7 +220,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     !expandedProperty.Contains(':', StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                JToken expandedValue = JValue.CreateNull();
+                JToken expandedValue = null;
                 var hasTerm = activeContext.TryGetTerm(key, out var term);
 
                 if (hasTerm && term.Options.HasFlag(LinkedDataTermOptions.ClearTerm))
@@ -221,7 +229,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 7.5) Otherwise, if key's container mapping in active context is @language and value is a JSON object
                 //      then value is expanded from a language map as follows:
                 if (hasTerm && term.ContainerMappings.HasFlag(ContainerMappings.Language) &&
-                    value.Type == JTokenType.Object)
+                    value.Is(JTokenType.Object))
                 {
                     // 7.5.1) Initialize expanded value to an empty array.
                     var expandedArray = new JArray();
@@ -247,7 +255,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
                             // 7.5.2.1) item must be a string, otherwise an invalid language map value error has been
                             //          detected and processing is aborted.
-                            if (item.Type != JTokenType.String)
+                            if (!item.Is(JTokenType.String))
                                 throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageMapValue);
                             expandedArray.Add(new JObject()
                             {
@@ -260,7 +268,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 7.6) Otherwise, if key's container mapping in active context is @index and value is a JSON object
                 //      then value is expanded from an index map as follows:
                 else if (hasTerm && term.ContainerMappings == ContainerMappings.Index &&
-                    value.Type == JTokenType.Object)
+                    value.Is(JTokenType.Object))
                 {
                     // 7.6.1) Initialize expanded value to an empty array.
                     var expandedArray = new JArray();
@@ -279,7 +287,7 @@ namespace SourceCode.Clay.Json.LinkedData
                             cancellationToken)
                             .ConfigureAwait(false);
 
-                        var expandedIndexValueArray = expandedIndexValue.Type == JTokenType.Array
+                        var expandedIndexValueArray = expandedIndexValue.Is(JTokenType.Array)
                             ? (JArray)expandedIndexValue
                             : new JArray(expandedIndexValue);
 
@@ -287,7 +295,7 @@ namespace SourceCode.Clay.Json.LinkedData
                         for (var i = 0; i < expandedIndexValueArray.Count; i++)
                         {
                             var item = expandedIndexValueArray[i];
-                            if (item.Type == JTokenType.Null) continue;
+                            if (item.Is(JTokenType.Null)) continue;
                             // 7.6.2.3.1) If item does not have the key @index, add the key-value pair (@index-index)
                             //            to item.
                             if (item is JObject o && !o.ContainsKey(LinkedDataKeywords.Index))
@@ -310,17 +318,17 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
 
                 // 7.8) If expanded value is null, ignore key by continuing to the next key from element.
-                if (expandedValue.Type == JTokenType.Null) continue;
+                if (expandedValue.Is(JTokenType.Null)) continue;
 
                 // 7.9) If the container mapping associated to key in active context is @list and expanded value is not
                 //      already a list object, convert expanded value to a list object by first setting it to an array
                 //      containing only expanded value if it is not already an array, and then by setting it to a JSON
                 //      object containing the key-value pair @list-expanded value.
                 if (hasTerm && term.ContainerMappings == ContainerMappings.List &&
-                    (expandedValue.Type != JTokenType.Object ||
+                    (!expandedValue.Is(JTokenType.Object) ||
                         !((JObject)expandedValue).ContainsKey(LinkedDataKeywords.List)))
                 {
-                    expandedValue = expandedValue.Type == JTokenType.Array
+                    expandedValue = expandedValue.Is(JTokenType.Array)
                         ? expandedValue
                         : new JArray(expandedValue);
                     expandedValue = new JObject()
@@ -341,7 +349,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     var reverseMap = (JObject)reverseToken;
 
                     // 7.10.3) If expanded value is not an array, set it to an array containing expanded value.
-                    var expandedArray = expandedValue.Type == JTokenType.Array
+                    var expandedArray = expandedValue.Is(JTokenType.Array)
                         ? (JArray)expandedValue
                         : new JArray(expandedValue);
                     expandedValue = expandedArray;
@@ -350,7 +358,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     for (var i = 0; i < expandedArray.Count; i++)
                     {
                         var item = expandedArray[i];
-                        if (item.Type == JTokenType.Null) continue;
+                        if (item.Is(JTokenType.Null)) continue;
                         if (!(item is JObject o) ||
                             (o.ContainsKey(LinkedDataKeywords.Value) || o.ContainsKey(LinkedDataKeywords.List)))
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
@@ -366,16 +374,16 @@ namespace SourceCode.Clay.Json.LinkedData
                         result.Add(expandedProperty, propertyToken = new JArray());
 
                     var resultContainerArray = (JArray)propertyToken;
-                    if (expandedValue.Type == JTokenType.Array)
+                    if (expandedValue.Is(JTokenType.Array))
                     {
                         var expandedArray = (JArray)expandedValue;
                         for (var i = 0; i < expandedArray.Count; i++)
                         {
-                            if (expandedArray[i].Type == JTokenType.Null) continue;
+                            if (expandedArray[i].Is(JTokenType.Null)) continue;
                             resultContainerArray.Add(expandedArray[i]);
                         }
                     }
-                    else if (expandedValue.Type != JTokenType.Null)
+                    else if (!expandedValue.Is(JTokenType.Null))
                     {
                         resultContainerArray.Add(expandedValue);
                     }
@@ -391,8 +399,8 @@ namespace SourceCode.Clay.Json.LinkedData
                 if (result.ContainsKey(LinkedDataKeywords.Type)) count--;
                 if (result.ContainsKey(LinkedDataKeywords.Index)) count--;
                 if (count != 0) throw new LinkedDataException(LinkedDataErrorCode.InvalidValueObject);
-                if (valueToken.Type == JTokenType.Null) resultToken = JValue.CreateNull();
-                else if (result.ContainsKey(LinkedDataKeywords.Language) && valueToken.Type != JTokenType.String)
+                if (valueToken.Is(JTokenType.Null)) resultToken = null;
+                else if (result.ContainsKey(LinkedDataKeywords.Language) && !valueToken.Is(JTokenType.String))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageTaggedValue);
                 //else if (result.TryGetValue(LDKeywords.Type, out var typeToken) &&
                 //    !Uri.TryCreate((string)typeToken, UriKind.Absolute, out var tmp))
@@ -402,7 +410,7 @@ namespace SourceCode.Clay.Json.LinkedData
             //    is not an array, set it to an array containing only the associated
             //    value.
             else if (result.TryGetValue(LinkedDataKeywords.Type, out var typeToken) &&
-                typeToken.Type != JTokenType.Array)
+                !typeToken.Is(JTokenType.Array))
             {
                 result[LinkedDataKeywords.Type] = new JArray(typeToken);
             }
@@ -418,16 +426,16 @@ namespace SourceCode.Clay.Json.LinkedData
             }
 
             if (result.Count == 1 && result.ContainsKey(LinkedDataKeywords.Language))
-                resultToken = JValue.CreateNull();
+                resultToken = null;
 
             if (activeProperty == null || activeProperty == LinkedDataKeywords.Graph)
             {
                 if (result.Count == 0)
-                    resultToken = JValue.CreateNull();
+                    resultToken = null;
                 else if (result.ContainsKey(LinkedDataKeywords.Value) || result.ContainsKey(LinkedDataKeywords.List))
-                    resultToken = JValue.CreateNull();
+                    resultToken = null;
                 else if (result.Count == 1 && result.ContainsKey(LinkedDataKeywords.Id))
-                    resultToken = JValue.CreateNull();
+                    resultToken = null;
             }
 
             return resultToken;
@@ -458,7 +466,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 case LinkedDataKeywords.Id:
                     // 7.4.3) If expanded property is @id and value is not a string, an invalid @id value error has
                     //        been detected and processing is aborted.
-                    if (value.Type != JTokenType.String)
+                    if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidIdValue);
                     // Otherwise, set expanded value to the result of using the IRI Expansion algorithm, passing active
                     // context, value, and true for document relative.
@@ -471,17 +479,17 @@ namespace SourceCode.Clay.Json.LinkedData
                     //        expanded value to the result of using the IRI Expansion algorithm, passing active
                     //        context, true for vocab, and true for document relative to expand the value or each of
                     //        its items.
-                    if (value.Type == JTokenType.String)
+                    if (value.Is(JTokenType.String))
                         expandedValue = ExpandIri(activeContext,
-                            (string)value.DeepClone(),
+                            (string)value,
                             vocab: true,
                             documentRelative: true);
-                    else if (value.Type == JTokenType.Array)
+                    else if (value.Is(JTokenType.Array))
                     {
                         expandedArray = (JArray)value.DeepClone();
                         for (var i = 0; i < expandedArray.Count; i++)
                         {
-                            if (expandedArray[i].Type != JTokenType.String)
+                            if (!expandedArray[i].Is(JTokenType.String))
                                 throw new LinkedDataException(LinkedDataErrorCode.InvalidTypeValue);
                             var expandedItem = (JValue)expandedArray[i];
                             expandedItem.Value = ExpandIri(
@@ -509,7 +517,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     expandedArray = (JArray)expandedValue;
                     for (var i = 0; i < expandedArray.Count; i++)
                     {
-                        if (expandedArray[i].Type != JTokenType.Object)
+                        if (!expandedArray[i].Is(JTokenType.Object))
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidGraph);
                     }
                     break;
@@ -531,7 +539,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     // 7.4.7) If expanded property is @language and value is not a string, an invalid language-tagged
                     //        string error has been detected and processing is aborted. Otherwise, set expanded value
                     //        to lowercased value.
-                    if (value.Type != JTokenType.String)
+                    if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageTaggedString);
 
 #                   pragma warning disable CA1308 // Normalize strings to uppercase
@@ -542,7 +550,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 case LinkedDataKeywords.Index:
                     // 7.4.8) If expanded property is @index and value is not a string, an invalid @index value error
                     //        has been detected and processing is aborted. Otherwise, set expanded value to value.
-                    if (value.Type != JTokenType.String)
+                    if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidIndexValue);
                     expandedValue = value.DeepClone();
                     result[LinkedDataKeywords.Index] = expandedValue;
@@ -563,7 +571,7 @@ namespace SourceCode.Clay.Json.LinkedData
                         cancellationToken)
                         .ConfigureAwait(false);
 
-                    expandedArray = expandedValue.Type == JTokenType.Array
+                    expandedArray = expandedValue.Is(JTokenType.Array)
                         ? (JArray)expandedValue
                         : new JArray(expandedValue);
                     expandedValue = expandedArray;
@@ -592,7 +600,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 case LinkedDataKeywords.Reverse:
                     // 7.4.11) If expanded property is @reverse and value is not a JSON object, an
                     //         invalid @reverse value error has been detected and processing is aborted.
-                    if (value.Type != JTokenType.Object)
+                    if (!value.Is(JTokenType.Object))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
 
                     // 7.4.11.1) Initialize expanded value to the result of using this algorithm
@@ -611,7 +619,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     var count = expandedObject.Count;
                     if (expandedObject.TryGetValue(LinkedDataKeywords.Reverse, out var reverseToken))
                     {
-                        if (reverseToken.Type != JTokenType.Object)
+                        if (!reverseToken.Is(JTokenType.Object))
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
 
                         count--;
@@ -621,10 +629,10 @@ namespace SourceCode.Clay.Json.LinkedData
                             //             an empty array.
                             if (!result.TryGetValue(property, out var propToken))
                                 result.Add(property, propToken = new JArray());
-                            if (propToken.Type != JTokenType.Array)
+                            if (!propToken.Is(JTokenType.Array))
                                 throw new LinkedDataException(LinkedDataErrorCode.InvalidReverseProperty);
 
-                            var itemArray = item.Type == JTokenType.Array
+                            var itemArray = item.Is(JTokenType.Array)
                                 ? (JArray)item
                                 : new JArray(item);
 
@@ -675,7 +683,7 @@ namespace SourceCode.Clay.Json.LinkedData
             }
 
             // 7.4.12) Unless expanded value is null, set the expanded property member of result to expanded value.
-            if (expandedValue.Type != JTokenType.Null)
+            if (!expandedValue.Is(JTokenType.Null))
                 result[expandedProperty] = expandedValue;
         }
     }
