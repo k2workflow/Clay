@@ -15,6 +15,8 @@ namespace SourceCode.Clay.Json.LinkedData
 {
     partial class LinkedDataTransformation
     {
+        // https://www.w3.org/TR/json-ld-api/#expansion-algorithm
+
         public static async ValueTask<JArray> ExpandAsync(
             JToken token,
             LinkedDataOptions options,
