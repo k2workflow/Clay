@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Json.LinkedData
             wr.Method = "GET";
 
             using (var response = await wr.GetResponseAsync().ConfigureAwait(false))
-            using (var responseStream = await wr.GetRequestStreamAsync().ConfigureAwait(false))
+            using (var responseStream = response.GetResponseStream())
             using (var streamReader = new StreamReader(responseStream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
