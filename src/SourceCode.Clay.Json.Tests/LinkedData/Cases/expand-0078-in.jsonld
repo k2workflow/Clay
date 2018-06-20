@@ -1,0 +1,11 @@
+{
+  "@context": [
+    "http://example.org/context1.jsonld",
+    "http://example.org/context2.jsonld"
+  ],
+  "@id": "http://example.com/speakers#Alice",
+  "foaf:name": "Alice",
+  "foaf:homepage": "http://xkcd.com/177/",
+  "ical:summary": "Alice Talk",
+  "ical:location": "Lyon Convention Centre, Lyon, France"
+}

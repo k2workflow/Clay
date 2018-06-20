@@ -8,21 +8,58 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.LinkedData;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SourceCode.Clay.Json.Tests.LinkedData
 {
+    public sealed class LinkedDataTestOptions : LinkedDataOptions
+    {
+        private readonly Dictionary<string, JToken> _contexts = 
+            new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
+
+        public LinkedDataTestOptions(string @base = null)
+            : base(@base)
+        {
+        }
+
+        private LinkedDataTestOptions(string @base = null, LinkedDataContext expandContext = default) 
+            : base(@base, expandContext)
+        {
+        }
+
+        public void AddContext(string iri, JToken context)
+        {
+            _contexts.Add(iri, context);
+        }
+
+        public override async ValueTask<LinkedDataOptions> WithContextAsync(JToken localContext, CancellationToken cancellationToken = default)
+        {
+            var context = await CreateContextAsync(localContext, cancellationToken);
+            return new LinkedDataTestOptions(Base, context);
+        }
+
+        public override ValueTask<JToken> GetContextAsync(string iri, CancellationToken cancellationToken)
+        {
+            if (_contexts.TryGetValue(iri, out var result)) return new ValueTask<JToken>(result);
+            throw new FileNotFoundException();
+        }
+    }
+
     public sealed class LinkedDataTestCase
     {
+        public string Id { get; }
         public string Name { get; }
         public JToken Input { get; }
         public JToken Expected { get; }
         public LinkedDataOptions Options { get; }
 
-        public LinkedDataTestCase(string name, JToken input, JToken expected, LinkedDataOptions options)
+        public LinkedDataTestCase(string id, string name, JToken input, JToken expected, LinkedDataOptions options)
         {
+            Id = id;
             Name = name;
             Input = input;
             Expected = expected;
@@ -44,35 +81,49 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
             for (var i = 0; i < sequence.Count; i++)
             {
                 var caseJson = sequence[i];
-                var name = baseIri + (string)caseJson["@id"];
+                var id = baseIri + (string)caseJson["@id"];
+                var name = (string)caseJson["name"];
                 var input = (string)caseJson["input"];
                 var expect = (string)caseJson["expect"];
                 var option = (JObject)caseJson["option"];
-                yield return ReadAsync(baseIri, name, input, expect, option);
+                var contexts = (JObject)caseJson["contexts"];
+                yield return ReadAsync(baseIri, id, name, input, expect, option, contexts);
             }
         }
 
-        private static async ValueTask<LinkedDataTestCase> ReadAsync(string baseIri, string name, string input, string expect, JObject option)
+        private static async ValueTask<LinkedDataTestCase> ReadAsync(string baseIri, string id, string name, string input, string expect, JObject option, JObject contexts)
         {
             baseIri += input;
             var inputDoc = await ReadResourceAsync(input);
             var expectDoc = await ReadResourceAsync(expect);
-            var options = new LinkedDataOptions(baseIri);
+            var options = new LinkedDataTestOptions(baseIri);
 
             if (option != null)
             {
                 if (option.TryGetValue("base", out var baseToken))
                 {
-                    options = new LinkedDataOptions((string)baseToken);
+                    options = new LinkedDataTestOptions((string)baseToken);
                 }
                 if (option.TryGetValue("expandContext", out var expandContextToken))
                 {
                     var expandObject = await ReadResourceAsync((string)expandContextToken);
-                    options = await options.WithContextAsync(expandObject);
+                    options = (LinkedDataTestOptions)await options.WithContextAsync(expandObject);
                 }
             }
 
-            return new LinkedDataTestCase(name, inputDoc, expectDoc, options);
+            if (contexts != null)
+            {
+                foreach (var (iri, contextValue) in contexts)
+                {
+                    var wrappedContext = new JObject()
+                    {
+                        [LinkedDataKeywords.Context] = contextValue
+                    };
+                    options.AddContext(iri, wrappedContext);
+                }
+            }
+
+            return new LinkedDataTestCase(id, name, inputDoc, expectDoc, options);
         }
 
         private static async ValueTask<JToken> ReadResourceAsync(string resource)

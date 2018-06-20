@@ -42,10 +42,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
 
             public override string ToString() => Identifier;
         }
-
-        private const int ExpandMin = 1;
-        private const int ExpandMax = 77;
-
+        
         [Theory(DisplayName = nameof(LinkedDataTransformation_Expand))]
         [MemberData(nameof(Expand))]
         public static async Task LinkedDataTransformation_Expand(LinkedDataTestCase testCase)

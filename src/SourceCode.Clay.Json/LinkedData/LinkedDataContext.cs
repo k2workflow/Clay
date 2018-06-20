@@ -168,7 +168,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     // 3.2.4) Set result to the result of recursively calling this algorithm, passing
                     //        result for active context, context for local context, and a copy of remote
                     //        contexts.
-                    result = await ParseAsync(remoteContext, cancellationToken).ConfigureAwait(false);
+                    result = await result.ParseAsync(remoteContext, cancellationToken).ConfigureAwait(false);
                     _remoteContexts.Remove(uri);
                     continue;
                 }
