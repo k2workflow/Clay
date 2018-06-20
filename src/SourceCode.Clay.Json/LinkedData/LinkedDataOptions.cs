@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Json.LinkedData
             ExpandContext = expandContext.HasValue ? expandContext : new LinkedDataContext(this);
         }
 
-        public async ValueTask<LinkedDataOptions> WithContextAsync(
+        public virtual async ValueTask<LinkedDataOptions> WithContextAsync(
             JToken localContext,
             CancellationToken cancellationToken = default)
         {
