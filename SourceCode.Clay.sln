@@ -55,9 +55,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO", "src\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO.Tests", "src\SourceCode.Clay.IO.Tests\SourceCode.Clay.IO.Tests.csproj", "{14DA1C2D-3A63-4993-847A-15F6E4659E52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Algorithms", "src\SourceCode.Clay.Algorithms\SourceCode.Clay.Algorithms.csproj", "{712342E0-045F-4C8E-9E0C-618A330DE7E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms", "src\SourceCode.Clay.Algorithms\SourceCode.Clay.Algorithms.csproj", "{712342E0-045F-4C8E-9E0C-618A330DE7E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Algorithms.Tests", "src\SourceCode.Clay.Algorithms.Tests\SourceCode.Clay.Algorithms.Tests.csproj", "{3A79B7F5-243E-4553-9EC7-1A7A838008AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.Tests", "src\SourceCode.Clay.Algorithms.Tests\SourceCode.Clay.Algorithms.Tests.csproj", "{3A79B7F5-243E-4553-9EC7-1A7A838008AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Security", "src\SourceCode.Clay.Security\SourceCode.Clay.Security.csproj", "{28690A32-2A29-40AE-BE4A-DC00F6346791}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Security.Tests", "src\SourceCode.Clay.Security.Tests\SourceCode.Clay.Security.Tests.csproj", "{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +157,14 @@ Global
 		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A79B7F5-243E-4553-9EC7-1A7A838008AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28690A32-2A29-40AE-BE4A-DC00F6346791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28690A32-2A29-40AE-BE4A-DC00F6346791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28690A32-2A29-40AE-BE4A-DC00F6346791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28690A32-2A29-40AE-BE4A-DC00F6346791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +182,7 @@ Global
 		{7AB59F3C-9B6B-4E3F-9BFE-95F99435CD6B} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{14DA1C2D-3A63-4993-847A-15F6E4659E52} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{3A79B7F5-243E-4553-9EC7-1A7A838008AA} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9F58E15-1F9A-4AAC-831F-9C7A81512C01}

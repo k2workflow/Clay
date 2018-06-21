@@ -18,10 +18,10 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageId>SourceCode.Clay.Text</PackageId>
+    <PackageId>SourceCode.Clay.Security</PackageId>
     <Authors>SourceCode</Authors>
-    <Description>Tools and extensions for working with text.</Description>
-    <PackageTags>clay utility extension string stringbuilder</PackageTags>
+    <Description>Tools and extensions for working with security primitives.</Description>
+    <PackageTags>clay utility extension certificate x590 encrypt decrypt</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>
