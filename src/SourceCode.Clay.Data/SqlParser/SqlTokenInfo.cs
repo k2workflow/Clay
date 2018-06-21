@@ -51,12 +51,8 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(SqlTokenInfo other)
-        {
-            if (Kind != other.Kind) return false;
-            if (!StringComparer.Ordinal.Equals(Value, other.Value)) return false;
-
-            return true;
-        }
+            => Kind == other.Kind
+            && StringComparer.Ordinal.Equals(Value, other.Value);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>

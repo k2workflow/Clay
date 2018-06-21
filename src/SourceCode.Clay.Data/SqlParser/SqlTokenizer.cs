@@ -264,12 +264,9 @@ namespace SourceCode.Clay.Data.SqlParser
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0, char c1)
-        {
-            if (count - offset < 2) return false;
-            if (buffer[offset + 0] != c0) return false;
-            if (buffer[offset + 1] != c1) return false;
-            return true;
-        }
+            => count - offset >= 2
+            && buffer[offset + 0] == c0
+            && buffer[offset + 1] == c1;
 
         /// <summary>
         ///
