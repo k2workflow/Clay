@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Security
         private const int JunkLen = 6;
 
         /// <summary>
-        /// Load a <see cref="X509Certificate2"/> from My/CurrentUser given its thumbprint.
+        /// Load a <see cref="X509Certificate2"/> given its store location and thumbprint.
         /// </summary>
         /// <param name="storeLocation">The certificate <see cref="StoreLocation"/> to use.</param>
         /// <param name="thumbprint">The certificate thumbprint to find.</param>
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Security
         }
 
         /// <summary>
-        /// Load a <see cref="X509Certificate2"/> from My/CurrentUser given its thumbprint.
+        /// Try to load a <see cref="X509Certificate2"/> given its store location and thumbprint.
         /// </summary>
         /// <param name="storeLocation">The certificate <see cref="StoreLocation"/> to use.</param>
         /// <param name="thumbprint">The certificate thumbprint to find.</param>
