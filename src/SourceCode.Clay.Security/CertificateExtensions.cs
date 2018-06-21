@@ -20,7 +20,7 @@ namespace SourceCode.Clay.Security
         internal const int Sha1HexLen = 20 * 2; // Declared as internal for units
 
         // Permit N special characters
-        private const int JunkLen = 6;
+        internal const int JunkLen = 6; // Declared as internal for units
 
         /// <summary>
         /// Load a <see cref="X509Certificate2"/> given its store location and thumbprint.
@@ -33,14 +33,14 @@ namespace SourceCode.Clay.Security
         public static X509Certificate2 LoadCertificate(this StoreLocation storeLocation, string thumbprint, StoreName storeName = StoreName.My, bool validOnly = true)
         {
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
-            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified {nameof(thumbprint)} should be {Sha1HexLen} characters long.", nameof(thumbprint));
+            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
 
             var certStore = new X509Store(storeName, storeLocation);
             certStore.Open(OpenFlags.ReadOnly);
             try
             {
                 var clean = Clean(thumbprint);
-                if (thumbprint.Length != Sha1HexLen) throw new ArgumentException($"Specified {nameof(thumbprint)} should be exactly {Sha1HexLen} characters long.", nameof(thumbprint));
+                if (thumbprint.Length != Sha1HexLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
 
                 var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, clean, validOnly);
 
@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Security
         public static bool TryLoadCertificate(this StoreLocation storeLocation, string thumbprint, out X509Certificate2 certificate, StoreName storeName = StoreName.My, bool validOnly = true)
         {
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
-            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified {nameof(thumbprint)} should be {Sha1HexLen} characters long.", nameof(thumbprint));
+            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
 
             var certStore = new X509Store(storeName, storeLocation);
             certStore.Open(OpenFlags.ReadOnly);
