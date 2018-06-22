@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SourceCode.Clay.Security
@@ -14,38 +13,35 @@ namespace SourceCode.Clay.Security
     /// <summary>
     /// Represents <see cref="X509Certificate2"/> extensions.
     /// </summary>
-    public static class CertificateExtensions
+    public static class CertificateLoader
     {
-        // Sha1 hex character length (20 bytes)
-        internal const int Sha1HexLen = 20 * 2; // Declared as internal for units
-
-        // Permit N special characters
-        internal const int JunkLen = 6; // Declared as internal for units
+        /// <summary>
+        /// The number of hex characters required to represent a Sha1 thumbprint.
+        /// </summary>
+        public const byte Sha1Length = 20 * 2;
 
         /// <summary>
         /// Load a <see cref="X509Certificate2"/> given its store location and thumbprint.
         /// </summary>
+        /// <param name="storeName">The certificate <see cref="StoreName"/> to use.</param>
         /// <param name="storeLocation">The certificate <see cref="StoreLocation"/> to use.</param>
         /// <param name="thumbprint">The certificate thumbprint to find.</param>
-        /// <param name="storeName">The certificate <see cref="StoreName"/> to use.</param>
         /// <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
         /// <returns>If found, the certificate with the specified thumbprint.</returns>
-        public static X509Certificate2 LoadCertificate(this StoreLocation storeLocation, string thumbprint, StoreName storeName = StoreName.My, bool validOnly = true)
+        public static X509Certificate2 LoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly)
         {
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
-            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
-
+            if (thumbprint.Length != Sha1Length) throw new FormatException($"Specified thumbprint should be {Sha1Length} characters long.");
+            if (!IsValid(thumbprint[0]) || !IsValid(thumbprint[thumbprint.Length - 1])) throw new FormatException($"Invalid character(s) detected in thumbprint.");
+            
             var certStore = new X509Store(storeName, storeLocation);
             certStore.Open(OpenFlags.ReadOnly);
             try
             {
-                var clean = Clean(thumbprint);
-                if (thumbprint.Length != Sha1HexLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
-
-                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, clean, validOnly);
+                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
                 if (certCollection.Count == 0)
-                    throw new ArgumentException($@"Cannot find certificate with thumbprint '{clean}' in {storeName}/{storeLocation}.", nameof(thumbprint));
+                    throw new InvalidOperationException($@"Cannot find certificate in {storeName}/{storeLocation} with thumbprint '{thumbprint}'.");
 
                 // By convention we return the first certificate
                 var certificate = certCollection[0];
@@ -60,29 +56,23 @@ namespace SourceCode.Clay.Security
         /// <summary>
         /// Try to load a <see cref="X509Certificate2"/> given its store location and thumbprint.
         /// </summary>
+        /// <param name="storeName">The certificate <see cref="StoreName"/> to use.</param>
         /// <param name="storeLocation">The certificate <see cref="StoreLocation"/> to use.</param>
         /// <param name="thumbprint">The certificate thumbprint to find.</param>
-        /// <param name="storeName">The certificate <see cref="StoreName"/> to use.</param>
         /// <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
         /// <param name="certificate">If found, the certificate with the specified thumbprint.</param>
         /// <returns>true if the specified certificate was found; otherwise, false.</returns>
-        public static bool TryLoadCertificate(this StoreLocation storeLocation, string thumbprint, out X509Certificate2 certificate, StoreName storeName = StoreName.My, bool validOnly = true)
+        public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly, out X509Certificate2 certificate)
         {
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
-            if (thumbprint.Length > Sha1HexLen + JunkLen) throw new ArgumentException($"Specified thumbprint should be {Sha1HexLen} characters long.", nameof(thumbprint));
+            if (thumbprint.Length != Sha1Length) throw new FormatException($"Specified thumbprint should be {Sha1Length} characters long.");
+            if (!IsValid(thumbprint[0]) || !IsValid(thumbprint[thumbprint.Length - 1])) throw new FormatException($"Invalid character(s) detected in thumbprint.");
 
             var certStore = new X509Store(storeName, storeLocation);
             certStore.Open(OpenFlags.ReadOnly);
             try
             {
-                var clean = Clean(thumbprint);
-                if (thumbprint.Length != Sha1HexLen)
-                {
-                    certificate = null;
-                    return false;
-                }
-
-                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, clean, validOnly);
+                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
                 if (certCollection.Count == 0)
                 {
@@ -101,26 +91,29 @@ namespace SourceCode.Clay.Security
         }
 
         /// <summary>
-        /// If the thumbprint was copied from MMC, it likely contains special characters
+        /// Trims all leading/trailing characters that are not alphanumeric.
+        /// Truncates the resulting output to 40 characters if it is longer than that.
+        /// (If the thumbprint was copied from MMC, it likely contains special characters)
         /// </summary>
-        internal static string Clean(string thumbprint) // Declared as internal for units
+        public static string NormalizeThumbprint(string thumbprint)
         {
-            Debug.Assert(!string.IsNullOrWhiteSpace(thumbprint));
+            if (string.IsNullOrWhiteSpace(thumbprint))
+                return string.Empty;
 
-            // We already know the length is reasonable, so use stackalloc instead of a StringBuilder
-            Span<char> sb = stackalloc char[thumbprint.Length];
+            // Since the expected length is reasonable we use stackalloc instead of StringBuilder
+            Span<char> ch = stackalloc char[Sha1Length];
 
             var i = 0;
-            foreach (var c in thumbprint)
+            for (var j = 0; j < thumbprint.Length 
+                // We choose to ignore (vs throw) anything beyond the expected number of valid characters
+                && i < Sha1Length; j++)
             {
-                if ((c >= '0' && c <= '9') ||
-                    (c >= 'A' && c <= 'Z') ||
-                    (c >= 'a' && c <= 'z') ||
-                    c == '.' ||
-                    c == '_')
-                {
-                    sb[i++] = c;
-                }
+                var c = thumbprint[j];
+
+                if (!IsValid(c))
+                    continue;
+                
+                ch[i++] = c;
             }
 
             // Return empty if all characters were invalid
@@ -128,10 +121,15 @@ namespace SourceCode.Clay.Security
                 return string.Empty;
 
             // Else return the valid substring
-            sb = sb.Slice(0, i);
-            var clean = new string(sb);
+            ch = ch.Slice(0, i);
 
+            var clean = new string(ch);
             return clean;
         }
+
+        private static bool IsValid(char c)
+            => (c >= '0' && c <= '9') ||
+               (c >= 'A' && c <= 'Z') ||
+               (c >= 'a' && c <= 'z');
     }
 }

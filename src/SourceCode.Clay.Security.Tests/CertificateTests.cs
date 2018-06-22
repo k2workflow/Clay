@@ -13,241 +13,203 @@ namespace SourceCode.Clay.Security.Tests
 {
     public static class CertificateTests
     {
+        private static readonly X509Certificate2 ExistingCertificate;
+
+        static CertificateTests()
+        {
+            var certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            certStore.Open(OpenFlags.ReadOnly);
+            try
+            {
+                // Choose any arbitrary certificate on the machine
+                ExistingCertificate = certStore.Certificates[0];
+            }
+            finally
+            {
+                certStore.Close();
+            }
+        }
+
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_null()
         {
-            const string nullThumbprint = null;
+            const string thumbprint = null;
 
-            Assert.Throws<ArgumentNullException>(() => StoreLocation.CurrentUser.TryLoadCertificate(nullThumbprint, out var cert, StoreName.My, false));
-            Assert.Throws<ArgumentNullException>(() => StoreLocation.CurrentUser.LoadCertificate(nullThumbprint, StoreName.My, false));
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(string.Empty, norm);
+
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_empty()
         {
-            const string emptyThumbprint = "";
+            const string thumbprint = "";
 
-            Assert.Throws<ArgumentNullException>(() => StoreLocation.CurrentUser.TryLoadCertificate(emptyThumbprint, out var cert, StoreName.My, false));
-            Assert.Throws<ArgumentNullException>(() => StoreLocation.CurrentUser.LoadCertificate(emptyThumbprint, StoreName.My, false));
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(string.Empty, norm);
+
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_nonexistent()
         {
-            const string nonExistentThumbprint = "1230000000000000000000000000000000000000"; // Valid format but does not exist
+            var thumbprint = "00000" + ExistingCertificate.Thumbprint.Substring(10) + "00000"; // Valid format but unlikely to exist
 
-            var clean = CertificateExtensions.Clean(nonExistentThumbprint);
-            Assert.Equal(CertificateExtensions.Sha1HexLen, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(thumbprint.Length, norm.Length);
+            Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(nonExistentThumbprint, out var cert, StoreName.My, false);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _);
             Assert.False(found);
 
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(nonExistentThumbprint, StoreName.My, false));
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_invalid()
-        {
-            const string invalidThumbprint = "________________________________________"; // Correct length but bad format
-
-            var clean = CertificateExtensions.Clean(invalidThumbprint);
-            Assert.Equal(invalidThumbprint.Length, clean.Length);
-
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(invalidThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(invalidThumbprint, StoreName.My, false));
+            Assert.Throws<InvalidOperationException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_noisy_only()
         {
-            const string noisyOnlyThumbprint = "????????????????????????????????????????"; // Special characters only
+            var thumbprint = new string('?', CertificateLoader.Sha1Length); // Special characters only
 
-            var clean = CertificateExtensions.Clean(noisyOnlyThumbprint);
-            Assert.Equal(0, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(0, norm.Length);
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _));
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisyOnlyThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisyOnlyThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_short()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        [InlineData(39)]
+        public static void When_load_certificate_thumb_short_by_N(int n)
         {
-            const string shortThumbprint = "1230000000000000000000000000000000000"; // Too short
+            var thumbprint = ExistingCertificate.Thumbprint.Substring(n); // Too short
 
-            var clean = CertificateExtensions.Clean(shortThumbprint);
-            Assert.Equal(shortThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(thumbprint.Length, norm.Length);
+            Assert.NotEqual(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(shortThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(shortThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_long_by_1()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        public static void When_load_certificate_thumb_long_by_N(int n)
         {
-            const string longThumbprint = "1230000000000000000000000000000000000000" + "1"; // Too long
+            var thumbprint = ExistingCertificate.Thumbprint + new string('1', n); // Too long
 
-            var clean = CertificateExtensions.Clean(longThumbprint);
-            Assert.Equal(longThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.NotEqual(thumbprint.Length, norm.Length);
+            Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(longThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _);
+            Assert.True(found);
 
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(longThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_long_within_limit()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        [InlineData(39)]
+        public static void When_load_certificate_thumb_noisy_short(int n)
         {
-            var longThumbprint = "1230000000000000000000000000000000000000" + new string('1', CertificateExtensions.JunkLen); // Too long
+            var thumbprint = "\n" + ExistingCertificate.Thumbprint.Substring(n) + "\t"; // Too short after removing special chars
 
-            var clean = CertificateExtensions.Clean(longThumbprint);
-            Assert.Equal(longThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.NotEqual(thumbprint.Length, norm.Length);
+            Assert.NotEqual(CertificateLoader.Sha1Length, norm.Length);
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _));
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(longThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(longThumbprint, StoreName.My, false));
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_long_over_limit()
-        {
-            var longThumbprint = "1230000000000000000000000000000000000000" + new string('1', CertificateExtensions.JunkLen + 1); // Too long
-
-            var clean = CertificateExtensions.Clean(longThumbprint);
-            Assert.Equal(longThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.TryLoadCertificate(longThumbprint, out var cert, StoreName.My, false));
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(longThumbprint, StoreName.My, false));
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_noisy_short()
-        {
-            const string noisyShortThumbprint = "\n1230000000000000000000000000???0000000000\t"; // Too short after removing special chars
-
-            var clean = CertificateExtensions.Clean(noisyShortThumbprint);
-            Assert.NotEqual(noisyShortThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
-
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisyShortThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisyShortThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_noisy_short_0()
         {
-            const string noisy0Thumbprint = "?"; // 0 chars after removing special chars
+            const string thumbprint = "\r\n"; // 0 chars after removing special chars
 
-            var clean = CertificateExtensions.Clean(noisy0Thumbprint);
-            Assert.NotEqual(noisy0Thumbprint.Length, clean.Length);
-            Assert.Equal(0, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.NotEqual(thumbprint.Length, norm.Length);
+            Assert.Equal(0, norm.Length);
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _));
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisy0Thumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisy0Thumbprint, StoreName.My, false));
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<ArgumentNullException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_noisy_short_1()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        public static void When_load_certificate_thumb_noisy_long(int n)
         {
-            const string noisy1Thumbprint = "0?"; // Only 1 char after removing special chars
+            var thumbprint = "\n" + ExistingCertificate.Thumbprint + new string('1', n) + "\t"; // Too long after removing special chars
 
-            var clean = CertificateExtensions.Clean(noisy1Thumbprint);
-            Assert.NotEqual(noisy1Thumbprint.Length, clean.Length);
-            Assert.Equal(1, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.NotEqual(thumbprint.Length, norm.Length);
+            Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisy1Thumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _);
+            Assert.True(found);
 
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisy1Thumbprint, StoreName.My, false));
-        }
-
-        [Trait("Type", "Unit")]
-        [Fact]
-        public static void When_load_certificate_thumb_noisy_long()
-        {
-            const string noisyLongThumbprint = "\n1230000000000000000000000000?00000000000012\t"; // Too long after removing special chars
-
-            var clean = CertificateExtensions.Clean(noisyLongThumbprint);
-            Assert.NotEqual(noisyLongThumbprint.Length, clean.Length);
-            Assert.NotEqual(CertificateExtensions.Sha1HexLen, clean.Length);
-
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisyLongThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
-
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisyLongThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_noisy_valid()
         {
-            const string noisyValidThumbprint = "\n1230000000000000000000000000?000000000000\t"; // Valid format after removing special chars
+            var thumbprint = "\n" + ExistingCertificate.Thumbprint + "\t"; // Valid after removing special chars
 
-            var clean = CertificateExtensions.Clean(noisyValidThumbprint);
-            Assert.NotEqual(noisyValidThumbprint.Length, clean.Length);
-            Assert.Equal(CertificateExtensions.Sha1HexLen, clean.Length);
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.NotEqual(thumbprint.Length, norm.Length);
+            Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(noisyValidThumbprint, out var cert, StoreName.My, false);
-            Assert.False(found);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, norm, false, out _);
+            Assert.True(found);
 
-            Assert.Throws<ArgumentException>(() => StoreLocation.CurrentUser.LoadCertificate(noisyValidThumbprint, StoreName.My, false));
+            Assert.Throws<FormatException>(() => CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out _));
+            Assert.Throws<FormatException>(() => CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false));
         }
 
         [Trait("Type", "Unit")]
         [Fact]
         public static void When_load_certificate_thumb_valid()
         {
-            X509Certificate2 expected;
+            var thumbprint = ExistingCertificate.Thumbprint; // Valid in all respects (given that we already retrieved it locally)
 
-            var certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            certStore.Open(OpenFlags.ReadOnly);
-            try
-            {
-                // Choose any arbitrary certificate on the machine
-                expected = certStore.Certificates[0];
-            }
-            finally
-            {
-                certStore.Close();
-            }
+            var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
+            Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var thumbprint = expected.Thumbprint; // Valid in all respects (given that we already retrieved it locally)
-            var clean = CertificateExtensions.Clean(thumbprint);
-            Assert.Equal(CertificateExtensions.Sha1HexLen, clean.Length);
-
-            var found = StoreLocation.CurrentUser.TryLoadCertificate(thumbprint, out var actual, StoreName.My, false);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out var actual);
             Assert.True(found);
-            Assert.Equal(expected.SerialNumber, actual.SerialNumber);
+            Assert.Equal(ExistingCertificate.SerialNumber, actual.SerialNumber);
 
-            actual = StoreLocation.CurrentUser.LoadCertificate(thumbprint, StoreName.My, false);
-            Assert.Equal(expected.SerialNumber, actual.SerialNumber);
+            actual = CertificateLoader.LoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false);
+            Assert.Equal(ExistingCertificate.SerialNumber, actual.SerialNumber);
         }
     }
 }
