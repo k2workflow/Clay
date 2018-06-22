@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SequenceEquals_both_null))]
         public static void SequenceEquals_both_null()
         {
-            var equal = ((HashSet<string>)null).NullableSequenceEquals(null);
+            var equal = ((HashSet<string>)null).NullableSequenceEqual(null);
             Assert.True(equal);
         }
 
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set1 = new HashSet<string>();
             var set2 = new HashSet<string>();
 
-            var equal = set1.NullableSequenceEquals(set2);
+            var equal = set1.NullableSequenceEqual(set2);
             Assert.True(equal);
         }
 
@@ -41,10 +41,10 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = set1.NullableSequenceEquals(set2, StringComparer.OrdinalIgnoreCase);
+            var equal = set1.NullableSequenceEqual(set2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = set1.NullableSequenceEquals(set3, StringComparer.OrdinalIgnoreCase);
+            equal = set1.NullableSequenceEqual(set3, StringComparer.OrdinalIgnoreCase);
             Assert.False(equal);
         }
 
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SequenceEquals_one_null))]
         public static void SequenceEquals_one_null()
         {
-            var equal = TestData.Set.NullableSequenceEquals(null);
+            var equal = TestData.Set.NullableSequenceEqual(null);
             Assert.False(equal);
         }
 
@@ -63,7 +63,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string>(TestData.Set);
             set2.Remove("foo");
 
-            var equal = TestData.Set.NullableSequenceEquals(set2);
+            var equal = TestData.Set.NullableSequenceEqual(set2);
             Assert.False(equal);
         }
 
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var set2 = new HashSet<string>(TestData.Set);
 
-            var equal = TestData.Set.NullableSequenceEquals(set2);
+            var equal = TestData.Set.NullableSequenceEqual(set2);
             Assert.True(equal);
         }
 
@@ -86,7 +86,7 @@ namespace SourceCode.Clay.Collections.Tests
                 "xyz"
             };
 
-            var equal = TestData.Set.NullableSequenceEquals(set2);
+            var equal = TestData.Set.NullableSequenceEqual(set2);
             Assert.False(equal);
         }
 
@@ -102,7 +102,7 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.  List[0]
             };
 
-            var equal = TestData.List.NullableSequenceEquals(set, StringComparer.Ordinal);
+            var equal = TestData.List.NullableSequenceEqual(set, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -118,7 +118,7 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = TestData.List.NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = TestData.List.NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -126,7 +126,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SequenceEquals_not_equal_duplicates))]
         public static void SequenceEquals_not_equal_duplicates()
         {
-            var equal = TestData.Dupe1.NullableSequenceEquals(TestData.Dupe2, StringComparer.Ordinal);
+            var equal = TestData.Dupe1.NullableSequenceEqual(TestData.Dupe2, StringComparer.Ordinal);
             Assert.False(equal);
         }
     }

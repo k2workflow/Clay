@@ -171,7 +171,7 @@ namespace SourceCode.Clay.OpenApi
             if (!Head.NullableEquals(other.Head)) return false;
             if (!Patch.NullableEquals(other.Patch)) return false;
             if (!Trace.NullableEquals(other.Trace)) return false;
-            if (!Servers.NullableSequenceEquals(other.Servers)) return false;
+            if (!Servers.NullableSequenceEqual(other.Servers)) return false;
             if (!Parameters.NullableDictionaryEquals(other.Parameters)) return false;
 
             return true;

@@ -18,10 +18,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(CollectionEquals_both_null))]
         public static void CollectionEquals_both_null()
         {
-            var equal = ((ICollection<string>)TestData.Null).NullableSequenceEquals(null, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.Null).NullableSequenceEqual(null, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.Null).NullableSequenceEquals(null, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.Null).NullableSequenceEqual(null, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -32,10 +32,10 @@ namespace SourceCode.Clay.Collections.Tests
             var list1 = Array.Empty<string>();
             var list2 = new string[0];
 
-            var equal = ((ICollection<string>)list1).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)list1).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -47,22 +47,22 @@ namespace SourceCode.Clay.Collections.Tests
             var list2 = new string[] { "HI" };
             var list3 = new string[] { "bye" };
 
-            var equal = ((ICollection<string>)list1).NullableSequenceEquals(list2, StringComparer.OrdinalIgnoreCase);
+            var equal = ((ICollection<string>)list1).NullableSequenceEqual(list2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEquals(list2, StringComparer.OrdinalIgnoreCase);
+            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEqual(list2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = ((ICollection<string>)list1).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((ICollection<string>)list1).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((ICollection<string>)list1).NullableSequenceEquals(list3, StringComparer.Ordinal);
+            equal = ((ICollection<string>)list1).NullableSequenceEqual(list3, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEquals(list3, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)list1).NullableSequenceEqual(list3, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -70,10 +70,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(CollectionEquals_one_null))]
         public static void CollectionEquals_one_null()
         {
-            var equal = ((ICollection<string>)TestData.List).NullableSequenceEquals(null, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSequenceEqual(null, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEquals(null, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEqual(null, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -88,10 +88,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[2]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -107,10 +107,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[3]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -126,10 +126,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[3]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -145,10 +145,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = ((IList<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            var equal = ((IList<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyList<string>)TestData.List).NullableSequenceEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableSequenceEqual(list2, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -164,10 +164,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSequenceEquals(list2);
+            var equal = ((ICollection<string>)TestData.List).NullableSequenceEqual(list2);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEquals(list2);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSequenceEqual(list2);
             Assert.False(equal);
         }
     }
