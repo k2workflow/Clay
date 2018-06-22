@@ -170,7 +170,7 @@ namespace SourceCode.Clay.OpenApi
             if (!Callbacks.NullableDictionaryEquals(other.Callbacks)) return false;
             if (Options != other.Options) return false;
             if (!Security.NullableSetEquals(other.Security)) return false;
-            if (!Servers.NullableListEquals(other.Servers)) return false;
+            if (!Servers.NullableSequenceEquals(other.Servers)) return false;
 
             return true;
         }

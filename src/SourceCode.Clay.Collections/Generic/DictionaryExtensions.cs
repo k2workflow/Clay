@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="y">Dictionary 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>
         /// <returns></returns>
-        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y, in IEqualityComparer<TValue> valueComparer)
+        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y, in IEqualityComparer<TValue> valueComparer = null)
         {
             if (x is null) return y is null; // (null, null) or (null, y)
             if (y is null) return false; // (x, null)
@@ -86,6 +86,7 @@ namespace SourceCode.Clay.Collections.Generic
             return true;
 
             // Local functions
+
             bool? CheckCount(int xCount)
             {
                 // ICollection is more common
@@ -94,6 +95,7 @@ namespace SourceCode.Clay.Collections.Generic
                     if (xCount != yc.Count) return false; // (n, m)
                     if (xCount == 0) return true; // (0, 0)
                 }
+
                 // IReadOnlyCollection
                 else if (y is IReadOnlyCollection<KeyValuePair<TKey, TValue>> yrc)
                 {
@@ -104,17 +106,5 @@ namespace SourceCode.Clay.Collections.Generic
                 return null;
             }
         }
-
-        /// <summary>
-        /// Performs an efficient item-by-item comparison,
-        /// using the <see cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons
-        /// and the default <see cref="IEqualityComparer{T}"/> for Value comparisons.
-        /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
-        /// <param name="x">Dictionary 1</param>
-        /// <param name="y">Dictionary 2</param>
-        /// <returns></returns>
-        public static bool NullableDictionaryEquals<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> x, IEnumerable<KeyValuePair<TKey, TValue>> y)
-            => NullableDictionaryEquals(x, y, null);
     }
 }

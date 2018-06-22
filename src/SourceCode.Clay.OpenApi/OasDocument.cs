@@ -126,7 +126,7 @@ namespace SourceCode.Clay.OpenApi
 
             if (Version != other.Version) return false;
             if (!Info.NullableEquals(other.Info)) return false;
-            if (!Servers.NullableListEquals(other.Servers)) return false;
+            if (!Servers.NullableSequenceEquals(other.Servers)) return false;
             if (!Paths.NullableDictionaryEquals(other.Paths)) return false;
             if (!Components.NullableEquals(other.Components)) return false;
             if (!Security.NullableSetEquals(other.Security)) return false;

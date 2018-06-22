@@ -20,64 +20,200 @@ namespace SourceCode.Clay.Collections.Generic
         /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
         /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="x">List 1</param>
-        /// <param name="y">List 2</param>
+        /// <param name="xe">List 1</param>
+        /// <param name="ye">List 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> xe, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer = null)
         {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
+            if (xe is null) return ye is null; // (null, null) or (null, y)
+            if (ye is null) return false; // (x, null)
+            if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
             var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
-            // ICollection is more common
-            if (x is ICollection<TSource> xc)
+            // ISet is derived from ICollection
+            if (xe is ISet<TSource> xs)
             {
-                return xc.NullableCollectionEquals(y, cmpr);
+                return SetEqualsImpl(xs, ye, cmpr);
+            }
+
+            // ICollection is more common
+            else if (xe is ICollection<TSource> xc)
+            {
+                // IList is more likely
+                if (xe is IList<TSource> xl)
+                {
+                    return ListEqualsImpl(xl, ye, cmpr);
+                }
+
+                // IReadOnlyList
+                if (xe is IReadOnlyList<TSource> xr)
+                {
+                    return ListEqualsImpl(xr, ye, cmpr);
+                }
             }
 
             // IReadOnlyCollection
-            if (x is IReadOnlyCollection<TSource> xrc)
+            else if (xe is IReadOnlyCollection<TSource> xrc)
             {
-                return xrc.NullableCollectionEquals(y, cmpr);
+                // IReadOnlyList is more likely
+                if (xe is IReadOnlyList<TSource> xr)
+                {
+                    return ListEqualsImpl(xr, ye, cmpr);
+                }
+
+                // IList
+                if (xe is IList<TSource> xl)
+                {
+                    return ListEqualsImpl(xl, ye, cmpr);
+                }
             }
 
             // IEnumerable
-            var equal = EnumerableEquals(x, y, cmpr);
+            var equal = System.Linq.Enumerable.SequenceEqual(xe, ye, cmpr);
             return equal;
         }
 
-        /// <summary>
-        /// Performs an optimized item-by-item comparison, using the default comparer for the type.
-        /// The lists are required to have corresponding items in the same ordinal position.
-        /// </summary>
-        /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="x">List 1</param>
-        /// <param name="y">List 2</param>
-        /// <returns></returns>
-        public static bool NullableSequenceEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y)
-            => NullableSequenceEquals(x, y, null);
-
-        internal static bool EnumerableEquals<TSource>(in IEnumerable<TSource> x, in IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer)
+        private static bool SetEqualsImpl<TSource>(ISet<TSource> xs, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
         {
-            Debug.Assert(x != null);
-            Debug.Assert(y != null);
+            Debug.Assert(xs != null);
+            Debug.Assert(ye != null);
             Debug.Assert(comparer != null);
 
-            using (var xe = x.GetEnumerator())
-            using (var ye = y.GetEnumerator())
-            {
-                while (xe.MoveNext())
-                {
-                    if (!ye.MoveNext()) return false;
+            // Create a new Set regardless, to enforce the comparer
+            var ys = new HashSet<TSource>(ye, comparer);
 
-                    if (!comparer.Equals(xe.Current, ye.Current)) return false;
+            var equal = ys.SetEquals(xs);
+            return equal;
+        }
+
+        private static bool ListEqualsImpl<TSource>(IList<TSource> xl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        {
+            Debug.Assert(xl != null);
+            Debug.Assert(ye != null);
+            Debug.Assert(comparer != null);
+
+            // ICollection is more likely
+            if (ye is ICollection<TSource> yc)
+            {
+                if (xl.Count != yc.Count) return false; // (n, m)
+                if (xl.Count == 0) return true; // (0, 0)
+
+                var eq = ItemsEqualsImpl(xl, ye, comparer);
+                return eq;
+            }
+
+            // IReadOnlyCollection
+            if (ye is IReadOnlyCollection<TSource> yrc)
+            {
+                if (xl.Count != yrc.Count) return false; // (n, m)
+                if (xl.Count == 0) return true; // (0, 0)
+
+                var eq = ItemsEqualsImpl(xl, ye, comparer);
+                return eq;
+            }
+
+            // IEnumerable
+            var equal = System.Linq.Enumerable.SequenceEqual(xl, ye, comparer);
+            return equal;
+        }
+
+        private static bool ListEqualsImpl<TSource>(IReadOnlyList<TSource> xr, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        {
+            Debug.Assert(xr != null);
+            Debug.Assert(ye != null);
+            Debug.Assert(comparer != null);
+
+            // IReadOnlyCollection is more likely
+            if (ye is IReadOnlyCollection<TSource> yrc)
+            {
+                if (xr.Count != yrc.Count) return false; // (n, m)
+                if (xr.Count == 0) return true; // (0, 0)
+
+                var eq = ItemsEqualsImpl(xr, ye, comparer);
+                return eq;
+            }
+
+            // ICollection
+            if (ye is ICollection<TSource> yc)
+            {
+                if (xr.Count != yc.Count) return false; // (n, m)
+                if (xr.Count == 0) return true; // (0, 0)
+
+                var eq = ItemsEqualsImpl(xr, ye, comparer);
+                return eq;
+            }
+
+            // IEnumerable
+            var equal = System.Linq.Enumerable.SequenceEqual(xr, ye, comparer);
+            return equal;
+        }
+
+        private static bool ItemsEqualsImpl<TSource>(IList<TSource> xl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        {
+            Debug.Assert(xl != null);
+            Debug.Assert(ye != null);
+            Debug.Assert(comparer != null);
+
+            // IReadOnlyList is more likely
+            if (ye is IReadOnlyList<TSource> yr)
+            {
+                // Check items in sequential order
+                for (var i = 0; i < xl.Count; i++)
+                {
+                    if (!comparer.Equals(xl[i], yr[i])) return false;
                 }
 
-                return !ye.MoveNext();
+                return true;
             }
+
+            // IList
+            if (ye is IList<TSource> yl)
+            {
+                // Check items in sequential order
+                for (var i = 0; i < xl.Count; i++)
+                {
+                    if (!comparer.Equals(xl[i], yl[i])) return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool ItemsEqualsImpl<TSource>(IReadOnlyList<TSource> xr, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        {
+            Debug.Assert(xr != null);
+            Debug.Assert(ye != null);
+            Debug.Assert(comparer != null);
+
+            // IReadOnlyList is more likely
+            if (ye is IReadOnlyList<TSource> yr)
+            {
+                // Check items in sequential order
+                for (var i = 0; i < xr.Count; i++)
+                {
+                    if (!comparer.Equals(xr[i], yr[i])) return false;
+                }
+
+                return true;
+            }
+
+            // IList
+            if (ye is IList<TSource> yl)
+            {
+                // Check items in sequential order
+                for (var i = 0; i < xr.Count; i++)
+                {
+                    if (!comparer.Equals(xr[i], yl[i])) return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
