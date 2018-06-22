@@ -40,32 +40,20 @@ namespace SourceCode.Clay.Collections.Generic
                 {
                     return ListEqualsImpl(xl, ye, cmpr);
                 }
-
-                // IReadOnlyList
-                if (xe is IReadOnlyList<TSource> xr)
-                {
-                    return ListEqualsImpl(xr, ye, cmpr);
-                }
             }
 
             // IReadOnlyCollection
             else if (xe is IReadOnlyCollection<TSource> xrc)
             {
                 // IReadOnlyList is more likely
-                if (xe is IReadOnlyList<TSource> xr)
+                if (xe is IReadOnlyList<TSource> xrl)
                 {
-                    return ListEqualsImpl(xr, ye, cmpr);
-                }
-
-                // IList
-                if (xe is IList<TSource> xl)
-                {
-                    return ListEqualsImpl(xl, ye, cmpr);
+                    return ReadOnlyListEqualsImpl(xrl, ye, cmpr);
                 }
             }
 
             // IEnumerable
-            var equal = System.Linq.Enumerable.SequenceEqual(xe, ye, cmpr);
+            var equal = EnumerableEquals(xe, ye, cmpr);
             return equal;
         }
 
@@ -96,38 +84,38 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // IEnumerable
-            var equal = System.Linq.Enumerable.SequenceEqual(xl, ye, comparer);
+            var equal = EnumerableEquals(xl, ye, comparer);
             return equal;
         }
 
-        private static bool ListEqualsImpl<TSource>(IReadOnlyList<TSource> xr, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        private static bool ReadOnlyListEqualsImpl<TSource>(IReadOnlyList<TSource> xrl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
         {
-            Debug.Assert(xr != null);
+            Debug.Assert(xrl != null);
             Debug.Assert(ye != null);
             Debug.Assert(comparer != null);
 
             // IReadOnlyCollection is more likely
             if (ye is IReadOnlyCollection<TSource> yrc)
             {
-                if (xr.Count != yrc.Count) return false; // (n, m)
-                if (xr.Count == 0) return true; // (0, 0)
+                if (xrl.Count != yrc.Count) return false; // (n, m)
+                if (xrl.Count == 0) return true; // (0, 0)
 
-                var eq = ItemsEqualsImpl(xr, ye, comparer);
+                var eq = ItemsEqualsImpl(xrl, ye, comparer);
                 return eq;
             }
 
             // ICollection
             if (ye is ICollection<TSource> yc)
             {
-                if (xr.Count != yc.Count) return false; // (n, m)
-                if (xr.Count == 0) return true; // (0, 0)
+                if (xrl.Count != yc.Count) return false; // (n, m)
+                if (xrl.Count == 0) return true; // (0, 0)
 
-                var eq = ItemsEqualsImpl(xr, ye, comparer);
+                var eq = ItemsEqualsImpl(xrl, ye, comparer);
                 return eq;
             }
 
             // IEnumerable
-            var equal = System.Linq.Enumerable.SequenceEqual(xr, ye, comparer);
+            var equal = EnumerableEquals(xrl, ye, comparer);
             return equal;
         }
 
@@ -138,12 +126,12 @@ namespace SourceCode.Clay.Collections.Generic
             Debug.Assert(comparer != null);
 
             // IReadOnlyList is more likely
-            if (ye is IReadOnlyList<TSource> yr)
+            if (ye is IReadOnlyList<TSource> yrl)
             {
                 // Check items in sequential order
                 for (var i = 0; i < xl.Count; i++)
                 {
-                    if (!comparer.Equals(xl[i], yr[i])) return false;
+                    if (!comparer.Equals(xl[i], yrl[i])) return false;
                 }
 
                 return true;
@@ -164,19 +152,19 @@ namespace SourceCode.Clay.Collections.Generic
             return false;
         }
 
-        private static bool ItemsEqualsImpl<TSource>(IReadOnlyList<TSource> xr, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
+        private static bool ItemsEqualsImpl<TSource>(IReadOnlyList<TSource> xrl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
         {
-            Debug.Assert(xr != null);
+            Debug.Assert(xrl != null);
             Debug.Assert(ye != null);
             Debug.Assert(comparer != null);
 
             // IReadOnlyList is more likely
-            if (ye is IReadOnlyList<TSource> yr)
+            if (ye is IReadOnlyList<TSource> yrl)
             {
                 // Check items in sequential order
-                for (var i = 0; i < xr.Count; i++)
+                for (var i = 0; i < xrl.Count; i++)
                 {
-                    if (!comparer.Equals(xr[i], yr[i])) return false;
+                    if (!comparer.Equals(xrl[i], yrl[i])) return false;
                 }
 
                 return true;
@@ -186,15 +174,35 @@ namespace SourceCode.Clay.Collections.Generic
             if (ye is IList<TSource> yl)
             {
                 // Check items in sequential order
-                for (var i = 0; i < xr.Count; i++)
+                for (var i = 0; i < xrl.Count; i++)
                 {
-                    if (!comparer.Equals(xr[i], yl[i])) return false;
+                    if (!comparer.Equals(xrl[i], yl[i])) return false;
                 }
 
                 return true;
             }
 
             return false;
+        }
+
+        private static bool EnumerableEquals<TSource>(IEnumerable<TSource> x, IEnumerable<TSource> y, IEqualityComparer<TSource> comparer)
+        {
+            Debug.Assert(x != null);
+            Debug.Assert(y != null);
+            Debug.Assert(comparer != null);
+
+            using (var xe = x.GetEnumerator())
+            using (var ye = y.GetEnumerator())
+            {
+                while (xe.MoveNext())
+                {
+                    if (!ye.MoveNext()) return false;
+
+                    if (!comparer.Equals(xe.Current, ye.Current)) return false;
+                }
+
+                return !ye.MoveNext();
+            }
         }
     }
 }
