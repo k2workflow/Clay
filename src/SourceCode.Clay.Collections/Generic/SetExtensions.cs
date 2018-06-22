@@ -18,36 +18,37 @@ namespace SourceCode.Clay.Collections.Generic
         /// Performs an efficient item-by-item comparison, using a custom <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="x">Set 1</param>
-        /// <param name="y">Set 2</param>
+        /// <param name="xe">Set 1</param>
+        /// <param name="ye">Set 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
-        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> x, IEnumerable<TSource> y, in IEqualityComparer<TSource> comparer = null)
+        public static bool NullableSetEquals<TSource>(this IEnumerable<TSource> xe, IEnumerable<TSource> ye, in IEqualityComparer<TSource> comparer = null)
         {
-            if (x is null) return y is null; // (null, null) or (null, y)
-            if (y is null) return false; // (x, null)
-            if (ReferenceEquals(x, y)) return true; // (x, x)
+            if (xe is null) return ye is null; // (null, null) or (null, y)
+            if (ye is null) return false; // (x, null)
+            if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
             // ICollection is more common
-            if (x is ICollection<TSource> xc)
+            if (xe is ICollection<TSource> xc)
             {
                 var isEqual = CheckCount(xc.Count);
                 if (isEqual.HasValue) return isEqual.Value;
             }
 
             // IReadOnlyCollection
-            else if (x is IReadOnlyCollection<TSource> xrc)
+            else if (xe is IReadOnlyCollection<TSource> xr)
             {
-                var isEqual = CheckCount(xrc.Count);
+                var isEqual = CheckCount(xr.Count);
                 if (isEqual.HasValue) return isEqual.Value;
             }
 
             var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
-            // ISet
-            var xss = new HashSet<TSource>(x, cmpr);
-            var yss = new HashSet<TSource>(y, cmpr);
+            // Build an ISet for each input collection, ensuring the same equality comparer
+            var xss = new HashSet<TSource>(xe, cmpr);
+            var yss = new HashSet<TSource>(ye, cmpr);
 
+            // Use native comparison
             return xss.SetEquals(yss);
 
             // Local functions
@@ -55,16 +56,16 @@ namespace SourceCode.Clay.Collections.Generic
             bool? CheckCount(int xCount)
             {
                 // ICollection is more common
-                if (y is ICollection<TSource> yc)
+                if (ye is ICollection<TSource> yc)
                 {
                     if (xCount != yc.Count) return false; // (n, m)
                     if (xCount == 0) return true; // (0, 0)
                 }
 
                 // IReadOnlyCollection
-                else if (y is IReadOnlyCollection<TSource> yrc)
+                else if (ye is IReadOnlyCollection<TSource> yr)
                 {
-                    if (xCount != yrc.Count) return false; // (n, m)
+                    if (xCount != yr.Count) return false; // (n, m)
                     if (xCount == 0) return true; // (0, 0)
                 }
 

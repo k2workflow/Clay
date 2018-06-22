@@ -32,14 +32,8 @@ namespace SourceCode.Clay.Collections.Generic
 
             var cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
-            // ISet is derived from ICollection
-            if (xe is ISet<TSource> xs)
-            {
-                return SetEqualsImpl(xs, ye, cmpr);
-            }
-
             // ICollection is more common
-            else if (xe is ICollection<TSource> xc)
+            if (xe is ICollection<TSource> xc)
             {
                 // IList is more likely
                 if (xe is IList<TSource> xl)
@@ -72,19 +66,6 @@ namespace SourceCode.Clay.Collections.Generic
 
             // IEnumerable
             var equal = System.Linq.Enumerable.SequenceEqual(xe, ye, cmpr);
-            return equal;
-        }
-
-        private static bool SetEqualsImpl<TSource>(ISet<TSource> xs, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
-        {
-            Debug.Assert(xs != null);
-            Debug.Assert(ye != null);
-            Debug.Assert(comparer != null);
-
-            // Create a new Set regardless, to enforce the comparer
-            var ys = new HashSet<TSource>(ye, comparer);
-
-            var equal = ys.SetEquals(xs);
             return equal;
         }
 
