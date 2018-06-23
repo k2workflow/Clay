@@ -116,8 +116,8 @@ namespace SourceCode.Clay.OpenApi
             if (Options != other.Options) return false;
             if (Style != other.Style) return false;
             if (!Schema.Equals(other.Schema)) return false;
-            if (!Examples.NullableDictionaryEquals(other.Examples)) return false;
-            if (!Content.NullableDictionaryEquals(other.Content)) return false;
+            if (!Examples.NullableDictionaryEqual(other.Examples)) return false;
+            if (!Content.NullableDictionaryEqual(other.Content)) return false;
 
             return true;
         }

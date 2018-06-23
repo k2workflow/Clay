@@ -159,17 +159,17 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (!Tags.NullableSetEquals(other.Tags)) return false;
+            if (!Tags.NullableSetEqual(other.Tags)) return false;
             if (!StringComparer.Ordinal.Equals(Summary, other.Summary)) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
             if (!ExternalDocumentation.NullableEquals(other.ExternalDocumentation)) return false;
             if (!StringComparer.Ordinal.Equals(OperationIdentifier, other.OperationIdentifier)) return false;
-            if (!Parameters.NullableDictionaryEquals(other.Parameters)) return false;
+            if (!Parameters.NullableDictionaryEqual(other.Parameters)) return false;
             if (!RequestBody.Equals(other.RequestBody)) return false;
-            if (!Responses.NullableDictionaryEquals(other.Responses)) return false;
-            if (!Callbacks.NullableDictionaryEquals(other.Callbacks)) return false;
+            if (!Responses.NullableDictionaryEqual(other.Responses)) return false;
+            if (!Callbacks.NullableDictionaryEqual(other.Callbacks)) return false;
             if (Options != other.Options) return false;
-            if (!Security.NullableSetEquals(other.Security)) return false;
+            if (!Security.NullableSetEqual(other.Security)) return false;
             if (!Servers.NullableSequenceEqual(other.Servers)) return false;
 
             return true;

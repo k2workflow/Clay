@@ -134,15 +134,15 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (!Schemas.NullableDictionaryEquals(other.Schemas)) return false;
-            if (!Responses.NullableDictionaryEquals(other.Responses)) return false;
-            if (!Parameters.NullableDictionaryEquals(other.Parameters)) return false;
-            if (!Examples.NullableDictionaryEquals(other.Examples)) return false;
-            if (!RequestBodies.NullableDictionaryEquals(other.RequestBodies)) return false;
-            if (!Headers.NullableDictionaryEquals(other.Headers)) return false;
-            if (!SecuritySchemes.NullableDictionaryEquals(other.SecuritySchemes)) return false;
-            if (!Links.NullableDictionaryEquals(other.Links)) return false;
-            if (!Callbacks.NullableDictionaryEquals(other.Callbacks)) return false;
+            if (!Schemas.NullableDictionaryEqual(other.Schemas)) return false;
+            if (!Responses.NullableDictionaryEqual(other.Responses)) return false;
+            if (!Parameters.NullableDictionaryEqual(other.Parameters)) return false;
+            if (!Examples.NullableDictionaryEqual(other.Examples)) return false;
+            if (!RequestBodies.NullableDictionaryEqual(other.RequestBodies)) return false;
+            if (!Headers.NullableDictionaryEqual(other.Headers)) return false;
+            if (!SecuritySchemes.NullableDictionaryEqual(other.SecuritySchemes)) return false;
+            if (!Links.NullableDictionaryEqual(other.Links)) return false;
+            if (!Callbacks.NullableDictionaryEqual(other.Callbacks)) return false;
 
             return true;
         }

@@ -18,10 +18,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_both_null))]
         public static void DictionaryEquals_both_null()
         {
-            var equal = ((IDictionary<string, string>)null).NullableDictionaryEquals(null);
+            var equal = ((IDictionary<string, string>)null).NullableDictionaryEqual(null);
             Assert.True(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)null).NullableDictionaryEquals(null);
+            equal = ((IReadOnlyDictionary<string, string>)null).NullableDictionaryEqual(null);
             Assert.True(equal);
         }
 
@@ -32,10 +32,10 @@ namespace SourceCode.Clay.Collections.Tests
             var dict1 = new Dictionary<string, string>();
             var dict2 = new Dictionary<string, string>();
 
-            var equal = dict1.NullableDictionaryEquals(dict2);
+            var equal = dict1.NullableDictionaryEqual(dict2);
             Assert.True(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEquals(dict2);
+            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEqual(dict2);
             Assert.True(equal);
         }
 
@@ -47,22 +47,22 @@ namespace SourceCode.Clay.Collections.Tests
             var dict2 = new Dictionary<string, string> { ["HI"] = "HI1" };
             var dict3 = new Dictionary<string, string> { ["bye"] = "bye1" };
 
-            var equal = dict1.NullableDictionaryEquals(dict2);
+            var equal = dict1.NullableDictionaryEqual(dict2);
             Assert.False(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEquals(dict2);
+            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEqual(dict2);
             Assert.False(equal);
 
-            equal = dict1.NullableDictionaryEquals(dict2, StringComparer.OrdinalIgnoreCase);
+            equal = dict1.NullableDictionaryEqual(dict2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEquals(dict2, StringComparer.OrdinalIgnoreCase);
+            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEqual(dict2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = dict1.NullableDictionaryEquals(dict3);
+            equal = dict1.NullableDictionaryEqual(dict3);
             Assert.False(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEquals(dict3);
+            equal = ((IReadOnlyDictionary<string, string>)dict1).NullableDictionaryEqual(dict3);
             Assert.False(equal);
         }
 
@@ -70,10 +70,10 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(DictionaryEquals_one_null))]
         public static void DictionaryEquals_one_null()
         {
-            var equal = TestData.Dict.NullableDictionaryEquals(null);
+            var equal = TestData.Dict.NullableDictionaryEqual(null);
             Assert.False(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEquals(null);
+            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEqual(null);
             Assert.False(equal);
         }
 
@@ -84,10 +84,10 @@ namespace SourceCode.Clay.Collections.Tests
             var dict2 = new Dictionary<string, string>(TestData.Dict);
             dict2.Remove("foo");
 
-            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEqual(dict2);
             Assert.False(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEquals(dict2);
+            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEqual(dict2);
             Assert.False(equal);
         }
 
@@ -97,10 +97,10 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var dict2 = new Dictionary<string, string>(TestData.Dict);
 
-            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEqual(dict2);
             Assert.True(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEquals(dict2);
+            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEqual(dict2);
             Assert.True(equal);
         }
 
@@ -113,10 +113,10 @@ namespace SourceCode.Clay.Collections.Tests
                 ["xyz"] = "xyz1"
             };
 
-            var equal = TestData.Dict.NullableDictionaryEquals(dict2);
+            var equal = TestData.Dict.NullableDictionaryEqual(dict2);
             Assert.False(equal);
 
-            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEquals(dict2);
+            equal = ((IReadOnlyDictionary<string, string>)TestData.Dict).NullableDictionaryEqual(dict2);
             Assert.False(equal);
         }
     }

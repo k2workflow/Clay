@@ -231,14 +231,14 @@ namespace SourceCode.Clay.OpenApi
             if (!StringComparer.Ordinal.Equals(Title, other.Title)) return false;
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
             if (!StringComparer.Ordinal.Equals(Pattern, other.Pattern)) return false;
-            if (!Enum.NullableSetEquals(other.Enum)) return false;
-            if (!AllOf.NullableSetEquals(other.AllOf)) return false;
-            if (!OneOf.NullableSetEquals(other.OneOf)) return false;
-            if (!AnyOf.NullableSetEquals(other.AnyOf)) return false;
-            if (!Not.NullableSetEquals(other.Not)) return false;
+            if (!Enum.NullableSetEqual(other.Enum)) return false;
+            if (!AllOf.NullableSetEqual(other.AllOf)) return false;
+            if (!OneOf.NullableSetEqual(other.OneOf)) return false;
+            if (!AnyOf.NullableSetEqual(other.AnyOf)) return false;
+            if (!Not.NullableSetEqual(other.Not)) return false;
             if (Items != other.Items) return false;
-            if (!Properties.NullableDictionaryEquals(other.Properties)) return false;
-            if (!AdditionalProperties.NullableDictionaryEquals(other.AdditionalProperties)) return false;
+            if (!Properties.NullableDictionaryEqual(other.Properties)) return false;
+            if (!AdditionalProperties.NullableDictionaryEqual(other.AdditionalProperties)) return false;
 
             return true;
         }

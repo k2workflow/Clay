@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_both_null))]
         public static void SetEquals_both_null()
         {
-            var equal = ((HashSet<string>)null).NullableSetEquals(null);
+            var equal = ((HashSet<string>)null).NullableSetEqual(null);
             Assert.True(equal);
         }
 
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set1 = new HashSet<string>();
             var set2 = new HashSet<string>();
 
-            var equal = set1.NullableSetEquals(set2);
+            var equal = set1.NullableSetEqual(set2);
             Assert.True(equal);
         }
 
@@ -41,10 +41,10 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string> { "HI" };
             var set3 = new HashSet<string> { "bye" };
 
-            var equal = set1.NullableSetEquals(set2, StringComparer.OrdinalIgnoreCase);
+            var equal = set1.NullableSetEqual(set2, StringComparer.OrdinalIgnoreCase);
             Assert.True(equal);
 
-            equal = set1.NullableSetEquals(set3, StringComparer.OrdinalIgnoreCase);
+            equal = set1.NullableSetEqual(set3, StringComparer.OrdinalIgnoreCase);
             Assert.False(equal);
         }
 
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_one_null))]
         public static void SetEquals_one_null()
         {
-            var equal = TestData.Set.NullableSetEquals(null);
+            var equal = TestData.Set.NullableSetEqual(null);
             Assert.False(equal);
         }
 
@@ -63,7 +63,7 @@ namespace SourceCode.Clay.Collections.Tests
             var set2 = new HashSet<string>(TestData.Set);
             set2.Remove("foo");
 
-            var equal = TestData.Set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEqual(set2);
             Assert.False(equal);
         }
 
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Collections.Tests
         {
             var set2 = new HashSet<string>(TestData.Set);
 
-            var equal = TestData.Set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEqual(set2);
             Assert.True(equal);
         }
 
@@ -86,7 +86,7 @@ namespace SourceCode.Clay.Collections.Tests
                 "xyz"
             };
 
-            var equal = TestData.Set.NullableSetEquals(set2);
+            var equal = TestData.Set.NullableSetEqual(set2);
             Assert.False(equal);
         }
 
@@ -102,10 +102,10 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSetEqual(set, StringComparer.Ordinal);
             Assert.False(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(set, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEqual(set, StringComparer.Ordinal);
             Assert.False(equal);
         }
 
@@ -121,16 +121,16 @@ namespace SourceCode.Clay.Collections.Tests
                 TestData.List[0]
             };
 
-            var equal = ((ICollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.List).NullableSetEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.List).NullableSetEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IList<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IList<string>)TestData.List).NullableSetEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyList<string>)TestData.List).NullableSetEquals(list2, StringComparer.Ordinal);
+            equal = ((IReadOnlyList<string>)TestData.List).NullableSetEqual(list2, StringComparer.Ordinal);
             Assert.True(equal);
         }
 
@@ -138,16 +138,16 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(SetEquals_is_equal_duplicates))]
         public static void SetEquals_is_equal_duplicates()
         {
-            var equal = ((ICollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            var equal = ((ICollection<string>)TestData.Dupe1).NullableSetEqual(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyCollection<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            equal = ((IReadOnlyCollection<string>)TestData.Dupe1).NullableSetEqual(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            equal = ((IList<string>)TestData.Dupe1).NullableSetEqual(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
 
-            equal = ((IReadOnlyList<string>)TestData.Dupe1).NullableSetEquals(TestData.Dupe2, StringComparer.Ordinal);
+            equal = ((IReadOnlyList<string>)TestData.Dupe1).NullableSetEqual(TestData.Dupe2, StringComparer.Ordinal);
             Assert.True(equal);
         }
     }

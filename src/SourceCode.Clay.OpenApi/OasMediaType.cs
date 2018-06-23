@@ -89,8 +89,8 @@ namespace SourceCode.Clay.OpenApi
             if (ReferenceEquals(this, other)) return true;
 
             if (!Schema.Equals(other.Schema)) return false;
-            if (!Examples.NullableDictionaryEquals(other.Examples)) return false;
-            if (!Encoding.NullableDictionaryEquals(other.Encoding)) return false;
+            if (!Examples.NullableDictionaryEqual(other.Examples)) return false;
+            if (!Encoding.NullableDictionaryEqual(other.Encoding)) return false;
 
             return true;
         }

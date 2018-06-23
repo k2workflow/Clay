@@ -89,7 +89,7 @@ namespace SourceCode.Clay.OpenApi
             if (ReferenceEquals(this, other)) return true;
 
             if (!StringComparer.Ordinal.Equals(Description, other.Description)) return false;
-            if (!Content.NullableDictionaryEquals(other.Content)) return false;
+            if (!Content.NullableDictionaryEqual(other.Content)) return false;
             if (Options != other.Options) return false;
 
             return true;

@@ -112,7 +112,7 @@ namespace SourceCode.Clay.OpenApi
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (!this.NullableDictionaryEquals(other)) return false;
+            if (!this.NullableDictionaryEqual(other)) return false;
 
             return true;
         }
