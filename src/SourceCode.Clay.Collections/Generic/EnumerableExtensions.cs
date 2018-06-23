@@ -34,28 +34,77 @@ namespace SourceCode.Clay.Collections.Generic
             // If both are some kind of collection
             if (BothAreCollections(xe, ye, out var xCount, out var yCount))
             {
-                // Then we can immediately compare counts
+                // Then we can short-circuit on counts
                 if (xCount != yCount) return false; // (n, m)
                 if (xCount == 0) return true; // (0, 0)
 
                 // IList is more common
                 if (xe is IList<TSource> xl)
                 {
-                    var eq = MembersEqual(xl, ye, cmpr);
-                    return eq;
+                    // IList is more likely
+                    if (ye is IList<TSource> yl)
+                    {
+                        for (var i = 0; i < xl.Count; i++)
+                            if (!cmpr.Equals(xl[i], yl[i]))
+                                return false;
+
+                        return true;
+                    }
+
+                    // IReadOnlyList
+                    if (ye is IReadOnlyList<TSource> yrl)
+                    {
+                        var eq = ListEqualsLedger(xl, yrl);
+                        return eq;
+                    }
                 }
 
                 // IReadOnlyList
                 else if (xe is IReadOnlyList<TSource> xrl)
                 {
-                    var eq = MembersEqual(xrl, ye, cmpr);
-                    return eq;
+                    // IReadOnlyList is more likely
+                    if (ye is IReadOnlyList<TSource> yrl)
+                    {
+                        for (var i = 0; i < xrl.Count; i++)
+                            if (!cmpr.Equals(xrl[i], yrl[i]))
+                                return false;
+
+                        return true;
+                    }
+
+                    // IList
+                    if (ye is IList<TSource> yl)
+                    {
+                        var eq = ListEqualsLedger(yl, xrl);
+                        return eq;
+                    }
                 }
             }
 
             // Else resort to an IEnumerable comparison
-            var equal = EnumerableEqual(xe, ye, cmpr);
-            return equal;
+            using (var xi = xe.GetEnumerator())
+            using (var yi = ye.GetEnumerator())
+            {
+                while (xi.MoveNext())
+                {
+                    if (!yi.MoveNext()) return false;
+
+                    if (!cmpr.Equals(xi.Current, yi.Current)) return false;
+                }
+
+                return !yi.MoveNext();
+            }
+
+            // Local functions
+
+            bool ListEqualsLedger(IList<TSource> l1, IReadOnlyList<TSource> l2)
+            {
+                for (var i = 0; i < l1.Count; i++)
+                    if (!cmpr.Equals(l1[i], l2[i]))
+                        return false;
+
+                return true;
+            }
         }
 
         /// <summary>
@@ -84,96 +133,6 @@ namespace SourceCode.Clay.Collections.Generic
             xCount = 0;
             yCount = 0;
             return false;
-        }
-
-        /// <summary>
-        /// Check equality by iterating through two lists and comparing colocated members.
-        /// </summary>
-        /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="xl">Input 1</param>
-        /// <param name="ye">Input 2</param>
-        /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
-        private static bool MembersEqual<TSource>(IList<TSource> xl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
-        {
-            // IList is more likely
-            if (ye is IList<TSource> yl)
-            {
-                for (var i = 0; i < xl.Count; i++)
-                    if (!comparer.Equals(xl[i], yl[i]))
-                        return false;
-
-                return true;
-            }
-
-            // IReadOnlyList
-            if (ye is IReadOnlyList<TSource> yrl)
-            {
-                for (var i = 0; i < xl.Count; i++)
-                    if (!comparer.Equals(xl[i], yrl[i]))
-                        return false;
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Check equality by iterating through two lists and comparing colocated members.
-        /// </summary>
-        /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="xrl">Input 1</param>
-        /// <param name="ye">Input 2</param>
-        /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
-        private static bool MembersEqual<TSource>(IReadOnlyList<TSource> xrl, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
-        {
-            // IReadOnlyList is more likely
-            if (ye is IReadOnlyList<TSource> yrl)
-            {
-                for (var i = 0; i < xrl.Count; i++)
-                    if (!comparer.Equals(xrl[i], yrl[i]))
-                        return false;
-
-                return true;
-            }
-
-            // IList
-            if (ye is IList<TSource> yl)
-            {
-                for (var i = 0; i < xrl.Count; i++)
-                    if (!comparer.Equals(xrl[i], yl[i]))
-                        return false;
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Check equality by enumerating two sequences and comparing colocated members.
-        /// </summary>
-        /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="xe">Input 1</param>
-        /// <param name="ye">Input 2</param>
-        /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
-        private static bool EnumerableEqual<TSource>(IEnumerable<TSource> xe, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer)
-        {
-            using (var xi = xe.GetEnumerator())
-            using (var yi = ye.GetEnumerator())
-            {
-                while (xi.MoveNext())
-                {
-                    if (!yi.MoveNext()) return false;
-
-                    if (!comparer.Equals(xi.Current, yi.Current)) return false;
-                }
-
-                return !yi.MoveNext();
-            }
         }
     }
 }

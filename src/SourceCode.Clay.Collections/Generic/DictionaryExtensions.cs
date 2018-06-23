@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Collections.Generic
             // If both are some kind of collection
             if (EnumerableExtensions.BothAreCollections(xe, ye, out var xCount, out var yCount))
             {
-                // Then we can immediately compare counts
+                // Then we can short-circuit on counts
                 if (xCount != yCount) return false; // (n, m)
                 if (xCount == 0) return true; // (0, 0)
 
