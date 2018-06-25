@@ -5,13 +5,29 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace SourceCode.Clay.Algorithms.Tests
 {
     public class GraphTests
     {
+        private sealed class SetEqualityComparer<T> : IEqualityComparer<ISet<T>>
+        {
+            public static IEqualityComparer<ISet<T>> Default { get; } = new SetEqualityComparer<T>();
+
+            public bool Equals(ISet<T> x, ISet<T> y)
+            {
+                if (x is null && y is null) return true;
+                if (x is null || y is null) return false;
+                return x.IsSupersetOf(y) && y.IsSupersetOf(x);
+            }
+
+            public int GetHashCode(ISet<T> obj) => obj == null ? 0 : HashCode.Combine(obj.Count);
+        }
+
         private static void AssertSetEqual<T>(HashSet<T> expected, HashSet<T> actual)
         {
             foreach (var item in expected)
@@ -121,6 +137,69 @@ namespace SourceCode.Clay.Algorithms.Tests
 
             AssertSetEqual(expectedCycles, actualCycles);
             AssertSetEqual(expectedTrees, actualTrees);
+        }
+
+        [Fact(DisplayName = nameof(Graph_Tarjan_Scenario1))]
+        public void Graph_Tarjan_Scenario1()
+        {
+            /*
+                /--\  /--\           /--\
+                |00+-->01<-------\---+11|
+                \--/  \+-/       |   \--/
+                       |         |
+                /--\  /v-\  /--\ |
+                |03<--+02+-->04| |
+                \-+/  \+-/  \+-/ |
+                  |    |     |   |
+                  |   /v-\   |   |
+                  \--->05<---/   |   /--\
+                      \-++-------/--->12|
+                        |            \--/
+                      /-v\
+                      |06|
+                      \-+/
+                /--\    |   /--\  /--\
+                |07<----+--->08<--+10|
+                \-+/        \+-/  \--/
+                  |   /--\   |
+                  \--->09<---/
+                      \--/
+            */
+
+            var g = Graph.Create<int>();
+            g.Add(00, 01);
+            g.Add(01, 02);
+            g.Add(02, 03);
+            g.Add(02, 04);
+            g.Add(02, 05);
+            g.Add(03, 05);
+            g.Add(04, 05);
+            g.Add(05, 01);
+            g.Add(05, 06);
+            g.Add(05, 12);
+            g.Add(06, 07);
+            g.Add(06, 08);
+            g.Add(07, 09);
+            g.Add(08, 09);
+            g.Add(10, 08);
+            g.Add(11, 01);
+
+            var actual = g.Tarjan().Select(x => new HashSet<int>(x)).ToList();
+
+            var expected = new List<HashSet<int>>()
+            {
+                new HashSet<int>() { 9 },
+                new HashSet<int>() { 7 },
+                new HashSet<int>() { 8 },
+                new HashSet<int>() { 6 },
+                new HashSet<int>() { 12 },
+                new HashSet<int>() { 1, 2, 3, 4, 5 },
+                new HashSet<int>() { 0 },
+                new HashSet<int>() { 10 },
+                new HashSet<int>() { 11 },
+            };
+
+            Assert.Equal(expected, actual, SetEqualityComparer<int>.Default);
         }
     }
 }
