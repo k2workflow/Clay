@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph.Create<int>();
+            var g = Graph.Create<int>(12);
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);
@@ -166,7 +166,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph.Create<int>();
+            var g = Graph.Create<int>(12);
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);

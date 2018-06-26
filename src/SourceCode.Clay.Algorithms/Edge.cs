@@ -21,16 +21,12 @@ namespace SourceCode.Clay.Algorithms
 
         public T To { get; }
 
-        public Edge(T from, T to, IEqualityComparer<T> equalityComparer)
+        public Edge(T from, T to, IEqualityComparer<T> equalityComparer = null)
         {
             From = from;
             To = to;
             _equalityComparer = equalityComparer ?? EqualityComparer<T>.Default;
         }
-
-        public Edge(T from, T to)
-            : this(from, to, null)
-        { }
 
         public override string ToString() => $"{From} -> {To}";
 

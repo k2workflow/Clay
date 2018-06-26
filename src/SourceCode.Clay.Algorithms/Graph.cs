@@ -14,9 +14,8 @@ namespace SourceCode.Clay.Algorithms
 {
     public static class Graph
     {
-        public static Graph<T> Create<T>(IEqualityComparer<T> equalityComparer) => new Graph<T>(equalityComparer);
-
-        public static Graph<T> Create<T>() => Create<T>(null);
+        public static Graph<T> Create<T>(int capacity, IEqualityComparer<T> equalityComparer = null) 
+            => new Graph<T>(capacity, equalityComparer);
     }
 
 #pragma warning disable CA1815
@@ -31,15 +30,11 @@ namespace SourceCode.Clay.Algorithms
 
         public Graph(int capacity, IEqualityComparer<T> equalityComparer)
         {
-            if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+            if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
 
             _equalityComparer = equalityComparer ?? EqualityComparer<T>.Default;
             _nodes = new ConcurrentDictionary<T, Node>(1, capacity, _equalityComparer);
         }
-
-        public Graph(IEqualityComparer<T> equalityComparer)
-            : this(1000, equalityComparer)
-        { }
 
         public void Add(T from, T to)
         {
