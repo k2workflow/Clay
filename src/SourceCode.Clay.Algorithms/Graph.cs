@@ -49,11 +49,11 @@ namespace SourceCode.Clay.Algorithms
 
             fromState.Edges.TryAdd(to, EdgeOptions.None);
             _nodes[to] = GetOrAdd(to).SetOptions(add: NodeOptions.Descendant);
-
-            Node GetOrAdd(T key) => nodes.GetOrAdd(key, CreateValue);
-
-            Node CreateValue(T key) => new Node();
         }
+
+        private Node GetOrAdd(T key) => _nodes.GetOrAdd(key, CreateValue);
+
+        private static Node CreateValue(T key) => new Node();
     }
 
 #pragma warning restore CA1815

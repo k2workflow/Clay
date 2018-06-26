@@ -16,7 +16,7 @@ using System.Text;
 namespace SourceCode.Clay.Algorithms
 {
     [DebuggerDisplay("{HierarchyPath,nq} {Node}")]
-    public readonly struct TreeNode<T> : IEquatable<TreeNode<T>>, IStructuralEquatable
+    public readonly struct TreeNode<T> : IEquatable<TreeNode<T>>
     {
         private readonly IEqualityComparer<T> _equalityComparer;
 
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Algorithms
         {
             Hierarchy = hierarchy ?? throw new ArgumentNullException(nameof(hierarchy));
             Node = node;
-            _equalityComparer = equalityComparer ?? EqualityComparer<T>.Default;
+            _equalityComparer = equalityComparer; // No point coalescing in a struct
         }
 
         public TreeNode(T node, IEqualityComparer<T> equalityComparer, params int[] hierarchy)
@@ -58,10 +58,14 @@ namespace SourceCode.Clay.Algorithms
             : this(node, null, (IReadOnlyList<int>)hierarchy)
         { }
 
-        public TreeNode<T> Clone() 
-            => Hierarchy is null ? 
-            default : 
-            new TreeNode<T>(Node, _equalityComparer, Hierarchy.ToArray()); // Clone via ToArray
+        public TreeNode<T> Clone()
+        {
+            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+
+            return Hierarchy is null ?
+                   default :
+                   new TreeNode<T>(Node, equalityComparer, Hierarchy.ToArray()); // Use ToArray as a vehicle for cloning
+        }
 
         public override string ToString() => $"{HierarchyPath} {Node}";
 
@@ -75,9 +79,12 @@ namespace SourceCode.Clay.Algorithms
             if (other.Hierarchy is null) return false;
 
             if (Hierarchy.Count != other.Hierarchy.Count) return false;
-            if (!_equalityComparer.Equals(Node, other.Node)) return false;
 
-            for (var i = 0; i < Hierarchy.Count; i++)
+            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            if (!equalityComparer.Equals(Node, other.Node)) return false;
+
+            // Hierarchies have a greater probability of being different starting from the end.
+            for (var i = Hierarchy.Count - 1; i >= 0; i--)
             {
                 if (Hierarchy[i] != other.Hierarchy[i]) return false;
             }
@@ -89,7 +96,8 @@ namespace SourceCode.Clay.Algorithms
         {
             var hashCode = -1781160927;
 
-            hashCode = hashCode * -1521134295 + _equalityComparer.GetHashCode(Node);
+            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            hashCode = hashCode * -1521134295 + equalityComparer.GetHashCode(Node);
 
             if (Hierarchy != null)
             {
@@ -109,19 +117,5 @@ namespace SourceCode.Clay.Algorithms
 
         public static bool operator !=(TreeNode<T> node1, TreeNode<T> node2) 
             => !(node1 == node2);
-
-        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
-        {
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
-            var hashCode = -1781160927;
-            hashCode = hashCode * -1521134295 + comparer.GetHashCode(Node);
-            hashCode = hashCode * -1521134295 + comparer.GetHashCode(Hierarchy);
-            return hashCode;
-        }
-
-        bool IStructuralEquatable.Equals(object other, IEqualityComparer comparer)
-            => other is TreeNode<T> e
-            && (comparer ?? throw new ArgumentNullException(nameof(comparer))).Equals(Node, e.Node)
-            && comparer.Equals(Hierarchy, e.Hierarchy);
     }
 }
