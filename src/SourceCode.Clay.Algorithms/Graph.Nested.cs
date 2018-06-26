@@ -12,26 +12,26 @@ using System.Diagnostics;
 
 namespace SourceCode.Clay.Algorithms
 {
-    public partial struct Graph<T>
+    partial struct Graph<T> // .Nested
     {
         [Flags]
         private enum EdgeOptions : byte
         {
-            None = 0b0000_0000,
-            FindExitsExecuted = 0b0001_0000
+            None = 0b_0000_0000,
+            FindExitsExecuted = 0b_0001_0000
         }
 
         [Flags]
         private enum NodeOptions : byte
         {
-            None = 0b0000_0000,
-            Descendant = 0b0000_0001,
-            OnStack = 0b0000_0010,
+            None = 0b_0000_0000,
+            Descendant = 0b_0000_0001,
+            OnStack = 0b_0000_0010,
 
-            StrongConnectExecuted = 0b0001_0000,
+            StrongConnectExecuted = 0b_0001_0000,
         }
 
-        [DebuggerDisplay("Cycle={Cycle} Count={Edges.Count}")]
+        [DebuggerDisplay("Cycle={Cycle,ac} Count={Edges.Count,ac}")]
         private struct Node
         {
             public ConcurrentDictionary<T, EdgeOptions> Edges;

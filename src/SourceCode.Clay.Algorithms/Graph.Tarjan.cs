@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SourceCode.Clay.Algorithms
 {
-    partial struct Graph<T>
+    partial struct Graph<T> // .Tarjan
     {
         public IReadOnlyList<IReadOnlyList<T>> Tarjan()
         {
@@ -51,6 +50,7 @@ namespace SourceCode.Clay.Algorithms
                 if (vstate.LowLink == vstate.Index)
                 {
                     var cycle = new List<T>();
+
                     T w;
                     do
                     {
@@ -64,6 +64,7 @@ namespace SourceCode.Clay.Algorithms
 
                         cycle.Add(w);
                     } while (!equalityComparer.Equals(v, w));
+
                     result.Add(cycle);
                 }
             }

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Algorithms.Tests
 {
-    public class GraphTests
+    public static class GraphTests
     {
         private sealed class SetEqualityComparer<T> : IEqualityComparer<ISet<T>>
         {
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         }
 
         [Fact(DisplayName = nameof(Graph_ToRepresentativeForest_Scenario1))]
-        public void Graph_ToRepresentativeForest_Scenario1()
+        public static void Graph_ToRepresentativeForest_Scenario1()
         {
             /*
                 /--\  /--\           /--\
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph.Create<int>();
+            var g = Graph.Create<int>(12);
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         }
 
         [Fact(DisplayName = nameof(Graph_Tarjan_Scenario1))]
-        public void Graph_Tarjan_Scenario1()
+        public static void Graph_Tarjan_Scenario1()
         {
             /*
                 /--\  /--\           /--\
@@ -166,7 +166,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                       \--/
             */
 
-            var g = Graph.Create<int>();
+            var g = Graph.Create<int>(12);
             g.Add(00, 01);
             g.Add(01, 02);
             g.Add(02, 03);
