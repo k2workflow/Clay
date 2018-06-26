@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,12 +29,17 @@ namespace SourceCode.Clay.Algorithms
         private readonly ConcurrentDictionary<T, Node> _nodes;
         private readonly IEqualityComparer<T> _equalityComparer;
 
-        public Graph(IEqualityComparer<T> equalityComparer)
+        public Graph(int capacity, IEqualityComparer<T> equalityComparer)
         {
-            if (equalityComparer == null) equalityComparer = EqualityComparer<T>.Default;
-            _equalityComparer = equalityComparer;
-            _nodes = new ConcurrentDictionary<T, Node>(1, 1000, equalityComparer);
+            if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+
+            _equalityComparer = equalityComparer ?? EqualityComparer<T>.Default;
+            _nodes = new ConcurrentDictionary<T, Node>(1, capacity, _equalityComparer);
         }
+
+        public Graph(IEqualityComparer<T> equalityComparer)
+            : this(1000, equalityComparer)
+        { }
 
         public void Add(T from, T to)
         {
