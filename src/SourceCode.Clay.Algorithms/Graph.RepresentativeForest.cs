@@ -10,9 +10,8 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Algorithms
 {
-    public partial struct Graph<T>
+    partial struct Graph<T> // .RepresentativeForest
     {
-        
         public void ToRepresentativeForest(Action<Edge<T>> onCycle, Action<TreeNode<T>> onTreeNode)
         {
             if (onCycle == null) throw new ArgumentNullException(nameof(onCycle));
@@ -20,6 +19,7 @@ namespace SourceCode.Clay.Algorithms
             if (_nodes == null) throw new InvalidOperationException();
             if (_nodes.Count == 0) return;
 
+            // Capture
             var nodes = _nodes;
             var equalityComparer = _equalityComparer;
 
@@ -143,12 +143,13 @@ namespace SourceCode.Clay.Algorithms
 
             // Traverse exit nodes to find trees.
             var hierarchy = new List<int> { 0 };
+
             void FindTrees(T v, Node vstate)
             {
                 // We don't need to check epoch, as StrongConnect and FindExits have created an
                 // acyclic graph.
 
-                onTreeNode(new TreeNode<T>(v, hierarchy));
+                onTreeNode(new TreeNode<T>(v, equalityComparer, hierarchy));
 
                 if (vstate.Exits == null) return;
 

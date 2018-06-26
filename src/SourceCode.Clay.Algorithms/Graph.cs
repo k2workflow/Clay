@@ -7,6 +7,7 @@
 
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SourceCode.Clay.Algorithms
 {
@@ -21,14 +22,11 @@ namespace SourceCode.Clay.Algorithms
 
     // Override equals and operator equals on value types
     // No best-fit implementation
+    [DebuggerDisplay("{_nodes.Count,ac}")]
     public readonly partial struct Graph<T>
     {
         private readonly ConcurrentDictionary<T, Node> _nodes;
         private readonly IEqualityComparer<T> _equalityComparer;
-
-        private static Node CreateValue(T key) => new Node();
-
-        private Node GetOrAdd(T key) => _nodes.GetOrAdd(key, CreateValue);
 
         public Graph(IEqualityComparer<T> equalityComparer)
         {
@@ -39,6 +37,8 @@ namespace SourceCode.Clay.Algorithms
 
         public void Add(T from, T to)
         {
+            var nodes = _nodes;
+
             var fromState = GetOrAdd(from);
             if (fromState.Edges == null)
             {
@@ -48,6 +48,10 @@ namespace SourceCode.Clay.Algorithms
 
             fromState.Edges.TryAdd(to, EdgeOptions.None);
             _nodes[to] = GetOrAdd(to).SetOptions(add: NodeOptions.Descendant);
+
+            Node GetOrAdd(T key) => nodes.GetOrAdd(key, CreateValue);
+
+            Node CreateValue(T key) => new Node();
         }
     }
 
