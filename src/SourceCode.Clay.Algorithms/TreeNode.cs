@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -63,8 +62,8 @@ namespace SourceCode.Clay.Algorithms
             var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
 
             return Hierarchy is null ?
-                   default :
-                   new TreeNode<T>(Node, equalityComparer, Hierarchy.ToArray()); // Use ToArray as a vehicle for cloning
+                default :
+                new TreeNode<T>(Node, equalityComparer, Hierarchy.ToArray()); // Use ToArray as a vehicle for cloning
         }
 
         public override string ToString() => $"{HierarchyPath} {Node}";
@@ -83,7 +82,7 @@ namespace SourceCode.Clay.Algorithms
             var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
             if (!equalityComparer.Equals(Node, other.Node)) return false;
 
-            // Hierarchies have a greater probability of being different starting from the end.
+            // Hierarchies have a greater probability of being different starting from the end
             for (var i = Hierarchy.Count - 1; i >= 0; i--)
             {
                 if (Hierarchy[i] != other.Hierarchy[i]) return false;
@@ -102,7 +101,10 @@ namespace SourceCode.Clay.Algorithms
             if (Hierarchy != null)
             {
                 hashCode = hashCode * -1521134295 + Hierarchy.Count;
+
                 var step = Math.Max(1, Hierarchy.Count / 10);
+
+                // Hierarchies have a greater probability of being different starting from the end
                 for (var i = Hierarchy.Count - 1; i >= 0; i -= step)
                 {
                     hashCode = hashCode * -1521134295 + Hierarchy[i].GetHashCode();
