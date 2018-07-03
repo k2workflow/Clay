@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Algorithms
 {
     public static class Graph
     {
-        public static Graph<T> Create<T>(int capacity, IEqualityComparer<T> equalityComparer = null) 
+        public static Graph<T> Create<T>(int capacity, IEqualityComparer<T> equalityComparer = null)
             => new Graph<T>(capacity, equalityComparer);
     }
 

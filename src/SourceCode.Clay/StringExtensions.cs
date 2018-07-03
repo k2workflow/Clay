@@ -7,6 +7,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace SourceCode.Clay
 {
@@ -54,9 +55,9 @@ namespace SourceCode.Clay
         /// <summary>
         /// Truncates a string to a specified width, respecting surrogate pairs and inserting
         /// an ellipsis '…' in the final position.
-        /// Tolerates width values that are too large or too small (or negative).
+        /// Tolerates width values that are too large, too small or negative.
         /// If the value is already smaller than the specified width, the original value is returned.
-        /// Note that if the target character is in a surrogate pair then the pair is treated atomically.
+        /// If the character at the elided boundary is in a surrogate pair then the pair is treated atomically.
         /// In this case the result may be shorter than specified.
         /// </summary>
         /// <param name="str">The string.</param>
@@ -64,39 +65,42 @@ namespace SourceCode.Clay
         /// <returns>The elided string.</returns>
         public static string Elide(this string str, int totalWidth)
         {
-            if (str == null || totalWidth <= 2 || str.Length <= totalWidth) return str;
+            // No need to elide if string is already within the required size
+            if (str == null || totalWidth <= 2 || str.Length <= totalWidth)
+                return str;
 
             // Since Elide is expected to be used primarily for display purposes, it needs to respect
             // surrogate pairs and not blindly split them in half.
             // https://stackoverflow.com/questions/2241348/what-is-unicode-utf-8-utf-16
             // https://stackoverflow.com/questions/14347799/how-do-i-create-a-string-with-a-surrogate-pair-inside-of-it
 
-            var ca = str.ToCharArray();
-
             // Expect non-surrogates by default
-            var n = 0;
+            var len = totalWidth;
+            var last = len - 1;
 
-            // High|Low (default on x86/x64)
+            // High | Low (default on x86/x64)
             if (BitConverter.IsLittleEndian)
             {
                 // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsLowSurrogate(ca[totalWidth - 1]))
-                    n = 1;
+                if (char.IsLowSurrogate(str[last]))
+                    len = last;
 
                 // If it's the HIGH surrogate, we're replacing it regardless
             }
-            // Low|High
+
+            // Low | High
             else
             {
                 // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsHighSurrogate(ca[totalWidth - 1]))
-                    n = 1;
+                if (char.IsHighSurrogate(str[last]))
+                    len = last;
 
                 // If it's the LOW surrogate, we're replacing it regardless
             }
 
-            ca[totalWidth - n - 1] = '…';
-            return new string(ca, 0, totalWidth - n);
+            var sb = new StringBuilder(str, 0, len, len);
+            sb[len - 1] = '…';
+            return sb.ToString();
         }
 
         /// <summary>

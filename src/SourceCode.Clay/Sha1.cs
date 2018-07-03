@@ -10,6 +10,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
@@ -49,6 +50,8 @@ namespace SourceCode.Clay
         /// The zeroes <see cref="Sha1"/>.
         /// </value>
         public static ref readonly Sha1 Zero => ref _zero;
+
+        private static readonly Sha1 _empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& fixed byte would require unsafe)
@@ -101,6 +104,19 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
+        /// Hashes the specified bytes.
+        /// </summary>
+        /// <param name="span">The bytes to hash.</param>
+        /// <returns></returns>
+        public static Sha1 Hash(in ReadOnlySpan<byte> span)
+        {
+            if (span.Length == 0) return _empty;
+
+            var sha1 = HashImpl(span);
+            return sha1;
+        }
+
+        /// <summary>
         /// Hashes the specified value using utf8 encoding.
         /// </summary>
         /// <param name="value">The string to hash.</param>
@@ -108,20 +124,27 @@ namespace SourceCode.Clay
         public static Sha1 Hash(in string value)
         {
             if (value == null) return Zero;
-            // Note that length=0 should not short-circuit
+            if (value.Length == 0) return _empty;
 
             // Rent buffer
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
+            maxLen = Math.Max(maxLen, Environment.SystemPageSize);
             var rented = ArrayPool<byte>.Shared.Rent(maxLen);
-            var count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
 
-            var hash = _sha1.Value.ComputeHash(rented, 0, count);
-            var sha1 = new Sha1(hash);
+            try
+            {
+                var count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
 
-            // Return buffer
-            ArrayPool<byte>.Shared.Return(rented);
+                var span = new ReadOnlySpan<byte>(rented, 0, count);
 
-            return sha1;
+                var sha1 = HashImpl(span);
+                return sha1;
+            }
+            finally
+            {
+                // Return buffer
+                ArrayPool<byte>.Shared.Return(rented);
+            }
         }
 
         /// <summary>
@@ -132,51 +155,31 @@ namespace SourceCode.Clay
         public static Sha1 Hash(in byte[] bytes)
         {
             if (bytes == null) return Zero;
-            // Note that length=0 should not short-circuit
+            if (bytes.Length == 0) return _empty;
 
-            var hash = _sha1.Value.ComputeHash(bytes); // TODO: Convert method signature to Span once ComputeHash supports Span
+            var span = new ReadOnlySpan<byte>(bytes);
 
-            var sha1 = new Sha1(hash);
+            var sha1 = HashImpl(span);
             return sha1;
         }
 
         /// <summary>
-        /// Hashes the specified bytes, starting at the specified offset and count.
+        /// Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
-        /// <param name="offset">The offset.</param>
-        /// <param name="count">The count.</param>
+        /// <param name="start">The offset.</param>
+        /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes, int offset, int count)
+        public static Sha1 Hash(in byte[] bytes, int start, int length)
         {
             if (bytes == null) return Zero;
-            // Note that length=0 should not short-circuit
 
-            if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+            // Do this first to check validity of start/length
+            var span = new ReadOnlySpan<byte>(bytes, start, length);
 
-            if (offset < 0 || offset + count > bytes.Length)
-                throw new ArgumentOutOfRangeException(nameof(offset));
+            if (length == 0) return _empty;
 
-            var hash = _sha1.Value.ComputeHash(bytes, offset, count);
-
-            var sha1 = new Sha1(hash);
-            return sha1;
-        }
-
-        /// <summary>
-        /// Hashes the specified bytes.
-        /// </summary>
-        /// <param name="bytes">The bytes to hash.</param>
-        /// <returns></returns>
-        public static Sha1 Hash(in ArraySegment<byte> bytes)
-        {
-            if (bytes.Array == null) return Zero;
-            // Note that length=0 should not short-circuit
-
-            var hash = _sha1.Value.ComputeHash(bytes.Array, bytes.Offset, bytes.Count);
-
-            var sha1 = new Sha1(hash);
+            var sha1 = HashImpl(span);
             return sha1;
         }
 
@@ -188,9 +191,21 @@ namespace SourceCode.Clay
         public static Sha1 Hash(Stream stream)
         {
             if (stream == null) return Zero;
-            // Note that length=0 should not short-circuit
+            // Note that length=0 should NOT short-circuit
 
             var hash = _sha1.Value.ComputeHash(stream);
+
+            var sha1 = new Sha1(hash);
+            return sha1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static Sha1 HashImpl(in ReadOnlySpan<byte> span)
+        {
+            // Do NOT short-circuit here; rely on call-sites to do so
+
+            Span<byte> hash = stackalloc byte[ByteLength];
+            _sha1.Value.TryComputeHash(span, hash, out _);
 
             var sha1 = new Sha1(hash);
             return sha1;
@@ -396,37 +411,34 @@ namespace SourceCode.Clay
                 slice = slice.Slice(2);
             }
 
-            unsafe
+            Span<byte> span = stackalloc byte[ByteLength];
+
+            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators optional
+            // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
+            var pos = 0;
+            for (var i = 0; i < 5; i++)
             {
-                Span<byte> span = stackalloc byte[ByteLength];
-
-                // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators optional
-                // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
-                var pos = 0;
-                for (var i = 0; i < 5; i++)
+                for (var j = 0; j < 4; j++)
                 {
-                    for (var j = 0; j < 4; j++)
-                    {
-                        // Two hexits per byte: aaaa bbbb
-                        if (!TryParseHexit(slice[pos++], out var h1)
-                            || !TryParseHexit(slice[pos++], out var h2))
-                            return false;
+                    // Two hexits per byte: aaaa bbbb
+                    if (!TryParseHexit(slice[pos++], out var h1)
+                        || !TryParseHexit(slice[pos++], out var h2))
+                        return false;
 
-                        span[i * 4 + j] = (byte)((h1 << 4) | h2);
-                    }
-
-                    if (pos < HexLength && (slice[pos] == '-' || slice[pos] == ' '))
-                        pos++;
+                    span[i * 4 + j] = (byte)((h1 << 4) | h2);
                 }
 
-                // TODO: Is this correct: do we not already permit longer strings to be passed in?
-                // If the string is not fully consumed, it had an invalid length
-                if (pos != slice.Length)
-                    return false;
-
-                value = new Sha1(span);
-                return true;
+                if (pos < HexLength && (slice[pos] == '-' || slice[pos] == ' '))
+                    pos++;
             }
+
+            // TODO: Is this correct: do we not already permit longer strings to be passed in?
+            // If the string is not fully consumed, it had an invalid length
+            if (pos != slice.Length)
+                return false;
+
+            value = new Sha1(span);
+            return true;
 
             // Local functions
 

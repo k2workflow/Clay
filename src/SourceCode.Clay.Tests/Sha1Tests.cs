@@ -16,6 +16,49 @@ namespace SourceCode.Clay.Tests
     public static class Sha1Tests
     {
         private const string _surrogatePair = "\uD869\uDE01";
+                
+        private const string _empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709"; // http://www.di-mgt.com.au/sha_testvectors.html
+        private const string _zero =  "0000000000000000000000000000000000000000";
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_check_zero))]
+        public static void When_check_zero()
+        {
+            var expected = Sha1.Parse(_zero);
+            var actual = Sha1.Hash((Stream)null);
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+
+            expected = Sha1.Zero;
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_check_empty))]
+        public static void When_check_empty()
+        {
+            // Empty Array
+            var expected = Sha1.Parse(_empty);
+            var actual = Sha1.Hash(Array.Empty<byte>());
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+
+            // Empty ArraySegment
+            actual = Sha1.Hash(default(ArraySegment<byte>));
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+
+            // Empty Span
+            actual = Sha1.Hash(default(Span<byte>));
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+
+            // Empty String
+            actual = Sha1.Hash(string.Empty);
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+        }
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_null_sha1))]
@@ -51,12 +94,6 @@ namespace SourceCode.Clay.Tests
 
             // Stream
             actual = Sha1.Hash((Stream)null);
-            Assert.Equal(expected, actual);
-            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
-
-            // Null segment
-            actual = Sha1.Hash(default(ArraySegment<byte>));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
             // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
@@ -337,11 +374,9 @@ namespace SourceCode.Clay.Tests
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_create_test_vectors))]
-        [ClassData(typeof(TestVectors))]
+        [ClassData(typeof(TestVectors))] // http://www.di-mgt.com.au/sha_testvectors.html
         public static void When_create_test_vectors(string input, string expected)
         {
-            // http://www.di-mgt.com.au/sha_testvectors.html
-
             var sha1 = Sha1.Parse(expected);
             {
                 // String
@@ -403,12 +438,22 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_create_sha1_from_empty_ArraySegment))]
+        public static void When_create_sha1_from_empty_ArraySegment()
+        {
+            var expected = Sha1.Hash(Array.Empty<byte>());
+
+            // Empty segment
+            var actual = Sha1.Hash(default(ArraySegment<byte>));
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_sha_from_empty_string))]
         public static void When_create_sha_from_empty_string()
         {
-            // http://www.di-mgt.com.au/sha_testvectors.html
-
-            const string expected = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
+            const string expected = _empty; // http://www.di-mgt.com.au/sha_testvectors.html
             var sha1 = Sha1.Parse(expected);
             {
                 const string input = "";
@@ -516,6 +561,8 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_format_sha1))]
         public static void When_format_sha1()
         {
+            // http://www.di-mgt.com.au/sha_testvectors.html
+
             const string expected_N = "a9993e364706816aba3e25717850c26c9cd0d89d";
             var sha1 = Sha1.Parse(expected_N);
 
@@ -583,6 +630,8 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_parse_sha1))]
         public static void When_parse_sha1()
         {
+            // http://www.di-mgt.com.au/sha_testvectors.html
+
             const string expected_N = "a9993e364706816aba3e25717850c26c9cd0d89d";
             var sha1 = Sha1.Parse(expected_N);
 

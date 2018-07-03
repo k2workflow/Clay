@@ -458,8 +458,11 @@ namespace SourceCode.Clay
         /// <inheritdoc/>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if (string.IsNullOrEmpty(format)) format = "F";
+            if (string.IsNullOrEmpty(format))
+                return ToDefinedFormatString('F', formatProvider);
+
             if (format.Length != 1) throw new ArgumentOutOfRangeException(nameof(format));
+
             return ToDefinedFormatString(format[0], formatProvider);
         }
     }
