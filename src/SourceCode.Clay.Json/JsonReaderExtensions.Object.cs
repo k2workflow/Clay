@@ -99,13 +99,8 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
         public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler)
-        {
             // Leverage shared logic, ignoring sentinel return <int> value
-            ReadObject(jr, propertyHandler, Curry0);
-        }
-
-        // Curry delegate into static function
-        private static int Curry0() => 0;
+            => ReadObject(jr, propertyHandler, Curry0);
 
         /// <summary>
         /// Processes the current token value as a Json object but ignores all values.
@@ -116,7 +111,7 @@ namespace SourceCode.Clay.Json
             var count = 0;
 
             // Leverage shared logic, ignoring sentinel return <int> value
-            ReadObject(jr, CurryHandler, CurryFactory);
+            ReadObject(jr, CurryHandler, Curry0);
 
             return count;
 
@@ -135,9 +130,9 @@ namespace SourceCode.Clay.Json
 
                 return true;
             }
-
-            // Curry delegate into local function
-            int CurryFactory() => 0;
         }
+
+        // Curry delegate into static invariant
+        private static int Curry0() => 0;
     }
 }

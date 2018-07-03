@@ -128,6 +128,7 @@ namespace SourceCode.Clay
 
             // Rent buffer
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
+            maxLen = Math.Max(maxLen, Environment.SystemPageSize);
             var rented = ArrayPool<byte>.Shared.Rent(maxLen);
 
             try
