@@ -40,17 +40,7 @@ namespace SourceCode.Clay
         /// The number of hex characters required to represent a <see cref="Sha1"/> value.
         /// </summary>
         public const byte HexLength = ByteLength * 2;
-
-        private static readonly Sha1 _zero;
-
-        /// <summary>
-        /// A singleton representing an <see cref="Sha1"/> value that is all zeroes.
-        /// </summary>
-        /// <value>
-        /// The zeroes <see cref="Sha1"/>.
-        /// </value>
-        public static ref readonly Sha1 Zero => ref _zero;
-
+        
         private static readonly Sha1 _empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
@@ -123,7 +113,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in string value)
         {
-            if (value == null) return Zero;
+            if (value == null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return _empty;
 
             // Rent buffer
@@ -154,7 +144,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in byte[] bytes)
         {
-            if (bytes == null) return Zero;
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) return _empty;
 
             var span = new ReadOnlySpan<byte>(bytes);
@@ -172,7 +162,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in byte[] bytes, int start, int length)
         {
-            if (bytes == null) return Zero;
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
 
             // Do this first to check validity of start/length
             var span = new ReadOnlySpan<byte>(bytes, start, length);
@@ -190,7 +180,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(Stream stream)
         {
-            if (stream == null) return Zero;
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
             var hash = _sha1.Value.ComputeHash(stream);
@@ -393,7 +383,7 @@ namespace SourceCode.Clay
         [SecuritySafeCritical]
         public static bool TryParse(in ReadOnlySpan<char> hex, out Sha1 value)
         {
-            value = Zero;
+            value = default;
 
             // Length must be at least 40
             if (hex.Length < HexLength)
@@ -466,7 +456,8 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static bool TryParse(string hex, out Sha1 value)
         {
-            value = Zero;
+            value = default;
+
             if (hex == null)
                 return false;
 
