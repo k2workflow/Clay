@@ -42,21 +42,22 @@ namespace SourceCode.Clay.IO
             if (span.Length == 0) return;
 
             bufferLength = Math.Min(bufferLength, span.Length);
-            var ba = ArrayPool<byte>.Shared.Rent(bufferLength);
+
+            var rented = ArrayPool<byte>.Shared.Rent(bufferLength);
             try
             {
                 var offset = 0;
                 while (offset < span.Length)
                 {
                     var toCopy = Math.Min(bufferLength, span.Length - offset);
-                    span.Slice(offset, toCopy).CopyTo(ba);
-                    stream.Write(ba, 0, toCopy);
+                    span.Slice(offset, toCopy).CopyTo(rented);
+                    stream.Write(rented, 0, toCopy);
                     offset += toCopy;
                 }
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(ba);
+                ArrayPool<byte>.Shared.Return(rented);
             }
         }
 
@@ -76,26 +77,26 @@ namespace SourceCode.Clay.IO
             async Task Impl()
             {
                 bufferLength = Math.Min(bufferLength, memory.Length);
-                var ba = ArrayPool<byte>.Shared.Rent(bufferLength);
+
+                var rented = ArrayPool<byte>.Shared.Rent(bufferLength);
                 try
                 {
                     var offset = 0;
                     while (offset < memory.Length)
                     {
                         var toCopy = Math.Min(bufferLength, memory.Length - offset);
-                        memory.Span.Slice(offset, toCopy).CopyTo(ba);
-                        await stream.WriteAsync(ba, 0, toCopy, cancellationToken).ConfigureAwait(false);
+                        memory.Span.Slice(offset, toCopy).CopyTo(rented);
+                        await stream.WriteAsync(rented, 0, toCopy, cancellationToken).ConfigureAwait(false);
                         offset += toCopy;
                     }
                 }
                 finally
                 {
-                    ArrayPool<byte>.Shared.Return(ba);
+                    ArrayPool<byte>.Shared.Return(rented);
                 }
             }
 
-            if (memory.Length == 0) return Task.CompletedTask;
-            return Impl();
+            return memory.Length == 0 ? Task.CompletedTask : Impl();
         }
     }
 }

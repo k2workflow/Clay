@@ -10,9 +10,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 using System.Threading;
 
@@ -32,7 +30,7 @@ namespace SourceCode.Clay
         private static readonly ThreadLocal<System.Security.Cryptography.SHA1> _sha1 = new ThreadLocal<System.Security.Cryptography.SHA1>(System.Security.Cryptography.SHA1.Create);
 
         /// <summary>
-        /// The fixed byte length of a <see cref="Sha1"/> value.
+        /// The standard byte length of a <see cref="Sha1"/> value.
         /// </summary>
         public const byte ByteLength = 20;
 
@@ -44,7 +42,7 @@ namespace SourceCode.Clay
         private static readonly Sha1 _empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
-        // Using byte[] or String means a dereference to the heap (& fixed byte would require unsafe)
+        // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
 
         private readonly byte _a0;
         private readonly byte _a1;
@@ -74,23 +72,14 @@ namespace SourceCode.Clay
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
-        /// <param name="span">The buffer.</param>
+        /// <param name="source">The buffer.</param>
         /// <exception cref="ArgumentOutOfRangeException">buffer - buffer</exception>
-        [SecuritySafeCritical]
-        public Sha1(in ReadOnlySpan<byte> span)
+        public Sha1(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
-            if (span.Length < ByteLength)
-                throw new ArgumentOutOfRangeException(nameof(span), $"{nameof(span)} must have length at least {ByteLength}");
-
-            unsafe
-            {
-                fixed (byte* src = span)
-                fixed (byte* dst = &_a0)
-                {
-                    Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
-                }
-            }
+            var src = source.Slice(0, ByteLength);
+            var dst = MemoryMarshal.CreateSpan(ref _a0, ByteLength);
+            src.CopyTo(dst);
         }
 
         /// <summary>
@@ -116,11 +105,10 @@ namespace SourceCode.Clay
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return _empty;
 
-            // Rent buffer
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
-            maxLen = Math.Max(maxLen, Environment.SystemPageSize);
-            var rented = ArrayPool<byte>.Shared.Rent(maxLen);
 
+            // Rent buffer
+            var rented = ArrayPool<byte>.Shared.Rent(maxLen);
             try
             {
                 var count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
@@ -189,7 +177,6 @@ namespace SourceCode.Clay
             return sha1;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Sha1 HashImpl(in ReadOnlySpan<byte> span)
         {
             // Do NOT short-circuit here; rely on call-sites to do so
@@ -204,49 +191,45 @@ namespace SourceCode.Clay
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
         /// </summary>
-        /// <param name="buffer">The buffer to copy to.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">buffer</exception>
-        /// <exception cref="ArgumentOutOfRangeException">offset - buffer</exception>
-        [SecuritySafeCritical]
-        public int CopyTo(Span<byte> span)
+        /// <param name="destination">The buffer to copy to.</param>
+        public void CopyTo(Span<byte> destination)
         {
-            if (span.Length < ByteLength)
-                throw new ArgumentOutOfRangeException(nameof(span), $"{nameof(span)} must have length at least {ByteLength}");
-
             unsafe
             {
-                fixed (byte* src = &_a0)
-                fixed (byte* dst = span)
+                fixed (byte* ptr = &_a0)
                 {
-                    Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
+                    var source = new ReadOnlySpan<byte>(ptr, ByteLength);
+                    source.CopyTo(destination);
                 }
             }
-
-            return ByteLength;
         }
 
-        private const char FormatN = (char)0;
-
-        [SecuritySafeCritical]
-        private char[] ToChars(char separator)
+        /// <summary>
+        /// Tries to copy the <see cref="Sha1"/> value to the provided buffer.
+        /// </summary>
+        /// <param name="destination">The buffer to copy to.</param>
+        /// <returns>True if successful</returns>
+        public bool TryCopyTo(Span<byte> destination)
         {
-            Debug.Assert(separator == FormatN || separator == '-' || separator == ' ');
-
-            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators optional
-            var sep = 0;
-            char[] chars;
-            if (separator == FormatN)
+            unsafe
             {
-                chars = new char[HexLength];
+                fixed (byte* ptr = &_a0)
+                {
+                    var source = new ReadOnlySpan<byte>(ptr, ByteLength);
+                    return source.TryCopyTo(destination);
+                }
             }
-            else
-            {
-                sep = 8;
-                chars = new char[HexLength + 4];
-            }
+        }
 
+        /// <summary>
+        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
+            Span<char> span = stackalloc char[HexLength];
+            
             unsafe
             {
                 fixed (byte* src = &_a0)
@@ -258,35 +241,16 @@ namespace SourceCode.Clay
                         var byt = src[i];
 
                         var b = byt >> 4; // == b / 16
-                        chars[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a');
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
 
                         b = byt & 0x0F; // == b % 16
-                        chars[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a');
-
-                        // Append a separator if required
-                        if (pos == sep) // pos >= 2, sep = 0|N
-                        {
-                            chars[pos++] = separator;
-
-                            sep = pos + 8;
-                            if (sep >= chars.Length)
-                                sep = 0;
-                        }
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
                     }
                 }
             }
 
-            return chars;
-        }
-
-        /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            var chars = ToChars(FormatN);
-            return new string(chars);
+            var str = new string(span);
+            return str;
         }
 
         /// <summary>
@@ -309,30 +273,59 @@ namespace SourceCode.Clay
             {
                 // a9993e364706816aba3e25717850c26c9cd0d89d
                 case 'n':
-                case 'N':
-                    {
-                        var chars = ToChars(FormatN);
-                        return new string(chars);
-                    }
+                case 'N': return ToString();
 
                 // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
                 case 'd':
-                case 'D':
-                    {
-                        var chars = ToChars('-');
-                        return new string(chars);
-                    }
+                case 'D': return Format('-');
 
                 // a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
                 case 's':
-                case 'S':
-                    {
-                        var chars = ToChars(' ');
-                        return new string(chars);
-                    }
+                case 'S': return Format(' ');
             }
 
             throw new FormatException($"Invalid format specification '{format}'");
+        }
+
+        private string Format(char separator)
+        {
+            Debug.Assert(separator == '-' || separator == ' ');
+
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes) with 4 separators
+            Span<char> span = stackalloc char[HexLength + 4];
+
+            unsafe
+            {
+                fixed (byte* src = &_a0)
+                {
+                    var pos = 0;
+                    var sep = 8;
+                    for (var i = 0; i < ByteLength; i++) // 20
+                    {
+                        // Each byte is two hexits (convention is lowercase)
+                        var byt = src[i];
+
+                        var b = byt >> 4; // == b / 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        b = byt & 0x0F; // == b % 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        // Append a separator if required
+                        if (pos == sep) // pos >= 2, sep = 0|N
+                        {
+                            span[pos++] = separator;
+
+                            sep = pos + 8;
+                            if (sep >= span.Length)
+                                sep = 0; // Prevent IndexOutOfRangeException
+                        }
+                    }
+                }
+            }
+
+            var str = new string(span);
+            return str;
         }
 
         /// <summary>
@@ -343,19 +336,43 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public KeyValuePair<string, string> Split(int prefixLength)
         {
-            var chars = ToChars(FormatN);
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
+            Span<char> span = stackalloc char[HexLength];
 
-            if (prefixLength <= 0)
-                return new KeyValuePair<string, string>(string.Empty, new string(chars));
+            unsafe
+            {
+                fixed (byte* src = &_a0)
+                {
+                    var pos = 0;
+                    for (var i = 0; i < ByteLength; i++) // 20
+                    {
+                        // Each byte is two hexits (convention is lowercase)
+                        var byt = src[i];
+
+                        var b = byt >> 4; // == b / 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        b = byt & 0x0F; // == b % 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+                    }
+                }
+            }
 
             if (prefixLength >= HexLength)
-                return new KeyValuePair<string, string>(new string(chars), string.Empty);
+            {
+                var pfx = new string(span);
+                return new KeyValuePair<string, string>(pfx, string.Empty);
+            }
 
-            var key = new string(chars, 0, prefixLength);
-            var val = new string(chars, prefixLength, chars.Length - prefixLength);
+            if (prefixLength <= 0)
+            {
+                var ext = new string(span);
+                return new KeyValuePair<string, string>(string.Empty, ext);
+            }
 
-            var kvp = new KeyValuePair<string, string>(key, val);
-            return kvp;
+            var prefix = new string(span.Slice(0, prefixLength));
+            var extra = new string(span.Slice(prefixLength, HexLength - prefixLength));
+            return new KeyValuePair<string, string>(prefix, extra);
         }
 
         // Sentinel value for n/a (128)
@@ -380,7 +397,6 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        [SecuritySafeCritical]
         public static bool TryParse(in ReadOnlySpan<char> hex, out Sha1 value)
         {
             value = default;
@@ -558,8 +574,10 @@ namespace SourceCode.Clay
                     for (var i = 0; i < ByteLength; i++)
                     {
                         var cmp = src[i].CompareTo(dst[i]); // CLR returns a-b for byte comparisons
-                        if (cmp != 0)
-                            return cmp < 0 ? -1 : 1; // Normalize to [-1, 0, +1]
+                        if (cmp == 0)
+                            continue;
+
+                        return cmp < 0 ? -1 : 1; // Normalize to [-1, 0, +1]
                     }
                 }
             }

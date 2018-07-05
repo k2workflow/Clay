@@ -151,17 +151,17 @@ namespace SourceCode.Clay.IO
             {
                 if (_position == _memory.Length) return;
 
-                var buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                var rented = ArrayPool<byte>.Shared.Rent(bufferSize);
                 try
                 {
                     var source = _memory.Span.Slice(_position);
-                    for (var i = _position; i < _memory.Length; i += buffer.Length)
+                    for (var i = _position; i < _memory.Length; i += rented.Length)
                     {
-                        var toCopy = Math.Min(source.Length, buffer.Length);
-                        source.Slice(0, toCopy).CopyTo(buffer);
+                        var toCopy = Math.Min(source.Length, rented.Length);
+                        source.Slice(0, toCopy).CopyTo(rented);
                         source = source.Slice(toCopy);
 
-                        destination.Write(buffer, 0, toCopy);
+                        destination.Write(rented, 0, toCopy);
                         _position = i;
                     }
 
@@ -169,7 +169,7 @@ namespace SourceCode.Clay.IO
                 }
                 finally
                 {
-                    ArrayPool<byte>.Shared.Return(buffer);
+                    ArrayPool<byte>.Shared.Return(rented);
                 }
             }
         }
@@ -179,17 +179,17 @@ namespace SourceCode.Clay.IO
             var position = _position;
             if (position == _memory.Length) return;
 
-            var buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+            var rented = ArrayPool<byte>.Shared.Rent(bufferSize);
             try
             {
                 var source = _memory.Slice(position);
-                for (var i = position; i < _memory.Length; i += buffer.Length)
+                for (var i = position; i < _memory.Length; i += rented.Length)
                 {
-                    var toCopy = Math.Min(source.Length, buffer.Length);
-                    source.Slice(0, toCopy).Span.CopyTo(buffer);
+                    var toCopy = Math.Min(source.Length, rented.Length);
+                    source.Slice(0, toCopy).Span.CopyTo(rented);
                     source = source.Slice(toCopy);
 
-                    await destination.WriteAsync(buffer, 0, toCopy, cancellationToken).ConfigureAwait(false);
+                    await destination.WriteAsync(rented, 0, toCopy, cancellationToken).ConfigureAwait(false);
                     _position = i;
                 }
 
@@ -197,7 +197,7 @@ namespace SourceCode.Clay.IO
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                ArrayPool<byte>.Shared.Return(rented);
             }
         }
 

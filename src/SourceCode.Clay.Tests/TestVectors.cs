@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
-    internal sealed class TestVectors : IEnumerable<object[]>
+    public sealed class TestVectors : IEnumerable<object[]>
     {
         private static readonly List<object[]> _data = new List<object[]>
         {
