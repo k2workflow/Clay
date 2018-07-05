@@ -128,45 +128,5 @@ namespace SourceCode.Clay.Text
             => sb?
             .AppendFormat(provider, format, args)
             .AppendLine();
-
-        /// <summary>
-        /// Appends two <see cref="StringBuilder"/> instances.
-        /// </summary>
-        /// <param name="sb">The <see cref="StringBuilder"/> instance to append to.</param>
-        /// <param name="arg">The <see cref="StringBuilder"/> instance that should be appended to the first.</param>
-        /// <returns>The initial instance, with the second instance appended to it.</returns>
-        /// <exception cref="System.ArgumentNullException">sb</exception>
-        public static StringBuilder AppendBuilder(this StringBuilder sb, StringBuilder arg)
-        {
-            if (sb == null) throw new ArgumentNullException(nameof(sb));
-            if (arg == null || arg.Length == 0) return sb;
-
-            // Minimize iterative reallocations
-            var len = sb.Length + arg.Length;
-            sb.EnsureCapacity(len);
-
-            // Concat chars from second builder (loop is cheaper than bouncing via ToString)
-            for (var i = 0; i < arg.Length; i++)
-                sb.Append(arg[i]);
-
-            return sb;
-        }
-
-        /// <summary>
-        /// Appends two <see cref="StringBuilder"/> instances.
-        /// </summary>
-        /// <param name="sb">The <see cref="StringBuilder"/> instance to append to.</param>
-        /// <param name="arg">The <see cref="StringBuilder"/> instance that should be appended to the first.</param>
-        /// <returns>The initial instance, with the second instance appended to it.</returns>
-        /// <exception cref="System.ArgumentNullException">sb</exception>
-        public static StringBuilder AppendBuilderLine(this StringBuilder sb, StringBuilder arg)
-        {
-            if (sb == null) throw new ArgumentNullException(nameof(sb));
-
-            var concat = sb.AppendBuilder(arg);
-            concat.AppendLine();
-
-            return concat;
-        }
     }
 }
