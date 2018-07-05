@@ -96,8 +96,7 @@ namespace SourceCode.Clay.IO
                 }
             }
 
-            if (memory.Length == 0) return Task.CompletedTask;
-            return Impl();
+            return memory.Length == 0 ? Task.CompletedTask : Impl();
         }
     }
 }

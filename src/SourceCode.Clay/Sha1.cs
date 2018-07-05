@@ -10,7 +10,6 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
@@ -44,7 +43,7 @@ namespace SourceCode.Clay
         private static readonly Sha1 _empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
-        // Using byte[] or String means a dereference to the heap (& fixed byte would require unsafe)
+        // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
 
         private readonly byte _a0;
         private readonly byte _a1;
@@ -74,21 +73,20 @@ namespace SourceCode.Clay
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
-        /// <param name="span">The buffer.</param>
+        /// <param name="source">The buffer.</param>
         /// <exception cref="ArgumentOutOfRangeException">buffer - buffer</exception>
         [SecuritySafeCritical]
-        public Sha1(in ReadOnlySpan<byte> span)
+        public Sha1(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
-            if (span.Length < ByteLength)
-                throw new ArgumentOutOfRangeException(nameof(span), $"{nameof(span)} must have length at least {ByteLength}");
+            var src = source.Slice(0, ByteLength);
 
             unsafe
             {
-                fixed (byte* src = span)
-                fixed (byte* dst = &_a0)
+                fixed (byte* ptr = &_a0)
                 {
-                    Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
+                    var dst = new Span<byte>(ptr, ByteLength);
+                    src.CopyTo(dst);
                 }
             }
         }
@@ -116,9 +114,9 @@ namespace SourceCode.Clay
             if (value == null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return _empty;
 
-            // Rent buffer
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
 
+            // Rent buffer
             var rented = ArrayPool<byte>.Shared.Rent(maxLen);
             try
             {
@@ -188,7 +186,6 @@ namespace SourceCode.Clay
             return sha1;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Sha1 HashImpl(in ReadOnlySpan<byte> span)
         {
             // Do NOT short-circuit here; rely on call-sites to do so
@@ -203,27 +200,34 @@ namespace SourceCode.Clay
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
         /// </summary>
-        /// <param name="buffer">The buffer to copy to.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">buffer</exception>
-        /// <exception cref="ArgumentOutOfRangeException">offset - buffer</exception>
-        [SecuritySafeCritical]
-        public int CopyTo(Span<byte> span)
+        /// <param name="destination">The buffer to copy to.</param>
+        public void CopyTo(Span<byte> destination)
         {
-            if (span.Length < ByteLength)
-                throw new ArgumentOutOfRangeException(nameof(span), $"{nameof(span)} must have length at least {ByteLength}");
-
             unsafe
             {
-                fixed (byte* src = &_a0)
-                fixed (byte* dst = span)
+                fixed (byte* ptr = &_a0)
                 {
-                    Buffer.MemoryCopy(src, dst, ByteLength, ByteLength);
+                    var source = new ReadOnlySpan<byte>(ptr, ByteLength);
+                    source.CopyTo(destination);
                 }
             }
+        }
 
-            return ByteLength;
+        /// <summary>
+        /// Tries to copy the <see cref="Sha1"/> value to the provided buffer.
+        /// </summary>
+        /// <param name="destination">The buffer to copy to.</param>
+        /// <returns>True if successful</returns>
+        public bool TryCopyTo(Span<byte> destination)
+        {
+            unsafe
+            {
+                fixed (byte* ptr = &_a0)
+                {
+                    var source = new ReadOnlySpan<byte>(ptr, ByteLength);
+                    return source.TryCopyTo(destination);
+                }
+            }
         }
 
         private const char FormatN = (char)0;
