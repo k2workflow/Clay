@@ -346,19 +346,43 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public KeyValuePair<string, string> Split(int prefixLength)
         {
-            var chars = ToChars(FormatN);
+            // Text is treated as 5 groups of 8 chars (4 bytes)
+            Span<char> span = stackalloc char[HexLength];
 
-            if (prefixLength <= 0)
-                return new KeyValuePair<string, string>(string.Empty, new string(chars));
+            unsafe
+            {
+                fixed (byte* src = &_a0)
+                {
+                    var pos = 0;
+                    for (var i = 0; i < ByteLength; i++) // 20
+                    {
+                        // Each byte is two hexits (convention is lowercase)
+                        var byt = src[i];
+
+                        var b = byt >> 4; // == b / 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        b = byt & 0x0F; // == b % 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+                    }
+                }
+            }
 
             if (prefixLength >= HexLength)
-                return new KeyValuePair<string, string>(new string(chars), string.Empty);
+            {
+                var pfx = new string(span);
+                return new KeyValuePair<string, string>(pfx, string.Empty);
+            }
 
-            var key = new string(chars, 0, prefixLength);
-            var val = new string(chars, prefixLength, chars.Length - prefixLength);
+            if (prefixLength <= 0)
+            {
+                var ext = new string(span);
+                return new KeyValuePair<string, string>(string.Empty, ext);
+            }
 
-            var kvp = new KeyValuePair<string, string>(key, val);
-            return kvp;
+            var prefix = new string(span.Slice(0, prefixLength));
+            var extra = new string(span.Slice(prefixLength, HexLength - prefixLength));
+            return new KeyValuePair<string, string>(prefix, extra);
         }
 
         // Sentinel value for n/a (128)
