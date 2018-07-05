@@ -230,25 +230,14 @@ namespace SourceCode.Clay
             }
         }
 
-        private const char FormatN = (char)0;
-
-        [SecuritySafeCritical]
-        private char[] ToChars(char separator)
+        /// <summary>
+        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
-            Debug.Assert(separator == FormatN || separator == '-' || separator == ' ');
-
-            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators optional
-            var sep = 0;
-            char[] chars;
-            if (separator == FormatN)
-            {
-                chars = new char[HexLength];
-            }
-            else
-            {
-                sep = 8;
-                chars = new char[HexLength + 4];
-            }
+            // Text is treated as 5 groups of 8 chars (4 bytes)
+            Span<char> span = stackalloc char[HexLength];
 
             unsafe
             {
@@ -261,35 +250,16 @@ namespace SourceCode.Clay
                         var byt = src[i];
 
                         var b = byt >> 4; // == b / 16
-                        chars[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a');
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
 
                         b = byt & 0x0F; // == b % 16
-                        chars[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a');
-
-                        // Append a separator if required
-                        if (pos == sep) // pos >= 2, sep = 0|N
-                        {
-                            chars[pos++] = separator;
-
-                            sep = pos + 8;
-                            if (sep >= chars.Length)
-                                sep = 0;
-                        }
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
                     }
                 }
             }
 
-            return chars;
-        }
-
-        /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            var chars = ToChars(FormatN);
-            return new string(chars);
+            var str = new string(span);
+            return str;
         }
 
         /// <summary>
@@ -312,30 +282,59 @@ namespace SourceCode.Clay
             {
                 // a9993e364706816aba3e25717850c26c9cd0d89d
                 case 'n':
-                case 'N':
-                    {
-                        var chars = ToChars(FormatN);
-                        return new string(chars);
-                    }
+                case 'N': return ToString();
 
                 // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
                 case 'd':
-                case 'D':
-                    {
-                        var chars = ToChars('-');
-                        return new string(chars);
-                    }
+                case 'D': return Format('-');
 
                 // a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
                 case 's':
-                case 'S':
-                    {
-                        var chars = ToChars(' ');
-                        return new string(chars);
-                    }
+                case 'S': return Format(' ');
             }
 
             throw new FormatException($"Invalid format specification '{format}'");
+        }
+
+        private string Format(char separator)
+        {
+            Debug.Assert(separator == '-' || separator == ' ');
+
+            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators additional
+            Span<char> span = stackalloc char[HexLength + 4];
+
+            unsafe
+            {
+                fixed (byte* src = &_a0)
+                {
+                    var pos = 0;
+                    var sep = 8;
+                    for (var i = 0; i < ByteLength; i++) // 20
+                    {
+                        // Each byte is two hexits (convention is lowercase)
+                        var byt = src[i];
+
+                        var b = byt >> 4; // == b / 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        b = byt & 0x0F; // == b % 16
+                        span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+
+                        // Append a separator if required
+                        if (pos == sep) // pos >= 2, sep = 0|N
+                        {
+                            span[pos++] = separator;
+
+                            sep = pos + 8;
+                            if (sep >= span.Length)
+                                sep = 0; // Prevent IndexOutOfRangeException
+                        }
+                    }
+                }
+            }
+
+            var str = new string(span);
+            return str;
         }
 
         /// <summary>
