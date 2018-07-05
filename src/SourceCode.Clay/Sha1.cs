@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 using System.Threading;
 
@@ -31,7 +30,7 @@ namespace SourceCode.Clay
         private static readonly ThreadLocal<System.Security.Cryptography.SHA1> _sha1 = new ThreadLocal<System.Security.Cryptography.SHA1>(System.Security.Cryptography.SHA1.Create);
 
         /// <summary>
-        /// The fixed byte length of a <see cref="Sha1"/> value.
+        /// The standard byte length of a <see cref="Sha1"/> value.
         /// </summary>
         public const byte ByteLength = 20;
 
@@ -75,20 +74,12 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="source">The buffer.</param>
         /// <exception cref="ArgumentOutOfRangeException">buffer - buffer</exception>
-        [SecuritySafeCritical]
         public Sha1(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
             var src = source.Slice(0, ByteLength);
-
-            unsafe
-            {
-                fixed (byte* ptr = &_a0)
-                {
-                    var dst = new Span<byte>(ptr, ByteLength);
-                    src.CopyTo(dst);
-                }
-            }
+            var dst = MemoryMarshal.CreateSpan(ref _a0, ByteLength);
+            src.CopyTo(dst);
         }
 
         /// <summary>
@@ -236,9 +227,9 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public override string ToString()
         {
-            // Text is treated as 5 groups of 8 chars (4 bytes)
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
             Span<char> span = stackalloc char[HexLength];
-
+            
             unsafe
             {
                 fixed (byte* src = &_a0)
@@ -300,7 +291,7 @@ namespace SourceCode.Clay
         {
             Debug.Assert(separator == '-' || separator == ' ');
 
-            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators additional
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes) with 4 separators
             Span<char> span = stackalloc char[HexLength + 4];
 
             unsafe
@@ -345,7 +336,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public KeyValuePair<string, string> Split(int prefixLength)
         {
-            // Text is treated as 5 groups of 8 chars (4 bytes)
+            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
             Span<char> span = stackalloc char[HexLength];
 
             unsafe
@@ -406,7 +397,6 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        [SecuritySafeCritical]
         public static bool TryParse(in ReadOnlySpan<char> hex, out Sha1 value)
         {
             value = default;
@@ -584,8 +574,10 @@ namespace SourceCode.Clay
                     for (var i = 0; i < ByteLength; i++)
                     {
                         var cmp = src[i].CompareTo(dst[i]); // CLR returns a-b for byte comparisons
-                        if (cmp != 0)
-                            return cmp < 0 ? -1 : 1; // Normalize to [-1, 0, +1]
+                        if (cmp == 0)
+                            continue;
+
+                        return cmp < 0 ? -1 : 1; // Normalize to [-1, 0, +1]
                     }
                 }
             }
