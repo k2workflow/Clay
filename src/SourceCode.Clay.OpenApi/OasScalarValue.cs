@@ -5,6 +5,7 @@
 
 #endregion
 
+using SourceCode.Clay.Json;
 using System;
 
 namespace SourceCode.Clay.OpenApi
