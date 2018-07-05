@@ -76,14 +76,14 @@ namespace SourceCode.Clay
 
             // Expect non-surrogates by default
             var len = totalWidth;
-            var last = len - 1;
+            var len_1 = len - 1;
 
             // High | Low (default on x86/x64)
             if (BitConverter.IsLittleEndian)
             {
                 // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsLowSurrogate(str[last]))
-                    len = last;
+                if (char.IsLowSurrogate(str[len_1]))
+                    len = len_1;
 
                 // If it's the HIGH surrogate, we're replacing it regardless
             }
@@ -92,15 +92,20 @@ namespace SourceCode.Clay
             else
             {
                 // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsHighSurrogate(str[last]))
-                    len = last;
+                if (char.IsHighSurrogate(str[len_1]))
+                    len = len_1;
 
                 // If it's the LOW surrogate, we're replacing it regardless
             }
 
-            var sb = new StringBuilder(str, 0, len, len);
-            sb[len - 1] = '…';
-            return sb.ToString();
+            // Write directly into the string’s memory on the heap, thus avoiding any intermediate allocations
+            var sb = string.Create(len, len - 1, (dst, last) => // Say string has len=4, => last=3
+            {
+                str.AsSpan(0, last).CopyTo(dst); // Only copy first 3 chars: [0, 1, 2]
+                dst[last] = '…'; // Explicitly set 4th char: [3]
+            });
+
+            return sb;
         }
 
         /// <summary>

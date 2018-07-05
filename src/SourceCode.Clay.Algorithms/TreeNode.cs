@@ -29,8 +29,9 @@ namespace SourceCode.Clay.Algorithms
             {
                 if (Hierarchy == null) return null;
 
-                var sb = new StringBuilder(1 + Hierarchy.Count * 2);
-                sb.Append("/");
+                var capacity = 1 + Hierarchy.Count * (3 + 1); // Initial '/', plus ~3 chars for each int, plus '/' for each segment
+
+                var sb = new StringBuilder("/", capacity);
                 for (var i = 0; i < Hierarchy.Count; i++)
                     sb.AppendFormat(CultureInfo.InvariantCulture, "{0}/", Hierarchy[i]);
 
