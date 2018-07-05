@@ -8,7 +8,7 @@
 using System;
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Json.Tests
 {
     // Parameters are used to disambiguate theories
 #   pragma warning disable xUnit1026 // Theory methods should use all of their parameters

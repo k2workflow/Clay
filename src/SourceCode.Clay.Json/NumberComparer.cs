@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Json
 {
     /// <summary>
     /// Represents a way to compare different <see cref="Number"/> values.

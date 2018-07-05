@@ -7,7 +7,7 @@
 
 using System;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Json
 {
 #pragma warning disable CA1720 // Identifier contains type name
 #pragma warning disable CA1028 // Enum Storage should be Int32

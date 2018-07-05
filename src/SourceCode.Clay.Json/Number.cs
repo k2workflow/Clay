@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Json
 {
 #pragma warning disable CA2225 // Operator overloads have named alternates
 
