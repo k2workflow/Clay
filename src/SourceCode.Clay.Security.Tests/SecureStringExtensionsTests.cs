@@ -5,10 +5,11 @@
 
 #endregion
 
+using SourceCode.Clay.Tests;
 using System.Security;
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Security.Tests
 {
     public static class SecureStringExtensionsTests
     {

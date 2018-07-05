@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Security
 {
     /// <summary>
     /// Utility functions for <see cref="SecureString"/>.
