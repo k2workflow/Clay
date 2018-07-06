@@ -52,7 +52,7 @@ namespace SourceCode.Clay.IO
         }
 
         public override Task FlushAsync(CancellationToken cancellationToken)
-            => Task.CompletedTask;
+            => FlushAsync();
 
         public override long Seek(long offset, SeekOrigin origin)
         {

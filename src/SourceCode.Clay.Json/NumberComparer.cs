@@ -237,7 +237,6 @@ namespace SourceCode.Clay.Json
                 return 0;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public override bool Equals(Number x, Number y)
             {
                 if (x.ValueTypeCode != y.ValueTypeCode) return false;

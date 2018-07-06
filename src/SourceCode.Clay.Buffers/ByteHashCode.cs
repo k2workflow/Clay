@@ -66,6 +66,8 @@ namespace SourceCode.Clay.Buffers
     {
         private static readonly uint s_seed = (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
+        public static readonly int Empty = Combine(Array.Empty<byte>());
+
         private const uint Prime1 = 2654435761U;
         private const uint Prime2 = 2246822519U;
         private const uint Prime3 = 3266489917U;

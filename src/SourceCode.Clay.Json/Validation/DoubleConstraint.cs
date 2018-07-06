@@ -16,12 +16,12 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct DoubleConstraint : IEquatable<DoubleConstraint>
     {
-        private static readonly DoubleConstraint _empty;
-        private static readonly DoubleConstraint _forSingle = new DoubleConstraint(float.MinValue, float.MaxValue);
+        private static readonly DoubleConstraint s_empty;
+        private static readonly DoubleConstraint s_forSingle = new DoubleConstraint(float.MinValue, float.MaxValue);
 
-        public static ref readonly DoubleConstraint Empty => ref _empty;
+        public static ref readonly DoubleConstraint Empty => ref s_empty;
 
-        public static ref readonly DoubleConstraint ForSingle => ref _forSingle;
+        public static ref readonly DoubleConstraint ForSingle => ref s_forSingle;
 
         /// <summary>
         /// Gets the minimum value.

@@ -12,9 +12,9 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public readonly struct SqlParamInfo : IEquatable<SqlParamInfo>
     {
-        private static readonly SqlParamInfo _empty;
+        private static readonly SqlParamInfo s_empty;
 
-        public static ref readonly SqlParamInfo Empty => ref _empty;
+        public static ref readonly SqlParamInfo Empty => ref s_empty;
 
         public bool IsNullable { get; }
 

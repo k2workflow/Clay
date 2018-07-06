@@ -7,7 +7,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace SourceCode.Clay
 {
@@ -23,15 +22,16 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Left(this string str, int length)
         {
-            var len = length <= 0 ? 0 : length;
+            if (string.IsNullOrEmpty(str)) return str;
 
-            if (str == null || str.Length <= len) return str;
+            if (length <= 0) return string.Empty;
 
-            // Per Substring behavior, we don't respect surrogate pairs
-            return str.Substring(0, len);
+            if (length >= str.Length) return str;
+
+            // Per existing Substring behavior, we don't respect surrogate pairs
+            return str.Substring(0, length);
         }
 
         /// <summary>
@@ -41,15 +41,16 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Right(this string str, int length)
         {
-            var len = length <= 0 ? 0 : length;
+            if (string.IsNullOrEmpty(str)) return str;
 
-            if (str == null || str.Length <= len) return str;
+            if (length <= 0) return string.Empty;
 
-            // Per Substring behavior, we don't respect surrogate pairs
-            return str.Substring(str.Length - len, len);
+            if (length >= str.Length) return str;
+
+            // Per existing Substring behavior, we don't respect surrogate pairs
+            return str.Substring(str.Length - length);
         }
 
         /// <summary>
