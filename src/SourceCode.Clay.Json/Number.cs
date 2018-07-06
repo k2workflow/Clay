@@ -239,7 +239,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(sbyte value) : this()
         {
             _typeCode = (byte)TypeCode.SByte;
@@ -250,7 +249,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(byte value) : this()
         {
             _typeCode = (byte)TypeCode.Byte;
@@ -261,7 +259,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(short value) : this()
         {
             _typeCode = (byte)TypeCode.Int16;
@@ -272,7 +269,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(ushort value) : this()
         {
             _typeCode = (byte)TypeCode.UInt16;
@@ -283,7 +279,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(int value) : this()
         {
             _typeCode = (byte)TypeCode.Int32;
@@ -294,7 +289,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(uint value) : this()
         {
             _typeCode = (byte)TypeCode.UInt32;
@@ -305,7 +299,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(long value) : this()
         {
             _typeCode = (byte)TypeCode.Int64;
@@ -316,7 +309,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(ulong value) : this()
         {
             _typeCode = (byte)TypeCode.UInt64;
@@ -327,7 +319,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(float value) : this()
         {
             _typeCode = (byte)TypeCode.Single;
@@ -338,7 +329,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(double value) : this()
         {
             _typeCode = (byte)TypeCode.Double;
@@ -349,7 +339,6 @@ namespace SourceCode.Clay.Json
         /// Creates a new instance of the <see cref="Number"/> struct.
         /// </summary>
         /// <param name="value">The value to be contained by the number.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Number(decimal value) : this()
         {
             _typeCode = (byte)TypeCode.Decimal;
@@ -448,7 +437,6 @@ namespace SourceCode.Clay.Json
         /// <param name="format">The format of the number to use.</param>
         /// <param name="provider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string format, IFormatProvider formatProvider)
         {
             switch (ValueTypeCode)
@@ -483,7 +471,6 @@ namespace SourceCode.Clay.Json
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Number other) => NumberComparer.Default.Equals(this, other);
 
         /// <summary>Returns the hash code for this instance.</summary>
@@ -507,37 +494,26 @@ namespace SourceCode.Clay.Json
 
         public static bool operator >=(Number x, Number y) => x.CompareTo(y) >= 0;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(sbyte value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(byte value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(short value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ushort value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(int value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(uint value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(long value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(ulong value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(float value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(double value) => new Number(value);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Number(decimal value) => new Number(value);
 
         TypeCode IConvertible.GetTypeCode() => TypeCode.Object;

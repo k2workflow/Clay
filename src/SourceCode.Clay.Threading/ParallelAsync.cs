@@ -9,7 +9,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -155,7 +154,6 @@ namespace SourceCode.Clay.Threading
             return dict;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ExecutionDataflowBlockOptions Build(ParallelOptions options) => new ExecutionDataflowBlockOptions
         {
             CancellationToken = options == null ? CancellationToken.None : options.CancellationToken,

@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
@@ -15,7 +14,6 @@ namespace SourceCode.Clay
     /// </summary>
     public static class EquatableExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NullableEquals<T>(this T x, T y)
             where T : class, IEquatable<T>
         {
@@ -26,7 +24,6 @@ namespace SourceCode.Clay
             return x.Equals(y);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NullableEquals<T>(this T? x, T? y)
             where T : struct, IEquatable<T>
         {

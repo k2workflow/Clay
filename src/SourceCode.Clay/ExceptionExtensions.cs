@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
@@ -24,7 +23,6 @@ namespace SourceCode.Clay
         /// Used to indicate that an exception has been intentionally suppressed.
         /// </remarks>
         /// <param name="exception">The exception to suppress.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Suppress(this Exception exception)
         {
             // Do nothing by design

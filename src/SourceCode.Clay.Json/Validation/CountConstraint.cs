@@ -79,11 +79,8 @@ namespace SourceCode.Clay.Json.Validation
                 return false;
 
             // Check Max
-            if (Maximum.HasValue
-                && value > Maximum.Value)
-                return false;
-
-            return true;
+            return !Maximum.HasValue
+                || value <= Maximum.Value;
         }
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>

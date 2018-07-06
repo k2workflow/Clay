@@ -248,19 +248,13 @@ namespace SourceCode.Clay.Data.SqlParser
                 }
             }
 
-            if (char.IsWhiteSpace(peekBuffer[0]))
-                return SqlTokenKind.Whitespace;
-
-            return SqlTokenKind.Literal;
+            return char.IsWhiteSpace(peekBuffer[0]) ? SqlTokenKind.Whitespace : SqlTokenKind.Literal;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0)
-        {
-            if (count - offset < 1) return false;
-            if (buffer[offset] != c0) return false;
-            return true;
-        }
+            => count - offset >= 1
+            && buffer[offset] == c0;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool Contains(char[] buffer, int offset, int count, char c0, char c1)

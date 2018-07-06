@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SourceCode.Clay.Security
@@ -127,6 +128,7 @@ namespace SourceCode.Clay.Security
             return clean;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsValid(char c)
             => (c >= '0' && c <= '9') ||
                (c >= 'A' && c <= 'Z') ||
