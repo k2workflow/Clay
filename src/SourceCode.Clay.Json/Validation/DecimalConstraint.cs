@@ -16,9 +16,9 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct DecimalConstraint : IEquatable<DecimalConstraint>
     {
-        private static readonly DecimalConstraint _empty;
+        private static readonly DecimalConstraint s_empty;
 
-        public static ref readonly DecimalConstraint Empty => ref _empty;
+        public static ref readonly DecimalConstraint Empty => ref s_empty;
 
         /// <summary>
         /// Gets the minimum value.

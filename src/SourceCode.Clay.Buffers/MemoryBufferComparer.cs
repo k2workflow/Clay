@@ -55,7 +55,7 @@ namespace SourceCode.Clay.Buffers
         public override int GetHashCode(ReadOnlyMemory<byte> obj)
         {
             // Empty
-            if (obj.Length == 0) return ArrayBufferComparer.EmptyHashCode;
+            if (obj.Length == 0) return ByteHashCode.Empty;
 
             // Calculate on full length
             var span = obj.Span;

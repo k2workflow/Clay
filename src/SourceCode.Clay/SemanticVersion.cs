@@ -15,12 +15,12 @@ namespace SourceCode.Clay
     /// </summary>
     public readonly struct SemanticVersion : IComparable<SemanticVersion>, IEquatable<SemanticVersion>, IFormattable
     {
-        private static readonly SemanticVersion _empty;
+        private static readonly SemanticVersion s_empty;
 
         /// <summary>
         /// Gets the default value of <see cref="SemanticVersion"/>.
         /// </summary>
-        public static ref readonly SemanticVersion Empty => ref _empty;
+        public static ref readonly SemanticVersion Empty => ref s_empty;
 
         /// <summary>
         /// Gets the major version.

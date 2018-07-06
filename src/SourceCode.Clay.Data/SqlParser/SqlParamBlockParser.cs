@@ -16,13 +16,13 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static class SqlParamBlockParser
     {
-        private static readonly IReadOnlyDictionary<string, SqlParamInfo> _empty = ImmutableDictionary<string, SqlParamInfo>.Empty;
+        private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty = ImmutableDictionary<string, SqlParamInfo>.Empty;
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                return _empty;
+                return s_empty;
 
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
@@ -30,19 +30,19 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
-                    return _empty;
+                    return s_empty;
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
-                    return _empty;
+                    return s_empty;
 
                 // PROC | PROCEDURE
                 if (!ParseLiteral(tokenizer, "PROC", "PROCEDURE"))
-                    return _empty;
+                    return s_empty;
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out var schema, out var name))
-                    return _empty;
+                    return s_empty;
 
                 // (
                 var parenthesized = ParseSymbol(tokenizer, '(');
@@ -66,14 +66,14 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out var pname))
-                        return _empty;
+                        return s_empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out var tschema, out var tname))
-                        return _empty;
+                        return s_empty;
 
                     // VARYING
                     ParseLiteral(tokenizer, "VARYING");
@@ -105,7 +105,7 @@ namespace SourceCode.Clay.Data.SqlParser
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseFunction(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
-                return _empty;
+                return s_empty;
 
             // Tokenize
             var tokens = SqlTokenizer.Tokenize(sql, true);
@@ -113,23 +113,23 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
-                    return _empty;
+                    return s_empty;
 
                 // CREATE
                 if (!ParseLiteral(tokenizer, "CREATE"))
-                    return _empty;
+                    return s_empty;
 
                 // FUNCTION
                 if (!ParseLiteral(tokenizer, "FUNCTION"))
-                    return _empty;
+                    return s_empty;
 
                 // [Name] or "Name"
                 if (!ParseModuleName(tokenizer, out var schema, out var name))
-                    return _empty;
+                    return s_empty;
 
                 // (
                 if (!ParseSymbol(tokenizer, '('))
-                    return _empty;
+                    return s_empty;
 
                 var parms = new Dictionary<string, SqlParamInfo>(StringComparer.Ordinal);
 
@@ -149,14 +149,14 @@ namespace SourceCode.Clay.Data.SqlParser
 
                     // @param
                     if (!ParseParamName(tokenizer, out var pname))
-                        return _empty;
+                        return s_empty;
 
                     // AS
                     ParseLiteral(tokenizer, "AS");
 
                     // Foo.DECIMAL(1,2)
                     if (!ParseTypeName(tokenizer, out var tschema, out var tname))
-                        return _empty;
+                        return s_empty;
 
                     // = default
                     var hasDefault = ParseDefault(tokenizer, out var isNullable);

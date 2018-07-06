@@ -206,7 +206,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>The new <see cref="OasFieldExpression"/>.</returns>
         public static OasFieldExpression ResponseBody(JsonPointer pointer) => new OasFieldExpression(OasFieldExpressionType.Response, pointer);
 
-        private static readonly HashSet<char> _tchar = new HashSet<char>(
+        private static readonly HashSet<char> s_valid = new HashSet<char>(
             "!#$%&'*+-.^_`|~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
 
@@ -214,7 +214,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             for (var i = 0; i < name.Length; i++)
             {
-                if (!_tchar.Contains(name[i]))
+                if (!s_valid.Contains(name[i]))
                     throw new ArgumentOutOfRangeException(nameof(name), $"'{name[i]}' is not a valid token character.");
             }
         }
@@ -223,7 +223,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             for (var i = 0; i < name.Length; i++)
             {
-                if (!_tchar.Contains(name[i])) return false;
+                if (!s_valid.Contains(name[i])) return false;
             }
             return true;
         }

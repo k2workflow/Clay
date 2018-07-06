@@ -27,7 +27,7 @@ namespace SourceCode.Clay
     public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
     {
         // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<System.Security.Cryptography.SHA1> _sha1 = new ThreadLocal<System.Security.Cryptography.SHA1>(System.Security.Cryptography.SHA1.Create);
+        private static readonly ThreadLocal<System.Security.Cryptography.SHA1> t_sha1 = new ThreadLocal<System.Security.Cryptography.SHA1>(System.Security.Cryptography.SHA1.Create);
 
         /// <summary>
         /// The standard byte length of a <see cref="Sha1"/> value.
@@ -39,7 +39,7 @@ namespace SourceCode.Clay
         /// </summary>
         public const byte HexLength = ByteLength * 2;
         
-        private static readonly Sha1 _empty = HashImpl(ReadOnlySpan<byte>.Empty);
+        private static readonly Sha1 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
@@ -89,7 +89,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in ReadOnlySpan<byte> span)
         {
-            if (span.Length == 0) return _empty;
+            if (span.Length == 0) return s_empty;
 
             var sha1 = HashImpl(span);
             return sha1;
@@ -103,7 +103,7 @@ namespace SourceCode.Clay
         public static Sha1 Hash(in string value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) return _empty;
+            if (value.Length == 0) return s_empty;
 
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
 
@@ -133,7 +133,7 @@ namespace SourceCode.Clay
         public static Sha1 Hash(in byte[] bytes)
         {
             if (bytes == null) throw new ArgumentNullException(nameof(bytes));
-            if (bytes.Length == 0) return _empty;
+            if (bytes.Length == 0) return s_empty;
 
             var span = new ReadOnlySpan<byte>(bytes);
 
@@ -155,7 +155,7 @@ namespace SourceCode.Clay
             // Do this first to check validity of start/length
             var span = new ReadOnlySpan<byte>(bytes, start, length);
 
-            if (length == 0) return _empty;
+            if (length == 0) return s_empty;
 
             var sha1 = HashImpl(span);
             return sha1;
@@ -171,7 +171,7 @@ namespace SourceCode.Clay
             if (stream == null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
-            var hash = _sha1.Value.ComputeHash(stream);
+            var hash = t_sha1.Value.ComputeHash(stream);
 
             var sha1 = new Sha1(hash);
             return sha1;
@@ -182,7 +182,7 @@ namespace SourceCode.Clay
             // Do NOT short-circuit here; rely on call-sites to do so
 
             Span<byte> hash = stackalloc byte[ByteLength];
-            _sha1.Value.TryComputeHash(span, hash, out _);
+            t_sha1.Value.TryComputeHash(span, hash, out _);
 
             var sha1 = new Sha1(hash);
             return sha1;
@@ -381,7 +381,7 @@ namespace SourceCode.Clay
         // '0'=48, '9'=57
         // 'A'=65, 'F'=70
         // 'a'=97, 'f'=102
-        private static readonly byte[] Hexits = new byte['f' - '0' + 1] // 102 - 48 + 1 = 55
+        private static readonly byte[] s_hexits = new byte['f' - '0' + 1] // 102 - 48 + 1 = 55
         {
             00, 01, 02, 03, 04, 05, 06, 07, 08, 09, // [00-09]       = 48..57 = '0'..'9'
             __, __, __, __, __, __, __, 10, 11, 12, // [10-16,17-19] = 65..67 = 'A'..'C'
@@ -455,7 +455,7 @@ namespace SourceCode.Clay
                 if (c < '0' || c > 'f')
                     return false;
 
-                var bex = Hexits[c - '0'];
+                var bex = s_hexits[c - '0'];
                 if (bex == __) // Sentinel value for n/a (128)
                     return false;
 

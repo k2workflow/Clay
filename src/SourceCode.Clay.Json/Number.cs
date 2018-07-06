@@ -365,9 +365,9 @@ namespace SourceCode.Clay.Json
         public static Number CreateFromObject(object value)
             => value is null
             ? throw new ArgumentNullException(nameof(value))
-            : _objectFactory(value.GetType().TypeHandle, value);
+            : s_objectFactory(value.GetType().TypeHandle, value);
 
-        private static readonly Func<RuntimeTypeHandle, object, Number> _objectFactory = CreateObjectFactory();
+        private static readonly Func<RuntimeTypeHandle, object, Number> s_objectFactory = CreateObjectFactory();
 
         private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
         {

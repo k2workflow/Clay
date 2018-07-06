@@ -14,8 +14,6 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public sealed class ArrayBufferComparer : BufferComparer<byte[]>
     {
-        internal static readonly int EmptyHashCode = ByteHashCode.Combine(Array.Empty<byte>());
-
         /// <summary>
         /// Creates a new instance of the <see cref="ArrayBufferComparer"/> class, that considers the full
         /// buffer when calculating the hashcode.
@@ -73,7 +71,7 @@ namespace SourceCode.Clay.Buffers
             if (obj == null) return 0;
 
             // Empty
-            if (obj.Length == 0) return EmptyHashCode;
+            if (obj.Length == 0) return ByteHashCode.Empty;
 
             // Calculate on full length
             var span = obj.AsSpan();

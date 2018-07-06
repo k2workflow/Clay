@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Tests
 {
     public sealed class TestVectors : IEnumerable<object[]>
     {
-        private static readonly List<object[]> _data = new List<object[]>
+        private static readonly List<object[]> s_data = new List<object[]>
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
             
@@ -37,7 +37,7 @@ namespace SourceCode.Clay.Tests
 
         public const string SurrogatePair = "\uD869\uDE01";
 
-        public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
+        public IEnumerator<object[]> GetEnumerator() => s_data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

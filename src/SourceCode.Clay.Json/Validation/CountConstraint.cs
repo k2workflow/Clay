@@ -16,15 +16,15 @@ namespace SourceCode.Clay.Json.Validation
     /// </summary>
     public readonly struct CountConstraint : IEquatable<CountConstraint>
     {
-        private static readonly CountConstraint _empty;
-        private static readonly CountConstraint _forByte = new CountConstraint(byte.MinValue, byte.MaxValue);
-        private static readonly CountConstraint _forUInt16 = new CountConstraint(ushort.MinValue, ushort.MaxValue);
+        private static readonly CountConstraint s_empty;
+        private static readonly CountConstraint s_forByte = new CountConstraint(byte.MinValue, byte.MaxValue);
+        private static readonly CountConstraint s_forUInt16 = new CountConstraint(ushort.MinValue, ushort.MaxValue);
 
-        public static ref readonly CountConstraint Empty => ref _empty;
+        public static ref readonly CountConstraint Empty => ref s_empty;
 
-        public static ref readonly CountConstraint ForByte => ref _forByte;
+        public static ref readonly CountConstraint ForByte => ref s_forByte;
 
-        public static ref readonly CountConstraint ForUInt16 => ref _forUInt16;
+        public static ref readonly CountConstraint ForUInt16 => ref s_forUInt16;
 
         /// <summary>
         /// Gets the minimum value.

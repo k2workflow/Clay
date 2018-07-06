@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Buffers
         /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
-        /// <param name="cmpr">The comparer to use to test for equality.</param>
+        /// <param name="comparer">The comparer to use to test for equality.</param>
         /// <returns></returns>
         public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y, in IEqualityComparer<TSource> comparer)
         {
@@ -36,9 +36,8 @@ namespace SourceCode.Clay.Buffers
 
             // Check items in sequential order
             for (var i = 0; i < xs.Length; i++)
-            {
-                if (!cmpr.Equals(xs[i], ys[i])) return false;
-            }
+                if (!cmpr.Equals(xs[i], ys[i]))
+                    return false;
 
             return true;
         }
