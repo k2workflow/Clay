@@ -12,9 +12,19 @@ using System.Diagnostics;
 
 namespace SourceCode.Clay.Algorithms
 {
+    /// <summary>
+    /// Factory methods for <see cref="Graph{T}"/>.
+    /// </summary>
     public static class Graph
     {
-        public static Graph<T> Create<T>(int capacity, IEqualityComparer<T> equalityComparer = null)
+        /// <summary>
+        /// Creates a new <see cref="Graph{T}"/> value.
+        /// </summary>
+        /// <typeparam name="T">The type of the vertices in the graph.</typeparam>
+        /// <param name="capacity">The initial capacity of the graph.</param>
+        /// <param name="equalityComparer">The equality comparer for vertices.</param>
+        /// <returns>The <see cref="Graph{T}"/>.</returns>
+        public static Graph<T> Create<T>(int capacity = 10, IEqualityComparer<T> equalityComparer = null)
             => new Graph<T>(capacity, equalityComparer);
     }
 
@@ -22,12 +32,23 @@ namespace SourceCode.Clay.Algorithms
 
     // Override equals and operator equals on value types
     // No best-fit implementation
+
+    /// <summary>
+    /// Represents several algorithms that can be performed on a graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the vertices in the graph.</typeparam>
+    /// <remarks>Multiple algorithms should not be executed against a single instance of this structure.</remarks>
     [DebuggerDisplay("{_nodes.Count,ac}")]
     public readonly partial struct Graph<T>
     {
         private readonly ConcurrentDictionary<T, Node> _nodes;
         private readonly IEqualityComparer<T> _equalityComparer;
 
+        /// <summary>
+        /// Creates a new <see cref="Graph{T}"/> value.
+        /// </summary>
+        /// <param name="capacity">The initial capacity of the graph.</param>
+        /// <param name="equalityComparer">The equality comparer for vertices.</param>
         public Graph(int capacity, IEqualityComparer<T> equalityComparer)
         {
             if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
@@ -36,6 +57,11 @@ namespace SourceCode.Clay.Algorithms
             _nodes = new ConcurrentDictionary<T, Node>(1, capacity, _equalityComparer);
         }
 
+        /// <summary>
+        /// Adds the specified directed edge to the graph.
+        /// </summary>
+        /// <param name="from">The vertex that the edge originates from.</param>
+        /// <param name="to">The vertex that the edge terminates at.</param>
         public void Add(T from, T to)
         {
             var nodes = _nodes;
