@@ -12,6 +12,8 @@ using System.Diagnostics;
 
 namespace SourceCode.Clay.Algorithms
 {
+#pragma warning disable CA1815
+
     partial struct Graph<T> // .Nested
     {
         [Flags]
@@ -49,4 +51,6 @@ namespace SourceCode.Clay.Algorithms
             }
         }
     }
+
+#pragma warning restore CA1815
 }

@@ -5,6 +5,15 @@ namespace SourceCode.Clay.Algorithms
 {
     partial struct Graph<T> // .Tarjan
     {
+        /// <summary>
+        /// Identifies strongly connected components (cycles) in a graph and performs a topological sort, by using
+        /// Tarjan's Strongly Connected Components Algorithm.
+        /// </summary>
+        /// <remarks>
+        /// All nodes in the graph appear in at least one strongly connected component (that may only contain the node itself). The
+        /// graph is only cyclic if any cycle contains more than one node.
+        /// </remarks>
+        /// <returns>The list of strongly connected components.</returns>
         public IReadOnlyList<IReadOnlyList<T>> Tarjan()
         {
             var index = 0;

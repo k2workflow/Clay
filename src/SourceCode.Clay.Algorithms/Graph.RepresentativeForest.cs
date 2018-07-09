@@ -12,6 +12,43 @@ namespace SourceCode.Clay.Algorithms
 {
     partial struct Graph<T> // .RepresentativeForest
     {
+        /// <summary>
+        /// Converts the graph into a representative forest.
+        /// </summary>
+        /// <param name="onCycle">A callback that is invoked when a cycle is detected.</param>
+        /// <param name="onTreeNode">A callback that is invoked when a tree node is detected.</param>
+        /// <remarks>
+        /// A representative forest is a collection of trees and cycles that is used to answer traversal
+        /// queries.
+        /// 
+        /// Traversing the forest (towards either parents or children) will traverse the original
+        /// graph in that direction.  Note that a single node may appear multiple times within the
+        /// forest.
+        /// 
+        /// Each node in the forest is represented by a cycle that has at minimum one element. Nodes that
+        /// are represented by multiple elements are virtualized cycles: traversal queries will always visit
+        /// every node in the cycle no matter the traversal direction.
+        /// 
+        /// To correctly perform a traversal query the following steps should be performed, given node <c>N</c>.
+        /// 
+        /// <list type="number">
+        ///     <item><description>
+        ///         Find the unique set of <see cref="Edge{T}.From"/> where the associated <see cref="Edge{T}.To"/> is <c>N</c>.
+        ///     </description></item>
+        ///     <item><description>
+        ///         Find the unique list of <see cref="TreeNode{T}.Hierarchy"/> where <see cref="TreeNode{T}.Node"/> appears in the set created in (1).
+        ///     </description></item>
+        ///     <item><description>
+        ///         Find the unique set of <see cref="TreeNode{T}.Node"/> according to traversing the forest, starting at the hierarchies discovered in (2).
+        ///     </description></item>
+        ///     <item><description>
+        ///         Find the unique set of <see cref="Edge{T}.To"/> where the associated <see cref="Edge{T}.From"/> appears in the set created in (3).
+        ///     </description></item>
+        /// </list>
+        /// 
+        /// A single list instance is used across <paramref name="onTreeNode"/> invocations, <see cref="TreeNode{T}.Clone"/> must be called if 
+        /// <see cref="TreeNode{T}"/> instances are persisted in memory after the callback completes.
+        /// </remarks>
         public void ToRepresentativeForest(Action<Edge<T>> onCycle, Action<TreeNode<T>> onTreeNode)
         {
             if (onCycle == null) throw new ArgumentNullException(nameof(onCycle));
