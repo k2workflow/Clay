@@ -73,7 +73,6 @@ namespace SourceCode.Clay
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <param name="source">The buffer.</param>
-        /// <exception cref="ArgumentOutOfRangeException">buffer - buffer</exception>
         public Sha1(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {

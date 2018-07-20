@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
@@ -81,6 +82,40 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 1));
             Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, Blit.RotateRight(sut, 2));
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
+        }
+
+        [Theory(DisplayName = nameof(Blit_FloorLog2))]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(15)]
+        [InlineData(16)]
+        [InlineData(17)]
+        [InlineData(1023)]
+        [InlineData(1024)]
+        [InlineData(1025)]
+        [InlineData(int.MaxValue - 1)]
+        [InlineData(int.MaxValue)]
+        public static void Blit_FloorLog2(int n)
+        {
+            var expected = Math.Floor(Math.Log(n, 2));
+            var actual = Blit.FloorLog2(n);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(Blit_FloorLog2_Throws))]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public static void Blit_FloorLog2_Throws(int n)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2(n));
         }
     }
 }

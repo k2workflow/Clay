@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
@@ -124,6 +125,39 @@ namespace SourceCode.Clay.Buffers
             var b = bits % 64;
 
             return unchecked((value >> b) | (value << (64 - b)));
+        }
+
+        private static readonly int[] DeBruijn = new int[32]
+        {
+            00, 09, 01, 10, 13, 21, 02, 29,
+            11, 14, 16, 18, 22, 25, 03, 30,
+            08, 12, 20, 28, 15, 17, 24, 07,
+            19, 27, 23, 06, 26, 05, 04, 31
+        };
+
+        /// <summary>
+        /// Finds the floor of the base-2 log of the specified value.
+        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="n"/>, 2)).
+        /// </summary>
+        /// <param name="n">The value.</param>
+        /// <returns>The log2 floor of the value.</returns>
+        public static int FloorLog2(int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n));
+
+            // Uses de Bruijn
+            // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
+
+            n |= n >> 1;
+            n |= n >> 2;
+            n |= n >> 4;
+            n |= n >> 8;
+            n |= n >> 16;
+
+            var u = (uint)(n * (uint)0x_07C4_ACDD) >> 27;
+
+            var result = DeBruijn[u];
+            return result;
         }
     }
 }

@@ -18,19 +18,32 @@ namespace SourceCode.Clay.Buffers
         {
             if (comparison == null) throw new ArgumentNullException(nameof(comparison));
 
-            if (span.IsEmpty || span.Length <= 1) return;
-            IntrospectiveSort(span, comparison, 0, span.Length - 1, 2 * FloorLog2(span.Length));
-        }
-
-        private static int FloorLog2(int n)
-        {
-            var result = 0;
-            while (n >= 1)
+            // Short-circuit for small N
+            switch (span.Length)
             {
-                result++;
-                n = n / 2;
+                // 0 or 1 members
+                case 0:
+                case 1:
+                    return;
+
+                // 2 members
+                case 2:
+                    SwapIfGreater(span, comparison, 0, 1); // 4,3 => 3,4
+                    return;
+
+                // 3 members
+                case 3:
+                    SwapIfGreater(span, comparison, 0, 1); // 4,3,2 => 3,4,2
+                    SwapIfGreater(span, comparison, 1, 2); // 3,4,2 => 3,2,4
+                    SwapIfGreater(span, comparison, 0, 1); // 3,2,4 => 2,3,4
+                    return;
             }
-            return result;
+
+            // N members
+            var limit = 1 + Blit.FloorLog2(span.Length); // TODO: '+1' maintains compat with old code, but may have been a bug
+            limit = 2 * limit;
+
+            IntrospectiveSort(span, comparison, 0, span.Length - 1, limit);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

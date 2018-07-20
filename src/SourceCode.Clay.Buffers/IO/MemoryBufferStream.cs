@@ -34,7 +34,7 @@ namespace SourceCode.Clay.IO
             get => _position;
             set
             {
-                if (value < 0 || value > _memory.Length) throw new ArgumentOutOfRangeException(nameof(value));
+                if ((uint)value >= (uint)_memory.Length) throw new ArgumentOutOfRangeException(nameof(value));
                 _position = (int)value;
             }
         }
