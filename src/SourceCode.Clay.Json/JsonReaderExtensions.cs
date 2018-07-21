@@ -23,12 +23,54 @@ namespace SourceCode.Clay.Json
         public static TEnum? ReadEnum<TEnum>(this JsonReader jr, bool ignoreCase)
             where TEnum : struct
         {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str) || str == JsonConstants.Null)
+            if (string.IsNullOrEmpty(str))
                 return null;
 
             var knd = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
             return knd;
+        }
+
+        /// <summary>
+        /// Reads the current token value as a string, then converts it to a nullable <see cref="Guid"/>.
+        /// Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="string.Empty"/>.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The parsed guid value or null.</returns>
+        public static Guid? ParseGuid(this JsonReader jr)
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            var str = (string)jr.Value;
+            if (string.IsNullOrEmpty(str))
+                return null;
+
+            var guid = Guid.Parse(str);
+            return guid;
+        }
+
+        /// <summary>
+        /// Reads the current token value as a string, then converts it to a nullable <see cref="Guid"/>.
+        /// Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="string.Empty"/>.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <param name="format">Specifier indicating the exact format to use when interpreting the input.</param>
+        /// <returns>The parsed guid value or null.</returns>
+        public static Guid? ParseGuidExact(this JsonReader jr, string format)
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            var str = (string)jr.Value;
+            if (string.IsNullOrEmpty(str))
+                return null;
+
+            var guid = Guid.ParseExact(str, format);
+            return guid;
         }
     }
 }
