@@ -6,6 +6,7 @@
 #endregion
 
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
@@ -193,7 +194,9 @@ namespace SourceCode.Clay.Json.Units
             }
         }
 
-        private const string jsonObject = @"
+        private static readonly Guid guid1 = new Guid("82a7f48d-3b50-4b1e-b82e-3ada8210c358");
+
+        private static readonly string jsonObject = @"
         {
             ""name"": ""joe"",
             ""last"": null,
@@ -204,6 +207,7 @@ namespace SourceCode.Clay.Json.Units
             ""type1"": ""tINyINt"",
             ""type2"": """",
             ""type3"": null,
+            ""guid1"": """ + guid1.ToString() + @""",
             ""object"": { ""foo"": 123 },
             ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ]
         }";
@@ -232,6 +236,7 @@ namespace SourceCode.Clay.Json.Units
                 var alive = false;
                 var age = -1L;
                 var type = new System.Data.SqlDbType?[3];
+                Guid? guid = null;
 
                 var text = jr.ReadObject(n =>
                 {
@@ -245,6 +250,7 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "guid1": guid = jr.ParseGuid(); return true;
                         case "object": jr.SkipCountObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
                     }
@@ -262,6 +268,7 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
+                Assert.Equal(guid1, guid.Value);
             }
 
             // Process
@@ -275,6 +282,7 @@ namespace SourceCode.Clay.Json.Units
                 var age = -1L;
                 string text = null;
                 var type = new System.Data.SqlDbType?[3];
+                Guid? guid = null;
 
                 jr.ProcessObject(n =>
                 {
@@ -288,6 +296,7 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "guid1": guid = jr.ParseGuidExact("D"); return true;
                         case "object": jr.SkipCountObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
                     }
@@ -305,6 +314,7 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
+                Assert.Equal(guid1, guid.Value);
             }
 
             // Skip
@@ -314,7 +324,7 @@ namespace SourceCode.Clay.Json.Units
                 var actualCount = jr.SkipCountObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
-                Assert.Equal(10, actualCount);
+                Assert.Equal(11, actualCount);
             }
         }
 
