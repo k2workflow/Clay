@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Buffers
         /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="n"/>, 2)).
         /// </summary>
         /// <param name="n">The value.</param>
-        /// <returns>The log2 floor of the value.</returns>
+        /// <returns>The floor(log2) of the value.</returns>
         public static int FloorLog2(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n));
