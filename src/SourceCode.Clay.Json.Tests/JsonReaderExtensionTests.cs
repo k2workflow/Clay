@@ -247,9 +247,9 @@ namespace SourceCode.Clay.Json.Units
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
                         case "age": age = (long)jr.Value; return true;
-                        case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
-                        case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
-                        case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type1": type[0] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
+                        case "type2": type[1] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
+                        case "type3": type[2] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
                         case "guid1": guid = jr.ParseGuid(); return true;
                         case "object": jr.SkipCountObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
@@ -293,9 +293,9 @@ namespace SourceCode.Clay.Json.Units
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
                         case "age": age = (long)jr.Value; return true;
-                        case "type1": type[0] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
-                        case "type2": type[1] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
-                        case "type3": type[2] = jr.ReadEnum<System.Data.SqlDbType>(true); return true;
+                        case "type1": type[0] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
+                        case "type2": type[1] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
+                        case "type3": type[2] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
                         case "guid1": guid = jr.ParseGuidExact("D"); return true;
                         case "object": jr.SkipCountObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
