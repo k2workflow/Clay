@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Json
                 return null;
 
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str))
+            if (str.Length == 0) // We already checked for null
                 return null;
 
             var enm = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Json
                 return null;
 
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str))
+            if (str.Length == 0) // We already checked for null
                 return null;
 
             var guid = Guid.Parse(str);
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Json
                 return null;
 
             var str = (string)jr.Value;
-            if (string.IsNullOrEmpty(str))
+            if (str.Length == 0) // We already checked for null
                 return null;
 
             var guid = Guid.ParseExact(str, format);
