@@ -110,7 +110,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The serialized <see cref="JToken"/>.</returns>
         protected virtual JToken SerializeUnknown<T>(T value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (Equals(value, default(T))) return null;
 
             var mySerializers = _mySerializers;
             if (mySerializers is null)
