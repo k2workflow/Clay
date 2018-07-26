@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
-            if (sql == null) throw new ArgumentNullException(nameof(sql));
+            if (sql is null) throw new ArgumentNullException(nameof(sql));
 
             using (var reader = new SqlCharReader(sql))
             {
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
-            if (reader == null) throw new ArgumentNullException(nameof(reader));
+            if (reader is null) throw new ArgumentNullException(nameof(reader));
 
             using (var cr = new SqlCharReader(reader))
             {
@@ -107,7 +107,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
             var peekBuffer = new char[2];
 
             var tokens = new List<SqlTokenInfo>();
@@ -163,7 +163,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenKind Peek(char[] peekBuffer, int peekLength)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekLength >= 1);
 
@@ -272,10 +272,10 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         private static SqlTokenInfo ReadWhitespace(char[] peekBuffer, int peekLength, SqlCharReader reader, bool skipSundry)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekLength >= 1);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
 
             // Fast path for single whitespace
             if (peekLength >= 2
@@ -336,11 +336,11 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenInfo ReadSquareString(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekBuffer[0] == '[');
             Debug.Assert(peekLength >= 1);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
 
             // Sql Identifiers are max 128 chars
             var cap = peekLength + 128;
@@ -411,10 +411,10 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenInfo ReadQuotedString(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekLength >= 1);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
 
             // Perf: Assume string is N chars
             const int averageLen = 256;
@@ -460,8 +460,8 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenInfo ReadQuotedString(StringBuilder sb, char delimiter, SqlCharReader reader)
         {
-            Debug.Assert(sb != null);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(sb is null));
+            Debug.Assert(!(reader is null));
 
             var buffer = new char[sb.Capacity];
 
@@ -528,8 +528,8 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         private static SqlTokenInfo ReadBlockComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
         {
-            Debug.Assert(reader != null);
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(reader is null));
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
 
             // Perf: Assume comment is N chars
@@ -590,8 +590,8 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns></returns>
         private static SqlTokenInfo ReadLineComment(char[] peekBuffer, SqlCharReader reader, bool skipSundry)
         {
-            Debug.Assert(reader != null);
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(reader is null));
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
 
             // Perf: Assume comment is N chars
@@ -644,10 +644,10 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenInfo ReadSymbol(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekLength >= 1);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
 
             if (peekLength >= 2)
             {
@@ -692,10 +692,10 @@ namespace SourceCode.Clay.Data.SqlParser
 
         private static SqlTokenInfo ReadLiteral(char[] peekBuffer, int peekLength, SqlCharReader reader)
         {
-            Debug.Assert(peekBuffer != null);
+            Debug.Assert(!(peekBuffer is null));
             Debug.Assert(peekBuffer.Length >= 1);
             Debug.Assert(peekLength >= 1);
-            Debug.Assert(reader != null);
+            Debug.Assert(!(reader is null));
 
             // Sql literals are generally short
             var cap = peekLength + 32;

@@ -28,7 +28,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets a value indicating whether the reference has a value.
         /// </summary>
-        public bool HasValue => Url != null || Pointer.Count != 0;
+        public bool HasValue => !(Url is null) || Pointer.Count != 0;
 
         /// <summary>
         /// Creates a new internal <see cref="OasReference"/> value.
@@ -57,9 +57,9 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="pointer">The external reference pointer.</param>
         public OasReference(Uri url, JsonPointer pointer)
         {
-            if (url == null && pointer.Count == 0) throw new ArgumentNullException(nameof(url));
+            if (url is null && pointer.Count == 0) throw new ArgumentNullException(nameof(url));
 
-            if (url != null)
+            if (!(url is null))
             {
                 if (url.IsAbsoluteUri && !string.IsNullOrEmpty(url.Fragment) && pointer.Count != 0)
                     throw new ArgumentOutOfRangeException(nameof(url), "The URL cannot have a fragment when a pointer is provided.");
@@ -120,7 +120,7 @@ namespace SourceCode.Clay.OpenApi
         /// <exception cref="FormatException"><paramref name="url"/> is not in a format compliant with the Open API specification.</exception>
         public static OasReference ParseUrl(Uri url)
         {
-            if (url == null) throw new ArgumentNullException(nameof(url));
+            if (url is null) throw new ArgumentNullException(nameof(url));
             if (!TryParseUrl(url, out var result)) throw new FormatException("The specified value is not a valid reference.");
             return result;
         }
@@ -139,7 +139,7 @@ namespace SourceCode.Clay.OpenApi
         /// <returns><c>true</c> if <paramref name="url"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParseUrl(Uri url, out OasReference result)
         {
-            if (url == null)
+            if (url is null)
             {
                 result = default;
                 return false;
@@ -148,7 +148,7 @@ namespace SourceCode.Clay.OpenApi
             // TODO: Handle escaped URL characters in pointer.
 
             string frag = null;
-            if (url.IsAbsoluteUri && url.Fragment != null)
+            if (url.IsAbsoluteUri && !(url.Fragment is null))
             {
                 frag = url.GetComponents(UriComponents.Fragment, UriFormat.Unescaped);
                 url = new UriBuilder(url) { Fragment = null }.Uri;
@@ -178,7 +178,7 @@ namespace SourceCode.Clay.OpenApi
                 }
             }
 
-            if (frag != null && !JsonPointer.TryParse(frag, out var pointer))
+            if (!(frag is null) && !JsonPointer.TryParse(frag, out var pointer))
             {
                 result = default;
                 return false;
@@ -200,7 +200,7 @@ namespace SourceCode.Clay.OpenApi
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator OasReference(Uri url) => url == null ? default : ParseUrl(url);
+        public static implicit operator OasReference(Uri url) => url is null ? default : ParseUrl(url);
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="System.String" /> to <see cref="SourceCode.Clay.OpenApi.OasReference" />.
@@ -226,7 +226,7 @@ namespace SourceCode.Clay.OpenApi
             if (!HasValue) return null;
 
             var frag = "#" + Uri.EscapeUriString(Pointer.ToString());
-            if (Url == null) return new Uri(frag, UriKind.Relative);
+            if (Url is null) return new Uri(frag, UriKind.Relative);
             else if (frag == "#") return Url;
             else if (Url.IsAbsoluteUri) return new UriBuilder(Url) { Fragment = frag }.Uri;
             else return new Uri(Url.OriginalString + frag, UriKind.Relative);

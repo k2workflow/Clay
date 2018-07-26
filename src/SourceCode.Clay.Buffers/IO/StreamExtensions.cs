@@ -37,7 +37,7 @@ namespace SourceCode.Clay.IO
         /// <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
         public static void Write(this Stream stream, in ReadOnlySpan<byte> span, int bufferLength = 81920)
         {
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null) throw new ArgumentNullException(nameof(stream));
             if (bufferLength < 1) throw new ArgumentOutOfRangeException(nameof(bufferLength));
             if (span.Length == 0) return;
 
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.IO
         /// <param name="cancellationToken">The cancellation token.</param>
         public static Task WriteAsync(this Stream stream, ReadOnlyMemory<byte> memory, int bufferLength = 81920, CancellationToken cancellationToken = default)
         {
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null) throw new ArgumentNullException(nameof(stream));
             if (bufferLength < 1) throw new ArgumentOutOfRangeException(nameof(bufferLength));
 
             async Task Impl()

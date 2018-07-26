@@ -43,8 +43,8 @@ namespace SourceCode.Clay.Buffers
         public override int Compare(byte[] x, byte[] y)
         {
             if (x == y) return 0; // (null, null) or (x, x)
-            if (x == null) return -1; // (null, y)
-            if (y == null) return 1; // (x, null)
+            if (x is null) return -1; // (null, y)
+            if (y is null) return 1; // (x, null)
 
             return MemoryBufferComparer.CompareSpan(x, y);
         }
@@ -53,7 +53,7 @@ namespace SourceCode.Clay.Buffers
         public override bool Equals(byte[] x, byte[] y)
         {
             if (x == y) return true; // (null, null) or (x, x)
-            if (x == null || y == null) return false; // (x, null) or (null, y)
+            if (x is null || y is null) return false; // (x, null) or (null, y)
 
             return MemoryBufferComparer.CompareSpan(x, y) == 0;
         }
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Buffers
         public override int GetHashCode(byte[] obj)
         {
             // Null
-            if (obj == null) return 0;
+            if (obj is null) return 0;
 
             // Empty
             if (obj.Length == 0) return ByteHashCode.Empty;

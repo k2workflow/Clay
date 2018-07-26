@@ -96,8 +96,8 @@ namespace SourceCode.Clay
             if (major < 0) throw new ArgumentOutOfRangeException(nameof(major));
             if (minor < 0) throw new ArgumentOutOfRangeException(nameof(minor));
             if (patch < 0) throw new ArgumentOutOfRangeException(nameof(patch));
-            if (preRelease != null && !ValidatePreRelease(preRelease, 0, -1)) throw new ArgumentOutOfRangeException(nameof(preRelease));
-            if (buildMetadata != null && !ValidateBuildMetadata(buildMetadata, 0, -1)) throw new ArgumentOutOfRangeException(nameof(buildMetadata));
+            if (!(preRelease is null) && !ValidatePreRelease(preRelease, 0, -1)) throw new ArgumentOutOfRangeException(nameof(preRelease));
+            if (!(buildMetadata is null) && !ValidateBuildMetadata(buildMetadata, 0, -1)) throw new ArgumentOutOfRangeException(nameof(buildMetadata));
 
             Major = major;
             Minor = minor;
@@ -124,7 +124,7 @@ namespace SourceCode.Clay
 
         private static bool ValidateBuildMetadata(string value, int startIndex, int endIndex)
         {
-            if (value == null) return true;
+            if (value is null) return true;
             if (endIndex < 0) endIndex = value.Length - 1;
 
             for (var i = startIndex; i <= endIndex; i++)
@@ -143,7 +143,7 @@ namespace SourceCode.Clay
 
         private static bool ValidatePreRelease(string value, int startIndex, int endIndex)
         {
-            if (value == null) return true;
+            if (value is null) return true;
             if (endIndex < 0) endIndex = value.Length - 1;
 
             for (var i = startIndex; i <= endIndex; i++)
@@ -308,11 +308,11 @@ namespace SourceCode.Clay
                 compatability |= SemanticVersionCompatabilities.NewerPatchVersion;
 
             // Different pre-releases are always incompatible.
-            if (baseline.PreRelease == null && comparand.PreRelease != null)
+            if (baseline.PreRelease is null && !(comparand.PreRelease is null))
                 compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.PreReleaseAdded;
-            else if (baseline.PreRelease != null && comparand.PreRelease == null)
+            else if (!(baseline.PreRelease is null) && comparand.PreRelease is null)
                 compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.PreReleaseRemoved;
-            else if (baseline.PreRelease != null && comparand.PreRelease != null)
+            else if (!(baseline.PreRelease is null) && !(comparand.PreRelease is null))
             {
                 var cmp = string.CompareOrdinal(baseline.PreRelease, comparand.PreRelease);
                 if (cmp == -1) compatability |= SemanticVersionCompatabilities.Incompatible | SemanticVersionCompatabilities.NewerPreRelease;
@@ -320,11 +320,11 @@ namespace SourceCode.Clay
             }
 
             // Build metadata is irrelevant.
-            if (baseline.BuildMetadata == null && comparand.BuildMetadata != null)
+            if (baseline.BuildMetadata is null && !(comparand.BuildMetadata is null))
                 compatability |= SemanticVersionCompatabilities.BuildMetadataAdded;
-            else if (baseline.BuildMetadata != null && comparand.BuildMetadata == null)
+            else if (!(baseline.BuildMetadata is null) && comparand.BuildMetadata is null)
                 compatability |= SemanticVersionCompatabilities.BuildMetadataRemoved;
-            else if (baseline.BuildMetadata != null && comparand.BuildMetadata != null && !StringComparer.Ordinal.Equals(baseline.BuildMetadata, comparand.BuildMetadata))
+            else if (!(baseline.BuildMetadata is null) && !(comparand.BuildMetadata is null) && !StringComparer.Ordinal.Equals(baseline.BuildMetadata, comparand.BuildMetadata))
                 compatability |= SemanticVersionCompatabilities.DifferentBuildMetadata;
 
             return compatability;
@@ -416,7 +416,7 @@ namespace SourceCode.Clay
 
                 case 'p':
                 case 'P':
-                    if (PreRelease == null)
+                    if (PreRelease is null)
                         str = $"{Major}.{Minor}.{Patch}";
                     else
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}";
@@ -424,7 +424,7 @@ namespace SourceCode.Clay
 
                 case 'm':
                 case 'M':
-                    if (BuildMetadata == null)
+                    if (BuildMetadata is null)
                         str = $"{Major}.{Minor}.{Patch}";
                     else
                         str = $"{Major}.{Minor}.{Patch}+{BuildMetadata}";
@@ -432,11 +432,11 @@ namespace SourceCode.Clay
 
                 case 'f':
                 case 'F':
-                    if (PreRelease == null && BuildMetadata == null)
+                    if (PreRelease is null && BuildMetadata is null)
                         str = $"{Major}.{Minor}.{Patch}";
-                    else if (PreRelease == null)
+                    else if (PreRelease is null)
                         str = $"{Major}.{Minor}.{Patch}+{BuildMetadata}";
-                    else if (BuildMetadata == null)
+                    else if (BuildMetadata is null)
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}";
                     else
                         str = $"{Major}.{Minor}.{Patch}-{PreRelease}+{BuildMetadata}";

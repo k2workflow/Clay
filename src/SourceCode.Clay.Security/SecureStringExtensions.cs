@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Security
         /// <returns></returns>
         public static string ToUnsecureString(this SecureString ss)
         {
-            if (ss == null) return null;
+            if (ss is null) return null;
 
             // https://blogs.msdn.microsoft.com/fpintos/2009/06/12/how-to-properly-convert-securestring-to-string/
             var ptr = IntPtr.Zero;
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Security
 
         public static SecureString ToSecureString(this string str)
         {
-            if (str == null) return null;
+            if (str is null) return null;
 
             var ss = new SecureString();
             for (var i = 0; i < str.Length; i++)

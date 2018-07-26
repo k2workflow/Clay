@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static byte[] GetSqlBytes(this SqlDataReader sqlDr, string name)
         {
-            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Data.SqlClient
         public static TEnum? GetSqlEnum<TEnum>(this SqlDataReader sqlDr, string name)
            where TEnum : struct, IComparable, IFormattable, IConvertible // We cannot directly constrain by Enum, so approximate by constraining on Enum's implementation
         {
-            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
@@ -67,7 +67,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static string GetSqlXml(this SqlDataReader sqlDr, string name)
         {
-            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static XDocument GetSqlXDocument(this SqlDataReader sqlDr, string name)
         {
-            if (sqlDr == null) throw new ArgumentNullException(nameof(sqlDr));
+            if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException

@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Json
 
         public static Number ToNumber(this JValue value)
         {
-            if (value == null) return default;
+            if (value is null) return default;
 
             if (value.Type == JTokenType.Integer)
             {

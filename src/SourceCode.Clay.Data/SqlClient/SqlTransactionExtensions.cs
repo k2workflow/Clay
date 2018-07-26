@@ -26,8 +26,8 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType)
         {
-            if (sqlTxn == null) throw new ArgumentNullException(nameof(sqlTxn));
-            if (sqlTxn.Connection == null) throw new ArgumentNullException(nameof(sqlTxn));
+            if (sqlTxn is null) throw new ArgumentNullException(nameof(sqlTxn));
+            if (sqlTxn.Connection is null) throw new ArgumentNullException(nameof(sqlTxn));
             if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             var cmd = new SqlCommand(commandText, sqlTxn.Connection)

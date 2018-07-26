@@ -23,8 +23,8 @@ namespace SourceCode.Clay.Json
         /// <returns>The value.</returns>
         public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (propertyHandler == null) throw new ArgumentNullException(nameof(propertyHandler));
+            if (jr is null) throw new ArgumentNullException(nameof(jr));
+            if (propertyHandler is null) throw new ArgumentNullException(nameof(propertyHandler));
 
             if (jr.TokenType == JsonToken.None)
                 jr.Read();
@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Json
                     // '}'
                     case JsonToken.EndObject:
                         {
-                            if (objectFactory == null) return default;
+                            if (objectFactory is null) return default;
 
                             var obj = objectFactory();
                             return obj;

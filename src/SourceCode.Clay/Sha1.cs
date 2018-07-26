@@ -101,7 +101,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in string value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value is null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return s_empty;
 
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
@@ -131,7 +131,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in byte[] bytes)
         {
-            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) return s_empty;
 
             var span = new ReadOnlySpan<byte>(bytes);
@@ -149,7 +149,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(in byte[] bytes, int start, int length)
         {
-            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
             // Do this first to check validity of start/length
             var span = new ReadOnlySpan<byte>(bytes, start, length);
@@ -167,7 +167,7 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static Sha1 Hash(Stream stream)
         {
-            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
             var hash = t_sha1.Value.ComputeHash(stream);
@@ -473,7 +473,7 @@ namespace SourceCode.Clay
         {
             value = default;
 
-            if (hex == null)
+            if (hex is null)
                 return false;
 
             var span = hex.AsSpan();
@@ -502,7 +502,7 @@ namespace SourceCode.Clay
         /// <exception cref="FormatException">Sha1</exception>
         public static Sha1 Parse(string hex)
         {
-            if (hex == null) throw new ArgumentNullException(nameof(hex));
+            if (hex is null) throw new ArgumentNullException(nameof(hex));
 
             var span = hex.AsSpan();
             return Parse(span);

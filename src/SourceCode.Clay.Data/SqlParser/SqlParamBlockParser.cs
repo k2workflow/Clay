@@ -182,7 +182,7 @@ namespace SourceCode.Clay.Data.SqlParser
             if (tokenizer.Current.Kind != SqlTokenKind.Symbol)
                 return false;
 
-            if (tokenizer.Current.Value == null) return false;
+            if (tokenizer.Current.Value is null) return false;
             if (tokenizer.Current.Value.Length != 1) return false;
             if (tokenizer.Current.Value[0] != expected) return false;
 

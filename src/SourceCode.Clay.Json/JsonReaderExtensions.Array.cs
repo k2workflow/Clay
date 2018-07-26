@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Json
         /// <param name="itemFactory">The item factory.</param>
         public static void ProcessArray(this JsonReader jr, Action itemFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
+            if (jr is null) throw new ArgumentNullException(nameof(jr));
 
             if (jr.TokenType == JsonToken.None)
                 jr.Read();
@@ -93,8 +93,8 @@ namespace SourceCode.Clay.Json
         /// <returns>The value.</returns>
         public static IEnumerable<T> EnumerateArray<T>(this JsonReader jr, Func<T> itemFactory)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
-            if (itemFactory == null) throw new ArgumentNullException(nameof(itemFactory));
+            if (jr is null) throw new ArgumentNullException(nameof(jr));
+            if (itemFactory is null) throw new ArgumentNullException(nameof(itemFactory));
 
             if (jr.TokenType == JsonToken.None)
                 jr.Read();
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Json
         /// <returns>The number of items skipped.</returns>
         public static int SkipCountArray(this JsonReader jr)
         {
-            if (jr == null) throw new ArgumentNullException(nameof(jr));
+            if (jr is null) throw new ArgumentNullException(nameof(jr));
 
             var count = 0;
 

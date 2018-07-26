@@ -74,7 +74,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             var hc = new HashCode();
 
-            if (_components != null)
+            if (!(_components is null))
             {
                 hc.Add(_components.Length);
                 hc.Add(_components[0]);
@@ -112,7 +112,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
         public static OasExpression Parse(string s)
         {
-            if (s == null) throw new ArgumentNullException(nameof(s));
+            if (s is null) throw new ArgumentNullException(nameof(s));
             if (!TryParse(s, out var result)) throw new FormatException();
             return result;
         }
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             if (string.IsNullOrEmpty(s))
             {
                 result = default;
-                return s != null;
+                return !(s is null);
             }
 
             var currentComponent = new StringBuilder();
@@ -193,7 +193,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <returns>The string format of the expression.</returns>
         public override string ToString()
         {
-            if (_components == null) return string.Empty;
+            if (_components is null) return string.Empty;
 
             var sb = new StringBuilder();
             for (var i = 0; i < _components.Length; i++)

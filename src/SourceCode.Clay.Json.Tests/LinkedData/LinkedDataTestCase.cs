@@ -98,7 +98,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
             var expectDoc = await ReadResourceAsync(expect);
             var options = new LinkedDataTestOptions(baseIri);
 
-            if (option != null)
+            if (!(option is null))
             {
                 if (option.TryGetValue("base", out var baseToken))
                 {
@@ -111,7 +111,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
                 }
             }
 
-            if (contexts != null)
+            if (!(contexts is null))
             {
                 foreach (var (iri, contextValue) in contexts)
                 {

@@ -121,7 +121,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 [OasExpression.Parse("http://test/1/{$statusCode}")] = new OasReferable<OasPath>("#/test/1"),
             });
 
-            Assert.False(cb1 == null);
+            Assert.NotNull(cb1);
             Assert.True(cb2 == cb3);
             Assert.False(cb1 == cb2);
             Assert.False(cb3 == cb4);

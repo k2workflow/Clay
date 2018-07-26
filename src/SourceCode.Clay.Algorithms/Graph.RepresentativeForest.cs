@@ -51,9 +51,9 @@ namespace SourceCode.Clay.Algorithms
         /// </remarks>
         public void ToRepresentativeForest(Action<Edge<T>> onCycle, Action<TreeNode<T>> onTreeNode)
         {
-            if (onCycle == null) throw new ArgumentNullException(nameof(onCycle));
-            if (onTreeNode == null) throw new ArgumentNullException(nameof(onTreeNode));
-            if (_nodes == null) throw new InvalidOperationException();
+            if (onCycle is null) throw new ArgumentNullException(nameof(onCycle));
+            if (onTreeNode is null) throw new ArgumentNullException(nameof(onTreeNode));
+            if (_nodes is null) throw new InvalidOperationException();
             if (_nodes.Count == 0) return;
 
             // Capture
@@ -74,7 +74,7 @@ namespace SourceCode.Clay.Algorithms
                 nodes[v] = vstate;
                 stack.Push(v);
 
-                if (vstate.Edges != null)
+                if (!(vstate.Edges is null))
                 {
                     foreach (var w in vstate.Edges)
                     {
@@ -143,7 +143,7 @@ namespace SourceCode.Clay.Algorithms
             // Add exit nodes.
             void FindExits(T v, Node vstate)
             {
-                if (vstate.Edges == null) return;
+                if (vstate.Edges is null) return;
 
                 // The entry-point for cycles contains the list of exit nodes.
                 var cycleState = nodes[vstate.Cycle];
@@ -155,7 +155,7 @@ namespace SourceCode.Clay.Algorithms
                     // If w is in a different cycle, then it is an escape from the current cycle.
                     if (!equalityComparer.Equals(wstate.Cycle, vstate.Cycle))
                     {
-                        if (cycleState.Exits == null)
+                        if (cycleState.Exits is null)
                         {
                             cycleState.Exits = new HashSet<T>(equalityComparer);
                             nodes[vstate.Cycle] = cycleState;
@@ -188,7 +188,7 @@ namespace SourceCode.Clay.Algorithms
 
                 onTreeNode(new TreeNode<T>(v, equalityComparer, hierarchy));
 
-                if (vstate.Exits == null) return;
+                if (vstate.Exits is null) return;
 
                 var currentIndex = hierarchy.Count;
                 hierarchy.Add(0);

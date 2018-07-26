@@ -35,7 +35,7 @@ namespace SourceCode.Clay.OpenApi.Tests
 
         private static void GenerateExpectedCode(JToken value, IndentedTextWriter writer)
         {
-            if (value == null)
+            if (value is null)
             {
                 writer.Write("null");
             }

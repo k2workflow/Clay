@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Collections.Generic
             var formalParam = Expression.Parameter(typeof(TKey), "key");
 
             // Fast path if no cases
-            if (cases == null || cases.Count == 0)
+            if (cases is null || cases.Count == 0)
             {
                 values = Array.Empty<TValue>();
                 expr = Expression.Lambda<Func<TKey, int>>(notFound, formalParam);

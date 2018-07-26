@@ -36,7 +36,7 @@ namespace SourceCode.Clay.OpenApi
         /// <summary>
         /// Gets a value indicating whether the reference is a value.
         /// </summary>
-        public bool IsValue => Value != null;
+        public bool IsValue => !(Value is null);
 
         /// <summary>
         /// Gets a value indicating whether the reference is null.
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="reference">The external reference pointer.</param>
         public OasReferable(Uri url, JsonPointer reference)
         {
-            if (url == null && reference.Count == 0) throw new ArgumentNullException(nameof(url));
+            if (url is null && reference.Count == 0) throw new ArgumentNullException(nameof(url));
             Value = default;
             Reference = new OasReference(url, reference);
         }

@@ -128,7 +128,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="json">The <see cref="JObject"/> to populate.</param>
         protected virtual void SerializeParameterBody(OasParameterBody value, JObject json)
         {
-            if (value == null) return;
+            if (value is null) return;
 
             var examples = value.Examples
                 .Select(x => ValueTuple.Create(x.Key?.ToString(), x.Value));

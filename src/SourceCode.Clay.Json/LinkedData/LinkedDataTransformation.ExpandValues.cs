@@ -50,15 +50,15 @@ namespace SourceCode.Clay.Json.LinkedData
                 [LinkedDataKeywords.Value] = value.DeepClone()
             };
 
-            if (hasTerm && term.TypeMapping != null)
+            if (hasTerm && !(term.TypeMapping is null))
                 result[LinkedDataKeywords.Type] = term.TypeMapping;
 
             if (value.Is(JTokenType.String))
             {
                 if (hasTerm && term.Options.HasFlag(LinkedDataTermOptions.ClearLanguage)) { }
-                else if (hasTerm && term.Language != null)
+                else if (hasTerm && !(term.Language is null))
                     result[LinkedDataKeywords.Language] = term.Language;
-                else if (activeContext.Language != null)
+                else if (!(activeContext.Language is null))
                     result[LinkedDataKeywords.Language] = activeContext.Language;
             }
 
@@ -73,12 +73,12 @@ namespace SourceCode.Clay.Json.LinkedData
             Dictionary<string, bool> defined = null)
         {
             // 1) If value is a keyword or null, return value as is.
-            if (value == null || LinkedDataKeywords.IsKeyword(value))
+            if (value is null || LinkedDataKeywords.IsKeyword(value))
                 return value;
 
             // 2) If local context is not null, it contains a key that equals value, and the value associated with the
             //    key that equals value in defined is not true
-            if (localContext != null && localContext.TryGetValue(value, out var termToken) &&
+            if (!(localContext is null) && localContext.TryGetValue(value, out var termToken) &&
                 !defined.ContainsKey(value))
             {
                 activeContext.AddTerm(activeContext, localContext, value, termToken, defined);
@@ -111,7 +111,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
                 // 5.3) If local context is not null, it contains a key that equals prefix, and the value associated
                 //      with the key that equals prefix in defined is not true
-                if (localContext != null && localContext.TryGetValue(prefix, out termToken) &&
+                if (!(localContext is null) && localContext.TryGetValue(prefix, out termToken) &&
                     !defined.ContainsKey(prefix))
                 {
                     activeContext.AddTerm(activeContext, localContext, prefix, termToken, defined);
@@ -128,7 +128,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 6) If vocab is true, and active context has a vocabulary mapping, return the result of concatenating the
             //    vocabulary mapping with value.
-            if (vocab && activeContext.Vocabulary != null)
+            if (vocab && !(activeContext.Vocabulary is null))
                 return activeContext.Vocabulary + value;
 
             // 7) Otherwise, if document relative is true set value to the result of resolving value against the base

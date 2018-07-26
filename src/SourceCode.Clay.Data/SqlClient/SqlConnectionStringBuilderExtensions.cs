@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlConnectionStringBuilder ClearInlineCredentials(this SqlConnectionStringBuilder sqlCsb)
         {
-            if (sqlCsb == null) throw new ArgumentNullException(nameof(sqlCsb));
+            if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
 
             sqlCsb.UserID = string.Empty;
             sqlCsb.Password = string.Empty;
