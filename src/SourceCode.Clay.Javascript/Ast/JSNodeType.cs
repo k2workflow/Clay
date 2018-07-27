@@ -1,0 +1,42 @@
+﻿namespace SourceCode.Clay.Javascript.Ast
+{
+    public enum JSNodeType
+    {
+        Identifier,
+        Literal,
+        Program,
+        ExpressionStatement,
+        BlockStatement,
+        DebuggerStatement,
+        WithStatement,
+        ReturnStatement,
+        LabeledStatement,
+        BreakStatement,
+        ContinueStatement,
+        IfStatement,
+        SwitchStatement,
+        SwitchCase,
+        ThrowStatement,
+        TryStatement,
+        CatchClause,
+        WhileStatement,
+        DoWhileStatement,
+        ForStatement,
+        ForInStatement,
+        FunctionDeclaration,
+        VariableDeclaration,
+        VariableDeclarator,
+        ThisExpression,
+        ArrayExpression,
+        ObjectExpression,
+        Property,
+        FunctionExpression,
+        UnaryExpression,
+        BinaryExpression,
+        MemberExpression,
+        ConditionalExpression,
+        CallExpression,
+        NewExpression,
+        SequenceExpression
+    }
+}
