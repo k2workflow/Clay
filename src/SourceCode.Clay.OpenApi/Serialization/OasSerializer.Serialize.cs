@@ -693,7 +693,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The serialized value.</returns>
         public virtual JToken Serialize<T>(T value)
         {
-            if (Equals(value, default(T))) return null;
+            if (ReferenceEquals(value, default(T))) return null;
 
             if (typeof(T) == typeof(string)) return (string)(object)value;
 
