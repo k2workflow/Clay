@@ -1,6 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <!-- Common properties defined in Directory.Build.props -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -24,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SourceCode.Clay.IO\SourceCode.Clay.IO.csproj" />
+    <ProjectReference Include="..\SourceCode.Clay.Javascript\SourceCode.Clay.Javascript.csproj" />
   </ItemGroup>
-  
+
 </Project>
