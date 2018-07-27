@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- CA1716	CLI holdover -->
+    <!-- CA1010	Collection initializer hack requires implementing IEnumerable. -->
+    <!-- CA1033	Types are not sealed for extensibility. -->
+    <!-- CA2225	Constructors are To/From. -->
+    <!-- CA1043	Fluent interface. -->
+    <!-- CA1044	Fluent interface. -->
+    <NoWarn>$(NoWarn);CA1716;CA1010;CA1033;CA2225;CA1044;CA1043</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.1">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SourceCode.Clay\SourceCode.Clay.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Javascript</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Ecmascript AST.</Description>
+    <PackageTags>clay javascript ast estree</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+  </PropertyGroup>
+  
+</Project>
