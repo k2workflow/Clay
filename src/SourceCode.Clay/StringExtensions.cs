@@ -67,7 +67,7 @@ namespace SourceCode.Clay
         public static string Elide(this string str, int totalWidth)
         {
             // No need to elide if string is already within the required size
-            if (str == null || totalWidth <= 2 || str.Length <= totalWidth)
+            if (str is null || totalWidth <= 2 || str.Length <= totalWidth)
                 return str;
 
             // Since Elide is expected to be used primarily for display purposes, it needs to respect

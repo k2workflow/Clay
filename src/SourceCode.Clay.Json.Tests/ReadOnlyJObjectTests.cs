@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Json.Tests
             };
 
             Assert.False(json.Equals(null));
-            Assert.True(json != null);
+            Assert.True(!(json is null));
 
             var clone = (JObject)json.DeepClone();
             Assert.Equal(json.Count, clone.Count);
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Json.Tests
             var json = new ReadOnlyJObject(jobj);
 
             Assert.False(json.Equals(null));
-            Assert.True(json != null);
+            Assert.True(!(json is null));
             Assert.Equal(jobj.Count, json.Count);
             Assert.Equal(jobj.ToString(), json.ToString());
 

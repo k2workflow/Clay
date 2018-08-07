@@ -104,7 +104,7 @@ namespace SourceCode.Clay.IO
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer is null) throw new ArgumentNullException(nameof(buffer));
             return Read(new Span<byte>(buffer, offset, count));
         }
 
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.IO
 
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer is null) throw new ArgumentNullException(nameof(buffer));
             return BeginRead(new Memory<byte>(buffer, offset, count), callback, state);
         }
 

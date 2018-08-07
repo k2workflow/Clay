@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Algorithms.Tests
                 return x.IsSupersetOf(y) && y.IsSupersetOf(x);
             }
 
-            public int GetHashCode(ISet<T> obj) => obj == null ? 0 : HashCode.Combine(obj.Count);
+            public int GetHashCode(ISet<T> obj) => obj is null ? 0 : HashCode.Combine(obj.Count);
         }
 
         private static void AssertSetEqual<T>(HashSet<T> expected, HashSet<T> actual)

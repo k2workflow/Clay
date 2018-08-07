@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Json.LinkedData
         internal string Base { get; }
         internal string Vocabulary { get; }
         internal string Language { get; }
-        internal bool HasValue => _remoteContexts != null;
+        internal bool HasValue => !(_remoteContexts is null);
 
         internal LinkedDataContext(
             LinkedDataOptions options)
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
         internal bool TryGetTerm(string term, out LinkedDataTerm result)
         {
-            if (term == null)
+            if (term is null)
             {
                 result = default;
                 return false;
@@ -191,7 +191,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     var value = (string)baseToken;
 
                     // 3.4.2) If value is null, remove the base IRI of result.
-                    if (value == null) { }
+                    if (value is null) { }
                     // 3.4.3) Otherwise, if value is an absolute IRI, the base IRI of
                     //        result is set to value.
                     else if (Uri.IsWellFormedUriString(value, UriKind.Absolute)) { }
@@ -199,7 +199,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     //        of result is not null, set the base IRI of result to the
                     //        result of resolving value against the current base IRI of
                     //        result.
-                    else if (Uri.IsWellFormedUriString(value, UriKind.Relative) && result.Base != null)
+                    else if (Uri.IsWellFormedUriString(value, UriKind.Relative) && !(result.Base is null))
                         value = Utils.Resolve(result.Base, value);
                     else throw new LinkedDataException(LinkedDataErrorCode.InvalidBaseIri);
 
@@ -221,7 +221,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
                     var value = (string)vocabToken;
                     // 3.5.2) If value is null, remove any vocabulary mapping from result.
-                    if (value == null) { }
+                    if (value is null) { }
                     // 3.5.3) Otherwise, if value is an absolute IRI or blank node identifier,
                     //        the vocabulary mapping of result is set to value.
                     else if (value.StartsWith("_:", StringComparison.Ordinal) ||
@@ -246,7 +246,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
 #                   pragma warning disable CA1308 // Normalize strings to uppercase
                     var value = (string)langToken;
-                    if (value == null) { }
+                    if (value is null) { }
                     else value = value.ToLowerInvariant();
 #                   pragma warning restore CA1308 // Normalize strings to uppercase
 

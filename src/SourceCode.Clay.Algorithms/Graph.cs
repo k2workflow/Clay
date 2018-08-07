@@ -67,7 +67,7 @@ namespace SourceCode.Clay.Algorithms
             var nodes = _nodes;
 
             var fromState = GetOrAdd(from);
-            if (fromState.Edges == null)
+            if (fromState.Edges is null)
             {
                 fromState.Edges = new ConcurrentDictionary<T, EdgeOptions>(_equalityComparer);
                 _nodes[from] = fromState;

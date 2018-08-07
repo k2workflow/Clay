@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Buffers
 
         public static void Sort<T>(this Span<T> span, Comparison<T> comparison)
         {
-            if (comparison == null) throw new ArgumentNullException(nameof(comparison));
+            if (comparison is null) throw new ArgumentNullException(nameof(comparison));
 
             // Short-circuit for small N
             switch (span.Length)

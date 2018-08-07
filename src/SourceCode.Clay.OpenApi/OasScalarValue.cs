@@ -114,7 +114,7 @@ namespace SourceCode.Clay.OpenApi
         /// <param name="string">The string.</param>
         public OasScalarValue(string @string)
         {
-            if (@string == null)
+            if (@string is null)
             {
                 _typeCode = 0;
                 _number = default;

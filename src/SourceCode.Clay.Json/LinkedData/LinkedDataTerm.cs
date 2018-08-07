@@ -236,7 +236,7 @@ namespace SourceCode.Clay.Json.LinkedData
             }
             // 15) Otherwise, if active context has a vocabulary mapping, the IRI mapping of definition is set to the
             //     result of concatenating the value associated with the vocabulary mapping and term.
-            else if (activeContext.Vocabulary != null)
+            else if (!(activeContext.Vocabulary is null))
             {
                 iriMapping = activeContext.Vocabulary + term;
             }

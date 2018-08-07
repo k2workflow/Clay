@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Json.Pointers
         {
             get
             {
-                if (_value == null) return null;
+                if (_value is null) return null;
                 if (!ushort.TryParse(_value, NumberStyles.None, CultureInfo.InvariantCulture, out var value)) return null;
                 return value;
             }

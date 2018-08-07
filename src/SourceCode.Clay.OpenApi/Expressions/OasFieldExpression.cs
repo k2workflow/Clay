@@ -274,7 +274,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         {
             var i = index;
 
-            if (s == null || !StartsWith(s, "$", i++))
+            if (s is null || !StartsWith(s, "$", i++))
             {
                 result = default;
                 return false;

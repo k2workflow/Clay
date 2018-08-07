@@ -110,9 +110,9 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<int, TValue> ToDynamicSwitch<TItem, TValue>(this IReadOnlyList<TItem> cases, Func<TItem, int> keyExtractor, Func<TItem, TValue> valueExtractor)
         {
-            if (cases == null) throw new ArgumentNullException(nameof(cases));
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-            if (valueExtractor == null) throw new ArgumentNullException(nameof(valueExtractor));
+            if (cases is null) throw new ArgumentNullException(nameof(cases));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (valueExtractor is null) throw new ArgumentNullException(nameof(valueExtractor));
 
             var unique = new Dictionary<int, TValue>(cases.Count);
             foreach (var @case in cases)
@@ -137,8 +137,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>The compiled switch statement.</returns>
         public static IDynamicSwitch<int, TItem> ToDynamicSwitch<TItem>(this IReadOnlyList<TItem> cases, Func<TItem, int> keyExtractor)
         {
-            if (cases == null) throw new ArgumentNullException(nameof(cases));
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (cases is null) throw new ArgumentNullException(nameof(cases));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
             TItem valueExtractor(TItem item) => item; // Local function
             var impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);

@@ -78,12 +78,12 @@ namespace SourceCode.Clay
                 hash.Add(obj.Minor);
                 hash.Add(obj.Patch);
 
-                if (obj.PreRelease != null)
+                if (!(obj.PreRelease is null))
                 {
                     hash.Add(obj.PreRelease, StringComparer.Ordinal);
                 }
 
-                if (obj.BuildMetadata != null)
+                if (!(obj.BuildMetadata is null))
                 {
                     hash.Add(obj.BuildMetadata, StringComparer.Ordinal);
                 }
@@ -127,7 +127,7 @@ namespace SourceCode.Clay
                 hash.Add(obj.Minor);
                 hash.Add(obj.Patch);
 
-                if (obj.PreRelease != null)
+                if (!(obj.PreRelease is null))
                 {
                     hash.Add(obj.PreRelease, StringComparer.Ordinal);
                 }

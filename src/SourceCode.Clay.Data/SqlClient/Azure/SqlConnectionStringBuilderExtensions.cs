@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
         /// <returns></returns>
         public static SqlConnectionStringBuilder MakeRobust(this SqlConnectionStringBuilder sqlCsb, SqlConnectionRetryOptions options)
         {
-            if (sqlCsb == null) throw new ArgumentNullException(nameof(sqlCsb));
+            if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
 
             var opt = options ?? SqlConnectionRetryOptions.Default;
 

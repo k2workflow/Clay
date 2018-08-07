@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Threading
         public static async Task ForAsync(int fromInclusive, int toExclusive, ParallelOptions options, Func<int, Task> action)
         {
             if (toExclusive < fromInclusive) throw new ArgumentOutOfRangeException(nameof(toExclusive));
-            if (action == null) throw new ArgumentNullException(nameof(action));
+            if (action is null) throw new ArgumentNullException(nameof(action));
 
             var opt = Build(options);
 
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Threading
         public static async Task<IReadOnlyDictionary<int, TValue>> ForAsync<TValue>(int fromInclusive, int toExclusive, ParallelOptions options, Func<int, Task<TValue>> func)
         {
             if (toExclusive < fromInclusive) throw new ArgumentOutOfRangeException(nameof(toExclusive));
-            if (func == null) throw new ArgumentNullException(nameof(func));
+            if (func is null) throw new ArgumentNullException(nameof(func));
 
             var dict = new ConcurrentDictionary<int, TValue>();
 
@@ -96,8 +96,8 @@ namespace SourceCode.Clay.Threading
         /// <returns></returns>
         public static async Task ForEachAsync<TSource>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task> action)
         {
-            if (source == null) return;
-            if (action == null) throw new ArgumentNullException(nameof(action));
+            if (source is null) return;
+            if (action is null) throw new ArgumentNullException(nameof(action));
 
             var opt = Build(options);
 
@@ -124,8 +124,8 @@ namespace SourceCode.Clay.Threading
         /// <returns></returns>
         public static async ValueTask<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
         {
-            if (source == null) return ImmutableDictionary<TSource, TValue>.Empty;
-            if (func == null) throw new ArgumentNullException(nameof(func));
+            if (source is null) return ImmutableDictionary<TSource, TValue>.Empty;
+            if (func is null) throw new ArgumentNullException(nameof(func));
 
             var dict = new ConcurrentDictionary<TSource, TValue>();
 
@@ -156,8 +156,8 @@ namespace SourceCode.Clay.Threading
 
         private static ExecutionDataflowBlockOptions Build(ParallelOptions options) => new ExecutionDataflowBlockOptions
         {
-            CancellationToken = options == null ? CancellationToken.None : options.CancellationToken,
-            MaxDegreeOfParallelism = options == null ? -1 : options.MaxDegreeOfParallelism
+            CancellationToken = options is null ? CancellationToken.None : options.CancellationToken,
+            MaxDegreeOfParallelism = options is null ? -1 : options.MaxDegreeOfParallelism
         };
     }
 }

@@ -25,7 +25,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JObject"/> representing the dictionary.</returns>
         protected virtual JObject ToJsonMap<T>(IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
         {
-            if (dictionary == null)
+            if (dictionary is null)
             {
                 if (required) return new JObject();
                 return null;
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JObject"/> representing the dictionary.</returns>
         protected virtual JObject ToJsonMap<T>(IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
         {
-            if (dictionary == null)
+            if (dictionary is null)
             {
                 if (required) return new JObject();
                 return null;
@@ -93,7 +93,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         protected virtual void SetJsonMap<T>(JObject container, string key, IEnumerable<ValueTuple<string, T>> dictionary, bool required = false)
         {
             var result = ToJsonMap(dictionary, required);
-            if (result != null) container.Add(key, result);
+            if (!(result is null)) container.Add(key, result);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         protected virtual void SetJsonMap<T>(JObject container, string key, IEnumerable<KeyValuePair<string, T>> dictionary, bool required = false)
         {
             var result = ToJsonMap(dictionary, required);
-            if (result != null) container.Add(key, result);
+            if (!(result is null)) container.Add(key, result);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The <see cref="JArray"/> containing the list.</returns>
         protected virtual JArray ToJsonArray<T>(IEnumerable<T> list, bool required = false)
         {
-            if (list == null)
+            if (list is null)
             {
                 if (required) return new JArray();
                 return null;
@@ -154,7 +154,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         protected virtual void SetJsonArray<T>(JObject container, string key, IEnumerable<T> list, bool required = false)
         {
             var result = ToJsonArray(list);
-            if (result != null) container.Add(key, result);
+            if (!(result is null)) container.Add(key, result);
         }
 
         /// <summary>
@@ -189,9 +189,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         protected virtual void SetJsonValue(JObject container, string key, string value, bool required = false)
         {
-            if (required && value == null)
+            if (required && value is null)
                 container.Add(key, null);
-            else if (required || value != null)
+            else if (required || !(value is null))
                 container.Add(key, value);
         }
 
@@ -204,7 +204,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         protected virtual void SetJsonValue(JObject container, string key, JToken value, bool required = false)
         {
-            if (required || value != null)
+            if (required || !(value is null))
                 container.Add(key, value);
         }
 
@@ -217,9 +217,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         protected virtual void SetJsonValue(JObject container, string key, Uri value, bool required = false)
         {
-            if (value == null && required)
+            if (value is null && required)
                 container.Add(key, null);
-            else if (value != null)
+            else if (!(value is null))
                 container.Add(key, value.ToString());
         }
 
@@ -232,9 +232,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         protected virtual void SetJsonValue(JObject container, string key, ContentType value, bool required = false)
         {
-            if (value == null && required)
+            if (value is null && required)
                 container.Add(key, null);
-            else if (value != null)
+            else if (!(value is null))
                 container.Add(key, value.ToString());
         }
 
@@ -247,9 +247,9 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         protected virtual void SetJsonValue(JObject container, string key, MailAddress value, bool required = false)
         {
-            if (value == null && required)
+            if (value is null && required)
                 container.Add(key, null);
-            else if (value != null)
+            else if (!(value is null))
                 container.Add(key, value.ToString());
         }
 
@@ -278,7 +278,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         protected virtual void SetJsonObject<T>(JObject container, string key, T value, bool required = false)
         {
             var js = Serialize(value);
-            if (js == null)
+            if (js is null)
             {
                 if (required) container.Add(key, new JObject());
                 return;

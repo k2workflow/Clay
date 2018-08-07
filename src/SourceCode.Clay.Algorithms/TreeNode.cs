@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Algorithms
         {
             get
             {
-                if (Hierarchy == null) return null;
+                if (Hierarchy is null) return null;
 
                 var capacity = 1 + Hierarchy.Count * (3 + 1); // Initial '/', plus ~3 chars for each int, plus '/' for each segment
 
@@ -162,7 +162,7 @@ namespace SourceCode.Clay.Algorithms
             var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
             hashCode = hashCode * -1521134295 + equalityComparer.GetHashCode(Node);
 
-            if (Hierarchy != null)
+            if (!(Hierarchy is null))
             {
                 var step = Math.Max(1, Hierarchy.Count / 10);
 

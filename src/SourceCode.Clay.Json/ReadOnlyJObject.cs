@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Json
                 var json = _json[key];
 
                 // Clone to avoid call-site mutation post-facto
-                if (json != null)
+                if (!(json is null))
                     json = json.DeepClone();
 
                 return json;
@@ -43,14 +43,14 @@ namespace SourceCode.Clay.Json
         {
             _json = new JObject();
 
-            if (source == null) return;
+            if (source is null) return;
 
             foreach (var item in source)
             {
                 var value = item.Value;
 
                 // Clone to avoid call-site mutation post-facto
-                if (value != null)
+                if (!(value is null))
                     value = value.DeepClone();
 
                 _json.Add(item.Key, value);
@@ -61,14 +61,14 @@ namespace SourceCode.Clay.Json
         {
             _json = new JObject();
 
-            if (items == null) return;
+            if (items is null) return;
 
             for (var i = 0; i < items.Length; i++)
             {
                 var value = items[i].Value;
 
                 // Clone to avoid call-site mutation post-facto
-                if (value != null)
+                if (!(value is null))
                     value = value.DeepClone();
 
                 _json.Add(items[i].Key, value);
@@ -79,14 +79,14 @@ namespace SourceCode.Clay.Json
         {
             _json = new JObject();
 
-            if (items == null) return;
+            if (items is null) return;
 
             foreach (var kvp in items)
             {
                 var value = kvp.Value;
 
                 // Clone to avoid call-site mutation post-facto
-                if (value != null)
+                if (!(value is null))
                     value = value.DeepClone();
 
                 _json.Add(kvp.Key, value);
@@ -105,7 +105,7 @@ namespace SourceCode.Clay.Json
                 return false;
 
             // Clone to avoid call-site mutation post-facto
-            if (json != null)
+            if (!(json is null))
                 value = json.DeepClone();
 
             return true;
@@ -130,10 +130,10 @@ namespace SourceCode.Clay.Json
         /// <param name="extra"></param>
         public ReadOnlyJObject Merge(IEnumerable<KeyValuePair<string, JToken>> nodes)
         {
-            if (nodes == null || !System.Linq.Enumerable.Any(nodes))
+            if (nodes is null || !System.Linq.Enumerable.Any(nodes))
                 return this;
 
-            if (_json == null || _json.Count == 0)
+            if (_json is null || _json.Count == 0)
                 return new ReadOnlyJObject(nodes);
 
             // TODO: This is slow - this and the ctor both enumerate

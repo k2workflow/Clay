@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Algorithms
                 nodes[v] = vstate;
                 stack.Push(v);
 
-                if (vstate.Edges != null)
+                if (!(vstate.Edges is null))
                 {
                     foreach (var w in vstate.Edges)
                     {

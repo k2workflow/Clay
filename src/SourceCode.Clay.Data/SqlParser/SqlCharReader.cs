@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="count">The number of characters filled. This may be more (or less, if the source is empty) than requested.</param>
         public void FillLength(char[] buffer, int minimumCount, out int count)
         {
-            Debug.Assert(buffer != null);
+            Debug.Assert(!(buffer is null));
             Debug.Assert(minimumCount >= 0);
             Debug.Assert(minimumCount <= buffer.Length);
 
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="count">The number of characters filled. This may or may not fill the rest of buffer depending on whether the source is empty.</param>
         public void FillRemaining(char[] buffer, int offset, out int count)
         {
-            Debug.Assert(buffer != null);
+            Debug.Assert(!(buffer is null));
             Debug.Assert(offset >= 0);
             Debug.Assert(offset < buffer.Length);
 
@@ -118,7 +118,7 @@ namespace SourceCode.Clay.Data.SqlParser
         {
             if (length == 0) return;
 
-            Debug.Assert(buffer != null);
+            Debug.Assert(!(buffer is null));
             Debug.Assert(buffer.Length > 0);
             Debug.Assert(offset >= 0);
             Debug.Assert(length >= 0);

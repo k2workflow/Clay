@@ -21,8 +21,8 @@ namespace SourceCode.Clay.Json.LinkedData
         public static bool Is(this JToken jToken, JTokenType type)
         {
             if (type == JTokenType.Null)
-                return jToken == null || jToken.Type == JTokenType.Null;
-            if (jToken == null)
+                return jToken is null || jToken.Type == JTokenType.Null;
+            if (jToken is null)
                 return false;
 
             switch (jToken.Type)
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
         public static string Resolve(string baseUri, string pathToResolve)
         {
-            if (baseUri == null) return pathToResolve;
+            if (baseUri is null) return pathToResolve;
             if (string.IsNullOrWhiteSpace(pathToResolve)) return baseUri;
 
             if (Uri.TryCreate(baseUri, UriKind.Absolute, out var uri))

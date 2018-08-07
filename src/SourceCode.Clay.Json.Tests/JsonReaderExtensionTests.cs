@@ -136,7 +136,7 @@ namespace SourceCode.Clay.Json.Units
 
                     return false;
                 },
-                () => actual = actual == null ? null : "oops");
+                () => actual = actual is null ? null : "oops");
 
                 Assert.Null(actual);
             }

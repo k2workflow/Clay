@@ -30,9 +30,9 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
         {
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            if (items is null) throw new ArgumentNullException(nameof(items));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
             if (dictionaryCreationThreshold < -1) throw new ArgumentOutOfRangeException(nameof(dictionaryCreationThreshold));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer, dictionaryCreationThreshold);
@@ -56,8 +56,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
         {
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
             if (dictionaryCreationThreshold < -1) throw new ArgumentOutOfRangeException(nameof(dictionaryCreationThreshold));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer, dictionaryCreationThreshold);
@@ -76,9 +76,9 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
-            if (items == null) throw new ArgumentNullException(nameof(items));
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            if (items is null) throw new ArgumentNullException(nameof(items));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer);
 
@@ -99,8 +99,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (comparer is null) throw new ArgumentNullException(nameof(comparer));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer);
             return impl;
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor)
         {
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor);
 
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor)
         {
-            if (keyExtractor == null) throw new ArgumentNullException(nameof(keyExtractor));
+            if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor);
             return impl;
@@ -152,7 +152,7 @@ namespace SourceCode.Clay.Collections.Generic
             public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor, in IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold)
                 : base(comparer, dictionaryCreationThreshold)
             {
-                if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+                if (comparer is null) throw new ArgumentNullException(nameof(comparer));
                 if (dictionaryCreationThreshold < -1) throw new ArgumentOutOfRangeException(nameof(dictionaryCreationThreshold));
 
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
@@ -161,7 +161,7 @@ namespace SourceCode.Clay.Collections.Generic
             public KeyedCollectionImpl(in Func<TValue, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
                 : base(comparer)
             {
-                if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+                if (comparer is null) throw new ArgumentNullException(nameof(comparer));
 
                 _keyExtractor = keyExtractor ?? throw new ArgumentNullException(nameof(keyExtractor));
             }

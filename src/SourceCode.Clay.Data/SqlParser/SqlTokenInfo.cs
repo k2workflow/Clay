@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Data.SqlParser
         internal SqlTokenInfo(SqlTokenKind kind, params char[] value)
         {
             Kind = kind;
-            Value = value == null ? null : new string(value);
+            Value = value is null ? null : new string(value);
         }
 
         internal SqlTokenInfo(SqlTokenKind kind, char[] value, int offset, int count)

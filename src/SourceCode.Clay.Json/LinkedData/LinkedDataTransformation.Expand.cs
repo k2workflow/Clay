@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Json.LinkedData
             string activeProperty,
             CancellationToken cancellationToken)
         {
-            if (element == null)
+            if (element is null)
                 return await ExpandNullAsync(
                         (JValue)element,
                         activeContext,
@@ -125,7 +125,7 @@ namespace SourceCode.Clay.Json.LinkedData
             string activeProperty,
             CancellationToken cancellationToken)
         {
-            if (activeProperty == null || activeProperty == LinkedDataKeywords.Graph)
+            if (activeProperty is null || activeProperty == LinkedDataKeywords.Graph)
                 return new ValueTask<JToken>(default(JToken));
             return new ValueTask<JToken>(ExpandValue(activeContext, activeProperty, element));
         }
@@ -216,7 +216,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
                 // 7.3) If expanded property is null or it neither contains a colon (:) nor it is
                 //      a keyword, drop key by continuing to the next key.
-                if (expandedProperty == null ||
+                if (expandedProperty is null ||
                     !expandedProperty.Contains(':', StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -428,7 +428,7 @@ namespace SourceCode.Clay.Json.LinkedData
             if (result.Count == 1 && result.ContainsKey(LinkedDataKeywords.Language))
                 resultToken = null;
 
-            if (activeProperty == null || activeProperty == LinkedDataKeywords.Graph)
+            if (activeProperty is null || activeProperty == LinkedDataKeywords.Graph)
             {
                 if (result.Count == 0)
                     resultToken = null;
@@ -559,7 +559,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 case LinkedDataKeywords.List:
                     // 7.4.9.1) If active property is null or @graph, continue with the next key from element to remove
                     //          the free-floating list.
-                    if (activeProperty == null || activeProperty == LinkedDataKeywords.Graph)
+                    if (activeProperty is null || activeProperty == LinkedDataKeywords.Graph)
                         return;
 
                     // 7.4.9.2) Otherwise, initialize expanded value to the result of using this algorithm recursively

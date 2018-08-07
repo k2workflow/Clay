@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
             if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
             var cmd = new SqlCommand(commandText, sqlCon)
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The connection.</param>
         public static void Reopen(this SqlConnection sqlCon)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             switch (sqlCon.State)
             {
@@ -87,7 +87,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The connection.</param>
         public static async Task ReopenAsync(this SqlConnection sqlCon)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             switch (sqlCon.State)
             {
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns>Cookie value that will be required to close the connection</returns>
         public static byte[] OpenImpersonated(this SqlConnection sqlCon, string impersonatedUsername)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Open the underlying connection
             sqlCon.Reopen();
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Data.SqlClient
                     var o = cmd.ExecuteScalar();
 
                     // Check that the result is non-empty
-                    if (o == null)
+                    if (o is null)
                         throw new ArgumentNullException(nameof(impersonatedUsername));
 
                     user = o.ToString();
@@ -179,7 +179,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns>Cookie value that will be required to close the connection</returns>
         public static async Task<byte[]> OpenImpersonatedAsync(this SqlConnection sqlCon, string impersonatedUsername)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Open the underlying connection
             await sqlCon.ReopenAsync().ConfigureAwait(false);
@@ -202,7 +202,7 @@ namespace SourceCode.Clay.Data.SqlClient
                     var o = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
                     // Check that the result is non-empty
-                    if (o == null)
+                    if (o is null)
                         throw new ArgumentNullException(nameof(impersonatedUsername));
 
                     user = o.ToString();
@@ -240,7 +240,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
         public static void CloseImpersonated(this SqlConnection sqlCon, byte[] cookie)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Check that the underlying connection is still open
             if (sqlCon.State == ConnectionState.Open)
@@ -248,7 +248,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 try
                 {
                     // Only revert the cookie if it is provided
-                    if (cookie != null && cookie.Length > 0) // @COOKIE is VARBINARY(100)
+                    if (!(cookie is null) && cookie.Length > 0) // @COOKIE is VARBINARY(100)
                     {
                         const string sql = "REVERT WITH COOKIE = @cookie;";
                         using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))
@@ -275,7 +275,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
         public static async Task CloseImpersonatedAsync(this SqlConnection sqlCon, byte[] cookie)
         {
-            if (sqlCon == null) throw new ArgumentNullException(nameof(sqlCon));
+            if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
 
             // Check that the underlying connection is still open
             if (sqlCon.State == ConnectionState.Open)
@@ -283,7 +283,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 try
                 {
                     // Only revert the cookie if it is provided
-                    if (cookie != null && cookie.Length > 0)
+                    if (!(cookie is null) && cookie.Length > 0)
                     {
                         const string sql = "REVERT WITH COOKIE = @cookie;";
                         using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))

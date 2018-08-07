@@ -70,7 +70,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
                 for (; instType != typeof(ValueType) && instType != typeof(object); instType = instType.BaseType)
                 {
                     method = _methods.FirstOrDefault(x => x.GetParameters()[0].ParameterType == instType);
-                    if (method != null) break;
+                    if (!(method is null)) break;
                 }
 
                 if (method == default)
@@ -110,10 +110,10 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <returns>The serialized <see cref="JToken"/>.</returns>
         protected virtual JToken SerializeUnknown<T>(T value)
         {
-            if (ReferenceEquals(value, null)) return null;
+            if (ReferenceEquals(value, default(T))) return null;
 
             var mySerializers = _mySerializers;
-            if (mySerializers == null)
+            if (mySerializers is null)
             {
                 Thread.MemoryBarrier();
                 mySerializers = _serializers.GetOrAdd(GetType().TypeHandle, th => new SerializerInfo(Type.GetTypeFromHandle(th)));

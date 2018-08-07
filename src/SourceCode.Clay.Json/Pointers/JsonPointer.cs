@@ -81,7 +81,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns></returns>
         public JsonPointer Merge(params JsonPointerToken[] tokens)
         {
-            if (tokens == null || tokens.Length == 0)
+            if (tokens is null || tokens.Length == 0)
                 return this;
 
             var array = new JsonPointerToken[Count + tokens.Length];
@@ -131,7 +131,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Json pointer specification.</exception>
         public static JsonPointer Parse(string s)
         {
-            if (s == null) throw new ArgumentNullException(nameof(s));
+            if (s is null) throw new ArgumentNullException(nameof(s));
             if (!TryParse(s, out var result)) throw new FormatException("The specified value is not a valid Json pointer.");
             return result;
         }
@@ -150,7 +150,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string s, out JsonPointer result)
         {
-            if (s == null)
+            if (s is null)
             {
                 result = default;
                 return false;
@@ -220,13 +220,13 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>The result of the evaluation.</returns>
         public JToken Evaluate(JToken target, JsonPointerEvaluationOptions options = default)
         {
-            if (_tokens == null) return target;
+            if (_tokens is null) return target;
 
             for (var i = 0; i < _tokens.Length; i++)
             {
                 var token = _tokens[i];
 
-                if (target == null || target.Type == JTokenType.Null)
+                if (target is null || target.Type == JTokenType.Null)
                 {
                     if (options.HasFlag(JsonPointerEvaluationOptions.NullCoalescing)) return target;
                     throw new InvalidOperationException($"Cannot evaluate the token '{token.Value}' on a null value.");
@@ -320,7 +320,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-            => _tokens == null ? 0 : HashCode.Combine(_tokens.Length, _tokens[0]);
+            => _tokens is null ? 0 : HashCode.Combine(_tokens.Length, _tokens[0]);
 
         public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
 
@@ -332,7 +332,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// <returns>The Json pointer.</returns>
         public override string ToString()
         {
-            if (_tokens == null) return string.Empty;
+            if (_tokens is null) return string.Empty;
 
             var sb = new StringBuilder(_tokens.Length * LengthHeuristic);
             for (var i = 0; i < _tokens.Length; i++)
