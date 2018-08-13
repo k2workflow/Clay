@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -9,9 +9,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSIdentifier Label { get; set; }
 
         public JSLabeledStatement()
-        {
-
-        }
+        { }
 
         public JSLabeledStatement(JSIdentifier label)
         {

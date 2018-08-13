@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -10,12 +7,11 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public JSNodeConverter()
         {
-
         }
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == null) throw new ArgumentNullException(nameof(objectType));
+            if (objectType is null) throw new ArgumentNullException(nameof(objectType));
             return typeof(IJSNode).IsAssignableFrom(objectType);
         }
     }

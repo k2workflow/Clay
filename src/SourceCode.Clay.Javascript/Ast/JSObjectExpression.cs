@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.ObjectExpression;
 
-        public List<JSProperty> Properties { get; }
+        public IList<JSProperty> Properties { get; }
 
         public JSExpression this[Discriminated<JSLiteral, JSIdentifier> key]
         {
@@ -20,15 +20,35 @@ namespace SourceCode.Clay.Javascript.Ast
             Properties = new List<JSProperty>();
         }
 
+        public JSObjectExpression(int capacity)
+        {
+            Properties = new List<JSProperty>(capacity);
+        }
+
+        public JSObjectExpression(JSProperty property)
+        {
+            Properties = new List<JSProperty>() { property };
+        }
+
+        public JSObjectExpression(IEnumerable<JSProperty> properties)
+        {
+            Properties = new List<JSProperty>(properties);
+        }
+
+        public JSObjectExpression(params JSProperty[] properties)
+            : this((IEnumerable<JSProperty>)properties)
+        { }
+
         public JSObjectExpression Add(JSProperty property)
         {
             Properties.Add(property);
             return this;
         }
 
-        public JSObjectExpression Add(IEnumerable<JSProperty> property)
+        public JSObjectExpression Add(IEnumerable<JSProperty> properties)
         {
-            Properties.AddRange(property);
+            foreach (var property in properties)
+                Properties.Add(property);
             return this;
         }
 

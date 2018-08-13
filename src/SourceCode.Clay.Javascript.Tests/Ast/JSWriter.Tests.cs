@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Javascript.Ast
         private void Test<T>(T node, string minified, string normal = null)
             where T : IJSNode
         {
-            if (normal == null) normal = minified;
+            if (normal is null) normal = minified;
             var actualMinified = "sync:" + Write(node, true);
             var actualNormal = "sync:" + Write(node, false);
             Assert.Equal("sync:" + minified, actualMinified);

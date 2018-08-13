@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,11 +10,16 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Callee { get; set; }
 
-        public List<JSExpression> Arguments { get; }
+        public IList<JSExpression> Arguments { get; }
 
         public JSCallExpression()
         {
             Arguments = new List<JSExpression>();
+        }
+
+        public JSCallExpression(int capacity)
+        {
+            Arguments = new List<JSExpression>(capacity);
         }
 
         public JSCallExpression(JSExpression callee)
@@ -23,15 +28,36 @@ namespace SourceCode.Clay.Javascript.Ast
             Callee = callee;
         }
 
+        public JSCallExpression(JSExpression callee, int capacity)
+        {
+            Arguments = new List<JSExpression>(capacity);
+            Callee = callee;
+        }
+
+        public JSCallExpression(JSExpression callee, JSExpression argument)
+        {
+            Arguments = new List<JSExpression>() { argument };
+        }
+
+        public JSCallExpression(JSExpression callee, IEnumerable<JSExpression> arguments)
+        {
+            Arguments = new List<JSExpression>(arguments);
+        }
+
+        public JSCallExpression(JSExpression callee, params JSExpression[] arguments)
+            : this(callee, (IEnumerable<JSExpression>)arguments)
+        { }
+
         public JSCallExpression Add(JSExpression argument)
         {
             Arguments.Add(argument);
             return this;
         }
 
-        public JSCallExpression Add(IEnumerable<JSExpression> argument)
+        public JSCallExpression Add(IEnumerable<JSExpression> arguments)
         {
-            Arguments.AddRange(argument);
+            foreach (var argument in arguments)
+                Arguments.Add(argument);
             return this;
         }
 

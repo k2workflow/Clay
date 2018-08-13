@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -13,9 +13,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSExpression Update { get; set; }
 
         public JSForStatement()
-        {
-
-        }
+        { }
 
         public JSForStatement(Discriminated<JSVariableDeclaration, JSExpression> initializer, JSExpression test, JSExpression update)
         {

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 var item = array[i];
 
                 if (!allowNull &&
-                    (item == null || item.Type == JTokenType.Null))
+                    (item is null || item.Type == JTokenType.Null))
                     throw new InvalidOperationException($"Elements can not be null.");
 
                 var element = ReadJson(item, list[i], serializer);
@@ -49,7 +49,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 var item = array[i];
 
                 if (!allowNull &&
-                    (item == null || item.Type == JTokenType.Null))
+                    (item is null || item.Type == JTokenType.Null))
                     throw new InvalidOperationException($"Elements can not be null.");
 
                 var element = ReadJson(item, null, serializer);
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("elements", out var elementsToken) || !(elementsToken is JArray elementsArray))
                 throw new InvalidOperationException("ArrayExpression must have elements property of type array.");
 
-            if (existingValue == null) existingValue = new JSArrayExpression();
+            if (existingValue is null) existingValue = new JSArrayExpression();
 
             ReadArray(elementsArray, existingValue.Elements, serializer, true);
 
@@ -135,7 +135,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("value", out var valueToken) || !(valueToken is JValue valueValue))
                 throw new InvalidOperationException("If regex is not present on Literal AST, value must be present.");
 
-            if (existingValue == null) existingValue = new JSLiteral();
+            if (existingValue is null) existingValue = new JSLiteral();
             existingValue.Value = valueValue.Value;
 
             return existingValue;
@@ -165,7 +165,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 }
             }
 
-            if (existingValue == null) existingValue = new JSLiteral();
+            if (existingValue is null) existingValue = new JSLiteral();
             existingValue.Value = new JSRegex(pattern, options);
 
             return existingValue;
@@ -189,7 +189,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (right is null)
                 throw new InvalidOperationException("BinaryExpression nmust have left property of type expression.");
 
-            if (existingValue == null) existingValue = new JSBinaryExpression();
+            if (existingValue is null) existingValue = new JSBinaryExpression();
             existingValue.Right.Clear();
 
             existingValue.Operator = @operator;
@@ -250,7 +250,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("body", out var bodyToken) || !(bodyToken is JArray bodyArray))
                 throw new InvalidOperationException("Block must have body property of type array.");
             
-            if (existingValue == null) existingValue = new JSBlockStatement();
+            if (existingValue is null) existingValue = new JSBlockStatement();
 
             ReadArray(bodyArray, existingValue.Body, serializer);
 
@@ -267,7 +267,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(label is null) && !(label is JSIdentifier))
                 throw new InvalidOperationException("BreakStatement must have label property of type identifier or null.");
 
-            if (existingValue == null) existingValue = new JSBreakStatement();
+            if (existingValue is null) existingValue = new JSBreakStatement();
 
             existingValue.Label = (JSIdentifier)label;
 
@@ -286,7 +286,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(callee is JSExpression calleeExpression))
                 throw new InvalidOperationException("CallExpression must have callee property of type expression.");
 
-            if (existingValue == null) existingValue = new JSCallExpression();
+            if (existingValue is null) existingValue = new JSCallExpression();
 
             existingValue.Callee = calleeExpression;
             ReadArray(argumentsArray, existingValue.Arguments, serializer);
@@ -308,7 +308,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(param is IJSPattern paramPattern))
                 throw new InvalidOperationException("CatchClause must have param property of type pattern.");
 
-            if (existingValue == null) existingValue = new JSCatchClause();
+            if (existingValue is null) existingValue = new JSCatchClause();
 
             existingValue.Parameter = paramPattern;
             ReadArray(bodyArray, existingValue.Body, serializer);
@@ -336,7 +336,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(alt is JSExpression altExpression))
                 throw new InvalidOperationException("ConditionalExpression must have alternate property of type expression.");
 
-            if (existingValue == null) existingValue = new JSConditionalExpression();
+            if (existingValue is null) existingValue = new JSConditionalExpression();
 
             existingValue.Test = testExpression;
             existingValue.Consequent = consExpression;
@@ -355,7 +355,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(label is null) && !(label is JSIdentifier))
                 throw new InvalidOperationException("ContinueStatement must have label property of type identifier or null.");
 
-            if (existingValue == null) existingValue = new JSContinueStatement();
+            if (existingValue is null) existingValue = new JSContinueStatement();
 
             existingValue.Label = (JSIdentifier)label;
 
@@ -382,7 +382,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("DoWhileStatement must have property body of type statement.");
 
-            if (existingValue == null) existingValue = new JSDoWhileStatement();
+            if (existingValue is null) existingValue = new JSDoWhileStatement();
 
             existingValue.Test = testExpression;
             existingValue.Body = (JSStatement)body;
@@ -400,7 +400,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(expression is JSExpression expressionExpression))
                 throw new InvalidOperationException("ExpressionStatement must have property expression of type expression.");
 
-            if (existingValue == null) existingValue = new JSExpressionStatement();
+            if (existingValue is null) existingValue = new JSExpressionStatement();
             existingValue.Expression = expressionExpression;
 
             return existingValue;
@@ -441,7 +441,7 @@ namespace SourceCode.Clay.Javascript.Ast
             else
                 throw new InvalidOperationException("ForInStatement must have property left of type variable declaration or pattern.");
 
-            if (existingValue == null) existingValue = new JSForInStatement();
+            if (existingValue is null) existingValue = new JSForInStatement();
 
             existingValue.Left = leftDiscriminator;
             existingValue.Right = rightExpression;
@@ -488,7 +488,7 @@ namespace SourceCode.Clay.Javascript.Ast
             else
                 throw new InvalidOperationException("ForStatement must have property init of type variable declaration, pattern or null.");
 
-            if (existingValue == null) existingValue = new JSForStatement();
+            if (existingValue is null) existingValue = new JSForStatement();
 
             existingValue.Initializer = initDiscriminator;
             existingValue.Test = (JSExpression)test;
@@ -514,7 +514,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(id is JSIdentifier idIdentifier))
                 throw new InvalidOperationException("FunctionDeclaration must have property id of type identifier.");
 
-            if (existingValue == null) existingValue = new JSFunctionDeclaration();
+            if (existingValue is null) existingValue = new JSFunctionDeclaration();
 
             existingValue.Identifier = idIdentifier;
             ReadArray(paramsArray, existingValue.Parameters, serializer);
@@ -539,7 +539,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(id is null) && !(id is JSIdentifier))
                 throw new InvalidOperationException("FunctionExpression must have property id of type identifier or null.");
 
-            if (existingValue == null) existingValue = new JSFunctionExpression();
+            if (existingValue is null) existingValue = new JSFunctionExpression();
 
             existingValue.Identifier = (JSIdentifier)id;
             ReadArray(paramsArray, existingValue.Parameters, serializer);
@@ -553,7 +553,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("name", out var nameToken) || !(nameToken.Type == JTokenType.String))
                 throw new InvalidOperationException("Identifier must have name property of type string.");
 
-            if (existingValue == null) existingValue = new JSIdentifier();
+            if (existingValue is null) existingValue = new JSIdentifier();
 
             existingValue.Name = (string)nameToken;
 
@@ -580,7 +580,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(alternate is null) && !(alternate is JSStatement))
                 throw new InvalidOperationException("IfStatement must have property alternate of type statement or null.");
 
-            if (existingValue == null) existingValue = new JSIfStatement();
+            if (existingValue is null) existingValue = new JSIfStatement();
 
             existingValue.Test = testExpression;
             existingValue.Body = (JSStatement)body;
@@ -604,7 +604,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("LabeledStatement must have property body of type statement.");
 
-            if (existingValue == null) existingValue = new JSLabeledStatement();
+            if (existingValue is null) existingValue = new JSLabeledStatement();
 
             existingValue.Label = labelIdentifier;
             existingValue.Body = (JSStatement)body;
@@ -629,7 +629,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(property is JSExpression propertyExpression))
                 throw new InvalidOperationException("MemberExpression must have property property of type expression.");
 
-            if (existingValue == null) existingValue = new JSMemberExpression();
+            if (existingValue is null) existingValue = new JSMemberExpression();
             existingValue.Indices.Clear();
 
             existingValue.IsComputed = (bool)computedToken;
@@ -651,7 +651,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(callee is JSExpression calleeExpression))
                 throw new InvalidOperationException("NewExpression must have callee property of type expression.");
 
-            if (existingValue == null) existingValue = new JSNewExpression();
+            if (existingValue is null) existingValue = new JSNewExpression();
 
             existingValue.Callee = calleeExpression;
             ReadArray(argumentsArray, existingValue.Arguments, serializer);
@@ -664,7 +664,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("properties", out var propertiesToken) || !(propertiesToken is JArray propertiesArray))
                 throw new InvalidOperationException("ObjectExpression must have properties property of type array.");
 
-            if (existingValue == null) existingValue = new JSObjectExpression();
+            if (existingValue is null) existingValue = new JSObjectExpression();
 
             ReadArray(propertiesArray, existingValue.Properties, serializer);
 
@@ -676,7 +676,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("body", out var bodyToken) || !(bodyToken is JArray bodyArray))
                 throw new InvalidOperationException("Program must have property body of type array.");
 
-            if (existingValue == null) existingValue = new JSProgram();
+            if (existingValue is null) existingValue = new JSProgram();
 
             ReadArray(bodyArray, existingValue.Body, serializer);
 
@@ -711,7 +711,7 @@ namespace SourceCode.Clay.Javascript.Ast
             else
                 throw new InvalidOperationException("Property must have property key of type literal or identifier.");
 
-            if (existingValue == null) existingValue = new JSProperty();
+            if (existingValue is null) existingValue = new JSProperty();
 
             existingValue.Key = keyDiscriminator;
             existingValue.Value = valueExpression;
@@ -741,7 +741,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(argument is null) && !(argument is JSExpression))
                 throw new InvalidOperationException("ReturnStatement must have argument property of type expression or null.");
 
-            if (existingValue == null) existingValue = new JSReturnStatement();
+            if (existingValue is null) existingValue = new JSReturnStatement();
 
             existingValue.Expression = (JSExpression)argument;
 
@@ -753,7 +753,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("expressions", out var expressionsToken) || !(expressionsToken is JArray expressionsArray))
                 throw new InvalidOperationException("SequenceExpression must have expressions property of type array.");
 
-            if (existingValue == null) existingValue = new JSSequenceExpression();
+            if (existingValue is null) existingValue = new JSSequenceExpression();
 
             ReadArray(expressionsArray, existingValue.Expressions, serializer);
 
@@ -772,7 +772,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(test is null) && !(test is JSExpression))
                 throw new InvalidOperationException("SwitchCase must have test property of type expression or null.");
 
-            if (existingValue == null) existingValue = new JSSwitchCase();
+            if (existingValue is null) existingValue = new JSSwitchCase();
 
             existingValue.Test = (JSExpression)test;
             ReadArray(consequentArray, existingValue.Body, serializer);
@@ -792,7 +792,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(discriminant is JSExpression discriminantExpression))
                 throw new InvalidOperationException("SwitchStatement must have discriminant property of type expression.");
 
-            if (existingValue == null) existingValue = new JSSwitchStatement();
+            if (existingValue is null) existingValue = new JSSwitchStatement();
 
             existingValue.Discriminant = discriminantExpression;
             ReadArray(casesArray, existingValue.Cases, serializer);
@@ -815,7 +815,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(argument is JSExpression argumentExpression))
                 throw new InvalidOperationException("ThrowStatement must have argument property of type expression.");
 
-            if (existingValue == null) existingValue = new JSThrowStatement();
+            if (existingValue is null) existingValue = new JSThrowStatement();
 
             existingValue.Expression = argumentExpression;
 
@@ -847,7 +847,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(handler is null) && !(handler is JSCatchClause))
                 throw new InvalidOperationException("TryStatement must have handler property of type catch clause or null.");
 
-            if (existingValue == null) existingValue = new JSTryStatement();
+            if (existingValue is null) existingValue = new JSTryStatement();
 
             existingValue.Handler = (JSCatchClause)handler;
             ReadArray(bodyArray, existingValue.Body, serializer);
@@ -872,7 +872,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(argument is JSExpression argumentExpression))
                 throw new InvalidOperationException("UnaryExpression must have argument property of type expression.");
 
-            if (existingValue == null) existingValue = new JSUnaryExpression();
+            if (existingValue is null) existingValue = new JSUnaryExpression();
 
             existingValue.Expression = argumentExpression;
             existingValue.Operator = @operator;
@@ -904,7 +904,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("declarations", out var declToken) || !(declToken is JArray declArray))
                 throw new InvalidOperationException("VariableDeclarator must have property declarations of type array.");
 
-            if (existingValue == null) existingValue = new JSVariableDeclaration();
+            if (existingValue is null) existingValue = new JSVariableDeclaration();
 
             existingValue.Kind = JSVariableDeclarationKind.Var;
             ReadArray(declArray, existingValue.Declarations, serializer);
@@ -927,7 +927,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(init is null) && !(init is JSExpression))
                 throw new InvalidOperationException("VariableDeclarator must have property init of type expression or null.");
 
-            if (existingValue == null) existingValue = new JSVariableDeclarator();
+            if (existingValue is null) existingValue = new JSVariableDeclarator();
 
             existingValue.Identifier = idPattern;
             existingValue.Initializer = (JSExpression)init;
@@ -950,7 +950,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("WhileStatement must have property body of type statement.");
 
-            if (existingValue == null) existingValue = new JSWhileStatement();
+            if (existingValue is null) existingValue = new JSWhileStatement();
 
             existingValue.Test = testExpression;
             existingValue.Body = (JSStatement)body;
@@ -973,7 +973,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("WithStatement must have property body of type statement.");
 
-            if (existingValue == null) existingValue = new JSWithStatement();
+            if (existingValue is null) existingValue = new JSWithStatement();
 
             existingValue.Object = objectExpression;
             existingValue.Body = (JSStatement)body;

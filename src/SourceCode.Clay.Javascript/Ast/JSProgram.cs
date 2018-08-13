@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -8,7 +8,6 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSProgram()
         {
-
         }
 
         public new JSProgram Add(JSStatement body) => (JSProgram)base.Add(body);

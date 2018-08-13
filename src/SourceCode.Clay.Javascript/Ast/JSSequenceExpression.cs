@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,12 +8,31 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.SequenceExpression;
 
-        public List<JSExpression> Expressions { get; }
+        public IList<JSExpression> Expressions { get; }
 
         public JSSequenceExpression()
         {
             Expressions = new List<JSExpression>();
         }
+
+        public JSSequenceExpression(int capacity)
+        {
+            Expressions = new List<JSExpression>(capacity);
+        }
+
+        public JSSequenceExpression(JSExpression expression)
+        {
+            Expressions = new List<JSExpression>() { expression };
+        }
+
+        public JSSequenceExpression(IEnumerable<JSExpression> expressions)
+        {
+            Expressions = new List<JSExpression>(expressions);
+        }
+
+        public JSSequenceExpression(params JSExpression[] expressions)
+            : this((IEnumerable<JSExpression>)expressions)
+        { }
 
         public JSSequenceExpression Add(JSExpression expression)
         {
@@ -21,9 +40,10 @@ namespace SourceCode.Clay.Javascript.Ast
             return this;
         }
 
-        public JSSequenceExpression Add(IEnumerable<JSExpression> expression)
+        public JSSequenceExpression Add(IEnumerable<JSExpression> expressions)
         {
-            Expressions.AddRange(expression);
+            foreach (var expression in expressions)
+                Expressions.Add(expression);
             return this;
         }
 

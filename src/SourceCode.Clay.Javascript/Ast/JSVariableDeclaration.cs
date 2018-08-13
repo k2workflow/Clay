@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.VariableDeclaration;
 
-        public List<JSVariableDeclarator> Declarations { get; }
+        public IList<JSVariableDeclarator> Declarations { get; }
 
         public JSVariableDeclarationKind Kind { get; set; }
 
@@ -17,15 +17,35 @@ namespace SourceCode.Clay.Javascript.Ast
             Declarations = new List<JSVariableDeclarator>();
         }
 
+        public JSVariableDeclaration(int capacity)
+        {
+            Declarations = new List<JSVariableDeclarator>(capacity);
+        }
+
+        public JSVariableDeclaration(JSVariableDeclarator declaration)
+        {
+            Declarations = new List<JSVariableDeclarator>() { declaration };
+        }
+
+        public JSVariableDeclaration(IEnumerable<JSVariableDeclarator> declarations)
+        {
+            Declarations = new List<JSVariableDeclarator>(declarations);
+        }
+
+        public JSVariableDeclaration(params JSVariableDeclarator[] declarations)
+            : this((IEnumerable<JSVariableDeclarator>)declarations)
+        { }
+
         public JSVariableDeclaration Add(JSVariableDeclarator declaration)
         {
             Declarations.Add(declaration);
             return this;
         }
 
-        public JSVariableDeclaration Add(IEnumerable<JSVariableDeclarator> declaration)
+        public JSVariableDeclaration Add(IEnumerable<JSVariableDeclarator> declarations)
         {
-            Declarations.AddRange(declaration);
+            foreach (var declaration in declarations)
+                Declarations.Add(declaration);
             return this;
         }
 
@@ -47,7 +67,7 @@ namespace SourceCode.Clay.Javascript.Ast
         IEnumerator IEnumerable.GetEnumerator() => Enumerable.Empty<object>().GetEnumerator();
 
         public static implicit operator JSVariableDeclaration(JSVariableDeclarator declarator)
-            => declarator == null
+            => declarator is null
             ? null
             : new JSVariableDeclaration() { declarator };
     }

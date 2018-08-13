@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIdentifier Identifier { get; set; }
 
-        public List<IJSPattern> Parameters { get; }
+        public IList<IJSPattern> Parameters { get; }
 
         IList<IJSPattern> IJSFunction.Parameters => Parameters;
 
@@ -17,9 +17,26 @@ namespace SourceCode.Clay.Javascript.Ast
             Parameters = new List<IJSPattern>();
         }
 
+        public JSFunctionDeclaration(int capacity)
+        {
+            Parameters = new List<IJSPattern>(capacity);
+        }
+
         public JSFunctionDeclaration(JSIdentifier identifier)
         {
             Parameters = new List<IJSPattern>();
+            Identifier = identifier;
+        }
+
+        public JSFunctionDeclaration(JSIdentifier identifier, int capacity)
+        {
+            Parameters = new List<IJSPattern>(capacity);
+            Identifier = identifier;
+        }
+
+        public JSFunctionDeclaration(JSIdentifier identifier, IJSPattern parameter)
+        {
+            Parameters = new List<IJSPattern>() { parameter };
             Identifier = identifier;
         }
 
@@ -31,10 +48,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSFunctionDeclaration(JSIdentifier identifier, params IJSPattern[] parameters)
             : this(identifier, (IEnumerable<IJSPattern>)parameters)
-        {
-            Parameters = new List<IJSPattern>(parameters);
-            Identifier = identifier;
-        }
+        { }
 
         public new JSFunctionDeclaration Add(JSStatement body) => (JSFunctionDeclaration)base.Add(body);
         public new JSFunctionDeclaration Add(params JSStatement[] body) => (JSFunctionDeclaration)base.Add(body);
@@ -48,7 +62,8 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSFunctionDeclaration Add(IEnumerable<IJSPattern> parameters)
         {
-            Parameters.AddRange(parameters);
+            foreach (var parameter in parameters)
+                Parameters.Add(parameter);
             return this;
         }
 

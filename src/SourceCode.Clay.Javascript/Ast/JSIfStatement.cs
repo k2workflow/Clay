@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -11,9 +11,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSStatement Alternate { get; set; }
 
         public JSIfStatement()
-        {
-
-        }
+        { }
 
         public JSIfStatement(JSExpression test, JSStatement consequent, JSStatement alternate)
             : base(consequent)
@@ -24,8 +22,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement(JSExpression test, JSStatement consequent)
             : this(test, consequent, null)
-        {
-        }
+        { }
 
         public JSIfStatement(JSExpression test)
         {
@@ -34,7 +31,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement Else(JSStatement body)
         {
-            if (Alternate == null) Alternate = body;
+            if (Alternate is null) Alternate = body;
             else if (Alternate is JSBlockStatement block) block.Body.Add(body);
             else Alternate = new JSBlockStatement()
             {

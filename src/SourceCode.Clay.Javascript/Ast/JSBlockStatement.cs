@@ -8,14 +8,31 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.BlockStatement;
 
-        public List<JSStatement> Body { get; }
-
-        IList<JSStatement> IJSBlock.Body => Body;
+        public IList<JSStatement> Body { get; }
 
         public JSBlockStatement()
         {
             Body = new List<JSStatement>();
         }
+
+        public JSBlockStatement(int capacity)
+        {
+            Body = new List<JSStatement>(capacity);
+        }
+
+        public JSBlockStatement(JSStatement body)
+        {
+            Body = new List<JSStatement>() { body };
+        }
+
+        public JSBlockStatement(IEnumerable<JSStatement> bodies)
+        {
+            Body = new List<JSStatement>(bodies);
+        }
+
+        public JSBlockStatement(params JSStatement[] bodies)
+            : this((IEnumerable<JSStatement>)bodies)
+        { }
 
         public JSBlockStatement Add(JSStatement body)
         {
@@ -26,9 +43,10 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSBlockStatement Add(params JSStatement[] body)
             => Add((IEnumerable<JSStatement>)body);
 
-        public JSBlockStatement Add(IEnumerable<JSStatement> body)
+        public JSBlockStatement Add(IEnumerable<JSStatement> bodies)
         {
-            Body.AddRange(body);
+            foreach (var body in bodies)
+            Body.Add(body);
             return this;
         }
 

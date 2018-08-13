@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSBreakStatement : JSStatement
     {
@@ -8,7 +8,6 @@
 
         public JSBreakStatement()
         {
-
         }
 
         public JSBreakStatement(JSIdentifier identifier)

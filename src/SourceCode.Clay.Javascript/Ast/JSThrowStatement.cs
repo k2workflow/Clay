@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSThrowStatement : JSExpressionStatement
     {
@@ -11,7 +11,6 @@
         public JSThrowStatement(JSExpression argument)
             : base(argument)
         {
-
         }
     }
 }

@@ -188,8 +188,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("elements");
             writer.WriteStartArray();
-            foreach (var item in node.Elements)
+
+            for (var i = 0; i < node.Elements.Count; i++)
+            {
+                var item = node.Elements[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -295,8 +300,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("body");
             writer.WriteStartArray();
-            foreach (var item in node.Body)
+
+            for (var i = 0; i < node.Body.Count; i++)
+            {
+                var item = node.Body[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -310,7 +320,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("BreakStatement");
 
             writer.WritePropertyName("label");
-            if (node.Label == null)
+            if (node.Label is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Label, serializer);
@@ -330,8 +340,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("arguments");
             writer.WriteStartArray();
-            foreach (var item in node.Arguments)
+
+            for (var i = 0; i < node.Arguments.Count; i++)
+            {
+                var item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -363,8 +378,11 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WritePropertyName("body");
             writer.WriteStartArray();
 
-            foreach (var item in items)
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
                 WriteJson(writer, item, serializer);
+            }
 
             writer.WriteEndArray();
             writer.WriteEndObject();
@@ -397,7 +415,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("ContinueStatement");
 
             writer.WritePropertyName("label");
-            if (node.Label == null)
+            if (node.Label is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Label, serializer);
@@ -462,9 +480,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
             switch (node.Left)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("right");
@@ -487,9 +511,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
             switch (node.Initializer)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("test");
@@ -505,55 +535,34 @@ namespace SourceCode.Clay.Javascript.Ast
         }
 
         protected virtual void WriteJson(JsonWriter writer, JSFunctionDeclaration node, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("type");
-            writer.WriteValue("FunctionDeclaration");
-
-            writer.WritePropertyName("id");
-            if (node.Identifier == null)
-                writer.WriteNull();
-            else
-                WriteJson(writer, node.Identifier, serializer);
-
-            writer.WritePropertyName("params");
-            writer.WriteStartArray();
-
-            for (var i = 0; i < node.Parameters.Count; i++)
-                WriteJson(writer, node.Parameters[i], serializer);
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("body");
-            WriteJson(writer, node.Body, serializer);
-
-            writer.WriteEndObject();
-        }
+            => WriteJson(writer, "FunctionDeclaration", node, serializer);
 
         protected virtual void WriteJson(JsonWriter writer, JSFunctionExpression node, JsonSerializer serializer)
+            => WriteJson(writer, "FunctionExpression", node, serializer);
+
+        private void WriteJson(JsonWriter writer, string type, IJSFunction function, JsonSerializer serializer)
         {
             writer.WriteStartObject();
 
             writer.WritePropertyName("type");
-            writer.WriteValue("FunctionExpression");
+            writer.WriteValue(type);
 
             writer.WritePropertyName("id");
-            if (node.Identifier == null)
+            if (function.Identifier is null)
                 writer.WriteNull();
             else
-                WriteJson(writer, node.Identifier, serializer);
+                WriteJson(writer, function.Identifier, serializer);
 
             writer.WritePropertyName("params");
             writer.WriteStartArray();
 
-            for (var i = 0; i < node.Parameters.Count; i++)
-                WriteJson(writer, node.Parameters[i], serializer);
+            for (var i = 0; i < function.Parameters.Count; i++)
+                WriteJson(writer, function.Parameters[i], serializer);
 
             writer.WriteEndArray();
 
             writer.WritePropertyName("body");
-            WriteJson(writer, node.Body, serializer);
+            WriteJson(writer, function.Body, serializer);
 
             writer.WriteEndObject();
         }
@@ -707,8 +716,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("arguments");
             writer.WriteStartArray();
-            foreach (var item in node.Arguments)
+
+            for (var i = 0; i < node.Arguments.Count; i++)
+            {
+                var item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -723,8 +737,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("properties");
             writer.WriteStartArray();
-            foreach (var item in node.Properties)
+
+            for (var i = 0; i < node.Properties.Count; i++)
+            {
+                var item = node.Properties[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -739,8 +758,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("body");
             writer.WriteStartArray();
-            foreach (var item in node.Body)
+
+            for (var i = 0; i < node.Body.Count; i++)
+            {
+                var item = node.Body[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -756,9 +780,15 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WritePropertyName("key");
             switch (node.Key)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("value");
@@ -888,13 +918,13 @@ namespace SourceCode.Clay.Javascript.Ast
             WriteJson(writer, node.Body, serializer);
 
             writer.WritePropertyName("handler");
-            if (node.Handler == null)
+            if (node.Handler is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Handler, serializer);
 
             writer.WritePropertyName("finalizer");
-            if (node.Handler != null && node.Finalizer.Body.Count == 0)
+            if (!(node.Handler is null) && node.Finalizer.Body.Count == 0)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Finalizer, serializer);

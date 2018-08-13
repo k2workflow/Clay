@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSLiteral : JSExpression
     {
@@ -8,7 +8,6 @@
 
         public JSLiteral()
         {
-
         }
 
         public JSLiteral(object value)

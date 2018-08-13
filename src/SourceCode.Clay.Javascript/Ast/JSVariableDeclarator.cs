@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSVariableDeclarator : IJSNode
     {
@@ -10,7 +10,6 @@
 
         public JSVariableDeclarator()
         {
-
         }
 
         public JSVariableDeclarator(IJSPattern identifier, JSExpression initializer)
@@ -22,7 +21,6 @@
         public JSVariableDeclarator(IJSPattern identifier)
             : this(identifier, null)
         {
-
         }
 
         public static implicit operator JSVariableDeclaration(JSVariableDeclarator declarator)

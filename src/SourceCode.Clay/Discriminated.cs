@@ -13,7 +13,7 @@ namespace SourceCode.Clay
     [DebuggerDisplay("{Which,nq} {Value}")]
     public readonly struct Discriminated<TItem1, TItem2> : IEquatable<Discriminated<TItem1, TItem2>>
     {
-        private readonly int _state;
+        private readonly byte _state;
         private readonly TItem1 _item1;
         private readonly TItem2 _item2;
 
@@ -42,6 +42,8 @@ namespace SourceCode.Clay
         /// </summary>
         public TItem2 Item2 => _state == 2 ? _item2 : throw new InvalidOperationException("The second item is not set.");
 
+        #region DebuggerDisplay
+
         [ExcludeFromCodeCoverage]
         private string Which
         {
@@ -50,10 +52,11 @@ namespace SourceCode.Clay
                 switch (_state)
                 {
                     case 0: return "Empty";
-                    case 1: return "Item1";
-                    case 2: return "Item2";
-                    default: return "Invalid";
+                    case 1: return nameof(Item1);
+                    case 2: return nameof(Item2);
                 }
+
+                return "Invalid";
             }
         }
 
@@ -64,13 +67,15 @@ namespace SourceCode.Clay
             {
                 switch (_state)
                 {
-                    case 0: return null;
                     case 1: return _item1;
                     case 2: return _item2;
-                    default: return null;
                 }
+
+                return null;
             }
         }
+
+        #endregion
 
         /// <summary>
         /// Creates a new <see cref="Discriminated{TItem1, TItem2}"/> with a <typeparamref name="TItem1"/>.
@@ -104,11 +109,18 @@ namespace SourceCode.Clay
         {
             switch (_state)
             {
-                case 0: empty?.Invoke(); break;
-                case 1: item1?.Invoke(_item1); break;
-                case 2: item2?.Invoke(_item2); break;
-                default: throw new InvalidOperationException();
+                case 0:
+                    empty?.Invoke();
+                    break;
+                case 1:
+                    item1?.Invoke(_item1);
+                    break;
+                case 2:
+                    item2?.Invoke(_item2);
+                    break;
             }
+
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -121,11 +133,15 @@ namespace SourceCode.Clay
         {
             switch (_state)
             {
-                case 0: return empty == null ? default : empty();
-                case 1: return item1 == null ? default : item1(_item1);
-                case 2: return item2 == null ? default : item2(_item2);
-                default: throw new InvalidOperationException();
+                case 0:
+                    return empty is null ? default : empty();
+                case 1:
+                    return item1 is null ? default : item1(_item1);
+                case 2:
+                    return item2 is null ? default : item2(_item2);
             }
+
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -133,7 +149,9 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="obj">The <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
-        public override bool Equals(object obj) => obj is Discriminated<TItem1, TItem2> o && Equals(o);
+        public override bool Equals(object obj) 
+            => obj is Discriminated<TItem1, TItem2> other 
+            && Equals(other);
 
         /// <summary>
         /// Determines if this <see cref="Discriminated{TItem1, TItem2}"/> is equal to another.
@@ -141,11 +159,9 @@ namespace SourceCode.Clay
         /// <param name="other">The <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
         public bool Equals(Discriminated<TItem1, TItem2> other)
-        {
-            return _state == other._state &&
-                   (_state != 1 || EqualityComparer<TItem1>.Default.Equals(_item1, other._item1)) &&
-                   (_state != 2 || EqualityComparer<TItem2>.Default.Equals(_item2, other._item2));
-        }
+            => _state == other._state
+            && (_state != 1 || EqualityComparer<TItem1>.Default.Equals(_item1, other._item1))
+            && (_state != 2 || EqualityComparer<TItem2>.Default.Equals(_item2, other._item2));
 
         /// <summary>
         /// Gets the hash code for this <see cref="Discriminated{TItem1, TItem2}"/>.
@@ -157,8 +173,9 @@ namespace SourceCode.Clay
             {
                 case 1: return EqualityComparer<TItem1>.Default.GetHashCode(_item1);
                 case 2: return EqualityComparer<TItem2>.Default.GetHashCode(_item2);
-                default: return 0;
             }
+
+            return 0;
         }
 
 #pragma warning disable CA2225 // Operator overloads have named alternates
@@ -183,7 +200,8 @@ namespace SourceCode.Clay
         /// <param name="discriminated1">The first <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <param name="discriminated2">The second <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
-        public static bool operator ==(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) => discriminated1.Equals(discriminated2);
+        public static bool operator ==(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) 
+            => discriminated1.Equals(discriminated2);
 
         /// <summary>
         /// Determines whether two <see cref="Discriminated{TItem1, TItem2}"/> are unequal.
@@ -191,6 +209,7 @@ namespace SourceCode.Clay
         /// <param name="discriminated1">The first <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <param name="discriminated2">The second <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are unequal.</returns>
-        public static bool operator !=(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) => !(discriminated1 == discriminated2);
+        public static bool operator !=(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) 
+            => !(discriminated1 == discriminated2);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSProperty : IJSNode
     {
@@ -12,7 +12,6 @@
 
         public JSProperty()
         {
-
         }
 
         public JSProperty(JSPropertyKind kind, Discriminated<JSLiteral, JSIdentifier> key, JSExpression value)
@@ -25,7 +24,6 @@
         public JSProperty(Discriminated<JSLiteral, JSIdentifier> key, JSExpression value)
             : this(JSPropertyKind.Initializer, key, value)
         {
-
         }
     }
 }

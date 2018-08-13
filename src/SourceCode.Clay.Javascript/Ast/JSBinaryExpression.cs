@@ -12,11 +12,16 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Left { get; set; }
 
-        public List<JSExpression> Right { get; }
+        public IList<JSExpression> Right { get; }
 
         public JSBinaryExpression()
         {
             Right = new List<JSExpression>();
+        }
+
+        public JSBinaryExpression(int capacity)
+        {
+            Right = new List<JSExpression>(capacity);
         }
 
         public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator)
@@ -26,14 +31,18 @@ namespace SourceCode.Clay.Javascript.Ast
             Right = new List<JSExpression>();
         }
 
+        public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator, int capacity)
+        {
+            Left = left;
+            Operator = @operator;
+            Right = new List<JSExpression>(capacity);
+        }
+
         public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator, JSExpression right)
         {
             Left = left;
             Operator = @operator;
-            Right = new List<JSExpression>()
-            {
-                right
-            };
+            Right = new List<JSExpression>(){ right };
         }
 
         public JSBinaryExpression Add(JSExpression right)
@@ -41,7 +50,8 @@ namespace SourceCode.Clay.Javascript.Ast
             if (right is JSBinaryExpression binary && binary.Operator == Operator)
             {
                 Right.Add(binary.Left);
-                Right.AddRange(binary.Right);
+                foreach (var rght in binary.Right)
+                    Right.Add(rght);
                 return this;
             }
             Right.Add(right);

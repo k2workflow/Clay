@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -150,7 +149,7 @@ namespace SourceCode.Clay.Javascript.Ast
         #region Break
         public static JSBreakStatement JSBreak(JSIdentifier identifier) => new JSBreakStatement(identifier);
         public static JSBreakStatement JSBreak() => JSBreak((JSIdentifier)null);
-        public static JSBreakStatement JSBreak(string identifier) => JSBreak(identifier == null ? null : new JSIdentifier(identifier));
+        public static JSBreakStatement JSBreak(string identifier) => JSBreak(identifier is null ? null : new JSIdentifier(identifier));
         #endregion
 
         #region Call
@@ -183,7 +182,7 @@ namespace SourceCode.Clay.Javascript.Ast
         #region Continue
         public static JSContinueStatement JSContinue(JSIdentifier identifier) => new JSContinueStatement(identifier);
         public static JSContinueStatement JSContinue() => JSContinue((JSIdentifier)null);
-        public static JSContinueStatement JSContinue(string identifier) => JSContinue(identifier == null ? null : JSIdentifier(identifier));
+        public static JSContinueStatement JSContinue(string identifier) => JSContinue(identifier is null ? null : JSIdentifier(identifier));
         #endregion
 
         #region Debugger

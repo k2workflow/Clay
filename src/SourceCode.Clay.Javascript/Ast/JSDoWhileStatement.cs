@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSDoWhileStatement : JSWhileStatement
     {
-
         public override JSNodeType Type => JSNodeType.DoWhileStatement;
 
         public JSDoWhileStatement()
         {
-
         }
 
         public JSDoWhileStatement(JSExpression test)
             : base(test)
         {
-
         }
 
         public JSDoWhileStatement(JSExpression test, JSStatement body)

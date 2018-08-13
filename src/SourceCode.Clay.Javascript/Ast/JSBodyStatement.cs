@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,18 +9,22 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSStatement Body { get; set; }
 
         protected JSBodyStatement()
-        {
-
-        }
+        { }
 
         protected JSBodyStatement(JSStatement body)
         {
-            Body = body;
+            Add(body);
+        }
+
+        protected JSBodyStatement(IEnumerable<JSStatement> body)
+        {
+            foreach (var item in body)
+                Add(item);
         }
 
         public JSBodyStatement Add(JSStatement body)
         {
-            if (Body == null) Body = body;
+            if (Body is null) Body = body;
             else if (Body is JSBlockStatement block) block.Body.Add(body);
             else Body = new JSBlockStatement()
             {

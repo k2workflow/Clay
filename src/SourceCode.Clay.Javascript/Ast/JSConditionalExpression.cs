@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSConditionalExpression : JSExpression
     {
@@ -12,7 +12,6 @@
 
         public JSConditionalExpression()
         {
-
         }
 
         public JSConditionalExpression(JSExpression test, JSExpression consequent, JSExpression alternate)

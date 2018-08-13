@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -17,7 +17,6 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSRegex(string pattern)
             : this(pattern, JSRegexOptions.None)
         {
-
         }
 
         public override bool Equals(object obj) => obj is JSRegex o && Equals(o);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -9,9 +9,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSExpression Object { get; set; }
 
         public JSWithStatement()
-        {
-
-        }
+        { }
 
         public JSWithStatement(JSExpression @object)
         {

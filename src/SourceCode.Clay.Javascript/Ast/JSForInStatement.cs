@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -11,9 +11,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSExpression Right { get; set; }
 
         public JSForInStatement()
-        {
-
-        }
+        { }
 
         public JSForInStatement(Discriminated<JSVariableDeclaration, IJSPattern> left, JSExpression right)
         {
