@@ -73,8 +73,10 @@ namespace SourceCode.Clay.Javascript.Ast
             var variable = Expression.Variable(TypeofJSObjectExpression);
             var result = (Expression)Expression.New(TypeofJSObjectExpression);
 
-            foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            for (var i = 0; i < props.Length; i++)
             {
+                var prop = props[i];
                 var propertyType = prop.PropertyType;
                 var accessor = Expression.Convert(Expression.Property(convertedParam, prop), TypeofObject);
                 var identifier = Expression.Convert(Expression.New(ConstructorOfJSIdentifier, Expression.Constant(prop.Name)), TypeofJSExpression);

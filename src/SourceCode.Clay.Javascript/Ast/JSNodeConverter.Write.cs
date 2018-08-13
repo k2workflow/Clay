@@ -188,8 +188,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("elements");
             writer.WriteStartArray();
-            foreach (var item in node.Elements)
+
+            for (var i = 0; i < node.Elements.Count; i++)
+            {
+                var item = node.Elements[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -295,8 +300,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("body");
             writer.WriteStartArray();
-            foreach (var item in node.Body)
+
+            for (var i = 0; i < node.Body.Count; i++)
+            {
+                var item = node.Body[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -330,8 +340,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("arguments");
             writer.WriteStartArray();
-            foreach (var item in node.Arguments)
+
+            for (var i = 0; i < node.Arguments.Count; i++)
+            {
+                var item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -363,8 +378,11 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WritePropertyName("body");
             writer.WriteStartArray();
 
-            foreach (var item in items)
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
                 WriteJson(writer, item, serializer);
+            }
 
             writer.WriteEndArray();
             writer.WriteEndObject();
@@ -719,8 +737,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("arguments");
             writer.WriteStartArray();
-            foreach (var item in node.Arguments)
+
+            for (var i = 0; i < node.Arguments.Count; i++)
+            {
+                var item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -735,8 +758,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("properties");
             writer.WriteStartArray();
-            foreach (var item in node.Properties)
+
+            for (var i = 0; i < node.Properties.Count; i++)
+            {
+                var item = node.Properties[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
@@ -751,8 +779,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WritePropertyName("body");
             writer.WriteStartArray();
-            foreach (var item in node.Body)
+
+            for (var i = 0; i < node.Body.Count; i++)
+            {
+                var item = node.Body[i];
                 WriteJson(writer, item, serializer);
+            }
+
             writer.WriteEndArray();
 
             writer.WriteEndObject();
