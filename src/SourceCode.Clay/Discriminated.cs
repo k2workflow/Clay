@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SourceCode.Clay
 {
@@ -40,6 +41,41 @@ namespace SourceCode.Clay
         /// Gets the second item.
         /// </summary>
         public TItem2 Item2 => _state == 2 ? _item2 : throw new InvalidOperationException("The second item is not set.");
+
+        #region DebuggerDisplay
+
+        [ExcludeFromCodeCoverage]
+        private string Which
+        {
+            get
+            {
+                switch (_state)
+                {
+                    case 0: return "Empty";
+                    case 1: return nameof(Item1);
+                    case 2: return nameof(Item2);
+                }
+
+                return "Invalid";
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private object Value
+        {
+            get
+            {
+                switch (_state)
+                {
+                    case 1: return _item1;
+                    case 2: return _item2;
+                }
+
+                return null;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Creates a new <see cref="Discriminated{TItem1, TItem2}"/> with a <typeparamref name="TItem1"/>.
@@ -90,9 +126,9 @@ namespace SourceCode.Clay
         {
             switch (_state)
             {
-                case 0: return empty == null ? default : empty();
-                case 1: return item1 == null ? default : item1(_item1);
-                case 2: return item2 == null ? default : item2(_item2);
+                case 0: return empty is null ? default : empty();
+                case 1: return item1 is null ? default : item1(_item1);
+                case 2: return item2 is null ? default : item2(_item2);
                 default: throw new InvalidOperationException();
             }
         }
