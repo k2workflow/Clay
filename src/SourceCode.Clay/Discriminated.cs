@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SourceCode.Clay
 {
@@ -13,7 +12,7 @@ namespace SourceCode.Clay
     [DebuggerDisplay("{Which,nq} {Value}")]
     public readonly struct Discriminated<TItem1, TItem2> : IEquatable<Discriminated<TItem1, TItem2>>
     {
-        private readonly int _state;
+        private readonly byte _state;
         private readonly TItem1 _item1;
         private readonly TItem2 _item2;
 
@@ -41,36 +40,6 @@ namespace SourceCode.Clay
         /// Gets the second item.
         /// </summary>
         public TItem2 Item2 => _state == 2 ? _item2 : throw new InvalidOperationException("The second item is not set.");
-
-        [ExcludeFromCodeCoverage]
-        private string Which
-        {
-            get
-            {
-                switch (_state)
-                {
-                    case 0: return "Empty";
-                    case 1: return "Item1";
-                    case 2: return "Item2";
-                    default: return "Invalid";
-                }
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        private object Value
-        {
-            get
-            {
-                switch (_state)
-                {
-                    case 0: return null;
-                    case 1: return _item1;
-                    case 2: return _item2;
-                    default: return null;
-                }
-            }
-        }
 
         /// <summary>
         /// Creates a new <see cref="Discriminated{TItem1, TItem2}"/> with a <typeparamref name="TItem1"/>.
@@ -133,7 +102,9 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="obj">The <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
-        public override bool Equals(object obj) => obj is Discriminated<TItem1, TItem2> o && Equals(o);
+        public override bool Equals(object obj) 
+            => obj is Discriminated<TItem1, TItem2> other 
+            && Equals(other);
 
         /// <summary>
         /// Determines if this <see cref="Discriminated{TItem1, TItem2}"/> is equal to another.
@@ -141,11 +112,9 @@ namespace SourceCode.Clay
         /// <param name="other">The <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
         public bool Equals(Discriminated<TItem1, TItem2> other)
-        {
-            return _state == other._state &&
-                   (_state != 1 || EqualityComparer<TItem1>.Default.Equals(_item1, other._item1)) &&
-                   (_state != 2 || EqualityComparer<TItem2>.Default.Equals(_item2, other._item2));
-        }
+            => _state == other._state
+            && (_state != 1 || EqualityComparer<TItem1>.Default.Equals(_item1, other._item1))
+            && (_state != 2 || EqualityComparer<TItem2>.Default.Equals(_item2, other._item2));
 
         /// <summary>
         /// Gets the hash code for this <see cref="Discriminated{TItem1, TItem2}"/>.
@@ -183,7 +152,8 @@ namespace SourceCode.Clay
         /// <param name="discriminated1">The first <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <param name="discriminated2">The second <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
-        public static bool operator ==(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) => discriminated1.Equals(discriminated2);
+        public static bool operator ==(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) 
+            => discriminated1.Equals(discriminated2);
 
         /// <summary>
         /// Determines whether two <see cref="Discriminated{TItem1, TItem2}"/> are unequal.
@@ -191,6 +161,7 @@ namespace SourceCode.Clay
         /// <param name="discriminated1">The first <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <param name="discriminated2">The second <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are unequal.</returns>
-        public static bool operator !=(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) => !(discriminated1 == discriminated2);
+        public static bool operator !=(Discriminated<TItem1, TItem2> discriminated1, Discriminated<TItem1, TItem2> discriminated2) 
+            => !(discriminated1 == discriminated2);
     }
 }
