@@ -109,11 +109,18 @@ namespace SourceCode.Clay
         {
             switch (_state)
             {
-                case 0: empty?.Invoke(); break;
-                case 1: item1?.Invoke(_item1); break;
-                case 2: item2?.Invoke(_item2); break;
-                default: throw new InvalidOperationException();
+                case 0:
+                    empty?.Invoke();
+                    break;
+                case 1:
+                    item1?.Invoke(_item1);
+                    break;
+                case 2:
+                    item2?.Invoke(_item2);
+                    break;
             }
+
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -126,11 +133,15 @@ namespace SourceCode.Clay
         {
             switch (_state)
             {
-                case 0: return empty is null ? default : empty();
-                case 1: return item1 is null ? default : item1(_item1);
-                case 2: return item2 is null ? default : item2(_item2);
-                default: throw new InvalidOperationException();
+                case 0:
+                    return empty is null ? default : empty();
+                case 1:
+                    return item1 is null ? default : item1(_item1);
+                case 2:
+                    return item2 is null ? default : item2(_item2);
             }
+
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -162,8 +173,9 @@ namespace SourceCode.Clay
             {
                 case 1: return EqualityComparer<TItem1>.Default.GetHashCode(_item1);
                 case 2: return EqualityComparer<TItem2>.Default.GetHashCode(_item2);
-                default: return 0;
             }
+
+            return 0;
         }
 
 #pragma warning disable CA2225 // Operator overloads have named alternates

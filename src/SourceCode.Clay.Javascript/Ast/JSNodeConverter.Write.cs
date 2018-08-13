@@ -462,9 +462,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
             switch (node.Left)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("right");
@@ -487,9 +493,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
             switch (node.Initializer)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("test");
@@ -756,9 +768,15 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WritePropertyName("key");
             switch (node.Key)
             {
-                case var d when d.IsItem1: WriteJson(writer, d.Item1, serializer); break;
-                case var d when d.IsItem2: WriteJson(writer, d.Item2, serializer); break;
-                default: WriteJson(writer, (JSExpression)null, serializer); break;
+                case var d when d.IsItem1:
+                    WriteJson(writer, d.Item1, serializer);
+                    break;
+                case var d when d.IsItem2:
+                    WriteJson(writer, d.Item2, serializer);
+                    break;
+                default:
+                    WriteJson(writer, (JSExpression)null, serializer);
+                    break;
             }
 
             writer.WritePropertyName("value");

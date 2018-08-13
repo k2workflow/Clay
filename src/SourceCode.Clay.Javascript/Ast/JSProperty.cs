@@ -24,7 +24,6 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSProperty(Discriminated<JSLiteral, JSIdentifier> key, JSExpression value)
             : this(JSPropertyKind.Initializer, key, value)
         {
-
         }
     }
 }
