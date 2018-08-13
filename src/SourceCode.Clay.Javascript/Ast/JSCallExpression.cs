@@ -34,6 +34,20 @@ namespace SourceCode.Clay.Javascript.Ast
             Callee = callee;
         }
 
+        public JSCallExpression(JSExpression callee, JSExpression argument)
+        {
+            Arguments = new List<JSExpression>() { argument };
+        }
+
+        public JSCallExpression(JSExpression callee, IEnumerable<JSExpression> arguments)
+        {
+            Arguments = new List<JSExpression>(arguments);
+        }
+
+        public JSCallExpression(JSExpression callee, params JSExpression[] arguments)
+            : this(callee, (IEnumerable<JSExpression>)arguments)
+        { }
+
         public JSCallExpression Add(JSExpression argument)
         {
             Arguments.Add(argument);

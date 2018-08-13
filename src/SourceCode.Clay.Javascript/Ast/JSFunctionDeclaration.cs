@@ -34,6 +34,12 @@ namespace SourceCode.Clay.Javascript.Ast
             Identifier = identifier;
         }
 
+        public JSFunctionDeclaration(JSIdentifier identifier, IJSPattern parameter)
+        {
+            Parameters = new List<IJSPattern>() { parameter };
+            Identifier = identifier;
+        }
+
         public JSFunctionDeclaration(JSIdentifier identifier, IEnumerable<IJSPattern> parameters)
         {
             Parameters = new List<IJSPattern>(parameters);
@@ -42,8 +48,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSFunctionDeclaration(JSIdentifier identifier, params IJSPattern[] parameters)
             : this(identifier, (IEnumerable<IJSPattern>)parameters)
-        {
-        }
+        { }
 
         public new JSFunctionDeclaration Add(JSStatement body) => (JSFunctionDeclaration)base.Add(body);
         public new JSFunctionDeclaration Add(params JSStatement[] body) => (JSFunctionDeclaration)base.Add(body);

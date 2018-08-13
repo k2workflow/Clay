@@ -9,13 +9,22 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSStatement Body { get; set; }
 
         protected JSBodyStatement()
-        {
-        }
+        { }
 
         protected JSBodyStatement(JSStatement body)
         {
-            Body = body;
+            Add(body);
         }
+
+        protected JSBodyStatement(IEnumerable<JSStatement> body)
+        {
+            foreach (var item in body)
+                Add(item);
+        }
+
+        protected JSBodyStatement(params JSStatement[] body)
+            : this((IEnumerable<JSStatement>)body)
+        { }
 
         public JSBodyStatement Add(JSStatement body)
         {

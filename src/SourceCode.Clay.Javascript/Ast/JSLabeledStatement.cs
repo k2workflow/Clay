@@ -9,8 +9,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSIdentifier Label { get; set; }
 
         public JSLabeledStatement()
-        {
-        }
+        { }
 
         public JSLabeledStatement(JSIdentifier label)
         {

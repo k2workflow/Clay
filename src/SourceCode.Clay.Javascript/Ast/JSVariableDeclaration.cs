@@ -22,6 +22,20 @@ namespace SourceCode.Clay.Javascript.Ast
             Declarations = new List<JSVariableDeclarator>(capacity);
         }
 
+        public JSVariableDeclaration(JSVariableDeclarator declaration)
+        {
+            Declarations = new List<JSVariableDeclarator>() { declaration };
+        }
+
+        public JSVariableDeclaration(IEnumerable<JSVariableDeclarator> declarations)
+        {
+            Declarations = new List<JSVariableDeclarator>(declarations);
+        }
+
+        public JSVariableDeclaration(params JSVariableDeclarator[] declarations)
+            : this((IEnumerable<JSVariableDeclarator>)declarations)
+        { }
+
         public JSVariableDeclaration Add(JSVariableDeclarator declaration)
         {
             Declarations.Add(declaration);

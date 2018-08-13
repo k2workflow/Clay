@@ -42,10 +42,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             Left = left;
             Operator = @operator;
-            Right = new List<JSExpression>()
-            {
-                right
-            };
+            Right = new List<JSExpression>(){ right };
         }
 
         public JSBinaryExpression Add(JSExpression right)

@@ -34,6 +34,22 @@ namespace SourceCode.Clay.Javascript.Ast
             Discriminant = discriminant;
         }
 
+        public JSSwitchStatement(JSExpression discriminant, JSSwitchCase expression)
+        {
+            Cases = new List<JSSwitchCase>() { expression };
+            Discriminant = discriminant;
+        }
+
+        public JSSwitchStatement(JSExpression discriminant, IEnumerable<JSSwitchCase> expressions)
+        {
+            Cases = new List<JSSwitchCase>(expressions);
+            Discriminant = discriminant;
+        }
+
+        public JSSwitchStatement(JSExpression discriminant, params JSSwitchCase[] expressions)
+            : this(discriminant, (IEnumerable<JSSwitchCase>)expressions)
+        { }
+
         public JSSwitchStatement Add(JSSwitchCase @case)
         {
             Cases.Add(@case);

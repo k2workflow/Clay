@@ -11,8 +11,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSStatement Alternate { get; set; }
 
         public JSIfStatement()
-        {
-        }
+        { }
 
         public JSIfStatement(JSExpression test, JSStatement consequent, JSStatement alternate)
             : base(consequent)
@@ -23,8 +22,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement(JSExpression test, JSStatement consequent)
             : this(test, consequent, null)
-        {
-        }
+        { }
 
         public JSIfStatement(JSExpression test)
         {

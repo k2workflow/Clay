@@ -9,8 +9,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSExpression Object { get; set; }
 
         public JSWithStatement()
-        {
-        }
+        { }
 
         public JSWithStatement(JSExpression @object)
         {

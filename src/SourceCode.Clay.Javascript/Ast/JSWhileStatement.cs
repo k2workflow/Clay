@@ -9,8 +9,11 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSExpression Test { get; set; }
 
         public JSWhileStatement()
-        {
-        }
+        { }
+
+        public JSWhileStatement(JSStatement body)
+            : base(body)
+        { }
 
         public JSWhileStatement(JSExpression test)
         {

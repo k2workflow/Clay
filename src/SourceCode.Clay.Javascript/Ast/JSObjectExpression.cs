@@ -20,6 +20,25 @@ namespace SourceCode.Clay.Javascript.Ast
             Properties = new List<JSProperty>();
         }
 
+        public JSObjectExpression(int capacity)
+        {
+            Properties = new List<JSProperty>(capacity);
+        }
+
+        public JSObjectExpression(JSProperty property)
+        {
+            Properties = new List<JSProperty>() { property };
+        }
+
+        public JSObjectExpression(IEnumerable<JSProperty> properties)
+        {
+            Properties = new List<JSProperty>(properties);
+        }
+
+        public JSObjectExpression(params JSProperty[] properties)
+            : this((IEnumerable<JSProperty>)properties)
+        { }
+
         public JSObjectExpression Add(JSProperty property)
         {
             Properties.Add(property);
