@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.VariableDeclaration;
 
-        public List<JSVariableDeclarator> Declarations { get; }
+        public IList<JSVariableDeclarator> Declarations { get; }
 
         public JSVariableDeclarationKind Kind { get; set; }
 
@@ -23,9 +23,10 @@ namespace SourceCode.Clay.Javascript.Ast
             return this;
         }
 
-        public JSVariableDeclaration Add(IEnumerable<JSVariableDeclarator> declaration)
+        public JSVariableDeclaration Add(IEnumerable<JSVariableDeclarator> declarations)
         {
-            Declarations.AddRange(declaration);
+            foreach (var declaration in declarations)
+                Declarations.Add(declaration);
             return this;
         }
 

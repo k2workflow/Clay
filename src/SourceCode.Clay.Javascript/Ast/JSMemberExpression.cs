@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Object { get; set; }
 
-        public List<JSExpression> Indices { get; }
+        public IList<JSExpression> Indices { get; }
 
         public bool IsComputed { get; set; }
 
@@ -51,9 +51,10 @@ namespace SourceCode.Clay.Javascript.Ast
             return this;
         }
 
-        public JSMemberExpression Add(IEnumerable<JSExpression> property)
+        public JSMemberExpression Add(IEnumerable<JSExpression> properties)
         {
-            Indices.AddRange(property);
+            foreach (var property in properties)
+                Indices.Add(property);
             return this;
         }
 

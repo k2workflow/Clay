@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,11 +8,9 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public abstract JSNodeType Type { get; }
 
-        public List<JSStatement> Body { get; }
+        public IList<JSStatement> Body { get; }
 
-        IList<JSStatement> IJSBlock.Body => Body;
-
-        public JSBlock()
+        protected JSBlock()
         {
             Body = new List<JSStatement>();
         }
@@ -26,9 +24,10 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSBlock Add(params JSStatement[] body)
             => Add((IEnumerable<JSStatement>)body);
 
-        public JSBlock Add(IEnumerable<JSStatement> body)
+        public JSBlock Add(IEnumerable<JSStatement> bodies)
         {
-            Body.AddRange(body);
+            foreach (var body in bodies)
+                Body.Add(body);
             return this;
         }
 

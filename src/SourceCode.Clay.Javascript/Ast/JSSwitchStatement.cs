@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Discriminant { get; set; }
 
-        public List<JSSwitchCase> Cases { get; }
+        public IList<JSSwitchCase> Cases { get; }
 
         public JSSwitchStatement()
         {
@@ -29,9 +29,10 @@ namespace SourceCode.Clay.Javascript.Ast
             return this;
         }
 
-        public JSSwitchStatement Add(IEnumerable<JSSwitchCase> @case)
+        public JSSwitchStatement Add(IEnumerable<JSSwitchCase> cases)
         {
-            Cases.AddRange(@case);
+            foreach (var @case in cases)
+                Cases.Add(@case);
             return this;
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.SequenceExpression;
 
-        public List<JSExpression> Expressions { get; }
+        public IList<JSExpression> Expressions { get; }
 
         public JSSequenceExpression()
         {
@@ -21,9 +21,10 @@ namespace SourceCode.Clay.Javascript.Ast
             return this;
         }
 
-        public JSSequenceExpression Add(IEnumerable<JSExpression> expression)
+        public JSSequenceExpression Add(IEnumerable<JSExpression> expressions)
         {
-            Expressions.AddRange(expression);
+            foreach (var expression in expressions)
+                Expressions.Add(expression);
             return this;
         }
 

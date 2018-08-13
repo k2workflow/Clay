@@ -8,9 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.BlockStatement;
 
-        public List<JSStatement> Body { get; }
-
-        IList<JSStatement> IJSBlock.Body => Body;
+        public IList<JSStatement> Body { get; }
 
         public JSBlockStatement()
         {
@@ -26,9 +24,10 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSBlockStatement Add(params JSStatement[] body)
             => Add((IEnumerable<JSStatement>)body);
 
-        public JSBlockStatement Add(IEnumerable<JSStatement> body)
+        public JSBlockStatement Add(IEnumerable<JSStatement> bodies)
         {
-            Body.AddRange(body);
+            foreach (var body in bodies)
+            Body.Add(body);
             return this;
         }
 

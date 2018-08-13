@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIdentifier Identifier { get; set; }
 
-        public List<IJSPattern> Parameters { get; }
+        public IList<IJSPattern> Parameters { get; }
 
         IList<IJSPattern> IJSFunction.Parameters => Parameters;
 
@@ -48,7 +48,8 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSFunctionExpression Add(IEnumerable<IJSPattern> parameters)
         {
-            Parameters.AddRange(parameters);
+            foreach (var parameter in parameters)
+                Parameters.Add(parameter);
             return this;
         }
 

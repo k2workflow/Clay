@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,11 +6,9 @@ namespace SourceCode.Clay.Javascript.Ast
 {
     public abstract class JSBlockExpression : JSExpression, IJSBlock
     {
-        public List<JSStatement> Body { get; }
+        public IList<JSStatement> Body { get; }
 
-        IList<JSStatement> IJSBlock.Body => Body;
-
-        public JSBlockExpression()
+        protected JSBlockExpression()
         {
             Body = new List<JSStatement>();
         }
@@ -24,9 +22,10 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSBlockExpression Add(params JSStatement[] body)
             => Add((IEnumerable<JSStatement>)body);
 
-        public JSBlockExpression Add(IEnumerable<JSStatement> body)
+        public JSBlockExpression Add(IEnumerable<JSStatement> bodies)
         {
-            Body.AddRange(body);
+            foreach (var body in bodies)
+                Body.Add(body);
             return this;
         }
 

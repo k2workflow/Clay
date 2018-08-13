@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Left { get; set; }
 
-        public List<JSExpression> Right { get; }
+        public IList<JSExpression> Right { get; }
 
         public JSBinaryExpression()
         {
@@ -41,7 +41,8 @@ namespace SourceCode.Clay.Javascript.Ast
             if (right is JSBinaryExpression binary && binary.Operator == Operator)
             {
                 Right.Add(binary.Left);
-                Right.AddRange(binary.Right);
+                foreach (var rght in binary.Right)
+                    Right.Add(rght);
                 return this;
             }
             Right.Add(right);
