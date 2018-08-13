@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public virtual void WriteNode<T>(T node)
             where T : IJSNode
         {
-            if (node == null)
+            if (Equals(node, default(T))) // TODO: ReferenceEquals
             {
                 if (typeof(T) == typeof(JSStatement))
                 {
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSSequenceExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             for (var i = 0; i < node.Expressions.Count; i++)
             {
                 if (i != 0) Write(Minify ? "," : ", ");
@@ -154,15 +154,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSNewExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("new ");
             WriteNode((JSCallExpression)node);
         }
 
         protected virtual void WriteNode(JSCallExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Callee != null)
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Callee is null))
             {
                 var isFunction = node.Callee is IJSFunction;
                 if (isFunction) Write("(");
@@ -180,7 +180,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSConditionalExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             WriteNode(node.Test);
             Write(Minify ? "?" : " ? ");
             WriteNode(node.Consequent);
@@ -190,7 +190,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSMemberExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             WriteNode(node.Object);
             for (var i = 0; i < node.Indices.Count; i++)
             {
@@ -202,7 +202,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSBinaryExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("(");
             WriteNode(node.Left);
             for (var i = 0; i < node.Right.Count; i++)
@@ -328,7 +328,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSUnaryExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             switch (node.Operator)
             {
@@ -382,7 +382,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSFunctionExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("function(");
             for (var i = 0; i < node.Parameters.Count; i++)
             {
@@ -395,7 +395,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSProperty node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             switch (node.Key)
             {
@@ -410,7 +410,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSObjectExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (node.Properties.Count == 0)
             {
                 Write("{}");
@@ -445,7 +445,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSArrayExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (node.Elements.Count == 0)
             {
                 Write("[]");
@@ -480,15 +480,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSThisExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("this");
         }
 
         protected virtual void WriteNode(JSVariableDeclarator node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             WriteNode(node.Identifier);
-            if (node.Initializer != null)
+            if (!(node.Initializer is null))
             {
                 Write(Minify ? "=" : " = ");
                 WriteNode(node.Initializer);
@@ -497,7 +497,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSVariableDeclaration node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             WriteNode(node.Kind);
             if (!Minify) Indent++;
             for (var i = 0; i < node.Declarations.Count; i++)
@@ -524,9 +524,9 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSFunctionDeclaration node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("function");
-            if (node.Identifier != null)
+            if (!(node.Identifier is null))
             {
                 Write(" ");
                 WriteNode(node.Identifier);
@@ -543,14 +543,14 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSForInStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "for(" : "for (");
 
             switch (node.Left)
             {
                 case var d when d.IsItem1:
                     WriteNode(d.Item1.Kind);
-                    if (d.Item1.Declarations.Count > 0 && d.Item1.Declarations[0] != null)
+                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
                         WriteNode(d.Item1.Declarations[0]);
                     break;
 
@@ -581,7 +581,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 WriteBlock(block, spacer || !Minify, newLine);
                 return true;
             }
-            else if (node.Body != null)
+            else if (!(node.Body is null))
             {
                 if (Minify && spacer) Write(" ");
                 else if (!Minify)
@@ -599,14 +599,14 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSForStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "for(" : "for (");
 
             switch (node.Initializer)
             {
                 case var d when d.IsItem1:
                     WriteNode(d.Item1.Kind);
-                    if (d.Item1.Declarations.Count > 0 && d.Item1.Declarations[0] != null)
+                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
                         WriteNode(d.Item1.Declarations[0]);
                     break;
                 case var d when d.IsItem2:
@@ -615,30 +615,30 @@ namespace SourceCode.Clay.Javascript.Ast
             }
 
             Write(Minify ? ";" : "; ");
-            if (node.Test != null) WriteNode(node.Test);
+            if (!(node.Test is null)) WriteNode(node.Test);
             Write(Minify ? ";" : "; ");
-            if (node.Test != null) WriteNode(node.Update);
+            if (!(node.Test is null)) WriteNode(node.Update);
             Write(")");
             WriteBody(node, false, true);
         }
 
         protected virtual void WriteNode(JSDoWhileStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             Write("do");
             var isBlock = WriteBody(node, true, false);
             if (Minify) Write("while(");
             else if (isBlock) Write(" while (");
             else Write("while (");
-            if (node.Test != null) WriteNode(node.Test);
+            if (!(node.Test is null)) WriteNode(node.Test);
             if (Minify) Write(");");
             else WriteLine(");");
         }
 
         protected virtual void WriteNode(JSWhileStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "while(" : "while (");
             WriteNode(node.Test);
             Write(")");
@@ -649,7 +649,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSCatchClause node, bool newLine)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "catch(" : "catch (");
             WriteNode(node.Parameter);
             Write(")");
@@ -658,13 +658,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSTryStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("try");
-            WriteBlock(node, true, node.Handler == null && node.Finalizer == null);
-            if (node.Handler != null)
+            WriteBlock(node, true, node.Handler is null && node.Finalizer is null);
+            if (!(node.Handler is null))
             {
                 if (!Minify) Write(" ");
-                WriteNode(node.Handler, node.Finalizer == null);
+                WriteNode(node.Handler, node.Finalizer is null);
             }
             if (node.Finalizer.Body.Count > 0)
             {
@@ -675,7 +675,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSThrowStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("throw ");
             WriteNode(node.Expression);
             if (Minify) Write(";");
@@ -684,9 +684,9 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSSwitchCase node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
-            if (node.Test != null)
+            if (!(node.Test is null))
             {
                 Write("case ");
                 WriteNode(node.Test);
@@ -711,7 +711,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSSwitchStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "switch(" : "switch (");
             WriteNode(node.Discriminant);
             Write(Minify ? "){" : ") {");
@@ -735,7 +735,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSIfStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (Minify &&
                 node.Body is JSExpressionStatement consequent &&
@@ -754,9 +754,9 @@ namespace SourceCode.Clay.Javascript.Ast
             WriteNode(node.Test);
             Write(")");
 
-            var isBlock = WriteBody(node, false, node.Alternate == null);
+            var isBlock = WriteBody(node, false, node.Alternate is null);
 
-            if (node.Alternate != null)
+            if (!(node.Alternate is null))
             {
                 if (isBlock && !Minify) Write(" ");
                 Write("else");
@@ -788,26 +788,26 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSContinueStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            Write(node.Label == null ? "continue" : "continue ");
-            if (node.Label != null) WriteNode(node.Label);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            Write(node.Label is null ? "continue" : "continue ");
+            if (!(node.Label is null)) WriteNode(node.Label);
             if (Minify) Write(";");
             else WriteLine(";");
         }
 
         protected virtual void WriteNode(JSBreakStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            Write(node.Label == null ? "break" : "break ");
-            if (node.Label != null) WriteNode(node.Label);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            Write(node.Label is null ? "break" : "break ");
+            if (!(node.Label is null)) WriteNode(node.Label);
             if (Minify) Write(";");
             else WriteLine(";");
         }
 
         protected virtual void WriteNode(JSLabeledStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Label != null) WriteNode(node.Label);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Label is null)) WriteNode(node.Label);
             if (Minify) Write(":");
             else WriteLine(":");
             WriteNode(node.Body);
@@ -815,9 +815,9 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSReturnStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write("return");
-            if (node.Expression != null)
+            if (!(node.Expression is null))
             {
                 Write(" ");
                 WriteNode(node.Expression);
@@ -828,7 +828,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSWithStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "with(" : "with (");
             WriteNode(node.Object);
             Write(")");
@@ -837,15 +837,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSDebuggerStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (Minify) Write("debugger;");
             else WriteLine("debugger;");
         }
 
         protected virtual void WriteNode(JSExpressionStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Expression != null) WriteNode(node.Expression);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Expression is null)) WriteNode(node.Expression);
             if (Minify) Write(";");
             else WriteLine(";");
         }
@@ -882,7 +882,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(IJSFunction node, bool newLine)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (node.Body.Count == 0)
             {
@@ -910,7 +910,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSProgram node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             for (var i = 0; i < node.Body.Count; i++)
             {
@@ -921,17 +921,17 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteNode(JSIdentifier node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             Write(node.Name);
         }
 
         protected virtual void WriteNode(JSLiteral node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (node.Value is string s) WriteLiteral(s);
             else if (node.Value is bool b) WriteLiteral(b);
-            else if (node.Value == null) WriteLiteral();
+            else if (node.Value is null) WriteLiteral();
             else if (node.Value is JSRegex r) WriteLiteral(r);
             else if (node.Value is byte uint8) WriteLiteral(uint8);
             else if (node.Value is sbyte int8) WriteLiteral(int8);
@@ -980,7 +980,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteLiteral(JSRegex value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value == default) throw new ArgumentNullException(nameof(value));
 
             Write("/");
             for (var i = 0; i < value.Pattern.Length; i++)
@@ -999,7 +999,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual void WriteLiteral(string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 WriteLiteral();
                 return;

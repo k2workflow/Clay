@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -33,13 +33,14 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public static JSExpression JSValue<T>(T value)
         {
-            if (ReferenceEquals(value, null)) return JSNull();
+            if (Equals(value, default(T))) // TODO: ReferenceEquals
+                return JSNull();
             if (value is JSExpression expression) return expression;
             var rth = typeof(T) == typeof(object)
                 ? Type.GetTypeHandle(value)
                 : typeof(T).TypeHandle;
             var factory = _factories.GetOrAdd(rth, CreateFactory);
-            if (factory == null) throw new NotSupportedException();
+            if (factory is null) throw new NotSupportedException();
             return factory(value);
         }
 
@@ -48,7 +49,7 @@ namespace SourceCode.Clay.Javascript.Ast
             var type = Type.GetTypeFromHandle(typeHandle);
 
             var factory = CreateAnyExpression(type);
-            if (factory == null) return default;
+            if (factory is null) return default;
 
             return factory.Compile();
         }
@@ -64,7 +65,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         private static Expression<Func<object, JSExpression>> CreateFactoryExpression(Type type)
         {
-            if (type.GetCustomAttribute<CompilerGeneratedAttribute>(false) == null) return default;
+            if (type.GetCustomAttribute<CompilerGeneratedAttribute>(false) is null) return default;
 
             var param = Expression.Parameter(TypeofObject, "value");
             var convertedParam = Expression.Convert(param, type);
@@ -80,7 +81,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 var descrim = Expression.New(ConstructorOfProperty_Identifier, identifier);
 
                 var factory = CreateAnyExpression(propertyType);
-                if (factory == null) return null;
+                if (factory is null) return null;
 
                 var invoked = Expression.Invoke(factory, accessor);
                 result = Expression.Call(result, MethodOfJSObjectExpression_Property, descrim, invoked);

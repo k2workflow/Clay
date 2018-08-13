@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Javascript.Ast
         IEnumerator IEnumerable.GetEnumerator() => Enumerable.Empty<object>().GetEnumerator();
 
         public static implicit operator JSVariableDeclaration(JSVariableDeclarator declarator)
-            => declarator == null
+            => declarator is null
             ? null
             : new JSVariableDeclaration() { declarator };
     }

@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSBodyStatement Add(JSStatement body)
         {
-            if (Body == null) Body = body;
+            if (Body is null) Body = body;
             else if (Body is JSBlockStatement block) block.Body.Add(body);
             else Body = new JSBlockStatement()
             {

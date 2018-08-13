@@ -310,7 +310,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("BreakStatement");
 
             writer.WritePropertyName("label");
-            if (node.Label == null)
+            if (node.Label is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Label, serializer);
@@ -397,7 +397,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("ContinueStatement");
 
             writer.WritePropertyName("label");
-            if (node.Label == null)
+            if (node.Label is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Label, serializer);
@@ -512,7 +512,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("FunctionDeclaration");
 
             writer.WritePropertyName("id");
-            if (node.Identifier == null)
+            if (node.Identifier is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Identifier, serializer);
@@ -539,7 +539,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("FunctionExpression");
 
             writer.WritePropertyName("id");
-            if (node.Identifier == null)
+            if (node.Identifier is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Identifier, serializer);
@@ -888,13 +888,13 @@ namespace SourceCode.Clay.Javascript.Ast
             WriteJson(writer, node.Body, serializer);
 
             writer.WritePropertyName("handler");
-            if (node.Handler == null)
+            if (node.Handler is null)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Handler, serializer);
 
             writer.WritePropertyName("finalizer");
-            if (node.Handler != null && node.Finalizer.Body.Count == 0)
+            if (!(node.Handler is null) && node.Finalizer.Body.Count == 0)
                 writer.WriteNull();
             else
                 WriteJson(writer, node.Finalizer, serializer);

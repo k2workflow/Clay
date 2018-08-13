@@ -33,7 +33,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement Else(JSStatement body)
         {
-            if (Alternate == null) Alternate = body;
+            if (Alternate is null) Alternate = body;
             else if (Alternate is JSBlockStatement block) block.Body.Add(body);
             else Alternate = new JSBlockStatement()
             {

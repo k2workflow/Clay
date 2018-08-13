@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Javascript.Ast
         public virtual ValueTask WriteNodeAsync<T>(T node)
             where T : IJSNode
         {
-            if (node == null)
+            if (Equals(node, default(T))) // TODO: ReferenceEquals
             {
                 if (typeof(T) == typeof(JSStatement))
                 {
@@ -108,7 +108,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSSequenceExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             for (var i = 0; i < node.Expressions.Count; i++)
             {
                 if (i != 0) await WriteAsync(Minify ? "," : ", ").ConfigureAwait(false);
@@ -118,15 +118,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSNewExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("new ").ConfigureAwait(false);
             await WriteNodeAsync((JSCallExpression)node).ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSCallExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Callee != null)
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Callee is null))
             {
                 var isFunction = node.Callee is IJSFunction;
                 if (isFunction) await WriteAsync("(").ConfigureAwait(false);
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSConditionalExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteNodeAsync(node.Test).ConfigureAwait(false);
             await WriteAsync(Minify ? "?" : " ? ").ConfigureAwait(false);
             await WriteNodeAsync(node.Consequent).ConfigureAwait(false);
@@ -154,7 +154,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSMemberExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteNodeAsync(node.Object).ConfigureAwait(false);
             for (var i = 0; i < node.Indices.Count; i++)
             {
@@ -166,7 +166,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSBinaryExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("(").ConfigureAwait(false);
             await WriteNodeAsync(node.Left).ConfigureAwait(false);
             for (var i = 0; i < node.Right.Count; i++)
@@ -257,7 +257,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSUnaryExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             switch (node.Operator)
             {
@@ -311,7 +311,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSFunctionExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("function(").ConfigureAwait(false);
             for (var i = 0; i < node.Parameters.Count; i++)
             {
@@ -324,7 +324,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSProperty node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             switch (node.Key)
             {
@@ -339,7 +339,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSObjectExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (node.Properties.Count == 0)
             {
                 await WriteAsync("{}").ConfigureAwait(false);
@@ -374,7 +374,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSArrayExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (node.Elements.Count == 0)
             {
                 await WriteAsync("[]").ConfigureAwait(false);
@@ -409,15 +409,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSThisExpression node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("this").ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSVariableDeclarator node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteNodeAsync(node.Identifier).ConfigureAwait(false);
-            if (node.Initializer != null)
+            if (!(node.Initializer is null))
             {
                 await WriteAsync(Minify ? "=" : " = ").ConfigureAwait(false);
                 await WriteNodeAsync(node.Initializer).ConfigureAwait(false);
@@ -426,7 +426,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSVariableDeclaration node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteNodeAsync(node.Kind).ConfigureAwait(false);
             if (!Minify) Indent++;
             for (var i = 0; i < node.Declarations.Count; i++)
@@ -453,9 +453,9 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSFunctionDeclaration node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("function").ConfigureAwait(false);
-            if (node.Identifier != null)
+            if (!(node.Identifier is null))
             {
                 await WriteAsync(" ");
                 await WriteNodeAsync(node.Identifier);
@@ -472,14 +472,14 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSForInStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "for(" : "for (").ConfigureAwait(false);
 
             switch (node.Left)
             {
                 case var d when d.IsItem1:
                     await WriteNodeAsync(d.Item1.Kind).ConfigureAwait(false);
-                    if (d.Item1.Declarations.Count > 0 && d.Item1.Declarations[0] != null)
+                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
                         await WriteNodeAsync(d.Item1.Declarations[0]).ConfigureAwait(false);
                     break;
 
@@ -510,7 +510,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 await WriteBlockAsync(block, spacer || !Minify, newLine).ConfigureAwait(false);
                 return true;
             }
-            else if (node.Body != null)
+            else if (!(node.Body is null))
             {
                 if (Minify && spacer) await WriteAsync(" ").ConfigureAwait(false);
                 else if (!Minify)
@@ -528,14 +528,14 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSForStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "for(" : "for (").ConfigureAwait(false);
 
             switch (node.Initializer)
             {
                 case var d when d.IsItem1:
                     await WriteNodeAsync(d.Item1.Kind).ConfigureAwait(false);
-                    if (d.Item1.Declarations.Count > 0 && d.Item1.Declarations[0] != null)
+                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
                         await WriteNodeAsync(d.Item1.Declarations[0]).ConfigureAwait(false);
                     break;
                 case var d when d.IsItem2:
@@ -544,16 +544,16 @@ namespace SourceCode.Clay.Javascript.Ast
             }
 
             await WriteAsync(Minify ? ";" : "; ").ConfigureAwait(false);
-            if (node.Test != null) await WriteNodeAsync(node.Test).ConfigureAwait(false);
+            if (!(node.Test is null)) await WriteNodeAsync(node.Test).ConfigureAwait(false);
             await WriteAsync(Minify ? ";" : "; ").ConfigureAwait(false);
-            if (node.Update != null) await WriteNodeAsync(node.Update).ConfigureAwait(false);
+            if (!(node.Update is null)) await WriteNodeAsync(node.Update).ConfigureAwait(false);
             await WriteAsync(")").ConfigureAwait(false);
             await WriteBodyAsync(node, false, true).ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSDoWhileStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             await WriteAsync("do").ConfigureAwait(false);
             var isBlock = await WriteBodyAsync(node, true, false).ConfigureAwait(false);
@@ -567,7 +567,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSWhileStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "while(" : "while (").ConfigureAwait(false);
             await WriteNodeAsync(node.Test).ConfigureAwait(false);
             await WriteAsync(")").ConfigureAwait(false);
@@ -578,7 +578,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSCatchClause node, bool newLine)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "catch(" : "catch (").ConfigureAwait(false);
             await WriteNodeAsync(node.Parameter).ConfigureAwait(false);
             await WriteAsync(")").ConfigureAwait(false);
@@ -587,13 +587,13 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSTryStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("try").ConfigureAwait(false);
-            await WriteBlockAsync(node, true, node.Handler == null && node.Finalizer == null).ConfigureAwait(false);
-            if (node.Handler != null)
+            await WriteBlockAsync(node, true, node.Handler is null && node.Finalizer is null).ConfigureAwait(false);
+            if (!(node.Handler is null))
             {
                 if (!Minify) await WriteAsync(" ").ConfigureAwait(false);
-                await WriteNodeAsync(node.Handler, node.Finalizer == null).ConfigureAwait(false);
+                await WriteNodeAsync(node.Handler, node.Finalizer is null).ConfigureAwait(false);
             }
             if (node.Finalizer.Body.Count > 0)
             {
@@ -604,7 +604,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSThrowStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("throw ").ConfigureAwait(false);
             await WriteNodeAsync(node.Expression).ConfigureAwait(false);
             if (Minify) await WriteAsync(";").ConfigureAwait(false);
@@ -613,9 +613,9 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSSwitchCase node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
-            if (node.Test != null)
+            if (!(node.Test is null))
             {
                 await WriteAsync("case ").ConfigureAwait(false);
                 await WriteNodeAsync(node.Test).ConfigureAwait(false);
@@ -640,7 +640,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSSwitchStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "switch(" : "switch (").ConfigureAwait(false);
             await WriteNodeAsync(node.Discriminant).ConfigureAwait(false);
             await WriteAsync(Minify ? "){" : ") {").ConfigureAwait(false);
@@ -663,7 +663,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSIfStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (Minify &&
                 node.Body is JSExpressionStatement consequent &&
@@ -682,9 +682,9 @@ namespace SourceCode.Clay.Javascript.Ast
             await WriteNodeAsync(node.Test).ConfigureAwait(false);
             await WriteAsync(")").ConfigureAwait(false);
 
-            var isBlock = await WriteBodyAsync(node, false, node.Alternate == null).ConfigureAwait(false);
+            var isBlock = await WriteBodyAsync(node, false, node.Alternate is null).ConfigureAwait(false);
 
-            if (node.Alternate != null)
+            if (!(node.Alternate is null))
             {
                 if (isBlock && !Minify) await WriteAsync(" ").ConfigureAwait(false);
                 await WriteAsync("else").ConfigureAwait(false);
@@ -716,36 +716,36 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSContinueStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            await WriteAsync(node.Label == null ? "continue" : "continue ").ConfigureAwait(false);
-            if (node.Label != null) await WriteNodeAsync(node.Label).ConfigureAwait(false);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            await WriteAsync(node.Label is null ? "continue" : "continue ").ConfigureAwait(false);
+            if (!(node.Label is null)) await WriteNodeAsync(node.Label).ConfigureAwait(false);
             if (Minify) await WriteAsync(";").ConfigureAwait(false);
             else await WriteLineAsync(";").ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSBreakStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            await WriteAsync(node.Label == null ? "break" : "break ").ConfigureAwait(false);
-            if (node.Label != null) await WriteNodeAsync(node.Label).ConfigureAwait(false);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            await WriteAsync(node.Label is null ? "break" : "break ").ConfigureAwait(false);
+            if (!(node.Label is null)) await WriteNodeAsync(node.Label).ConfigureAwait(false);
             if (Minify) await WriteAsync(";").ConfigureAwait(false);
             else await WriteLineAsync(";").ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSLabeledStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Label != null) await WriteNodeAsync(node.Label).ConfigureAwait(false);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Label is null)) await WriteNodeAsync(node.Label).ConfigureAwait(false);
             if (Minify) await WriteAsync(":").ConfigureAwait(false);
             else await WriteLineAsync(":").ConfigureAwait(false);
-            if (node.Body != null) await WriteNodeAsync(node.Body).ConfigureAwait(false);
+            if (!(node.Body is null)) await WriteNodeAsync(node.Body).ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSReturnStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync("return").ConfigureAwait(false);
-            if (node.Expression != null)
+            if (!(node.Expression is null))
             {
                 await WriteAsync(" ").ConfigureAwait(false);
                 await WriteNodeAsync(node.Expression).ConfigureAwait(false);
@@ -756,7 +756,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSWithStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "with(" : "with (").ConfigureAwait(false);
             await WriteNodeAsync(node.Object).ConfigureAwait(false);
             await WriteAsync(")").ConfigureAwait(false);
@@ -765,15 +765,15 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSDebuggerStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             if (Minify) await WriteAsync("debugger;").ConfigureAwait(false);
             else await WriteLineAsync("debugger;").ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSExpressionStatement node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
-            if (node.Expression != null) await WriteNodeAsync(node.Expression);
+            if (node is null) throw new ArgumentNullException(nameof(node));
+            if (!(node.Expression is null)) await WriteNodeAsync(node.Expression);
             if (Minify) await WriteAsync(";").ConfigureAwait(false);
             else await WriteLineAsync(";").ConfigureAwait(false);
         }
@@ -810,7 +810,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(IJSFunction node, bool newLine)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (node.Body.Count == 0)
             {
@@ -838,7 +838,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSProgram node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             for (var i = 0; i < node.Body.Count; i++)
             {
@@ -849,17 +849,17 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteNodeAsync(JSIdentifier node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(node.Name).ConfigureAwait(false);
         }
 
         protected virtual async ValueTask WriteNodeAsync(JSLiteral node)
         {
-            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (node is null) throw new ArgumentNullException(nameof(node));
 
             if (node.Value is string s) await WriteLiteralAsync(s).ConfigureAwait(false);
             else if (node.Value is bool b) await WriteLiteralAsync(b).ConfigureAwait(false);
-            else if (node.Value == null) await WriteLiteralAsync().ConfigureAwait(false);
+            else if (node.Value is null) await WriteLiteralAsync().ConfigureAwait(false);
             else if (node.Value is JSRegex r) await WriteLiteralAsync(r).ConfigureAwait(false);
             else if (node.Value is byte uint8) await WriteLiteralAsync(uint8).ConfigureAwait(false);
             else if (node.Value is sbyte int8) await WriteLiteralAsync(int8).ConfigureAwait(false);
@@ -908,7 +908,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteLiteralAsync(JSRegex value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            if (value == default) throw new ArgumentNullException(nameof(value));
 
             await WriteAsync("/").ConfigureAwait(false);
             for (var i = 0; i < value.Pattern.Length; i++)
@@ -927,7 +927,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected virtual async ValueTask WriteLiteralAsync(string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 await WriteLiteralAsync().ConfigureAwait(false);
                 return;
