@@ -26,8 +26,7 @@ namespace SourceCode.Clay
         public bool Equals(VoidResult other) => true; // Invariant homogeneous equality
 
         /// <inheritdoc/>
-        public override bool Equals(object obj)
-            => obj is VoidResult other;
+        public override bool Equals(object obj) => obj is VoidResult;
 
         /// <inheritdoc/>
         public override int GetHashCode() => 0;
