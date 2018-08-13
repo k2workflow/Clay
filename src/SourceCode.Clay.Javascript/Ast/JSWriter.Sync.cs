@@ -27,6 +27,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 }
                 return;
             }
+
             switch (node.Type)
             {
                 case JSNodeType.Identifier:

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,6 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected JSBodyStatement()
         {
-
         }
 
         protected JSBodyStatement(JSStatement body)

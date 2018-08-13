@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -12,7 +12,6 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement()
         {
-
         }
 
         public JSIfStatement(JSExpression test, JSStatement consequent, JSStatement alternate)

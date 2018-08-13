@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSIdentifier : JSExpression, IJSPattern
     {
@@ -8,7 +8,6 @@
 
         public JSIdentifier()
         {
-
         }
 
         public JSIdentifier(string name)

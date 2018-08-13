@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSUnaryExpression : JSExpression
     {
@@ -10,7 +10,6 @@
 
         public JSUnaryExpression()
         {
-
         }
 
         public JSUnaryExpression(JSUnaryOperator @operator, JSExpression argument)

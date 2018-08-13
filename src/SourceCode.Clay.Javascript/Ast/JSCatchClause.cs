@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
@@ -10,7 +10,6 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSCatchClause()
         {
-
         }
 
         public JSCatchClause(IJSPattern parameter)

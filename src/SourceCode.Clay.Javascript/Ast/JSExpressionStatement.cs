@@ -1,4 +1,4 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
     public class JSExpressionStatement : JSStatement
     {
@@ -8,7 +8,6 @@
 
         public JSExpressionStatement()
         {
-
         }
 
         public JSExpressionStatement(JSExpression expression)
