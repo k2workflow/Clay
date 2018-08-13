@@ -535,55 +535,34 @@ namespace SourceCode.Clay.Javascript.Ast
         }
 
         protected virtual void WriteJson(JsonWriter writer, JSFunctionDeclaration node, JsonSerializer serializer)
-        {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("type");
-            writer.WriteValue("FunctionDeclaration");
-
-            writer.WritePropertyName("id");
-            if (node.Identifier is null)
-                writer.WriteNull();
-            else
-                WriteJson(writer, node.Identifier, serializer);
-
-            writer.WritePropertyName("params");
-            writer.WriteStartArray();
-
-            for (var i = 0; i < node.Parameters.Count; i++)
-                WriteJson(writer, node.Parameters[i], serializer);
-
-            writer.WriteEndArray();
-
-            writer.WritePropertyName("body");
-            WriteJson(writer, node.Body, serializer);
-
-            writer.WriteEndObject();
-        }
+            => WriteJson(writer, "FunctionDeclaration", node, serializer);
 
         protected virtual void WriteJson(JsonWriter writer, JSFunctionExpression node, JsonSerializer serializer)
+            => WriteJson(writer, "FunctionExpression", node, serializer);
+
+        private void WriteJson(JsonWriter writer, string type, IJSFunction function, JsonSerializer serializer)
         {
             writer.WriteStartObject();
 
             writer.WritePropertyName("type");
-            writer.WriteValue("FunctionExpression");
+            writer.WriteValue(type);
 
             writer.WritePropertyName("id");
-            if (node.Identifier is null)
+            if (function.Identifier is null)
                 writer.WriteNull();
             else
-                WriteJson(writer, node.Identifier, serializer);
+                WriteJson(writer, function.Identifier, serializer);
 
             writer.WritePropertyName("params");
             writer.WriteStartArray();
 
-            for (var i = 0; i < node.Parameters.Count; i++)
-                WriteJson(writer, node.Parameters[i], serializer);
+            for (var i = 0; i < function.Parameters.Count; i++)
+                WriteJson(writer, function.Parameters[i], serializer);
 
             writer.WriteEndArray();
 
             writer.WritePropertyName("body");
-            WriteJson(writer, node.Body, serializer);
+            WriteJson(writer, function.Body, serializer);
 
             writer.WriteEndObject();
         }
