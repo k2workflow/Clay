@@ -19,9 +19,20 @@ namespace SourceCode.Clay.Javascript.Ast
             Indices = new List<JSExpression>();
         }
 
+        public JSMemberExpression(int capacity)
+        {
+            Indices = new List<JSExpression>(capacity);
+        }
+
         public JSMemberExpression(JSExpression @object)
         {
             Indices = new List<JSExpression>();
+            Object = @object;
+        }
+
+        public JSMemberExpression(JSExpression @object, int capacity)
+        {
+            Indices = new List<JSExpression>(capacity);
             Object = @object;
         }
 
@@ -34,6 +45,13 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSMemberExpression(JSExpression @object, bool isComputed)
         {
             Indices = new List<JSExpression>();
+            Object = @object;
+            IsComputed = isComputed;
+        }
+
+        public JSMemberExpression(JSExpression @object, bool isComputed, int capacity)
+        {
+            Indices = new List<JSExpression>(capacity);
             Object = @object;
             IsComputed = isComputed;
         }

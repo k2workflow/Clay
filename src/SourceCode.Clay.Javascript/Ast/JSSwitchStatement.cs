@@ -17,9 +17,20 @@ namespace SourceCode.Clay.Javascript.Ast
             Cases = new List<JSSwitchCase>();
         }
 
+        public JSSwitchStatement(int capacity)
+        {
+            Cases = new List<JSSwitchCase>(capacity);
+        }
+
         public JSSwitchStatement(JSExpression discriminant)
         {
             Cases = new List<JSSwitchCase>();
+            Discriminant = discriminant;
+        }
+
+        public JSSwitchStatement(JSExpression discriminant, int capacity)
+        {
+            Cases = new List<JSSwitchCase>(capacity);
             Discriminant = discriminant;
         }
 

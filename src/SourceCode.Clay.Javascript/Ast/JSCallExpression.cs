@@ -17,9 +17,20 @@ namespace SourceCode.Clay.Javascript.Ast
             Arguments = new List<JSExpression>();
         }
 
+        public JSCallExpression(int capacity)
+        {
+            Arguments = new List<JSExpression>(capacity);
+        }
+
         public JSCallExpression(JSExpression callee)
         {
             Arguments = new List<JSExpression>();
+            Callee = callee;
+        }
+
+        public JSCallExpression(JSExpression callee, int capacity)
+        {
+            Arguments = new List<JSExpression>(capacity);
             Callee = callee;
         }
 

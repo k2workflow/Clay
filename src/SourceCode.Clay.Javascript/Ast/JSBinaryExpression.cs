@@ -19,11 +19,23 @@ namespace SourceCode.Clay.Javascript.Ast
             Right = new List<JSExpression>();
         }
 
+        public JSBinaryExpression(int capacity)
+        {
+            Right = new List<JSExpression>(capacity);
+        }
+
         public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator)
         {
             Left = left;
             Operator = @operator;
             Right = new List<JSExpression>();
+        }
+
+        public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator, int capacity)
+        {
+            Left = left;
+            Operator = @operator;
+            Right = new List<JSExpression>(capacity);
         }
 
         public JSBinaryExpression(JSExpression left, JSBinaryOperator @operator, JSExpression right)

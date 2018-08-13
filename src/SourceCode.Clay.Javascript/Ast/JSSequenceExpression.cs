@@ -15,6 +15,11 @@ namespace SourceCode.Clay.Javascript.Ast
             Expressions = new List<JSExpression>();
         }
 
+        public JSSequenceExpression(int capacity)
+        {
+            Expressions = new List<JSExpression>(capacity);
+        }
+
         public JSSequenceExpression Add(JSExpression expression)
         {
             Expressions.Add(expression);

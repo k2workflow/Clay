@@ -15,6 +15,11 @@ namespace SourceCode.Clay.Javascript.Ast
             Body = new List<JSStatement>();
         }
 
+        protected JSBlock(int capacity)
+        {
+            Body = new List<JSStatement>(capacity);
+        }
+
         public JSBlock Add(JSStatement body)
         {
             Add(body);

@@ -15,6 +15,11 @@ namespace SourceCode.Clay.Javascript.Ast
             Elements = new List<JSExpression>();
         }
 
+        public JSArrayExpression(int capacity)
+        {
+            Elements = new List<JSExpression>(capacity);
+        }
+
         public JSArrayExpression Add(JSExpression element)
         {
             Elements.Add(element);
