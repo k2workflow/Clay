@@ -22,10 +22,6 @@ namespace SourceCode.Clay.Javascript.Ast
                 Add(item);
         }
 
-        protected JSBodyStatement(params JSStatement[] body)
-            : this((IEnumerable<JSStatement>)body)
-        { }
-
         public JSBodyStatement Add(JSStatement body)
         {
             if (Body is null) Body = body;

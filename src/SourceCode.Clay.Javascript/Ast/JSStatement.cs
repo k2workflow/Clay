@@ -5,7 +5,6 @@ namespace SourceCode.Clay.Javascript.Ast
         public abstract JSNodeType Type { get; }
 
         protected JSStatement()
-        {
-        }
+        { }
     }
 }

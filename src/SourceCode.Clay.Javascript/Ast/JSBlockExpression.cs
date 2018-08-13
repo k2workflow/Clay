@@ -28,10 +28,6 @@ namespace SourceCode.Clay.Javascript.Ast
             Body = new List<JSStatement>(bodies);
         }
 
-        protected JSBlockExpression(params JSStatement[] bodies)
-            : this((IEnumerable<JSStatement>)bodies)
-        { }
-
         public JSBlockExpression Add(JSStatement body)
         {
             Body.Add(body);
