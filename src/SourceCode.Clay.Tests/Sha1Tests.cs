@@ -747,27 +747,39 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Sha1_Compare))]
-        public static void Sha1_Compare()
+        [Fact(DisplayName = nameof(When_compare_sha1))]
+        public static void When_compare_sha1()
         {
-            var comparer = Sha1Comparer.Default;
-
-            var sha1 = Sha1.Hash("abc");
-            var sha2 = Sha1.Hash("abc");
-            var sha3 = Sha1.Hash("def");
-
+            var sha1 = Sha1.Hash("abc"); // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
             Assert.True(default(Sha1) < sha1);
             Assert.True(sha1 > default(Sha1));
 
-            var list = new[] { sha1, sha2, sha3 };
+            var sha2 = sha1; // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
+            Assert.True(sha2 <= sha1);
+            Assert.True(sha2 >= sha1);
+            Assert.False(sha2 < sha1);
+            Assert.False(sha2 > sha1);
 
+            var sha3 = Sha1.Hash("def"); // 589c2233-5a381f12-2d129225-f5c0ba30-56ed5811
             Assert.True(sha1.CompareTo(sha2) == 0);
             Assert.True(sha1.CompareTo(sha3) != 0);
 
-            Array.Sort(list, comparer.Compare);
+            var span = new Span<byte>(new byte[Sha1.ByteLength]);
+            sha1.CopyTo(span);
+            span[Sha1.ByteLength - 1]++;
+            var sha4 = new Sha1(span); // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89e
+            Assert.True(sha4 >= sha1);
+            Assert.True(sha4 > sha1);
+            Assert.False(sha4 < sha1);
+            Assert.False(sha4 <= sha1);
+            Assert.True(sha1.CompareTo(sha4) < 0);
 
-            Assert.True(list[0] <= list[1]);
-            Assert.True(list[2] >= list[1]);
+            var list = new[] { sha4, sha1, sha2, sha3 };
+            var comparer = Sha1Comparer.Default;
+            Array.Sort(list, comparer.Compare);
+            Assert.True(list[0] < list[1]);
+            Assert.True(list[1] == list[2]);
+            Assert.True(list[2] < list[3]);
         }
     }
 }
