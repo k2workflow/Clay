@@ -159,9 +159,11 @@ namespace SourceCode.Clay
         /// <param name="other">The <see cref="Discriminated{TItem1, TItem2}"/>.</param>
         /// <returns>A value indicating whether the <see cref="Discriminated{TItem1, TItem2}"/> are equal.</returns>
         public bool Equals(Discriminated<TItem1, TItem2> other)
-            => _state == other._state
-            && (_state != 1 || EqualityComparer<TItem1>.Default.Equals(_item1, other._item1))
-            && (_state != 2 || EqualityComparer<TItem2>.Default.Equals(_item2, other._item2));
+            => _state == other._state &&
+            (
+                (_state == 1 && EqualityComparer<TItem1>.Default.Equals(_item1, other._item1)) ||
+                (_state == 2 && EqualityComparer<TItem2>.Default.Equals(_item2, other._item2))
+            );
 
         /// <summary>
         /// Gets the hash code for this <see cref="Discriminated{TItem1, TItem2}"/>.

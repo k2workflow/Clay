@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Algorithms
         {
             From = from;
             To = to;
-            _equalityComparer = equalityComparer; // No point coalescing in a struct
+            _equalityComparer = equalityComparer; // No point coalescing in a struct since default ctor won't assign
         }
 
         /// <summary>

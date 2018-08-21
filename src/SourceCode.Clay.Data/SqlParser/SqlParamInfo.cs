@@ -35,10 +35,8 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         public bool Equals(SqlParamInfo other)
-            => IsNullable == other.IsNullable
-            && HasDefault == other.HasDefault
-            && IsReadOnly == other.IsReadOnly
-            && Direction == other.Direction;
+            => (IsNullable, HasDefault, IsReadOnly, Direction) 
+            == (other.IsNullable, other.HasDefault, other.IsReadOnly, other.Direction);
 
         public override bool Equals(object obj)
             => obj is SqlParamInfo prm

@@ -22,8 +22,8 @@ namespace SourceCode.Clay.Javascript.Ast
         public override bool Equals(object obj) => obj is JSRegex o && Equals(o);
 
         public bool Equals(JSRegex other)
-            => Pattern == other.Pattern
-            && Options == other.Options;
+            => (Pattern, Options)
+            == (other.Pattern, other.Options);
 
         public override int GetHashCode() => 0;
 
