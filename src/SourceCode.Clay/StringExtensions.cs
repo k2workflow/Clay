@@ -24,11 +24,8 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static string Left(this string str, int length)
         {
-            if (string.IsNullOrEmpty(str)) return str;
-
+            if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
-
-            if (length >= str.Length) return str;
 
             // Per existing Substring behavior, we don't respect surrogate pairs
             return str.Substring(0, length);
@@ -43,11 +40,8 @@ namespace SourceCode.Clay
         /// <returns></returns>
         public static string Right(this string str, int length)
         {
-            if (string.IsNullOrEmpty(str)) return str;
-
+            if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
-
-            if (length >= str.Length) return str;
 
             // Per existing Substring behavior, we don't respect surrogate pairs
             return str.Substring(str.Length - length);

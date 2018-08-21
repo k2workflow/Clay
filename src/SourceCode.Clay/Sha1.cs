@@ -106,7 +106,6 @@ namespace SourceCode.Clay
 
             var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
 
-            // Rent buffer
             var rented = ArrayPool<byte>.Shared.Rent(maxLen);
             try
             {
@@ -119,7 +118,6 @@ namespace SourceCode.Clay
             }
             finally
             {
-                // Return buffer
                 ArrayPool<byte>.Shared.Return(rented);
             }
         }
@@ -572,7 +570,7 @@ namespace SourceCode.Clay
 
                     for (var i = 0; i < ByteLength; i++)
                     {
-                        var cmp = src[i].CompareTo(dst[i]); // CLR returns a-b for byte comparisons
+                        var cmp = src[i].CompareTo(dst[i]); // CLR returns (a - b) for byte comparisons
                         if (cmp == 0)
                             continue;
 
