@@ -26,9 +26,11 @@ namespace SourceCode.Clay
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
+            if (length == 1) return char.ToString(str[0]);
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            return str.Substring(0, length);
+            var s = str.Substring(0, length);
+            return s;
         }
 
         /// <summary>
@@ -42,9 +44,11 @@ namespace SourceCode.Clay
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
+            if (length == 1) return char.ToString(str[str.Length - 1]);
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            return str.Substring(str.Length - length);
+            var s = str.Substring(str.Length - length);
+            return s;
         }
 
         /// <summary>

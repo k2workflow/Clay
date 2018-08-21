@@ -59,6 +59,19 @@ namespace SourceCode.Clay.Tests
             actual = "AB".Left(1);
             Assert.Equal("A", actual);
 
+            // ABC
+            actual = "ABC".Left(-1);
+            Assert.Equal(string.Empty, actual);
+
+            actual = "ABC".Left(0);
+            Assert.Equal(string.Empty, actual);
+
+            actual = "ABC".Left(1);
+            Assert.Equal("A", actual);
+
+            actual = "ABC".Left(2);
+            Assert.Equal("AB", actual);
+
             // AAA...
             for (var len = 0; len <= 10; len++)
             {
@@ -122,6 +135,19 @@ namespace SourceCode.Clay.Tests
 
             actual = "AB".Right(1);
             Assert.Equal("B", actual);
+
+            // ABC
+            actual = "ABC".Right(-1);
+            Assert.Equal(string.Empty, actual);
+
+            actual = "ABC".Right(0);
+            Assert.Equal(string.Empty, actual);
+
+            actual = "ABC".Right(1);
+            Assert.Equal("C", actual);
+
+            actual = "ABC".Right(2);
+            Assert.Equal("BC", actual);
 
             // AAA...
             for (var len = 0; len <= 10; len++)
