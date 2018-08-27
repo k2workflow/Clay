@@ -43,6 +43,7 @@ namespace SourceCode.Clay
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
+        // In C# 7.3+ we can use readonly fixed byte
 
         private readonly byte _a0;
         private readonly byte _a1;
