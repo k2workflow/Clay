@@ -15,18 +15,13 @@ namespace SourceCode.Clay.Tests
 {
     public static class Sha1Tests
     {
-        private const string _surrogatePair = "\uD869\uDE01";
-                
-        private const string _empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709"; // http://www.di-mgt.com.au/sha_testvectors.html
-
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_check_default))]
         public static void When_check_default()
         {
             var expected = default(Sha1);
 
-            const string _zero =  "0000000000000000000000000000000000000000";
-            var actual = Sha1.Parse(_zero);
+            var actual = Sha1.Parse(Sha1TestVectors.Zero);
 
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
@@ -36,7 +31,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_check_empty))]
         public static void When_check_empty()
         {
-            var expected = Sha1.Parse(_empty);
+            var expected = Sha1.Parse(Sha1TestVectors.Empty);
 
             // Empty Array singleton
             var actual = Sha1.Hash(Array.Empty<byte>());
@@ -98,9 +93,9 @@ namespace SourceCode.Clay.Tests
             Assert.True(default == expected);
             Assert.False(default != expected);
             Assert.True(expected.Equals((object)expected));
-            Assert.Equal(new KeyValuePair<string, string>("", "0000000000000000000000000000000000000000"), expected.Split(0));
-            Assert.Equal(new KeyValuePair<string, string>("00", "00000000000000000000000000000000000000"), expected.Split(2));
-            Assert.Equal(new KeyValuePair<string, string>("0000000000000000000000000000000000000000", ""), expected.Split(Sha1.HexLength));
+            Assert.Equal(new KeyValuePair<string, string>("", Sha1TestVectors.Zero), expected.Split(0));
+            Assert.Equal(new KeyValuePair<string, string>("00", Sha1TestVectors.Zero.Left(Sha1.HexLength - 2)), expected.Split(2));
+            Assert.Equal(new KeyValuePair<string, string>(Sha1TestVectors.Zero, ""), expected.Split(Sha1.HexLength));
 
             // Null string
             Assert.Throws<ArgumentNullException>(() => Sha1.Hash((string)null));
@@ -152,21 +147,18 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(buffer);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Byte[] with offset 0
             expected.CopyTo(buffer.AsSpan());
             actual = new Sha1(buffer);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Byte[] with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
             actual = new Sha1(buffer.AsSpan().Slice(5));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -181,7 +173,6 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(buffer.AsSpan().Slice(5));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Segment
             expected.CopyTo(buffer.AsSpan());
@@ -189,7 +180,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(seg);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Segment with offset 0
             expected.CopyTo(buffer.AsSpan());
@@ -197,7 +187,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(seg);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Segment with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
@@ -205,7 +194,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(seg);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -224,7 +212,6 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Memory with offset 0
             expected.CopyTo(buffer.AsSpan());
@@ -232,7 +219,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Memory with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
@@ -240,7 +226,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -256,7 +241,6 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct ReadOnlyMemory with offset 0
             expected.CopyTo(buffer.AsSpan());
@@ -264,7 +248,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct ReadOnlyMemory with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
@@ -272,7 +255,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(mem.Span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -287,7 +269,6 @@ namespace SourceCode.Clay.Tests
             var actual = Sha1.Hash(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct MemoryStream with offset 0
             mem = new MemoryStream(buffer, 0, buffer.Length);
@@ -295,7 +276,6 @@ namespace SourceCode.Clay.Tests
             actual = Sha1.Hash(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct MemoryStream with offset N
             mem = new MemoryStream(buffer, 5, buffer.Length - 5);
@@ -303,7 +283,6 @@ namespace SourceCode.Clay.Tests
             actual = Sha1.Hash(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -319,7 +298,6 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Span with offset 0
             expected.CopyTo(buffer.AsSpan());
@@ -327,7 +305,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct Span with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
@@ -335,7 +312,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
@@ -363,7 +339,6 @@ namespace SourceCode.Clay.Tests
             var actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct ReadOnlySpan with offset 0
             expected.CopyTo(buffer.AsSpan());
@@ -371,7 +346,6 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
 
             // Construct ReadOnlySpan with offset N
             expected.CopyTo(buffer.AsSpan().Slice(5));
@@ -379,12 +353,11 @@ namespace SourceCode.Clay.Tests
             actual = new Sha1(span);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
-            // Assert.Equal(expected.Memory, actual.Memory, BufferComparer.Memory);
         }
 
         [Trait("Type", "Unit")]
         [Theory(DisplayName = nameof(When_create_test_vectors))]
-        [ClassData(typeof(TestVectors))] // http://www.di-mgt.com.au/sha_testvectors.html
+        [ClassData(typeof(Sha1TestVectors))] // http://www.di-mgt.com.au/sha_testvectors.html
         public static void When_create_test_vectors(string input, string expected)
         {
             var sha1 = Sha1.Parse(expected);
@@ -463,7 +436,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_create_sha_from_empty_string))]
         public static void When_create_sha_from_empty_string()
         {
-            const string expected = _empty; // http://www.di-mgt.com.au/sha_testvectors.html
+            const string expected = Sha1TestVectors.Empty; // http://www.di-mgt.com.au/sha_testvectors.html
             var sha1 = Sha1.Parse(expected);
             {
                 const string input = "";
@@ -530,7 +503,7 @@ namespace SourceCode.Clay.Tests
         {
             for (var i = 1; i < 200; i++)
             {
-                var str = new string(Char.MinValue, i);
+                var str = new string(char.MinValue, i);
                 var sha1 = Sha1.Hash(str);
 
                 Assert.NotEqual(default, sha1);
@@ -559,7 +532,7 @@ namespace SourceCode.Clay.Tests
             var str = string.Empty;
             for (var i = 1; i < 200; i++)
             {
-                str += _surrogatePair;
+                str += Sha1TestVectors.SurrogatePair;
                 var sha1 = Sha1.Hash(str);
 
                 Assert.NotEqual(default, sha1);
@@ -659,9 +632,9 @@ namespace SourceCode.Clay.Tests
 
             Assert.False(Sha1.TryParse(expected_N.Replace('8', 'G'), out _));
 
-            Assert.False(Sha1.TryParse($"0x{new string('1', 38)}", out _));
-            Assert.False(Sha1.TryParse($"0x{new string('1', 39)}", out _));
-            Assert.True(Sha1.TryParse($"0x{new string('1', 40)}", out _));
+            Assert.False(Sha1.TryParse($"0x{new string('1', Sha1.HexLength - 2)}", out _));
+            Assert.False(Sha1.TryParse($"0x{new string('1', Sha1.HexLength - 1)}", out _));
+            Assert.True(Sha1.TryParse($"0x{new string('1', Sha1.HexLength)}", out _));
 
             // "N"
             {
@@ -730,7 +703,7 @@ namespace SourceCode.Clay.Tests
             var byt1 = new byte[20] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
             var sha1 = new Sha1(byt1);
             var str1 = sha1.ToString();
-            Assert.Equal(@"000102030405060708090a0b0c0d0e0f10111213", str1);
+            Assert.Equal("000102030405060708090a0b0c0d0e0f10111213", str1);
 
             for (var n = 0; n < 20; n++)
             {
@@ -779,7 +752,7 @@ namespace SourceCode.Clay.Tests
             Array.Sort(list, comparer.Compare);
             Assert.True(list[0] < list[1]);
             Assert.True(list[1] == list[2]);
-            Assert.True(list[2] < list[3]);
+            Assert.True(list[3] > list[2]);
         }
     }
 }

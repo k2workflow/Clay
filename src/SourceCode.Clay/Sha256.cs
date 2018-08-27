@@ -19,29 +19,29 @@ using crypt = System.Security.Cryptography;
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// Represents a <see cref="Sha1"/> value.
+    /// Represents a <see cref="Sha256"/> value.
     /// </summary>
     /// <seealso cref="crypt.SHA1" />
     /// <seealso cref="System.IEquatable{T}" />
     /// <seealso cref="System.IComparable{T}" />
     [DebuggerDisplay("{ToString(\"D\"),nq,ac}")]
     [StructLayout(LayoutKind.Sequential, Size = ByteLength)]
-    public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
+    public readonly struct Sha256 : IEquatable<Sha256>, IComparable<Sha256>
     {
         // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA1> t_sha1 = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
+        private static readonly ThreadLocal<crypt.SHA256> t_sha1 = new ThreadLocal<crypt.SHA256>(crypt.SHA256.Create);
 
         /// <summary>
-        /// The standard byte length of a <see cref="Sha1"/> value.
+        /// The standard byte length of a <see cref="Sha256"/> value.
         /// </summary>
-        public const byte ByteLength = 20;
+        public const byte ByteLength = 32;
 
         /// <summary>
-        /// The number of hex characters required to represent a <see cref="Sha1"/> value.
+        /// The number of hex characters required to represent a <see cref="Sha256"/> value.
         /// </summary>
         public const byte HexLength = ByteLength * 2;
         
-        private static readonly Sha1 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
+        private static readonly Sha256 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
@@ -72,11 +72,26 @@ namespace SourceCode.Clay
         private readonly byte _e2;
         private readonly byte _e3;
 
+        private readonly byte _f0;
+        private readonly byte _f1;
+        private readonly byte _f2;
+        private readonly byte _f3;
+
+        private readonly byte _g0;
+        private readonly byte _g1;
+        private readonly byte _g2;
+        private readonly byte _g3;
+
+        private readonly byte _h0;
+        private readonly byte _h1;
+        private readonly byte _h2;
+        private readonly byte _h3;
+
         /// <summary>
-        /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
+        /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <param name="source">The buffer.</param>
-        public Sha1(in ReadOnlySpan<byte> source)
+        public Sha256(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
             var src = source.Slice(0, ByteLength);
@@ -89,7 +104,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in ReadOnlySpan<byte> span)
+        public static Sha256 Hash(in ReadOnlySpan<byte> span)
         {
             if (span.Length == 0) return s_empty;
 
@@ -102,7 +117,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The string to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in string value)
+        public static Sha256 Hash(in string value)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return s_empty;
@@ -130,7 +145,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes)
+        public static Sha256 Hash(in byte[] bytes)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) return s_empty;
@@ -148,7 +163,7 @@ namespace SourceCode.Clay
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes, int start, int length)
+        public static Sha256 Hash(in byte[] bytes, int start, int length)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -166,31 +181,31 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(Stream stream)
+        public static Sha256 Hash(Stream stream)
         {
             if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
             var hash = t_sha1.Value.ComputeHash(stream);
 
-            var sha1 = new Sha1(hash);
+            var sha1 = new Sha256(hash);
             return sha1;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Sha1 HashImpl(in ReadOnlySpan<byte> span)
+        private static Sha256 HashImpl(in ReadOnlySpan<byte> span)
         {
             // Do NOT short-circuit here; rely on call-sites to do so
 
             Span<byte> hash = stackalloc byte[ByteLength];
             t_sha1.Value.TryComputeHash(span, hash, out _);
 
-            var sha1 = new Sha1(hash);
+            var sha1 = new Sha256(hash);
             return sha1;
         }
 
         /// <summary>
-        /// Copies the <see cref="Sha1"/> value to the provided buffer.
+        /// Copies the <see cref="Sha256"/> value to the provided buffer.
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
         public void CopyTo(Span<byte> destination)
@@ -206,7 +221,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Tries to copy the <see cref="Sha1"/> value to the provided buffer.
+        /// Tries to copy the <see cref="Sha256"/> value to the provided buffer.
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
         /// <returns>True if successful</returns>
@@ -224,12 +239,12 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
+        /// Returns a string representation of the <see cref="Sha256"/> instance using the 'N' format.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
+            // Text is treated as 8 groups of 8 chars (8 x 4 bytes)
             Span<char> span = stackalloc char[HexLength];
             
             unsafe
@@ -237,7 +252,7 @@ namespace SourceCode.Clay
                 fixed (byte* src = &_a0)
                 {
                     var pos = 0;
-                    for (var i = 0; i < ByteLength; i++) // 20
+                    for (var i = 0; i < ByteLength; i++) // 32
                     {
                         // Each byte is two hexits (convention is lowercase)
                         var byt = src[i];
@@ -256,10 +271,10 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance.
-        /// N: a9993e364706816aba3e25717850c26c9cd0d89d,
-        /// D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d,
-        /// S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+        /// Returns a string representation of the <see cref="Sha256"/> instance.
+        /// N: cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0,
+        /// D: cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0,
+        /// S: cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
@@ -273,15 +288,15 @@ namespace SourceCode.Clay
 
             switch (format[0])
             {
-                // a9993e364706816aba3e25717850c26c9cd0d89d
+                // cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
                 case 'n':
                 case 'N': return ToString();
 
-                // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
+                // cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
                 case 'd':
                 case 'D': return Format('-');
 
-                // a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+                // cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
                 case 's':
                 case 'S': return Format(' ');
             }
@@ -293,8 +308,8 @@ namespace SourceCode.Clay
         {
             Debug.Assert(separator == '-' || separator == ' ');
 
-            // Text is treated as 5 groups of 8 chars (5 x 4 bytes) with 4 separators
-            Span<char> span = stackalloc char[HexLength + 4];
+            // Text is treated as 8 groups of 8 chars (8 x 4 bytes) with 7 separators
+            Span<char> span = stackalloc char[HexLength + 7];
 
             unsafe
             {
@@ -302,7 +317,7 @@ namespace SourceCode.Clay
                 {
                     var pos = 0;
                     var sep = 8;
-                    for (var i = 0; i < ByteLength; i++) // 20
+                    for (var i = 0; i < ByteLength; i++) // 32
                     {
                         // Each byte is two hexits (convention is lowercase)
                         var byt = src[i];
@@ -331,14 +346,14 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts the <see cref="Sha1"/> instance to a string using the 'N' format,
+        /// Converts the <see cref="Sha256"/> instance to a string using the 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
         /// <returns></returns>
         public KeyValuePair<string, string> Split(int prefixLength)
         {
-            // Text is treated as 5 groups of 8 chars (5 x 4 bytes)
+            // Text is treated as 8 groups of 8 chars (8 x 4 bytes)
             Span<char> span = stackalloc char[HexLength];
 
             unsafe
@@ -346,7 +361,7 @@ namespace SourceCode.Clay
                 fixed (byte* src = &_a0)
                 {
                     var pos = 0;
-                    for (var i = 0; i < ByteLength; i++) // 20
+                    for (var i = 0; i < ByteLength; i++) // 32
                     {
                         // Each byte is two hexits (convention is lowercase)
                         var byt = src[i];
@@ -400,11 +415,11 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(in ReadOnlySpan<char> hex, out Sha1 value)
+        public static bool TryParse(in ReadOnlySpan<char> hex, out Sha256 value)
         {
             value = default;
 
-            // Length must be at least 40
+            // Length must be at least 64
             if (hex.Length < HexLength)
                 return false;
 
@@ -412,7 +427,7 @@ namespace SourceCode.Clay
             var slice = hex;
             if (slice[0] == '0' && (slice[1] == 'x' || slice[1] == 'X'))
             {
-                // Length must be at least 40+2
+                // Length must be at least 64+2
                 if (slice.Length < 2 + HexLength)
                     return false;
 
@@ -422,10 +437,10 @@ namespace SourceCode.Clay
 
             Span<byte> span = stackalloc byte[ByteLength];
 
-            // Text is treated as 5 groups of 8 chars (4 bytes); 4 separators optional
-            // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
+            // Text is treated as 8 groups of 8 chars (4 bytes); 7 separators optional
+            // "ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad"
             var pos = 0;
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 8; i++)
             {
                 for (var j = 0; j < 4; j++) // We read 4x2 chars at a time
                 {
@@ -446,7 +461,7 @@ namespace SourceCode.Clay
             if (pos != slice.Length)
                 return false;
 
-            value = new Sha1(span);
+            value = new Sha256(span);
             return true;
 
             // Local functions
@@ -473,7 +488,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(string hex, out Sha1 value)
+        public static bool TryParse(string hex, out Sha256 value)
         {
             value = default;
 
@@ -489,11 +504,11 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
-        /// <exception cref="FormatException">Sha1</exception>
-        public static Sha1 Parse(in ReadOnlySpan<char> hex)
+        /// <exception cref="FormatException">Sha256</exception>
+        public static Sha256 Parse(in ReadOnlySpan<char> hex)
         {
             if (!TryParse(hex, out var sha1))
-                throw new FormatException($"Input was not recognized as a valid {nameof(Sha1)}");
+                throw new FormatException($"Input was not recognized as a valid {nameof(Sha256)}");
 
             return sha1;
         }
@@ -503,8 +518,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
-        /// <exception cref="FormatException">Sha1</exception>
-        public static Sha1 Parse(string hex)
+        /// <exception cref="FormatException">Sha256</exception>
+        public static Sha256 Parse(string hex)
         {
             if (hex is null) throw new ArgumentNullException(nameof(hex));
 
@@ -512,7 +527,7 @@ namespace SourceCode.Clay
             return Parse(span);
         }
 
-        public bool Equals(Sha1 other)
+        public bool Equals(Sha256 other)
         {
             unsafe
             {
@@ -530,7 +545,7 @@ namespace SourceCode.Clay
         }
 
         public override bool Equals(object obj)
-            => obj is Sha1 other
+            => obj is Sha256 other
             && Equals(other);
 
         public override int GetHashCode()
@@ -562,11 +577,26 @@ namespace SourceCode.Clay
             hash.Add(_e2);
             hash.Add(_e3);
 
+            hash.Add(_f0);
+            hash.Add(_f1);
+            hash.Add(_f2);
+            hash.Add(_f3);
+
+            hash.Add(_g0);
+            hash.Add(_g1);
+            hash.Add(_g2);
+            hash.Add(_g3);
+
+            hash.Add(_h0);
+            hash.Add(_h1);
+            hash.Add(_h2);
+            hash.Add(_h3);
+
             var hc = hash.ToHashCode();
             return hc;
         }
 
-        public int CompareTo(Sha1 other)
+        public int CompareTo(Sha256 other)
         {
             unsafe
             {
@@ -588,16 +618,16 @@ namespace SourceCode.Clay
             return 0;
         }
 
-        public static bool operator ==(Sha1 x, Sha1 y) => x.Equals(y);
+        public static bool operator ==(Sha256 x, Sha256 y) => x.Equals(y);
 
-        public static bool operator !=(Sha1 x, Sha1 y) => !(x == y);
+        public static bool operator !=(Sha256 x, Sha256 y) => !(x == y);
 
-        public static bool operator >=(Sha1 x, Sha1 y) => x.CompareTo(y) >= 0;
+        public static bool operator >=(Sha256 x, Sha256 y) => x.CompareTo(y) >= 0;
 
-        public static bool operator >(Sha1 x, Sha1 y) => x.CompareTo(y) > 0;
+        public static bool operator >(Sha256 x, Sha256 y) => x.CompareTo(y) > 0;
 
-        public static bool operator <=(Sha1 x, Sha1 y) => x.CompareTo(y) <= 0;
+        public static bool operator <=(Sha256 x, Sha256 y) => x.CompareTo(y) <= 0;
 
-        public static bool operator <(Sha1 x, Sha1 y) => x.CompareTo(y) < 0;
+        public static bool operator <(Sha256 x, Sha256 y) => x.CompareTo(y) < 0;
     }
 }

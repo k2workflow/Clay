@@ -10,14 +10,17 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
-    public sealed class TestVectors : IEnumerable<object[]>
+    public sealed class Sha1TestVectors : IEnumerable<object[]>
     {
+        public const string Zero = "0000000000000000000000000000000000000000";
+        public const string Empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709"; // http://www.di-mgt.com.au/sha_testvectors.html
+
         private static readonly List<object[]> s_data = new List<object[]>
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
             
             // Test Vector 1
-            new object[]{ "", "da39a3ee5e6b4b0d3255bfef95601890afd80709" },
+            new object[]{ "", Empty },
 
             // Test Vector 2
             new object[]{ "abc", "a9993e364706816aba3e25717850c26c9cd0d89d" },
@@ -32,13 +35,13 @@ namespace SourceCode.Clay.Tests
             new object[]{ new string('a', 1000_000), "34aa973cd4c4daa4f61eeb2bdbad27316534016f" },
         };
 
-        // https://en.wikipedia.org/wiki/Special:CiteThisPage?page=Rick_Astley
-        public const string LongStr = @"From Wikipedia: Astley was born on 6 February 1966 in Newton-le-Willows in Lancashire, the fourth child of his family. His parents divorced when he was five, and Astley was brought up by his father.[9] His musical career started when he was ten, singing in the local church choir.[10] During his schooldays, Astley formed and played the drums in a number of local bands, where he met guitarist David Morris.[2][11] After leaving school at sixteen, Astley was employed during the day as a driver in his father's market-gardening business and played drums on the Northern club circuit at night in bands such as Give Way – specialising in covering Beatles and Shadows songs – and FBI, which won several local talent competitions.[10]";
-
-        public const string SurrogatePair = "\uD869\uDE01";
-
         public IEnumerator<object[]> GetEnumerator() => s_data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public const string SurrogatePair = "\uD869\uDE01";
+
+        // https://en.wikipedia.org/wiki/Special:CiteThisPage?page=Rick_Astley
+        public const string LongStr = @"From Wikipedia: Astley was born on 6 February 1966 in Newton-le-Willows in Lancashire, the fourth child of his family. His parents divorced when he was five, and Astley was brought up by his father.[9] His musical career started when he was ten, singing in the local church choir.[10] During his schooldays, Astley formed and played the drums in a number of local bands, where he met guitarist David Morris.[2][11] After leaving school at sixteen, Astley was employed during the day as a driver in his father's market-gardening business and played drums on the Northern club circuit at night in bands such as Give Way – specialising in covering Beatles and Shadows songs – and FBI, which won several local talent competitions.[10]";
     }
 }
