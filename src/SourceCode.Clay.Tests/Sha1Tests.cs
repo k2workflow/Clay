@@ -433,6 +433,33 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_create_sha_from_bytes))]
+        public static void When_create_sha_from_bytes()
+        {
+            var buffer = new byte[Sha1.ByteLength];
+            var tinyBuffer = new byte[Sha1.ByteLength - 1];
+
+            for (var i = 1; i < 200; i++)
+            {
+                var str = new string(char.MinValue, i);
+                var byt = Encoding.UTF8.GetBytes(str);
+                var sha = Sha1.Hash(byt);
+
+                Assert.NotEqual(default, sha);
+                Assert.Equal(Sha1.HexLength, Encoding.UTF8.GetByteCount(sha.ToString()));
+
+                var copied = sha.TryCopyTo(buffer);
+                Assert.True(copied);
+
+                var shb = new Sha1(buffer);
+                Assert.Equal(sha, shb);
+
+                copied = sha.TryCopyTo(tinyBuffer);
+                Assert.False(copied);
+            }
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_sha_from_empty_string))]
         public static void When_create_sha_from_empty_string()
         {
@@ -517,7 +544,7 @@ namespace SourceCode.Clay.Tests
         {
             for (var i = 1; i < 200; i++)
             {
-                var str = new string(Char.MaxValue, i);
+                var str = new string(char.MaxValue, i);
                 var sha1 = Sha1.Hash(str);
 
                 Assert.NotEqual(default, sha1);
@@ -619,6 +646,7 @@ namespace SourceCode.Clay.Tests
             var sha1 = Sha1.Parse(expected_N);
 
             Assert.True(Sha1.TryParse(expected_N, out _));
+            Assert.True(Sha1.TryParse(expected_N.AsSpan(), out _));
 
             Assert.True(Sha1.TryParse("0x" + expected_N, out _));
             Assert.True(Sha1.TryParse("0X" + expected_N, out _));
@@ -631,6 +659,8 @@ namespace SourceCode.Clay.Tests
             Assert.False(Sha1.TryParse("0X" + expected_N.Substring(Sha1.HexLength - 2), out _));
 
             Assert.False(Sha1.TryParse(expected_N.Replace('8', 'G'), out _));
+            Assert.False(Sha1.TryParse(expected_N.Replace('8', 'G').AsSpan(), out _));
+            Assert.Throws<FormatException>(() => Sha1.Parse(expected_N.Replace('8', 'G').AsSpan()));
 
             Assert.False(Sha1.TryParse($"0x{new string('1', Sha1.HexLength - 2)}", out _));
             Assert.False(Sha1.TryParse($"0x{new string('1', Sha1.HexLength - 1)}", out _));
