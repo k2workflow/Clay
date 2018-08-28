@@ -214,8 +214,8 @@ namespace SourceCode.Clay
             {
                 fixed (byte* ptr = &_00)
                 {
-                    var source = new ReadOnlySpan<byte>(ptr, ByteLength);
-                    source.CopyTo(destination);
+                    var src = new ReadOnlySpan<byte>(ptr, ByteLength);
+                    src.CopyTo(destination);
                 }
             }
         }
@@ -262,9 +262,9 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (byte* src = &_00)
+                fixed (byte* ptr = &_00)
                 {
-                    var sha = new ReadOnlySpan<byte>(src, ByteLength);
+                    var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
                     switch (format[0])
                     {
@@ -308,9 +308,9 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* src = &_00)
+                fixed (byte* ptr = &_00)
                 {
-                    var sha = new ReadOnlySpan<byte>(src, ByteLength);
+                    var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
                     var kvp = ShaUtil.Split(sha, prefixLength);
                     return kvp;
