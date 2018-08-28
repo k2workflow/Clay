@@ -68,19 +68,15 @@ namespace SourceCode.Clay
             // Text is treated as 5|8 groups of 8 chars (4 bytes); 4|7 separators optional
             // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
             // "cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0"
-            var n = hexLength / 8; // 5|8
             var pos = 0;
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i < byteLength; i++) // 20|32
             {
-                for (var j = 0; j < 4; j++) // We read 4x2 chars at a time
-                {
-                    // Two hexits per byte: aaaa bbbb
-                    if (!TryParseHexit(slice[pos++], out var h1)
-                        || !TryParseHexit(slice[pos++], out var h2))
-                        return false;
+                // We read 4x2 chars at a time, 2 hexits per byte: aaaa bbbb
+                if (!TryParseHexit(slice[pos++], out var h1)
+                    || !TryParseHexit(slice[pos++], out var h2))
+                    return false;
 
-                    sha[i * 4 + j] = (byte)((h1 << 4) | h2);
-                }
+                sha[i] = (byte)((h1 << 4) | h2);
 
                 if (pos < hexLength && (slice[pos] == '-' || slice[pos] == ' '))
                     pos++;
