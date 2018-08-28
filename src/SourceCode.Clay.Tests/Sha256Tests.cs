@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -433,6 +434,33 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_create_sha_from_bytes))]
+        public static void When_create_sha_from_bytes()
+        {
+            var buffer = new byte[Sha256.ByteLength];
+            var tinyBuffer = new byte[Sha256.ByteLength - 1];
+
+            for (var i = 1; i < 200; i++)
+            {
+                var str = new string(char.MinValue, i);
+                var byt = Encoding.UTF8.GetBytes(str);
+                var sha = Sha256.Hash(byt);
+
+                Assert.NotEqual(default, sha);
+                Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(sha.ToString()));
+
+                var copied = sha.TryCopyTo(buffer);
+                Assert.True(copied);
+
+                var shb = new Sha256(buffer);
+                Assert.Equal(sha, shb);
+
+                copied = sha.TryCopyTo(tinyBuffer);
+                Assert.False(copied);
+            }
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_create_sha_from_empty_string))]
         public static void When_create_sha_from_empty_string()
         {
@@ -503,7 +531,7 @@ namespace SourceCode.Clay.Tests
         {
             for (var i = 1; i < 200; i++)
             {
-                var str = new string(Char.MinValue, i);
+                var str = new string(char.MinValue, i);
                 var sha256 = Sha256.Hash(str);
 
                 Assert.NotEqual(default, sha256);
@@ -517,7 +545,7 @@ namespace SourceCode.Clay.Tests
         {
             for (var i = 1; i < 200; i++)
             {
-                var str = new string(Char.MaxValue, i);
+                var str = new string(char.MaxValue, i);
                 var sha256 = Sha256.Hash(str);
 
                 Assert.NotEqual(default, sha256);
@@ -619,6 +647,7 @@ namespace SourceCode.Clay.Tests
             var sha256 = Sha256.Parse(expected_N);
 
             Assert.True(Sha256.TryParse(expected_N, out _));
+            Assert.True(Sha256.TryParse(expected_N.AsSpan(), out _));
 
             Assert.True(Sha256.TryParse("0x" + expected_N, out _));
             Assert.True(Sha256.TryParse("0X" + expected_N, out _));
@@ -631,6 +660,8 @@ namespace SourceCode.Clay.Tests
             Assert.False(Sha256.TryParse("0X" + expected_N.Substring(Sha256.HexLength - 2), out _));
 
             Assert.False(Sha256.TryParse(expected_N.Replace('8', 'G'), out _));
+            Assert.False(Sha256.TryParse(expected_N.Replace('8', 'G').AsSpan(), out _));
+            Assert.Throws<FormatException>(() => Sha256.Parse(expected_N.Replace('8', 'G').AsSpan()));
 
             Assert.False(Sha256.TryParse($"0x{new string('1', Sha256.HexLength - 2)}", out _));
             Assert.False(Sha256.TryParse($"0x{new string('1', Sha256.HexLength - 1)}", out _));
