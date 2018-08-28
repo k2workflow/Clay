@@ -532,7 +532,7 @@ namespace SourceCode.Clay.Tests
             var str = string.Empty;
             for (var i = 1; i < 200; i++)
             {
-                str += Sha1TestVectors.SurrogatePair;
+                str += TestVectors.SurrogatePair;
                 var sha1 = Sha1.Hash(str);
 
                 Assert.NotEqual(default, sha1);
