@@ -13,14 +13,14 @@ namespace SourceCode.Clay.Tests
     public sealed class Sha1TestVectors : IEnumerable<object[]>
     {
         public const string Zero = "0000000000000000000000000000000000000000";
-        public const string Empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709"; // http://www.di-mgt.com.au/sha_testvectors.html
+        public const string Empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
 
-        private static readonly List<object[]> s_data = new List<object[]>
+        private static readonly IList<object[]> s_data = new object[5][]
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
             
             // Test Vector 1
-            new object[]{ "", Empty },
+            new object[]{ string.Empty, Empty },
 
             // Test Vector 2
             new object[]{ "abc", "a9993e364706816aba3e25717850c26c9cd0d89d" },
