@@ -7,7 +7,7 @@
 
 namespace SourceCode.Clay.Tests
 {
-    public static class TestVectors
+    public static class TestConstants
     {
         public const string SurrogatePair = "\uD869\uDE01";
 

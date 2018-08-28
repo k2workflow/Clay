@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
-    public sealed class Sha1TestVectors : IEnumerable<object[]>
+    internal sealed class Sha1TestVectors : IEnumerable<object[]>
     {
         public const string Zero = "0000000000000000000000000000000000000000";
         public const string Empty = "da39a3ee5e6b4b0d3255bfef95601890afd80709";

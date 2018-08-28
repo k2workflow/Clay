@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
-    public sealed class Sha256TestVectors : IEnumerable<object[]>
+    internal sealed class Sha256TestVectors : IEnumerable<object[]>
     {
         public const string Zero = "0000000000000000000000000000000000000000000000000000000000000000";
         public const string Empty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
