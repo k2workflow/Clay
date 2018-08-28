@@ -22,6 +22,21 @@ namespace SourceCode.Clay
             11, 12, 13, 14, 15                      // [50-54]       = 98..102= 'b'..'f'
         };
 
+        private static bool TryParseHexit(char c, out byte b)
+        {
+            b = 0;
+
+            if (c < '0' || c > 'f')
+                return false;
+
+            var bex = s_hexits[c - '0'];
+            if (bex == __) // Sentinel value for n/a (128)
+                return false;
+
+            b = bex;
+            return true;
+        }
+
         /// <summary>
         /// Tries to parse the specified hexadecimal.
         /// </summary>
@@ -35,9 +50,6 @@ namespace SourceCode.Clay
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
             var hexLength = byteLength * 2; // 40|64
-            var n = hexLength / 8; // 5|8
-
-            // Length must be at least 40|64
             if (hex.Length < hexLength)
                 return false;
 
@@ -56,6 +68,7 @@ namespace SourceCode.Clay
             // Text is treated as 5|8 groups of 8 chars (4 bytes); 4|7 separators optional
             // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
             // "cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0"
+            var n = hexLength / 8; // 5|8
             var pos = 0;
             for (var i = 0; i < n; i++)
             {
@@ -80,22 +93,27 @@ namespace SourceCode.Clay
                 return false;
 
             return true;
+        }
 
-            // Local functions
+        private static void ToHex(in ReadOnlySpan<byte> sha, in Span<char> span)
+        {
+            var byteLength = sha.Length; // 20|32
+            Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
-            bool TryParseHexit(char c, out byte b)
+            // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
+            Debug.Assert(span.Length == Sha1.HexLength || span.Length == Sha256.HexLength);
+
+            var pos = 0;
+            for (var i = 0; i < byteLength; i++) // 20|32
             {
-                b = 0;
+                // Each byte is two hexits (convention is lowercase)
+                var byt = sha[i];
 
-                if (c < '0' || c > 'f')
-                    return false;
+                var b = byt >> 4; // == b / 16
+                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
 
-                var bex = s_hexits[c - '0'];
-                if (bex == __) // Sentinel value for n/a (128)
-                    return false;
-
-                b = bex;
-                return true;
+                b = byt & 0x0F; // == b % 16
+                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
             }
         }
 
@@ -111,21 +129,10 @@ namespace SourceCode.Clay
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
-            var hexLength = byteLength * 2; // 40|64
+            var hexLength = byteLength * 2;
+
             Span<char> span = stackalloc char[hexLength];
-
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
-            {
-                // Each byte is two hexits (convention is lowercase)
-                var byt = sha[i];
-
-                var b = byt >> 4; // == b / 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-
-                b = byt & 0x0F; // == b % 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-            }
+            ToHex(sha, span);
 
             if (prefixLength >= hexLength)
             {
@@ -159,18 +166,7 @@ namespace SourceCode.Clay
             var hexLength = byteLength * 2; // 40|64
             Span<char> span = stackalloc char[hexLength];
 
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
-            {
-                // Each byte is two hexits (convention is lowercase)
-                var byt = sha[i];
-
-                var b = byt >> 4; // == b / 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-
-                b = byt & 0x0F; // == b % 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-            }
+            ToHex(sha, span);
 
             var str = new string(span);
             return str;
