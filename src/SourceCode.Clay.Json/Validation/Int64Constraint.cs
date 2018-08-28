@@ -175,15 +175,8 @@ namespace SourceCode.Clay.Json.Validation
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(Int64Constraint other)
-        {
-            if (Minimum != other.Minimum) return false;
-            if (Maximum != other.Maximum) return false;
-            if (RangeOptions != other.RangeOptions) return false;
-            if (MultipleOf != other.MultipleOf) return false;
-            if (Required != other.Required) return false;
-
-            return true;
-        }
+            => (Minimum, Maximum, RangeOptions, MultipleOf, Required)
+            == (other.Minimum, other.Maximum, other.RangeOptions, other.MultipleOf, other.Required);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>

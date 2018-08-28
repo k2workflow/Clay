@@ -19,29 +19,29 @@ using crypt = System.Security.Cryptography;
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// Represents a <see cref="Sha1"/> value.
+    /// Represents a <see cref="Sha256"/> value.
     /// </summary>
-    /// <seealso cref="crypt.SHA1" />
+    /// <seealso cref="crypt.SHA256" />
     /// <seealso cref="System.IEquatable{T}" />
     /// <seealso cref="System.IComparable{T}" />
     [DebuggerDisplay("{ToString(\"D\"),nq,ac}")]
     [StructLayout(LayoutKind.Sequential, Size = ByteLength)]
-    public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
+    public readonly struct Sha256 : IEquatable<Sha256>, IComparable<Sha256>
     {
         // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA1> t_sha = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
+        private static readonly ThreadLocal<crypt.SHA256> t_sha = new ThreadLocal<crypt.SHA256>(crypt.SHA256.Create);
 
         /// <summary>
-        /// The standard byte length of a <see cref="Sha1"/> value.
+        /// The standard byte length of a <see cref="Sha256"/> value.
         /// </summary>
-        public const byte ByteLength = 20;
+        public const byte ByteLength = 32;
 
         /// <summary>
-        /// The number of hex characters required to represent a <see cref="Sha1"/> value.
+        /// The number of hex characters required to represent a <see cref="Sha256"/> value.
         /// </summary>
         public const byte HexLength = ByteLength * 2;
         
-        private static readonly Sha1 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
+        private static readonly Sha256 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
@@ -72,11 +72,26 @@ namespace SourceCode.Clay
         private readonly byte _18;
         private readonly byte _19;
 
+        private readonly byte _20;
+        private readonly byte _21;
+        private readonly byte _22;
+        private readonly byte _23;
+
+        private readonly byte _24;
+        private readonly byte _25;
+        private readonly byte _26;
+        private readonly byte _27;
+
+        private readonly byte _28;
+        private readonly byte _29;
+        private readonly byte _30;
+        private readonly byte _31;
+
         /// <summary>
-        /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
+        /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <param name="source">The buffer.</param>
-        public Sha1(in ReadOnlySpan<byte> source)
+        public Sha256(in ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
             var src = source.Slice(0, ByteLength);
@@ -89,7 +104,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in ReadOnlySpan<byte> span)
+        public static Sha256 Hash(in ReadOnlySpan<byte> span)
         {
             if (span.Length == 0) return s_empty;
 
@@ -102,7 +117,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The string to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in string value)
+        public static Sha256 Hash(in string value)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return s_empty;
@@ -130,7 +145,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes)
+        public static Sha256 Hash(in byte[] bytes)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) return s_empty;
@@ -148,7 +163,7 @@ namespace SourceCode.Clay
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes, int start, int length)
+        public static Sha256 Hash(in byte[] bytes, int start, int length)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -166,31 +181,31 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(Stream stream)
+        public static Sha256 Hash(Stream stream)
         {
             if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
             var hash = t_sha.Value.ComputeHash(stream);
 
-            var sha = new Sha1(hash);
+            var sha = new Sha256(hash);
             return sha;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Sha1 HashImpl(in ReadOnlySpan<byte> span)
+        private static Sha256 HashImpl(in ReadOnlySpan<byte> span)
         {
             // Do NOT short-circuit here; rely on call-sites to do so
 
             Span<byte> hash = stackalloc byte[ByteLength];
             t_sha.Value.TryComputeHash(span, hash, out _);
 
-            var sha = new Sha1(hash);
+            var sha = new Sha256(hash);
             return sha;
         }
 
         /// <summary>
-        /// Copies the <see cref="Sha1"/> value to the provided buffer.
+        /// Copies the <see cref="Sha256"/> value to the provided buffer.
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
         public void CopyTo(Span<byte> destination)
@@ -206,7 +221,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Tries to copy the <see cref="Sha1"/> value to the provided buffer.
+        /// Tries to copy the <see cref="Sha256"/> value to the provided buffer.
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
         /// <returns>True if successful</returns>
@@ -224,16 +239,16 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
+        /// Returns a string representation of the <see cref="Sha256"/> instance using the 'N' format.
         /// </summary>
         /// <returns></returns>
         public override string ToString() => ToString("N");
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance.
-        /// N: a9993e364706816aba3e25717850c26c9cd0d89d,
-        /// D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d,
-        /// S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+        /// Returns a string representation of the <see cref="Sha256"/> instance.
+        /// N: cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0,
+        /// D: cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0,
+        /// S: cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
@@ -253,7 +268,7 @@ namespace SourceCode.Clay
 
                     switch (format[0])
                     {
-                        // a9993e364706816aba3e25717850c26c9cd0d89d
+                        // cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
                         case 'n':
                         case 'N':
                             {
@@ -261,7 +276,7 @@ namespace SourceCode.Clay
                                 return str;
                             }
 
-                        // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
+                        // cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
                         case 'd':
                         case 'D':
                             {
@@ -269,7 +284,7 @@ namespace SourceCode.Clay
                                 return str;
                             }
 
-                        // a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+                        // cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
                         case 's':
                         case 'S':
                             {
@@ -284,7 +299,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts the <see cref="Sha1"/> instance to a string using the 'N' format,
+        /// Converts the <see cref="Sha256"/> instance to a string using the 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
@@ -301,7 +316,7 @@ namespace SourceCode.Clay
                     return kvp;
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Tries to parse the specified hexadecimal.
@@ -309,7 +324,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(in ReadOnlySpan<char> hex, out Sha1 value)
+        public static bool TryParse(in ReadOnlySpan<char> hex, out Sha256 value)
         {
             value = default;
 
@@ -317,7 +332,7 @@ namespace SourceCode.Clay
             if (!ShaUtil.TryParse(hex, sha))
                 return false;
 
-            value = new Sha1(sha);
+            value = new Sha256(sha);
             return true;
         }
 
@@ -327,7 +342,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(string hex, out Sha1 value)
+        public static bool TryParse(string hex, out Sha256 value)
         {
             value = default;
 
@@ -338,7 +353,7 @@ namespace SourceCode.Clay
             if (!ShaUtil.TryParse(hex.AsSpan(), sha))
                 return false;
 
-            value = new Sha1(sha);
+            value = new Sha256(sha);
             return true;
         }
 
@@ -347,14 +362,14 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
-        /// <exception cref="FormatException">Sha1</exception>
-        public static Sha1 Parse(in ReadOnlySpan<char> hex)
+        /// <exception cref="FormatException">Sha256</exception>
+        public static Sha256 Parse(in ReadOnlySpan<char> hex)
         {
             Span<byte> sha = stackalloc byte[ByteLength];
             if (!ShaUtil.TryParse(hex, sha))
-                throw new FormatException($"Input was not recognized as a valid {nameof(Sha1)}");
+                throw new FormatException($"Input was not recognized as a valid {nameof(Sha256)}");
 
-            var value = new Sha1(sha);
+            var value = new Sha256(sha);
             return value;
         }
 
@@ -363,24 +378,24 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
-        /// <exception cref="FormatException">Sha1</exception>
-        public static Sha1 Parse(string hex)
+        /// <exception cref="FormatException">Sha256</exception>
+        public static Sha256 Parse(string hex)
         {
             if (hex is null)
                 throw new ArgumentNullException(nameof(hex));
 
             if (hex.Length < HexLength)
-                throw new FormatException($"Input was not recognized as a valid {nameof(Sha1)}");
+                throw new FormatException($"Input was not recognized as a valid {nameof(Sha256)}");
 
             Span<byte> sha = stackalloc byte[ByteLength];
             if (!ShaUtil.TryParse(hex.AsSpan(), sha))
-                throw new FormatException($"Input was not recognized as a valid {nameof(Sha1)}");
+                throw new FormatException($"Input was not recognized as a valid {nameof(Sha256)}");
 
-            var value = new Sha1(sha);
+            var value = new Sha256(sha);
             return value;
         }
 
-        public bool Equals(Sha1 other)
+        public bool Equals(Sha256 other)
         {
             unsafe
             {
@@ -398,7 +413,7 @@ namespace SourceCode.Clay
         }
 
         public override bool Equals(object obj)
-            => obj is Sha1 other
+            => obj is Sha256 other
             && Equals(other);
 
         public override int GetHashCode()
@@ -430,11 +445,26 @@ namespace SourceCode.Clay
             hash.Add(_18);
             hash.Add(_19);
 
+            hash.Add(_20);
+            hash.Add(_21);
+            hash.Add(_22);
+            hash.Add(_23);
+
+            hash.Add(_24);
+            hash.Add(_25);
+            hash.Add(_26);
+            hash.Add(_27);
+
+            hash.Add(_28);
+            hash.Add(_29);
+            hash.Add(_30);
+            hash.Add(_31);
+
             var hc = hash.ToHashCode();
             return hc;
         }
 
-        public int CompareTo(Sha1 other)
+        public int CompareTo(Sha256 other)
         {
             unsafe
             {
@@ -456,16 +486,16 @@ namespace SourceCode.Clay
             return 0;
         }
 
-        public static bool operator ==(Sha1 x, Sha1 y) => x.Equals(y);
+        public static bool operator ==(Sha256 x, Sha256 y) => x.Equals(y);
 
-        public static bool operator !=(Sha1 x, Sha1 y) => !(x == y);
+        public static bool operator !=(Sha256 x, Sha256 y) => !(x == y);
 
-        public static bool operator >=(Sha1 x, Sha1 y) => x.CompareTo(y) >= 0;
+        public static bool operator >=(Sha256 x, Sha256 y) => x.CompareTo(y) >= 0;
 
-        public static bool operator >(Sha1 x, Sha1 y) => x.CompareTo(y) > 0;
+        public static bool operator >(Sha256 x, Sha256 y) => x.CompareTo(y) > 0;
 
-        public static bool operator <=(Sha1 x, Sha1 y) => x.CompareTo(y) <= 0;
+        public static bool operator <=(Sha256 x, Sha256 y) => x.CompareTo(y) <= 0;
 
-        public static bool operator <(Sha1 x, Sha1 y) => x.CompareTo(y) < 0;
+        public static bool operator <(Sha256 x, Sha256 y) => x.CompareTo(y) < 0;
     }
 }

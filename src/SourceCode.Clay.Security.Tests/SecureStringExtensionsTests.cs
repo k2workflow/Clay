@@ -40,10 +40,10 @@ namespace SourceCode.Clay.Security.Tests
 
             // Surrogate
             actual = new SecureString();
-            actual.AppendChar(TestVectors.SurrogatePair[0]);
-            actual.AppendChar(TestVectors.SurrogatePair[1]);
+            actual.AppendChar(TestConstants.SurrogatePair[0]);
+            actual.AppendChar(TestConstants.SurrogatePair[1]);
             actual.MakeReadOnly();
-            Assert.Equal(TestVectors.SurrogatePair, actual.ToUnsecureString());
+            Assert.Equal(TestConstants.SurrogatePair, actual.ToUnsecureString());
 
             // Short
             actual = new SecureString();
@@ -57,10 +57,10 @@ namespace SourceCode.Clay.Security.Tests
 
             // Large
             actual = new SecureString();
-            for (var i = 0; i < TestVectors.LongStr.Length; i++)
-                actual.AppendChar(TestVectors.LongStr[i]);
+            for (var i = 0; i < TestConstants.LongStr.Length; i++)
+                actual.AppendChar(TestConstants.LongStr[i]);
             actual.MakeReadOnly();
-            Assert.Equal(TestVectors.LongStr, actual.ToUnsecureString());
+            Assert.Equal(TestConstants.LongStr, actual.ToUnsecureString());
         }
 
         [Trait("Type", "Unit")]
@@ -90,10 +90,10 @@ namespace SourceCode.Clay.Security.Tests
             Assert.Equal("h", ss.ToUnsecureString());
 
             // Surrogate
-            actual = TestVectors.SurrogatePair;
+            actual = TestConstants.SurrogatePair;
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(TestVectors.SurrogatePair, ss.ToUnsecureString());
+            Assert.Equal(TestConstants.SurrogatePair, ss.ToUnsecureString());
 
             // Short
             actual = "helL0";
@@ -102,10 +102,10 @@ namespace SourceCode.Clay.Security.Tests
             Assert.Equal("helL0", ss.ToUnsecureString());
 
             // Large
-            actual = TestVectors.LongStr;
+            actual = TestConstants.LongStr;
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(TestVectors.LongStr, ss.ToUnsecureString());
+            Assert.Equal(TestConstants.LongStr, ss.ToUnsecureString());
         }
     }
 }
