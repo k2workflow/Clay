@@ -47,30 +47,30 @@ namespace SourceCode.Clay
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
         // In C# 7.3+ we can use 'readonly fixed byte'
 
-        private readonly byte _a0;
-        private readonly byte _a1;
-        private readonly byte _a2;
-        private readonly byte _a3;
+        private readonly byte _00;
+        private readonly byte _01;
+        private readonly byte _02;
+        private readonly byte _03;
 
-        private readonly byte _b0;
-        private readonly byte _b1;
-        private readonly byte _b2;
-        private readonly byte _b3;
+        private readonly byte _04;
+        private readonly byte _05;
+        private readonly byte _06;
+        private readonly byte _07;
 
-        private readonly byte _c0;
-        private readonly byte _c1;
-        private readonly byte _c2;
-        private readonly byte _c3;
+        private readonly byte _08;
+        private readonly byte _09;
+        private readonly byte _10;
+        private readonly byte _11;
 
-        private readonly byte _d0;
-        private readonly byte _d1;
-        private readonly byte _d2;
-        private readonly byte _d3;
+        private readonly byte _12;
+        private readonly byte _13;
+        private readonly byte _14;
+        private readonly byte _15;
 
-        private readonly byte _e0;
-        private readonly byte _e1;
-        private readonly byte _e2;
-        private readonly byte _e3;
+        private readonly byte _16;
+        private readonly byte _17;
+        private readonly byte _18;
+        private readonly byte _19;
 
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
@@ -80,7 +80,7 @@ namespace SourceCode.Clay
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
             var src = source.Slice(0, ByteLength);
-            var dst = MemoryMarshal.CreateSpan(ref _a0, ByteLength);
+            var dst = MemoryMarshal.CreateSpan(ref _00, ByteLength);
             src.CopyTo(dst);
         }
 
@@ -197,7 +197,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* ptr = &_a0)
+                fixed (byte* ptr = &_00)
                 {
                     var source = new ReadOnlySpan<byte>(ptr, ByteLength);
                     source.CopyTo(destination);
@@ -214,7 +214,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* ptr = &_a0)
+                fixed (byte* ptr = &_00)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     var ok = src.TryCopyTo(destination);
@@ -247,7 +247,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (byte* src = &_a0)
+                fixed (byte* src = &_00)
                 {
                     var sha = new ReadOnlySpan<byte>(src, ByteLength);
 
@@ -293,7 +293,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* src = &_a0)
+                fixed (byte* src = &_00)
                 {
                     var sha = new ReadOnlySpan<byte>(src, ByteLength);
 
@@ -384,9 +384,9 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* src = &_a0)
+                fixed (byte* src = &_00)
                 {
-                    var dst = &other._a0;
+                    var dst = &other._00;
 
                     for (var i = 0; i < ByteLength; i++)
                         if (src[i] != dst[i])
@@ -405,30 +405,30 @@ namespace SourceCode.Clay
         {
             var hash = new HashCode();
 
-            hash.Add(_a0);
-            hash.Add(_a1);
-            hash.Add(_a2);
-            hash.Add(_a3);
+            hash.Add(_00);
+            hash.Add(_01);
+            hash.Add(_02);
+            hash.Add(_03);
 
-            hash.Add(_b0);
-            hash.Add(_b1);
-            hash.Add(_b2);
-            hash.Add(_b3);
+            hash.Add(_04);
+            hash.Add(_05);
+            hash.Add(_06);
+            hash.Add(_07);
 
-            hash.Add(_c0);
-            hash.Add(_c1);
-            hash.Add(_c2);
-            hash.Add(_c3);
+            hash.Add(_08);
+            hash.Add(_09);
+            hash.Add(_10);
+            hash.Add(_11);
 
-            hash.Add(_d0);
-            hash.Add(_d1);
-            hash.Add(_d2);
-            hash.Add(_d3);
+            hash.Add(_12);
+            hash.Add(_13);
+            hash.Add(_14);
+            hash.Add(_15);
 
-            hash.Add(_e0);
-            hash.Add(_e1);
-            hash.Add(_e2);
-            hash.Add(_e3);
+            hash.Add(_16);
+            hash.Add(_17);
+            hash.Add(_18);
+            hash.Add(_19);
 
             var hc = hash.ToHashCode();
             return hc;
@@ -438,9 +438,9 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* src = &_a0)
+                fixed (byte* src = &_00)
                 {
-                    var dst = &other._a0;
+                    var dst = &other._00;
 
                     for (var i = 0; i < ByteLength; i++)
                     {
