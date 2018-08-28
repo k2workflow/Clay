@@ -140,9 +140,12 @@ namespace SourceCode.Clay.Collections.Generic
             if (cases is null) throw new ArgumentNullException(nameof(cases));
             if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
-            TItem valueExtractor(TItem item) => item; // Local function
             var impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);
             return impl;
+
+            // Local functions
+
+            TItem valueExtractor(TItem item) => item; 
         }
     }
 }

@@ -56,6 +56,7 @@ namespace SourceCode.Clay.Collections.Generic
                 }
 
                 // IReadOnlyDictionary
+                // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
                 if (xe is IReadOnlyDictionary<TKey, TValue> xrd)
                 {
                     // For each key in the second dictionary...

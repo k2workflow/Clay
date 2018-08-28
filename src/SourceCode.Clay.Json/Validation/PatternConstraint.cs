@@ -42,7 +42,8 @@ namespace SourceCode.Clay.Json.Validation
             Required = required;
             _regex = new Lazy<Regex>(build, LazyThreadSafetyMode.PublicationOnly);
 
-            // Local function
+            // Local functions
+
             Regex build() => new Regex(pattern, options, timeout);
         }
 

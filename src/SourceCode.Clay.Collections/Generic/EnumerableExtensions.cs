@@ -52,6 +52,7 @@ namespace SourceCode.Clay.Collections.Generic
                     }
 
                     // IReadOnlyList
+                    // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
                     if (ye is IReadOnlyList<TSource> yrl)
                     {
                         var eq = ListEqualsLedger(xl, yrl);
@@ -60,9 +61,11 @@ namespace SourceCode.Clay.Collections.Generic
                 }
 
                 // IReadOnlyList
+                // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
                 else if (xe is IReadOnlyList<TSource> xrl)
                 {
                     // IReadOnlyList is more likely
+                    // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
                     if (ye is IReadOnlyList<TSource> yrl)
                     {
                         for (var i = 0; i < xrl.Count; i++)
@@ -119,6 +122,7 @@ namespace SourceCode.Clay.Collections.Generic
         internal static bool BothAreCollections<TSource>(IEnumerable<TSource> xe, IEnumerable<TSource> ye, out int xCount, out int yCount)
         {
             // Try get item counts
+            // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
             var xN = xe is ICollection<TSource> xc ? xc.Count : (xe is IReadOnlyCollection<TSource> xrc ? xrc.Count : (int?)null);
             var yN = ye is ICollection<TSource> yc ? yc.Count : (ye is IReadOnlyCollection<TSource> yrc ? yrc.Count : (int?)null);
 
