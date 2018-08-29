@@ -369,11 +369,15 @@ namespace SourceCode.Clay.Algorithms
         /// <returns>The number of decoded symbols.</returns>
         public static int Decode(byte[] src, int offset, int count, byte[] dst)
         {
+            var edgeIndex = count - 1;
+
             var i = offset;
             var j = 0;
             var lastDecodedBits = 0;
-            while (i < count)
+            while (i <= edgeIndex)
             {
+                var remainingBits = 8 - lastDecodedBits;
+
                 var next = (uint)(src[i] << 24 + lastDecodedBits);
                 if (i + 1 < src.Length)
                 {
@@ -388,8 +392,8 @@ namespace SourceCode.Clay.Algorithms
                     }
                 }
 
-                var ones = (uint)(int.MinValue >> (8 - lastDecodedBits - 1));
-                if (i == count - 1 && lastDecodedBits > 0 && (next & ones) == ones)
+                var ones = (uint)(int.MinValue >> remainingBits - 1);
+                if (i == edgeIndex && lastDecodedBits > 0 && (next & ones) == ones)
                 {
                     // The remaining 7 or less bits are all 1, which is padding.
                     // We specifically check that lastDecodedBits > 0 because padding
@@ -401,26 +405,16 @@ namespace SourceCode.Clay.Algorithms
                 // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
                 // of the input, we need to make sure we pass the correct number of valid bits
                 // left, otherwise the trailing 0s in next may form a valid symbol.
-                var validBits = (8 - lastDecodedBits) + (count - i - 1) * 8;
+                var validBits = remainingBits + (edgeIndex - i) * 8;
                 if (validBits > 30) validBits = 30;
                 var ch = Decode(next, validBits, out var decodedBits);
 
-                if (ch == -1)
+                if (ch == -1 || ch == 256 || j == dst.Length)
                 {
-                    // No valid symbol could be decoded with the bits in next
-                    throw new HuffmanDecodingException();
-                }
-
-                if (ch == 256)
-                {
-                    // A Huffman-encoded string literal containing the EOS symbol MUST be treated as a decoding error.
+                    // -1: No valid symbol could be decoded with the bits in next
+                    // 256: A Huffman-encoded string literal containing the EOS symbol MUST be treated as a decoding error.
+                    // j: Destination is too small.
                     // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
-                    throw new HuffmanDecodingException();
-                }
-
-                if (j == dst.Length)
-                {
-                    // Destination is too small.
                     throw new HuffmanDecodingException();
                 }
 
@@ -488,7 +482,8 @@ namespace SourceCode.Clay.Algorithms
                 if (masked < codeMax)
                 {
                     decodedBits = codeLength;
-                    return codes[codes.Length - (codeMax - masked)];
+                    var result = codes[codes.Length - (codeMax - masked)];
+                    return result;
                 }
             }
 
