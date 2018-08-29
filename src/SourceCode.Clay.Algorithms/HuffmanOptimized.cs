@@ -327,29 +327,29 @@ namespace SourceCode.Clay.Algorithms
             (0b11111111_11111111_11111111_11111100, 30)
         };
 
-        private static readonly (int codeLength, int deltaLength, int[] codes)[] s_decodingTable = new[]
+        private static readonly (byte codeLength, byte deltaLength, ushort[] codes)[] s_decodingTable = new[]
         {
-            (05, 0, new[] { 48, 49, 50, 97, 99, 101, 105, 111, 115, 116 }), // deltaLength must be 0 for related optimizations to work
-            (06, 1, new[] { 32, 37, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 61, 65, 95, 98, 100, 102, 103, 104, 108, 109, 110, 112, 114, 117 }),
-            (07, 1, new[] { 58, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 89, 106, 107, 113, 118, 119, 120, 121, 122 }),
-            (08, 1, new[] { 38, 42, 44, 59, 88, 90 }),
-            (10, 2, new[] { 33, 34, 40, 41, 63 }),
-            (11, 1, new[] { 39, 43, 124 }),
-            (12, 1, new[] { 35, 62 }),
-            (13, 1, new[] { 0, 36, 64, 91, 93, 126 }),
-            (14, 1, new[] { 94, 125 }),
-            (15, 1, new[] { 60, 96, 123 }),
-            (19, 4, new[] { 92, 195, 208 }),
-            (20, 1, new[] { 128, 130, 131, 162, 184, 194, 224, 226 }),
-            (21, 1, new[] { 153, 161, 167, 172, 176, 177, 179, 209, 216, 217, 227, 229, 230 }),
-            (22, 1, new[] { 129, 132, 133, 134, 136, 146, 154, 156, 160, 163, 164, 169, 170, 173, 178, 181, 185, 186, 187, 189, 190, 196, 198, 228, 232, 233 }),
-            (23, 1, new[] { 1, 135, 137, 138, 139, 140, 141, 143, 147, 149, 150, 151, 152, 155, 157, 158, 165, 166, 168, 174, 175, 180, 182, 183, 188, 191, 197, 231, 239 }),
-            (24, 1, new[] { 9, 142, 144, 145, 148, 159, 171, 206, 215, 225, 236, 237 }),
-            (25, 1, new[] { 199, 207, 234, 235 }),
-            (26, 1, new[] { 192, 193, 200, 201, 202, 205, 210, 213, 218, 219, 238, 240, 242, 243, 255 }),
-            (27, 1, new[] { 203, 204, 211, 212, 214, 221, 222, 223, 241, 244, 245, 246, 247, 248, 250, 251, 252, 253, 254 }),
-            (28, 1, new[] { 2, 3, 4, 5, 6, 7, 8, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127, 220, 249 }),
-            (30, 2, new[] { 10, 13, 22, 256 })
+            ((byte)05, (byte)0, new[] { (ushort)048, (ushort)049, (ushort)050, (ushort)097, (ushort)099, (ushort)101, (ushort)105, (ushort)111, (ushort)115, (ushort)116 }), // deltaLength must be 0 for related optimizations to work
+            ((byte)06, (byte)1, new[] { (ushort)032, (ushort)037, (ushort)045, (ushort)046, (ushort)047, (ushort)051, (ushort)052, (ushort)053, (ushort)054, (ushort)055, (ushort)056, (ushort)057, (ushort)061, (ushort)065, (ushort)095, (ushort)098, (ushort)100, (ushort)102, (ushort)103, (ushort)104, (ushort)108, (ushort)109, (ushort)110, (ushort)112, (ushort)114, (ushort)117 }),
+            ((byte)07, (byte)1, new[] { (ushort)058, (ushort)066, (ushort)067, (ushort)068, (ushort)069, (ushort)070, (ushort)071, (ushort)072, (ushort)073, (ushort)074, (ushort)075, (ushort)076, (ushort)077, (ushort)078, (ushort)079, (ushort)080, (ushort)081, (ushort)082, (ushort)083, (ushort)084, (ushort)085, (ushort)086, (ushort)087, (ushort)089, (ushort)106, (ushort)107, (ushort)113, (ushort)118, (ushort)119, (ushort)120, (ushort)121, (ushort)122 }),
+            ((byte)08, (byte)1, new[] { (ushort)038, (ushort)042, (ushort)044, (ushort)059, (ushort)088, (ushort)090 }),
+            ((byte)10, (byte)2, new[] { (ushort)033, (ushort)034, (ushort)040, (ushort)041, (ushort)063 }),
+            ((byte)11, (byte)1, new[] { (ushort)039, (ushort)043, (ushort)124 }),
+            ((byte)12, (byte)1, new[] { (ushort)035, (ushort)062 }),
+            ((byte)13, (byte)1, new[] { (ushort)000, (ushort)036, (ushort)064, (ushort)091, (ushort)093, (ushort)126 }),
+            ((byte)14, (byte)1, new[] { (ushort)094, (ushort)125 }),
+            ((byte)15, (byte)1, new[] { (ushort)060, (ushort)096, (ushort)123 }),
+            ((byte)19, (byte)4, new[] { (ushort)092, (ushort)195, (ushort)208 }),
+            ((byte)20, (byte)1, new[] { (ushort)128, (ushort)130, (ushort)131, (ushort)162, (ushort)184, (ushort)194, (ushort)224, (ushort)226 }),
+            ((byte)21, (byte)1, new[] { (ushort)153, (ushort)161, (ushort)167, (ushort)172, (ushort)176, (ushort)177, (ushort)179, (ushort)209, (ushort)216, (ushort)217, (ushort)227, (ushort)229, (ushort)230 }),
+            ((byte)22, (byte)1, new[] { (ushort)129, (ushort)132, (ushort)133, (ushort)134, (ushort)136, (ushort)146, (ushort)154, (ushort)156, (ushort)160, (ushort)163, (ushort)164, (ushort)169, (ushort)170, (ushort)173, (ushort)178, (ushort)181, (ushort)185, (ushort)186, (ushort)187, (ushort)189, (ushort)190, (ushort)196, (ushort)198, (ushort)228, (ushort)232, (ushort)233 }),
+            ((byte)23, (byte)1, new[] { (ushort)001, (ushort)135, (ushort)137, (ushort)138, (ushort)139, (ushort)140, (ushort)141, (ushort)143, (ushort)147, (ushort)149, (ushort)150, (ushort)151, (ushort)152, (ushort)155, (ushort)157, (ushort)158, (ushort)165, (ushort)166, (ushort)168, (ushort)174, (ushort)175, (ushort)180, (ushort)182, (ushort)183, (ushort)188, (ushort)191, (ushort)197, (ushort)231, (ushort)239 }),
+            ((byte)24, (byte)1, new[] { (ushort)009, (ushort)142, (ushort)144, (ushort)145, (ushort)148, (ushort)159, (ushort)171, (ushort)206, (ushort)215, (ushort)225, (ushort)236, (ushort)237 }),
+            ((byte)25, (byte)1, new[] { (ushort)199, (ushort)207, (ushort)234, (ushort)235 }),
+            ((byte)26, (byte)1, new[] { (ushort)192, (ushort)193, (ushort)200, (ushort)201, (ushort)202, (ushort)205, (ushort)210, (ushort)213, (ushort)218, (ushort)219, (ushort)238, (ushort)240, (ushort)242, (ushort)243, (ushort)255 }),
+            ((byte)27, (byte)1, new[] { (ushort)203, (ushort)204, (ushort)211, (ushort)212, (ushort)214, (ushort)221, (ushort)222, (ushort)223, (ushort)241, (ushort)244, (ushort)245, (ushort)246, (ushort)247, (ushort)248, (ushort)250, (ushort)251, (ushort)252, (ushort)253, (ushort)254 }),
+            ((byte)28, (byte)1, new[] { (ushort)002, (ushort)003, (ushort)004, (ushort)005, (ushort)006, (ushort)007, (ushort)008, (ushort)011, (ushort)012, (ushort)014, (ushort)015, (ushort)016, (ushort)017, (ushort)018, (ushort)019, (ushort)020, (ushort)021, (ushort)023, (ushort)024, (ushort)025, (ushort)026, (ushort)027, (ushort)028, (ushort)029, (ushort)030, (ushort)031, (ushort)127, (ushort)220, (ushort)249 }),
+            ((byte)30, (byte)2, new[] { (ushort)010, (ushort)013, (ushort)022, (ushort)256 })
         };
 
         /// <summary>
@@ -369,14 +369,13 @@ namespace SourceCode.Clay.Algorithms
         /// <returns>The number of decoded symbols.</returns>
         public static int Decode(byte[] src, int offset, int count, byte[] dst)
         {
-            var edgeIndex = count - 1;
-
             var i = offset;
             var j = 0;
             var lastDecodedBits = 0;
+            var edgeIndex = count - 1; // Cache common calc
             while (i <= edgeIndex)
             {
-                var remainingBits = 8 - lastDecodedBits;
+                var remainingBits = 8 - lastDecodedBits; // Cache common calc
 
                 var next = (uint)(src[i] << 24 + lastDecodedBits);
                 if (i + 1 < src.Length)
@@ -402,18 +401,26 @@ namespace SourceCode.Clay.Algorithms
                     break;
                 }
 
+                if (j == dst.Length)
+                {
+                    // Destination is too small.
+                    throw new HuffmanDecodingException();
+                }
+
                 // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
                 // of the input, we need to make sure we pass the correct number of valid bits
                 // left, otherwise the trailing 0s in next may form a valid symbol.
                 var validBits = remainingBits + (edgeIndex - i) * 8;
-                if (validBits > 30) validBits = 30;
+                if (validBits > 30)
+                    validBits = 30; // Equivalent to Math.Min(30, validBits)
+
                 var ch = Decode(next, validBits, out var decodedBits);
 
-                if (ch == -1 || ch == 256 || j == dst.Length)
+                if (ch == -1 || ch == 256)
                 {
-                    // -1: No valid symbol could be decoded with the bits in next
+                    // -1: No valid symbol could be decoded with the bits in next.
+
                     // 256: A Huffman-encoded string literal containing the EOS symbol MUST be treated as a decoding error.
-                    // j: Destination is too small.
                     // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
                     throw new HuffmanDecodingException();
                 }
