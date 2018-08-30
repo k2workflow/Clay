@@ -324,40 +324,38 @@ namespace SourceCode.Clay.Algorithms
             (0b11111111_11111111_11111101_11100000, 27),
             (0b11111111_11111111_11111110_00000000, 27),
             (0b11111111_11111111_11111011_10000000, 26),
+
+            // 256
             (0b11111111_11111111_11111111_11111100, 30)
         };
 
         private static readonly (byte codeLength, int codeMax, int mask, byte[] codes)[] s_decodingTable = new[]
         {
-            ((byte)05, 00000000_10, int.MinValue >> 04, new[] { (byte)048, (byte)049, (byte)050, (byte)097, (byte)099, (byte)101, (byte)105, (byte)111, (byte)115, (byte)116 }), // deltaLength must be 0 for related optimizations to work
-            ((byte)06, 00000000_46, int.MinValue >> 05, new[] { (byte)032, (byte)037, (byte)045, (byte)046, (byte)047, (byte)051, (byte)052, (byte)053, (byte)054, (byte)055, (byte)056, (byte)057, (byte)061, (byte)065, (byte)095, (byte)098, (byte)100, (byte)102, (byte)103, (byte)104, (byte)108, (byte)109, (byte)110, (byte)112, (byte)114, (byte)117 }),
-            ((byte)07, 0000000_124, int.MinValue >> 06, new[] { (byte)058, (byte)066, (byte)067, (byte)068, (byte)069, (byte)070, (byte)071, (byte)072, (byte)073, (byte)074, (byte)075, (byte)076, (byte)077, (byte)078, (byte)079, (byte)080, (byte)081, (byte)082, (byte)083, (byte)084, (byte)085, (byte)086, (byte)087, (byte)089, (byte)106, (byte)107, (byte)113, (byte)118, (byte)119, (byte)120, (byte)121, (byte)122 }),
-            ((byte)08, 0000000_254, int.MinValue >> 07, new[] { (byte)038, (byte)042, (byte)044, (byte)059, (byte)088, (byte)090 }),
-            ((byte)10, 000000_1021, int.MinValue >> 09, new[] { (byte)033, (byte)034, (byte)040, (byte)041, (byte)063 }),
-            ((byte)11, 000000_2045, int.MinValue >> 10, new[] { (byte)039, (byte)043, (byte)124 }),
-            ((byte)12, 000000_4092, int.MinValue >> 11, new[] { (byte)035, (byte)062 }),
-            ((byte)13, 000000_8190, int.MinValue >> 12, new[] { (byte)000, (byte)036, (byte)064, (byte)091, (byte)093, (byte)126 }),
-            ((byte)14, 00000_16382, int.MinValue >> 13, new[] { (byte)094, (byte)125 }),
-            ((byte)15, 00000_32767, int.MinValue >> 14, new[] { (byte)060, (byte)096, (byte)123 }),
-            ((byte)19, 0000_524275, int.MinValue >> 18, new[] { (byte)092, (byte)195, (byte)208 }),
-            ((byte)20, 000_1048558, int.MinValue >> 19, new[] { (byte)128, (byte)130, (byte)131, (byte)162, (byte)184, (byte)194, (byte)224, (byte)226 }),
-            ((byte)21, 000_2097129, int.MinValue >> 20, new[] { (byte)153, (byte)161, (byte)167, (byte)172, (byte)176, (byte)177, (byte)179, (byte)209, (byte)216, (byte)217, (byte)227, (byte)229, (byte)230 }),
-            ((byte)22, 000_4194284, int.MinValue >> 21, new[] { (byte)129, (byte)132, (byte)133, (byte)134, (byte)136, (byte)146, (byte)154, (byte)156, (byte)160, (byte)163, (byte)164, (byte)169, (byte)170, (byte)173, (byte)178, (byte)181, (byte)185, (byte)186, (byte)187, (byte)189, (byte)190, (byte)196, (byte)198, (byte)228, (byte)232, (byte)233 }),
-            ((byte)23, 000_8388597, int.MinValue >> 22, new[] { (byte)001, (byte)135, (byte)137, (byte)138, (byte)139, (byte)140, (byte)141, (byte)143, (byte)147, (byte)149, (byte)150, (byte)151, (byte)152, (byte)155, (byte)157, (byte)158, (byte)165, (byte)166, (byte)168, (byte)174, (byte)175, (byte)180, (byte)182, (byte)183, (byte)188, (byte)191, (byte)197, (byte)231, (byte)239 }),
-            ((byte)24, 00_16777206, int.MinValue >> 23, new[] { (byte)009, (byte)142, (byte)144, (byte)145, (byte)148, (byte)159, (byte)171, (byte)206, (byte)215, (byte)225, (byte)236, (byte)237 }),
-            ((byte)25, 00_33554416, int.MinValue >> 24, new[] { (byte)199, (byte)207, (byte)234, (byte)235 }),
-            ((byte)26, 00_67108847, int.MinValue >> 25, new[] { (byte)192, (byte)193, (byte)200, (byte)201, (byte)202, (byte)205, (byte)210, (byte)213, (byte)218, (byte)219, (byte)238, (byte)240, (byte)242, (byte)243, (byte)255 }),
-            ((byte)27, 0_134217713, int.MinValue >> 26, new[] { (byte)203, (byte)204, (byte)211, (byte)212, (byte)214, (byte)221, (byte)222, (byte)223, (byte)241, (byte)244, (byte)245, (byte)246, (byte)247, (byte)248, (byte)250, (byte)251, (byte)252, (byte)253, (byte)254 }),
-            ((byte)28, 0_268435455, int.MinValue >> 27, new[] { (byte)002, (byte)003, (byte)004, (byte)005, (byte)006, (byte)007, (byte)008, (byte)011, (byte)012, (byte)014, (byte)015, (byte)016, (byte)017, (byte)018, (byte)019, (byte)020, (byte)021, (byte)023, (byte)024, (byte)025, (byte)026, (byte)027, (byte)028, (byte)029, (byte)030, (byte)031, (byte)127, (byte)220, (byte)249 }),
-            ((byte)30, 1_073741824, int.MinValue >> 29, new[] { (byte)010, (byte)013, (byte)022, (byte)0 /* 256: Special handling for last cell */ })
+            ((byte)05, 00000000_10, int.MinValue >> 04, new[] { (byte)048, (byte)049, (byte)050, (byte)097, (byte)099, (byte)101, (byte)105, (byte)111, (byte)115, (byte)116 }), // 10
+            ((byte)06, 00000000_46, int.MinValue >> 05, new[] { (byte)032, (byte)037, (byte)045, (byte)046, (byte)047, (byte)051, (byte)052, (byte)053, (byte)054, (byte)055, (byte)056, (byte)057, (byte)061, (byte)065, (byte)095, (byte)098, (byte)100, (byte)102, (byte)103, (byte)104, (byte)108, (byte)109, (byte)110, (byte)112, (byte)114, (byte)117 }), // 26
+            ((byte)07, 0000000_124, int.MinValue >> 06, new[] { (byte)058, (byte)066, (byte)067, (byte)068, (byte)069, (byte)070, (byte)071, (byte)072, (byte)073, (byte)074, (byte)075, (byte)076, (byte)077, (byte)078, (byte)079, (byte)080, (byte)081, (byte)082, (byte)083, (byte)084, (byte)085, (byte)086, (byte)087, (byte)089, (byte)106, (byte)107, (byte)113, (byte)118, (byte)119, (byte)120, (byte)121, (byte)122 }), // 32
+            ((byte)08, 0000000_254, int.MinValue >> 07, new[] { (byte)038, (byte)042, (byte)044, (byte)059, (byte)088, (byte)090 }), // 6
+            ((byte)10, 000000_1021, int.MinValue >> 09, new[] { (byte)033, (byte)034, (byte)040, (byte)041, (byte)063 }), // 5
+            ((byte)11, 000000_2045, int.MinValue >> 10, new[] { (byte)039, (byte)043, (byte)124 }), // 3
+            ((byte)12, 000000_4092, int.MinValue >> 11, new[] { (byte)035, (byte)062 }), // 2
+            ((byte)13, 000000_8190, int.MinValue >> 12, new[] { (byte)000, (byte)036, (byte)064, (byte)091, (byte)093, (byte)126 }), // 6
+            ((byte)14, 00000_16382, int.MinValue >> 13, new[] { (byte)094, (byte)125 }), // 2
+            ((byte)15, 00000_32767, int.MinValue >> 14, new[] { (byte)060, (byte)096, (byte)123 }), // 3
+            ((byte)19, 0000_524275, int.MinValue >> 18, new[] { (byte)092, (byte)195, (byte)208 }), // 3
+            ((byte)20, 000_1048558, int.MinValue >> 19, new[] { (byte)128, (byte)130, (byte)131, (byte)162, (byte)184, (byte)194, (byte)224, (byte)226 }), // 8
+            ((byte)21, 000_2097129, int.MinValue >> 20, new[] { (byte)153, (byte)161, (byte)167, (byte)172, (byte)176, (byte)177, (byte)179, (byte)209, (byte)216, (byte)217, (byte)227, (byte)229, (byte)230 }), // 13
+            ((byte)22, 000_4194284, int.MinValue >> 21, new[] { (byte)129, (byte)132, (byte)133, (byte)134, (byte)136, (byte)146, (byte)154, (byte)156, (byte)160, (byte)163, (byte)164, (byte)169, (byte)170, (byte)173, (byte)178, (byte)181, (byte)185, (byte)186, (byte)187, (byte)189, (byte)190, (byte)196, (byte)198, (byte)228, (byte)232, (byte)233 }), // 26
+            ((byte)23, 000_8388597, int.MinValue >> 22, new[] { (byte)001, (byte)135, (byte)137, (byte)138, (byte)139, (byte)140, (byte)141, (byte)143, (byte)147, (byte)149, (byte)150, (byte)151, (byte)152, (byte)155, (byte)157, (byte)158, (byte)165, (byte)166, (byte)168, (byte)174, (byte)175, (byte)180, (byte)182, (byte)183, (byte)188, (byte)191, (byte)197, (byte)231, (byte)239 }), // 29
+            ((byte)24, 00_16777206, int.MinValue >> 23, new[] { (byte)009, (byte)142, (byte)144, (byte)145, (byte)148, (byte)159, (byte)171, (byte)206, (byte)215, (byte)225, (byte)236, (byte)237 }), // 12
+            ((byte)25, 00_33554416, int.MinValue >> 24, new[] { (byte)199, (byte)207, (byte)234, (byte)235 }), // 4
+            ((byte)26, 00_67108847, int.MinValue >> 25, new[] { (byte)192, (byte)193, (byte)200, (byte)201, (byte)202, (byte)205, (byte)210, (byte)213, (byte)218, (byte)219, (byte)238, (byte)240, (byte)242, (byte)243, (byte)255 }), // 15
+            ((byte)27, 0_134217713, int.MinValue >> 26, new[] { (byte)203, (byte)204, (byte)211, (byte)212, (byte)214, (byte)221, (byte)222, (byte)223, (byte)241, (byte)244, (byte)245, (byte)246, (byte)247, (byte)248, (byte)250, (byte)251, (byte)252, (byte)253, (byte)254 }), // 19
+            ((byte)28, 0_268435455, int.MinValue >> 27, new[] { (byte)002, (byte)003, (byte)004, (byte)005, (byte)006, (byte)007, (byte)008, (byte)011, (byte)012, (byte)014, (byte)015, (byte)016, (byte)017, (byte)018, (byte)019, (byte)020, (byte)021, (byte)023, (byte)024, (byte)025, (byte)026, (byte)027, (byte)028, (byte)029, (byte)030, (byte)031, (byte)127, (byte)220, (byte)249 }), // 29
+            ((byte)30, 1_073741824, int.MinValue >> 29, new[] { (byte)010, (byte)013, (byte)022, (byte)0 /* 256: Special handling for last cell */ }) // 4  
         };
 
         static HuffmanOptimizedCodeAndTable()
-        {
-        }
-
-        // Location of final cell in s_decodingTable
-        private static readonly (int i, int j) s_last = (s_decodingTable.Length - 1, s_decodingTable[s_decodingTable.Length - 1].codes.Length - 1);
+        { }
 
         /// <summary>
         /// 
@@ -497,9 +495,9 @@ namespace SourceCode.Clay.Algorithms
                     decodedBits = codeLength;
                     var j = codes.Length - (codeMax - masked);
 
-                    /* 256: Special handling for last cell */
-                    var is256 = (i == s_last.i && j == s_last.j);
+                    var is256 = (i == 20 && j == 3); // 256: Special handling for last cell
                     result = is256 ? 256 : codes[j];
+
                     break;
                 }
             }
