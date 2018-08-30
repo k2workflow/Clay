@@ -15,8 +15,8 @@ namespace SourceCode.Clay.Algorithms.Bench
     {
         private const int _iterations = 1000;
 
-        private const int _count = 25;
-        private static readonly (byte[] encoded, byte[] expected)[] _test = new (byte[], byte[])[_count]
+        private const int _simpleCount = 25;
+        private static readonly (byte[] encoded, byte[] expected)[] _simpleData = new (byte[], byte[])[_simpleCount]
         {
             // Single 5-bit symbol
             ( new byte[] { 0x07 }, Encoding.ASCII.GetBytes("0") ),
@@ -75,21 +75,21 @@ namespace SourceCode.Clay.Algorithms.Bench
         public HuffmanBench()
         { }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = _count * _iterations)]
-        public ulong OptimizedCodeAndTable()
+        [Benchmark(Baseline = false, OperationsPerInvoke = _simpleCount * _iterations)]
+        public ulong OrigOpt()
         {
-            var sum = 0u;
+            var sum = 0ul;
 
             var rented = ArrayPool<byte>.Shared.Rent(4096);
             {
                 for (var j = 0; j < _iterations; j++)
                 {
-                    for (var i = 0; i < _test.Length; i++)
+                    for (var i = 0; i < _simpleData.Length; i++)
                     {
-                        var expected = _test[i].expected;
-                        var encoded = _test[i].encoded;
+                        var encoded = _simpleData[i].encoded;
+                        //var expected = _test[i].expected;
 
-                        var actualLength = HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, rented);
+                        var actualLength = HuffmanOrigOpt.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
                     }
                 }
@@ -99,21 +99,21 @@ namespace SourceCode.Clay.Algorithms.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = _count * _iterations)]
-        public ulong OriginalCode()
+        [Benchmark(Baseline = true, OperationsPerInvoke = _simpleCount * _iterations)]
+        public ulong Orig()
         {
-            var sum = 0u;
+            var sum = 0ul;
 
             var rented = ArrayPool<byte>.Shared.Rent(4096);
             {
                 for (var j = 0; j < _iterations; j++)
                 {
-                    for (var i = 0; i < _test.Length; i++)
+                    for (var i = 0; i < _simpleData.Length; i++)
                     {
-                        var expected = _test[i].expected;
-                        var encoded = _test[i].encoded;
+                        var encoded = _simpleData[i].encoded;
+                        //var expected = _test[i].expected;
 
-                        var actualLength = HuffmanLegacy.Decode(encoded, 0, encoded.Length, rented);
+                        var actualLength = Algorithms.HuffmanOrig.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
                     }
                 }

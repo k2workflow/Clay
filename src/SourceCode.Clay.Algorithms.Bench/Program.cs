@@ -14,9 +14,6 @@ namespace SourceCode.Clay.Algorithms.Bench
         public static void Main(string[] args)
         {
             var bench = new HuffmanBench();
-            bench.OriginalCode();
-            bench.OptimizedCodeAndTable();
-
             var summary = BenchmarkRunner.Run<HuffmanBench>();
         }
     }

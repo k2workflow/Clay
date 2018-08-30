@@ -1,15 +1,16 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+#region License
 
-using System;
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
 
 namespace SourceCode.Clay.Algorithms
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class HuffmanLegacy
+    public static class HuffmanOrigOpt
     {
         // TODO: this can be constructed from _decodingTable
         private static readonly (uint code, int bitLength)[] s_encodingTable = new (uint code, int bitLength)[]
@@ -323,43 +324,47 @@ namespace SourceCode.Clay.Algorithms
             (0b11111111_11111111_11111101_11100000, 27),
             (0b11111111_11111111_11111110_00000000, 27),
             (0b11111111_11111111_11111011_10000000, 26),
+
+            // 256
             (0b11111111_11111111_11111111_11111100, 30)
         };
 
-        private static readonly (int codeLength, int[] codes)[] s_decodingTable = new[]
+        private const int _rows = 21;
+        private const int _last = 4;
+        private static readonly (byte codeLength, int codeMax, int mask, byte[] codes)[] s_decodingTable = new (byte, int, int, byte[])[_rows]
         {
-            (5, new[] { 48, 49, 50, 97, 99, 101, 105, 111, 115, 116 }),
-            (6, new[] { 32, 37, 45, 46, 47, 51, 52, 53, 54, 55, 56, 57, 61, 65, 95, 98, 100, 102, 103, 104, 108, 109, 110, 112, 114, 117 }),
-            (7, new[] { 58, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 89, 106, 107, 113, 118, 119, 120, 121, 122 }),
-            (8, new[] { 38, 42, 44, 59, 88, 90 }),
-            (10, new[] { 33, 34, 40, 41, 63 }),
-            (11, new[] { 39, 43, 124 }),
-            (12, new[] { 35, 62 }),
-            (13, new[] { 0, 36, 64, 91, 93, 126 }),
-            (14, new[] { 94, 125 }),
-            (15, new[] { 60, 96, 123 }),
-            (19, new[] { 92, 195, 208 }),
-            (20, new[] { 128, 130, 131, 162, 184, 194, 224, 226 }),
-            (21, new[] { 153, 161, 167, 172, 176, 177, 179, 209, 216, 217, 227, 229, 230 }),
-            (22, new[] { 129, 132, 133, 134, 136, 146, 154, 156, 160, 163, 164, 169, 170, 173, 178, 181, 185, 186, 187, 189, 190, 196, 198, 228, 232, 233 }),
-            (23, new[] { 1, 135, 137, 138, 139, 140, 141, 143, 147, 149, 150, 151, 152, 155, 157, 158, 165, 166, 168, 174, 175, 180, 182, 183, 188, 191, 197, 231, 239 }),
-            (24, new[] { 9, 142, 144, 145, 148, 159, 171, 206, 215, 225, 236, 237 }),
-            (25, new[] { 199, 207, 234, 235 }),
-            (26, new[] { 192, 193, 200, 201, 202, 205, 210, 213, 218, 219, 238, 240, 242, 243, 255 }),
-            (27, new[] { 203, 204, 211, 212, 214, 221, 222, 223, 241, 244, 245, 246, 247, 248, 250, 251, 252, 253, 254 }),
-            (28, new[] { 2, 3, 4, 5, 6, 7, 8, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 127, 220, 249 }),
-            (30, new[] { 10, 13, 22, 256 })
+            (05, 00000000_10, int.MinValue >> 04, new byte[00_10] { 048, 049, 050, 097, 099, 101, 105, 111, 115, 116 }), // 10
+            (06, 00000000_46, int.MinValue >> 05, new byte[00_26] { 032, 037, 045, 046, 047, 051, 052, 053, 054, 055, 056, 057, 061, 065, 095, 098, 100, 102, 103, 104, 108, 109, 110, 112, 114, 117 }), // 26
+            (07, 0000000_124, int.MinValue >> 06, new byte[00_32] { 058, 066, 067, 068, 069, 070, 071, 072, 073, 074, 075, 076, 077, 078, 079, 080, 081, 082, 083, 084, 085, 086, 087, 089, 106, 107, 113, 118, 119, 120, 121, 122 }), // 32
+            (08, 0000000_254, int.MinValue >> 07, new byte[000_6] { 038, 042, 044, 059, 088, 090 }), // 6
+            (10, 000000_1021, int.MinValue >> 09, new byte[000_5] { 033, 034, 040, 041, 063 }), // 5
+            (11, 000000_2045, int.MinValue >> 10, new byte[000_3] { 039, 043, 124 }), // 3
+            (12, 000000_4092, int.MinValue >> 11, new byte[000_2] { 035, 062 }), // 2
+            (13, 000000_8190, int.MinValue >> 12, new byte[000_6] { 000, 036, 064, 091, 093, 126 }), // 6
+            (14, 00000_16382, int.MinValue >> 13, new byte[000_2] { 094, 125 }), // 2
+            (15, 00000_32767, int.MinValue >> 14, new byte[000_3] { 060, 096, 123 }), // 3
+            (19, 0000_524275, int.MinValue >> 18, new byte[000_3] { 092, 195, 208 }), // 3
+            (20, 000_1048558, int.MinValue >> 19, new byte[000_8] { 128, 130, 131, 162, 184, 194, 224, 226 }), // 8
+            (21, 000_2097129, int.MinValue >> 20, new byte[00_13] { 153, 161, 167, 172, 176, 177, 179, 209, 216, 217, 227, 229, 230 }), // 13
+            (22, 000_4194284, int.MinValue >> 21, new byte[00_26] { 129, 132, 133, 134, 136, 146, 154, 156, 160, 163, 164, 169, 170, 173, 178, 181, 185, 186, 187, 189, 190, 196, 198, 228, 232, 233 }), // 26
+            (23, 000_8388597, int.MinValue >> 22, new byte[00_29] { 001, 135, 137, 138, 139, 140, 141, 143, 147, 149, 150, 151, 152, 155, 157, 158, 165, 166, 168, 174, 175, 180, 182, 183, 188, 191, 197, 231, 239 }), // 29
+            (24, 00_16777206, int.MinValue >> 23, new byte[00_12] { 009, 142, 144, 145, 148, 159, 171, 206, 215, 225, 236, 237 }), // 12
+            (25, 00_33554416, int.MinValue >> 24, new byte[000_4] { 199, 207, 234, 235 }), // 4
+            (26, 00_67108847, int.MinValue >> 25, new byte[00_15] { 192, 193, 200, 201, 202, 205, 210, 213, 218, 219, 238, 240, 242, 243, 255 }), // 15
+            (27, 0_134217713, int.MinValue >> 26, new byte[00_19] { 203, 204, 211, 212, 214, 221, 222, 223, 241, 244, 245, 246, 247, 248, 250, 251, 252, 253, 254 }), // 19
+            (28, 0_268435455, int.MinValue >> 27, new byte[00_29] { 002, 003, 004, 005, 006, 007, 008, 011, 012, 014, 015, 016, 017, 018, 019, 020, 021, 023, 024, 025, 026, 027, 028, 029, 030, 031, 127, 220, 249 }), // 29
+            (30, 1_073741824, int.MinValue >> 29, new byte[_last] { 010, 013, 022, 0 /* 256: Special handling for last cell */ }) // 4  
         };
+
+        static HuffmanOrigOpt()
+        { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static (uint encoded, int bitLength) Encode(int data)
-        {
-            return s_encodingTable[data];
-        }
+        public static (uint encoded, int bitLength) Encode(int data) => s_encodingTable[data];
 
         /// <summary>
         /// Decodes a Huffman encoded string from a byte array.
@@ -374,44 +379,61 @@ namespace SourceCode.Clay.Algorithms
             var i = offset;
             var j = 0;
             var lastDecodedBits = 0;
-            while (i < count)
+            var edgeIndex = count - 1;
+
+            while (i <= edgeIndex)
             {
                 var next = (uint)(src[i] << 24 + lastDecodedBits);
-                next |= (i + 1 < src.Length ? (uint)(src[i + 1] << 16 + lastDecodedBits) : 0);
-                next |= (i + 2 < src.Length ? (uint)(src[i + 2] << 8 + lastDecodedBits) : 0);
-                next |= (i + 3 < src.Length ? (uint)(src[i + 3] << lastDecodedBits) : 0);
-
-                var ones = (uint)(int.MinValue >> (8 - lastDecodedBits - 1));
-                if (i == count - 1 && lastDecodedBits > 0 && (next & ones) == ones)
+                if (i + 1 < src.Length)
                 {
-                    // The remaining 7 or less bits are all 1, which is padding.
-                    // We specifically check that lastDecodedBits > 0 because padding
-                    // longer than 7 bits should be treated as a decoding error.
-                    // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
-                    break;
+                    next |= (uint)(src[i + 1] << 16 + lastDecodedBits);
+
+                    if (i + 2 < src.Length)
+                    {
+                        next |= (uint)(src[i + 2] << 8 + lastDecodedBits);
+
+                        if (i + 3 < src.Length)
+                        {
+                            next |= (uint)(src[i + 3] << lastDecodedBits);
+                        }
+                    }
                 }
 
-                // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
-                // of the input, we need to make sure we pass the correct number of valid bits
-                // left, otherwise the trailing 0s in next may form a valid symbol.
-                var validBits = Math.Min(30, (8 - lastDecodedBits) + (count - i - 1) * 8);
-                var ch = Decode(next, validBits, out var decodedBits);
+                var remainingBits = 8 - lastDecodedBits;
 
-                if (ch == -1)
+                // The remaining 7 or less bits are all 1, which is padding.
+                // We specifically check that lastDecodedBits > 0 because padding
+                // longer than 7 bits should be treated as a decoding error.
+                // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
+                if (i == edgeIndex && lastDecodedBits > 0)
                 {
-                    // No valid symbol could be decoded with the bits in next
-                    throw new HuffmanDecodingException();
-                }
-                else if (ch == 256)
-                {
-                    // A Huffman-encoded string literal containing the EOS symbol MUST be treated as a decoding error.
-                    // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
-                    throw new HuffmanDecodingException();
+                    var ones = (uint)(int.MinValue >> remainingBits - 1);
+
+                    if ((next & ones) == ones)
+                        break;
                 }
 
                 if (j == dst.Length)
                 {
                     // Destination is too small.
+                    throw new HuffmanDecodingException();
+                }
+
+                // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
+                // of the input, we need to make sure we pass the correct number of valid bits
+                // left, otherwise the trailing 0s in next may form a valid symbol.
+                var validBits = remainingBits + (edgeIndex - i) * 8;
+                if (validBits > 30)
+                    validBits = 30; // Equivalent to Math.Min(30, validBits)
+
+                var ch = Decode(next, validBits, out var decodedBits);
+
+                if (ch == -1 || ch == 256)
+                {
+                    // -1: No valid symbol could be decoded with the bits in next.
+
+                    // 256: A Huffman-encoded string literal containing the EOS symbol MUST be treated as a decoding error.
+                    // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
                     throw new HuffmanDecodingException();
                 }
 
@@ -459,31 +481,30 @@ namespace SourceCode.Clay.Algorithms
             // symbol in the list of values associated with bit length b in the decoding table by indexing it
             // with codeMax - v.
 
-            var codeMax = 0;
+            var result = -1;
+            decodedBits = 0;
 
-            for (var i = 0; i < s_decodingTable.Length && s_decodingTable[i].codeLength <= validBits; i++)
+            for (var i = 0; i < s_decodingTable.Length; i++)
             {
-                (var codeLength, var codes) = s_decodingTable[i];
+                var (codeLength, codeMax, mask, codes) = s_decodingTable[i];
+                if (codeLength > validBits)
+                    break;
 
-                if (i > 0)
-                {
-                    codeMax <<= codeLength - s_decodingTable[i - 1].codeLength;
-                }
-
-                codeMax += codes.Length;
-
-                var mask = int.MinValue >> (codeLength - 1);
                 var masked = (data & mask) >> (32 - codeLength);
 
                 if (masked < codeMax)
                 {
                     decodedBits = codeLength;
-                    return codes[codes.Length - (codeMax - masked)];
+                    var j = codes.Length - (codeMax - masked);
+
+                    var is256 = (i == _rows - 1 && j == _last - 1); // 256: Special handling for last cell
+                    result = is256 ? 256 : codes[j];
+
+                    break;
                 }
             }
 
-            decodedBits = 0;
-            return -1;
+            return result;
         }
     }
 }
