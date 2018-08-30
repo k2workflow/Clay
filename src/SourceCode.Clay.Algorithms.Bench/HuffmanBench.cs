@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Algorithms.Bench
         { }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _count * _iterations)]
-        public ulong Optimized()
+        public ulong OptimizedCodeAndTable()
         {
             var sum = 0u;
 
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Algorithms.Bench
                         var expected = _test[i].expected;
                         var encoded = _test[i].encoded;
 
-                        var actualLength = HuffmanOptimized.Decode(encoded, 0, encoded.Length, rented);
+                        var actualLength = HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
                     }
                 }
@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Algorithms.Bench
         }
 
         [Benchmark(Baseline = true, OperationsPerInvoke = _count * _iterations)]
-        public ulong Legacy()
+        public ulong OriginalCode()
         {
             var sum = 0u;
 

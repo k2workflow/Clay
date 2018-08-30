@@ -72,7 +72,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         public void HuffmanDecodeArray(byte[] encoded, byte[] expected)
         {
             var dst = new byte[expected.Length];
-            Assert.Equal(expected.Length, HuffmanOptimized.Decode(encoded, 0, encoded.Length, dst));
+            Assert.Equal(expected.Length, HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, dst));
             Assert.Equal(expected, dst);
         }
 
@@ -92,7 +92,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         [MemberData(nameof(_longPaddingData))]
         public void ThrowsOnPaddingLongerThanSevenBits(byte[] encoded)
         {
-            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimized.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
+            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
             //Assert.Equal(CoreStrings.HPackHuffmanErrorIncomplete, exception.Message);
         }
 
@@ -108,7 +108,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         [MemberData(nameof(_eosData))]
         public void ThrowsOnEOS(byte[] encoded)
         {
-            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimized.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
+            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
             //Assert.Equal(CoreStrings.HPackHuffmanErrorEOS, exception.Message);
         }
 
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         {
             //                           h      e         l          l      o         *
             var encoded = new byte[] { 0b100111_00, 0b101_10100, 0b0_101000_0, 0b0111_1111 };
-            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimized.Decode(encoded, 0, encoded.Length, new byte[encoded.Length]));
+            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, new byte[encoded.Length]));
             //Assert.Equal(CoreStrings.HPackHuffmanErrorDestinationTooSmall, exception.Message);
         }
 
@@ -149,7 +149,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         [MemberData(nameof(_incompleteSymbolData))]
         public void ThrowsOnIncompleteSymbol(byte[] encoded)
         {
-            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimized.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
+            var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOptimizedCodeAndTable.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
             //Assert.Equal(CoreStrings.HPackHuffmanErrorIncomplete, exception.Message);
         }
 
@@ -157,7 +157,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         [MemberData(nameof(HuffmanData))]
         public void HuffmanEncode(int code, uint expectedEncoded, int expectedBitLength)
         {
-            var (encoded, bitLength) = HuffmanOptimized.Encode(code);
+            var (encoded, bitLength) = HuffmanOptimizedCodeAndTable.Encode(code);
             Assert.Equal(expectedEncoded, encoded);
             Assert.Equal(expectedBitLength, bitLength);
         }
@@ -166,7 +166,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         [MemberData(nameof(HuffmanData))]
         public void HuffmanDecode(int code, uint encoded, int bitLength)
         {
-            Assert.Equal(code, HuffmanOptimized.Decode(encoded, bitLength, out var decodedBits));
+            Assert.Equal(code, HuffmanOptimizedCodeAndTable.Decode(encoded, bitLength, out var decodedBits));
             Assert.Equal(bitLength, decodedBits);
         }
 
@@ -181,7 +181,7 @@ namespace SourceCode.Clay.Algorithms.Tests
 #pragma warning restore xUnit1026
             int bitLength)
         {
-            Assert.Equal(code, HuffmanOptimized.Decode(HuffmanOptimized.Encode(code).encoded, bitLength, out var decodedBits));
+            Assert.Equal(code, HuffmanOptimizedCodeAndTable.Decode(HuffmanOptimizedCodeAndTable.Encode(code).encoded, bitLength, out var decodedBits));
             Assert.Equal(bitLength, decodedBits);
         }
 

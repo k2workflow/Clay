@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Algorithms
     /// <summary>
     /// 
     /// </summary>
-    public static class HuffmanOptimized
+    public static class HuffmanOptimizedCodeAndTable
     {
         // TODO: this can be constructed from _decodingTable
         private static readonly (uint code, int bitLength)[] s_encodingTable = new (uint code, int bitLength)[]
@@ -351,6 +351,12 @@ namespace SourceCode.Clay.Algorithms
             ((byte)28, 0_268435455, int.MinValue >> (28 - 1), new[] { (byte)002, (byte)003, (byte)004, (byte)005, (byte)006, (byte)007, (byte)008, (byte)011, (byte)012, (byte)014, (byte)015, (byte)016, (byte)017, (byte)018, (byte)019, (byte)020, (byte)021, (byte)023, (byte)024, (byte)025, (byte)026, (byte)027, (byte)028, (byte)029, (byte)030, (byte)031, (byte)127, (byte)220, (byte)249 }),
             ((byte)30, 1_073741824, int.MinValue >> (30 - 1), new[] { (byte)010, (byte)013, (byte)022, (byte)0 /* 256: Special handling in code */ })
         };
+
+        private static readonly (byte codeLength, int codeMax, int mask, byte[] codes)[] s_decodingTable1;
+
+        static HuffmanOptimizedCodeAndTable()
+        {
+        }
 
         // Location of final cell in s_decodingTable
         private static readonly (int i, int j) s_last = (s_decodingTable.Length - 1, s_decodingTable[s_decodingTable.Length - 1].codes.Length - 1);
