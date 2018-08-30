@@ -327,30 +327,33 @@ namespace SourceCode.Clay.Algorithms
             (0b11111111_11111111_11111111_11111100, 30)
         };
 
-        private static readonly (byte codeLength, byte deltaLength, ushort[] codes)[] s_decodingTable = new[]
+        private static readonly (byte codeLength, byte deltaLength, int mask, byte[] codes)[] s_decodingTable = new[]
         {
-            ((byte)05, (byte)0, new[] { (ushort)048, (ushort)049, (ushort)050, (ushort)097, (ushort)099, (ushort)101, (ushort)105, (ushort)111, (ushort)115, (ushort)116 }), // deltaLength must be 0 for related optimizations to work
-            ((byte)06, (byte)1, new[] { (ushort)032, (ushort)037, (ushort)045, (ushort)046, (ushort)047, (ushort)051, (ushort)052, (ushort)053, (ushort)054, (ushort)055, (ushort)056, (ushort)057, (ushort)061, (ushort)065, (ushort)095, (ushort)098, (ushort)100, (ushort)102, (ushort)103, (ushort)104, (ushort)108, (ushort)109, (ushort)110, (ushort)112, (ushort)114, (ushort)117 }),
-            ((byte)07, (byte)1, new[] { (ushort)058, (ushort)066, (ushort)067, (ushort)068, (ushort)069, (ushort)070, (ushort)071, (ushort)072, (ushort)073, (ushort)074, (ushort)075, (ushort)076, (ushort)077, (ushort)078, (ushort)079, (ushort)080, (ushort)081, (ushort)082, (ushort)083, (ushort)084, (ushort)085, (ushort)086, (ushort)087, (ushort)089, (ushort)106, (ushort)107, (ushort)113, (ushort)118, (ushort)119, (ushort)120, (ushort)121, (ushort)122 }),
-            ((byte)08, (byte)1, new[] { (ushort)038, (ushort)042, (ushort)044, (ushort)059, (ushort)088, (ushort)090 }),
-            ((byte)10, (byte)2, new[] { (ushort)033, (ushort)034, (ushort)040, (ushort)041, (ushort)063 }),
-            ((byte)11, (byte)1, new[] { (ushort)039, (ushort)043, (ushort)124 }),
-            ((byte)12, (byte)1, new[] { (ushort)035, (ushort)062 }),
-            ((byte)13, (byte)1, new[] { (ushort)000, (ushort)036, (ushort)064, (ushort)091, (ushort)093, (ushort)126 }),
-            ((byte)14, (byte)1, new[] { (ushort)094, (ushort)125 }),
-            ((byte)15, (byte)1, new[] { (ushort)060, (ushort)096, (ushort)123 }),
-            ((byte)19, (byte)4, new[] { (ushort)092, (ushort)195, (ushort)208 }),
-            ((byte)20, (byte)1, new[] { (ushort)128, (ushort)130, (ushort)131, (ushort)162, (ushort)184, (ushort)194, (ushort)224, (ushort)226 }),
-            ((byte)21, (byte)1, new[] { (ushort)153, (ushort)161, (ushort)167, (ushort)172, (ushort)176, (ushort)177, (ushort)179, (ushort)209, (ushort)216, (ushort)217, (ushort)227, (ushort)229, (ushort)230 }),
-            ((byte)22, (byte)1, new[] { (ushort)129, (ushort)132, (ushort)133, (ushort)134, (ushort)136, (ushort)146, (ushort)154, (ushort)156, (ushort)160, (ushort)163, (ushort)164, (ushort)169, (ushort)170, (ushort)173, (ushort)178, (ushort)181, (ushort)185, (ushort)186, (ushort)187, (ushort)189, (ushort)190, (ushort)196, (ushort)198, (ushort)228, (ushort)232, (ushort)233 }),
-            ((byte)23, (byte)1, new[] { (ushort)001, (ushort)135, (ushort)137, (ushort)138, (ushort)139, (ushort)140, (ushort)141, (ushort)143, (ushort)147, (ushort)149, (ushort)150, (ushort)151, (ushort)152, (ushort)155, (ushort)157, (ushort)158, (ushort)165, (ushort)166, (ushort)168, (ushort)174, (ushort)175, (ushort)180, (ushort)182, (ushort)183, (ushort)188, (ushort)191, (ushort)197, (ushort)231, (ushort)239 }),
-            ((byte)24, (byte)1, new[] { (ushort)009, (ushort)142, (ushort)144, (ushort)145, (ushort)148, (ushort)159, (ushort)171, (ushort)206, (ushort)215, (ushort)225, (ushort)236, (ushort)237 }),
-            ((byte)25, (byte)1, new[] { (ushort)199, (ushort)207, (ushort)234, (ushort)235 }),
-            ((byte)26, (byte)1, new[] { (ushort)192, (ushort)193, (ushort)200, (ushort)201, (ushort)202, (ushort)205, (ushort)210, (ushort)213, (ushort)218, (ushort)219, (ushort)238, (ushort)240, (ushort)242, (ushort)243, (ushort)255 }),
-            ((byte)27, (byte)1, new[] { (ushort)203, (ushort)204, (ushort)211, (ushort)212, (ushort)214, (ushort)221, (ushort)222, (ushort)223, (ushort)241, (ushort)244, (ushort)245, (ushort)246, (ushort)247, (ushort)248, (ushort)250, (ushort)251, (ushort)252, (ushort)253, (ushort)254 }),
-            ((byte)28, (byte)1, new[] { (ushort)002, (ushort)003, (ushort)004, (ushort)005, (ushort)006, (ushort)007, (ushort)008, (ushort)011, (ushort)012, (ushort)014, (ushort)015, (ushort)016, (ushort)017, (ushort)018, (ushort)019, (ushort)020, (ushort)021, (ushort)023, (ushort)024, (ushort)025, (ushort)026, (ushort)027, (ushort)028, (ushort)029, (ushort)030, (ushort)031, (ushort)127, (ushort)220, (ushort)249 }),
-            ((byte)30, (byte)2, new[] { (ushort)010, (ushort)013, (ushort)022, (ushort)256 })
+            ((byte)05, (byte)0, int.MinValue >> (05 - 1), new[] { (byte)048, (byte)049, (byte)050, (byte)097, (byte)099, (byte)101, (byte)105, (byte)111, (byte)115, (byte)116 }), // deltaLength must be 0 for related optimizations to work
+            ((byte)06, (byte)1, int.MinValue >> (06 - 1), new[] { (byte)032, (byte)037, (byte)045, (byte)046, (byte)047, (byte)051, (byte)052, (byte)053, (byte)054, (byte)055, (byte)056, (byte)057, (byte)061, (byte)065, (byte)095, (byte)098, (byte)100, (byte)102, (byte)103, (byte)104, (byte)108, (byte)109, (byte)110, (byte)112, (byte)114, (byte)117 }),
+            ((byte)07, (byte)1, int.MinValue >> (07 - 1), new[] { (byte)058, (byte)066, (byte)067, (byte)068, (byte)069, (byte)070, (byte)071, (byte)072, (byte)073, (byte)074, (byte)075, (byte)076, (byte)077, (byte)078, (byte)079, (byte)080, (byte)081, (byte)082, (byte)083, (byte)084, (byte)085, (byte)086, (byte)087, (byte)089, (byte)106, (byte)107, (byte)113, (byte)118, (byte)119, (byte)120, (byte)121, (byte)122 }),
+            ((byte)08, (byte)1, int.MinValue >> (08 - 1), new[] { (byte)038, (byte)042, (byte)044, (byte)059, (byte)088, (byte)090 }),
+            ((byte)10, (byte)2, int.MinValue >> (10 - 1), new[] { (byte)033, (byte)034, (byte)040, (byte)041, (byte)063 }),
+            ((byte)11, (byte)1, int.MinValue >> (11 - 1), new[] { (byte)039, (byte)043, (byte)124 }),
+            ((byte)12, (byte)1, int.MinValue >> (12 - 1), new[] { (byte)035, (byte)062 }),
+            ((byte)13, (byte)1, int.MinValue >> (13 - 1), new[] { (byte)000, (byte)036, (byte)064, (byte)091, (byte)093, (byte)126 }),
+            ((byte)14, (byte)1, int.MinValue >> (14 - 1), new[] { (byte)094, (byte)125 }),
+            ((byte)15, (byte)1, int.MinValue >> (15 - 1), new[] { (byte)060, (byte)096, (byte)123 }),
+            ((byte)19, (byte)4, int.MinValue >> (19 - 1), new[] { (byte)092, (byte)195, (byte)208 }),
+            ((byte)20, (byte)1, int.MinValue >> (20 - 1), new[] { (byte)128, (byte)130, (byte)131, (byte)162, (byte)184, (byte)194, (byte)224, (byte)226 }),
+            ((byte)21, (byte)1, int.MinValue >> (21 - 1), new[] { (byte)153, (byte)161, (byte)167, (byte)172, (byte)176, (byte)177, (byte)179, (byte)209, (byte)216, (byte)217, (byte)227, (byte)229, (byte)230 }),
+            ((byte)22, (byte)1, int.MinValue >> (22 - 1), new[] { (byte)129, (byte)132, (byte)133, (byte)134, (byte)136, (byte)146, (byte)154, (byte)156, (byte)160, (byte)163, (byte)164, (byte)169, (byte)170, (byte)173, (byte)178, (byte)181, (byte)185, (byte)186, (byte)187, (byte)189, (byte)190, (byte)196, (byte)198, (byte)228, (byte)232, (byte)233 }),
+            ((byte)23, (byte)1, int.MinValue >> (23 - 1), new[] { (byte)001, (byte)135, (byte)137, (byte)138, (byte)139, (byte)140, (byte)141, (byte)143, (byte)147, (byte)149, (byte)150, (byte)151, (byte)152, (byte)155, (byte)157, (byte)158, (byte)165, (byte)166, (byte)168, (byte)174, (byte)175, (byte)180, (byte)182, (byte)183, (byte)188, (byte)191, (byte)197, (byte)231, (byte)239 }),
+            ((byte)24, (byte)1, int.MinValue >> (24 - 1), new[] { (byte)009, (byte)142, (byte)144, (byte)145, (byte)148, (byte)159, (byte)171, (byte)206, (byte)215, (byte)225, (byte)236, (byte)237 }),
+            ((byte)25, (byte)1, int.MinValue >> (25 - 1), new[] { (byte)199, (byte)207, (byte)234, (byte)235 }),
+            ((byte)26, (byte)1, int.MinValue >> (26 - 1), new[] { (byte)192, (byte)193, (byte)200, (byte)201, (byte)202, (byte)205, (byte)210, (byte)213, (byte)218, (byte)219, (byte)238, (byte)240, (byte)242, (byte)243, (byte)255 }),
+            ((byte)27, (byte)1, int.MinValue >> (27 - 1), new[] { (byte)203, (byte)204, (byte)211, (byte)212, (byte)214, (byte)221, (byte)222, (byte)223, (byte)241, (byte)244, (byte)245, (byte)246, (byte)247, (byte)248, (byte)250, (byte)251, (byte)252, (byte)253, (byte)254 }),
+            ((byte)28, (byte)1, int.MinValue >> (28 - 1), new[] { (byte)002, (byte)003, (byte)004, (byte)005, (byte)006, (byte)007, (byte)008, (byte)011, (byte)012, (byte)014, (byte)015, (byte)016, (byte)017, (byte)018, (byte)019, (byte)020, (byte)021, (byte)023, (byte)024, (byte)025, (byte)026, (byte)027, (byte)028, (byte)029, (byte)030, (byte)031, (byte)127, (byte)220, (byte)249 }),
+            ((byte)30, (byte)2, int.MinValue >> (30 - 1), new[] { (byte)010, (byte)013, (byte)022, (byte)0 /* 256: Special handling in code */ })
         };
+
+        // Location of final cell in s_decodingTable
+        private static readonly (int i, int j) s_last = (s_decodingTable.Length - 1, s_decodingTable[s_decodingTable.Length - 1].codes.Length - 1);
 
         /// <summary>
         /// 
@@ -372,11 +375,10 @@ namespace SourceCode.Clay.Algorithms
             var i = offset;
             var j = 0;
             var lastDecodedBits = 0;
-            var edgeIndex = count - 1; // Cache common calc
+            var edgeIndex = count - 1;
+
             while (i <= edgeIndex)
             {
-                var remainingBits = 8 - lastDecodedBits; // Cache common calc
-
                 var next = (uint)(src[i] << 24 + lastDecodedBits);
                 if (i + 1 < src.Length)
                 {
@@ -387,18 +389,23 @@ namespace SourceCode.Clay.Algorithms
                         next |= (uint)(src[i + 2] << 8 + lastDecodedBits);
 
                         if (i + 3 < src.Length)
+                        {
                             next |= (uint)(src[i + 3] << lastDecodedBits);
+                        }
                     }
                 }
 
-                var ones = (uint)(int.MinValue >> remainingBits - 1);
-                if (i == edgeIndex && lastDecodedBits > 0 && (next & ones) == ones)
+                var remainingBits = 8 - lastDecodedBits;
+
+                if (i == edgeIndex && lastDecodedBits > 0)
                 {
                     // The remaining 7 or less bits are all 1, which is padding.
                     // We specifically check that lastDecodedBits > 0 because padding
                     // longer than 7 bits should be treated as a decoding error.
                     // http://httpwg.org/specs/rfc7541.html#rfc.section.5.2
-                    break;
+                    var ones = (uint)(int.MinValue >> remainingBits - 1);
+                    if ((next & ones) == ones)
+                        break;
                 }
 
                 if (j == dst.Length)
@@ -469,33 +476,32 @@ namespace SourceCode.Clay.Algorithms
             // symbol in the list of values associated with bit length b in the decoding table by indexing it
             // with codeMax - v.
 
-            var codeMax = 0;
+            var result = -1;
+            decodedBits = 0;
 
+            var codeMax = 0;
             for (var i = 0; i < s_decodingTable.Length; i++)
             {
-                // deltaLength is precomputed codeMax delta
-                var (codeLength, deltaLength, codes) = s_decodingTable[i];
-
-                // Move check out of for-loop to leverage cached value for codeLength
+                var (codeLength, deltaLength, mask, codes) = s_decodingTable[i];
                 if (codeLength > validBits)
                     break;
 
-                // Mitigate the if (i > 0) branch by ensuring s_decodingTable[0].deltaLength==0
                 codeMax = (codeMax << deltaLength) + codes.Length;
 
-                var mask = int.MinValue >> (codeLength - 1);
                 var masked = (data & mask) >> (32 - codeLength);
 
                 if (masked < codeMax)
                 {
                     decodedBits = codeLength;
-                    var result = codes[codes.Length - (codeMax - masked)];
-                    return result;
+                    var j = codes.Length - (codeMax - masked);
+
+                    /* 256: Special handling in code */
+                    result = (i == s_last.i && j == s_last.j) ? 256 : codes[j];
+                    break;
                 }
             }
 
-            decodedBits = 0;
-            return -1;
+            return result;
         }
     }
 }

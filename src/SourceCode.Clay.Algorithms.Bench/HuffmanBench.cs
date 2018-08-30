@@ -13,6 +13,8 @@ namespace SourceCode.Clay.Algorithms.Bench
     [MemoryDiagnoser]
     public class HuffmanBench
     {
+        private const int _iterations = 1000;
+
         private const int _count = 25;
         private static readonly (byte[] encoded, byte[] expected)[] _test = new (byte[], byte[])[_count]
         {
@@ -73,20 +75,23 @@ namespace SourceCode.Clay.Algorithms.Bench
         public HuffmanBench()
         { }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = _count)]
+        [Benchmark(Baseline = false, OperationsPerInvoke = _count * _iterations)]
         public ulong Optimized()
         {
             var sum = 0u;
 
             var rented = ArrayPool<byte>.Shared.Rent(4096);
             {
-                for (var i = 0; i < _test.Length; i++)
+                for (var j = 0; j < _iterations; j++)
                 {
-                    var expected = _test[i].expected;
-                    var encoded = _test[i].encoded;
+                    for (var i = 0; i < _test.Length; i++)
+                    {
+                        var expected = _test[i].expected;
+                        var encoded = _test[i].encoded;
 
-                    var actualLength = HuffmanOptimized.Decode(encoded, 0, encoded.Length, rented);
-                    sum += (uint)actualLength;
+                        var actualLength = HuffmanOptimized.Decode(encoded, 0, encoded.Length, rented);
+                        sum += (uint)actualLength;
+                    }
                 }
             }
             ArrayPool<byte>.Shared.Return(rented);
@@ -94,20 +99,23 @@ namespace SourceCode.Clay.Algorithms.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = _count)]
+        [Benchmark(Baseline = true, OperationsPerInvoke = _count * _iterations)]
         public ulong Legacy()
         {
             var sum = 0u;
 
             var rented = ArrayPool<byte>.Shared.Rent(4096);
             {
-                for (var i = 0; i < _test.Length; i++)
+                for (var j = 0; j < _iterations; j++)
                 {
-                    var expected = _test[i].expected;
-                    var encoded = _test[i].encoded;
+                    for (var i = 0; i < _test.Length; i++)
+                    {
+                        var expected = _test[i].expected;
+                        var encoded = _test[i].encoded;
 
-                    var actualLength = HuffmanLegacy.Decode(encoded, 0, encoded.Length, rented);
-                    sum += (uint)actualLength;
+                        var actualLength = HuffmanLegacy.Decode(encoded, 0, encoded.Length, rented);
+                        sum += (uint)actualLength;
+                    }
                 }
             }
             ArrayPool<byte>.Shared.Return(rented);
