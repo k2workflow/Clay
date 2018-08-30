@@ -4,6 +4,8 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Xunit;
 
@@ -110,6 +112,24 @@ namespace SourceCode.Clay.Algorithms.Tests
         {
             var exception = Assert.Throws<HuffmanDecodingException>(() => HuffmanOrigOpt.Decode(encoded, 0, encoded.Length, new byte[encoded.Length * 2]));
             //Assert.Equal(CoreStrings.HPackHuffmanErrorEOS, exception.Message);
+        }
+
+        [Fact]
+        public void HuffmanDecodeHeaders()
+        {
+            using (var reader = File.OpenText(@".\HuffmanHeaders.txt"))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var expected = Encoding.ASCII.GetBytes(line);
+
+                    var dst = new byte[expected.Length];
+                    var encoded = Encode(line);
+                    Assert.Equal(expected.Length, HuffmanOrigOpt.Decode(encoded, 0, encoded.Length, dst));
+                    Assert.Equal(expected, dst);
+                }
+            }
         }
 
         [Fact]
@@ -451,6 +471,48 @@ namespace SourceCode.Clay.Algorithms.Tests
 
                 return data;
             }
+        }
+
+        private static byte[] Encode(string value)
+        {
+            var encodedBytes = new List<byte>();
+            byte workingByte = 0;
+            var bitsLeftInByte = 8;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                var character = value[i];
+                var encoded = HuffmanOrig.Encode(character);
+
+                while (encoded.bitLength > 0)
+                {
+                    var bitsToWrite = bitsLeftInByte;
+                    workingByte |= (byte)(encoded.encoded >> 24 + (8 - bitsToWrite));
+                    if (encoded.bitLength >= bitsLeftInByte)
+                    {
+                        encoded.encoded <<= bitsLeftInByte;
+
+                        encodedBytes.Add(workingByte);
+                        workingByte = 0;
+                        bitsLeftInByte = 8;
+                    }
+                    else
+                    {
+                        bitsLeftInByte -= encoded.bitLength;
+                    }
+
+                    encoded.bitLength -= bitsToWrite;
+                }
+            }
+
+            if (bitsLeftInByte < 8)
+            {
+                // Pad remaning bits with 1s
+                workingByte |= (byte)((0x1 << bitsLeftInByte) - 1);
+                encodedBytes.Add(workingByte);
+            }
+
+            return encodedBytes.ToArray();
         }
     }
 }

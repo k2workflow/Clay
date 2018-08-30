@@ -6,6 +6,8 @@
 
 using BenchmarkDotNet.Attributes;
 using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SourceCode.Clay.Algorithms.Bench
@@ -72,10 +74,28 @@ namespace SourceCode.Clay.Algorithms.Bench
             ( new byte[] { 0xfe, 0x53 }, Encoding.ASCII.GetBytes("\"t") )
         };
 
+        private const int _headerCount = 350; // From line-count in HuffmanHeaders.txt
+        private static readonly (byte[] encoded, string decodedValue)[] s_headerData = new (byte[], string)[_headerCount];
+
         public HuffmanBench()
         { }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = _simpleCount * _iterations)]
+        [GlobalSetup]
+        public void Setup()
+        {
+            using (var reader = File.OpenText(@".\HuffmanHeaders.txt"))
+            {
+                var i = 0;
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var bytes = Encode(line);
+                    s_headerData[i++] = (bytes, line);
+                }
+            }
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = (_simpleCount + _headerCount) * _iterations)]
         public ulong OrigOpt()
         {
             var sum = 0ul;
@@ -84,10 +104,20 @@ namespace SourceCode.Clay.Algorithms.Bench
             {
                 for (var j = 0; j < _iterations; j++)
                 {
+                    // Simple
                     for (var i = 0; i < _simpleData.Length; i++)
                     {
                         var encoded = _simpleData[i].encoded;
                         //var expected = _test[i].expected;
+
+                        var actualLength = HuffmanOrigOpt.Decode(encoded, 0, encoded.Length, rented);
+                        sum += (uint)actualLength;
+                    }
+
+                    // Headers
+                    for (var i = 0; i < s_headerData.Length; i++)
+                    {
+                        var encoded = s_headerData[i].encoded;
 
                         var actualLength = HuffmanOrigOpt.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
@@ -99,7 +129,7 @@ namespace SourceCode.Clay.Algorithms.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = _simpleCount * _iterations)]
+        [Benchmark(Baseline = true, OperationsPerInvoke = (_simpleCount + _headerCount) * _iterations)]
         public ulong Orig()
         {
             var sum = 0ul;
@@ -108,12 +138,22 @@ namespace SourceCode.Clay.Algorithms.Bench
             {
                 for (var j = 0; j < _iterations; j++)
                 {
+                    // Simple
                     for (var i = 0; i < _simpleData.Length; i++)
                     {
                         var encoded = _simpleData[i].encoded;
                         //var expected = _test[i].expected;
 
-                        var actualLength = Algorithms.HuffmanOrig.Decode(encoded, 0, encoded.Length, rented);
+                        var actualLength = HuffmanOrig.Decode(encoded, 0, encoded.Length, rented);
+                        sum += (uint)actualLength;
+                    }
+
+                    // Headers
+                    for (var i = 0; i < s_headerData.Length; i++)
+                    {
+                        var encoded = s_headerData[i].encoded;
+
+                        var actualLength = HuffmanOrig.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
                     }
                 }
@@ -121,6 +161,48 @@ namespace SourceCode.Clay.Algorithms.Bench
             ArrayPool<byte>.Shared.Return(rented);
 
             return sum;
+        }
+
+        private static byte[] Encode(string value)
+        {
+            var encodedBytes = new List<byte>();
+            byte workingByte = 0;
+            var bitsLeftInByte = 8;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                var character = value[i];
+                var encoded = HuffmanOrig.Encode(character);
+
+                while (encoded.bitLength > 0)
+                {
+                    var bitsToWrite = bitsLeftInByte;
+                    workingByte |= (byte)(encoded.encoded >> 24 + (8 - bitsToWrite));
+                    if (encoded.bitLength >= bitsLeftInByte)
+                    {
+                        encoded.encoded <<= bitsLeftInByte;
+
+                        encodedBytes.Add(workingByte);
+                        workingByte = 0;
+                        bitsLeftInByte = 8;
+                    }
+                    else
+                    {
+                        bitsLeftInByte -= encoded.bitLength;
+                    }
+
+                    encoded.bitLength -= bitsToWrite;
+                }
+            }
+
+            if (bitsLeftInByte < 8)
+            {
+                // Pad remaning bits with 1s
+                workingByte |= (byte)((0x1 << bitsLeftInByte) - 1);
+                encodedBytes.Add(workingByte);
+            }
+
+            return encodedBytes.ToArray();
         }
     }
 }

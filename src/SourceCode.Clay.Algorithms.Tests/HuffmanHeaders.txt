@@ -1,0 +1,350 @@
+connection: close
+content-type: text/html
+date: Tue, 28 Aug 2018 17:15:25 GMT
+server: Apache
+transfer-encoding: chunked
+x-powered-by: PHP/5.4.45
+:method: GET
+:scheme: http
+:path: /
+:authority: www.example.com
+cache-control: no-cache
+:authority:blog.cloudflare.com
+**:method:**GET
+**:scheme:**https
+accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8
+accept-encoding:gzip, deflate, sdch, br
+accept-language:en-US,en;q=0.8
+cookie: 297 byte cookie
+**upgrade-insecure-requests:**1
+user-agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2853.0 Safari/537.36
+:method:GET
+:path:/assets/images/cloudflare-sprite-small.png
+accept:image/webp,image/,/*;q=0.8
+**accept-encoding:**gzip, deflate, sdch, br
+**accept-language:**en-US,en;q=0.8
+**cookie:**same 297 byte cookie
+referer:https://blog.cloudflare.com/assets/css/screen.css?v=2237be22c2
+**user-agent:**Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2853.0 Safari/537.36
+cache-control:public, max-age=30
+**cf-cache-status:**HIT
+cf-h2-pushed:</assets/css/screen.css?v=2237be22c2>,</assets/js/jquery.fitvids.js?v=2237be22c2>
+**cf-ray:**2ded53145e0c1ffa-DFW
+content-encoding:gzip
+content-type:text/html; charset=utf-8
+date:Wed, 07 Sep 2016 21:41:23 GMT
+expires:Wed, 07 Sep 2016 21:41:53 GMT
+link: <//cdn.bizible.com/scripts/bizible.js>; rel=preload; as=script,<https://code.jquery.com/jquery-1.11.3.min.js>; rel=preload; as=script
+server:cloudflare-nginx
+status:200
+vary:Accept-Encoding
+**x-ghost-cache-status:**From Cache
+**x-powered-by:**Express
+cache-control:public, max-age=31536000
+**cf-bgj:imgq:**100
+cf-ray:2ded53163e241ffa-DFW
+content-type:image/png
+**date:**Wed, 07 Sep 2016 21:41:23 GMT
+expires:Thu, 07 Sep 2017 21:41:23 GMT
+**server:**cloudflare-nginx
+**status:**200
+**vary:**Accept-Encoding
+x-powered-by:Express
+Request URL: https://www.google.com/search?rlz=1C1CHBF_enUS775US775&ei=AdCGW6jnMKbF0PEPrIOnwAc&q=large+sample+of+request+headers&oq=large+sample+of+request+headers&gs_l=psy-ab.3..33i22i29i30k1l2.12274.15900.0.15967.31.31.0.0.0.0.167.2670.19j9.28.0....0...1.1.64.psy-ab..3.28.2664...0j0i131k1j0i67k1j0i22i30k1.0.FVShGGa3Jwo
+Request Method: GET
+Status Code: 200 
+Remote Address: 172.217.6.36:443
+Referrer Policy: origin
+alt-svc: quic=":443"; ma=2592000; v="44,43,39,35"
+cache-control: private, max-age=0
+content-encoding: br
+content-type: text/html; charset=UTF-8
+date: Wed, 29 Aug 2018 16:55:59 GMT
+expires: -1
+server: gws
+set-cookie: 1P_JAR=2018-08-29-16; expires=Fri, 28-Sep-2018 16:55:59 GMT; path=/; domain=.google.com
+status: 200
+strict-transport-security: max-age=86400
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+:authority: www.google.com
+:path: /search?rlz=1C1CHBF_enUS775US775&ei=AdCGW6jnMKbF0PEPrIOnwAc&q=large+sample+of+request+headers&oq=large+sample+of+request+headers&gs_l=psy-ab.3..33i22i29i30k1l2.12274.15900.0.15967.31.31.0.0.0.0.167.2670.19j9.28.0....0...1.1.64.psy-ab..3.28.2664...0j0i131k1j0i67k1j0i22i30k1.0.FVShGGa3Jwo
+:scheme: https
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+accept-encoding: gzip, deflate, br
+accept-language: en-US,en;q=0.9
+pragma: no-cache
+referer: https://www.google.com/
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36
+x-client-data: CIW2yQEIpLbJAQjBtskBCKmdygEI2J3KAQjZncoBCKijygEYgZjKAQ==
+:authority: developer.mozilla.org
+:path: /en-US/docs/Web/HTTP/Headers
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Connection: keep-alive
+Host: assets-cdn.github.com
+Referer: https://github.com/18F/api-standards/issues/45
+A-IM: feed
+Accept: text/html
+Accept-Charset: utf-8
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US
+Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT
+Access-Control-Request-Method: GET
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+Connection: Upgrade
+Content-Length: 348
+Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==
+Content-Type: application/x-www-form-urlencoded
+Cookie: $Version=1; Skin=new;
+Date: Tue, 15 Nov 1994 08:12:31 GMT
+Expect: 100-continue
+Forwarded: for=192.0.2.60;proto=http;by=203.0.113.43Forwarded: for=192.0.2.43, for=198.51.100.17
+From: user@example.com
+Host: en.wikipedia.org:8080
+Host: en.wikipedia.org
+If-Match: "737060cd8c284d8af7ad3082f209582d"
+If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+If-None-Match: "737060cd8c284d8af7ad3082f209582d"
+If-Range: "737060cd8c284d8af7ad3082f209582d"
+If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+Max-Forwards: 10
+Origin: http://www.example-social-network.com
+Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+Range: bytes=500-999
+Referer: http://en.wikipedia.org/wiki/Main_Page
+TE: trailers, deflate
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0
+Upgrade: h2c, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
+Via: 1.0 fred, 1.1 example.com (Apache/1.1)
+Warning: 199 Miscellaneous warning
+X-Requested-With: XMLHttpRequest
+DNT: 1 (Do Not Track Enabled)
+DNT: 0 (Do Not Track Disabled)
+X-Forwarded-For: client1, proxy1, proxy2
+X-Forwarded-For: 129.78.138.66, 129.78.64.103
+X-Forwarded-Host: en.wikipedia.org:8080
+X-Forwarded-Host: en.wikipedia.org
+X-Forwarded-Proto: https
+Front-End-Https: on
+X-HTTP-Method-Override: DELETE
+X-Att-Deviceid: GT-P7320/P7320XXLPG
+x-wap-profile:http://wap.samsungmobile.com/uaprof/SGH-I777.xml
+Proxy-Connection: keep-alive
+X-UIDH: ...
+X-Csrf-Token: i8XNjC4b8KVok4uw5RftR38Wgp2BFwql
+X-Request-ID: f058ebd6-02f7-4d3f-942e-904344e8cde5
+Save-Data: on
+Access-Control-Allow-Origin: *
+Accept-Patch: text/example;charset=utf-8
+Accept-Ranges: bytes
+Age: 12
+Allow: GET, HEAD
+Alt-Svc: http/1.1="http2.example.com:8001"; ma=7200
+Cache-Control: max-age=3600
+Content-Disposition: attachment; filename="fname.ext"
+Content-Encoding: gzip
+Content-Language: da
+Content-Location: /index.htm
+Content-Range: bytes 21010-47021/47022
+Delta-Base: "abc"
+ETag: "737060cd8c284d8af7ad3082f209582d"
+Expires: Thu, 01 Dec 1994 16:00:00 GMT
+IM: feed
+Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
+Link: </feed>; rel="alternate"[44]
+Example 1: Location: http://www.w3.org/pub/WWW/People.html
+Example 2: Location: /pub/WWW/People.html
+P3P: CP="This is not a P3P policy! See https://en.wikipedia.org/wiki/Special:CentralAutoLogin/P3P for more info."
+Proxy-Authenticate: Basic
+Public-Key-Pins: max-age=2592000; pin-sha256="aadfafE9CZ9INDbd=";
+Example 1: Retry-After: 120
+Example 2: Retry-After: Fri, 07 Nov 2014 23:59:59 GMT
+Server: Apache/2.4.1 (Unix)
+Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1
+Strict-Transport-Security: max-age=16070400; includeSubDomains
+Trailer: Max-Forwards
+Tk: ?
+Example 1: Vary: *
+Example 2: Vary: Accept-Language
+WWW-Authenticate: Basic
+X-Frame-Options: deny
+X-WebKit-CSP: default-src 'self'
+Refresh: 5; url=http://www.w3.org/pub/WWW/People.html
+Status: 200 OK
+Timing-Allow-Origin: *
+Timing-Allow-Origin: <origin>[, <origin>]*
+X-Content-Duration: 42.666
+X-Content-Type-Options: nosniff[56]
+X-Powered-By: PHP/5.4.0
+X-UA-Compatible: IE=EmulateIE7
+X-UA-Compatible: IE=edge
+X-UA-Compatible: Chrome=1
+GET /tutorials/other/top-20-mysql-best-practices/ HTTP/1.1
+Host: net.tutsplus.com
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive: 300
+Cookie: PHPSESSID=valuechanged
+HTTP/1.x 200 OK
+Date: Sat, 28 Nov 2009 04:36:25 GMT
+Server: LiteSpeed
+X-Powered-By: W3 Total Cache/0.8
+Pragma: public
+Expires: Sat, 28 Nov 2009 05:36:25 GMT
+Etag: "pub1259380237;gz"
+Cache-Control: max-age=3600, public
+Last-Modified: Sat, 28 Nov 2009 03:50:37 GMT
+X-Pingback: http://net.tutsplus.com/xmlrpc.php
+Vary: Accept-Encoding, Cookie, User-Agent
+POST /foo.php HTTP/1.1
+Host: localhost
+Referer: http://localhost/test.php
+Content-Length: 43 
+first_name=John&last_name=Doe&action=Submit
+Accept: text/css,*/*;q=0.1
+Host: gatling.io
+Referer: https://gatling.io/docs/2.3/http/http_request/
+Accept: */*
+Referer: https://gatling.io/wp-content/themes/zerif-pro/style.css?ver=4.9.8
+Cookie: ASP.NET_SessionId=redactedjkdfje3984kmna; CLIENTSCREENRESOLUTION=1680,1050; Database_Cookie=DefaultDatabase; ctl00_DefaultContent_mpulseListWKO_gdList=-1; ctl00_DefaultContent_wgEquipmentsList_gdList=-1; ctl00_DefaultContent_gvMRList_gdList=-1; ctl00_DefaultContent_wgInventoryItems_gdList=-1
+Host: radar
+Cookie: _ga=GA1.2.1989902688.1445637726; intercom-lou-b4hlb1c7=1
+Host: facilitymonitor.testdomain.com
+Host: static-global-s-msn-com.akamaized.net
+Origin: https://www.msn.com
+Referer: https://www.msn.com/
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134
+access-control-allow-methods: HEAD,GET,OPTIONS
+cache-control: max-age=30229512
+content-length: 19764
+content-type: application/font-woff2
+date: Thu, 30 Aug 2018 00:04:01 GMT
+etag: "0fc9f36d031d41:0"
+last-modified: Sun, 12 Aug 2018 00:05:44 GMT
+server: Microsoft-IIS/8.5
+x-powered-by: ASP.NET
+x-xss-protection: 1
+cache-control: public, no-transform, max-age=31521643
+content-length: 35181
+content-type: text/css; charset=utf-8
+expires: Thu, 29 Aug 2019 20:04:44 GMT
+last-modified: Wed, 29 Aug 2018 20:04:48 GMT
+vary: Accept-Encoding
+x-activity-id: 00000000-bb55-441f-821b-860ed63a6078
+x-appversion: 20180824_11469148
+x-aspnetmvc-version: 5.2
+x-az: {did:0d7f58fa0b7245c7a69abb7fd7bebdf7, rid: 107, sn: westus-prod-hp, dt: 2018-08-29T13:09:06.4053297Z, bt: 2018-08-25T00:13:58.2574603Z}
+x-content-type-options: nosniff
+x-s1: 2018-08-29T20:04:48
+Accept: image/png, image/svg+xml, image/*; q=0.8, */*; q=0.5
+Cookie: CSNUtId=ac102317-5935-e582-101d-4f9d30023a02
+Host: t.wayfair.com
+Referer: https://acdn.adnxs.com/dmp/async_usersync.html
+Cookie: usersync=eNqdmM1OQjEQhd-laxbz02mnbH0El8aFURYkCASI0RDeXYwm3Jje0p4t8OXMnPnj3nP4WB2O6902LHkR9uvP1eYYlk_nsH4Ly-BhEY5f29fH08vhdP2FiQuX7Pr78cPufb9ZnVbXby6LP6RUEFFKcR5h-s-omecYU4Ph8dA49urQjUnj-QgBDJCPGKCTAZ1KG_x4lxr1UakySfK816rjfaAGMGU8nwjUNEaAyXVGdd43o_G-NhvXSdzL3PJJMs5kH2ecxvvagXwcyMcVYPI4UxKwE8nGhZgRJdHxseP-HTfZ2ZoQaKbrirUuCiEQI1A9PGZuQFZ6oenFIwRiILyZ5XAHUuSKW7X3cqQW5L3Q9I7Phdc4fMKGKGUE8t67PIXK-DGX2r-ge5aLCJCTAB0hEse3kQhSJ0HqpIRAAliudSOyeUvJeqGpUgKUogBKURElxIiIGBEdgAw4NWIM5GT1nJK1RsMSEl5GlBwYdyu9ShMoIUZkQiBIKQOW5wIoOdJ73r1hJ5Y7cp8KAfepMAIpAkUkJ2CelGT8iVMp9ipNHtUpjQ-hUnXcs3rrpQA5ALEgUEQg4CWMcgKUhPrr9Hz5BhR33GU.; anj=dTM7k!M4/S@-S3@:5]s?rfkOt1ouNGLEIz=I34Uxvts@_rcExh53@)5C%WQ8QW:F?Ol/?7#?SLvpU>o`OJneq$*hz2uhx7)3iN*nZB??xsS-kINZz<16Iu(-sObu7x1F/jvBbuawhsxO?DXZO=y>ag5yyp$>%1+$cYe0fMn1UpcG4sKoRV*VBl5G-s/8?Rr<N7?h.aUP`REnI[w)S923*9[339m[*hm#+b=z9a61$rl9h0.pr-X]iIY[mQGf0sUh^g%P5nm>k/tmzplny=4o6i_do44v0/T]!4]_+U5%PR=2WO+hV<u(<I[VEoz+``wS*SPMDgkFMAx1:IWL^]#Z>OyZ1o_na*a.x>3!1z'E@pIk298=ne#DjO<3WLWwBo+eVM:QxQtOw1DC*/F36rP]3/[QCXi[lCYUfrm/iPYJ@rUiYw$%u81+aQL72nF</bU@<s4bo'EW4Y:rlNpyA1m'n%(DD)if'>n<%yVJnV0>:_@'ZS`lOS#'p7eAp+?]->uN>5E]/d@/)kF?MH@u]Cr.Y<h:oo8R4Zz:uu@=_'$]%HcjdYdhje!g:]P0m@UJt?q`E.D](+h.oIbcl[u_*%#aY?)YugVsPe4a0_Mz+?VVG[Q<qv*H$RSRVd37:tv[rt@GpM3@A<vb5O:JIRsH<y!!]996#%-Q<F%/wcMH%L=0BdrG<Y!'ngL*^K$8/*E#'Xx6k).jwMiASqrh!A/*bNmq.FN171nez__.H8a*H2Y23.%$u8Lrpy:.ShbI$>Ye!5GGmyoyZT8%S@JwhUF8KL:BIOqu@Zv%tCiE>:zrpXvabs6?<l3L2NoHPbf3tf]_ivYYEq5vmL_dG>V1mHZ<BKR>K!rY@GG'WJxND4hew@>D4upRY2V/-k3k(Q3=CWwq/6gCT/PJB$5XF#B[JaJH[XGC(bPnYbM0c6B^[r/owEQ-6[7B4L3md+2K7t-zcPz*-4xm7kv5xTvr6K*zN@iuz^!AB4@$@X$`+!.gR429/aZ6R]3M#foCPQ)Sfy30kaw?-5ucMESGn_RQ?HCCVCb@=g(4SE(H:9$o'+0%LD`]q.t^6pg.=<_nynARThTNZADH31^LxyoYQZCnmBjwD484Zs2w:DRWQALT1Oj#JmOJ6pLe^S/I=uJIZFHH<d809!u7:`X5HFlpc%dEi*tIMZ<p.VoQVJq(yI_p4TT%hYs_iw3'1_:lI$3S'Z@*oAqA@NSEAcmqyQd3.9.1tJ^_sMBrs2G>]I=f6gTUSU89<2%t>C_nOBJF(S^bW69j0hIinsk9(w)GL%[1D'CT#39UAcQ0ETL-1Wc%w)*eA:Bl-(O-oA+]=h)8#]'MyVaegkQZ5mD$Vn%=f7`>z`g(y*N+%vbbRl*kdlY8xQE*<kV*otx]s-0nK$AKl%6fhrpT+7l/N2.Z-J.f`tL7h+o:GQ>XOxsfY1mXBr9+g9K39!c^$t.i4JFquR<k[rEEuyP$ep2yG^9NhwsZ[ZU?h93w'taCs><rz9m:7!Urvf9POMSwuq-o6z%6Fq002@]V=M.LYN*2:N7ifHv]/Y3lP(WRx.^lR?PO:+la1AVG6Krqw5'`/e/BkpzU`7vaqs!?0DaM?u<51qj^KgR6/fv$%ZoXHQ.u+SwU?]Q$@5)_KSUois[@GgwD/*>SDQ^he@+=RdvCTtUVwEC0; uuid2=6211220940380613961; icu=ChgImdYCEAoYASABKAEw9uic3AU4AUABSAEQ9uic3AUYAA..
+Host: ib.adnxs.com
+Content-Length: 384
+Content-Type: text/plain; charset=UTF-8
+Host: www.google-analytics.com
+Origin: https://github.com
+Referer: https://github.com/
+Sec-Token-Binding: AIkAAgBBQGA2jXcwE8gUsY9pRdCVKuJfuVqkn9SnUP_4EH4wD9riv0tBql8cmYn4yzpqt1UmdZZQcTYFcX6A0yfnbM_9C0YAQEXIirFmK0_HMbgFrnfvuql4XWz0C3WvaywBrxIrPf6b-eR1--c0J0HSAT__WyWfLJNXU8LolALvQToxT0i1huMAAA
+Connection : "Connection"
+Sun, 06 Nov 1994 08:49:37 GMT
+Sunday, 06-Nov-94 08:49:37 GMT
+Sun Nov  6 08:49:37 1994
+Trailer : field-name
+Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11
+Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)
+Warning : warn-code SP warn-agent SP warn-text SP warn-date
+Accept: type/subtype [q=qvalue]
+Accept: text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c
+Accept-Charset: iso-8859-5, unicode-1-1; q=0.8
+Accept-Encoding: compress, gzip
+Accept-Encoding:
+Accept-Encoding: *
+Accept-Encoding: compress;q=0.5, gzip;q=1.0
+Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
+Accept-Language: da, en-gb;q=0.8, en;q=0.7
+Authorization: BASIC Z3Vlc3Q6Z3Vlc3QxMjM=
+Cookie: name1=value1;name2=value2;name3=value3
+Expect : 100-continue | expectation-extension
+From: webmaster@w3.org
+GET /pub/WWW/ HTTP/1.1
+Host: www.w3.org
+If-Match: "xyzzy"
+If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+If-Match: *
+If-None-Match: "xyzzy"
+If-None-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+If-None-Match: *
+If-Range : entity-tag | HTTP-date
+If-Range: Sat, 29 Oct 1994 19:43:31 GMT
+Max-Forwards : 5
+Proxy-Authorization : credentials
+Range: bytes=0-499
+Range: bytes=-500
+Range: bytes=0-0,-1
+Referer: http://www.tutorialspoint.org/http/index.htm
+TE: deflate
+TE:
+TE: trailers, deflate;q=0.5
+User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)
+Accept-Ranges: none
+Age: 1030
+ETag: "xyzzy"
+ETag: W/"xyzzy"
+ETag: ""
+Location: http://www.tutorialspoint.org/http/index.htm
+Proxy-Authenticate  : challenge
+Retry-After: Fri, 31 Dec 1999 23:59:59 GMT
+Retry-After: 120
+Server: Apache/2.2.14 (Win32)
+Vary: Accept-Language, Accept-Encoding
+WWW-Authenticate: BASIC realm="Admin"
+Allow: GET, HEAD, PUT
+Content-Language: mi, en
+Content-Length: 3495
+Content-MD5  : 8c2d46911f3f5a326455f0ed7a8ed3b3
+Content-Range : bytes 0-499/1234
+Content-Range : bytes 500-999/1234
+Content-Range : bytes 500-1233/1234
+Content-Range : bytes 734-1233/1234
+HTTP/1.1 206 Partial content
+Date: Wed, 15 Nov 1995 06:25:24 GMT
+Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
+Content-Length: 26012
+Content-Type: image/gif
+Content-Type: text/html; charset=ISO-8859-4
+Accept:  *.*, q=0.1
+Accept:  audio/*, q=0.2
+Accept:  audio/basic q=1
+Accept-Encoding: x-compress; x-zip
+User-Agent:  LII-Cello/1.0  libwww/2.5
+Referer: http://www.w3.org/hypertext/DataSources/Overview.html
+Authorization:  kerberos
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept:*/*
+Accept-Language: en-gb
+Host: www.httpwatch.com
+Referer: http://www.httpwatch.com/httpgallery/headers/
+Content-Length: 2748
+Date: Wed, 4 Oct 2004 12:00:00 GMT
+Server: Microsoft-IIS/6.0
+X-AspNet-Version: 4.0.30319
+GET /docs/index.html HTTP/1.1
+Host: www.nowhere123.com
+Accept: image/gif, image/jpeg, */*
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
+get /test.html HTTP/1.0
+GET /index.html HTTP/1.1
+GET /testdir HTTP/1.1
+GET http://www.amazon.com/index.html HTTP/1.1
+Host: www.amazon.com
+HEAD /index.html HTTP/1.0
+OPTIONS http://www.amazon.com/ HTTP/1.1
+Cache-Control:public
+Cache-Control:private
