@@ -395,6 +395,11 @@ namespace SourceCode.Clay.Algorithms
                         if (i + 3 < src.Length)
                         {
                             next |= (uint)(src[i + 3] << lastDecodedBits);
+
+                            if (i + 4 < src.Length)
+                            {
+                                next |= (uint)(src[i + 4] >> (8 - lastDecodedBits));
+                            }
                         }
                     }
                 }

@@ -380,6 +380,7 @@ namespace SourceCode.Clay.Algorithms
                 next |= (i + 1 < src.Length ? (uint)(src[i + 1] << 16 + lastDecodedBits) : 0);
                 next |= (i + 2 < src.Length ? (uint)(src[i + 2] << 8 + lastDecodedBits) : 0);
                 next |= (i + 3 < src.Length ? (uint)(src[i + 3] << lastDecodedBits) : 0);
+                next |= (i + 4 < src.Length ? (uint)(src[i + 4] >> (8 - lastDecodedBits)) : 0);
 
                 var ones = (uint)(int.MinValue >> (8 - lastDecodedBits - 1));
                 if (i == count - 1 && lastDecodedBits > 0 && (next & ones) == ones)
