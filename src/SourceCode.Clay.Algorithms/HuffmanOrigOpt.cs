@@ -5,6 +5,8 @@
 
 #endregion
 
+using System.Runtime.CompilerServices;
+
 namespace SourceCode.Clay.Algorithms
 {
     /// <summary>
@@ -13,7 +15,7 @@ namespace SourceCode.Clay.Algorithms
     internal static class HuffmanOrigOpt
     {
         // TODO: this can be constructed from _decodingTable
-        private static readonly (uint code, int bitLength)[] s_encodingTable = new (uint code, int bitLength)[]
+        private static readonly (uint code, byte bitLength)[] s_encodingTable = new (uint code, byte bitLength)[]
         {
             // 0
             (0b11111111_11000000_00000000_00000000, 13),
@@ -353,11 +355,8 @@ namespace SourceCode.Clay.Algorithms
             (26, 00_67108847, int.MinValue >> 25, new byte[00_15] { 192, 193, 200, 201, 202, 205, 210, 213, 218, 219, 238, 240, 242, 243, 255 }), // 15
             (27, 0_134217713, int.MinValue >> 26, new byte[00_19] { 203, 204, 211, 212, 214, 221, 222, 223, 241, 244, 245, 246, 247, 248, 250, 251, 252, 253, 254 }), // 19
             (28, 0_268435455, int.MinValue >> 27, new byte[00_29] { 002, 003, 004, 005, 006, 007, 008, 011, 012, 014, 015, 016, 017, 018, 019, 020, 021, 023, 024, 025, 026, 027, 028, 029, 030, 031, 127, 220, 249 }), // 29
-            (30, 1_073741824, int.MinValue >> 29, new byte[_last] { 010, 013, 022, 0 /* 256: Special handling for last cell */ }) // 4  
+            (30, 1_073741824, int.MinValue >> 29, new byte[_last] { 010, 013, 022, 0 /* Special handling for last cell (256) */ }) // 4  
         };
-
-        static HuffmanOrigOpt()
-        { }
 
         /// <summary>
         /// 
@@ -380,6 +379,7 @@ namespace SourceCode.Clay.Algorithms
             var j = 0;
             var lastDecodedBits = 0;
             var edgeIndex = count - 1;
+            var table = s_decodingTable;
 
             while (i <= edgeIndex)
             {
@@ -415,7 +415,7 @@ namespace SourceCode.Clay.Algorithms
                     var ones = (uint)(int.MinValue >> remainingBits - 1);
 
                     if ((next & ones) == ones)
-                        break;
+                        return j;
                 }
 
                 if (j == dst.Length)
@@ -427,12 +427,11 @@ namespace SourceCode.Clay.Algorithms
                 // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
                 // of the input, we need to make sure we pass the correct number of valid bits
                 // left, otherwise the trailing 0s in next may form a valid symbol.
-                var validBits = remainingBits + (edgeIndex - i) * 8;
+                var validBits = remainingBits + ((edgeIndex - i) << 3); // * 8
                 if (validBits > 30)
                     validBits = 30; // Equivalent to Math.Min(30, validBits)
 
-                var ch = Decode(next, validBits, out var decodedBits);
-
+                var ch = DecodeImpl(table, next, validBits, out var decodedBits);
                 if (ch == -1 || ch == 256)
                 {
                     // -1: No valid symbol could be decoded with the bits in next.
@@ -446,10 +445,10 @@ namespace SourceCode.Clay.Algorithms
 
                 // If we crossed a byte boundary, advance i so we start at the next byte that's not fully decoded.
                 lastDecodedBits += decodedBits;
-                i += lastDecodedBits / 8;
+                i += (lastDecodedBits >> 3); // / 8
 
                 // Modulo 8 since we only care about how many bits were decoded in the last byte that we processed.
-                lastDecodedBits %= 8;
+                lastDecodedBits &= 0x7; // % 8
             }
 
             return j;
@@ -467,7 +466,11 @@ namespace SourceCode.Clay.Algorithms
         /// </param>
         /// <param name="decodedBits">The number of bits decoded from <paramref name="data"/>.</param>
         /// <returns>The decoded symbol.</returns>
-        public static int Decode(uint data, int validBits, out int decodedBits)
+        public static int Decode(in uint data, in int validBits, out int decodedBits)
+            => DecodeImpl(s_decodingTable, data, validBits, out decodedBits);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int DecodeImpl((byte, int, int, byte[])[] table, in uint data, in int validBits, out int decodedBits)
         {
             // The code below implements the decoding logic for a canonical Huffman code.
             //
@@ -486,30 +489,47 @@ namespace SourceCode.Clay.Algorithms
             // symbol in the list of values associated with bit length b in the decoding table by indexing it
             // with codeMax - v.
 
-            var result = -1;
             decodedBits = 0;
 
-            for (var i = 0; i < s_decodingTable.Length; i++)
+            var i = 0;
+            for (; i < table.Length - 1; i++)
             {
-                var (codeLength, codeMax, mask, codes) = s_decodingTable[i];
+                var (codeLength, codeMax, mask, codes) = table[i];
+
                 if (codeLength > validBits)
-                    break;
+                    return -1;
 
                 var masked = (data & mask) >> (32 - codeLength);
-
                 if (masked < codeMax)
                 {
                     decodedBits = codeLength;
                     var j = codes.Length - (codeMax - masked);
 
-                    var is256 = (i == _rows - 1 && j == _last - 1); // 256: Special handling for last cell
-                    result = is256 ? 256 : codes[j];
-
-                    break;
+                    return codes[j];
                 }
             }
 
-            return result;
+            // Unroll the final loop to handle last cell (256)
+            i = table.Length - 1;
+            {
+                var (codeLength, codeMax, mask, codes) = table[i];
+
+                if (codeLength > validBits)
+                    return -1;
+
+                var masked = (data & mask) >> (32 - codeLength);
+                if (masked < codeMax)
+                {
+                    decodedBits = codeLength;
+                    var j = codes.Length - (codeMax - masked);
+
+                    // Special handling for last cell (256)
+                    var is256 = j == _last - 1;
+                    return is256 ? 256 : codes[j];
+                }
+            }
+
+            return -1;
         }
     }
 }

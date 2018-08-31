@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Algorithms
 {
     internal static class HuffmanArray
     {
-        private static readonly (uint code, int bitLength)[] s_encodingTable = new (uint code, int bitLength)[]
+        private static readonly (uint code, byte bitLength)[] s_encodingTable = new (uint code, byte bitLength)[]
         {
             (0b11111111_11000000_00000000_00000000, 13),
             (0b11111111_11111111_10110000_00000000, 23),
@@ -338,7 +338,7 @@ namespace SourceCode.Clay.Algorithms
                 // The longest possible symbol size is 30 bits. If we're at the last 4 bytes
                 // of the input, we need to make sure we pass the correct number of valid bits
                 // left, otherwise the trailing 0s in next may form a valid symbol.
-                var validBits = remainingBits + (edgeIndex - i) * 8;
+                var validBits = remainingBits + ((edgeIndex - i) << 3); // * 8
                 if (validBits > 30)
                     validBits = 30; // Equivalent to Math.Min(30, validBits)
 
@@ -356,10 +356,10 @@ namespace SourceCode.Clay.Algorithms
 
                 // If we crossed a byte boundary, advance i so we start at the next byte that's not fully decoded.
                 lastDecodedBits += decodedBits;
-                i += lastDecodedBits / 8;
+                i += (lastDecodedBits >> 3); // / 8
 
                 // Modulo 8 since we only care about how many bits were decoded in the last byte that we processed.
-                lastDecodedBits %= 8;
+                lastDecodedBits &= 0x7; // % 8
             }
 
             return j;
@@ -381,7 +381,7 @@ namespace SourceCode.Clay.Algorithms
             => DecodeImpl(s_decodingArray, s_encodingTable, data, validBits, out decodedBits);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int DecodeImpl(short[][] decodingArray, (uint code, int bitLength)[] encodingTable, in uint data, in int validBits, out int decodedBits)
+        private static int DecodeImpl(short[][] decodingArray, (uint code, byte bitLength)[] encodingTable, in uint data, in int validBits, out int decodedBits)
         {
             var arrayIndex = 0;
 
@@ -409,7 +409,7 @@ namespace SourceCode.Clay.Algorithms
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int DecodeImpl(short[][] decodingArray, (uint code, int bitLength)[] encodingTable, in uint workingByte, ref int arrayIndex, in int validBits, out int decodedBits)
+        private static int DecodeImpl(short[][] decodingArray, (uint code, byte bitLength)[] encodingTable, in uint workingByte, ref int arrayIndex, in int validBits, out int decodedBits)
         {
             decodedBits = 0;
 
@@ -419,7 +419,7 @@ namespace SourceCode.Clay.Algorithms
             // if the value is positive then we have a pointer into the encoding table
             if (value >= 0)
             {
-                var (_, bitLength) = encodingTable[value];
+                var bitLength = encodingTable[value].bitLength;
                 if (bitLength > validBits)
                     return -2;  // we only found a value by incorporating bits beyond the the valid remaining length of the data stream
 
@@ -437,7 +437,7 @@ namespace SourceCode.Clay.Algorithms
         static HuffmanArray()
         {
             short nextAvailableSubIndex = 1;
-            
+
             // loop through each entry in the encoding table and create entries for it in our decoding array
             for (short i = 0; i < s_encodingTable.Length; i++)
             {
