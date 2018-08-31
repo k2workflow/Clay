@@ -6,7 +6,6 @@
 #endregion
 
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
 using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.Bench.Properties;
 
