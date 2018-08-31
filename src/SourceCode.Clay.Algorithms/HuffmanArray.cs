@@ -271,7 +271,7 @@ namespace SourceCode.Clay.Algorithms
             (0b11111111_11111111_11111111_11111100, 30)
         };
 
-        public static readonly short[,] s_decodingArray = new short[15, 256];
+        public static readonly short[][] s_decodingArray = new short[15][];
 
         public static (uint encoded, int bitLength) Encode(int data) => s_encodingTable[data];
 
@@ -381,7 +381,7 @@ namespace SourceCode.Clay.Algorithms
             => DecodeImpl(s_decodingArray, s_encodingTable, data, validBits, out decodedBits);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int DecodeImpl(short[,] decodingArray, (uint code, int bitLength)[] encodingTable, in uint data, in int validBits, out int decodedBits)
+        private static int DecodeImpl(short[][] decodingArray, (uint code, int bitLength)[] encodingTable, in uint data, in int validBits, out int decodedBits)
         {
             var arrayIndex = 0;
 
@@ -391,12 +391,15 @@ namespace SourceCode.Clay.Algorithms
             // Unroll loop
             var value = DecodeImpl(decodingArray, encodingTable, (data >> 24) & 0xFF, ref arrayIndex, validBits, out decodedBits);
             if (value >= 0) return value;
+            if (value == -2) return -1;
 
             value = DecodeImpl(decodingArray, encodingTable, (data >> 16) & 0xFF, ref arrayIndex, validBits, out decodedBits);
             if (value >= 0) return value;
+            if (value == -2) return -1;
 
             value = DecodeImpl(decodingArray, encodingTable, (data >> 8) & 0xFF, ref arrayIndex, validBits, out decodedBits);
             if (value >= 0) return value;
+            if (value == -2) return -1;
 
             value = DecodeImpl(decodingArray, encodingTable, (data >> 0) & 0xFF, ref arrayIndex, validBits, out decodedBits);
             if (value >= 0) return value;
@@ -406,19 +409,19 @@ namespace SourceCode.Clay.Algorithms
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int DecodeImpl(short[,] decodingArray, (uint code, int bitLength)[] encodingTable, in uint workingByte, ref int arrayIndex, in int validBits, out int decodedBits)
+        private static int DecodeImpl(short[][] decodingArray, (uint code, int bitLength)[] encodingTable, in uint workingByte, ref int arrayIndex, in int validBits, out int decodedBits)
         {
             decodedBits = 0;
 
             // key into array
-            var value = decodingArray[arrayIndex, workingByte];
+            var value = decodingArray[arrayIndex][workingByte];
 
             // if the value is positive then we have a pointer into the encoding table
-            if (value > -1)
+            if (value >= 0)
             {
                 var (_, bitLength) = encodingTable[value];
                 if (bitLength > validBits)
-                    return -1;  // we only found a value by incorporating bits beyond the the valid remaining length of the data stream
+                    return -2;  // we only found a value by incorporating bits beyond the the valid remaining length of the data stream
 
                 decodedBits = bitLength;
                 return value;   // the index is also the value
@@ -434,6 +437,7 @@ namespace SourceCode.Clay.Algorithms
         static HuffmanArray()
         {
             short nextAvailableSubIndex = 1;
+            
             // loop through each entry in the encoding table and create entries for it in our decoding array
             for (short i = 0; i < s_encodingTable.Length; i++)
             {
@@ -443,6 +447,9 @@ namespace SourceCode.Clay.Algorithms
                 // loop for however many bytes the value occupies
                 for (var j = 0; j <= Math.Ceiling(bitLength / 8.0); j++)
                 {
+                    if (s_decodingArray[currentArrayIndex] == null)
+                        s_decodingArray[currentArrayIndex] = new short[256];
+
                     var byteOffset = 8 * (3 - j);       // how many bits is the working byte offset from the right
                     var totalLength = 8 * (j + 1);      // how many bits of the entry can consume total so far
 
@@ -454,14 +461,14 @@ namespace SourceCode.Clay.Algorithms
                         // we need to store all permutations of the bits that are beyond the length of the code
                         var loopMax = 0x1 << (totalLength - bitLength); // have to create entries for all of these values
                         for (uint k = 0; k < loopMax; k++)
-                            s_decodingArray[currentArrayIndex, codeByte + k] = i;   // each entry returns the same index into the encoding table
+                            s_decodingArray[currentArrayIndex][codeByte + k] = i;   // each entry returns the same index into the encoding table
 
                         break;  // we're done with this entry. bail on the loop
                     }
                     // else: we need to split the entry into one or more sub-arrays
 
                     // let's see if anyone before us has already claimed a sub-array with our bit pattern
-                    var subArrayIndex = s_decodingArray[currentArrayIndex, codeByte];
+                    var subArrayIndex = s_decodingArray[currentArrayIndex][codeByte];
 
                     // negative values are used as pointers to the next array. zeros are unused. positive values are a successful decode
                     if (subArrayIndex < 0)
@@ -469,7 +476,7 @@ namespace SourceCode.Clay.Algorithms
                     else
                     {
                         subArrayIndex = nextAvailableSubIndex++;    // if no one has our bit battern then we'll stake our claim on the next available array
-                        s_decodingArray[currentArrayIndex, codeByte] = (short)-subArrayIndex;  // blaze the trail for the next guy
+                        s_decodingArray[currentArrayIndex][codeByte] = (short)-subArrayIndex;  // blaze the trail for the next guy
                     }
 
                     currentArrayIndex = subArrayIndex;  // we've left a pointer behind us and we're moving on to the next array
