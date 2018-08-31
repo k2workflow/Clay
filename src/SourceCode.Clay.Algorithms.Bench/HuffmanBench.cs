@@ -78,7 +78,32 @@ namespace SourceCode.Clay.Algorithms.Bench
         private static readonly (byte[] encoded, string decodedValue)[] s_headerData = new (byte[], string)[_headerCount];
 
         public HuffmanBench()
-        { }
+        {
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = _count * _iterations)]
+        public ulong OptimizedJumpTable()
+        {
+            var sum = 0u;
+
+            var rented = ArrayPool<byte>.Shared.Rent(4096);
+            {
+                for (var j = 0; j < _iterations; j++)
+                {
+                    for (var i = 0; i < _test.Length; i++)
+                    {
+                        var expected = _test[i].expected;
+                        var encoded = _test[i].encoded;
+
+                        var actualLength = HuffmanJump.Decode(encoded, 0, encoded.Length, rented);
+                        sum += (uint)actualLength;
+                    }
+                }
+            }
+            ArrayPool<byte>.Shared.Return(rented);
+
+            return sum;
+        }
 
         [GlobalSetup]
         public void Setup()
