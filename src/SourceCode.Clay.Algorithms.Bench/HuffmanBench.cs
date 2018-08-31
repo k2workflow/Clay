@@ -121,7 +121,7 @@ namespace SourceCode.Clay.Algorithms.Bench
 
         #region Helpers
 
-        private const int _simpleCount = 25;
+        private const int _simpleCount = 26;
         private static readonly (byte[] encoded, byte[] expected)[] _simpleData = new (byte[], byte[])[_simpleCount]
         {
             // Single 5-bit symbol
@@ -175,7 +175,8 @@ namespace SourceCode.Clay.Algorithms.Bench
 
             // Sequences that uncovered errors
             ( new byte[] { 0xb6, 0xb9, 0xac, 0x1c, 0x85, 0x58, 0xd5, 0x20, 0xa4, 0xb6, 0xc2, 0xad, 0x61, 0x7b, 0x5a, 0x54, 0x25, 0x1f }, Encoding.ASCII.GetBytes("upgrade-insecure-requests") ),
-            ( new byte[] { 0xfe, 0x53 }, Encoding.ASCII.GetBytes("\"t") )
+            ( new byte[] { 0xfe, 0x53 }, Encoding.ASCII.GetBytes("\"t") ),
+            ( new byte[] { 0xb9, 0x49, 0x53, 0x39, 0xe4, 0xb8, 0xa6, 0x2c, 0x1b, 0xff }, Encoding.ASCII.GetBytes(":method: GET") )
         };
 
         private const int _headerCount = 350; // From line-count in HuffmanHeaders.txt
