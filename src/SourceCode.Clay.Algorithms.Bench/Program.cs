@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Algorithms.Bench
     {
         public static void Main(string[] args)
         {
-            var bench = new HuffmanBench();
+            //var bench = new HuffmanBench();
             var summary = BenchmarkRunner.Run<HuffmanBench>();
         }
     }

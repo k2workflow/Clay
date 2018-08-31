@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Algorithms
     /// <summary>
     /// 
     /// </summary>
-    public static class HuffmanJump
+    internal static class HuffmanJump
     {
         private const ushort Character = 0x8000;
         private const ushort Invalid = ushort.MaxValue & ~Character;

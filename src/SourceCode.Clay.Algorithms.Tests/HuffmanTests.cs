@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Xunit;
-using Huff = SourceCode.Clay.Algorithms.HuffmanJump;
+using Huff = SourceCode.Clay.Algorithms.HuffmanOrigOpt;
 
 namespace SourceCode.Clay.Algorithms.Tests
 {

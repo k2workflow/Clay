@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Algorithms
     /// <summary>
     /// 
     /// </summary>
-    public static class HuffmanOrigOpt
+    internal static class HuffmanOrigOpt
     {
         // TODO: this can be constructed from _decodingTable
         private static readonly (uint code, int bitLength)[] s_encodingTable = new (uint code, int bitLength)[]

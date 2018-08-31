@@ -9,7 +9,7 @@ namespace SourceCode.Clay.Algorithms
     /// <summary>
     /// 
     /// </summary>
-    public class HuffmanDecodingException : Exception
+    internal class HuffmanDecodingException : Exception
     {
         /// <summary>
         /// 
