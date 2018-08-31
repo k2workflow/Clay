@@ -81,7 +81,7 @@ namespace SourceCode.Clay.Algorithms.Bench
         {
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = _count * _iterations)]
+        [Benchmark(Baseline = false, OperationsPerInvoke = _simpleCount * _iterations)]
         public ulong OptimizedJumpTable()
         {
             var sum = 0u;
@@ -90,10 +90,10 @@ namespace SourceCode.Clay.Algorithms.Bench
             {
                 for (var j = 0; j < _iterations; j++)
                 {
-                    for (var i = 0; i < _test.Length; i++)
+                    for (var i = 0; i < _simpleData.Length; i++)
                     {
-                        var expected = _test[i].expected;
-                        var encoded = _test[i].encoded;
+                        var expected = _simpleData[i].expected;
+                        var encoded = _simpleData[i].encoded;
 
                         var actualLength = HuffmanJump.Decode(encoded, 0, encoded.Length, rented);
                         sum += (uint)actualLength;
