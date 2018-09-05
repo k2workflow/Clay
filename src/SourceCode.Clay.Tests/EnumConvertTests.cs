@@ -86,13 +86,6 @@ namespace SourceCode.Clay.Tests
             Int64MinValue = unchecked((ulong)long.MinValue)
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_NonEnum))]
-        public static void EnumConvert_NonEnum()
-        {
-            Assert.Throws<InvalidCastException>(() => EnumConvert.ToEnum<int>(0));
-            Assert.Throws<InvalidCastException>(() => EnumConvert.ToByte(0));
-        }
-
         // TODO: Negative tests should pass
         //[Fact(DisplayName = nameof(EnumConvert_EmptyEnum))]
         //public static void EnumConvert_EmptyEnum()
@@ -410,12 +403,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(long.MaxValue, EnumConvert.ToInt64(Int64Enum.MaxValue));
 
             Assert.Equal(unchecked((long)ulong.MaxValue), EnumConvert.ToInt64(UInt64Enum.MaxValue));
-        }
-
-        [Fact(DisplayName = nameof(EnumConvert_Cached_NonEnum))]
-        public static void EnumConvert_Cached_NonEnum()
-        {
-            Assert.Throws<InvalidCastException>(() => EnumConvert.Length<int>());
         }
 
         [Fact(DisplayName = nameof(EnumConvert_Cached_EmptyEnum))]

@@ -169,7 +169,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         /// <param name="required">A value indicating whether the property is required.</param>
         /// <param name="invert">A value indicating whether to invert the flag check.</param>
         protected virtual void SetJsonFlag<TEnum>(JObject container, string key, TEnum value, TEnum flag, bool defaultState = false, bool required = false, bool invert = false)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
         {
             var v = EnumConvert.ToUInt64(value);
             var f = EnumConvert.ToUInt64(flag);
