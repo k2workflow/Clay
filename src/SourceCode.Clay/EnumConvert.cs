@@ -21,28 +21,20 @@ namespace SourceCode.Clay
         private sealed class Unchecked { }
 
         private static class Converter<TEnum, TInteger, TChecked>
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
+            where TInteger : unmanaged, IComparable, IConvertible, IFormattable
         {
 #pragma warning disable CA1000 // Do not declare static members on generic types
             private static readonly bool s_isChecked = typeof(TChecked) == typeof(Checked);
+
             public static Func<TEnum, TInteger> ConvertTo { get; }
+
             public static Func<TInteger, TEnum> ConvertFrom { get; }
 #pragma warning restore CA1000 // Do not declare static members on generic types
 
             static Converter()
             {
                 var @enum = typeof(TEnum);
-#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-                // Exceptions are not raised in this method.
-
-                if (!@enum.IsEnum)
-                {
-                    ConvertTo = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
-                    ConvertFrom = _ => throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
-                    return;
-                }
-#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
-
                 var integer = typeof(TInteger);
 
                 try
@@ -79,12 +71,11 @@ namespace SourceCode.Clay
         }
 
         private static class ValueCache<TEnum>
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
         {
             internal static readonly Func<int> Length = () =>
             {
                 var @enum = typeof(TEnum);
-                if (!@enum.IsEnum) throw new InvalidCastException($"{typeof(TEnum)} is not an enum.");
 
                 var values = (ulong[])typeof(Enum)
                     .GetMethod("InternalGetValues", BindingFlags.Static | BindingFlags.NonPublic) // Also see InternalGetNames
@@ -106,7 +97,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="ulong"/>.</returns>
         public static ulong ToUInt64<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ulong, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -121,7 +112,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="ulong"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(ulong value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ulong, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -136,7 +127,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="long"/>.</returns>
         public static long ToInt64<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, long, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -151,7 +142,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="long"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(long value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, long, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -166,7 +157,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="uint"/>.</returns>
         public static uint ToUInt32<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, uint, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -181,7 +172,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="uint"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(uint value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, uint, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -196,7 +187,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="int"/>.</returns>
         public static int ToInt32<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, int, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -211,7 +202,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="int"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(int value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, int, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -226,7 +217,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="ushort"/>.</returns>
         public static ushort ToUInt16<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ushort, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -241,7 +232,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="ushort"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(ushort value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ushort, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -256,7 +247,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="short"/>.</returns>
         public static short ToInt16<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, short, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -271,7 +262,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="short"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(short value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, short, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -286,7 +277,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="byte"/>.</returns>
         public static byte ToByte<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, byte, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -301,7 +292,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="byte"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(byte value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, byte, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -316,7 +307,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="sbyte"/>.</returns>
         public static sbyte ToSByte<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, sbyte, Unchecked>.ConvertTo(value);
 
         /// <summary>
@@ -331,7 +322,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="sbyte"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnum<TEnum>(sbyte value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, sbyte, Unchecked>.ConvertFrom(value);
 
         /// <summary>
@@ -347,7 +338,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="ulong"/>.</returns>
         public static ulong ToUInt64Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ulong, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -364,7 +355,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="ulong"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(ulong value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ulong, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -380,7 +371,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="long"/>.</returns>
         public static long ToInt64Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, long, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -397,7 +388,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="long"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(long value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, long, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -413,7 +404,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="uint"/>.</returns>
         public static uint ToUInt32Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, uint, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -430,7 +421,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="uint"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(uint value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, uint, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -446,7 +437,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="int"/>.</returns>
         public static int ToInt32Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, int, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -463,7 +454,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="int"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(int value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, int, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -479,7 +470,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="ushort"/>.</returns>
         public static ushort ToUInt16Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ushort, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -496,7 +487,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="ushort"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ConvertToEnumChecked<TEnum>(ushort value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, ushort, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -512,7 +503,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="short"/>.</returns>
         public static short ToInt16Checked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, short, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -529,7 +520,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="short"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(short value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, short, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -545,7 +536,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="byte"/>.</returns>
         public static byte ToByteChecked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, byte, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -562,7 +553,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="byte"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(byte value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, byte, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -578,7 +569,7 @@ namespace SourceCode.Clay
         /// <param name="value">The enum value to convert.</param>
         /// <returns>The <see cref="sbyte"/>.</returns>
         public static sbyte ToSByteChecked<TEnum>(TEnum value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, sbyte, Checked>.ConvertTo(value);
 
         /// <summary>
@@ -595,7 +586,7 @@ namespace SourceCode.Clay
         /// <param name="value">The <see cref="sbyte"/> to convert.</param>
         /// <returns>The <typeparamref name="TEnum"/>.</returns>
         public static TEnum ToEnumChecked<TEnum>(sbyte value)
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => Converter<TEnum, sbyte, Checked>.ConvertFrom(value);
 
         /// <summary>
@@ -604,7 +595,7 @@ namespace SourceCode.Clay
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
         /// <returns>The member count.</returns>
         public static int Length<TEnum>()
-            where TEnum : struct, IComparable, IConvertible, IFormattable
+            where TEnum : struct, Enum
             => ValueCache<TEnum>.Length();
     }
 }
