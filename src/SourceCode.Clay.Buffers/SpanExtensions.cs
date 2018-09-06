@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N members
-            var limit = 2 * Blit.FloorLog2(span.Length); // N > 3 due to previous checks
+            var limit = 2 * Blit.FloorLog2((uint)span.Length); // N > 3 due to previous checks
 
             IntrospectiveSort(span, comparison, 0, span.Length - 1, limit);
         }
