@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 // Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
@@ -152,6 +152,23 @@ namespace SourceCode.Clay.Buffers
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
+            // Short-circuit lower boundary
+            switch (value)
+            {
+                case 1:
+                    return 0;
+
+                case 2:
+                case 3:
+                    return 1;
+
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    return 2;
+            }
+
             // Uses de Bruijn (many sources)
             // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
             // https://gist.github.com/mburbea/c9a71ac1b1a25762c38c9fee7de0ddc2
@@ -180,7 +197,13 @@ namespace SourceCode.Clay.Buffers
         public static int FloorLog2(in uint value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-            if (value == uint.MaxValue) return 31; // Math.Log(0xFFFF_FFFF, 2) == 31.999999999664098
+
+            // Short-circuit upper boundary
+            // 2^31             = 2,147,483,648
+            // uint.MaxValue    = 4,294,967,295
+            // 2^32             = 4,294,967,296
+            const uint hi = 1U << 31;
+            if (value >= hi) return 31;
 
             return FloorLog2Impl(value);
         }
@@ -194,7 +217,13 @@ namespace SourceCode.Clay.Buffers
         public static int FloorLog2(in int value)
         {
             if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value));
-            if (value == int.MaxValue) return 30; // Math.Log(0x7FFF_FFFF, 2) == 30.999999999328196
+
+            // Short-circuit upper boundary
+            // 2^30             = 1,073,741,824
+            // int.MaxValue     = 2,147,483,647
+            // 2^31             = 2,147,483,648
+            const int hi = 1 << 30;
+            if (value >= hi) return 30;
 
             return FloorLog2Impl((uint)value);
         }
@@ -208,7 +237,13 @@ namespace SourceCode.Clay.Buffers
         public static int FloorLog2(in ulong value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-            if (value == ulong.MaxValue) return 64;
+
+            // Short-circuit upper boundary
+            // 2^63             = 9,223,372,036,854,775,808
+            // ulong.MaxValue   = 18,446,744,073,709,551,615
+            // 2^64             = 18,446,744,073,709,551,616
+            const ulong hi = 1UL << 63;
+            if (value >= hi) return 63;
 
             // Heuristic: hot path assumes small numbers more likely
             var val = (uint)value;
@@ -232,7 +267,13 @@ namespace SourceCode.Clay.Buffers
         public static int FloorLog2(in long value)
         {
             if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value));
-            if (value == long.MaxValue) return 63;
+
+            // Short-circuit upper boundary
+            // 2^62             = 4,611,686,018,427,387,904
+            // long.MaxValue    = 9,223,372,036,854,775,807
+            // 2^63             = 9,223,372,036,854,775,808
+            const long hi = 1L << 62;
+            if (value >= hi) return 62;
 
             // Heuristic: hot path assumes small numbers more likely
             var val = (uint)value;
