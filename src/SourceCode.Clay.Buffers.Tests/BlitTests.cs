@@ -105,8 +105,9 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((uint)short.MaxValue)]
         [InlineData((uint)ushort.MaxValue)]
         [InlineData((uint)int.MaxValue - 1)]
-        [InlineData((uint)int.MaxValue)]
-        [InlineData((uint)int.MaxValue + 1)]
+        [InlineData((uint)int.MaxValue)] // (1U << 31) - 1
+        [InlineData((uint)int.MaxValue + 1)] // 1U << 31
+        [InlineData((1U << 31) + 1)]
         [InlineData(uint.MaxValue - 1)]
         [InlineData(uint.MaxValue)]
         public static void Blit_FloorLog2_32u(uint n)
@@ -139,6 +140,9 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((int)byte.MaxValue)]
         [InlineData((int)short.MaxValue)]
         [InlineData((int)ushort.MaxValue)]
+        [InlineData((1 << 30) - 1)]
+        [InlineData(1 << 30)]
+        [InlineData((1 << 30) + 1)]
         [InlineData(int.MaxValue - 1)]
         [InlineData(int.MaxValue)]
         public static void Blit_FloorLog2_32(int n)
@@ -177,6 +181,9 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((ulong)uint.MaxValue - 1)]
         [InlineData((ulong)uint.MaxValue)]
         [InlineData((ulong)uint.MaxValue + 1)]
+        [InlineData((1UL << 63) - 1)]
+        [InlineData(1UL << 63)]
+        [InlineData((1UL << 63) + 1)]
         [InlineData(ulong.MaxValue - 1)]
         [InlineData(ulong.MaxValue)]
         public static void Blit_FloorLog2_64u(ulong n)
@@ -215,6 +222,9 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((long)uint.MaxValue - 1)]
         [InlineData((long)uint.MaxValue)]
         [InlineData((long)uint.MaxValue + 1)]
+        [InlineData((1L << 62) - 1)]
+        [InlineData(1L << 62)]
+        [InlineData((1L << 62) + 1)]
         [InlineData(long.MaxValue - 1)]
         [InlineData(long.MaxValue)]
         public static void Blit_FloorLog2_64(long n)
