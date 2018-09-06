@@ -24,9 +24,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateLeft(byte value, byte bits)
         {
-            var b = bits % 8;
+            var b = bits & 7; // mod 8
 
-            return unchecked((byte)((value << b) | (value >> (8 - b))));
+            // Intrinsic not available for byte/ushort
+            return (byte)((value << b) | (value >> (8 - b)));
         }
 
         /// <summary>
@@ -38,9 +39,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateRight(byte value, byte bits)
         {
-            var b = bits % 8;
+            var b = bits & 7; // mod 8
 
-            return unchecked((byte)((value >> b) | (value << (8 - b))));
+            // Intrinsic not available for byte/ushort
+            return (byte)((value >> b) | (value << (8 - b)));
         }
 
         /// <summary>
@@ -52,9 +54,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateLeft(ushort value, byte bits)
         {
-            var b = bits % 16;
+            var b = bits & 15; // mod 16
 
-            return unchecked((ushort)((value << b) | (value >> (16 - b))));
+            // Intrinsic not available for byte/ushort
+            return (ushort)((value << b) | (value >> (16 - b)));
         }
 
         /// <summary>
@@ -66,9 +69,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateRight(ushort value, byte bits)
         {
-            var b = bits % 16;
+            var b = bits & 15; // mod 16
 
-            return unchecked((ushort)((value >> b) | (value << (16 - b))));
+            // Intrinsic not available for byte/ushort
+            return (ushort)((value >> b) | (value << (16 - b)));
         }
 
         /// <summary>
@@ -80,9 +84,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateLeft(uint value, byte bits)
         {
-            var b = bits % 32;
+            var b = bits & 31; // mod 32
 
-            return unchecked((value << b) | (value >> (32 - b)));
+            // Will compile to instrinsic if pattern complies (uint/ulong):
+            // https://github.com/dotnet/coreclr/pull/1830
+            return (value << b) | (value >> (32 - b));
         }
 
         /// <summary>
@@ -94,9 +100,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateRight(uint value, byte bits)
         {
-            var b = bits % 32;
+            var b = bits & 31; // mod 32
 
-            return unchecked((value >> b) | (value << (32 - b)));
+            // Will compile to instrinsic if pattern complies (uint/ulong):
+            // https://github.com/dotnet/coreclr/pull/1830
+            return (value >> b) | (value << (32 - b));
         }
 
         /// <summary>
@@ -108,9 +116,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateLeft(ulong value, byte bits)
         {
-            var b = bits % 64;
+            var b = bits & 63; // mod 64
 
-            return unchecked((value << b) | (value >> (64 - b)));
+            // Will compile to instrinsic if pattern complies (uint/ulong):
+            // https://github.com/dotnet/coreclr/pull/1830
+            return (value << b) | (value >> (64 - b));
         }
 
         /// <summary>
@@ -122,12 +132,14 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateRight(ulong value, byte bits)
         {
-            var b = bits % 64;
+            var b = bits & 63; // mod 64
 
-            return unchecked((value >> b) | (value << (64 - b)));
+            // Will compile to instrinsic if pattern complies (uint/ulong):
+            // https://github.com/dotnet/coreclr/pull/1830
+            return (value >> b) | (value << (64 - b));
         }
 
-        private static readonly int[] DeBruijn = new int[32]
+        private static readonly byte[] s_deBruijn = new byte[32]
         {
             00, 09, 01, 10, 13, 21, 02, 29,
             11, 14, 16, 18, 22, 25, 03, 30,
@@ -141,7 +153,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="n">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(int n)
+        public static byte FloorLog2(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n));
 
@@ -154,9 +166,10 @@ namespace SourceCode.Clay.Buffers
             n |= n >> 8;
             n |= n >> 16;
 
-            var u = (uint)(n * (uint)0x_07C4_ACDD) >> 27;
+            const uint c = 0x_07C4_ACDD;
+            var u = (uint)(n * c) >> 27;
 
-            var result = DeBruijn[u];
+            var result = s_deBruijn[u];
             return result;
         }
     }
