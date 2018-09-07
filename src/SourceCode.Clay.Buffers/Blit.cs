@@ -271,5 +271,69 @@ namespace SourceCode.Clay.Buffers
 
             return inc + FloorLog2Impl(val);
         }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in uint value)
+        {
+            if (value == 0) return 0;
+
+            // Uses SWAR (SIMD Within A Register)
+
+            const uint c0 = 0x_5555_5555;
+            const uint c1 = 0x_3333_3333;
+            const uint c2 = 0x_0F0F_0F0F;
+            const uint c3 = 0x_0101_0101;
+
+            var val = value;
+
+            val -= (val >> 1) & c0;
+            val = (val & c1) + ((val >> 2) & c1);
+            val = (val + (val >> 4)) & c2;
+            val *= c3;
+            val >>= 24; // 32 - 8
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in int value) => PopCount((uint)value);
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in ulong value)
+        {
+            if (value == 0) return 0;
+
+            // Uses SWAR (SIMD Within A Register)
+
+            const ulong c0 = 0x_5555_5555_5555_5555;
+            const ulong c1 = 0x_3333_3333_3333_3333;
+            const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
+            const ulong c3 = 0x_0101_0101_0101_0101;
+
+            var val = value;
+
+            val -= (value >> 1) & c0;
+            val = (val & c1) + ((val >> 2) & c1);
+            val = (val + (val >> 4)) & c2;
+            val *= c3;
+            val >>= 56; // 64 - 8
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in long value) => PopCount((ulong)value);
     }
 }
