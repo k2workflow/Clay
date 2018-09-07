@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
@@ -152,28 +152,24 @@ namespace SourceCode.Clay.Buffers
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
-            // Short-circuit lower boundary
-            if (value <= 1) return 0;
-            if (value <= 3) return 1;
-            if (value <= 7) return 2;
+            // Short-circuit lower boundary (1, 2, 3)
+            if (value <= 3)
+                return value == 1 ? 0 : 1;
 
             // Uses de Bruijn (many sources)
             // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
             // https://gist.github.com/mburbea/c9a71ac1b1a25762c38c9fee7de0ddc2
 
             var val = value;
-
             val |= val >> 01;
             val |= val >> 02;
             val |= val >> 04;
             val |= val >> 08;
             val |= val >> 16;
 
-            const uint c = 0x_07C4_ACDD;
-            var i = (val * c) >> 27;
+            var ix = (val * 0x_07C4_ACDD) >> 27;
 
-            var floor = s_deBruijn32[i];
-            return floor;
+            return s_deBruijn32[ix];
         }
 
         /// <summary>
