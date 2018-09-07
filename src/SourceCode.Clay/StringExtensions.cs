@@ -22,7 +22,7 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
         /// <returns></returns>
-        public static string Left(this string str, int length)
+        public static string Left(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
@@ -40,7 +40,7 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
         /// <returns></returns>
-        public static string Right(this string str, int length)
+        public static string Right(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 0) return string.Empty;
@@ -62,7 +62,7 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="totalWidth">The total width.</param>
         /// <returns>The elided string.</returns>
-        public static string Elide(this string str, int totalWidth)
+        public static string Elide(this string str, in int totalWidth)
         {
             // No need to elide if string is already within the required size
             if (str is null || totalWidth <= 2 || str.Length <= totalWidth)
@@ -115,7 +115,7 @@ namespace SourceCode.Clay
         /// <param name="y"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsOrdinal(this string x, string y)
+        public static bool EqualsOrdinal(this string x, in string y)
             => StringComparer.Ordinal.Equals(x, y);
     }
 }

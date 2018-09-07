@@ -148,7 +148,7 @@ namespace SourceCode.Clay
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha1 Hash(in byte[] bytes, int start, int length)
+        public static Sha1 Hash(in byte[] bytes, in int start, in int length)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -166,7 +166,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
         /// <returns></returns>
-        public static Sha1 Hash(Stream stream)
+        public static Sha1 Hash(in Stream stream)
         {
             if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
@@ -193,7 +193,7 @@ namespace SourceCode.Clay
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
-        public void CopyTo(Span<byte> destination)
+        public void CopyTo(in Span<byte> destination)
         {
             unsafe
             {
@@ -210,7 +210,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="destination">The buffer to copy to.</param>
         /// <returns>True if successful</returns>
-        public bool TryCopyTo(Span<byte> destination)
+        public bool TryCopyTo(in Span<byte> destination)
         {
             unsafe
             {
@@ -237,7 +237,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
-        public string ToString(string format)
+        public string ToString(in string format)
         {
             if (string.IsNullOrWhiteSpace(format))
                 throw new FormatException($"Empty format specification");
@@ -289,7 +289,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
         /// <returns></returns>
-        public KeyValuePair<string, string> Split(int prefixLength)
+        public KeyValuePair<string, string> Split(in int prefixLength)
         {
             unsafe
             {
@@ -327,7 +327,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(string hex, out Sha1 value)
+        public static bool TryParse(in string hex, out Sha1 value)
         {
             value = default;
 
@@ -364,7 +364,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
         /// <exception cref="FormatException">Sha1</exception>
-        public static Sha1 Parse(string hex)
+        public static Sha1 Parse(in string hex)
         {
             if (hex is null)
                 throw new ArgumentNullException(nameof(hex));
@@ -456,16 +456,16 @@ namespace SourceCode.Clay
             return 0;
         }
 
-        public static bool operator ==(Sha1 x, Sha1 y) => x.Equals(y);
+        public static bool operator ==(in Sha1 x, in Sha1 y) => x.Equals(y);
 
-        public static bool operator !=(Sha1 x, Sha1 y) => !(x == y);
+        public static bool operator !=(in Sha1 x, in Sha1 y) => !(x == y);
 
-        public static bool operator >=(Sha1 x, Sha1 y) => x.CompareTo(y) >= 0;
+        public static bool operator >=(in Sha1 x, in Sha1 y) => x.CompareTo(y) >= 0;
 
-        public static bool operator >(Sha1 x, Sha1 y) => x.CompareTo(y) > 0;
+        public static bool operator >(in Sha1 x, in Sha1 y) => x.CompareTo(y) > 0;
 
-        public static bool operator <=(Sha1 x, Sha1 y) => x.CompareTo(y) <= 0;
+        public static bool operator <=(in Sha1 x, in Sha1 y) => x.CompareTo(y) <= 0;
 
-        public static bool operator <(Sha1 x, Sha1 y) => x.CompareTo(y) < 0;
+        public static bool operator <(in Sha1 x, in Sha1 y) => x.CompareTo(y) < 0;
     }
 }

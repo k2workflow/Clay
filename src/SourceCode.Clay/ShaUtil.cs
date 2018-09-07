@@ -22,7 +22,7 @@ namespace SourceCode.Clay
             11, 12, 13, 14, 15                      // [50-54]       = 98..102= 'b'..'f'
         };
 
-        private static bool TryParseHexit(char c, out byte b)
+        private static bool TryParseHexit(in char c, out byte b)
         {
             b = 0;
 
@@ -177,7 +177,7 @@ namespace SourceCode.Clay
         /// <param name="sha"></param>
         /// <param name="separator"></param>
         /// <returns></returns>
-        internal static string ToString(in ReadOnlySpan<byte> sha, char separator)
+        internal static string ToString(in ReadOnlySpan<byte> sha, in char separator)
         {
             Debug.Assert(separator == '-' || separator == ' ');
 

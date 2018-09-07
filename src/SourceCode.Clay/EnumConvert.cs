@@ -65,7 +65,7 @@ namespace SourceCode.Clay
                 }
             }
 
-            private static Expression Convert(Expression value, Type type) => s_isChecked
+            private static Expression Convert(in Expression value, in Type type) => s_isChecked
                 ? Expression.ConvertChecked(value, type)
                 : Expression.Convert(value, type);
         }

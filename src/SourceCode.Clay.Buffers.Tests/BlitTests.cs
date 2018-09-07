@@ -84,7 +84,7 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
         }
 
-        [Theory(DisplayName = nameof(Blit_FloorLog2))]
+        [Theory(DisplayName = nameof(Blit_FloorLog2_32u))]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
@@ -94,28 +94,160 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(7)]
         [InlineData(8)]
         [InlineData(9)]
+        [InlineData(14)]
         [InlineData(15)]
         [InlineData(16)]
         [InlineData(17)]
         [InlineData(1023)]
         [InlineData(1024)]
         [InlineData(1025)]
-        [InlineData(int.MaxValue - 1)]
-        [InlineData(int.MaxValue)]
-        public static void Blit_FloorLog2(int n)
+        [InlineData((uint)sbyte.MaxValue)]
+        [InlineData((uint)byte.MaxValue)]
+        [InlineData((uint)short.MaxValue)]
+        [InlineData((uint)ushort.MaxValue)]
+        [InlineData((uint)int.MaxValue - 1)]
+        [InlineData((uint)int.MaxValue)] // (1U << 31) - 1
+        [InlineData((uint)int.MaxValue + 1)] // 1U << 31
+        [InlineData((1U << 31) + 1)]
+        [InlineData(uint.MaxValue - 1)]
+        [InlineData(uint.MaxValue)]
+        public static void Blit_FloorLog2_32u(uint n)
         {
-            var expected = Math.Floor(Math.Log(n, 2));
-            var actual = Blit.FloorLog2(n);
+            var log = Blit.FloorLog2(n);
 
-            Assert.Equal(expected, actual);
+            var lo = Math.Pow(2, log);
+            var hi = Math.Pow(2, log + 1);
+
+            Assert.InRange(n, lo, hi);
         }
 
-        [Theory(DisplayName = nameof(Blit_FloorLog2_Throws))]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public static void Blit_FloorLog2_Throws(int n)
+        [Theory(DisplayName = nameof(Blit_FloorLog2_32))]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(14)]
+        [InlineData(15)]
+        [InlineData(16)]
+        [InlineData(17)]
+        [InlineData(1023)]
+        [InlineData(1024)]
+        [InlineData(1025)]
+        [InlineData((int)sbyte.MaxValue)]
+        [InlineData((int)byte.MaxValue)]
+        [InlineData((int)short.MaxValue)]
+        [InlineData((int)ushort.MaxValue)]
+        [InlineData((1 << 30) - 1)]
+        [InlineData(1 << 30)]
+        [InlineData((1 << 30) + 1)]
+        [InlineData(int.MaxValue - 1)]
+        [InlineData(int.MaxValue)]
+        public static void Blit_FloorLog2_32(int n)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2(n));
+            var log = Blit.FloorLog2(n);
+
+            var lo = Math.Pow(2, log);
+            var hi = Math.Pow(2, log + 1);
+
+            Assert.InRange(n, lo, hi);
+        }
+
+        [Theory(DisplayName = nameof(Blit_FloorLog2_64u))]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(14)]
+        [InlineData(15)]
+        [InlineData(16)]
+        [InlineData(17)]
+        [InlineData(1023)]
+        [InlineData(1024)]
+        [InlineData(1025)]
+        [InlineData((ulong)sbyte.MaxValue)]
+        [InlineData((ulong)byte.MaxValue)]
+        [InlineData((ulong)short.MaxValue)]
+        [InlineData((ulong)ushort.MaxValue)]
+        [InlineData((ulong)int.MaxValue - 1)]
+        [InlineData((ulong)int.MaxValue)]
+        [InlineData((ulong)int.MaxValue + 1)]
+        [InlineData((ulong)uint.MaxValue - 1)]
+        [InlineData((ulong)uint.MaxValue)]
+        [InlineData((ulong)uint.MaxValue + 1)]
+        [InlineData((1UL << 63) - 1)]
+        [InlineData(1UL << 63)]
+        [InlineData((1UL << 63) + 1)]
+        [InlineData(ulong.MaxValue - 1)]
+        [InlineData(ulong.MaxValue)]
+        public static void Blit_FloorLog2_64u(ulong n)
+        {
+            var log = Blit.FloorLog2(n);
+
+            var lo = Math.Pow(2, log);
+            var hi = Math.Pow(2, log + 1);
+
+            Assert.InRange(n, lo, hi);
+        }
+
+        [Theory(DisplayName = nameof(Blit_FloorLog2_64))]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(14)]
+        [InlineData(15)]
+        [InlineData(16)]
+        [InlineData(17)]
+        [InlineData(1023)]
+        [InlineData(1024)]
+        [InlineData(1025)]
+        [InlineData((long)sbyte.MaxValue)]
+        [InlineData((long)byte.MaxValue)]
+        [InlineData((long)short.MaxValue)]
+        [InlineData((long)ushort.MaxValue)]
+        [InlineData((long)int.MaxValue - 1)]
+        [InlineData((long)int.MaxValue)]
+        [InlineData((long)int.MaxValue + 1)]
+        [InlineData((long)uint.MaxValue - 1)]
+        [InlineData((long)uint.MaxValue)]
+        [InlineData((long)uint.MaxValue + 1)]
+        [InlineData((1L << 62) - 1)]
+        [InlineData(1L << 62)]
+        [InlineData((1L << 62) + 1)]
+        [InlineData(long.MaxValue - 1)]
+        [InlineData(long.MaxValue)]
+        public static void Blit_FloorLog2_64(long n)
+        {
+            var log = Blit.FloorLog2(n);
+
+            var lo = Math.Pow(2, log);
+            var hi = Math.Pow(2, log + 1);
+
+            Assert.InRange(n, lo, hi);
+        }
+
+        [Fact(DisplayName = nameof(Blit_FloorLog2_Throws))]
+        public static void Blit_FloorLog2_Throws()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((uint)0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((ulong)0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((long)0));
         }
     }
 }
