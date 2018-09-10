@@ -84,6 +84,19 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
         }
 
+        [Theory(DisplayName = nameof(Blit_FloorLog2_opt5))]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 1)]
+        [InlineData(4, 2)]
+        [InlineData(5, 2)]
+        public static void Blit_FloorLog2_opt5(uint n, int expected)
+        {
+            // Test the optimization trick on the lower boundary (1-5)
+            var actual = Blit.FloorLog2(n);
+            Assert.Equal(expected, (int)actual);
+        }
+
         [Theory(DisplayName = nameof(Blit_FloorLog2_32u))]
         [InlineData(1)]
         [InlineData(2)]
@@ -248,6 +261,64 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((uint)0));
             Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((ulong)0));
             Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((long)0));
+        }
+
+        [Theory(DisplayName = nameof(Blit_PopCount_32u))]
+        [InlineData(0b000, 0)]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(0b111111, 6)]
+        [InlineData(0b1111110, 6)]
+        [InlineData(0b1111111, 7)]
+        [InlineData(byte.MaxValue, 8)]
+        [InlineData(ushort.MaxValue >> 3, 16 - 3)]
+        [InlineData(ushort.MaxValue, 16)]
+        [InlineData(uint.MaxValue >> 5, 32 - 5)]
+        [InlineData(uint.MaxValue, 32)]
+        public static void Blit_PopCount_32u(uint n, int expected)
+        {
+            var actual = Blit.PopCount(n);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(Blit_PopCount_64u))]
+        [InlineData(0b000, 0)]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(0b111111, 6)]
+        [InlineData(0b1111110, 6)]
+        [InlineData(0b1111111, 7)]
+        [InlineData(byte.MaxValue, 8)]
+        [InlineData(ushort.MaxValue >> 3, 16 - 3)]
+        [InlineData(ushort.MaxValue, 16)]
+        [InlineData(uint.MaxValue >> 5, 32 - 5)]
+        [InlineData(uint.MaxValue, 32)]
+        [InlineData(ulong.MaxValue >> 7, 64 - 7)]
+        [InlineData(ulong.MaxValue, 64)]
+        public static void Blit_PopCount_64u(ulong n, int expected)
+        {
+            var actual = Blit.PopCount(n);
+            Assert.Equal(expected, actual);
         }
     }
 }

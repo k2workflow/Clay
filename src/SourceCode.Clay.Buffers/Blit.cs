@@ -153,13 +153,13 @@ namespace SourceCode.Clay.Buffers
             // Perf: Do not use guard clauses; callers must be trusted
 
             // Short-circuit lower boundary using optimization trick (n >> 1)
-            // 0 (000) => 0 (000) <- n/a, 0 trapped @ callsite
-            // 1 (001) => 0 (000) <- good
-            // 2 (010) => 1 (001)
-            // 3 (011) => 1 (001)
-            // 4 (100) => 2 (010)
-            // 5 (101) => 2 (010)
-            // 6 (110) => 3 (011) <- bad
+            // 0 (000) => 0 (000) ✖ (n/a, 0 trapped @ callsite)
+            // 1 (001) => 0 (000) ✔
+            // 2 (010) => 1 (001) ✔
+            // 3 (011) => 1 (001) ✔
+            // 4 (100) => 2 (010) ✔
+            // 5 (101) => 2 (010) ✔
+            // 6 (110) => 3 (011) ✖ (trick fails)
             if (value <= 5)
                 return (int)(value >> 1);
 
@@ -309,12 +309,6 @@ namespace SourceCode.Clay.Buffers
         /// Returns the population count (number of bits set) of a bit mask.
         /// </summary>
         /// <param name="value">The bit mask.</param>
-        public static int PopCount(in int value) => PopCount((uint)value);
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a bit mask.
-        /// </summary>
-        /// <param name="value">The bit mask.</param>
         public static int PopCount(in ulong value)
         {
             if (value == 0) return 0;
@@ -336,11 +330,5 @@ namespace SourceCode.Clay.Buffers
 
             return (int)val;
         }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a bit mask.
-        /// </summary>
-        /// <param name="value">The bit mask.</param>
-        public static int PopCount(in long value) => PopCount((ulong)value);
     }
 }
