@@ -152,9 +152,16 @@ namespace SourceCode.Clay.Buffers
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
-            // Short-circuit lower boundary (1, 2, 3)
-            if (value <= 3)
-                return value == 1 ? 0 : 1;
+            // Short-circuit lower boundary using optimization trick (n >> 1)
+            // 0 (000) => 0 (000) <- n/a, 0 trapped @ callsite
+            // 1 (001) => 0 (000) <- good
+            // 2 (010) => 1 (001)
+            // 3 (011) => 1 (001)
+            // 4 (100) => 2 (010)
+            // 5 (101) => 2 (010)
+            // 6 (110) => 3 (011) <- bad
+            if (value <= 5)
+                return (int)(value >> 1);
 
             // Uses de Bruijn (many sources)
             // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
