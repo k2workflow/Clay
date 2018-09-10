@@ -285,7 +285,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The bit mask.</param>
         public static int PopCount(in uint value)
         {
-            if (value == 0) return 0;
+            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
+            // 0 (000) -> 1 (001) -> 0 (000) ✔
+            // 1 (001) -> 2 (010) -> 1 (001) ✔
+            // 2 (010) -> 3 (011) -> 1 (001) ✔
+            // 3 (011) -> 4 (100) -> 2 (010) ✔
+            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            if (value <= 3)
+                return (int)((value + 1) >> 1);
 
             // Uses SWAR (SIMD Within A Register)
 
@@ -311,7 +318,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The bit mask.</param>
         public static int PopCount(in ulong value)
         {
-            if (value == 0) return 0;
+            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
+            // 0 (000) -> 1 (001) -> 0 (000) ✔
+            // 1 (001) -> 2 (010) -> 1 (001) ✔
+            // 2 (010) -> 3 (011) -> 1 (001) ✔
+            // 3 (011) -> 4 (100) -> 2 (010) ✔
+            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            if (value <= 3)
+                return (int)((value + 1) >> 1);
 
             // Uses SWAR (SIMD Within A Register)
 
