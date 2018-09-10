@@ -152,9 +152,16 @@ namespace SourceCode.Clay.Buffers
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
-            // Short-circuit lower boundary (1, 2, 3)
-            if (value <= 3)
-                return value == 1 ? 0 : 1;
+            // Short-circuit lower boundary using optimization trick (n >> 1)
+            // 0 (000) => 0 (000) ✖ (n/a, 0 trapped @ callsite)
+            // 1 (001) => 0 (000) ✔
+            // 2 (010) => 1 (001) ✔
+            // 3 (011) => 1 (001) ✔
+            // 4 (100) => 2 (010) ✔
+            // 5 (101) => 2 (010) ✔
+            // 6 (110) => 3 (011) ✖ (trick fails)
+            if (value <= 5)
+                return (int)(value >> 1);
 
             // Uses de Bruijn (many sources)
             // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
@@ -270,6 +277,72 @@ namespace SourceCode.Clay.Buffers
             }
 
             return inc + FloorLog2Impl(val);
+        }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in uint value)
+        {
+            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
+            // 0 (000) -> 1 (001) -> 0 (000) ✔
+            // 1 (001) -> 2 (010) -> 1 (001) ✔
+            // 2 (010) -> 3 (011) -> 1 (001) ✔
+            // 3 (011) -> 4 (100) -> 2 (010) ✔
+            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            if (value <= 3)
+                return (int)((value + 1) >> 1);
+
+            // Uses SWAR (SIMD Within A Register)
+
+            const uint c0 = 0x_5555_5555;
+            const uint c1 = 0x_3333_3333;
+            const uint c2 = 0x_0F0F_0F0F;
+            const uint c3 = 0x_0101_0101;
+
+            var val = value;
+
+            val -= (val >> 1) & c0;
+            val = (val & c1) + ((val >> 2) & c1);
+            val = (val + (val >> 4)) & c2;
+            val *= c3;
+            val >>= 24; // 32 - 8
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        public static int PopCount(in ulong value)
+        {
+            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
+            // 0 (000) -> 1 (001) -> 0 (000) ✔
+            // 1 (001) -> 2 (010) -> 1 (001) ✔
+            // 2 (010) -> 3 (011) -> 1 (001) ✔
+            // 3 (011) -> 4 (100) -> 2 (010) ✔
+            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            if (value <= 3)
+                return (int)((value + 1) >> 1);
+
+            // Uses SWAR (SIMD Within A Register)
+
+            const ulong c0 = 0x_5555_5555_5555_5555;
+            const ulong c1 = 0x_3333_3333_3333_3333;
+            const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
+            const ulong c3 = 0x_0101_0101_0101_0101;
+
+            var val = value;
+
+            val -= (value >> 1) & c0;
+            val = (val & c1) + ((val >> 2) & c1);
+            val = (val + (val >> 4)) & c2;
+            val *= c3;
+            val >>= 56; // 64 - 8
+
+            return (int)val;
         }
     }
 }
