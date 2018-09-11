@@ -420,17 +420,6 @@ namespace SourceCode.Clay.Buffers.Tests
                 Assert.Equal(!was, BitOps.InsertBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
-
-            // Signed
-            var actual1 = (int)n;
-            Assert.Equal(was, BitOps.InsertBit(ref actual1, offset, on));
-            Assert.Equal((int)expected, actual1);
-
-            if (actual1 != (int)n)
-            {
-                Assert.Equal(!was, BitOps.InsertBit(ref actual1, offset, !on));
-                Assert.Equal((int)n, actual1);
-            }
         }
 
         [Theory(DisplayName = nameof(Blit_WriteBit_64u))]
@@ -482,17 +471,6 @@ namespace SourceCode.Clay.Buffers.Tests
                 Assert.Equal(!was, BitOps.InsertBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
-
-            // Signed
-            var actual1 = (long)n;
-            Assert.Equal(was, BitOps.InsertBit(ref actual1, offset, on));
-            Assert.Equal((long)expected, actual1);
-
-            if (actual1 != (long)n)
-            {
-                Assert.Equal(!was, BitOps.InsertBit(ref actual1, offset, !on));
-                Assert.Equal((long)n, actual1);
-            }
         }
 
         #endregion
@@ -522,15 +500,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Signed
-            var actual1 = (int)n;
-
-            Assert.Equal(BitOps.FlipBit(ref actual1, offset), was);
-            Assert.Equal((int)expected, actual1);
-
-            Assert.Equal(BitOps.FlipBit(ref actual1, offset), !was);
-            Assert.Equal((int)n, actual1);
         }
 
         [Theory(DisplayName = nameof(Blit_FlipBit_64u))]
@@ -559,15 +528,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Signed
-            var actual1 = (long)n;
-
-            Assert.Equal(BitOps.FlipBit(ref actual1, offset), was);
-            Assert.Equal((long)expected, actual1);
-
-            Assert.Equal(BitOps.FlipBit(ref actual1, offset), !was);
-            Assert.Equal((long)n, actual1);
         }
 
         #endregion
