@@ -160,12 +160,9 @@ namespace SourceCode.Clay.Buffers
             // 4 (100) => 2 (010) ✔
             // 5 (101) => 2 (010) ✔
             // 6 (110) => 3 (011) ✖ (trick fails)
+
             if (value <= 5)
                 return (int)(value >> 1);
-
-            // Uses de Bruijn (many sources)
-            // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
-            // https://gist.github.com/mburbea/c9a71ac1b1a25762c38c9fee7de0ddc2
 
             var val = value;
             val |= val >> 01;
@@ -181,7 +178,7 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
@@ -193,6 +190,7 @@ namespace SourceCode.Clay.Buffers
             // 2^31             = 2,147,483,648
             // uint.MaxValue    = 4,294,967,295
             // 2^32             = 4,294,967,296
+
             const uint hi = 1U << 31;
             if (value >= hi) return 31;
 
@@ -201,7 +199,7 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
@@ -213,6 +211,7 @@ namespace SourceCode.Clay.Buffers
             // 2^30             = 1,073,741,824
             // int.MaxValue     = 2,147,483,647
             // 2^31             = 2,147,483,648
+
             const int hi = 1 << 30;
             if (value >= hi) return 30;
 
@@ -221,7 +220,7 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
@@ -233,6 +232,7 @@ namespace SourceCode.Clay.Buffers
             // 2^63             = 9,223,372,036,854,775,808
             // ulong.MaxValue   = 18,446,744,073,709,551,615
             // 2^64             = 18,446,744,073,709,551,616
+
             const ulong hi = 1UL << 63;
             if (value >= hi) return 63;
 
@@ -251,7 +251,7 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
@@ -263,6 +263,7 @@ namespace SourceCode.Clay.Buffers
             // 2^62             = 4,611,686,018,427,387,904
             // long.MaxValue    = 9,223,372,036,854,775,807
             // 2^63             = 9,223,372,036,854,775,808
+
             const long hi = 1L << 62;
             if (value >= hi) return 62;
 
@@ -286,16 +287,18 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(in uint value)
         {
+            // Truth table (1):
             // Short-circuit lower boundary using optimization trick (n+1 >> 1)
             // 0 (000) -> 1 (001) -> 0 (000) ✔
             // 1 (001) -> 2 (010) -> 1 (001) ✔
             // 2 (010) -> 3 (011) -> 1 (001) ✔
             // 3 (011) -> 4 (100) -> 2 (010) ✔
             // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Use SWAR (SIMD Within A Register)
+            // Use a SWAR (SIMD Within A Register) approach
 
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
@@ -328,16 +331,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(in ulong value)
         {
-            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
-            // 0 (000) -> 1 (001) -> 0 (000) ✔
-            // 1 (001) -> 2 (010) -> 1 (001) ✔
-            // 2 (010) -> 3 (011) -> 1 (001) ✔
-            // 3 (011) -> 4 (100) -> 2 (010) ✔
-            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            // See truth table (1) above
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Use SWAR (SIMD Within A Register)
+            // Use a SWAR (SIMD Within A Register) approach
 
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
@@ -414,18 +412,16 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The bit mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="toSet">True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint WriteBit(in uint value, in byte offset, in bool toSet)
+        public static uint WriteBit(in uint value, in byte offset, in bool on)
         {
             var b = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << b;
 
-            // TODO: Optimize without branching
-            if (toSet)
-                return value | mask;
-            
-            return value & ~mask;
+            return on ? 
+                value | mask : 
+                value & ~mask;
         }
 
         /// <summary>
@@ -433,28 +429,26 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The bit mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="toSet">True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int WriteBit(in int value, in byte offset, in bool toSet) 
-            => (int)WriteBit((uint)value, offset, toSet);
+        public static int WriteBit(in int value, in byte offset, in bool on) 
+            => (int)WriteBit((uint)value, offset, on);
 
         /// <summary>
         /// Sets the specified bit in a bit mask to true or false.
         /// </summary>
         /// <param name="value">The bit mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="toSet">True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong WriteBit(in ulong value, in byte offset, in bool toSet)
+        public static ulong WriteBit(in ulong value, in byte offset, in bool on)
         {
             var b = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << b;
 
-            // TODO: Optimize without branching
-            if (toSet)
-                return value | mask;
-
-            return value & ~mask;
+            return on ? 
+                value | mask : 
+                value & ~mask;
         }
 
         /// <summary>
@@ -462,10 +456,10 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The bit mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="toSet">True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long WriteBit(in long value, in byte offset, in bool toSet) 
-            => (long)WriteBit((ulong)value, offset, toSet);
+        public static long WriteBit(in long value, in byte offset, in bool on) 
+            => (long)WriteBit((ulong)value, offset, on);
 
         /// <summary>
         /// Negates a single bit in a bit mask.
@@ -478,11 +472,19 @@ namespace SourceCode.Clay.Buffers
             var b = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << b;
 
-            // TODO: Optimize without branching
-            if ((value & mask) == 1)
-                return value & ~mask;
+            // Truth table (2):
+            // v   m  | ~m  ^v  ~
+            // 00  01 | 10  10  01
+            // 01  01 | 10  11  00
+            // 10  01 | 10  00  11
+            // 11  01 | 10  01  10
+            //                      
+            // 00  10 | 01  01  10
+            // 01  10 | 01  00  11
+            // 10  10 | 01  11  00
+            // 11  10 | 01  10  01
 
-            return value | mask;
+            return ~(~mask ^ value);
         }
 
         /// <summary>
@@ -505,11 +507,8 @@ namespace SourceCode.Clay.Buffers
             var b = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << b;
 
-            // TODO: Optimize without branching
-            if ((value & mask) == 1)
-                return value & ~mask;
-
-            return value | mask;
+            // See Truth table (2) above
+            return ~(~mask ^ value);
         }
 
         /// <summary>
