@@ -284,6 +284,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ushort.MaxValue >> 3, 16 - 3)]
         [InlineData(ushort.MaxValue, 16)]
         [InlineData(uint.MaxValue >> 5, 32 - 5)]
+        [InlineData(uint.MaxValue << 7, 32 - 7)]
         [InlineData(uint.MaxValue, 32)]
         public static void Blit_PopCount_32u(uint n, int expected)
         {
@@ -313,7 +314,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ushort.MaxValue, 16)]
         [InlineData(uint.MaxValue >> 5, 32 - 5)]
         [InlineData(uint.MaxValue, 32)]
-        [InlineData(ulong.MaxValue >> 7, 64 - 7)]
+        [InlineData(ulong.MaxValue >> 9, 64 - 9)]
+        [InlineData(ulong.MaxValue << 11, 64 - 11)]
         [InlineData(ulong.MaxValue, 64)]
         public static void Blit_PopCount_64u(ulong n, int expected)
         {
