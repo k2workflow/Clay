@@ -15,129 +15,135 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class Blit
     {
+        #region Rotate
+
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateLeft(in byte value, in byte bits)
+        public static byte RotateLeft(in byte value, in byte offset)
         {
-            var b = bits & 7; // mod 8
+            var shft = offset & 7; // mod 8 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (byte)((value << b) | (value >> (8 - b)));
+            return (byte)((value << shft) | (value >> (8 - shft)));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateRight(in byte value, in byte bits)
+        public static byte RotateRight(in byte value, in byte offset)
         {
-            var b = bits & 7; // mod 8
+            var shft = offset & 7; // mod 8 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (byte)((value >> b) | (value << (8 - b)));
+            return (byte)((value >> shft) | (value << (8 - shft)));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="ushort"/> value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateLeft(in ushort value, in byte bits)
+        public static ushort RotateLeft(in ushort value, in byte offset)
         {
-            var b = bits & 15; // mod 16
+            var shft = offset & 15; // mod 16 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (ushort)((value << b) | (value >> (16 - b)));
+            return (ushort)((value << shft) | (value >> (16 - shft)));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="ushort"/> value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateRight(in ushort value, in byte bits)
+        public static ushort RotateRight(in ushort value, in byte offset)
         {
-            var b = bits & 15; // mod 16
+            var shft = offset & 15; // mod 16 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (ushort)((value >> b) | (value << (16 - b)));
+            return (ushort)((value >> shft) | (value << (16 - shft)));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="uint"/> value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateLeft(in uint value, in byte bits)
+        public static uint RotateLeft(in uint value, in byte offset)
         {
-            var b = bits & 31; // mod 32
+            var shft = offset & 31; // mod 32 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value << b) | (value >> (32 - b));
+            return (value << shft) | (value >> (32 - shft));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="uint"/> value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateRight(in uint value, in byte bits)
+        public static uint RotateRight(in uint value, in byte offset)
         {
-            var b = bits & 31; // mod 32
+            var shft = offset & 31; // mod 32 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> b) | (value << (32 - b));
+            return (value >> shft) | (value << (32 - shft));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="ulong"/> value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateLeft(in ulong value, in byte bits)
+        public static ulong RotateLeft(in ulong value, in byte offset)
         {
-            var b = bits & 63; // mod 64
+            var shft = offset & 63; // mod 64 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value << b) | (value >> (64 - b));
+            return (value << shft) | (value >> (64 - shft));
         }
 
         /// <summary>
         /// Rotates the specified <see cref="ulong"/> value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="bits">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateRight(in ulong value, in byte bits)
+        public static ulong RotateRight(in ulong value, in byte offset)
         {
-            var b = bits & 63; // mod 64
+            var shft = offset & 63; // mod 64 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> b) | (value << (64 - b));
+            return (value >> shft) | (value << (64 - shft));
         }
+
+        #endregion
+
+        #region FloorLog2
 
         private static readonly byte[] s_deBruijn32 = new byte[32]
         {
@@ -160,12 +166,9 @@ namespace SourceCode.Clay.Buffers
             // 4 (100) => 2 (010) ✔
             // 5 (101) => 2 (010) ✔
             // 6 (110) => 3 (011) ✖ (trick fails)
+
             if (value <= 5)
                 return (int)(value >> 1);
-
-            // Uses de Bruijn (many sources)
-            // https://stackoverflow.com/questions/15967240/fastest-implementation-of-log2int-and-log2float
-            // https://gist.github.com/mburbea/c9a71ac1b1a25762c38c9fee7de0ddc2
 
             var val = value;
             val |= val >> 01;
@@ -181,9 +184,9 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
-        /// <param name="value">The <see cref="uint"/> value.</param>
+        /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
         public static int FloorLog2(in uint value)
         {
@@ -193,6 +196,7 @@ namespace SourceCode.Clay.Buffers
             // 2^31             = 2,147,483,648
             // uint.MaxValue    = 4,294,967,295
             // 2^32             = 4,294,967,296
+
             const uint hi = 1U << 31;
             if (value >= hi) return 31;
 
@@ -201,9 +205,9 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
-        /// <param name="value">The <see cref="int"/> value.</param>
+        /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
         public static int FloorLog2(in int value)
         {
@@ -213,6 +217,7 @@ namespace SourceCode.Clay.Buffers
             // 2^30             = 1,073,741,824
             // int.MaxValue     = 2,147,483,647
             // 2^31             = 2,147,483,648
+
             const int hi = 1 << 30;
             if (value >= hi) return 30;
 
@@ -221,9 +226,9 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
-        /// <param name="value">The <see cref="ulong"/> value.</param>
+        /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
         public static int FloorLog2(in ulong value)
         {
@@ -233,6 +238,7 @@ namespace SourceCode.Clay.Buffers
             // 2^63             = 9,223,372,036,854,775,808
             // ulong.MaxValue   = 18,446,744,073,709,551,615
             // 2^64             = 18,446,744,073,709,551,616
+
             const ulong hi = 1UL << 63;
             if (value >= hi) return 63;
 
@@ -251,9 +257,9 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of Math.Floor(Math.Log(<paramref name="value"/>, 2)).
+        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
         /// </summary>
-        /// <param name="value">The <see cref="long"/> value.</param>
+        /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
         public static int FloorLog2(in long value)
         {
@@ -263,6 +269,7 @@ namespace SourceCode.Clay.Buffers
             // 2^62             = 4,611,686,018,427,387,904
             // long.MaxValue    = 9,223,372,036,854,775,807
             // 2^63             = 9,223,372,036,854,775,808
+
             const long hi = 1L << 62;
             if (value >= hi) return 62;
 
@@ -279,22 +286,29 @@ namespace SourceCode.Clay.Buffers
             return inc + FloorLog2Impl(val);
         }
 
+        #endregion
+
+        #region PopCount
+
         /// <summary>
-        /// Returns the population count (number of bits set) of a bit mask.
+        /// Returns the population count (number of bits set) of a mask.
         /// </summary>
-        /// <param name="value">The bit mask.</param>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(in uint value)
         {
+            // Truth table (1):
             // Short-circuit lower boundary using optimization trick (n+1 >> 1)
             // 0 (000) -> 1 (001) -> 0 (000) ✔
             // 1 (001) -> 2 (010) -> 1 (001) ✔
             // 2 (010) -> 3 (011) -> 1 (001) ✔
             // 3 (011) -> 4 (100) -> 2 (010) ✔
             // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Use SWAR (SIMD Within A Register)
+            // Uses a SWAR (SIMD Within A Register) approach
 
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
@@ -313,21 +327,25 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Returns the population count (number of bits set) of a bit mask.
+        /// Returns the population count (number of bits set) of a mask.
         /// </summary>
-        /// <param name="value">The bit mask.</param>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(in int value) 
+            => PopCount((uint)value);
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(in ulong value)
         {
-            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
-            // 0 (000) -> 1 (001) -> 0 (000) ✔
-            // 1 (001) -> 2 (010) -> 1 (001) ✔
-            // 2 (010) -> 3 (011) -> 1 (001) ✔
-            // 3 (011) -> 4 (100) -> 2 (010) ✔
-            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+            // See truth table (1) above
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Use SWAR (SIMD Within A Register)
+            // Use a SWAR (SIMD Within A Register) approach
 
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
@@ -344,5 +362,240 @@ namespace SourceCode.Clay.Buffers
 
             return (int)val;
         }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(in long value) 
+            => PopCount((ulong)value);
+
+        #endregion
+
+        #region ReadBit
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ReadBit(in uint value, in byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            return (value & mask) > 0;
+        }
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ReadBit(in int value, in byte offset) 
+            => ReadBit((uint)value, offset);
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ReadBit(in ulong value, in byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+
+            return (value & mask) > 0;
+        }
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ReadBit(in long value, in byte offset)
+            => ReadBit((ulong)value, offset);
+
+        #endregion
+
+        #region WriteBit
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref uint value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            value = on ? 
+                value | mask : 
+                value & ~mask;
+
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref int value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var val = (uint)value;
+            var rsp = val & mask;
+
+            value = (int)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref ulong value, in byte offset, in bool on)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var rsp = value & mask;
+
+            value = on ? 
+                value | mask : 
+                value & ~mask;
+
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref long value, in byte offset, in bool on)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var val = (ulong)value;
+            var rsp = val & mask;
+
+            value = (long)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
+        }
+
+        #endregion
+
+        #region FlipBit
+
+        /// <summary>
+        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool FlipBit(ref uint value, in byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            // Truth table (2):
+            // v   m  | ~m  ^v  ~
+            // 00  01 | 10  10  01
+            // 01  01 | 10  11  00
+            // 10  01 | 10  00  11
+            // 11  01 | 10  01  10
+            //                      
+            // 00  10 | 01  01  10
+            // 01  10 | 01  00  11
+            // 10  10 | 01  11  00
+            // 11  10 | 01  10  01
+
+            value = ~(~mask ^ value);
+
+            return rsp > 0; // BTC (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool FlipBit(ref int value, in byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var val = (uint)value;
+            var rsp = val & mask;
+
+            // See Truth table (2) above
+            value = (int)~(~mask ^ val);
+
+            return rsp > 0; // BTC (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool FlipBit(ref ulong value, in byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var rsp = value & mask;
+
+            // See Truth table (2) above
+            value = ~(~mask ^ value);
+
+            return rsp > 0; // BTC (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool FlipBit(ref long value, in byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var val = (ulong)value;
+            var rsp = val & mask;
+
+            // See Truth table (2) above
+            value = (long)~(~mask ^ val);
+
+            return rsp > 0; // BTC (inlining should prune if unused)
+        }
+
+        #endregion
     }
 }
