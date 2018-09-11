@@ -294,7 +294,7 @@ namespace SourceCode.Clay.Buffers
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Uses SWAR (SIMD Within A Register)
+            // Use SWAR (SIMD Within A Register)
 
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
@@ -327,7 +327,7 @@ namespace SourceCode.Clay.Buffers
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
-            // Uses SWAR (SIMD Within A Register)
+            // Use SWAR (SIMD Within A Register)
 
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
