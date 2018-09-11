@@ -386,7 +386,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            return (value & mask) > 0; // Cheaper than comparing to mask
+            return (value & mask) > 0;
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
 
-            return (value & mask) > 0; // Cheaper than comparing to mask
+            return (value & mask) > 0;
         }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace SourceCode.Clay.Buffers
                 value | mask : 
                 value & ~mask;
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace SourceCode.Clay.Buffers
                 val | mask :
                 val & ~mask);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
         }
 
         /// <summary>
@@ -483,7 +483,7 @@ namespace SourceCode.Clay.Buffers
                 value | mask : 
                 value & ~mask;
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
         }
 
         /// <summary>
@@ -504,7 +504,7 @@ namespace SourceCode.Clay.Buffers
                 val | mask :
                 val & ~mask);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTS/BTR (inlining should prune if unused)
         }
 
         #endregion
@@ -537,7 +537,7 @@ namespace SourceCode.Clay.Buffers
 
             value = ~(~mask ^ value);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
@@ -556,7 +556,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = (int)~(~mask ^ val);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = ~(~mask ^ value);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
@@ -593,7 +593,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = (long)~(~mask ^ val);
 
-            return rsp > 0; // Cheaper than comparing to mask
+            return rsp > 0; // BTC (inlining should prune if unused)
         }
 
         #endregion
