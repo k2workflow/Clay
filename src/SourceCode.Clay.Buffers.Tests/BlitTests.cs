@@ -410,6 +410,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue, 31, true, true, uint.MaxValue)]
         public static void Blit_WriteBit_32u(uint n, byte offset, bool on, bool was, uint expected)
         {
+            // Unsigned
             var actual = n;
             Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
@@ -418,6 +419,17 @@ namespace SourceCode.Clay.Buffers.Tests
             {
                 Assert.Equal(!was, Blit.WriteBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
+            }
+
+            // Signed
+            var actual1 = (int)n;
+            Assert.Equal(was, Blit.WriteBit(ref actual1, offset, on));
+            Assert.Equal((int)expected, actual1);
+
+            if (actual1 != (int)n)
+            {
+                Assert.Equal(!was, Blit.WriteBit(ref actual1, offset, !on));
+                Assert.Equal((int)n, actual1);
             }
         }
 
@@ -460,6 +472,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue, 63, true, true, ulong.MaxValue)]
         public static void Blit_WriteBit_64u(ulong n, byte offset, bool on, bool was, ulong expected)
         {
+            // Unsigned
             var actual = n;
             Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
@@ -470,6 +483,16 @@ namespace SourceCode.Clay.Buffers.Tests
                 Assert.Equal(n, actual);
             }
 
+            // Signed
+            var actual1 = (long)n;
+            Assert.Equal(was, Blit.WriteBit(ref actual1, offset, on));
+            Assert.Equal((long)expected, actual1);
+
+            if (actual1 != (long)n)
+            {
+                Assert.Equal(!was, Blit.WriteBit(ref actual1, offset, !on));
+                Assert.Equal((long)n, actual1);
+            }
         }
 
         #endregion
@@ -477,76 +500,6 @@ namespace SourceCode.Clay.Buffers.Tests
         #region FlipBit
 
         [Theory(DisplayName = nameof(Blit_FlipBit_32u))]
-        [InlineData(0b000, 0, 0b001)]
-        [InlineData(0b001, 0, 0b000)]
-        [InlineData(0b000, 1, 0b010)]
-        [InlineData(0b010, 1, 0b000)]
-        [InlineData(byte.MaxValue, 0, byte.MaxValue - 1)]
-        [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1)]
-        [InlineData(ushort.MaxValue, 0, ushort.MaxValue - 1)]
-        [InlineData(ushort.MaxValue, 15, ushort.MaxValue >> 1)]
-        [InlineData(uint.MaxValue, 0, uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1)]
-        public static void Blit_FlipBit_32u(uint n, byte offset, uint expected)
-        {
-            var actual = Blit.FlipBit(n, offset);
-            Assert.Equal(expected, actual);
-
-            actual = Blit.FlipBit(actual, offset);
-            Assert.Equal(n, actual);
-        }
-
-        [Theory(DisplayName = nameof(Blit_FlipBit_64u))]
-        [InlineData(0b000, 0, 0b001)]
-        [InlineData(0b001, 0, 0b000)]
-        [InlineData(0b000, 1, 0b010)]
-        [InlineData(0b010, 1, 0b000)]
-        [InlineData(byte.MaxValue, 0, byte.MaxValue - 1)]
-        [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1)]
-        [InlineData(ushort.MaxValue, 0, ushort.MaxValue - 1)]
-        [InlineData(ushort.MaxValue, 15, ushort.MaxValue >> 1)]
-        [InlineData(uint.MaxValue, 0, uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1)]
-        [InlineData(ulong.MaxValue, 0, ulong.MaxValue - 1)]
-        [InlineData(ulong.MaxValue, 63, ulong.MaxValue >> 1)]
-        public static void Blit_FlipBit_64u(ulong n, byte offset, ulong expected)
-        {
-            var actual = Blit.FlipBit(n, offset);
-            Assert.Equal(expected, actual);
-
-            actual = Blit.FlipBit(actual, offset);
-            Assert.Equal(n, actual);
-        }
-
-        //[Fact(DisplayName = nameof(Blit_FlipBit_Span))]
-        //public static void Blit_FlipBit_Span()
-        //{
-        //    Span<byte> span = stackalloc byte[] { 0, 123, 1, 255, 17 };
-
-        //    Blit.FlipBit(ref span, 3);
-        //    Assert.Equal(new byte[] { 8, 123, 1, 255, 17 }, span.ToArray());
-
-        //    Blit.FlipBit(ref span, 11);
-        //    Assert.Equal(new byte[] { 8, 115, 1, 255, 17 }, span.ToArray());
-
-        //    Blit.FlipBit(ref span, 36);
-        //    Assert.Equal(new byte[] { 8, 115, 1, 255, 1 }, span.ToArray());
-
-        //    Blit.FlipBit(ref span, 36);
-        //    Assert.Equal(new byte[] { 8, 115, 1, 255, 17 }, span.ToArray());
-
-        //    Blit.FlipBit(ref span, 11);
-        //    Assert.Equal(new byte[] { 8, 123, 1, 255, 17 }, span.ToArray());
-
-        //    Blit.FlipBit(ref span, 3);
-        //    Assert.Equal(new byte[] { 0, 123, 1, 255, 17 }, span.ToArray());
-        //}
-
-        #endregion
-
-        #region ExchangeBit
-
-        [Theory(DisplayName = nameof(Blit_ExchangeBit_32u))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -559,18 +512,28 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ushort.MaxValue, 16, ushort.MaxValue + (1U << 16), false)]
         [InlineData(uint.MaxValue, 0, uint.MaxValue - 1, true)]
         [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1, true)]
-        public static void Blit_ExchangeBit_32u(uint n, byte offset, uint expected, bool on)
+        public static void Blit_FlipBit_32u(uint n, byte offset, uint expected, bool was)
         {
+            // Unsigned
             var actual = n;
 
-            Assert.Equal(Blit.ExchangeBit(ref actual, offset), on);
+            Assert.Equal(Blit.FlipBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(Blit.ExchangeBit(ref actual, offset), !on);
+            Assert.Equal(Blit.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
+
+            // Signed
+            var actual1 = (int)n;
+
+            Assert.Equal(Blit.FlipBit(ref actual1, offset), was);
+            Assert.Equal((int)expected, actual1);
+
+            Assert.Equal(Blit.FlipBit(ref actual1, offset), !was);
+            Assert.Equal((int)n, actual1);
         }
 
-        [Theory(DisplayName = nameof(Blit_ExchangeBit_64u))]
+        [Theory(DisplayName = nameof(Blit_FlipBit_64u))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -586,15 +549,25 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue, 32, uint.MaxValue + (1UL << 32), false)]
         [InlineData(ulong.MaxValue, 0, ulong.MaxValue - 1, true)]
         [InlineData(ulong.MaxValue, 63, ulong.MaxValue >> 1, true)]
-        public static void Blit_ExchangeBit_64u(ulong n, byte offset, ulong expected, bool on)
+        public static void Blit_FlipBit_64u(ulong n, byte offset, ulong expected, bool was)
         {
+            // Unsigned
             var actual = n;
 
-            Assert.Equal(Blit.ExchangeBit(ref actual, offset), on);
+            Assert.Equal(Blit.FlipBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(Blit.ExchangeBit(ref actual, offset), !on);
+            Assert.Equal(Blit.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
+
+            // Signed
+            var actual1 = (long)n;
+
+            Assert.Equal(Blit.FlipBit(ref actual1, offset), was);
+            Assert.Equal((long)expected, actual1);
+
+            Assert.Equal(Blit.FlipBit(ref actual1, offset), !was);
+            Assert.Equal((long)n, actual1);
         }
 
         #endregion
