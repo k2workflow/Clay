@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Buffers
     /// <summary>
     /// Represents additional blit methods.
     /// </summary>
-    public static class Blit
+    public static class BitOps
     {
         #region Rotate
 
@@ -373,7 +373,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region ReadBit
+        #region ExtractBit
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -381,7 +381,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ReadBit(in uint value, in byte offset)
+        public static bool ExtractBit(in uint value, in byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -395,8 +395,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ReadBit(in int value, in byte offset) 
-            => ReadBit((uint)value, offset);
+        public static bool ExtractBit(in int value, in byte offset) 
+            => ExtractBit((uint)value, offset);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -404,7 +404,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ReadBit(in ulong value, in byte offset)
+        public static bool ExtractBit(in ulong value, in byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
@@ -418,12 +418,12 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ReadBit(in long value, in byte offset)
-            => ReadBit((ulong)value, offset);
+        public static bool ExtractBit(in long value, in byte offset)
+            => ExtractBit((ulong)value, offset);
 
         #endregion
 
-        #region WriteBit
+        #region InsertBit
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -432,7 +432,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref uint value, in byte offset, in bool on)
+        public static bool InsertBit(ref uint value, in byte offset, in bool on)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -452,7 +452,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref int value, in byte offset, in bool on)
+        public static bool InsertBit(ref int value, in byte offset, in bool on)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -473,7 +473,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref ulong value, in byte offset, in bool on)
+        public static bool InsertBit(ref ulong value, in byte offset, in bool on)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
@@ -493,7 +493,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref long value, in byte offset, in bool on)
+        public static bool InsertBit(ref long value, in byte offset, in bool on)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;

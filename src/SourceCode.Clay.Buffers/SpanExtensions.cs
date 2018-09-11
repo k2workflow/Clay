@@ -40,7 +40,8 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N members
-            var limit = 2 * Blit.FloorLog2((uint)span.Length); // N > 3 due to previous checks
+            var limit = BitOps.FloorLog2((uint)span.Length); // N > 3 due to previous checks
+            limit <<= 1; // mul 2
 
             IntrospectiveSort(span, comparison, 0, span.Length - 1, limit);
         }
@@ -121,9 +122,9 @@ namespace SourceCode.Clay.Buffers
         {
             var d = span[lo + i - 1];
 
-            while (i <= n / 2)
+            while (i <= n >> 1) // div 2
             {
-                var child = 2 * i;
+                var child = i << 1; // mul 2
 
                 if (child < n && comparison(span[lo + child - 1], span[lo + child]) < 0)
                     child++;
@@ -141,7 +142,7 @@ namespace SourceCode.Clay.Buffers
         private static int PickPivot<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
             // Compute median-of-three.  But also partition them, since we've done the comparison.
-            var mid = lo + ((hi - lo) / 2);
+            var mid = lo + ((hi - lo) >> 1); // div 2
 
             // Sort lo, mid and hi appropriately, then pick mid as the pivot.
             SwapIfGreater(span, comparison, lo, mid);
@@ -173,7 +174,7 @@ namespace SourceCode.Clay.Buffers
         internal static void HeapSort<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
             var n = hi - lo + 1;
-            for (var i = n / 2; i >= 1; i = i - 1)
+            for (var i = n >> 1; i >= 1; i = i - 1) // div 2
             {
                 DownHeap(span, comparison, i, n, lo);
             }

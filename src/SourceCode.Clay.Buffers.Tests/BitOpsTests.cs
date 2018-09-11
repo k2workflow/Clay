@@ -10,7 +10,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
-    public static class BlitTests
+    public static class BitOpsTests
     {
         #region Rotate
 
@@ -18,72 +18,72 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void Blit_RotateLeft_Byte()
         {
             byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, Blit.RotateLeft(sut, 1));
-            Assert.Equal((byte)0b01010101, Blit.RotateLeft(sut, 2));
-            Assert.Equal((byte)0b10101010, Blit.RotateLeft(sut, 3));
+            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((byte)0b01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateLeft_UShort))]
         public static void Blit_RotateLeft_UShort()
         {
             ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateLeft(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateLeft(sut, 3));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateLeft_UInt))]
         public static void Blit_RotateLeft_UInt()
         {
             uint sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 1));
-            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, Blit.RotateLeft(sut, 2));
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 3));
+            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateLeft_ULong))]
         public static void Blit_RotateLeft_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 1));
-            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, Blit.RotateLeft(sut, 2));
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateLeft(sut, 3));
+            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateRight_Byte))]
         public static void Blit_RotateRight_Byte()
         {
             byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, Blit.RotateRight(sut, 1));
-            Assert.Equal((byte)0b01010101, Blit.RotateRight(sut, 2));
-            Assert.Equal((byte)0b10101010, Blit.RotateRight(sut, 3));
+            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((byte)0b01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateRight_UShort))]
         public static void Blit_RotateRight_UShort()
         {
             ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, Blit.RotateRight(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, Blit.RotateRight(sut, 3));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateRight_UInt))]
         public static void Blit_RotateRight_UInt()
         {
             uint sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 1));
-            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, Blit.RotateRight(sut, 2));
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
+            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
         }
 
         [Fact(DisplayName = nameof(Blit_RotateRight_ULong))]
         public static void Blit_RotateRight_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 1));
-            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, Blit.RotateRight(sut, 2));
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, Blit.RotateRight(sut, 3));
+            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
         }
 
         #endregion
@@ -99,7 +99,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void Blit_FloorLog2_opt5(uint n, int expected)
         {
             // Test the optimization trick on the lower boundary (1-5)
-            var actual = Blit.FloorLog2(n);
+            var actual = BitOps.FloorLog2(n);
             Assert.Equal(expected, (int)actual);
         }
 
@@ -132,7 +132,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue)]
         public static void Blit_FloorLog2_32u(uint n)
         {
-            var log = Blit.FloorLog2(n);
+            var log = BitOps.FloorLog2(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -168,7 +168,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(int.MaxValue)]
         public static void Blit_FloorLog2_32(int n)
         {
-            var log = Blit.FloorLog2(n);
+            var log = BitOps.FloorLog2(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -210,7 +210,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue)]
         public static void Blit_FloorLog2_64u(ulong n)
         {
-            var log = Blit.FloorLog2(n);
+            var log = BitOps.FloorLog2(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -252,7 +252,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(long.MaxValue)]
         public static void Blit_FloorLog2_64(long n)
         {
-            var log = Blit.FloorLog2(n);
+            var log = BitOps.FloorLog2(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -263,10 +263,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(Blit_FloorLog2_Throws))]
         public static void Blit_FloorLog2_Throws()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((uint)0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((ulong)0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => Blit.FloorLog2((long)0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((uint)0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((ulong)0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((long)0));
         }
 
         #endregion
@@ -298,7 +298,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue, 32)]
         public static void Blit_PopCount_32u(uint n, int expected)
         {
-            var actual = Blit.PopCount(n);
+            var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -329,13 +329,13 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue, 64)]
         public static void Blit_PopCount_64u(ulong n, int expected)
         {
-            var actual = Blit.PopCount(n);
+            var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region ReadBit
+        #region ExtractBit
 
         [Theory(DisplayName = nameof(Blit_ReadBit_32u))]
         [InlineData(0b000, 0, false)]
@@ -349,7 +349,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue, 31, true)]
         public static void Blit_ReadBit_32u(uint n, byte offset, bool expected)
         {
-            var actual = Blit.ReadBit(n, offset);
+            var actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
         }
 
@@ -367,13 +367,13 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue, 63, true)]
         public static void Blit_ReadBit_64u(ulong n, byte offset, bool expected)
         {
-            var actual = Blit.ReadBit(n, offset);
+            var actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region WriteBit
+        #region InsertBit
 
         [Theory(DisplayName = nameof(Blit_WriteBit_32u))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
@@ -412,23 +412,23 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             // Unsigned
             var actual = n;
-            Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
+            Assert.Equal(was, BitOps.InsertBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
 
             if (actual != n)
             {
-                Assert.Equal(!was, Blit.WriteBit(ref actual, offset, !on));
+                Assert.Equal(!was, BitOps.InsertBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
 
             // Signed
             var actual1 = (int)n;
-            Assert.Equal(was, Blit.WriteBit(ref actual1, offset, on));
+            Assert.Equal(was, BitOps.InsertBit(ref actual1, offset, on));
             Assert.Equal((int)expected, actual1);
 
             if (actual1 != (int)n)
             {
-                Assert.Equal(!was, Blit.WriteBit(ref actual1, offset, !on));
+                Assert.Equal(!was, BitOps.InsertBit(ref actual1, offset, !on));
                 Assert.Equal((int)n, actual1);
             }
         }
@@ -474,23 +474,23 @@ namespace SourceCode.Clay.Buffers.Tests
         {
             // Unsigned
             var actual = n;
-            Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
+            Assert.Equal(was, BitOps.InsertBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
 
             if (actual != n)
             {
-                Assert.Equal(!was, Blit.WriteBit(ref actual, offset, !on));
+                Assert.Equal(!was, BitOps.InsertBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
 
             // Signed
             var actual1 = (long)n;
-            Assert.Equal(was, Blit.WriteBit(ref actual1, offset, on));
+            Assert.Equal(was, BitOps.InsertBit(ref actual1, offset, on));
             Assert.Equal((long)expected, actual1);
 
             if (actual1 != (long)n)
             {
-                Assert.Equal(!was, Blit.WriteBit(ref actual1, offset, !on));
+                Assert.Equal(!was, BitOps.InsertBit(ref actual1, offset, !on));
                 Assert.Equal((long)n, actual1);
             }
         }
@@ -517,19 +517,19 @@ namespace SourceCode.Clay.Buffers.Tests
             // Unsigned
             var actual = n;
 
-            Assert.Equal(Blit.FlipBit(ref actual, offset), was);
+            Assert.Equal(BitOps.FlipBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(Blit.FlipBit(ref actual, offset), !was);
+            Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
 
             // Signed
             var actual1 = (int)n;
 
-            Assert.Equal(Blit.FlipBit(ref actual1, offset), was);
+            Assert.Equal(BitOps.FlipBit(ref actual1, offset), was);
             Assert.Equal((int)expected, actual1);
 
-            Assert.Equal(Blit.FlipBit(ref actual1, offset), !was);
+            Assert.Equal(BitOps.FlipBit(ref actual1, offset), !was);
             Assert.Equal((int)n, actual1);
         }
 
@@ -554,19 +554,19 @@ namespace SourceCode.Clay.Buffers.Tests
             // Unsigned
             var actual = n;
 
-            Assert.Equal(Blit.FlipBit(ref actual, offset), was);
+            Assert.Equal(BitOps.FlipBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(Blit.FlipBit(ref actual, offset), !was);
+            Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
 
             // Signed
             var actual1 = (long)n;
 
-            Assert.Equal(Blit.FlipBit(ref actual1, offset), was);
+            Assert.Equal(BitOps.FlipBit(ref actual1, offset), was);
             Assert.Equal((long)expected, actual1);
 
-            Assert.Equal(Blit.FlipBit(ref actual1, offset), !was);
+            Assert.Equal(BitOps.FlipBit(ref actual1, offset), !was);
             Assert.Equal((long)n, actual1);
         }
 
