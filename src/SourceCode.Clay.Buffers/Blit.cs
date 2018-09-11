@@ -432,14 +432,17 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint WriteBit(in uint value, in byte offset, in bool on)
+        public static bool WriteBit(ref uint value, in byte offset, in bool on)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
+            var rsp = value & mask;
 
-            return on ? 
+            value = on ? 
                 value | mask : 
                 value & ~mask;
+
+            return rsp > 0; // Cheaper than comparing to mask
         }
 
         /// <summary>
@@ -449,8 +452,19 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int WriteBit(in int value, in byte offset, in bool on) 
-            => (int)WriteBit((uint)value, offset, on);
+        public static bool WriteBit(ref int value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var val = (uint)value;
+            var rsp = val & mask;
+
+            value = (int)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
 
         /// <summary>
         /// Sets the specified bit in a bit mask to true or false.
@@ -459,14 +473,17 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong WriteBit(in ulong value, in byte offset, in bool on)
+        public static bool WriteBit(ref ulong value, in byte offset, in bool on)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
+            var rsp = value & mask;
 
-            return on ? 
+            value = on ? 
                 value | mask : 
                 value & ~mask;
+
+            return rsp > 0; // Cheaper than comparing to mask
         }
 
         /// <summary>
@@ -476,8 +493,19 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long WriteBit(in long value, in byte offset, in bool on) 
-            => (long)WriteBit((ulong)value, offset, on);
+        public static bool WriteBit(ref long value, in byte offset, in bool on)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var val = (ulong)value;
+            var rsp = val & mask;
+
+            value = (long)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
 
         #endregion
 
@@ -489,10 +517,11 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The bit mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint FlipBit(in uint value, in byte offset)
+        public static bool FlipBit(ref uint value, in byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
+            var rsp = value & mask;
 
             // Truth table (2):
             // v   m  | ~m  ^v  ~
@@ -506,7 +535,9 @@ namespace SourceCode.Clay.Buffers
             // 10  10 | 01  11  00
             // 11  10 | 01  10  01
 
-            return ~(~mask ^ value);
+            value = ~(~mask ^ value);
+
+            return rsp > 0;
         }
 
         /// <summary>
@@ -528,6 +559,7 @@ namespace SourceCode.Clay.Buffers
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
+            var rsp = value & mask;
 
             // See Truth table (2) above
             return ~(~mask ^ value);

@@ -376,69 +376,100 @@ namespace SourceCode.Clay.Buffers.Tests
         #region WriteBit
 
         [Theory(DisplayName = nameof(Blit_WriteBit_32u))]
-        [InlineData(0b000, 0, false, 0b000)] // 0
-        [InlineData(0b000, 0, true, 0b001)]
-        [InlineData(0b000, 1, false, 0b000)]
-        [InlineData(0b000, 1, true, 0b010)]
-        [InlineData(0b001, 0, false, 0b000)] // 1
-        [InlineData(0b001, 0, true, 0b001)]
-        [InlineData(0b001, 1, false, 0b001)]
-        [InlineData(0b001, 1, true, 0b011)]
-        [InlineData(0b010, 0, false, 0b010)] // 2
-        [InlineData(0b010, 0, true, 0b011)]
-        [InlineData(0b010, 1, false, 0b000)]
-        [InlineData(0b010, 1, true, 0b010)]
-        [InlineData(0b011, 0, false, 0b010)] // 3
-        [InlineData(0b011, 0, true, 0b011)]
-        [InlineData(0b011, 1, false, 0b001)]
-        [InlineData(0b011, 1, true, 0b011)]
-        [InlineData(uint.MaxValue, 30, false, uint.MaxValue >> 2 | 1U << 31)]
-        [InlineData(uint.MaxValue, 30, true, uint.MaxValue)]
-        [InlineData(uint.MaxValue, 31, false, uint.MaxValue >> 1)]
-        [InlineData(uint.MaxValue, 31, true, uint.MaxValue)]
-        public static void Blit_WriteBit_32u(uint n, byte offset, bool on, uint expected)
+        [InlineData(0b000, 0, false, false, 0b000)] // 0
+        [InlineData(0b000, 0, true, false, 0b001)]
+        [InlineData(0b000, 1, false, false, 0b000)]
+        [InlineData(0b000, 1, true, false, 0b010)]
+        [InlineData(0b001, 0, false, true, 0b000)] // 1
+        [InlineData(0b001, 0, true, true, 0b001)]
+        [InlineData(0b001, 1, false, false, 0b001)]
+        [InlineData(0b001, 1, true, false, 0b011)]
+        [InlineData(0b010, 0, false, false, 0b010)] // 2
+        [InlineData(0b010, 0, true, false, 0b011)]
+        [InlineData(0b010, 1, false, true, 0b000)]
+        [InlineData(0b010, 1, true, true, 0b010)]
+        [InlineData(0b011, 0, false, true, 0b010)] // 3
+        [InlineData(0b011, 0, true, true, 0b011)]
+        [InlineData(0b011, 1, false, true, 0b001)]
+        [InlineData(0b011, 1, true, true, 0b011)]
+        [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
+        [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
+        [InlineData(byte.MaxValue, 7, true, true, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 8, false, false, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 8, true, false, byte.MaxValue + (1U << 8))]
+        [InlineData(ushort.MaxValue, 0, false, true, ushort.MaxValue - 1)]
+        [InlineData(ushort.MaxValue, 0, true, true, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 15, false, true, ushort.MaxValue >> 1)]
+        [InlineData(ushort.MaxValue, 15, true, true, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 16, false, false, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 16, true, false, ushort.MaxValue + (1U << 16))]
+        [InlineData(uint.MaxValue, 0, false, true, uint.MaxValue - 1)]
+        [InlineData(uint.MaxValue, 0, true, true, uint.MaxValue)]
+        [InlineData(uint.MaxValue, 31, false, true, uint.MaxValue >> 1)]
+        [InlineData(uint.MaxValue, 31, true, true, uint.MaxValue)]
+        public static void Blit_WriteBit_32u(uint n, byte offset, bool on, bool was, uint expected)
         {
-            var actual = Blit.WriteBit(n, offset, on);
+            var actual = n;
+            Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
 
             if (actual != n)
             {
-                actual = Blit.WriteBit(actual, offset, !on);
+                Assert.Equal(!was, Blit.WriteBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
         }
 
         [Theory(DisplayName = nameof(Blit_WriteBit_64u))]
-        [InlineData(0b000, 0, false, 0b000)] // 0
-        [InlineData(0b000, 0, true, 0b001)]
-        [InlineData(0b000, 1, false, 0b000)]
-        [InlineData(0b000, 1, true, 0b010)]
-        [InlineData(0b001, 0, false, 0b000)] // 1
-        [InlineData(0b001, 0, true, 0b001)]
-        [InlineData(0b001, 1, false, 0b001)]
-        [InlineData(0b001, 1, true, 0b011)]
-        [InlineData(0b010, 0, false, 0b010)] // 2
-        [InlineData(0b010, 0, true, 0b011)]
-        [InlineData(0b010, 1, false, 0b000)]
-        [InlineData(0b010, 1, true, 0b010)]
-        [InlineData(0b011, 0, false, 0b010)] // 3
-        [InlineData(0b011, 0, true, 0b011)]
-        [InlineData(0b011, 1, false, 0b001)]
-        [InlineData(0b011, 1, true, 0b011)]
-        [InlineData(ulong.MaxValue, 62, false, ulong.MaxValue >> 2 | 1UL << 63)]
-        [InlineData(ulong.MaxValue, 62, true, ulong.MaxValue)]
-        [InlineData(ulong.MaxValue, 63, false, ulong.MaxValue >> 1)]
-        [InlineData(ulong.MaxValue, 63, true, ulong.MaxValue)]
-        public static void Blit_WriteBit_64u(ulong n, byte offset, bool on, ulong expected)
+        [InlineData(0b000, 0, false, false, 0b000)] // 0
+        [InlineData(0b000, 0, true, false, 0b001)]
+        [InlineData(0b000, 1, false, false, 0b000)]
+        [InlineData(0b000, 1, true, false, 0b010)]
+        [InlineData(0b001, 0, false, true, 0b000)] // 1
+        [InlineData(0b001, 0, true, true, 0b001)]
+        [InlineData(0b001, 1, false, false, 0b001)]
+        [InlineData(0b001, 1, true, false, 0b011)]
+        [InlineData(0b010, 0, false, false, 0b010)] // 2
+        [InlineData(0b010, 0, true, false, 0b011)]
+        [InlineData(0b010, 1, false, true, 0b000)]
+        [InlineData(0b010, 1, true, true, 0b010)]
+        [InlineData(0b011, 0, false, true, 0b010)] // 3
+        [InlineData(0b011, 0, true, true, 0b011)]
+        [InlineData(0b011, 1, false, true, 0b001)]
+        [InlineData(0b011, 1, true, true, 0b011)]
+        [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
+        [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
+        [InlineData(byte.MaxValue, 7, true, true, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 8, false, false, byte.MaxValue)]
+        [InlineData(byte.MaxValue, 8, true, false, byte.MaxValue + (1U << 8))]
+        [InlineData(ushort.MaxValue, 0, false, true, ushort.MaxValue - 1)]
+        [InlineData(ushort.MaxValue, 0, true, true, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 15, false, true, ushort.MaxValue >> 1)]
+        [InlineData(ushort.MaxValue, 15, true, true, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 16, false, false, ushort.MaxValue)]
+        [InlineData(ushort.MaxValue, 16, true, false, ushort.MaxValue + (1U << 16))]
+        [InlineData(uint.MaxValue, 0, false, true, uint.MaxValue - 1)]
+        [InlineData(uint.MaxValue, 0, true, true, uint.MaxValue)]
+        [InlineData(uint.MaxValue, 31, false, true, uint.MaxValue >> 1)]
+        [InlineData(uint.MaxValue, 31, true, true, uint.MaxValue)]
+        [InlineData(ulong.MaxValue, 62, false, true, ulong.MaxValue >> 2 | 1UL << 63)]
+        [InlineData(ulong.MaxValue, 62, true, true, ulong.MaxValue)]
+        [InlineData(ulong.MaxValue, 63, false, true, ulong.MaxValue >> 1)]
+        [InlineData(ulong.MaxValue, 63, true, true, ulong.MaxValue)]
+        public static void Blit_WriteBit_64u(ulong n, byte offset, bool on, bool was, ulong expected)
         {
-            var actual = Blit.WriteBit(n, offset, on);
+            var actual = n;
+            Assert.Equal(was, Blit.WriteBit(ref actual, offset, on));
             Assert.Equal(expected, actual);
 
             if (actual != n)
             {
-                actual = Blit.WriteBit(actual, offset, !on);
+                Assert.Equal(!was, Blit.WriteBit(ref actual, offset, !on));
                 Assert.Equal(n, actual);
             }
+
         }
 
         #endregion
