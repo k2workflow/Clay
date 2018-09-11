@@ -15,6 +15,8 @@ namespace SourceCode.Clay.Buffers
     /// </summary>
     public static class Blit
     {
+        #region Rotate
+
         /// <summary>
         /// Rotates the specified <see cref="byte"/> value left by the specified number of bits.
         /// </summary>
@@ -138,6 +140,10 @@ namespace SourceCode.Clay.Buffers
             // https://github.com/dotnet/coreclr/pull/1830
             return (value >> b) | (value << (64 - b));
         }
+
+        #endregion
+
+        #region FloorLog2
 
         private static readonly byte[] s_deBruijn32 = new byte[32]
         {
@@ -280,6 +286,10 @@ namespace SourceCode.Clay.Buffers
             return inc + FloorLog2Impl(val);
         }
 
+        #endregion
+
+        #region PopCount
+
         /// <summary>
         /// Returns the population count (number of bits set) of a bit mask.
         /// </summary>
@@ -361,6 +371,10 @@ namespace SourceCode.Clay.Buffers
         public static int PopCount(in long value) 
             => PopCount((ulong)value);
 
+        #endregion
+
+        #region ReadBit
+
         /// <summary>
         /// Reads whether the specified bit in a bit mask is set to true.
         /// </summary>
@@ -372,7 +386,7 @@ namespace SourceCode.Clay.Buffers
             var b = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << b;
 
-            return (value & mask) == 1;
+            return (value & mask) > 0; // Cheaper than comparing to mask
         }
 
         /// <summary>
@@ -395,7 +409,7 @@ namespace SourceCode.Clay.Buffers
             var b = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << b;
 
-            return (value & mask) == 1;
+            return (value & mask) > 0; // Cheaper than comparing to mask
         }
 
         /// <summary>
@@ -406,6 +420,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ReadBit(in long value, in byte offset)
             => ReadBit((ulong)value, offset);
+
+        #endregion
+
+        #region WriteBit
 
         /// <summary>
         /// Sets the specified bit in a bit mask to true or false.
@@ -460,6 +478,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long WriteBit(in long value, in byte offset, in bool on) 
             => (long)WriteBit((ulong)value, offset, on);
+
+        #endregion
+
+        #region FlipBit
 
         /// <summary>
         /// Negates a single bit in a bit mask.
@@ -519,5 +541,27 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long FlipBit(in long value, in byte offset)
             => (long)FlipBit((ulong)value, offset);
+
+        /// <summary>
+        /// Negates a single bit in a bit mask.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        //public static void FlipBit(ref Span<byte> value, in int offset)
+        //{
+        //    var ix = (value.Length << 3) - 1;
+        //    if (offset <= ix) ix = offset; // Design choice ignores out-of-range values
+        //    ix >>= 3; // div 8
+
+        //    ref byte byt = ref value[ix];
+
+        //    ix = offset & 7; // mod 8
+        //    var mask = (byte)(1 << ix);
+
+        //    // See Truth table (2) above
+        //    byt = (byte)~(~mask ^ byt);
+        //}
+
+        #endregion
     }
 }
