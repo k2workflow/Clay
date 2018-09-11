@@ -512,5 +512,60 @@ namespace SourceCode.Clay.Buffers.Tests
         //}
 
         #endregion
+
+        #region ExchangeBit
+
+        [Theory(DisplayName = nameof(Blit_ExchangeBit_32u))]
+        [InlineData(0b000, 0, 0b001, false)]
+        [InlineData(0b001, 0, 0b000, true)]
+        [InlineData(0b000, 1, 0b010, false)]
+        [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
+        [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
+        [InlineData(byte.MaxValue, 8, byte.MaxValue + (1U << 8), false)]
+        [InlineData(ushort.MaxValue, 0, ushort.MaxValue - 1, true)]
+        [InlineData(ushort.MaxValue, 15, ushort.MaxValue >> 1, true)]
+        [InlineData(ushort.MaxValue, 16, ushort.MaxValue + (1U << 16), false)]
+        [InlineData(uint.MaxValue, 0, uint.MaxValue - 1, true)]
+        [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1, true)]
+        public static void Blit_ExchangeBit_32u(uint n, byte offset, uint expected, bool on)
+        {
+            var actual = n;
+
+            Assert.Equal(Blit.ExchangeBit(ref actual, offset), on);
+            Assert.Equal(expected, actual);
+
+            Assert.Equal(Blit.ExchangeBit(ref actual, offset), !on);
+            Assert.Equal(n, actual);
+        }
+
+        [Theory(DisplayName = nameof(Blit_ExchangeBit_64u))]
+        [InlineData(0b000, 0, 0b001, false)]
+        [InlineData(0b001, 0, 0b000, true)]
+        [InlineData(0b000, 1, 0b010, false)]
+        [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
+        [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
+        [InlineData(byte.MaxValue, 8, byte.MaxValue + (1UL << 8), false)]
+        [InlineData(ushort.MaxValue, 0, ushort.MaxValue - 1, true)]
+        [InlineData(ushort.MaxValue, 15, ushort.MaxValue >> 1, true)]
+        [InlineData(ushort.MaxValue, 16, ushort.MaxValue + (1UL << 16), false)]
+        [InlineData(uint.MaxValue, 0, uint.MaxValue - 1, true)]
+        [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1, true)]
+        [InlineData(uint.MaxValue, 32, uint.MaxValue + (1UL << 32), false)]
+        [InlineData(ulong.MaxValue, 0, ulong.MaxValue - 1, true)]
+        [InlineData(ulong.MaxValue, 63, ulong.MaxValue >> 1, true)]
+        public static void Blit_ExchangeBit_64u(ulong n, byte offset, ulong expected, bool on)
+        {
+            var actual = n;
+
+            Assert.Equal(Blit.ExchangeBit(ref actual, offset), on);
+            Assert.Equal(expected, actual);
+
+            Assert.Equal(Blit.ExchangeBit(ref actual, offset), !on);
+            Assert.Equal(n, actual);
+        }
+
+        #endregion
     }
 }

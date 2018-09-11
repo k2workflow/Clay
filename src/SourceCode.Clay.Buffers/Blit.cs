@@ -26,10 +26,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateLeft(in byte value, in byte offset)
         {
-            var b = offset & 7; // mod 8 safely ignores boundary checks
+            var shft = offset & 7; // mod 8 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (byte)((value << b) | (value >> (8 - b)));
+            return (byte)((value << shft) | (value >> (8 - shft)));
         }
 
         /// <summary>
@@ -41,10 +41,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateRight(in byte value, in byte offset)
         {
-            var b = offset & 7; // mod 8 safely ignores boundary checks
+            var shft = offset & 7; // mod 8 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (byte)((value >> b) | (value << (8 - b)));
+            return (byte)((value >> shft) | (value << (8 - shft)));
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateLeft(in ushort value, in byte offset)
         {
-            var b = offset & 15; // mod 16 safely ignores boundary checks
+            var shft = offset & 15; // mod 16 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (ushort)((value << b) | (value >> (16 - b)));
+            return (ushort)((value << shft) | (value >> (16 - shft)));
         }
 
         /// <summary>
@@ -71,10 +71,10 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateRight(in ushort value, in byte offset)
         {
-            var b = offset & 15; // mod 16 safely ignores boundary checks
+            var shft = offset & 15; // mod 16 safely ignores boundary checks
 
             // Intrinsic not available for byte/ushort
-            return (ushort)((value >> b) | (value << (16 - b)));
+            return (ushort)((value >> shft) | (value << (16 - shft)));
         }
 
         /// <summary>
@@ -86,11 +86,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateLeft(in uint value, in byte offset)
         {
-            var b = offset & 31; // mod 32 safely ignores boundary checks
+            var shft = offset & 31; // mod 32 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value << b) | (value >> (32 - b));
+            return (value << shft) | (value >> (32 - shft));
         }
 
         /// <summary>
@@ -102,11 +102,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateRight(in uint value, in byte offset)
         {
-            var b = offset & 31; // mod 32 safely ignores boundary checks
+            var shft = offset & 31; // mod 32 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> b) | (value << (32 - b));
+            return (value >> shft) | (value << (32 - shft));
         }
 
         /// <summary>
@@ -118,11 +118,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateLeft(in ulong value, in byte offset)
         {
-            var b = offset & 63; // mod 64 safely ignores boundary checks
+            var shft = offset & 63; // mod 64 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value << b) | (value >> (64 - b));
+            return (value << shft) | (value >> (64 - shft));
         }
 
         /// <summary>
@@ -134,11 +134,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateRight(in ulong value, in byte offset)
         {
-            var b = offset & 63; // mod 64 safely ignores boundary checks
+            var shft = offset & 63; // mod 64 safely ignores boundary checks
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> b) | (value << (64 - b));
+            return (value >> shft) | (value << (64 - shft));
         }
 
         #endregion
@@ -383,8 +383,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ReadBit(in uint value, in byte offset)
         {
-            var b = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << b;
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
             return (value & mask) > 0; // Cheaper than comparing to mask
         }
@@ -406,8 +406,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ReadBit(in ulong value, in byte offset)
         {
-            var b = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << b;
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
             return (value & mask) > 0; // Cheaper than comparing to mask
         }
@@ -434,8 +434,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint WriteBit(in uint value, in byte offset, in bool on)
         {
-            var b = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << b;
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
             return on ? 
                 value | mask : 
@@ -461,8 +461,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong WriteBit(in ulong value, in byte offset, in bool on)
         {
-            var b = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << b;
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
             return on ? 
                 value | mask : 
@@ -491,8 +491,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint FlipBit(in uint value, in byte offset)
         {
-            var b = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << b;
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
             // Truth table (2):
             // v   m  | ~m  ^v  ~
@@ -526,8 +526,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong FlipBit(in ulong value, in byte offset)
         {
-            var b = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << b;
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
             // See Truth table (2) above
             return ~(~mask ^ value);
@@ -561,6 +561,170 @@ namespace SourceCode.Clay.Buffers
         //    // See Truth table (2) above
         //    byt = (byte)~(~mask ^ byt);
         //}
+
+        #endregion
+
+        #region BTC
+
+        /// <summary>
+        /// Negates a single bit in a bit mask and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref uint value, in byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            // See Truth table (2) above
+            value = ~(~mask ^ value);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Negates a single bit in a bit mask and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref int value, in byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var val = (uint)value;
+            var rsp = val & mask;
+
+            // See Truth table (2) above
+            value = (int)(~(~mask ^ val));
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Negates a single bit in a bit mask and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref ulong value, in byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var rsp = value & mask;
+
+            // See Truth table (2) above
+            value = ~(~mask ^ value);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Negates a single bit in a bit mask and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref long value, in byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var val = (ulong)value;
+            var rsp = val & mask;
+
+            // See Truth table (2) above
+            value = (long)(~(~mask ^ val));
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        #endregion
+
+        #region BTS/BTR
+
+        /// <summary>
+        /// Sets the specified bit in a bit mask to true or false, and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref uint value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            value = on ?
+                value | mask :
+                value & ~mask;
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a bit mask to true or false, and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref int value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var val = (uint)value;
+            var rsp = val & mask;
+
+            value = (int)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a bit mask to true or false, and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref ulong value, in byte offset, in bool on)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var rsp = value & mask;
+
+            value = on ?
+                value | mask :
+                value & ~mask;
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a bit mask to true or false, and returns whether it was originally set or not.
+        /// </summary>
+        /// <param name="value">The bit mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExchangeBit(ref long value, in byte offset, in bool on)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var val = (ulong)value;
+            var rsp = val & mask;
+
+            value = (long)(on ?
+                val | mask :
+                val & ~mask);
+
+            return rsp > 0; // Cheaper than comparing to mask
+        }
 
         #endregion
     }
