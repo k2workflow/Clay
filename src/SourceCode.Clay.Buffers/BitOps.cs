@@ -1010,5 +1010,25 @@ namespace SourceCode.Clay.Buffers
         }
 
         #endregion
+
+        #region IsPowerOfTwo
+
+        public static bool IsPowerOfTwo(byte value)
+            => value != 0 
+            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
+
+        public static bool IsPowerOfTwo(ushort value)
+            => value != 0 
+            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
+
+        public static bool IsPowerOfTwo(uint value)
+            => value != 0 
+            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
+
+        //public static bool IsPowerOfTwo(ulong value) 
+        //    => value != 0 
+        //    && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
+
+        #endregion
     }
 }
