@@ -385,6 +385,7 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
             actual = BitOps.TrailingCount(m, false);
@@ -431,6 +432,7 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
             actual = BitOps.TrailingCount(m, false);
@@ -482,6 +484,7 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
             actual = BitOps.TrailingCount(m, false);
@@ -495,31 +498,31 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Theory(DisplayName = nameof(BitOps_LeadTrail_64u))]
-        //[InlineData(0b000ul, 64)]
-        //[InlineData(0b001ul, 63)]
-        //[InlineData(0b010ul, 62)]
-        //[InlineData(0b011ul, 62)]
-        //[InlineData(0b100ul, 61)]
-        //[InlineData(0b101ul, 61)]
-        //[InlineData(0b110ul, 61)]
-        //[InlineData(0b111ul, 61)]
-        //[InlineData(0b1101ul, 60)]
-        //[InlineData(0b1111ul, 60)]
-        //[InlineData(0b10111ul, 59)]
-        //[InlineData(0b11111ul, 59)]
-        //[InlineData(0b110111ul, 58)]
-        //[InlineData(0b111011ul, 58)]
-        //[InlineData(0b1111010ul, 57)]
-        //[InlineData(0b1111101ul, 57)]
-        //[InlineData((ulong)byte.MaxValue, 64 - 8)]
-        //[InlineData((ulong)(ushort.MaxValue >> 3), 64 - 16 + 3)]
+        [InlineData(0b000ul, 64)]
+        [InlineData(0b001ul, 63)]
+        [InlineData(0b010ul, 62)]
+        [InlineData(0b011ul, 62)]
+        [InlineData(0b100ul, 61)]
+        [InlineData(0b101ul, 61)]
+        [InlineData(0b110ul, 61)]
+        [InlineData(0b111ul, 61)]
+        [InlineData(0b1101ul, 60)]
+        [InlineData(0b1111ul, 60)]
+        [InlineData(0b10111ul, 59)]
+        [InlineData(0b11111ul, 59)]
+        [InlineData(0b110111ul, 58)]
+        [InlineData(0b111011ul, 58)]
+        [InlineData(0b1111010ul, 57)]
+        [InlineData(0b1111101ul, 57)]
+        [InlineData((ulong)byte.MaxValue, 64 - 8)]
+        [InlineData((ulong)(ushort.MaxValue >> 3), 64 - 16 + 3)]
         [InlineData((ulong)ushort.MaxValue, 64 - 16)]
-        //[InlineData((ulong)(uint.MaxValue >> 5), 32 + 5)]
-        //[InlineData((ulong)uint.MaxValue, 32)]
-        //[InlineData(ulong.MaxValue >> 9, 9)]
-        //[InlineData(1ul << 57, 64 - 1 - 57)]
-        //[InlineData(ulong.MaxValue, 0)]
-        //[InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110ul, 32 + 3)]
+        [InlineData((ulong)(uint.MaxValue >> 5), 32 + 5)]
+        [InlineData((ulong)uint.MaxValue, 32)]
+        [InlineData(ulong.MaxValue >> 9, 9)]
+        [InlineData(1ul << 57, 64 - 1 - 57)]
+        [InlineData(ulong.MaxValue, 0)]
+        [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110ul, 32 + 3)]
         public static void BitOps_LeadTrail_64u(ulong n, int expected)
         {
             var m = n;
