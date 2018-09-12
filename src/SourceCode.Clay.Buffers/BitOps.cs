@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
@@ -493,9 +494,8 @@ namespace SourceCode.Clay.Buffers
             if (value == byte.MaxValue)
                 return on ? 8 : 0;
 
-            var val = value;
-            if (on)
-                val = (byte)~val;
+            // If a leading-ones operation, negate mask but remember to truncate carry-bits
+            var val = on ? (uint)(byte)~(uint)value : value;
 
             return 7 - FloorLog2Impl(val);
         }
@@ -514,9 +514,8 @@ namespace SourceCode.Clay.Buffers
             if (value == ushort.MaxValue)
                 return on ? 16 : 0;
 
-            var val = value;
-            if (on)
-                val = (ushort)~val;
+            // If a leading-ones operation, negate mask but remember to truncate carry-bits
+            var val = on ? (uint)(ushort)~(uint)value : value;
 
             return 15 - FloorLog2Impl(val);
         }
@@ -535,6 +534,7 @@ namespace SourceCode.Clay.Buffers
             if (value == uint.MaxValue)
                 return on ? 32 : 0;
 
+            // If a leading-ones operation, negate mask but remember to truncate carry-bits
             var val = on ? ~value : value;
 
             return 31 - FloorLog2Impl(val);
@@ -554,6 +554,7 @@ namespace SourceCode.Clay.Buffers
             if (value == ulong.MaxValue)
                 return on ? 64 : 0;
 
+            // If a leading-ones operation, negate mask but remember to truncate carry-bits
             var val = on ? ~value : value;
             
             return 63 - FloorLog2(val);
@@ -563,13 +564,6 @@ namespace SourceCode.Clay.Buffers
 
         #region TrailingCount
 
-        // eg 64 % 11 = 9. Since 64 = 0100 0000 which has 6 trailing zeros, [9] = 6
-        private static readonly byte[] s_trail8u = new byte[11] // mod 11
-        {
-            8, 0, 1, 8, 2, 4, 9, 7,
-            3, 6, 5
-        };
-
         /// <summary>
         /// Count the number of trailing bits in a mask.
         /// </summary>
@@ -578,14 +572,43 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in byte value, in bool on)
         {
-            uint val = value;
-            if (on) val = ~val;
+            // If a trailing-ones operation, negate mask but remember to truncate carry-bits
+            var val = on ? (uint)(byte)~(uint)value : value;
 
-            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
-            return s_trail8u[lsb % 11];
+            // The expression (n & -n) returns lsb(n).
+            // Only possible values are therefore [0,1,2,4,...,128]
+            var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
+
+            // Mod-11 is a simple perfect-hashing scheme over [0,1,2,4,...,128]
+            // in order to derive a contiguous range [0..10] to use as a jmp table.
+            lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
+
+            var cnt = 0;
+            switch (lsb) // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            {
+                //   n                      2^n          %11      b=bin(n)    tz(b)
+                case 00: cnt = 8; break; // [  0 % 11] = [ 0] =    0000_0000 = 8
+                case 01: cnt = 0; break; // [  1 % 11] = [ 1] =    0000_0001 = 0 
+                case 02: cnt = 1; break; // [  2 % 11] = [ 2] =    0000_0010 = 1
+                case 04: cnt = 2; break; // [  4 % 11] = [ 4] =    0000_0100 = 2
+                case 05: cnt = 4; break; // [ 16 % 11] = [ 5] =    0001_0000 = 4
+                case 07: cnt = 7; break; // [128 % 11] = [ 7] =    1000_0000 = 7
+                case 08: cnt = 3; break; // [  8 % 11] = [ 8] =    0000_1000 = 3
+                case 09: cnt = 6; break; // [ 64 % 11] = [ 9] =    0100_0000 = 6
+                case 10: cnt = 5; break; // [ 32 % 11] = [10] =    0010_0000 = 5
+
+                // NoOp: Hashing scheme has unused outputs (inputs 256 & 512 are out of range in a byte)
+                default:
+                case 03:                 // [256 % 11] = [ 3] = 01_0000_0000 = 8
+                case 06:                 // [512 % 11] = [ 6] = 10_0000_0000 = 9
+                    Debug.Fail($"{nameof(TrailingCount)} inputs ({value},{on}) resulted in unexpected hash {lsb} and count {cnt}");
+                    break;
+            }
+             
+            return cnt; 
         }
 
-        // eg 64 % 19 = 7. Since 64 = 0100 0000 which has 6 trailing zeros, [7] = 6
+        // See algorithm notes in TrailingCount(byte)
         private static readonly byte[] s_trail16u = new byte[19] // mod 19
         {
             16, 00, 01, 13, 02, 16, 14, 06,
@@ -601,15 +624,14 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in ushort value, in bool on)
         {
-            uint val = value;
-            if (on)
-                val = ~val;
+            // If a trailing-ones operation, negate mask but remember to truncate carry-bits
+            var val = on ? (uint)(ushort)~(uint)value : value;
 
-            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
+            var lsb = val & -val;
             return s_trail16u[lsb % 19];
         }
 
-        // eg 64 % 37 = 27. Since 64 = 0100 0000 which has 6 trailing zeros, [27] = 6
+        // See algorithm notes in TrailingCount(byte)
         private static readonly byte[] s_trail32u = new byte[37] // mod 37
         {
             32, 00, 01, 26, 02, 23, 27, 00,
@@ -627,9 +649,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in uint value, in bool on)
         {
-            var val = value;
-            if (on)
-                val = ~val;
+            // If a trailing-ones operation, negate mask
+            var val = on ? ~value : value;
 
             var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
             return s_trail32u[lsb % 37];
