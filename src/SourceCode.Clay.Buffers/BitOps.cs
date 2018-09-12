@@ -586,35 +586,29 @@ namespace SourceCode.Clay.Buffers
             var cnt = 0;
             switch (lsb) // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             {
-                //   n                      2^n          %11      b=bin(n)    tz(b)
-                case 00: cnt = 8; break; // [  0 % 11] = [ 0] =    0000_0000 = 8
-                case 01: cnt = 0; break; // [  1 % 11] = [ 1] =    0000_0001 = 0 
-                case 02: cnt = 1; break; // [  2 % 11] = [ 2] =    0000_0010 = 1
-                case 04: cnt = 2; break; // [  4 % 11] = [ 4] =    0000_0100 = 2
-                case 05: cnt = 4; break; // [ 16 % 11] = [ 5] =    0001_0000 = 4
-                case 07: cnt = 7; break; // [128 % 11] = [ 7] =    1000_0000 = 7
-                case 08: cnt = 3; break; // [  8 % 11] = [ 8] =    0000_1000 = 3
-                case 09: cnt = 6; break; // [ 64 % 11] = [ 9] =    0100_0000 = 6
-                case 10: cnt = 5; break; // [ 32 % 11] = [10] =    0010_0000 = 5
+                //   n         z            2^n         % 11     b=bin(n)   z=tz(b)
+                case 00: cnt = 8; break; // [  0 % 11]  [ 0]     0000_0000  8
+                case 01: cnt = 0; break; // [  1 % 11]  [ 1]     0000_0001  0 
+                case 02: cnt = 1; break; // [  2 % 11]  [ 2]     0000_0010  1
+                case 03: goto default;   // [256 % 11]  [ 3]  01_0000_0000  8 (n/a)
 
-                // NoOp: Hashing scheme has unused outputs (inputs 256 & 512 are out of range in a byte)
+                case 04: cnt = 2; break; // [  4 % 11]  [ 4]     0000_0100  2
+                case 05: cnt = 4; break; // [ 16 % 11]  [ 5]     0001_0000  4
+                case 06: goto default;   // [512 % 11]  [ 6]  10_0000_0000  9 (n/a)
+                case 07: cnt = 7; break; // [128 % 11]  [ 7]     1000_0000  7
+
+                case 08: cnt = 3; break; // [  8 % 11]  [ 8]     0000_1000  3
+                case 09: cnt = 6; break; // [ 64 % 11]  [ 9]     0100_0000  6
+                case 10: cnt = 5; break; // [ 32 % 11]  [10]     0010_0000  5
+
+                // NoOp: Hashing scheme has unused outputs (inputs 256 & 512 do not fit a byte)
                 default:
-                case 03:                 // [256 % 11] = [ 3] = 01_0000_0000 = 8
-                case 06:                 // [512 % 11] = [ 6] = 10_0000_0000 = 9
                     Debug.Fail($"{nameof(TrailingCount)} inputs ({value},{on}) resulted in unexpected hash {lsb} and count {cnt}");
                     break;
             }
              
             return cnt; 
         }
-
-        // See algorithm notes in TrailingCount(byte)
-        private static readonly byte[] s_trail16u = new byte[19] // mod 19
-        {
-            16, 00, 01, 13, 02, 16, 14, 06,
-            03, 08, 17, 12, 15, 05, 07, 11,
-            04, 10, 09
-        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -627,11 +621,49 @@ namespace SourceCode.Clay.Buffers
             // If a trailing-ones operation, negate mask but remember to truncate carry-bits
             var val = on ? (uint)(ushort)~(uint)value : value;
 
+            // See algorithm notes in TrailingCount(byte)
             var lsb = val & -val;
-            return s_trail16u[lsb % 19];
+            lsb = lsb % 19;
+
+            var cnt = 0;
+            switch (lsb)
+            {
+                //   n         z             2^n            % 19     b=bin(n)             z=tz(b)
+                case 00: cnt = 16; break; // [     0 % 19]  [ 0]     0000_0000_0000_0000  16
+                case 01: cnt = 00; break; // [     1 % 19]  [ 1]     0000_0000_0000_0001  0
+                case 02: cnt = 01; break; // [     2 % 19]  [ 2]     0000_0000_0000_0010  1
+                case 03: cnt = 13; break; // [  8192 % 19]  [ 3]     0010_0000_0000_0000  13
+
+                case 04: cnt = 02; break; // [     4 % 19]  [ 4]     0000_0000_0000_0100  2
+                case 05: goto default;    // [ 65536 % 19]  [ 5]  01_0000_0000_0000_0000  16 (n/a)
+                case 06: cnt = 14; break; // [ 16384 % 19]  [ 6]     0100_0000_0000_0000  14
+                case 07: cnt = 06; break; // [    64 % 19]  [ 7]     0000_0000_0100_0000  6
+
+                case 08: cnt = 03; break; // [     8 % 19]  [ 8]     0000_0000_0000_1000  3
+                case 09: cnt = 08; break; // [   256 % 19]  [ 9]     0000_0001_0000_0000  8
+                case 10: goto default;    // [131072 % 19]  [10]  10_0000_0000_0000_0000  17 (n/a)
+                case 11: cnt = 12; break; // [  4096 % 19]  [11]     0001_0000_0000_0000  12
+
+                case 12: cnt = 15; break; // [ 32768 % 19]  [12]     1000_0000_0000_0000  15
+                case 13: cnt = 05; break; // [    32 % 19]  [13]     0000_0000_0010_0000  5
+                case 14: cnt = 07; break; // [   128 % 19]  [14]     0000_0000_1000_0000  7
+                case 15: cnt = 11; break; // [  2048 % 19]  [15]     0000_1000_0000_0000  11
+
+                case 16: cnt = 04; break; // [    16 % 19]  [16]     0000_0000_0001_0000  4
+                case 17: cnt = 10; break; // [  1024 % 19]  [17]     0000_0100_0000_0000  10
+                case 18: cnt = 09; break; // [   512 % 19]  [18]     0000_0010_0000_0000  9
+
+                // NoOp: Hashing scheme has unused outputs (inputs 65536 & 131072 do not fit a ushort)
+                default:
+                    Debug.Fail($"{nameof(TrailingCount)} inputs ({value},{on}) resulted in unexpected hash {lsb} and count {cnt}");
+                    break;
+            }
+
+            return cnt;
         }
 
         // See algorithm notes in TrailingCount(byte)
+        // Use a jump table instead of a switch since it's relatively large
         private static readonly byte[] s_trail32u = new byte[37] // mod 37
         {
             32, 00, 01, 26, 02, 23, 27, 00,
