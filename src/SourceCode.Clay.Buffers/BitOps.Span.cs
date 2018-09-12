@@ -312,7 +312,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Leading
+        #region LeadingCount
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -320,7 +320,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Leading(in ReadOnlySpan<byte> value, in bool on)
+        public static long LeadingCount(in ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -330,7 +330,7 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
         
-            return Leading(value[ix], on) + (ix << 3); // mul 8
+            return LeadingCount(value[ix], on) + (ix << 3); // mul 8
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Leading(in ReadOnlySpan<ushort> value, in bool on)
+        public static long LeadingCount(in ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -349,7 +349,7 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return Leading(value[ix], on) + (ix << 4); // mul 16
+            return LeadingCount(value[ix], on) + (ix << 4); // mul 16
         }
 
         /// <summary>
@@ -358,7 +358,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Leading(in ReadOnlySpan<uint> value, in bool on)
+        public static long LeadingCount(in ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -368,7 +368,7 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return Leading(value[ix], on) + (ix << 5); // mul 32
+            return LeadingCount(value[ix], on) + (ix << 5); // mul 32
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Leading(in ReadOnlySpan<ulong> value, in bool on)
+        public static long LeadingCount(in ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -387,12 +387,12 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return Leading(value[ix], on) + (ix << 6); // mul 64
+            return LeadingCount(value[ix], on) + (ix << 6); // mul 64
         }
 
         #endregion
 
-        #region Trailing
+        #region TrailingCount
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -400,7 +400,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ReadOnlySpan<byte> value, in bool on)
+        public static long TrailingCount(in ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -411,7 +411,7 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return Trailing(value[last - ix], on) + (ix << 3); // mul 8
+            return TrailingCount(value[last - ix], on) + (ix << 3); // mul 8
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ReadOnlySpan<ushort> value, in bool on)
+        public static long TrailingCount(in ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -431,7 +431,7 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return Trailing(value[last - ix], on) + (ix << 4); // mul 16
+            return TrailingCount(value[last - ix], on) + (ix << 4); // mul 16
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ReadOnlySpan<uint> value, in bool on)
+        public static long TrailingCount(in ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -451,7 +451,7 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return Trailing(value[last - ix], on) + (ix << 5); // mul 32
+            return TrailingCount(value[last - ix], on) + (ix << 5); // mul 32
         }
 
         /// <summary>
@@ -460,7 +460,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ReadOnlySpan<ulong> value, in bool on)
+        public static long TrailingCount(in ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -471,7 +471,7 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return Trailing(value[last - ix], on) + (ix << 6); // mul 64
+            return TrailingCount(value[last - ix], on) + (ix << 6); // mul 64
         }
 
         #endregion

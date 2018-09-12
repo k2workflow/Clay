@@ -477,7 +477,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Leading
+        #region LeadingCount
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -485,8 +485,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Leading(in byte value, in bool on)
-            => Leading((uint)value, on) - 24;
+        public static int LeadingCount(in byte value, in bool on)
+            => LeadingCount((uint)value, on) - 24;
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -494,8 +494,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Leading(in ushort value, in bool on)
-            => Leading((uint)value, on) - 16;
+        public static int LeadingCount(in ushort value, in bool on)
+            => LeadingCount((uint)value, on) - 16;
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -503,7 +503,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Leading(in uint value, in bool on)
+        public static int LeadingCount(in uint value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 32;
@@ -511,9 +511,7 @@ namespace SourceCode.Clay.Buffers
             if (value >= (1U << 31)) // 2,147,483,648
                 return on ? 32 : 0;
 
-            var val = value;
-            if (on)
-                val = ~val;
+            var val = on ? ~value : value;
 
             val |= val >> 1;
             val |= val >> 2;
@@ -530,7 +528,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Leading(in ulong value, in bool on)
+        public static int LeadingCount(in ulong value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 64;
@@ -538,9 +536,7 @@ namespace SourceCode.Clay.Buffers
             if (value >= (1U << 63)) // 9,223,372,036,854,775,808
                 return on ? 64 : 0;
 
-            var val = value;
-            if (on)
-                val = ~val;
+            var val = on ? ~value : value;
 
             val |= val >> 1;
             val |= val >> 2;
@@ -554,7 +550,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region Trailing
+        #region TrailingCount
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -562,8 +558,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in byte value, in bool on)
-            => Trailing((uint)value, on) - 24;
+        public static long TrailingCount(in byte value, in bool on)
+            => TrailingCount((uint)value, on) - 24;
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -571,8 +567,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ushort value, in bool on)
-            => Trailing((uint)value, on) - 16;
+        public static long TrailingCount(in ushort value, in bool on)
+            => TrailingCount((uint)value, on) - 16;
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -580,7 +576,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in uint value, in bool on)
+        public static long TrailingCount(in uint value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 32;
@@ -588,9 +584,7 @@ namespace SourceCode.Clay.Buffers
             if (value >= (1U << 31)) // 2,147,483,648
                 return on ? 32 : 0;
 
-            var val = value;
-            if (on)
-                val = ~val;
+            var val = on ? ~value : value;
 
             return s_deBruijn32[((val ^ (val - 1)) * Debruijn32) >> 27];
         }
@@ -601,7 +595,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Trailing(in ulong value, in bool on)
+        public static long TrailingCount(in ulong value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 64;
@@ -609,9 +603,7 @@ namespace SourceCode.Clay.Buffers
             if (value >= (1U << 63)) // 9,223,372,036,854,775,808
                 return on ? 64 : 0;
 
-            var val = value;
-            if (on)
-                val = ~val;
+            var val = on ? ~value : value;
 
             return s_deBruijn64[((val ^ (val - 1)) * Debruijn64) >> 58];
         }
@@ -628,6 +620,8 @@ namespace SourceCode.Clay.Buffers
             19, 27, 23, 06, 26, 05, 04, 31
         };
 
+        private const uint Debruijn32 = 0x07C4ACDDu;
+
         private static readonly byte[] s_deBruijn64 = new byte[64]
         {
             00, 47, 01, 56, 48, 27, 02, 60,
@@ -640,8 +634,7 @@ namespace SourceCode.Clay.Buffers
             13, 18, 08, 12, 07, 06, 05, 63
         };
 
-        private const uint Debruijn32 = 0x07C4ACDDU;
-        private const ulong Debruijn64 = 0x03F79D71B4CB0A89UL;
+        private const ulong Debruijn64 = 0x03F79D71B4CB0A89ul;
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int FloorLog2Impl(in uint value)
