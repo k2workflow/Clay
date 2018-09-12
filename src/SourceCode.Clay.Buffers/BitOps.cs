@@ -508,7 +508,7 @@ namespace SourceCode.Clay.Buffers
             if (value == 0)
                 return on ? 0 : 32;
 
-            if (value >= (1U << 31)) // 2,147,483,648
+            if (value == uint.MaxValue)
                 return on ? 32 : 0;
 
             var val = on ? ~value : value;
@@ -533,7 +533,7 @@ namespace SourceCode.Clay.Buffers
             if (value == 0)
                 return on ? 0 : 64;
 
-            if (value >= (1U << 63)) // 9,223,372,036,854,775,808
+            if (value == ulong.MaxValue)
                 return on ? 64 : 0;
 
             var val = on ? ~value : value;
@@ -558,7 +558,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in byte value, in bool on)
+        public static int TrailingCount(in byte value, in bool on)
             => TrailingCount((uint)value, on) - 24;
 
         /// <summary>
@@ -567,7 +567,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ushort value, in bool on)
+        public static int TrailingCount(in ushort value, in bool on)
             => TrailingCount((uint)value, on) - 16;
 
         /// <summary>
@@ -576,12 +576,12 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in uint value, in bool on)
+        public static int TrailingCount(in uint value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 32;
 
-            if (value >= (1U << 31)) // 2,147,483,648
+            if (value == uint.MaxValue) // 2,147,483,648
                 return on ? 32 : 0;
 
             var val = on ? ~value : value;
@@ -595,7 +595,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ulong value, in bool on)
+        public static int TrailingCount(in ulong value, in bool on)
         {
             if (value == 0)
                 return on ? 0 : 64;
