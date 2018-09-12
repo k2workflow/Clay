@@ -477,7 +477,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region LeadingCount
+        #region LeadingCount        
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -486,7 +486,19 @@ namespace SourceCode.Clay.Buffers
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingCount(in byte value, in bool on)
-            => LeadingCount((uint)value, on) - 24;
+        {
+            if (value == 0)
+                return on ? 0 : 8;
+
+            if (value == byte.MaxValue)
+                return on ? 8 : 0;
+
+            var val = value;
+            if (on)
+                val = (byte)~val;
+
+            return 7 - FloorLog2Impl(val);
+        }
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -495,7 +507,19 @@ namespace SourceCode.Clay.Buffers
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingCount(in ushort value, in bool on)
-            => LeadingCount((uint)value, on) - 16;
+        {
+            if (value == 0)
+                return on ? 0 : 16;
+
+            if (value == ushort.MaxValue)
+                return on ? 16 : 0;
+
+            var val = value;
+            if (on)
+                val = (ushort)~val;
+
+            return 15 - FloorLog2Impl(val);
+        }
 
         /// <summary>
         /// Count the number of leading bits in a mask.
@@ -513,13 +537,7 @@ namespace SourceCode.Clay.Buffers
 
             var val = on ? ~value : value;
 
-            val |= val >> 1;
-            val |= val >> 2;
-            val |= val >> 4;
-            val |= val >> 8;
-            val |= val >> 16;
-
-            return s_deBruijn32[(val * Debruijn32) >> 27] ^ 31;
+            return 31 - FloorLog2Impl(val);
         }
 
         /// <summary>
@@ -537,20 +555,20 @@ namespace SourceCode.Clay.Buffers
                 return on ? 64 : 0;
 
             var val = on ? ~value : value;
-
-            val |= val >> 1;
-            val |= val >> 2;
-            val |= val >> 4;
-            val |= val >> 8;
-            val |= val >> 16;
-            val |= val >> 32;
-
-            return s_deBruijn64[(val * Debruijn64) >> 58] ^ 63;
+            
+            return 63 - FloorLog2(val);
         }
 
         #endregion
 
         #region TrailingCount
+
+        // eg 64 % 11 = 9. Since 64 = 0100 0000 which has 6 trailing zeros, [9] = 6
+        private static readonly byte[] s_trail8u = new byte[11] // mod 11
+        {
+            8, 0, 1, 8, 2, 4, 9, 7,
+            3, 6, 5
+        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -559,7 +577,21 @@ namespace SourceCode.Clay.Buffers
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in byte value, in bool on)
-            => TrailingCount((uint)value, on) - 24;
+        {
+            uint val = value;
+            if (on) val = ~val;
+
+            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
+            return s_trail8u[lsb % 11];
+        }
+
+        // eg 64 % 19 = 7. Since 64 = 0100 0000 which has 6 trailing zeros, [7] = 6
+        private static readonly byte[] s_trail16u = new byte[19] // mod 19
+        {
+            16, 00, 01, 13, 02, 16, 14, 06,
+            03, 08, 17, 12, 15, 05, 07, 11,
+            04, 10, 09
+        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -568,7 +600,24 @@ namespace SourceCode.Clay.Buffers
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in ushort value, in bool on)
-            => TrailingCount((uint)value, on) - 16;
+        {
+            uint val = value;
+            if (on)
+                val = ~val;
+
+            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
+            return s_trail16u[lsb % 19];
+        }
+
+        // eg 64 % 37 = 27. Since 64 = 0100 0000 which has 6 trailing zeros, [27] = 6
+        private static readonly byte[] s_trail32u = new byte[37] // mod 37
+        {
+            32, 00, 01, 26, 02, 23, 27, 00,
+            03, 16, 24, 30, 28, 11, 00, 13,
+            04, 07, 17, 00, 25, 22, 31, 15,
+            29, 10, 12, 06, 00, 21, 14, 09,
+            05, 20, 08, 19, 18
+        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -578,16 +627,33 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingCount(in uint value, in bool on)
         {
-            if (value == 0)
-                return on ? 0 : 32;
+            //if (value == 0)
+            //    return on ? 0 : 32;
 
-            if (value == uint.MaxValue) // 2,147,483,648
+            if (value == uint.MaxValue)
                 return on ? 32 : 0;
 
-            var val = on ? ~value : value;
+            var val = value;
+            if (on)
+                val = ~val;
 
-            return s_deBruijn32[((val ^ (val - 1)) * Debruijn32) >> 27];
+            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
+            return s_trail32u[lsb % 37];
         }
+
+        // eg 64 % 67 = 27. Since 64 = 0100 0000 which has 6 trailing zeros, [27] = 6
+        private static readonly byte[] s_trail64u = new byte[67] // mod 71
+        {
+            64, 64, 1, 39, 2, 15, 40, 23,
+            3, 12, 16, 59, 41, 19, 24, 54,
+            4, 0, 13, 10, 17, 62, 60, 28,
+            42, 30, 20, 51, 25, 44, 55, 47,
+            5, 32, 0, 38, 14, 22, 11, 58,
+            18, 53, 63, 9, 61, 27, 29, 50,
+            43, 46, 31, 37, 21, 57, 52, 8,
+            26, 49, 45, 36, 56, 7, 48, 35,
+            6, 34, 33
+        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -600,12 +666,38 @@ namespace SourceCode.Clay.Buffers
             if (value == 0)
                 return on ? 0 : 64;
 
-            if (value >= (1U << 63)) // 9,223,372,036,854,775,808
+            if (value == ulong.MaxValue)
                 return on ? 64 : 0;
 
-            var val = on ? ~value : value;
+            if (value > uint.MaxValue)
+            {
+                if ((uint)value == 0)
+                    return 32 + TrailingCount((uint)(value >> 32), on);
 
-            return s_deBruijn64[((val ^ (val - 1)) * Debruijn64) >> 58];
+                return TrailingCount((uint)(value >> 32), on);
+            }
+
+            return TrailingCount((uint)value, on);
+
+            //if (value == ulong.MaxValue)
+            //    return on ? 0 : 64;
+
+            //var val = value;
+            //if (on)
+            //    val = ~val;
+
+            //var lsb = val & (ulong)-(long)val; // eg 0010 1100 => 44 & -44 = 4
+            //return s_trail64u[lsb % 67];
+
+            //if (value == 0)
+            //    return on ? 0 : 64;
+
+            //if (value == ulong.MaxValue)
+            //    return on ? 64 : 0;
+
+            //var val = on ? ~value : value;
+
+            //return s_deBruijn64[((val ^ (val - 1)) * Debruijn64) >> 58];
         }
 
         #endregion
@@ -620,7 +712,7 @@ namespace SourceCode.Clay.Buffers
             19, 27, 23, 06, 26, 05, 04, 31
         };
 
-        private const uint Debruijn32 = 0x07C4ACDDu;
+        private const uint Debruijn32 = 0x07C4_ACDDu;
 
         private static readonly byte[] s_deBruijn64 = new byte[64]
         {
@@ -634,7 +726,7 @@ namespace SourceCode.Clay.Buffers
             13, 18, 08, 12, 07, 06, 05, 63
         };
 
-        private const ulong Debruijn64 = 0x03F79D71B4CB0A89ul;
+        private const ulong Debruijn64 = 0x03F7_9D71_B4CB_0A89ul;
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int FloorLog2Impl(in uint value)

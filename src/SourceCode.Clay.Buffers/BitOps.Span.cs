@@ -20,7 +20,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ReadOnlySpan<byte> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<byte> value, in uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ReadOnlySpan<ushort> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ushort> value, in uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ReadOnlySpan<uint> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<uint> value, in uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ReadOnlySpan<ulong> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ulong> value, in uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref Span<byte> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<byte> value, in uint offset, in bool on)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref Span<ushort> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<ushort> value, in uint offset, in bool on)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -123,7 +123,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref Span<uint> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<uint> value, in uint offset, in bool on)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to write.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref Span<ulong> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<ulong> value, in uint offset, in bool on)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -160,7 +160,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(ref Span<byte> value, in uint offset)
+        public static bool FlipBit(Span<byte> value, in uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -176,7 +176,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(ref Span<ushort> value, in uint offset)
+        public static bool FlipBit(Span<ushort> value, in uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -192,7 +192,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(ref Span<uint> value, in uint offset)
+        public static bool FlipBit(Span<uint> value, in uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -208,7 +208,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(ref Span<ulong> value, in uint offset)
+        public static bool FlipBit(Span<ulong> value, in uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -227,7 +227,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long PopCount(in ReadOnlySpan<byte> value)
+        public static long PopCount(ReadOnlySpan<byte> value)
         {
             if (value.Length == 0)
                 return 0;
@@ -249,7 +249,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long PopCount(in ReadOnlySpan<ushort> value)
+        public static long PopCount(ReadOnlySpan<ushort> value)
         {
             if (value.Length == 0)
                 return 0;
@@ -271,7 +271,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long PopCount(in ReadOnlySpan<uint> value)
+        public static long PopCount(ReadOnlySpan<uint> value)
         {
             if (value.Length == 0)
                 return 0;
@@ -293,7 +293,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long PopCount(in ReadOnlySpan<ulong> value)
+        public static long PopCount(ReadOnlySpan<ulong> value)
         {
             if (value.Length == 0)
                 return 0;
@@ -320,7 +320,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingCount(in ReadOnlySpan<byte> value, in bool on)
+        public static long LeadingCount(ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -339,7 +339,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingCount(in ReadOnlySpan<ushort> value, in bool on)
+        public static long LeadingCount(ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -358,7 +358,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingCount(in ReadOnlySpan<uint> value, in bool on)
+        public static long LeadingCount(ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -377,7 +377,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingCount(in ReadOnlySpan<ulong> value, in bool on)
+        public static long LeadingCount(ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -400,7 +400,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ReadOnlySpan<byte> value, in bool on)
+        public static long TrailingCount(ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -420,7 +420,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ReadOnlySpan<ushort> value, in bool on)
+        public static long TrailingCount(ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -440,7 +440,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ReadOnlySpan<uint> value, in bool on)
+        public static long TrailingCount(ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -460,7 +460,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingCount(in ReadOnlySpan<ulong> value, in bool on)
+        public static long TrailingCount(ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
