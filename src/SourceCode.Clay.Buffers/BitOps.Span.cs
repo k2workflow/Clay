@@ -312,14 +312,15 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region LeadingZeros
+        #region Leading
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingZeros(in ReadOnlySpan<byte> value)
+        public static long Leading(in ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -328,16 +329,17 @@ namespace SourceCode.Clay.Buffers
 
             var ix = 0;
             while (value[ix] == 0) ix++;
-
-            return LeadingZeros(value[ix]) + (ix << 3); // mul 8
+        
+            return Leading(value[ix], on) + (ix << 3); // mul 8
         }
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingZeros(in ReadOnlySpan<ushort> value)
+        public static long Leading(in ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -347,15 +349,16 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 4); // mul 16
+            return Leading(value[ix], on) + (ix << 4); // mul 16
         }
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingZeros(in ReadOnlySpan<uint> value)
+        public static long Leading(in ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -365,15 +368,16 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 5); // mul 32
+            return Leading(value[ix], on) + (ix << 5); // mul 32
         }
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingZeros(in ReadOnlySpan<ulong> value)
+        public static long Leading(in ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -383,95 +387,20 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 6); // mul 64
+            return Leading(value[ix], on) + (ix << 6); // mul 64
         }
 
         #endregion
 
-        #region LeadingOnes
+        #region Trailing
 
         /// <summary>
-        /// Count the number of leading true bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingOnes(in ReadOnlySpan<byte> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            while (value[ix] == byte.MaxValue) ix++;
-
-            return LeadingOnes(value[ix]) + (ix << 3); // mul 8
-        }
-
-        /// <summary>
-        /// Count the number of leading true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingOnes(in ReadOnlySpan<ushort> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            while (value[ix] == ushort.MaxValue) ix++;
-
-            return LeadingOnes(value[ix]) + (ix << 4); // mul 16
-        }
-
-        /// <summary>
-        /// Count the number of leading true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingOnes(in ReadOnlySpan<uint> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            while (value[ix] == uint.MaxValue) ix++;
-
-            return LeadingOnes(value[ix]) + (ix << 5); // mul 32
-        }
-
-        /// <summary>
-        /// Count the number of leading true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long LeadingOnes(in ReadOnlySpan<ulong> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            while (value[ix] == ulong.MaxValue) ix++;
-
-            return LeadingOnes(value[ix]) + (ix << 6); // mul 64
-        }
-
-        #endregion
-
-        #region TrailingZeros
-
-        /// <summary>
-        /// Count the number of trailing false bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ReadOnlySpan<byte> value)
+        public static long Trailing(in ReadOnlySpan<byte> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -482,15 +411,16 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return TrailingZeros(value[last - ix]) + (ix << 3); // mul 8
+            return Trailing(value[last - ix], on) + (ix << 3); // mul 8
         }
 
         /// <summary>
-        /// Count the number of trailing false bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ReadOnlySpan<ushort> value)
+        public static long Trailing(in ReadOnlySpan<ushort> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -501,15 +431,16 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return TrailingZeros(value[last - ix]) + (ix << 4); // mul 16
+            return Trailing(value[last - ix], on) + (ix << 4); // mul 16
         }
 
         /// <summary>
-        /// Count the number of trailing false bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ReadOnlySpan<uint> value)
+        public static long Trailing(in ReadOnlySpan<uint> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -520,15 +451,16 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return TrailingZeros(value[last - ix]) + (ix << 5); // mul 32
+            return Trailing(value[last - ix], on) + (ix << 5); // mul 32
         }
 
         /// <summary>
-        /// Count the number of trailing false bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ReadOnlySpan<ulong> value)
+        public static long Trailing(in ReadOnlySpan<ulong> value, in bool on)
         {
             if (value.Length == 0)
                 return 0;
@@ -539,87 +471,7 @@ namespace SourceCode.Clay.Buffers
             var last = value.Length - 1;
             while (value[last - ix] == 0) ix++;
 
-            return TrailingZeros(value[last - ix]) + (ix << 6); // mul 64
-        }
-
-        #endregion
-
-        #region TrailingOnes
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ReadOnlySpan<byte> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            var last = value.Length - 1;
-            while (value[last - ix] == byte.MaxValue) ix++;
-
-            return TrailingOnes(value[last - ix]) + (ix << 3); // mul 8
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ReadOnlySpan<ushort> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            var last = value.Length - 1;
-            while (value[last - ix] == ushort.MaxValue) ix++;
-
-            return TrailingOnes(value[last - ix]) + (ix << 4); // mul 16
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ReadOnlySpan<uint> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            var last = value.Length - 1;
-            while (value[last - ix] == uint.MaxValue) ix++;
-
-            return TrailingOnes(value[last - ix]) + (ix << 5); // mul 32
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ReadOnlySpan<ulong> value)
-        {
-            if (value.Length == 0)
-                return 0;
-
-            // TODO: Vectorize
-
-            var ix = 0;
-            var last = value.Length - 1;
-            while (value[last - ix] == ulong.MaxValue) ix++;
-
-            return TrailingOnes(value[last - ix]) + (ix << 6); // mul 64
+            return Trailing(value[last - ix], on) + (ix << 6); // mul 64
         }
 
         #endregion

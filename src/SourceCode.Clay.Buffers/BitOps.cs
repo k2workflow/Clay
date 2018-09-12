@@ -477,45 +477,43 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region LeadingZeros        
+        #region Leading
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in byte value)
-        {
-            if (value == 0)
-                return 8;
-
-            return LeadingZeros((uint)value) - 24;
-        }
+        public static int Leading(in byte value, in bool on)
+            => Leading((uint)value, on) - 24;
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in ushort value)
-        {
-            if (value == 0)
-                return 16;
-
-            return LeadingZeros((uint)value) - 16;
-        }
+        public static int Leading(in ushort value, in bool on)
+            => Leading((uint)value, on) - 16;
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in uint value)
+        public static int Leading(in uint value, in bool on)
         {
             if (value == 0)
-                return 32;
+                return on ? 0 : 32;
+
+            if (value >= (1U << 31)) // 2,147,483,648
+                return on ? 32 : 0;
 
             var val = value;
+            if (on)
+                val = ~val;
 
             val |= val >> 1;
             val |= val >> 2;
@@ -527,16 +525,22 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Count the number of leading false bits in a mask.
+        /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in ulong value)
+        public static int Leading(in ulong value, in bool on)
         {
             if (value == 0)
-                return 64;
+                return on ? 0 : 64;
+
+            if (value >= (1U << 63)) // 9,223,372,036,854,775,808
+                return on ? 64 : 0;
 
             var val = value;
+            if (on)
+                val = ~val;
 
             val |= val >> 1;
             val |= val >> 2;
@@ -550,195 +554,70 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region LeadingOnes
+        #region Trailing
 
         /// <summary>
-        /// Count the number of leading true bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in byte value)
-        {
-            if (value == byte.MaxValue)
-                return 8;
-
-            return LeadingOnes((uint)value) - 24;
-        }
+        public static long Trailing(in byte value, in bool on)
+            => Trailing((uint)value, on) - 24;
 
         /// <summary>
-        /// Count the number of leading true bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in ushort value)
-        {
-            if (value == ushort.MaxValue)
-                return 16;
-
-            return LeadingOnes((uint)value) - 16;
-        }
+        public static long Trailing(in ushort value, in bool on)
+            => Trailing((uint)value, on) - 16;
 
         /// <summary>
-        /// Count the number of leading true bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in uint value)
+        public static long Trailing(in uint value, in bool on)
         {
-            if (value == uint.MaxValue)
-                return 32;
+            if (value == 0)
+                return on ? 0 : 32;
+
+            if (value >= (1U << 31)) // 2,147,483,648
+                return on ? 32 : 0;
 
             var val = value;
+            if (on)
+                val = ~val;
 
-            // TODO:
-            val |= val >> 1;
-            val |= val >> 2;
-            val |= val >> 4;
-            val |= val >> 8;
-            val |= val >> 16;
-
-            return s_deBruijn32[(val * Debruijn32) >> 27] ^ 31;
+            return s_deBruijn32[((val ^ (val - 1)) * Debruijn32) >> 27];
         }
 
         /// <summary>
-        /// Count the number of leading true bits in a mask.
+        /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
+        /// <param name="on">True to count each 1, or false to count each 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in ulong value)
+        public static long Trailing(in ulong value, in bool on)
         {
-            if (value == ulong.MaxValue)
-                return 64;
+            if (value == 0)
+                return on ? 0 : 64;
+
+            if (value >= (1U << 63)) // 9,223,372,036,854,775,808
+                return on ? 64 : 0;
 
             var val = value;
+            if (on)
+                val = ~val;
 
-            // TODO:
-            val |= val >> 1;
-            val |= val >> 2;
-            val |= val >> 4;
-            val |= val >> 8;
-            val |= val >> 16;
-            val |= val >> 32;
-
-            return s_deBruijn64[(val * Debruijn64) >> 58] ^ 63;
+            return s_deBruijn64[((val ^ (val - 1)) * Debruijn64) >> 58];
         }
 
         #endregion
 
-        #region TrailingZeros
-
-        /// <summary>
-        /// Count the number of trailing false bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in byte value)
-        {
-            if (value == 0)
-                return 8;
-
-            return TrailingZeros((uint)value) - 24;
-        }
-
-        /// <summary>
-        /// Count the number of trailing false bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ushort value)
-        {
-            if (value == 0)
-                return 16;
-
-            return TrailingZeros((uint)value) - 16;
-        }
-
-        /// <summary>
-        /// Count the number of trailing false bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in uint value)
-        {
-            if (value == 0)
-                return 32;
-
-            return s_deBruijn32[((value ^ (value - 1)) * Debruijn32) >> 27];
-        }
-
-        /// <summary>
-        /// Count the number of trailing false bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(in ulong value)
-        {
-            if (value == 0)
-                return 64;
-
-            return s_deBruijn64[((value ^ (value - 1)) * Debruijn64) >> 58];
-        }
-
-        #endregion
-
-        #region TrailingOnes
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in byte value)
-        {
-            if (value == byte.MaxValue)
-                return 8;
-
-            return TrailingOnes((uint)value) - 24;
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ushort value)
-        {
-            if (value == ushort.MaxValue)
-                return 16;
-
-            return TrailingOnes((uint)value) - 16;
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in uint value)
-        {
-            if (value == uint.MaxValue)
-                return 32;
-
-            // TODO:
-            return s_deBruijn32[((value ^ (value - 1)) * Debruijn32) >> 27];
-        }
-
-        /// <summary>
-        /// Count the number of trailing true bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingOnes(in ulong value)
-        {
-            if (value == ulong.MaxValue)
-                return 64;
-
-            // TODO:
-            return s_deBruijn64[((value ^ (value - 1)) * Debruijn64) >> 58];
-        }
-
-        #endregion
-        
         #region FloorLog2        
 
         private static readonly byte[] s_deBruijn32 = new byte[32]
