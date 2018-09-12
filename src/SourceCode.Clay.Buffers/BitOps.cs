@@ -162,6 +162,18 @@ namespace SourceCode.Clay.Buffers
 
         #region FlipBit
 
+        // Truth table (2):
+        // v   m  | ~m  ^v  ~
+        // 00  01 | 10  10  01
+        // 01  01 | 10  11  00
+        // 10  01 | 10  00  11
+        // 11  01 | 10  01  10
+        //                      
+        // 00  10 | 01  01  10
+        // 01  10 | 01  00  11
+        // 10  10 | 01  11  00
+        // 11  10 | 01  10  01
+
         /// <summary>
         /// Negates the specified bit in a mask and returns whether it was originally set.
         /// </summary>
@@ -174,7 +186,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) below
+            // See Truth table (2) above
             value = (byte)~(~mask ^ value);
 
             return rsp != 0; // BTC (inlining should prune if unused)
@@ -192,7 +204,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) below
+            // See Truth table (2) above
             value = (ushort)~(~mask ^ value);
 
             return rsp != 0; // BTC (inlining should prune if unused)
@@ -210,18 +222,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // Truth table (2):
-            // v   m  | ~m  ^v  ~
-            // 00  01 | 10  10  01
-            // 01  01 | 10  11  00
-            // 10  01 | 10  00  11
-            // 11  01 | 10  01  10
-            //                      
-            // 00  10 | 01  01  10
-            // 01  10 | 01  00  11
-            // 10  10 | 01  11  00
-            // 11  10 | 01  10  01
-
+            // See Truth table (2) above
             value = ~(~mask ^ value);
 
             return rsp != 0; // BTC (inlining should prune if unused)
@@ -381,6 +382,14 @@ namespace SourceCode.Clay.Buffers
 
         #region PopCount
 
+        // Truth table (1):
+        // Short-circuit lower boundary using optimization trick (n+1 >> 1)
+        // 0 (000) -> 1 (001) -> 0 (000) ✔
+        // 1 (001) -> 2 (010) -> 1 (001) ✔
+        // 2 (010) -> 3 (011) -> 1 (001) ✔
+        // 3 (011) -> 4 (100) -> 2 (010) ✔
+        // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
+
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
         /// </summary>
@@ -418,14 +427,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(in uint value)
         {
-            // Truth table (1):
-            // Short-circuit lower boundary using optimization trick (n+1 >> 1)
-            // 0 (000) -> 1 (001) -> 0 (000) ✔
-            // 1 (001) -> 2 (010) -> 1 (001) ✔
-            // 2 (010) -> 3 (011) -> 1 (001) ✔
-            // 3 (011) -> 4 (100) -> 2 (010) ✔
-            // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
-            
+            // See truth table (1) above
             if (value <= 3)
                 return (int)((value + 1) >> 1);
 
@@ -442,7 +444,7 @@ namespace SourceCode.Clay.Buffers
             val = (val & c1) + ((val >> 2) & c1);
             val = (val + (val >> 4)) & c2;
             val *= c3;
-            val >>= 24; // 32 - 8
+            val >>= 24;
 
             return (int)val;
         }
@@ -471,7 +473,7 @@ namespace SourceCode.Clay.Buffers
             val = (val & c1) + ((val >> 2) & c1);
             val = (val + (val >> 4)) & c2;
             val *= c3;
-            val >>= 56; // 64 - 8
+            val >>= 56;
 
             return (int)val;
         }
@@ -564,6 +566,26 @@ namespace SourceCode.Clay.Buffers
 
         #region TrailingCount
 
+        // Build this table by taking n = 0,1,2,4,...,512
+        // [2^n % 11] = tz(n)
+        private static readonly byte[] s_trail8u = new byte[11] // mod 11
+        {
+            //    2^n  % 11     b=bin(n)   z=tz(b)
+            8, //   0  [ 0]     0000_0000  8
+            0, //   1  [ 1]     0000_0001  0 
+            1, //   2  [ 2]     0000_0010  1
+            8, // 256  [ 3]  01_0000_0000  8 (n/a) 1u << 8
+               
+            2, //   4  [ 4]     0000_0100  2
+            4, //  16  [ 5]     0001_0000  4
+            9, // 512  [ 6]  10_0000_0000  9 (n/a) 1u << 9
+            7, // 128  [ 7]     1000_0000  7
+               
+            3, //   8  [ 8]     0000_1000  3
+            6, //  64  [ 9]     0100_0000  6
+            5, //  32  [10]     0010_0000  5
+        };
+
         /// <summary>
         /// Count the number of trailing bits in a mask.
         /// </summary>
@@ -583,32 +605,41 @@ namespace SourceCode.Clay.Buffers
             // in order to derive a contiguous range [0..10] to use as a jmp table.
             lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
 
-            var cnt = 0;
-            switch (lsb) // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
-            {
-                //   n         z            2^n         % 11     b=bin(n)   z=tz(b)
-                case 00: cnt = 8; break; // [  0 % 11]  [ 0]     0000_0000  8
-                case 01: cnt = 0; break; // [  1 % 11]  [ 1]     0000_0001  0 
-                case 02: cnt = 1; break; // [  2 % 11]  [ 2]     0000_0010  1
-                case 03: goto default;   // [256 % 11]  [ 3]  01_0000_0000  8 (n/a)
+            // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
+            Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(byte)} hash {lsb}");
 
-                case 04: cnt = 2; break; // [  4 % 11]  [ 4]     0000_0100  2
-                case 05: cnt = 4; break; // [ 16 % 11]  [ 5]     0001_0000  4
-                case 06: goto default;   // [512 % 11]  [ 6]  10_0000_0000  9 (n/a)
-                case 07: cnt = 7; break; // [128 % 11]  [ 7]     1000_0000  7
-
-                case 08: cnt = 3; break; // [  8 % 11]  [ 8]     0000_1000  3
-                case 09: cnt = 6; break; // [ 64 % 11]  [ 9]     0100_0000  6
-                case 10: cnt = 5; break; // [ 32 % 11]  [10]     0010_0000  5
-
-                // NoOp: Hashing scheme has unused outputs (inputs 256 & 512 do not fit a byte)
-                default:
-                    Debug.Fail($"{nameof(TrailingCount)} inputs ({value},{on}) resulted in unexpected hash {lsb} and count {cnt}");
-                    break;
-            }
-             
-            return cnt; 
+            var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            return cnt;
         }
+
+        // See algorithm notes in TrailingCount(byte)
+        private static readonly byte[] s_trail16u = new byte[19] // mod 19
+        {
+            //        2^n  % 19     b=bin(n)             z=tz(b)
+            16, //      0  [ 0]     0000_0000_0000_0000  16
+            00, //      1  [ 1]     0000_0000_0000_0001   0
+            01, //      2  [ 2]     0000_0000_0000_0010   1
+            13, //   8192  [ 3]     0010_0000_0000_0000  13
+
+            02, //      4  [ 4]     0000_0000_0000_0100   2
+            16, //  65536  [ 5]  01_0000_0000_0000_0000  16 (n/a) 1u << 16
+            14, //  16384  [ 6]     0100_0000_0000_0000  14
+            06, //     64  [ 7]     0000_0000_0100_0000   6
+
+            03, //      8  [ 8]     0000_0000_0000_1000   3
+            08, //    256  [ 9]     0000_0001_0000_0000   8
+            17, // 131072  [10]  10_0000_0000_0000_0000  17 (n/a) 1u << 17
+            12, //   4096  [11]     0001_0000_0000_0000  12
+
+            15, //  32768  [12]     1000_0000_0000_0000  15
+            05, //     32  [13]     0000_0000_0010_0000   5
+            07, //    128  [14]     0000_0000_1000_0000   7
+            11, //   2048  [15]     0000_1000_0000_0000  11
+
+            04, //     16  [16]     0000_0000_0001_0000   4
+            10, //   1024  [17]     0000_0100_0000_0000  10
+            09  //    512  [18]     0000_0010_0000_0000   9
+        };
 
         /// <summary>
         /// Count the number of trailing bits in a mask.
@@ -623,54 +654,65 @@ namespace SourceCode.Clay.Buffers
 
             // See algorithm notes in TrailingCount(byte)
             var lsb = val & -val;
-            lsb = lsb % 19;
+            lsb = lsb % 19; // mod 19
 
-            var cnt = 0;
-            switch (lsb)
-            {
-                //   n         z             2^n            % 19     b=bin(n)             z=tz(b)
-                case 00: cnt = 16; break; // [     0 % 19]  [ 0]     0000_0000_0000_0000  16
-                case 01: cnt = 00; break; // [     1 % 19]  [ 1]     0000_0000_0000_0001  0
-                case 02: cnt = 01; break; // [     2 % 19]  [ 2]     0000_0000_0000_0010  1
-                case 03: cnt = 13; break; // [  8192 % 19]  [ 3]     0010_0000_0000_0000  13
+            // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
+            Debug.Assert(!(lsb == 5 || lsb == 10), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(ushort)} hash {lsb}");
 
-                case 04: cnt = 02; break; // [     4 % 19]  [ 4]     0000_0000_0000_0100  2
-                case 05: goto default;    // [ 65536 % 19]  [ 5]  01_0000_0000_0000_0000  16 (n/a)
-                case 06: cnt = 14; break; // [ 16384 % 19]  [ 6]     0100_0000_0000_0000  14
-                case 07: cnt = 06; break; // [    64 % 19]  [ 7]     0000_0000_0100_0000  6
-
-                case 08: cnt = 03; break; // [     8 % 19]  [ 8]     0000_0000_0000_1000  3
-                case 09: cnt = 08; break; // [   256 % 19]  [ 9]     0000_0001_0000_0000  8
-                case 10: goto default;    // [131072 % 19]  [10]  10_0000_0000_0000_0000  17 (n/a)
-                case 11: cnt = 12; break; // [  4096 % 19]  [11]     0001_0000_0000_0000  12
-
-                case 12: cnt = 15; break; // [ 32768 % 19]  [12]     1000_0000_0000_0000  15
-                case 13: cnt = 05; break; // [    32 % 19]  [13]     0000_0000_0010_0000  5
-                case 14: cnt = 07; break; // [   128 % 19]  [14]     0000_0000_1000_0000  7
-                case 15: cnt = 11; break; // [  2048 % 19]  [15]     0000_1000_0000_0000  11
-
-                case 16: cnt = 04; break; // [    16 % 19]  [16]     0000_0000_0001_0000  4
-                case 17: cnt = 10; break; // [  1024 % 19]  [17]     0000_0100_0000_0000  10
-                case 18: cnt = 09; break; // [   512 % 19]  [18]     0000_0010_0000_0000  9
-
-                // NoOp: Hashing scheme has unused outputs (inputs 65536 & 131072 do not fit a ushort)
-                default:
-                    Debug.Fail($"{nameof(TrailingCount)} inputs ({value},{on}) resulted in unexpected hash {lsb} and count {cnt}");
-                    break;
-            }
-
+            var cnt = s_trail16u[lsb];
             return cnt;
         }
 
         // See algorithm notes in TrailingCount(byte)
-        // Use a jump table instead of a switch since it's relatively large
         private static readonly byte[] s_trail32u = new byte[37] // mod 37
         {
-            32, 00, 01, 26, 02, 23, 27, 00,
-            03, 16, 24, 30, 28, 11, 00, 13,
-            04, 07, 17, 00, 25, 22, 31, 15,
-            29, 10, 12, 06, 00, 21, 14, 09,
-            05, 20, 08, 19, 18
+            //                2^n  % 37       b=bin(n)                                 z=tz(b)
+            32, //              0  [ 0]       0000_0000_0000_0000_0000_0000_0000_0000  32
+            00, //              1  [ 1]       0000_0000_0000_0000_0000_0000_0000_0001   0
+            01, //              2  [ 2]       0000_0000_0000_0000_0000_0000_0000_0010   1
+            26,
+
+            02, //              4  [ 4]       0000_0000_0000_0000_0000_0000_0000_0100   2
+            23,
+            27,                  
+            32, //  4,294,967,296  [ 7]  0001_0000_0000_0000_0000_0000_0000_0000_0000  32 (n/a) 1ul << 32
+
+            03, //              8  [ 8]       0000_0000_0000_0000_0000_0000_0000_1000   3
+            16,
+            24,
+            30,
+
+            28,
+            11, //           2048  [13]       0000_0000_0000_0000_0000_1000_0000_0000  11
+            33, //  8,589,934,592  [14]  0010_0000_0000_0000_0000_0000_0000_0000_0000  33 (n/a) 1ul << 33
+            13,
+
+            04, //             16  [16]       0000_0000_0000_0000_0000_0000_0001_0000   4
+            07, //            128  [17]       0000_0000_0000_0000_0000_0000_1000_0000   7
+            17,
+            35, // 34,359,738,368  [19]  1000_0000_0000_0000_0000_0000_0000_0000_0000  35 (n/a) 1ul << 35
+
+            25,
+            22,
+            31,
+            15, //           8192  [15]       0000_0000_0000_0000_0010_0000_0000_0000  13
+
+            29,
+            10, //           1024  [25]       0000_0000_0000_0000_0000_0100_0000_0000  10
+            12, //           4096  [26]       0000_0000_0000_0000_0001_0000_0000_0000  12
+            06, //             64  [27]       0000_0000_0000_0000_0000_0000_0100_0000   6
+
+            34, // 17,179,869,184  [28]  0100_0000_0000_0000_0000_0000_0000_0000_0000  34 (n/a) 1ul << 34
+            21,
+            14,
+            09, //            512  [31]       0000_0000_0000_0000_0000_0010_0000_0000   9
+
+            05, //             32  [32]       0000_0000_0000_0000_0000_0000_0010_0000   5
+            20,
+            08, //            256  [34]       0000_0000_0000_0000_0000_0001_0000_0000   8
+            19,
+
+            18  //        262,144  [36]
         };
 
         /// <summary>
@@ -684,8 +726,15 @@ namespace SourceCode.Clay.Buffers
             // If a trailing-ones operation, negate mask
             var val = on ? ~value : value;
 
-            var lsb = val & -val; // eg 0010 1100 => 44 & -44 = 4
-            return s_trail32u[lsb % 37];
+            // See algorithm notes in TrailingCount(byte)
+            var lsb = val & -val;
+            lsb = lsb % 37; // mod 37
+
+            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
+            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(uint)} hash {lsb}");
+
+            var cnt = s_trail32u[lsb];
+            return cnt;
         }
 
         /// <summary>
@@ -699,6 +748,9 @@ namespace SourceCode.Clay.Buffers
             if (value == 0)
                 return on ? 0 : 64;
 
+            var val = (uint)value; // Grab low uint
+            var inc = 0;
+
             if (value > uint.MaxValue)
             {
                 if (value == ulong.MaxValue)
@@ -707,21 +759,22 @@ namespace SourceCode.Clay.Buffers
                 // TrailingOnes 
                 if (on)
                 {
-                    if ((uint)value == uint.MaxValue)
-                        goto Concat;
+                    if (val == uint.MaxValue)
+                    {
+                        val = (uint)(value >> 32); // Grab high uint
+                        inc = 32;
+                    }
                 }
 
                 // TrailingZeros
-                else if ((uint)value == 0)
+                else if (val == 0)
                 {
-                    goto Concat;
+                    val = (uint)(value >> 32); // Grab high uint
+                    inc = 32;
                 }
             }
 
-            return TrailingCount((uint)value, on);
-
-        Concat:
-            return 32 + TrailingCount((uint)(value >> 32), on);
+            return inc + TrailingCount(val, on);
         }
 
         #endregion
@@ -908,7 +961,6 @@ namespace SourceCode.Clay.Buffers
             // 2^64             = 18,446,744,073,709,551,616
 
             const ulong hi = 1UL << 63;
-            if (value >= hi) return 63;
 
             // Heuristic: hot path assumes small numbers more likely
             var val = (uint)value;
@@ -916,6 +968,8 @@ namespace SourceCode.Clay.Buffers
 
             if (value > uint.MaxValue) // 0xFFFF_FFFF
             {
+                if (value >= hi) return 63;
+
                 val = (uint)(value >> 32);
                 inc = 32;
             }
@@ -939,14 +993,15 @@ namespace SourceCode.Clay.Buffers
             // 2^63             = 9,223,372,036,854,775,808
 
             const long hi = 1L << 62;
-            if (value >= hi) return 62;
-
+            
             // Heuristic: hot path assumes small numbers more likely
             var val = (uint)value;
             var inc = 0;
 
             if (value > uint.MaxValue) // 0xFFFF_FFFF
             {
+                if (value >= hi) return 62;
+
                 val = (uint)(value >> 32);
                 inc = 32;
             }
