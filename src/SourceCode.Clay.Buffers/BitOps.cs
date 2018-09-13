@@ -486,18 +486,18 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingCount(in byte value, in bool on)
+        public static int LeadingCount(in byte value, in bool ones)
         {
             if (value == 0)
-                return on ? 0 : 8;
+                return ones ? 0 : 8;
 
             if (value == byte.MaxValue)
-                return on ? 8 : 0;
+                return ones ? 8 : 0;
 
             // If a leading-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? (uint)(byte)~(uint)value : value;
+            var val = ones ? (uint)(byte)~(uint)value : value;
 
             return 7 - FloorLog2Impl(val);
         }
@@ -506,18 +506,18 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingCount(in ushort value, in bool on)
+        public static int LeadingCount(in ushort value, in bool ones)
         {
             if (value == 0)
-                return on ? 0 : 16;
+                return ones ? 0 : 16;
 
             if (value == ushort.MaxValue)
-                return on ? 16 : 0;
+                return ones ? 16 : 0;
 
             // If a leading-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? (uint)(ushort)~(uint)value : value;
+            var val = ones ? (uint)(ushort)~(uint)value : value;
 
             return 15 - FloorLog2Impl(val);
         }
@@ -526,18 +526,18 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingCount(in uint value, in bool on)
+        public static int LeadingCount(in uint value, in bool ones)
         {
             if (value == 0)
-                return on ? 0 : 32;
+                return ones ? 0 : 32;
 
             if (value == uint.MaxValue)
-                return on ? 32 : 0;
+                return ones ? 32 : 0;
 
             // If a leading-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? ~value : value;
+            var val = ones ? ~value : value;
 
             return 31 - FloorLog2Impl(val);
         }
@@ -546,18 +546,18 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of leading bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingCount(in ulong value, in bool on)
+        public static int LeadingCount(in ulong value, in bool ones)
         {
             if (value == 0)
-                return on ? 0 : 64;
+                return ones ? 0 : 64;
 
             if (value == ulong.MaxValue)
-                return on ? 64 : 0;
+                return ones ? 64 : 0;
 
             // If a leading-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? ~value : value;
+            var val = ones ? ~value : value;
             
             return 63 - FloorLog2(val);
         }
@@ -590,12 +590,12 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingCount(in byte value, in bool on)
+        public static int TrailingCount(in byte value, in bool ones)
         {
             // If a trailing-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? (uint)(byte)~(uint)value : value;
+            var val = ones ? (uint)(byte)~(uint)value : value;
 
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...,128]
@@ -606,7 +606,7 @@ namespace SourceCode.Clay.Buffers
             lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
 
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(byte)} hash {lsb}");
+            Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingCount)}({value}, {ones}) resulted in unexpected {typeof(byte)} hash {lsb}");
 
             var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             return cnt;
@@ -645,19 +645,19 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingCount(in ushort value, in bool on)
+        public static int TrailingCount(in ushort value, in bool ones)
         {
             // If a trailing-ones operation, negate mask but remember to truncate carry-bits
-            var val = on ? (uint)(ushort)~(uint)value : value;
+            var val = ones ? (uint)(ushort)~(uint)value : value;
 
             // See algorithm notes in TrailingCount(byte)
             var lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
             // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(!(lsb == 5 || lsb == 10), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(ushort)} hash {lsb}");
+            Debug.Assert(!(lsb == 5 || lsb == 10), $"{nameof(TrailingCount)}({value}, {ones}) resulted in unexpected {typeof(ushort)} hash {lsb}");
 
             var cnt = s_trail16u[lsb];
             return cnt;
@@ -719,19 +719,19 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingCount(in uint value, in bool on)
+        public static int TrailingCount(in uint value, in bool ones)
         {
             // If a trailing-ones operation, negate mask
-            var val = on ? ~value : value;
+            var val = ones ? ~value : value;
 
             // See algorithm notes in TrailingCount(byte)
             var lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{nameof(TrailingCount)}({value}, {on}) resulted in unexpected {typeof(uint)} hash {lsb}");
+            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{nameof(TrailingCount)}({value}, {ones}) resulted in unexpected {typeof(uint)} hash {lsb}");
 
             var cnt = s_trail32u[lsb];
             return cnt;
@@ -741,12 +741,12 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="on">True to count each 1, or false to count each 0.</param>
+        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingCount(in ulong value, in bool on)
+        public static int TrailingCount(in ulong value, in bool ones)
         {
             if (value == 0)
-                return on ? 0 : 64;
+                return ones ? 0 : 64;
 
             var val = (uint)value; // Grab low uint
             var inc = 0;
@@ -754,10 +754,10 @@ namespace SourceCode.Clay.Buffers
             if (value > uint.MaxValue)
             {
                 if (value == ulong.MaxValue)
-                    return on ? 64 : 0;
+                    return ones ? 64 : 0;
 
                 // TrailingOnes 
-                if (on)
+                if (ones)
                 {
                     if (val == uint.MaxValue)
                     {
@@ -774,7 +774,7 @@ namespace SourceCode.Clay.Buffers
                 }
             }
 
-            return inc + TrailingCount(val, on);
+            return inc + TrailingCount(val, ones);
         }
 
         #endregion
