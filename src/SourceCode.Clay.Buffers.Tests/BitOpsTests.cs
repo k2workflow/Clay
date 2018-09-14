@@ -375,26 +375,26 @@ namespace SourceCode.Clay.Buffers.Tests
             var m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingCount(m, false);
+            var actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (byte)~n;
 
             // LeadingOnes
-            actual = BitOps.LeadingCount(m, true);
+            actual = BitOps.LeadingOnes(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
-            actual = BitOps.TrailingCount(m, false);
+            actual = BitOps.TrailingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (byte)~m;
 
             // TrailingOnes
-            actual = BitOps.TrailingCount(m, true);
+            actual = BitOps.TrailingOnes(m);
             Assert.Equal(expected, actual);
         }
 
@@ -422,26 +422,26 @@ namespace SourceCode.Clay.Buffers.Tests
             var m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingCount(m, false);
+            var actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (ushort)~n;
 
             // LeadingOnes
-            actual = BitOps.LeadingCount(m, true);
+            actual = BitOps.LeadingOnes(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
-            actual = BitOps.TrailingCount(m, false);
+            actual = BitOps.TrailingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (ushort)~m;
 
             // TrailingOnes
-            actual = BitOps.TrailingCount(m, true);
+            actual = BitOps.TrailingOnes(m);
             Assert.Equal(expected, actual);
         }
 
@@ -474,26 +474,26 @@ namespace SourceCode.Clay.Buffers.Tests
             var m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingCount(m, false);
+            var actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~n;
 
             // LeadingOnes
-            actual = BitOps.LeadingCount(m, true);
+            actual = BitOps.LeadingOnes(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
-            actual = BitOps.TrailingCount(m, false);
+            actual = BitOps.TrailingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~m;
 
             // TrailingOnes
-            actual = BitOps.TrailingCount(m, true);
+            actual = BitOps.TrailingOnes(m);
             Assert.Equal(expected, actual);
         }
 
@@ -528,26 +528,26 @@ namespace SourceCode.Clay.Buffers.Tests
             var m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingCount(m, false);
+            var actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~m;
 
             // LeadingOnes
-            actual = BitOps.LeadingCount(m, true);
+            actual = BitOps.LeadingOnes(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
             // TrailingZeros
-            actual = BitOps.TrailingCount(m, false);
+            actual = BitOps.TrailingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~m;
 
             // TrailingOnes
-            actual = BitOps.TrailingCount(m, true);
+            actual = BitOps.TrailingOnes(m);
             Assert.Equal(expected, actual);
         }
 
