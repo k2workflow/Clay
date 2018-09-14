@@ -591,7 +591,7 @@ namespace SourceCode.Clay.Buffers
             if (value[ix] == ulong.MaxValue)
                 return 0;
 
-            return 63 - FloorLog2(value[ix]) + (ix << 6); // mul 64
+            return 63 - FloorLog2Impl(value[ix]) + (ix << 6); // mul 64
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace SourceCode.Clay.Buffers
             // Negate mask but remember to truncate carry-bits
             var val = ~value[ix];
 
-            return 63 - FloorLog2(val) + (ix << 6); // mul 64
+            return 63 - FloorLog2Impl(val) + (ix << 6); // mul 64
         }
 
         #endregion

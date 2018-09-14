@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -860,7 +859,7 @@ namespace SourceCode.Clay.Buffers
             if (value == ulong.MaxValue)
                 return 0;
 
-            return 63 - FloorLog2(value);
+            return 63 - FloorLog2Impl(value);
         }
 
         /// <summary>
@@ -879,7 +878,7 @@ namespace SourceCode.Clay.Buffers
             // Negate mask but remember to truncate carry-bits
             var val = ~value;
 
-            return 63 - FloorLog2(val);
+            return 63 - FloorLog2Impl(val);
         }
 
         #endregion
@@ -1190,7 +1189,7 @@ namespace SourceCode.Clay.Buffers
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int FloorLog2Impl(uint value)
+        internal static int FloorLog2Impl(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
@@ -1219,141 +1218,10 @@ namespace SourceCode.Clay.Buffers
             return s_deBruijn32[ix];
         }
 
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(byte value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int FloorLog2Impl(ulong value)
         {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^7              = 128
-            // byte.MaxValue    = 255
-            // 2^8              = 256
-
-            const uint hi = 1U << 7;
-            if (value >= hi) return 7;
-
-            return FloorLog2Impl(value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in sbyte value)
-        {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^6              = 63
-            // sbyte.MaxValue   = 127
-            // 2^7              = 128
-
-            const uint hi = 1U << 6;
-            if (value >= hi) return 6;
-
-            return FloorLog2Impl((uint)value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(ushort value)
-        {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^15             = 32,768
-            // byte.MaxValue    = 65,535
-            // 2^16             = 65,536
-
-            const uint hi = 1U << 15;
-            if (value >= hi) return 15;
-
-            return FloorLog2Impl(value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in short value)
-        {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^14             = 16,384
-            // short.MaxValue   = 32,767
-            // 2^15             = 32,768
-
-            const uint hi = 1U << 14;
-            if (value >= hi) return 14;
-
-            return FloorLog2Impl((uint)value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(uint value)
-        {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^31             = 2,147,483,648
-            // uint.MaxValue    = 4,294,967,295
-            // 2^32             = 4,294,967,296
-
-            const uint hi = 1U << 31;
-            if (value >= hi) return 31;
-
-            return FloorLog2Impl(value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in int value)
-        {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^30             = 1,073,741,824
-            // int.MaxValue     = 2,147,483,647
-            // 2^31             = 2,147,483,648
-
-            const int hi = 1 << 30;
-            if (value >= hi) return 30;
-
-            return FloorLog2Impl((uint)value);
-        }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(ulong value)
-        {
-            if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
+            // Perf: Do not use guard clauses; callers must be trusted
 
             // Short-circuit upper boundary
             // 2^63             = 9,223,372,036,854,775,808
@@ -1376,58 +1244,6 @@ namespace SourceCode.Clay.Buffers
 
             return inc + FloorLog2Impl(val);
         }
-
-        /// <summary>
-        /// Finds the floor of the base-2 log of the specified value.
-        /// It is a fast equivalent of <code>Math.Floor(Math.Log(<paramref name="value"/>, 2))</code>.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in long value)
-        {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value));
-
-            // Short-circuit upper boundary
-            // 2^62             = 4,611,686,018,427,387,904
-            // long.MaxValue    = 9,223,372,036,854,775,807
-            // 2^63             = 9,223,372,036,854,775,808
-
-            const long hi = 1L << 62;
-            
-            // Heuristic: hot path assumes small numbers more likely
-            var val = (uint)value;
-            var inc = 0;
-
-            if (value > uint.MaxValue) // 0xFFFF_FFFF
-            {
-                if (value >= hi) return 62;
-
-                val = (uint)(value >> 32);
-                inc = 32;
-            }
-
-            return inc + FloorLog2Impl(val);
-        }
-
-        #endregion
-
-        #region IsPowerOfTwo
-
-        public static bool IsPowerOfTwo(byte value)
-            => value != 0 
-            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
-
-        public static bool IsPowerOfTwo(ushort value)
-            => value != 0 
-            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
-
-        public static bool IsPowerOfTwo(uint value)
-            => value != 0 
-            && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
-
-        //public static bool IsPowerOfTwo(ulong value) 
-        //    => value != 0 
-        //    && (value == (value & -value)); // The expression (n & -n) returns lsb(n)
 
         #endregion
     }

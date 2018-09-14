@@ -933,8 +933,8 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_FloorLog2_opt5(uint n, int expected)
         {
             // Test the optimization trick on the lower boundary (1-5)
-            var actual = BitOps.FloorLog2(n);
-            Assert.Equal(expected, (int)actual);
+            var actual = BitOps.FloorLog2Impl(n);
+            Assert.Equal(expected, actual);
         }
 
         [Theory(DisplayName = nameof(BitOps_FloorLog2_32u))]
@@ -966,43 +966,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue)]
         public static void BitOps_FloorLog2_32u(uint n)
         {
-            var log = BitOps.FloorLog2(n);
-
-            var lo = Math.Pow(2, log);
-            var hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_32))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((int)sbyte.MaxValue)]
-        [InlineData((int)byte.MaxValue)]
-        [InlineData((int)short.MaxValue)]
-        [InlineData((int)ushort.MaxValue)]
-        [InlineData((1 << 30) - 1)]
-        [InlineData(1 << 30)]
-        [InlineData((1 << 30) + 1)]
-        [InlineData(int.MaxValue - 1)]
-        [InlineData(int.MaxValue)]
-        public static void BitOps_FloorLog2_32(int n)
-        {
-            var log = BitOps.FloorLog2(n);
+            var log = BitOps.FloorLog2Impl(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -1044,7 +1008,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue)]
         public static void BitOps_FloorLog2_64u(ulong n)
         {
-            var log = BitOps.FloorLog2(n);
+            var log = BitOps.FloorLog2Impl(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -1052,56 +1016,12 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.InRange(n, lo, hi);
         }
 
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_64))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((long)sbyte.MaxValue)]
-        [InlineData((long)byte.MaxValue)]
-        [InlineData((long)short.MaxValue)]
-        [InlineData((long)ushort.MaxValue)]
-        [InlineData((long)int.MaxValue - 1)]
-        [InlineData((long)int.MaxValue)]
-        [InlineData((long)int.MaxValue + 1)]
-        [InlineData((long)uint.MaxValue - 1)]
-        [InlineData((long)uint.MaxValue)]
-        [InlineData((long)uint.MaxValue + 1)]
-        [InlineData((1L << 62) - 1)]
-        [InlineData(1L << 62)]
-        [InlineData((1L << 62) + 1)]
-        [InlineData(long.MaxValue - 1)]
-        [InlineData(long.MaxValue)]
-        public static void BitOps_FloorLog2_64(long n)
-        {
-            var log = BitOps.FloorLog2(n);
-
-            var lo = Math.Pow(2, log);
-            var hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        [Fact(DisplayName = nameof(BitOps_FloorLog2_Throws))]
-        public static void BitOps_FloorLog2_Throws()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2(0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((uint)0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((ulong)0));
-            Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2((long)0));
-        }
+        //[Fact(DisplayName = nameof(BitOps_FloorLog2_Throws))]
+        //public static void BitOps_FloorLog2_Throws()
+        //{
+        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl(0)); // uint
+        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl((ulong)0));
+        //}
 
         #endregion
 

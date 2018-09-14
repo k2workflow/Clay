@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
@@ -19,7 +20,8 @@ namespace SourceCode.Clay.Buffers
             if (comparison is null) throw new ArgumentNullException(nameof(comparison));
 
             // Short-circuit for small N
-            switch (span.Length)
+            var len = (uint)span.Length;
+            switch (len)
             {
                 // 0 or 1 members
                 case 0:
@@ -39,8 +41,10 @@ namespace SourceCode.Clay.Buffers
                     return;
             }
 
-            // N members
-            var limit = BitOps.FloorLog2((uint)span.Length); // N > 3 due to previous checks
+            // N > 3 due to previous checks
+            Debug.Assert(len > 3);
+            var limit = BitOps.FloorLog2Impl(len); // Unguarded - ensure N > 0
+
             limit <<= 1; // mul 2
 
             IntrospectiveSort(span, comparison, 0, span.Length - 1, limit);
