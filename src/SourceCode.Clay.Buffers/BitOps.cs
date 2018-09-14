@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in byte value, in byte offset)
+        public static bool ExtractBit(byte value, byte offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ushort value, in byte offset)
+        public static bool ExtractBit(ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in uint value, in byte offset)
+        public static bool ExtractBit(uint value, byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -66,12 +66,144 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(in ulong value, in byte offset)
+        public static bool ExtractBit(ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
 
             return (value & mask) != 0;
+        }
+
+        #endregion
+
+        #region ClearBit (Scalar)
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte ClearBit(byte value, byte offset)
+        {
+            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            return (byte)(value & ~mask);
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ushort ClearBit(ushort value, byte offset)
+        {
+            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            return (ushort)(value & ~mask);
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint ClearBit(uint value, byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            return value & ~mask;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong ClearBit(ulong value, byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+
+            return value & ~mask;
+        }
+
+        #endregion
+
+        #region ClearBit (Ref)
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref byte value, byte offset)
+        {
+            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            value = (byte)(value & ~mask);
+
+            return rsp != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref ushort value, byte offset)
+        {
+            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            value = (ushort)(value & ~mask);
+
+            return rsp != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref uint value, byte offset)
+        {
+            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+            var rsp = value & mask;
+
+            value = value & ~mask;
+
+            return rsp != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref ulong value, byte offset)
+        {
+            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+            var rsp = value & mask;
+
+            value = value & ~mask;
+
+            return rsp != 0;
         }
 
         #endregion
@@ -83,18 +215,13 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte InsertBit(byte value, in byte offset, in bool on)
+        public static byte InsertBit(byte value, byte offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            var val = (byte)(on ?
-                value | mask :
-                value & ~mask);
-
-            return val;
+            return (byte)(value | mask);
         }
 
         /// <summary>
@@ -102,18 +229,13 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort InsertBit(ushort value, in byte offset, in bool on)
+        public static ushort InsertBit(ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            var val = (ushort)(on ?
-                value | mask :
-                value & ~mask);
-
-            return val;
+            return (ushort)(value | mask);
         }
 
         /// <summary>
@@ -121,18 +243,13 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint InsertBit(uint value, in byte offset, in bool on)
+        public static uint InsertBit(uint value, byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            var val = on ?
-                value | mask :
-                value & ~mask;
-
-            return val;
+            return value | mask;
         }
 
         /// <summary>
@@ -140,18 +257,13 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong InsertBit(ulong value, in byte offset, in bool on)
+        public static ulong InsertBit(ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
 
-            var val = on ?
-                value | mask :
-                value & ~mask;
-
-            return val;
+            return value | mask;
         }
 
         #endregion
@@ -163,19 +275,16 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref byte value, in byte offset, in bool on)
+        public static bool InsertBit(ref byte value, byte offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
             var rsp = value & mask;
             
-            value = (byte)(on ?
-                value | mask :
-                value & ~mask);
+            value = (byte)(value | mask);
 
-            return rsp != 0; // BTS/BTR (inlining should prune if unused)
+            return rsp != 0;
         }
 
         /// <summary>
@@ -183,19 +292,16 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ushort value, in byte offset, in bool on)
+        public static bool InsertBit(ref ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            value = (ushort)(on ?
-                value | mask :
-                value & ~mask);
+            value = (ushort)(value | mask);
 
-            return rsp != 0; // BTS/BTR (inlining should prune if unused)
+            return rsp != 0;
         }
 
         /// <summary>
@@ -203,19 +309,16 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref uint value, in byte offset, in bool on)
+        public static bool InsertBit(ref uint value, byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            value = on ? 
-                value | mask : 
-                value & ~mask;
+            value = value | mask;
 
-            return rsp != 0; // BTS/BTR (inlining should prune if unused)
+            return rsp != 0;
         }
 
         /// <summary>
@@ -223,19 +326,16 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ulong value, in byte offset, in bool on)
+        public static bool InsertBit(ref ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
             var rsp = value & mask;
 
-            value = on ? 
-                value | mask : 
-                value & ~mask;
+            value = value | mask;
 
-            return rsp != 0; // BTS/BTR (inlining should prune if unused)
+            return rsp != 0;
         }
 
         #endregion
@@ -255,12 +355,12 @@ namespace SourceCode.Clay.Buffers
         // 11  10 | 01  10  01
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns the new value.
+        /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ComplementBit(byte value, in byte offset)
+        public static byte ComplementBit(byte value, byte offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -271,12 +371,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns the new value.
+        /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ComplementBit(ushort value, in byte offset)
+        public static ushort ComplementBit(ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -287,12 +387,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns the new value.
+        /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ComplementBit(uint value, in byte offset)
+        public static uint ComplementBit(uint value, byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -303,12 +403,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ComplementBit(ulong value, in byte offset)
+        public static ulong ComplementBit(ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
@@ -335,12 +435,12 @@ namespace SourceCode.Clay.Buffers
         // 11  10 | 01  10  01
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref byte value, in byte offset)
+        public static bool ComplementBit(ref byte value, byte offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -353,12 +453,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ushort value, in byte offset)
+        public static bool ComplementBit(ref ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -371,12 +471,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref uint value, in byte offset)
+        public static bool ComplementBit(ref uint value, byte offset)
         {
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -389,12 +489,12 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ulong value, in byte offset)
+        public static bool ComplementBit(ref ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
@@ -417,7 +517,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateLeft(in byte value, in byte offset)
+        public static byte RotateLeft(byte value, byte offset)
         {
             var shft = offset & 7; // mod 8 safely ignores boundary checks
             var val = (uint)value;
@@ -433,7 +533,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateRight(in byte value, in byte offset)
+        public static byte RotateRight(byte value, byte offset)
         {
             var shft = offset & 7; // mod 8 safely ignores boundary checks
             var val = (uint)value;
@@ -449,7 +549,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateLeft(in ushort value, in byte offset)
+        public static ushort RotateLeft(ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16 safely ignores boundary checks
             var val = (uint)value;
@@ -465,7 +565,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateRight(in ushort value, in byte offset)
+        public static ushort RotateRight(ushort value, byte offset)
         {
             var shft = offset & 15; // mod 16 safely ignores boundary checks
             var val = (uint)value;
@@ -481,7 +581,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateLeft(in uint value, in byte offset)
+        public static uint RotateLeft(uint value, byte offset)
         {
             var shft = offset & 31; // mod 32 safely ignores boundary checks
 
@@ -497,7 +597,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateRight(in uint value, in byte offset)
+        public static uint RotateRight(uint value, byte offset)
         {
             var shft = offset & 31; // mod 32 safely ignores boundary checks
 
@@ -513,7 +613,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateLeft(in ulong value, in byte offset)
+        public static ulong RotateLeft(ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64 safely ignores boundary checks
 
@@ -529,7 +629,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateRight(in ulong value, in byte offset)
+        public static ulong RotateRight(ulong value, byte offset)
         {
             var shft = offset & 63; // mod 64 safely ignores boundary checks
 
@@ -555,7 +655,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(in byte value)
+        public static int PopCount(byte value)
         {
             // 22 ops
             // TODO: Benchmark whether other algo is faster
@@ -577,7 +677,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(in ushort value)
+        public static int PopCount(ushort value)
             => PopCount((uint)value);
 
         /// <summary>
@@ -585,7 +685,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(in uint value)
+        public static int PopCount(uint value)
         {
             // See truth table (1) above
             if (value <= 3)
@@ -614,7 +714,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(in ulong value)
+        public static int PopCount(ulong value)
         {
             // See truth table (1) above
             if (value <= 3)
@@ -647,7 +747,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in byte value)
+        public static int LeadingZeros(byte value)
         {
             if (value == 0)
                 return 8;
@@ -663,7 +763,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in byte value)
+        public static int LeadingOnes(byte value)
         {
             if (value == 0)
                 return 0;
@@ -682,7 +782,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in ushort value)
+        public static int LeadingZeros(ushort value)
         {
             if (value == 0)
                 return 16;
@@ -698,7 +798,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in ushort value)
+        public static int LeadingOnes(ushort value)
         {
             if (value == 0)
                 return 0;
@@ -717,7 +817,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in uint value)
+        public static int LeadingZeros(uint value)
         {
             if (value == 0)
                 return 32;
@@ -733,7 +833,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in uint value)
+        public static int LeadingOnes(uint value)
         {
             if (value == 0)
                 return 0;
@@ -752,7 +852,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(in ulong value)
+        public static int LeadingZeros(ulong value)
         {
             if (value == 0)
                 return 64;
@@ -768,7 +868,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingOnes(in ulong value)
+        public static int LeadingOnes(ulong value)
         {
             if (value == 0)
                 return 0;
@@ -811,7 +911,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingZeros(in byte value)
+        public static int TrailingZeros(byte value)
         {
             var val = value;
 
@@ -835,7 +935,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(in byte value)
+        public static int TrailingOnes(byte value)
         {
             // Negate mask but remember to truncate carry-bits
             var val = (uint)(byte)~(uint)value;
@@ -890,7 +990,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingZeros(in ushort value)
+        public static int TrailingZeros(ushort value)
         {
             var val = value;
 
@@ -911,7 +1011,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(in ushort value)
+        public static int TrailingOnes(ushort value)
         {
             // Negate mask but remember to truncate carry-bits
             var val = (uint)(ushort)~(uint)value;
@@ -984,7 +1084,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingZeros(in uint value)
+        public static int TrailingZeros(uint value)
         {
             var val = value;
 
@@ -1004,7 +1104,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(in uint value)
+        public static int TrailingOnes(uint value)
         {
             // Negate mask
             var val = ~value;
@@ -1025,7 +1125,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingZeros(in ulong value)
+        public static int TrailingZeros(ulong value)
         {
             if (value == 0)
                 return 64;
@@ -1053,7 +1153,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(in ulong value)
+        public static int TrailingOnes(ulong value)
         {
             if (value == 0)
                 return 0;
@@ -1090,7 +1190,7 @@ namespace SourceCode.Clay.Buffers
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int FloorLog2Impl(in uint value)
+        private static int FloorLog2Impl(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
 
@@ -1125,7 +1225,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in byte value)
+        public static int FloorLog2(byte value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
 
@@ -1167,7 +1267,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in ushort value)
+        public static int FloorLog2(ushort value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
 
@@ -1209,7 +1309,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in uint value)
+        public static int FloorLog2(uint value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
 
@@ -1251,7 +1351,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The floor(log2) of the value.</returns>
-        public static int FloorLog2(in ulong value)
+        public static int FloorLog2(ulong value)
         {
             if (value == 0) throw new ArgumentOutOfRangeException(nameof(value));
 
@@ -1312,9 +1412,6 @@ namespace SourceCode.Clay.Buffers
         #endregion
 
         #region IsPowerOfTwo
-
-        public static int M(uint value) 
-            => InsertBit(ref value, 3, true) ? 5 : 6;
 
         public static bool IsPowerOfTwo(byte value)
             => value != 0 

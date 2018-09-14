@@ -19,15 +19,15 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ReadOnlySpan<byte> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<byte> value, uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ExtractBit(value[ix], shft);
+            return (value[ix] & mask) != 0;
         }
 
         /// <summary>
@@ -35,15 +35,15 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ReadOnlySpan<ushort> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ushort> value, uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ExtractBit(value[ix], shft);
+            return (value[ix] & mask) != 0;
         }
 
         /// <summary>
@@ -51,15 +51,15 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ReadOnlySpan<uint> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<uint> value, uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ExtractBit(value[ix], shft);
+            return (value[ix] & mask) != 0;
         }
 
         /// <summary>
@@ -67,15 +67,103 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ReadOnlySpan<ulong> value, in uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ulong> value, uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
-            return ExtractBit(value[ix], shft);
+            return (value[ix] & mask) != 0;
+        }
+
+        #endregion
+
+        #region ClearBit
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<byte> value, uint offset)
+        {
+            var ix = (int)(offset >> 3); // div 8
+            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            ref byte val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (byte)(val & ~mask);
+
+            return rsp != 0; // BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<ushort> value, uint offset)
+        {
+            var ix = (int)(offset >> 4); // div 16
+            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            ref ushort val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (ushort)(val & ~mask);
+
+            return rsp != 0; // BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<uint> value, uint offset)
+        {
+            var ix = (int)(offset >> 5); // div 32
+            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
+
+            ref uint val = ref value[ix];
+            var rsp = val & mask;
+
+            val = val & ~mask;
+
+            return rsp != 0; // BTR (inlining should prune if unused)
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<ulong> value, uint offset)
+        {
+            var ix = (int)(offset >> 6); // div 64
+            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
+
+            ref ulong val = ref value[ix];
+            var rsp = val & mask;
+
+            val = val & ~mask;
+
+            return rsp != 0; // BTR (inlining should prune if unused)
         }
 
         #endregion
@@ -87,16 +175,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(Span<byte> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<byte> value, uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return InsertBit(ref value[ix], shft, on);
+            ref byte val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (byte)(val | mask);
+
+            return rsp != 0; // BTS (inlining should prune if unused)
         }
 
         /// <summary>
@@ -104,16 +196,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(Span<ushort> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<ushort> value, uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return InsertBit(ref value[ix], shft, on);
+            ref ushort val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (ushort)(val | mask);
+
+            return rsp != 0; // BTS (inlining should prune if unused)
         }
 
         /// <summary>
@@ -121,16 +217,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(Span<uint> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<uint> value, uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return InsertBit(ref value[ix], shft, on);
+            ref uint val = ref value[ix];
+            var rsp = val & mask;
+
+            val = val | mask;
+
+            return rsp != 0; // BTS (inlining should prune if unused)
         }
 
         /// <summary>
@@ -138,16 +238,20 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(Span<ulong> value, in uint offset, in bool on)
+        public static bool InsertBit(Span<ulong> value, uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
-            return InsertBit(ref value[ix], shft, on);
+            ref ulong val = ref value[ix];
+            var rsp = val & mask;
+
+            val = val | mask;
+
+            return rsp != 0; // BTS (inlining should prune if unused)
         }
 
         #endregion
@@ -155,67 +259,87 @@ namespace SourceCode.Clay.Buffers
         #region ComplementBit
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(Span<byte> value, in uint offset)
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<byte> value, uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ComplementBit(ref value[ix], shft);
+            ref byte val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (byte)~(~mask ^ val);
+
+            return rsp != 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(Span<ushort> value, in uint offset)
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<ushort> value, uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ComplementBit(ref value[ix], shft);
+            ref ushort val = ref value[ix];
+            var rsp = val & mask;
+
+            val = (ushort)~(~mask ^ val);
+
+            return rsp != 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(Span<uint> value, in uint offset)
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<uint> value, uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
+            var mask = 1U << shft;
 
-            return ComplementBit(ref value[ix], shft);
+            ref uint val = ref value[ix];
+            var rsp = val & mask;
+
+            val = ~(~mask ^ val);
+
+            return rsp != 0; // BTC (inlining should prune if unused)
         }
 
         /// <summary>
-        /// Negates the specified bit in a mask and returns whether it was originally set.
+        /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to flip.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(Span<ulong> value, in uint offset)
+        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<ulong> value, uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
+            var mask = 1UL << shft;
 
-            return ComplementBit(ref value[ix], shft);
+            ref ulong val = ref value[ix];
+            var rsp = val & mask;
+
+            val = ~(~mask ^ val);
+
+            return rsp != 0; // BTC (inlining should prune if unused)
         }
 
         #endregion
@@ -328,8 +452,11 @@ namespace SourceCode.Clay.Buffers
 
             var ix = 0;
             while (value[ix] == 0) ix++;
-        
-            return LeadingZeros(value[ix]) + (ix << 3); // mul 8
+
+            if (value[ix] == byte.MaxValue)
+                return 0;
+
+            return 7 - FloorLog2Impl(value[ix]) + (ix << 3); // mul 8
         }
 
         /// <summary>
@@ -347,7 +474,13 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingOnes(value[ix]) + (ix << 3); // mul 8
+            if (value[ix] == byte.MaxValue)
+                return 8;
+
+            // Negate mask but remember to truncate carry-bits
+            var val = (uint)(byte)~(uint)value[ix];
+
+            return 7 - FloorLog2Impl(val) + (ix << 3); // mul 8
         }
 
         /// <summary>
@@ -365,7 +498,10 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 4); // mul 16
+            if (value[ix] == ushort.MaxValue)
+                return 0;
+
+            return 15 - FloorLog2Impl(value[ix]) + (ix << 4); // mul 16
         }
 
         /// <summary>
@@ -383,7 +519,13 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingOnes(value[ix]) + (ix << 4); // mul 16
+            if (value[ix] == ushort.MaxValue)
+                return 16;
+
+            // Negate mask but remember to truncate carry-bits
+            var val = (uint)(ushort)~(uint)value[ix];
+
+            return 15 - FloorLog2Impl(val) + (ix << 4); // mul 16
         }
 
         /// <summary>
@@ -401,7 +543,10 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 5); // mul 32
+            if (value[ix] == uint.MaxValue)
+                return 0;
+
+            return 31 - FloorLog2Impl(value[ix]) + (ix << 5); // mul 32
         }
 
         /// <summary>
@@ -419,7 +564,13 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingOnes(value[ix]) + (ix << 5); // mul 32
+            if (value[ix] == uint.MaxValue)
+                return 32;
+
+            // Negate mask but remember to truncate carry-bits
+            var val = ~value[ix];
+
+            return 31 - FloorLog2Impl(val) + (ix << 5); // mul 32
         }
 
         /// <summary>
@@ -437,7 +588,10 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingZeros(value[ix]) + (ix << 6); // mul 64
+            if (value[ix] == ulong.MaxValue)
+                return 0;
+
+            return 63 - FloorLog2(value[ix]) + (ix << 6); // mul 64
         }
 
         /// <summary>
@@ -455,7 +609,13 @@ namespace SourceCode.Clay.Buffers
             var ix = 0;
             while (value[ix] == 0) ix++;
 
-            return LeadingOnes(value[ix]) + (ix << 6); // mul 64
+            if (value[ix] == ulong.MaxValue)
+                return 64;
+
+            // Negate mask but remember to truncate carry-bits
+            var val = ~value[ix];
+
+            return 63 - FloorLog2(val) + (ix << 6); // mul 64
         }
 
         #endregion
