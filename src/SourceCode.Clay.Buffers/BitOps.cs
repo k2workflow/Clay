@@ -53,8 +53,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
 
             return (value & mask) != 0;
         }
@@ -67,8 +66,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
 
             return (value & mask) != 0;
         }
@@ -113,8 +111,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ClearBit(uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
 
             return value & ~mask;
         }
@@ -127,8 +124,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ClearBit(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
 
             return value & ~mask;
         }
@@ -179,8 +175,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
             var rsp = value & mask;
 
             value = value & ~mask;
@@ -196,8 +191,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
             var rsp = value & mask;
 
             value = value & ~mask;
@@ -245,8 +239,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint InsertBit(uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
 
             return value | mask;
         }
@@ -259,8 +252,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong InsertBit(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
 
             return value | mask;
         }
@@ -311,8 +303,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
             var rsp = value & mask;
 
             value = value | mask;
@@ -328,8 +319,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
             var rsp = value & mask;
 
             value = value | mask;
@@ -392,9 +382,8 @@ namespace SourceCode.Clay.Buffers
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ComplementBit(uint value, byte offset)
-        {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+        {            
+            var mask = 1U << offset; // uint.shift is natively mod-32
 
             // See Truth table (1) above
             var val = ~(~mask ^ value);
@@ -409,8 +398,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ComplementBit(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
 
             // See Truth table (1) above
             var val = ~(~mask ^ value);
@@ -465,8 +453,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            var mask = 1U << offset; // uint.shift is natively mod-32
             var rsp = value & mask;
 
             // See Truth table (1) above
@@ -483,8 +470,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64: design choice ignores out-of-range values
-            var mask = 1UL << shft;
+            var mask = 1UL << offset; // ulong.shift is natively mod-64
             var rsp = value & mask;
 
             // See Truth table (1) above
@@ -570,7 +556,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateLeft(uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32 safely ignores boundary checks
+            // uint.shift is natively mod-32, but we need the subtraction below
+            var shft = offset & 31;
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
@@ -586,7 +573,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateRight(uint value, byte offset)
         {
-            var shft = offset & 31; // mod 32 safely ignores boundary checks
+            // uint.shift is natively mod-32, but we need the subtraction below
+            var shft = offset & 31;
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
@@ -602,7 +590,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateLeft(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64 safely ignores boundary checks
+            // ulong.shift is natively mod-64, but we need the subtraction below
+            var shft = offset & 63;
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
@@ -618,7 +607,8 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateRight(ulong value, byte offset)
         {
-            var shft = offset & 63; // mod 64 safely ignores boundary checks
+            // ulong.shift is natively mod-64, but we need the subtraction below
+            var shft = offset & 63;
 
             // Will compile to instrinsic if pattern complies (uint/ulong):
             // https://github.com/dotnet/coreclr/pull/1830
