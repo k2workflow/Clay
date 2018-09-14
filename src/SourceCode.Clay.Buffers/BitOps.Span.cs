@@ -1,7 +1,6 @@
-using System;
 using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay.Buffers
+namespace System
 {
     partial class BitOps // .Span
     {

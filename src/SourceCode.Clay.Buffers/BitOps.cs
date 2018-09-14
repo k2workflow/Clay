@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay.Buffers
+namespace System
 {
     /// <summary>
     /// Represents additional blit methods.
