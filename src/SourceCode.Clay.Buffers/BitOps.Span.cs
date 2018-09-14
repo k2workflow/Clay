@@ -759,7 +759,6 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing one bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long TrailingOnes(ReadOnlySpan<ulong> value)
         {

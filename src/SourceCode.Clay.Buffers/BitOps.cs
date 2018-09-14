@@ -846,7 +846,7 @@ namespace SourceCode.Clay.Buffers
         #region TrailingCount
 
         // Build this table by taking n = 0,1,2,4,...,512
-        // [2^n % 11] = tz(n)
+        // [2^n % 11] = tz(n) manually counted
         private static readonly byte[] s_trail8u = new byte[11] // mod 11
         {
             //    2^n  % 11     b=bin(n)   z=tz(b)
@@ -949,7 +949,6 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing zero bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
         {
@@ -971,7 +970,6 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing one bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ushort value)
         {
