@@ -341,7 +341,7 @@ namespace SourceCode.Clay.Buffers
 
         #region ComplementBit (Scalar)
 
-        // Truth table (2):
+        // Truth table (1):
         // v   m  | ~m  ^v  ~
         // 00  01 | 10  10  01
         // 01  01 | 10  11  00
@@ -364,7 +364,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             var val = (byte)~(~mask ^ value);
             return val;
         }
@@ -380,7 +380,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             var val = (ushort)~(~mask ^ value);
             return val;
         }
@@ -396,7 +396,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 31; // mod 32: design choice ignores out-of-range values
             var mask = 1U << shft;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             var val = ~(~mask ^ value);
             return val;
         }
@@ -412,7 +412,7 @@ namespace SourceCode.Clay.Buffers
             var shft = offset & 63; // mod 64: design choice ignores out-of-range values
             var mask = 1UL << shft;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             var val = ~(~mask ^ value);
             return val;
         }
@@ -433,7 +433,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             value = (byte)~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -451,7 +451,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             value = (ushort)~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -469,7 +469,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1U << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             value = ~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -487,7 +487,7 @@ namespace SourceCode.Clay.Buffers
             var mask = 1UL << shft;
             var rsp = value & mask;
 
-            // See Truth table (2) above
+            // See Truth table (1) above
             value = ~(~mask ^ value);
 
             return rsp != 0; // BTC
