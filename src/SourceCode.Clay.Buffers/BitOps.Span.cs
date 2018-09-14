@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (byte)(val & ~mask);
 
-            return rsp != 0; // BTR (inlining should prune if unused)
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (ushort)(val & ~mask);
 
-            return rsp != 0; // BTR (inlining should prune if unused)
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace SourceCode.Clay.Buffers
 
             val = val & ~mask;
 
-            return rsp != 0; // BTR (inlining should prune if unused)
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace SourceCode.Clay.Buffers
 
             val = val & ~mask;
 
-            return rsp != 0; // BTR (inlining should prune if unused)
+            return rsp != 0; // BTR
         }
 
         #endregion
@@ -188,7 +188,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (byte)(val | mask);
 
-            return rsp != 0; // BTS (inlining should prune if unused)
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (ushort)(val | mask);
 
-            return rsp != 0; // BTS (inlining should prune if unused)
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace SourceCode.Clay.Buffers
 
             val = val | mask;
 
-            return rsp != 0; // BTS (inlining should prune if unused)
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace SourceCode.Clay.Buffers
 
             val = val | mask;
 
-            return rsp != 0; // BTS (inlining should prune if unused)
+            return rsp != 0; // BTS
         }
 
         #endregion
@@ -276,7 +276,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (byte)~(~mask ^ val);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace SourceCode.Clay.Buffers
 
             val = (ushort)~(~mask ^ val);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace SourceCode.Clay.Buffers
 
             val = ~(~mask ^ val);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace SourceCode.Clay.Buffers
 
             val = ~(~mask ^ val);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         #endregion
@@ -664,9 +664,8 @@ namespace SourceCode.Clay.Buffers
         /// Count the number of trailing zero bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="ones">True to count ones, or false to count zeros.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long TrailingZeros(ReadOnlySpan<ushort> value, in bool ones)
+        public static long TrailingZeros(ReadOnlySpan<ushort> value)
         {
             if (value.Length == 0)
                 return 0;

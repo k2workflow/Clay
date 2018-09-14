@@ -151,7 +151,7 @@ namespace SourceCode.Clay.Buffers
 
             value = (byte)(value & ~mask);
 
-            return rsp != 0;
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace SourceCode.Clay.Buffers
 
             value = (ushort)(value & ~mask);
 
-            return rsp != 0;
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace SourceCode.Clay.Buffers
 
             value = value & ~mask;
 
-            return rsp != 0;
+            return rsp != 0; // BTR
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace SourceCode.Clay.Buffers
 
             value = value & ~mask;
 
-            return rsp != 0;
+            return rsp != 0; // BTR
         }
 
         #endregion
@@ -283,7 +283,7 @@ namespace SourceCode.Clay.Buffers
             
             value = (byte)(value | mask);
 
-            return rsp != 0;
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace SourceCode.Clay.Buffers
 
             value = (ushort)(value | mask);
 
-            return rsp != 0;
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace SourceCode.Clay.Buffers
 
             value = value | mask;
 
-            return rsp != 0;
+            return rsp != 0; // BTS
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace SourceCode.Clay.Buffers
 
             value = value | mask;
 
-            return rsp != 0;
+            return rsp != 0; // BTS
         }
 
         #endregion
@@ -436,7 +436,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = (byte)~(~mask ^ value);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -454,7 +454,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = (ushort)~(~mask ^ value);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -472,7 +472,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = ~(~mask ^ value);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         /// <summary>
@@ -490,7 +490,7 @@ namespace SourceCode.Clay.Buffers
             // See Truth table (2) above
             value = ~(~mask ^ value);
 
-            return rsp != 0; // BTC (inlining should prune if unused)
+            return rsp != 0; // BTC
         }
 
         #endregion
@@ -1099,7 +1099,7 @@ namespace SourceCode.Clay.Buffers
 
             // We only have to count the low-32 or the high-32, depending on limits
 
-            // Assume we'll only examine low-32
+            // Assume we need only examine low-32
             var val = (uint)value;
             var inc = 0;
 
@@ -1111,6 +1111,7 @@ namespace SourceCode.Clay.Buffers
                 inc = 32;
             }
 
+            // Examine 32
             return inc + TrailingZeros(val);
         }
 
@@ -1123,7 +1124,7 @@ namespace SourceCode.Clay.Buffers
         {
             // We only have to count the low-32 or the high-32, depending on limits
 
-            // Assume we'll only examine low-32
+            // Assume we need only examine low-32
             var val = (uint)value;
             var inc = 0;
 
@@ -1135,6 +1136,7 @@ namespace SourceCode.Clay.Buffers
                 inc = 32;
             }
 
+            // Examine 32
             return inc + TrailingOnes(val);
         }
 
@@ -1175,20 +1177,21 @@ namespace SourceCode.Clay.Buffers
             // Perf: Do not use guard clauses; callers MUST be trusted
             Debug.Assert(value > 0);
 
-            // Grab low-32
+            // We only have to count the low-32 or the high-32, depending on limits
+
+            // Assume we need only examine low-32
             var val = (uint)value;
             var inc = 0;
 
-            if (value > uint.MaxValue) // 0xFFFF_FFFF
+            // If high-32 is non-zero
+            if (value > uint.MaxValue)
             {
-                // Short-circuit upper boundary
-                const ulong hi = 1UL << 63;
-                if (value >= hi) return 63; // TODO: Perf: Is this worth the branching cost?
-
-                val = (uint)(value >> 32); // Grab high-32
+                // Then we need only examine high-32 (and add 32 to the result)
+                val = (uint)(value >> 32); // Use high-32 instead
                 inc = 32;
             }
 
+            // Examine 32
             return inc + FloorLog2Impl(val);
         }
 
