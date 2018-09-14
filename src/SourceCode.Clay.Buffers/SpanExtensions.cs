@@ -42,8 +42,7 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N > 3 due to previous checks
-            Debug.Assert(len > 3);
-            var limit = BitOps.FloorLog2Impl(len); // Unguarded - ensure N > 0
+            var limit = BitOps.FloorLog2Impl(len);
 
             limit <<= 1; // mul 2
 

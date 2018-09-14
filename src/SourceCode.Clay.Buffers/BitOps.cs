@@ -421,18 +421,6 @@ namespace SourceCode.Clay.Buffers
 
         #region ComplementBit (Ref)
 
-        // Truth table (2):
-        // v   m  | ~m  ^v  ~
-        // 00  01 | 10  10  01
-        // 01  01 | 10  11  00
-        // 10  01 | 10  00  11
-        // 11  01 | 10  01  10
-        //                      
-        // 00  10 | 01  01  10
-        // 01  10 | 01  00  11
-        // 10  10 | 01  11  00
-        // 11  10 | 01  10  01
-
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
@@ -641,14 +629,6 @@ namespace SourceCode.Clay.Buffers
 
         #region PopCount
 
-        // Truth table (1):
-        // Short-circuit lower boundary using optimization trick (n+1 >> 1)
-        // 0 (000) -> 1 (001) -> 0 (000) ✔
-        // 1 (001) -> 2 (010) -> 1 (001) ✔
-        // 2 (010) -> 3 (011) -> 1 (001) ✔
-        // 3 (011) -> 4 (100) -> 2 (010) ✔
-        // 4 (100) -> 5 (101) -> 2 (010) ✖ (trick fails)
-
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
         /// </summary>
@@ -686,10 +666,6 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(uint value)
         {
-            // See truth table (1) above
-            if (value <= 3)
-                return (int)((value + 1) >> 1);
-
             // Uses a SWAR (SIMD Within A Register) approach
 
             const uint c0 = 0x_5555_5555;
@@ -715,10 +691,6 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ulong value)
         {
-            // See truth table (1) above
-            if (value <= 3)
-                return (int)((value + 1) >> 1);
-
             // Use a SWAR (SIMD Within A Register) approach
 
             const ulong c0 = 0x_5555_5555_5555_5555;
@@ -739,7 +711,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region LeadingCount        
+        #region LeadingCount
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -747,15 +719,10 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(byte value)
-        {
-            if (value == 0)
-                return 8;
-
-            if (value == byte.MaxValue)
-                return 0;
-
-            return 7 - FloorLog2Impl(value);
-        }
+            // FloorLog2 does not handle 0
+            => value == 0 
+            ? 8 
+            : 7 - FloorLog2Impl(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -764,9 +731,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(byte value)
         {
+            // FloorLog2 does not handle 0
             if (value == 0)
                 return 0;
 
+            // Negation of Max == 0; see above
             if (value == byte.MaxValue)
                 return 8;
 
@@ -782,15 +751,10 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ushort value)
-        {
-            if (value == 0)
-                return 16;
-
-            if (value == ushort.MaxValue)
-                return 0;
-
-            return 15 - FloorLog2Impl(value);
-        }
+            // FloorLog2 does not handle 0
+            => value == 0 
+            ? 16 
+            : 15 - FloorLog2Impl(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -799,9 +763,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ushort value)
         {
+            // FloorLog2 does not handle 0
             if (value == 0)
                 return 0;
 
+            // Negation of Max == 0; see above
             if (value == ushort.MaxValue)
                 return 16;
 
@@ -817,15 +783,10 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
-        {
-            if (value == 0)
-                return 32;
-
-            if (value == uint.MaxValue)
-                return 0;
-
-            return 31 - FloorLog2Impl(value);
-        }
+            // FloorLog2 does not handle 0
+            => value == 0 
+            ? 32 
+            : 31 - FloorLog2Impl(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -834,9 +795,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(uint value)
         {
+            // FloorLog2 does not handle 0
             if (value == 0)
                 return 0;
 
+            // Negation of Max == 0; see above
             if (value == uint.MaxValue)
                 return 32;
 
@@ -852,15 +815,10 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
-        {
-            if (value == 0)
-                return 64;
-
-            if (value == ulong.MaxValue)
-                return 0;
-
-            return 63 - FloorLog2Impl(value);
-        }
+            // FloorLog2 does not handle 0
+            => value == 0 
+            ? 64 
+            : 63 - FloorLog2Impl(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -869,9 +827,11 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ulong value)
         {
+            // FloorLog2 does not handle 0
             if (value == 0)
                 return 0;
 
+            // Negation of Max == 0; see above
             if (value == ulong.MaxValue)
                 return 64;
 
@@ -918,13 +878,14 @@ namespace SourceCode.Clay.Buffers
             // Only possible values are therefore [0,1,2,4,...,128]
             var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
-            // Mod-11 is a simple perfect-hashing scheme over [0,1,2,4,...,128]
-            // in order to derive a contiguous range [0..10] to use as a jmp table.
+            // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
+            // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
 
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
             Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingZeros)}({value}) resulted in unexpected {typeof(byte)} hash {lsb}");
 
+            // TODO: For such a small range, would a switch be faster?
             var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             return cnt;
         }
@@ -943,13 +904,14 @@ namespace SourceCode.Clay.Buffers
             // Only possible values are therefore [0,1,2,4,...,128]
             var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
-            // Mod-11 is a simple perfect-hashing scheme over [0,1,2,4,...,128]
-            // in order to derive a contiguous range [0..10] to use as a jmp table.
+            // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
+            // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
 
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
             Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingOnes)}({value}) resulted in unexpected {typeof(byte)} hash {lsb}");
 
+            // TODO: For such a small range, would a switch be faster?
             var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             return cnt;
         }
@@ -993,7 +955,8 @@ namespace SourceCode.Clay.Buffers
         {
             var val = value;
 
-            // See algorithm notes in TrailingCount(byte)
+            // See algorithm notes in TrailingZeros(byte)
+            // 19 is the closest prime greater than the range's cardinality of 17.
             var lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
@@ -1015,7 +978,8 @@ namespace SourceCode.Clay.Buffers
             // Negate mask but remember to truncate carry-bits
             var val = (uint)(ushort)~(uint)value;
 
-            // See algorithm notes in TrailingCount(byte)
+            // See algorithm notes in TrailingOnes(byte)
+            // 19 is the closest prime greater than the range's cardinality of 17.
             var lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
@@ -1087,7 +1051,8 @@ namespace SourceCode.Clay.Buffers
         {
             var val = value;
 
-            // See algorithm notes in TrailingCount(byte)
+            // See algorithm notes in TrailingZeros(byte)
+            // 37 is the closest prime greater than the range's cardinality of 33.
             var lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
@@ -1108,7 +1073,8 @@ namespace SourceCode.Clay.Buffers
             // Negate mask
             var val = ~value;
 
-            // See algorithm notes in TrailingCount(byte)
+            // See algorithm notes in TrailingOnes(byte)
+            // 37 is the closest prime greater than the range's cardinality of 33.
             var lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
@@ -1126,22 +1092,23 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ulong value)
         {
+            // 0 is a special case since calling into the uint overload
+            // will return 32 instead of 64
             if (value == 0)
                 return 64;
 
-            var val = (uint)value; // Grab low uint
+            // We only have to count the low-32 or the high-32, depending on limits
+
+            // Assume we'll only examine low-32
+            var val = (uint)value;
             var inc = 0;
 
-            if (value > uint.MaxValue)
+            // If high-32 is non-zero and low-32 is zero
+            if (value > uint.MaxValue && val == 0)
             {
-                if (value == ulong.MaxValue)
-                    return 0;
-
-                if (val == 0)
-                {
-                    val = (uint)(value >> 32); // Grab high uint
-                    inc = 32;
-                }
+                // Then we need only examine high-32 (and add 32 to the result)
+                val = (uint)(value >> 32); // Use high-32 instead
+                inc = 32;
             }
 
             return inc + TrailingZeros(val);
@@ -1154,23 +1121,18 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ulong value)
         {
-            if (value == 0)
-                return 0;
+            // We only have to count the low-32 or the high-32, depending on limits
 
-            var val = (uint)value; // Grab low uint
+            // Assume we'll only examine low-32
+            var val = (uint)value;
             var inc = 0;
 
-            if (value > uint.MaxValue)
+            // If high-32 is non-zero and low-32 is Max
+            if (value > uint.MaxValue && val == uint.MaxValue)
             {
-                if (value == ulong.MaxValue)
-                    return 64;
-
-                // TrailingOnes 
-                if (val == uint.MaxValue)
-                {
-                    val = (uint)(value >> 32); // Grab high uint
-                    inc = 32;
-                }
+                // Then we need only examine high-32 (and add 32 to the result)
+                val = (uint)(value >> 32); // Use high-32 instead
+                inc = 32;
             }
 
             return inc + TrailingOnes(val);
@@ -1192,18 +1154,7 @@ namespace SourceCode.Clay.Buffers
         internal static int FloorLog2Impl(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
-
-            // Short-circuit lower boundary using optimization trick (n >> 1)
-            // 0 (000) => 0 (000) ✖ (n/a, 0 trapped @ callsite)
-            // 1 (001) => 0 (000) ✔
-            // 2 (010) => 1 (001) ✔
-            // 3 (011) => 1 (001) ✔
-            // 4 (100) => 2 (010) ✔
-            // 5 (101) => 2 (010) ✔
-            // 6 (110) => 3 (011) ✖ (trick fails)
-
-            if (value <= 5)
-                return (int)(value >> 1);
+            Debug.Assert(value > 0);
 
             var val = value;
             val |= val >> 01;
@@ -1221,24 +1172,20 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int FloorLog2Impl(ulong value)
         {
-            // Perf: Do not use guard clauses; callers must be trusted
+            // Perf: Do not use guard clauses; callers MUST be trusted
+            Debug.Assert(value > 0);
 
-            // Short-circuit upper boundary
-            // 2^63             = 9,223,372,036,854,775,808
-            // ulong.MaxValue   = 18,446,744,073,709,551,615
-            // 2^64             = 18,446,744,073,709,551,616
-
-            const ulong hi = 1UL << 63;
-
-            // Heuristic: hot path assumes small numbers more likely
+            // Grab low-32
             var val = (uint)value;
             var inc = 0;
 
             if (value > uint.MaxValue) // 0xFFFF_FFFF
             {
-                if (value >= hi) return 63;
+                // Short-circuit upper boundary
+                const ulong hi = 1UL << 63;
+                if (value >= hi) return 63; // TODO: Perf: Is this worth the branching cost?
 
-                val = (uint)(value >> 32);
+                val = (uint)(value >> 32); // Grab high-32
                 inc = 32;
             }
 
