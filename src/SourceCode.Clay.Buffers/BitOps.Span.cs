@@ -152,7 +152,7 @@ namespace SourceCode.Clay.Buffers
 
         #endregion
 
-        #region FlipBit
+        #region ComplementBit
 
         /// <summary>
         /// Negates the specified bit in a mask and returns whether it was originally set.
@@ -160,14 +160,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(Span<byte> value, in uint offset)
+        public static bool ComplementBit(Span<byte> value, in uint offset)
         {
             var ix = (int)(offset >> 3); // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
 
-            return FlipBit(ref value[ix], shft);
+            return ComplementBit(ref value[ix], shft);
         }
 
         /// <summary>
@@ -176,14 +176,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(Span<ushort> value, in uint offset)
+        public static bool ComplementBit(Span<ushort> value, in uint offset)
         {
             var ix = (int)(offset >> 4); // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
 
-            return FlipBit(ref value[ix], shft);
+            return ComplementBit(ref value[ix], shft);
         }
 
         /// <summary>
@@ -192,14 +192,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(Span<uint> value, in uint offset)
+        public static bool ComplementBit(Span<uint> value, in uint offset)
         {
             var ix = (int)(offset >> 5); // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
 
-            return FlipBit(ref value[ix], shft);
+            return ComplementBit(ref value[ix], shft);
         }
 
         /// <summary>
@@ -208,14 +208,14 @@ namespace SourceCode.Clay.Buffers
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to flip.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool FlipBit(Span<ulong> value, in uint offset)
+        public static bool ComplementBit(Span<ulong> value, in uint offset)
         {
             var ix = (int)(offset >> 6); // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
 
-            return FlipBit(ref value[ix], shft);
+            return ComplementBit(ref value[ix], shft);
         }
 
         #endregion

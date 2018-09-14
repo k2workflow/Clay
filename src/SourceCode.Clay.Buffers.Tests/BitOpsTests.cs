@@ -152,9 +152,9 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #endregion
 
-        #region FlipBit
+        #region ComplementBit
 
-        [Theory(DisplayName = nameof(BitOps_FlipBit_32u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_32u))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -167,19 +167,19 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ushort.MaxValue, 16, ushort.MaxValue + (1U << 16), false)]
         [InlineData(uint.MaxValue, 0, uint.MaxValue - 1, true)]
         [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1, true)]
-        public static void BitOps_FlipBit_32u(uint n, byte offset, uint expected, bool was)
+        public static void BitOps_ComplementBit_32u(uint n, byte offset, uint expected, bool was)
         {
             // Unsigned
             var actual = n;
 
-            Assert.Equal(BitOps.FlipBit(ref actual, offset), was);
+            Assert.Equal(BitOps.ComplementBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
+            Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_FlipBit_64u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_64u))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -195,15 +195,15 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue, 32, uint.MaxValue + (1UL << 32), false)]
         [InlineData(ulong.MaxValue, 0, ulong.MaxValue - 1, true)]
         [InlineData(ulong.MaxValue, 63, ulong.MaxValue >> 1, true)]
-        public static void BitOps_FlipBit_64u(ulong n, byte offset, ulong expected, bool was)
+        public static void BitOps_ComplementBit_64u(ulong n, byte offset, ulong expected, bool was)
         {
             // Unsigned
             var actual = n;
 
-            Assert.Equal(BitOps.FlipBit(ref actual, offset), was);
+            Assert.Equal(BitOps.ComplementBit(ref actual, offset), was);
             Assert.Equal(expected, actual);
 
-            Assert.Equal(BitOps.FlipBit(ref actual, offset), !was);
+            Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
         }
 
