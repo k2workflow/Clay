@@ -19,6 +19,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
+        [InlineData(1, int.MinValue, true)] // % 8 = 0
+        [InlineData(1 << 7, int.MaxValue, true)] // % 8 = 7
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, true)]
         public static void BitOps_ExtractBit_8u(byte n, int offset, bool expected)
@@ -48,6 +50,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
+        [InlineData(1, int.MinValue, true)] // % 16 = 0
+        [InlineData(1 << 15, int.MaxValue, true)] // % 16 = 15
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, false)]
         [InlineData(ushort.MaxValue, 15, true)]
@@ -78,6 +82,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
+        [InlineData(1, int.MinValue, true)] // % 32 = 0
+        [InlineData(unchecked((uint)(1 << 31)), int.MaxValue, true)] // % 32 = 31
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, false)]
         [InlineData(ushort.MaxValue, 15, true)]
@@ -110,6 +116,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
+        [InlineData(1, int.MinValue, true)] // % 64 = 0
+        [InlineData(unchecked((ulong)(1 << 63)), int.MaxValue, true)] // % 64 = 63
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, false)]
         [InlineData(ushort.MaxValue, 15, true)]
@@ -164,6 +172,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b011, 0 - 8 * 2, true, true, 0b011)]
         [InlineData(0b011, 1 - 8 * 2, false, true, 0b001)]
         [InlineData(0b011, 1 - 8 * 2, true, true, 0b011)]
+        [InlineData(1, int.MinValue, false, true, 0)] // % 8 = 0
+        //[InlineData(1 << 7, int.MaxValue, false, true, 0)] // % 8 = 7 TODO
         [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
         [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
@@ -222,6 +232,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b011, 0 - 16 * 2, true, true, 0b011)]
         [InlineData(0b011, 1 - 16 * 2, false, true, 0b001)]
         [InlineData(0b011, 1 - 16 * 2, true, true, 0b011)]
+        [InlineData(1, int.MinValue, false, true, 0)] // % 16 = 0
+        //[InlineData(1 << 15, int.MaxValue, false, true, 0)] // % 16 = 15 TODO
         [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
         [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
@@ -286,6 +298,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0 - 32 * 2, true, true, 0b001)]
         [InlineData(0b001, 1 - 32 * 2, false, false, 0b001)]
         [InlineData(0b001, 1 - 32 * 2, true, false, 0b011)]
+        [InlineData(1, int.MinValue, false, true, 0)] // % 32 = 0
+        //[InlineData(1 << 31, int.MaxValue, false, true, 0)] // % 32 = 31 TODO
         [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
         [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
@@ -356,6 +370,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0 - 64 * 2, true, true, 0b001)]
         [InlineData(0b001, 1 - 64 * 2, false, false, 0b001)]
         [InlineData(0b001, 1 - 64 * 2, true, false, 0b011)]
+        [InlineData(1, int.MinValue, false, true, 0)] // % 64 = 0
+        //[InlineData(1 << 63, int.MaxValue, false, true, 0)] // % 64 = 63 TODO
         [InlineData(byte.MaxValue, 0, false, true, byte.MaxValue - 1)]
         [InlineData(byte.MaxValue, 0, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
@@ -418,6 +434,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
         [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(1, int.MinValue, 0, true)] // % 8 = 0
+        [InlineData(1 << 7, int.MaxValue, 0, true)] // % 8 = 7
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue - 1, true)]
@@ -458,6 +476,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
         [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(1, int.MinValue, 0, true)] // % 16 = 0
+        [InlineData(1 << 15, int.MaxValue, 0, true)] // % 16 = 15
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue + (1U << 8), false)]
@@ -500,6 +520,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
         [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(1, int.MinValue, 0, true)] // % 32 = 0
+        [InlineData(unchecked((uint)(1 << 31)), int.MaxValue, 0, true)] // % 32 = 31
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue + (1U << 8), false)]
@@ -546,6 +568,8 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
         [InlineData(0b010, 1, 0b000, true)]
+        [InlineData(1, int.MinValue, 0, true)] // % 64 = 0
+        //[InlineData(unchecked((ulong)(1 << 63)), int.MaxValue, 0, true)] // % 64 = 63 // TODO
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue + (1UL << 8), false)]
@@ -600,6 +624,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 1));
             Assert.Equal((byte)0b01010101, BitOps.RotateLeft(sut, 2));
             Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateLeft_UShort))]
@@ -609,6 +635,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
             Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateLeft_UInt))]
@@ -618,6 +646,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
             Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateLeft_ULong))]
@@ -627,6 +657,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
             Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateRight_Byte))]
@@ -636,6 +668,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 1));
             Assert.Equal((byte)0b01010101, BitOps.RotateRight(sut, 2));
             Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateRight_UShort))]
@@ -645,6 +679,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
             Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateRight_UInt))]
@@ -654,6 +690,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
             Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
             Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
         }
 
         [Fact(DisplayName = nameof(BitOps_RotateRight_ULong))]
@@ -663,6 +701,8 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
             Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
             Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
         }
 
         #endregion
