@@ -11,9 +11,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<byte> value, uint offset)
+        public static bool ExtractBit(ReadOnlySpan<byte> value, int offset)
         {
-            var ix = (int)(offset >> 3); // div 8
+            var ix = offset >> 3; // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
@@ -27,9 +27,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<ushort> value, uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ushort> value, int offset)
         {
-            var ix = (int)(offset >> 4); // div 16
+            var ix = offset >> 4; // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
@@ -43,9 +43,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<uint> value, uint offset)
+        public static bool ExtractBit(ReadOnlySpan<uint> value, int offset)
         {
-            var ix = (int)(offset >> 5); // div 32
+            var ix = offset >> 5; // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
@@ -59,9 +59,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<ulong> value, uint offset)
+        public static bool ExtractBit(ReadOnlySpan<ulong> value, int offset)
         {
-            var ix = (int)(offset >> 6); // div 64
+            var ix = offset >> 6; // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
@@ -79,9 +79,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<byte> value, uint offset)
+        public static bool ClearBit(Span<byte> value, int offset)
         {
-            var ix = (int)(offset >> 3); // div 8
+            var ix = offset >> 3; // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
@@ -100,9 +100,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<ushort> value, uint offset)
+        public static bool ClearBit(Span<ushort> value, int offset)
         {
-            var ix = (int)(offset >> 4); // div 16
+            var ix = offset >> 4; // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
@@ -121,9 +121,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<uint> value, uint offset)
+        public static bool ClearBit(Span<uint> value, int offset)
         {
-            var ix = (int)(offset >> 5); // div 32
+            var ix = offset >> 5; // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
@@ -142,9 +142,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<ulong> value, uint offset)
+        public static bool ClearBit(Span<ulong> value, int offset)
         {
-            var ix = (int)(offset >> 6); // div 64
+            var ix = offset >> 6; // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
@@ -167,9 +167,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<byte> value, uint offset)
+        public static bool InsertBit(Span<byte> value, int offset)
         {
-            var ix = (int)(offset >> 3); // div 8
+            var ix = offset >> 3; // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
             
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
@@ -188,9 +188,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<ushort> value, uint offset)
+        public static bool InsertBit(Span<ushort> value, int offset)
         {
-            var ix = (int)(offset >> 4); // div 16
+            var ix = offset >> 4; // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
@@ -209,9 +209,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<uint> value, uint offset)
+        public static bool InsertBit(Span<uint> value, int offset)
         {
-            var ix = (int)(offset >> 5); // div 32
+            var ix = offset >> 5; // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
@@ -230,9 +230,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<ulong> value, uint offset)
+        public static bool InsertBit(Span<ulong> value, int offset)
         {
-            var ix = (int)(offset >> 6); // div 64
+            var ix = offset >> 6; // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values
@@ -255,9 +255,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<byte> value, uint offset)
+        public static bool ComplementBit(Span<byte> value, int offset)
         {
-            var ix = (int)(offset >> 3); // div 8
+            var ix = offset >> 3; // div 8
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 7); // mod 8: design choice ignores out-of-range values
@@ -276,9 +276,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<ushort> value, uint offset)
+        public static bool ComplementBit(Span<ushort> value, int offset)
         {
-            var ix = (int)(offset >> 4); // div 16
+            var ix = offset >> 4; // div 16
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 15); // mod 16: design choice ignores out-of-range values
@@ -297,9 +297,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<uint> value, uint offset)
+        public static bool ComplementBit(Span<uint> value, int offset)
         {
-            var ix = (int)(offset >> 5); // div 32
+            var ix = offset >> 5; // div 32
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 31); // mod 32: design choice ignores out-of-range values
@@ -318,9 +318,9 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<ulong> value, uint offset)
+        public static bool ComplementBit(Span<ulong> value, int offset)
         {
-            var ix = (int)(offset >> 6); // div 64
+            var ix = offset >> 6; // div 64
             if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var shft = (byte)(offset & 63); // mod 64: design choice ignores out-of-range values

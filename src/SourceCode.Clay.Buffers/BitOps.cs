@@ -16,7 +16,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(byte value, byte offset)
+        public static bool ExtractBit(byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -30,7 +30,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ushort value, byte offset)
+        public static bool ExtractBit(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -44,7 +44,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(uint value, byte offset)
+        public static bool ExtractBit(uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
 
@@ -57,7 +57,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ulong value, byte offset)
+        public static bool ExtractBit(ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
 
@@ -74,7 +74,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ClearBit(byte value, byte offset)
+        public static byte ClearBit(byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -88,7 +88,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ClearBit(ushort value, byte offset)
+        public static ushort ClearBit(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -102,7 +102,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ClearBit(uint value, byte offset)
+        public static uint ClearBit(uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
 
@@ -115,7 +115,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ClearBit(ulong value, byte offset)
+        public static ulong ClearBit(ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
 
@@ -132,12 +132,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref byte value, byte offset)
+        public static bool ClearBit(ref byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = (byte)(value & ~mask);
 
             return rsp != 0; // BTR
@@ -149,12 +149,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref ushort value, byte offset)
+        public static bool ClearBit(ref ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = (ushort)(value & ~mask);
 
             return rsp != 0; // BTR
@@ -166,11 +166,11 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref uint value, byte offset)
+        public static bool ClearBit(ref uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = value & ~mask;
 
             return rsp != 0; // BTR
@@ -182,11 +182,11 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref ulong value, byte offset)
+        public static bool ClearBit(ref ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = value & ~mask;
 
             return rsp != 0; // BTR
@@ -202,7 +202,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte InsertBit(byte value, byte offset)
+        public static byte InsertBit(byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -216,7 +216,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort InsertBit(ushort value, byte offset)
+        public static ushort InsertBit(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -230,7 +230,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint InsertBit(uint value, byte offset)
+        public static uint InsertBit(uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
 
@@ -243,7 +243,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong InsertBit(ulong value, byte offset)
+        public static ulong InsertBit(ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
 
@@ -260,12 +260,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref byte value, byte offset)
+        public static bool InsertBit(ref byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
             
+            var rsp = value & mask;
             value = (byte)(value | mask);
 
             return rsp != 0; // BTS
@@ -277,12 +277,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ushort value, byte offset)
+        public static bool InsertBit(ref ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = (ushort)(value | mask);
 
             return rsp != 0; // BTS
@@ -294,11 +294,11 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref uint value, byte offset)
+        public static bool InsertBit(ref uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = value | mask;
 
             return rsp != 0; // BTS
@@ -310,11 +310,11 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ulong value, byte offset)
+        public static bool InsertBit(ref ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
-            var rsp = value & mask;
 
+            var rsp = value & mask;
             value = value | mask;
 
             return rsp != 0; // BTS
@@ -324,7 +324,7 @@ namespace System
 
         #region ComplementBit (Scalar)
 
-        // Truth table (1):
+        // Truth table (1)
         // v   m  | ~m  ^v  ~
         // 00  01 | 10  10  01
         // 01  01 | 10  11  00
@@ -342,7 +342,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ComplementBit(byte value, byte offset)
+        public static byte ComplementBit(byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -358,7 +358,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ComplementBit(ushort value, byte offset)
+        public static ushort ComplementBit(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
@@ -374,7 +374,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ComplementBit(uint value, byte offset)
+        public static uint ComplementBit(uint value, int offset)
         {            
             var mask = 1U << offset; // uint.shift is natively mod-32
 
@@ -389,7 +389,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ComplementBit(ulong value, byte offset)
+        public static ulong ComplementBit(ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
 
@@ -408,13 +408,13 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref byte value, byte offset)
+        public static bool ComplementBit(ref byte value, int offset)
         {
             var shft = offset & 7; // mod 8: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
 
             // See Truth table (1) above
+            var rsp = value & mask;
             value = (byte)~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -426,13 +426,13 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ushort value, byte offset)
+        public static bool ComplementBit(ref ushort value, int offset)
         {
             var shft = offset & 15; // mod 16: design choice ignores out-of-range values
             var mask = 1U << shft;
-            var rsp = value & mask;
 
             // See Truth table (1) above
+            var rsp = value & mask;
             value = (ushort)~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -444,12 +444,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref uint value, byte offset)
+        public static bool ComplementBit(ref uint value, int offset)
         {
             var mask = 1U << offset; // uint.shift is natively mod-32
-            var rsp = value & mask;
 
             // See Truth table (1) above
+            var rsp = value & mask;
             value = ~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -461,12 +461,12 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ulong value, byte offset)
+        public static bool ComplementBit(ref ulong value, int offset)
         {
             var mask = 1UL << offset; // ulong.shift is natively mod-64
-            var rsp = value & mask;
 
             // See Truth table (1) above
+            var rsp = value & mask;
             value = ~(~mask ^ value);
 
             return rsp != 0; // BTC
@@ -483,7 +483,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateLeft(byte value, byte offset)
+        public static byte RotateLeft(byte value, int offset)
         {
             var shft = offset & 7; // mod 8 safely ignores boundary checks
             var val = (uint)value;
@@ -499,7 +499,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte RotateRight(byte value, byte offset)
+        public static byte RotateRight(byte value, int offset)
         {
             var shft = offset & 7; // mod 8 safely ignores boundary checks
             var val = (uint)value;
@@ -515,7 +515,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateLeft(ushort value, byte offset)
+        public static ushort RotateLeft(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16 safely ignores boundary checks
             var val = (uint)value;
@@ -531,7 +531,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort RotateRight(ushort value, byte offset)
+        public static ushort RotateRight(ushort value, int offset)
         {
             var shft = offset & 15; // mod 16 safely ignores boundary checks
             var val = (uint)value;
@@ -547,7 +547,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateLeft(uint value, byte offset)
+        public static uint RotateLeft(uint value, int offset)
         {
             // uint.shift is natively mod-32, but we need the subtraction below
             var shft = offset & 31;
@@ -564,7 +564,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateRight(uint value, byte offset)
+        public static uint RotateRight(uint value, int offset)
         {
             // uint.shift is natively mod-32, but we need the subtraction below
             var shft = offset & 31;
@@ -581,7 +581,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateLeft(ulong value, byte offset)
+        public static ulong RotateLeft(ulong value, int offset)
         {
             // ulong.shift is natively mod-64, but we need the subtraction below
             var shft = offset & 63;
@@ -598,7 +598,7 @@ namespace System
         /// <param name="offset">The number of bits to rotate by.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong RotateRight(ulong value, byte offset)
+        public static ulong RotateRight(ulong value, int offset)
         {
             // ulong.shift is natively mod-64, but we need the subtraction below
             var shft = offset & 63;
