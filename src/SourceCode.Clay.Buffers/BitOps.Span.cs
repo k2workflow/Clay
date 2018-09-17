@@ -14,7 +14,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<byte> value, int offset)
         {
             int ix = offset >> 3; // div 8
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(value[ix], offset);
             return val;
@@ -28,7 +28,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<ushort> value, int offset)
         {
             int ix = offset >> 4; // div 16
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(value[ix], offset);
             return val;
@@ -42,7 +42,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<uint> value, int offset)
         {
             int ix = offset >> 5; // div 32
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(value[ix], offset);
             return val;
@@ -56,7 +56,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<ulong> value, int offset)
         {
             int ix = offset >> 6; // div 64
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(value[ix], offset);
             return val;
@@ -74,7 +74,7 @@ namespace System
         public static bool ClearBit(Span<byte> value, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref value[ix];
 
@@ -90,7 +90,7 @@ namespace System
         public static bool ClearBit(Span<ushort> value, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref value[ix];
 
@@ -106,7 +106,7 @@ namespace System
         public static bool ClearBit(Span<uint> value, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref value[ix];
 
@@ -122,7 +122,7 @@ namespace System
         public static bool ClearBit(Span<ulong> value, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref value[ix];
 
@@ -142,7 +142,7 @@ namespace System
         public static bool InsertBit(Span<byte> value, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref value[ix];
 
@@ -158,7 +158,7 @@ namespace System
         public static bool InsertBit(Span<ushort> value, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref value[ix];
 
@@ -174,7 +174,7 @@ namespace System
         public static bool InsertBit(Span<uint> value, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref value[ix];
 
@@ -190,7 +190,7 @@ namespace System
         public static bool InsertBit(Span<ulong> value, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref value[ix];
 
@@ -210,7 +210,7 @@ namespace System
         public static bool ComplementBit(Span<byte> value, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref value[ix];
 
@@ -226,7 +226,7 @@ namespace System
         public static bool ComplementBit(Span<ushort> value, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref value[ix];
 
@@ -242,7 +242,7 @@ namespace System
         public static bool ComplementBit(Span<uint> value, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref value[ix];
 
@@ -258,7 +258,7 @@ namespace System
         public static bool ComplementBit(Span<ulong> value, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref value[ix];
 
