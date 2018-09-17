@@ -1,5 +1,7 @@
 namespace System
 {
+#pragma warning disable IDE0007 // Use implicit type
+
     partial class BitOps // .Span
     {
         #region ExtractBit
@@ -654,4 +656,6 @@ namespace System
 
         #endregion
     }
+
+#pragma warning restore IDE0007 // Use implicit type
 }
