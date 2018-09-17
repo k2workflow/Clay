@@ -10,16 +10,24 @@ namespace System
     {
         #region ExtractBit
 
+        // For bitlength N, it is conventional to treat N as congruent modulo-N 
+        // under the shift operation.
+        // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
+        // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. So we use & not %.
+        // Software & hardware intrinsics already do this for uint/ulong, but
+        // we need to emulate for byte/ushort.
+
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
+        /// <param name="offset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
             return (value & mask) != 0;
         }
@@ -28,12 +36,13 @@ namespace System
         /// Reads whether the specified bit in a mask is set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
+        /// <param name="offset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
             return (value & mask) != 0;
         }
@@ -42,11 +51,12 @@ namespace System
         /// Reads whether the specified bit in a mask is set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
+        /// <param name="offset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
             return (value & mask) != 0;
         }
@@ -55,11 +65,12 @@ namespace System
         /// Reads whether the specified bit in a mask is set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
+        /// <param name="offset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..63] is treated as congruent mod 63.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
             return (value & mask) != 0;
         }
@@ -72,12 +83,13 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ClearBit(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
             return (byte)(value & ~mask);
         }
@@ -86,12 +98,13 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort ClearBit(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
             return (ushort)(value & ~mask);
         }
@@ -100,11 +113,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ClearBit(uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
             return value & ~mask;
         }
@@ -113,11 +127,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ClearBit(ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
             return value & ~mask;
         }
@@ -130,66 +145,70 @@ namespace System
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
-            var rsp = value & mask;
+            uint btr = value & mask;
             value = (byte)(value & ~mask);
 
-            return rsp != 0; // BTR
+            return btr != 0;
         }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
-            var rsp = value & mask;
+            uint btr = value & mask;
             value = (ushort)(value & ~mask);
 
-            return rsp != 0; // BTR
+            return btr != 0;
         }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
-            var rsp = value & mask;
+            uint btr = value & mask;
             value = value & ~mask;
 
-            return rsp != 0; // BTR
+            return btr != 0;
         }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
-            var rsp = value & mask;
+            ulong btr = value & mask;
             value = value & ~mask;
 
-            return rsp != 0; // BTR
+            return btr != 0;
         }
 
         #endregion
@@ -200,12 +219,13 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte InsertBit(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
             return (byte)(value | mask);
         }
@@ -214,12 +234,13 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..15] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort InsertBit(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
             return (ushort)(value | mask);
         }
@@ -228,11 +249,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint InsertBit(uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
             return value | mask;
         }
@@ -241,11 +263,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong InsertBit(ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
             return value | mask;
         }
@@ -258,66 +281,70 @@ namespace System
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
             
-            var rsp = value & mask;
+            uint bts = value & mask;
             value = (byte)(value | mask);
 
-            return rsp != 0; // BTS
+            return bts != 0;
         }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
-            var rsp = value & mask;
+            uint bts = value & mask;
             value = (ushort)(value | mask);
 
-            return rsp != 0; // BTS
+            return bts != 0;
         }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
-            var rsp = value & mask;
+            uint bts = value & mask;
             value = value | mask;
 
-            return rsp != 0; // BTS
+            return bts != 0;
         }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="offset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
-            var rsp = value & mask;
+            ulong bts = value & mask;
             value = value | mask;
 
-            return rsp != 0; // BTS
+            return bts != 0;
         }
 
         #endregion
@@ -340,62 +367,62 @@ namespace System
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ComplementBit(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
-            // See Truth table (1) above
-            var val = (byte)~(~mask ^ value);
-            return val;
+            mask = ~(~mask ^ value);
+            return (byte)mask;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort ComplementBit(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
-            // See Truth table (1) above
-            var val = (ushort)~(~mask ^ value);
-            return val;
+            mask = ~(~mask ^ value);
+            return (ushort)mask;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ComplementBit(uint value, int offset)
         {            
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
-            // See Truth table (1) above
-            var val = ~(~mask ^ value);
-            return val;
+            mask = ~(~mask ^ value);
+            return mask;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ComplementBit(ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
-            // See Truth table (1) above
-            var val = ~(~mask ^ value);
-            return val;
+            mask = ~(~mask ^ value);
+            return mask;
         }
 
         #endregion
@@ -406,211 +433,209 @@ namespace System
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref byte value, int offset)
         {
-            var shft = offset & 7; // mod 8: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 7;
+            uint mask = 1U << shft;
 
-            // See Truth table (1) above
-            var rsp = value & mask;
+            uint btc = value & mask;
             value = (byte)~(~mask ^ value);
 
-            return rsp != 0; // BTC
+            return btc != 0;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16: design choice ignores out-of-range values
-            var mask = 1U << shft;
+            int shft = offset & 15;
+            uint mask = 1U << shft;
 
-            // See Truth table (1) above
-            var rsp = value & mask;
+            uint btc = value & mask;
             value = (ushort)~(~mask ^ value);
 
-            return rsp != 0; // BTC
+            return btc != 0;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref uint value, int offset)
         {
-            var mask = 1U << offset; // uint.shift is natively mod-32
+            uint mask = 1U << offset;
 
-            // See Truth table (1) above
-            var rsp = value & mask;
+            uint btc = value & mask;
             value = ~(~mask ^ value);
 
-            return rsp != 0; // BTC
+            return btc != 0;
         }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
+        /// <param name="offset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref ulong value, int offset)
         {
-            var mask = 1UL << offset; // ulong.shift is natively mod-64
+            ulong mask = 1UL << offset;
 
-            // See Truth table (1) above
-            var rsp = value & mask;
+            ulong btc = value & mask;
             value = ~(~mask ^ value);
 
-            return rsp != 0; // BTC
+            return btc != 0;
         }
 
         #endregion
 
         #region Rotate
 
+        // Will compile to instrinsics if pattern complies (uint/ulong):
+        // https://github.com/dotnet/coreclr/pull/1830
+        // No intrinsics support for byte/ushort rotation
+
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateLeft(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8 safely ignores boundary checks
+            int shft = offset & 7;
             var val = (uint)value;
-
-            // Intrinsic not available for byte/ushort
-            return (byte)((val << shft) | (val >> (8 - shft)));
+            
+            val = (val << shft) | (val >> (8 - shft));
+            return (byte)val;
         }
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte RotateRight(byte value, int offset)
         {
-            var shft = offset & 7; // mod 8 safely ignores boundary checks
+            int shft = offset & 7;
             var val = (uint)value;
-
-            // Intrinsic not available for byte/ushort
-            return (byte)((val >> shft) | (val << (8 - shft)));
+            
+            val = (val >> shft) | (val << (8 - shft));
+            return (byte)val;
         }
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateLeft(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16 safely ignores boundary checks
+            int shft = offset & 15;
             var val = (uint)value;
 
-            // Intrinsic not available for byte/ushort
-            return (ushort)((val << shft) | (val >> (16 - shft)));
+            val = (val << shft) | (val >> (16 - shft));
+            return (ushort)val;
         }
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort RotateRight(ushort value, int offset)
         {
-            var shft = offset & 15; // mod 16 safely ignores boundary checks
+            int shft = offset & 15;
             var val = (uint)value;
 
-            // Intrinsic not available for byte/ushort
-            return (ushort)((val >> shft) | (val << (16 - shft)));
+            val = (val >> shft) | (val << (16 - shft));
+            return (ushort)val;
         }
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateLeft(uint value, int offset)
         {
-            // uint.shift is natively mod-32, but we need the subtraction below
-            var shft = offset & 31;
-
-            // Will compile to instrinsic if pattern complies (uint/ulong):
-            // https://github.com/dotnet/coreclr/pull/1830
-            return (value << shft) | (value >> (32 - shft));
+            uint val = (value << offset) | (value >> (32 - offset));
+            return val;
         }
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint RotateRight(uint value, int offset)
         {
-            // uint.shift is natively mod-32, but we need the subtraction below
-            var shft = offset & 31;
-
-            // Will compile to instrinsic if pattern complies (uint/ulong):
-            // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> shft) | (value << (32 - shft));
+            uint val = (value >> offset) | (value << (32 - offset));
+            return val;
         }
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateLeft(ulong value, int offset)
         {
-            // ulong.shift is natively mod-64, but we need the subtraction below
-            var shft = offset & 63;
-
-            // Will compile to instrinsic if pattern complies (uint/ulong):
-            // https://github.com/dotnet/coreclr/pull/1830
-            return (value << shft) | (value >> (64 - shft));
+            ulong val = (value << offset) | (value >> (64 - offset));
+            return val;
         }
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong RotateRight(ulong value, int offset)
         {
-            // ulong.shift is natively mod-64, but we need the subtraction below
-            var shft = offset & 63;
-
-            // Will compile to instrinsic if pattern complies (uint/ulong):
-            // https://github.com/dotnet/coreclr/pull/1830
-            return (value >> shft) | (value << (64 - shft));
+            ulong val = (value >> offset) | (value << (64 - offset));
+            return val;
         }
 
         #endregion
 
         #region PopCount
+
+        // Uses SWAR (SIMD Within A Register).
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -618,21 +643,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(byte value)
-        {
-            // 22 ops
-            // TODO: Benchmark whether other algo is faster
-            var val
-                = (value & 1)
-                + (value >> 1 & 1)
-                + (value >> 2 & 1)
-                + (value >> 3 & 1)
-                + (value >> 4 & 1)
-                + (value >> 5 & 1)
-                + (value >> 6 & 1)
-                + (value >> 7 & 1);
-
-            return val;
-        }
+            => PopCount((uint)value);
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -649,14 +660,12 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(uint value)
         {
-            // Uses a SWAR (SIMD Within A Register) approach
-
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
             const uint c2 = 0x_0F0F_0F0F;
             const uint c3 = 0x_0101_0101;
 
-            var val = value;
+            uint val = value;
 
             val -= (val >> 1) & c0;
             val = (val & c1) + ((val >> 2) & c1);
@@ -674,8 +683,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ulong value)
         {
-            // Use a SWAR (SIMD Within A Register) approach
-
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
             const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
@@ -718,11 +725,11 @@ namespace System
             if (value == 0)
                 return 0;
 
-            // Negation of Max == 0; see above
+            // Complement of Max == 0; see above
             if (value == byte.MaxValue)
                 return 8;
 
-            // Negate mask but remember to truncate carry-bits
+            // Complement mask but remember to truncate carry-bits
             var val = (uint)(byte)~(uint)value;
 
             return 7 - FloorLog2Impl(val);
@@ -750,11 +757,11 @@ namespace System
             if (value == 0)
                 return 0;
 
-            // Negation of Max == 0; see above
+            // Complement of Max == 0; see above
             if (value == ushort.MaxValue)
                 return 16;
 
-            // Negate mask but remember to truncate carry-bits
+            // Complement mask but remember to truncate carry-bits
             var val = (uint)(ushort)~(uint)value;
 
             return 15 - FloorLog2Impl(val);
@@ -782,14 +789,11 @@ namespace System
             if (value == 0)
                 return 0;
 
-            // Negation of Max == 0; see above
+            // Complement of Max == 0; see above
             if (value == uint.MaxValue)
                 return 32;
 
-            // Negate mask but remember to truncate carry-bits
-            var val = ~value;
-
-            return 31 - FloorLog2Impl(val);
+            return 31 - FloorLog2Impl(~value);
         }
 
         /// <summary>
@@ -814,14 +818,11 @@ namespace System
             if (value == 0)
                 return 0;
 
-            // Negation of Max == 0; see above
+            // Complement of Max == 0; see above
             if (value == ulong.MaxValue)
                 return 64;
 
-            // Negate mask but remember to truncate carry-bits
-            var val = ~value;
-
-            return 63 - FloorLog2Impl(val);
+            return 63 - FloorLog2Impl(~value);
         }
 
         #endregion
@@ -855,21 +856,21 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(byte value)
         {
-            var val = value;
+            byte val = value;
 
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...,128]
-            var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
+            int lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
             // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
-            lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
+            lsb = lsb % 11; // mod 11
 
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingZeros)}({value}) resulted in unexpected {typeof(byte)} hash {lsb}");
+            Debug.Assert(!(lsb == 3 || lsb == 6), $"{value} resulted in unexpected {typeof(byte)} hash {lsb}");
 
             // TODO: For such a small range, would a switch be faster?
-            var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             return cnt;
         }
 
@@ -879,28 +880,11 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(byte value)
-        {
-            // Negate mask but remember to truncate carry-bits
-            var val = (uint)(byte)~(uint)value;
+            => TrailingZeros((byte)~(uint)value); // Ones(N) == Zeros(~N)
 
-            // The expression (n & -n) returns lsb(n).
-            // Only possible values are therefore [0,1,2,4,...,128]
-            var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
-
-            // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
-            // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
-            lsb = lsb % 11; // eg 44 -> 4 % 11 -> 4
-
-            // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(!(lsb == 3 || lsb == 6), $"{nameof(TrailingOnes)}({value}) resulted in unexpected {typeof(byte)} hash {lsb}");
-
-            // TODO: For such a small range, would a switch be faster?
-            var cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
-            return cnt;
-        }
-
-        // See algorithm notes in TrailingCount(byte)
-        private static readonly byte[] s_trail16u = new byte[19] // mod 19
+        // See algorithm notes in TrailingCount(byte).
+        // 19 is the closest prime greater than the range's cardinality of 17.
+        private static readonly byte[] s_trail16u = new byte[19]
         {
             //        2^n  % 19     b=bin(n)             z=tz(b)
             16, //      0  [ 0]     0000_0000_0000_0000  16
@@ -935,17 +919,16 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
         {
-            var val = value;
+            ushort val = value;
 
             // See algorithm notes in TrailingZeros(byte)
-            // 19 is the closest prime greater than the range's cardinality of 17.
-            var lsb = val & -val;
+            int lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
             // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(!(lsb == 5 || lsb == 10), $"{nameof(TrailingZeros)}({value}) resulted in unexpected {typeof(ushort)} hash {lsb}");
+            Debug.Assert(!(lsb == 5 || lsb == 10), $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}");
 
-            var cnt = s_trail16u[lsb];
+            byte cnt = s_trail16u[lsb];
             return cnt;
         }
 
@@ -955,23 +938,10 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ushort value)
-        {
-            // Negate mask but remember to truncate carry-bits
-            var val = (uint)(ushort)~(uint)value;
-
-            // See algorithm notes in TrailingOnes(byte)
-            // 19 is the closest prime greater than the range's cardinality of 17.
-            var lsb = val & -val;
-            lsb = lsb % 19; // mod 19
-
-            // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(!(lsb == 5 || lsb == 10), $"{nameof(TrailingOnes)}({value}) resulted in unexpected {typeof(ushort)} hash {lsb}");
-
-            var cnt = s_trail16u[lsb];
-            return cnt;
-        }
+            => TrailingZeros((ushort)~(uint)value); // Ones(N) == Zeros(~N)
 
         // See algorithm notes in TrailingCount(byte)
+        // 37 is the closest prime greater than the range's cardinality of 33.
         private static readonly byte[] s_trail32u = new byte[37] // mod 37
         {
             //                2^n  % 37       b=bin(n)                                 z=tz(b)
@@ -1030,17 +1000,16 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(uint value)
         {
-            var val = value;
+            uint val = value;
 
             // See algorithm notes in TrailingZeros(byte)
-            // 37 is the closest prime greater than the range's cardinality of 33.
-            var lsb = val & -val;
+            long lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{nameof(TrailingZeros)}({value}) resulted in unexpected {typeof(uint)} hash {lsb}");
+            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{value} resulted in unexpected {typeof(uint)} hash {lsb}");
 
-            var cnt = s_trail32u[lsb];
+            byte cnt = s_trail32u[lsb];
             return cnt;
         }
 
@@ -1050,21 +1019,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(uint value)
-        {
-            // Negate mask
-            var val = ~value;
-
-            // See algorithm notes in TrailingOnes(byte)
-            // 37 is the closest prime greater than the range's cardinality of 33.
-            var lsb = val & -val;
-            lsb = lsb % 37; // mod 37
-
-            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{nameof(TrailingOnes)}({value}) resulted in unexpected {typeof(uint)} hash {lsb}");
-
-            var cnt = s_trail32u[lsb];
-            return cnt;
-        }
+            => TrailingZeros(~value); // Ones(N) == Zeros(~N)
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1073,7 +1028,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ulong value)
         {
-            // 0 is a special case since calling into the uint overload
+            // 0 is a special case since calling into the core uint routine
             // will return 32 instead of 64
             if (value == 0)
                 return 64;
@@ -1082,7 +1037,7 @@ namespace System
 
             // Assume we need only examine low-32
             var val = (uint)value;
-            var inc = 0;
+            byte inc = 0;
 
             // If high-32 is non-zero and low-32 is zero
             if (value > uint.MaxValue && val == 0)
@@ -1101,25 +1056,8 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(ulong value)
-        {
-            // We only have to count the low-32 or the high-32, depending on limits
-
-            // Assume we need only examine low-32
-            var val = (uint)value;
-            var inc = 0;
-
-            // If high-32 is non-zero and low-32 is Max
-            if (value > uint.MaxValue && val == uint.MaxValue)
-            {
-                // Then we need only examine high-32 (and add 32 to the result)
-                val = (uint)(value >> 32); // Use high-32 instead
-                inc = 32;
-            }
-
-            // Examine 32
-            return inc + TrailingOnes(val);
-        }
+        public static int TrailingOnes(ulong value) 
+            => TrailingZeros(~value); // Ones(N) == Zeros(~N)
 
         #endregion
 
@@ -1147,7 +1085,7 @@ namespace System
             val |= val >> 16;
 
             const uint c32 = 0x07C4_ACDDu;
-            var ix = (val * c32) >> 27;
+            uint ix = (val * c32) >> 27;
 
             return s_deBruijn32[ix];
         }
@@ -1162,7 +1100,7 @@ namespace System
 
             // Assume we need only examine low-32
             var val = (uint)value;
-            var inc = 0;
+            byte inc = 0;
 
             // If high-32 is non-zero
             if (value > uint.MaxValue)
