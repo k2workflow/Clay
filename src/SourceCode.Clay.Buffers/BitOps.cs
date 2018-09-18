@@ -1061,11 +1061,38 @@ namespace System
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // mod 11
 
+            byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(!(lsb == 3 || lsb == 6), $"{value} resulted in unexpected {typeof(byte)} hash {lsb}");
+            Debug.Assert(cnt < 8, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
 
             // TODO: For such a small range, would a switch be faster?
-            byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+
+            // Build this table by taking n = 0,1,2,4,...,512
+            // [2^n % 11] = tz(n) manually counted
+            switch (lsb)
+            {
+                //    n                            2^n  % 11     b=bin(n)   z=tz(b)
+                case 00: cnt = 8; break;        //   0  [ 0]     0000_0000  8
+                case 01: cnt = 0; break;        //   1  [ 1]     0000_0001  0 
+                case 02: cnt = 1; break;        //   2  [ 2]     0000_0010  1
+                case 03: cnt = 8; goto default; // 256  [ 3]  01_0000_0000  8 (n/a) 1u << 8
+                                                
+                case 04: cnt = 2; break;        //   4  [ 4]     0000_0100  2
+                case 05: cnt = 4; break;        //  16  [ 5]     0001_0000  4
+                case 06: cnt = 9; goto default; // 512  [ 6]  10_0000_0000  9 (n/a) 1u << 9
+                case 07: cnt = 7; break;        // 128  [ 7]     1000_0000  7
+                                                
+                case 08: cnt = 3; break;        //   8  [ 8]     0000_1000  3
+                case 09: cnt = 6; break;        //  64  [ 9]     0100_0000  6
+                case 10: cnt = 5; break;        //  32  [10]     0010_0000  5
+
+                default:
+                    cnt = 10;
+                    Debug.Fail($"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
+                    break;
+            }
+
             return cnt;
         }
 
@@ -1120,10 +1147,11 @@ namespace System
             int lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
-            // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(!(lsb == 5 || lsb == 10), $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}");
-
             byte cnt = s_trail16u[lsb];
+
+            // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
+            Debug.Assert(cnt < 16, $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}, with count {cnt}");
+
             return cnt;
         }
 
@@ -1201,10 +1229,11 @@ namespace System
             long lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
-            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(!(lsb == 7 || lsb == 14 || lsb == 19 || lsb == 28), $"{value} resulted in unexpected {typeof(uint)} hash {lsb}");
-
             byte cnt = s_trail32u[lsb];
+
+            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
+            Debug.Assert(cnt < 32, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
+
             return cnt;
         }
 

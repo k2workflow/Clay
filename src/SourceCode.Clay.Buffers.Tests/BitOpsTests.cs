@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Buffers.Tests
     {
         #region ExtractBit
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_8u))]
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_08u))]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(1 << 7, int.MaxValue, true)] // % 8 = 7
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, true)]
-        public static void BitOps_ExtractBit_8u(byte n, int offset, bool expected)
+        public static void BitOps_ExtractBit_08u(byte n, int offset, bool expected)
         {
             // Scalar
             var actual = BitOps.ExtractBit(n, offset);
@@ -151,7 +151,7 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #region WriteBit
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_8u))]
+        [Theory(DisplayName = nameof(BitOps_WriteBit_08u))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -179,7 +179,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
         [InlineData(byte.MaxValue, 7, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 8, false, true, byte.MaxValue - 1)]
-        public static void BitOps_WriteBit_8u(byte n, int offset, bool on, bool was, byte expected)
+        public static void BitOps_WriteBit_08u(byte n, int offset, bool on, bool was, byte expected)
         {
             // Scalar
             var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
@@ -505,7 +505,7 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #region ComplementBit
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_8u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_08u))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -515,7 +515,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue - 1, true)]
-        public static void BitOps_ComplementBit_8u(byte n, int offset, uint expected, bool was)
+        public static void BitOps_ComplementBit_08u(byte n, int offset, uint expected, bool was)
         {
             // Scalar
             var actual = BitOps.ComplementBit(n, offset);
@@ -785,7 +785,7 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #region PopCount
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_8u))]
+        [Theory(DisplayName = nameof(BitOps_PopCount_08u))]
         [InlineData(0b000, 0)]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
@@ -803,7 +803,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b1111110, 6)]
         [InlineData(0b1111111, 7)]
         [InlineData(byte.MaxValue, 8)]
-        public static void BitOps_PopCount_8u(byte n, int expected)
+        public static void BitOps_PopCount_08u(byte n, int expected)
         {
             // Scalar
             var actual = BitOps.PopCount(n);
@@ -919,7 +919,7 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #region LeadTrail
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_8u))]
+        [Theory(DisplayName = nameof(BitOps_LeadTrail_08u))]
         [InlineData((byte)0b000u, 8)]
         [InlineData((byte)0b001u, 7)]
         [InlineData((byte)0b010u, 6)]
@@ -938,7 +938,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((byte)0b1111101u, 1)]
         [InlineData(byte.MaxValue, 0)]
         [InlineData((byte)0b_0001_0110u, 3)]
-        public static void BitOps_LeadTrail_8u(byte n, int expected)
+        public static void BitOps_LeadTrail_08u(byte n, int expected)
         {
             var m = n;
 
