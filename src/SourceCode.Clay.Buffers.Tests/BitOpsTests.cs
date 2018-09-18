@@ -185,9 +185,15 @@ namespace SourceCode.Clay.Buffers.Tests
             var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
+            actual = BitOps.WriteBit(n, offset, on);
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 actual = !on ? BitOps.InsertBit(actual, offset) : BitOps.ClearBit(actual, offset);
+                Assert.Equal(n, actual);
+
+                actual = BitOps.WriteBit(actual, offset, !on);
                 Assert.Equal(n, actual);
             }
 
@@ -196,10 +202,17 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(was, on ? BitOps.InsertBit(ref actual, offset) : BitOps.ClearBit(ref actual, offset));
             Assert.Equal(expected, actual);
 
+            actual = n;
+            Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 Assert.Equal(!was, on ? BitOps.ClearBit(ref actual, offset) : BitOps.InsertBit(ref actual, offset));
                 Assert.Equal(n, actual);
+
+                Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+                Assert.Equal(expected, actual);
             }
 
             // Span
@@ -207,6 +220,10 @@ namespace SourceCode.Clay.Buffers.Tests
             {
                 Span<byte> span = stackalloc byte[4]; span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 8 * 2 + offset) : BitOps.ClearBit(span, 8 * 2 + offset);
+                Assert.Equal(offset >= 8 ? false : was, tf);
+
+                span[2] = n;
+                tf = BitOps.WriteBit(span, 8 * 2 + offset, on);
                 Assert.Equal(offset >= 8 ? false : was, tf);
             }
         }
@@ -251,9 +268,15 @@ namespace SourceCode.Clay.Buffers.Tests
             var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
+            actual = BitOps.WriteBit(n, offset, on);
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 actual = !on ? BitOps.InsertBit(actual, offset) : BitOps.ClearBit(actual, offset);
+                Assert.Equal(n, actual);
+
+                actual = BitOps.WriteBit(actual, offset, !on);
                 Assert.Equal(n, actual);
             }
 
@@ -262,10 +285,17 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(was, on ? BitOps.InsertBit(ref actual, offset) : BitOps.ClearBit(ref actual, offset));
             Assert.Equal(expected, actual);
 
+            actual = n;
+            Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 Assert.Equal(!was, on ? BitOps.ClearBit(ref actual, offset) : BitOps.InsertBit(ref actual, offset));
                 Assert.Equal(n, actual);
+
+                Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+                Assert.Equal(expected, actual);
             }
 
             // Span
@@ -273,6 +303,10 @@ namespace SourceCode.Clay.Buffers.Tests
             {
                 Span<ushort> span = stackalloc ushort[4]; span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 16 * 2 + offset) : BitOps.ClearBit(span, 16 * 2 + offset);
+                Assert.Equal(offset >= 16 ? false : was, tf);
+
+                span[2] = n;
+                tf = BitOps.WriteBit(span, 16 * 2 + offset, on);
                 Assert.Equal(offset >= 16 ? false : was, tf);
             }
         }
@@ -323,9 +357,15 @@ namespace SourceCode.Clay.Buffers.Tests
             var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
+            actual = BitOps.WriteBit(n, offset, on);
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 actual = !on ? BitOps.InsertBit(actual, offset) : BitOps.ClearBit(actual, offset);
+                Assert.Equal(n, actual);
+
+                actual = BitOps.WriteBit(actual, offset, !on);
                 Assert.Equal(n, actual);
             }
 
@@ -334,10 +374,17 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(was, on ? BitOps.InsertBit(ref actual, offset) : BitOps.ClearBit(ref actual, offset));
             Assert.Equal(expected, actual);
 
+            actual = n;
+            Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 Assert.Equal(!was, on ? BitOps.ClearBit(ref actual, offset) : BitOps.InsertBit(ref actual, offset));
                 Assert.Equal(n, actual);
+
+                Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+                Assert.Equal(expected, actual);
             }
 
             // Span
@@ -345,6 +392,10 @@ namespace SourceCode.Clay.Buffers.Tests
             {
                 Span<uint> span = stackalloc uint[4]; span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 32 * 2 + offset) : BitOps.ClearBit(span, 32 * 2 + offset);
+                Assert.Equal(offset >= 32 ? false : was, tf);
+
+                span[2] = n;
+                tf = BitOps.WriteBit(span, 32 * 2 + offset, on);
                 Assert.Equal(offset >= 32 ? false : was, tf);
             }
         }
@@ -399,9 +450,15 @@ namespace SourceCode.Clay.Buffers.Tests
             var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
+            actual = BitOps.WriteBit(n, offset, on);
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 actual = !on ? BitOps.InsertBit(actual, offset) : BitOps.ClearBit(actual, offset);
+                Assert.Equal(n, actual);
+
+                actual = BitOps.WriteBit(actual, offset, !on);
                 Assert.Equal(n, actual);
             }
 
@@ -410,10 +467,17 @@ namespace SourceCode.Clay.Buffers.Tests
             Assert.Equal(was, on ? BitOps.InsertBit(ref actual, offset) : BitOps.ClearBit(ref actual, offset));
             Assert.Equal(expected, actual);
 
+            actual = n;
+            Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+            Assert.Equal(expected, actual);
+
             if (actual != n)
             {
                 Assert.Equal(!was, !on ? BitOps.InsertBit(ref actual, offset) : BitOps.ClearBit(ref actual, offset));
                 Assert.Equal(n, actual);
+
+                Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
+                Assert.Equal(expected, actual);
             }
 
             // Span
@@ -421,6 +485,10 @@ namespace SourceCode.Clay.Buffers.Tests
             {
                 Span<ulong> span = stackalloc ulong[4]; span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 64 * 2 + offset) : BitOps.ClearBit(span, 64 * 2 + offset);
+                Assert.Equal(offset >= 64 ? false : was, tf);
+
+                span[2] = n;
+                tf = BitOps.WriteBit(span, 64 * 2 + offset, on);
                 Assert.Equal(offset >= 64 ? false : was, tf);
             }
         }
