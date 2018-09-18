@@ -218,7 +218,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Span
             if (offset > 0)
             {
-                Span<byte> span = stackalloc byte[4]; span[2] = n;
+                Span<byte> span = stackalloc byte[4];
+
+                span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 8 * 2 + offset) : BitOps.ClearBit(span, 8 * 2 + offset);
                 Assert.Equal(offset >= 8 ? false : was, tf);
 
@@ -301,7 +303,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Span
             if (offset > 0)
             {
-                Span<ushort> span = stackalloc ushort[4]; span[2] = n;
+                Span<ushort> span = stackalloc ushort[4];
+
+                span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 16 * 2 + offset) : BitOps.ClearBit(span, 16 * 2 + offset);
                 Assert.Equal(offset >= 16 ? false : was, tf);
 
@@ -390,7 +394,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Span
             if (offset > 0)
             {
-                Span<uint> span = stackalloc uint[4]; span[2] = n;
+                Span<uint> span = stackalloc uint[4];
+
+                span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 32 * 2 + offset) : BitOps.ClearBit(span, 32 * 2 + offset);
                 Assert.Equal(offset >= 32 ? false : was, tf);
 
@@ -483,7 +489,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Span
             if (offset > 0)
             {
-                Span<ulong> span = stackalloc ulong[4]; span[2] = n;
+                Span<ulong> span = stackalloc ulong[4];
+
+                span[2] = n;
                 var tf = on ? BitOps.InsertBit(span, 64 * 2 + offset) : BitOps.ClearBit(span, 64 * 2 + offset);
                 Assert.Equal(offset >= 64 ? false : was, tf);
 

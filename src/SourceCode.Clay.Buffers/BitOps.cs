@@ -106,8 +106,19 @@ namespace System
             int shft = offset & 7;
             uint mask = 1U << shft;
 
+            // TODO: Decide if safe or unsafe
+
+            // Safe, via union
             var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << shft;
+            uint onn = b2b.U8;
+
+            // Alternative: Unsafe
+            unsafe
+            {
+                onn = *(byte*)&on;
+            }
+
+            onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
         }
