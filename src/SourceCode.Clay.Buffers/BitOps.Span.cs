@@ -14,7 +14,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<byte> value, int offset)
         {
             int ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset)); // TODO: Perf; do we want these guards?
 
             var val = ExtractBit(value[ix], offset);
             return val;

@@ -1067,6 +1067,7 @@ namespace System
             Debug.Assert(cnt < 8, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
 
             // TODO: For such a small range, would a switch be faster?
+            // Alternative:
 
             // Build this table by taking n = 0,1,2,4,...,512
             // [2^n % 11] = tz(n) manually counted
