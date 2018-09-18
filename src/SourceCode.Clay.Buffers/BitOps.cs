@@ -945,7 +945,7 @@ namespace System
         public static int LeadingZeros(byte value)
             => value == 0 // Log(0) is undefined
             ? 8 
-            : 7 - FloorLog2Impl(value);
+            : 7 - Log2Floor(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -965,7 +965,7 @@ namespace System
             // Complement mask but remember to truncate carry-bits
             var val = (uint)(byte)~(uint)value;
 
-            return 7 - FloorLog2Impl(val);
+            return 7 - Log2Floor(val);
         }
 
         /// <summary>
@@ -977,7 +977,7 @@ namespace System
         public static int LeadingZeros(ushort value)
             => value == 0 // Log(0) is undefined
             ? 16
-            : 15 - FloorLog2Impl(value);
+            : 15 - Log2Floor(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -997,7 +997,7 @@ namespace System
             // Complement mask but remember to truncate carry-bits
             var val = (uint)(ushort)~(uint)value;
 
-            return 15 - FloorLog2Impl(val);
+            return 15 - Log2Floor(val);
         }
 
         /// <summary>
@@ -1009,7 +1009,7 @@ namespace System
         public static int LeadingZeros(uint value)
             => value == 0 // Log(0) is undefined
             ? 32
-            : 31 - FloorLog2Impl(value);
+            : 31 - Log2Floor(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1026,7 +1026,7 @@ namespace System
             if (value == uint.MaxValue)
                 return 32;
 
-            return 31 - FloorLog2Impl(~value);
+            return 31 - Log2Floor(~value);
         }
 
         /// <summary>
@@ -1038,7 +1038,7 @@ namespace System
         public static int LeadingZeros(ulong value)
             => value == 0 // Log(0) is undefined
             ? 64
-            : 63 - FloorLog2Impl(value);
+            : 63 - Log2Floor(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1055,7 +1055,7 @@ namespace System
             if (value == ulong.MaxValue)
                 return 64;
 
-            return 63 - FloorLog2Impl(~value);
+            return 63 - Log2Floor(~value);
         }
 
         #endregion
@@ -1331,57 +1331,151 @@ namespace System
 
         #endregion
 
-        #region FloorLog2        
+        #region Log2        
 
-        private static readonly byte[] s_deBruijn32 = new byte[32]
-        {
-            00, 09, 01, 10, 13, 21, 02, 29,
-            11, 14, 16, 18, 22, 25, 03, 30,
-            08, 12, 20, 28, 15, 17, 24, 07,
-            19, 27, 23, 06, 26, 05, 04, 31
-        };
-
+        /// <summary>
+        /// Computes the highest power of 2 that is lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int FloorLog2Impl(uint value)
+        internal static int Log2Floor(uint value)
+            => Log2Ceiling(value) - 1;
+
+        /// <summary>
+        /// Computes the highest power of 2 that is lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Floor(ulong value)
+            => Log2Ceiling(value) - 1;
+
+        /// <summary>
+        /// Computes the lowest power of 2 that is greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Ceiling(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
             var val = value;
+
             val |= val >> 01;
             val |= val >> 02;
             val |= val >> 04;
             val |= val >> 08;
             val |= val >> 16;
 
-            const uint c32 = 0x07C4_ACDDu;
-            uint ix = (val * c32) >> 27;
+            val = ~val;
 
-            return s_deBruijn32[ix];
+            int tz = TrailingZeros(val);
+            return tz;
         }
 
+        /// <summary>
+        /// Computes the lowest power of 2 that is greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int FloorLog2Impl(ulong value)
+        internal static int Log2Ceiling(ulong value)
         {
-            // Perf: Do not use guard clauses; callers MUST be trusted
+            // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            // We only have to count the low-32 or the high-32, depending on limits
+            var val = value;
 
-            // Assume we need only examine low-32
-            var val = (uint)value;
-            byte inc = 0;
+            val |= val >> 01;
+            val |= val >> 02;
+            val |= val >> 04;
+            val |= val >> 08;
+            val |= val >> 16;
+            val |= val >> 32;
 
-            // If high-32 is non-zero
-            if (value > uint.MaxValue)
+            val = ~val;
+
+            int tz = TrailingZeros(val);
+            return tz;
+        }
+
+        #endregion
+
+        #region Pow2
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Pow2Ceiling(uint value)
+            => Pow2Floor(value) - 1;
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Pow2Ceiling(ulong value)
+            => Pow2Floor(value) - 1;
+
+        /// <summary>
+        /// Computes the next power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Pow2Floor(uint value)
+        {
+            Debug.Assert(value < uint.MaxValue);
+
+            uint val = value;
+
+            // If zero, return 1
+            bool zero = value == 0;
+            unsafe
             {
-                // Then we need only examine high-32 (and add 32 to the result)
-                val = (uint)(value >> 32); // Use high-32 instead
-                inc = 32;
+                val += *(byte*)&zero;
             }
 
-            // Examine 32
-            return inc + FloorLog2Impl(val);
+            //         77        0100 1101
+            val--; //  76        0100 1100 (for exact powers of 2)
+            val |= val >> 01; // 0110 1110
+            val |= val >> 02; // 0111 1111
+            val |= val >> 04; // 0111 1111
+            val |= val >> 08; // 0111 1111
+            val |= val >> 16; // 0111 1111
+            val++; // 128        1000 0000 (for exact powers of 2)
+
+            return val;
+        }
+
+        /// <summary>
+        /// Computes the next power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Pow2Floor(ulong value)
+        { 
+            Debug.Assert(value < ulong.MaxValue);
+
+            ulong val = value;
+
+            // If zero, return 1
+            bool zero = value == 0;
+            unsafe
+            {
+                val += *(byte*)&zero;
+            }
+
+            val--;
+            val |= val >> 01;
+            val |= val >> 02;
+            val |= val >> 04;
+            val |= val >> 08;
+            val |= val >> 16;
+            val |= val >> 32;
+            val++;
+
+            return val;
         }
 
         #endregion

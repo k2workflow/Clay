@@ -42,7 +42,7 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N > 3 due to previous checks
-            var limit = BitOps.FloorLog2Impl(len);
+            var limit = BitOps.Log2Floor(len);
 
             limit <<= 1; // mul 2
 
