@@ -86,7 +86,6 @@ namespace System
 
         #region WriteBit (Scalar)
 
-        // Prefer union to unsafe
         [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 4)]
         private struct BoolToByte
         {
@@ -94,7 +93,7 @@ namespace System
             public bool On;
 
             [FieldOffset(0)]
-            public readonly byte U8; // Could make this uint
+            public readonly byte U8;
         }
 
         /// <summary>
@@ -124,7 +123,7 @@ namespace System
             }
 
             // 3: Unsafe.As
-            // onn = Unsafe.As<bool, byte>(); // Not sure if this even works
+            // onn = Unsafe.As<bool, uint>(ref on); // Unsafe is only available in CoreCLR I believe
 
             onn <<= shft;
 
