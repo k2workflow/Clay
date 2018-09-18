@@ -22,7 +22,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
-        /// Some platforms may compile to the x86 instruction BT.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -34,7 +34,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
-        /// Some platforms may compile to the x86 instruction BT.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -46,7 +46,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
-        /// Some platforms may compile to the x86 instruction BT.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -61,7 +61,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
-        /// Some platforms may compile to the x86 instruction BT.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -103,20 +103,20 @@ namespace System
             int shft = offset & 7;
             uint mask = 1U << shft;
 
-            // TODO: Decide if safe or unsafe
+            // TODO: Decide which alternative:
 
-            // Safe, via union
+            // 1: SAFE, via union
             var b2b = new BoolToByte { On = on };
             uint onn = b2b.U8;
 
-            // Alternative 1: Unsafe
+            // 2: UNSAFE
             unsafe
             {
                 onn = *(byte*)&on;
             }
 
-            // Alternative 2: Unsafe.As
-            //onn = Unsafe.As<bool, byte>(); // etc
+            // 3: Unsafe.As
+            // onn = Unsafe.As<bool, byte>(); // Not sure if this even works
 
             onn <<= shft;
 
@@ -343,7 +343,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTR.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -362,7 +362,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTR.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -381,7 +381,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTR.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -399,7 +399,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTR.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -483,7 +483,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTS.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -502,7 +502,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTS.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -521,7 +521,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTS.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -539,7 +539,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTS.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -639,7 +639,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTC.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -658,7 +658,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTC.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -677,7 +677,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTC.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -695,7 +695,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
-        /// Some platforms may compile to the x86 instruction BTC.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -717,7 +717,7 @@ namespace System
 
         // Will compile to instrinsics if pattern complies (uint/ulong):
         // https://github.com/dotnet/coreclr/pull/1830
-        // No intrinsics support for byte/ushort rotation
+        // There is NO intrinsics support for byte/ushort rotation.
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
@@ -732,6 +732,7 @@ namespace System
             int shft = offset & 7;
             var val = (uint)value;
             
+            // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (8 - shft));
             return (byte)val;
         }
@@ -748,7 +749,8 @@ namespace System
         {
             int shft = offset & 7;
             var val = (uint)value;
-            
+
+            // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (8 - shft));
             return (byte)val;
         }
@@ -766,6 +768,7 @@ namespace System
             int shft = offset & 15;
             var val = (uint)value;
 
+            // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (16 - shft));
             return (ushort)val;
         }
@@ -783,12 +786,14 @@ namespace System
             int shft = offset & 15;
             var val = (uint)value;
 
+            // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (16 - shft));
             return (ushort)val;
         }
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -803,6 +808,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -817,6 +823,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -831,6 +838,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -849,6 +857,7 @@ namespace System
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -858,6 +867,7 @@ namespace System
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -867,6 +877,7 @@ namespace System
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -891,6 +902,7 @@ namespace System
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -919,6 +931,7 @@ namespace System
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -950,6 +963,7 @@ namespace System
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -981,6 +995,7 @@ namespace System
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1009,6 +1024,7 @@ namespace System
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1061,6 +1077,7 @@ namespace System
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1076,13 +1093,15 @@ namespace System
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // mod 11
 
+            // TODO: For such a small range, would a switch be faster?
+            // Alternative 1: JMP
+
             byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
             Debug.Assert(cnt < 8, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
 
-            // TODO: For such a small range, would a switch be faster?
-            // Alternative:
+            // Alternative 2: SWITCH
 
             // Build this table by taking n = 0,1,2,4,...,512
             // [2^n % 11] = tz(n) manually counted
@@ -1152,6 +1171,7 @@ namespace System
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1234,6 +1254,7 @@ namespace System
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1263,6 +1284,7 @@ namespace System
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

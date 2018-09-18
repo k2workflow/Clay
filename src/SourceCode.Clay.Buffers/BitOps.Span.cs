@@ -8,6 +8,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
@@ -22,6 +23,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
@@ -36,6 +38,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
@@ -50,6 +53,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.</param>
@@ -68,6 +72,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -85,6 +90,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -102,6 +108,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -119,6 +126,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -140,6 +148,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
@@ -156,6 +165,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
@@ -172,6 +182,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
@@ -188,6 +199,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.</param>
@@ -208,6 +220,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -224,6 +237,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -240,6 +254,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -256,6 +271,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
@@ -276,6 +292,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
@@ -292,6 +309,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
@@ -308,6 +326,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
@@ -324,6 +343,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.</param>
