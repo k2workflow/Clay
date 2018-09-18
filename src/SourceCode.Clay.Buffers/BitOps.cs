@@ -29,8 +29,12 @@ namespace System
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(byte value, int offset)
-            // Avoid software emulation by leveraging overloads that may compile to instrinsics
-            => ExtractBit((uint)value, offset & 7);
+        {
+            int shft = offset & 7;
+            uint mask = 1U << shft;
+
+            return (value & mask) != 0;
+        }
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -41,8 +45,12 @@ namespace System
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ushort value, int offset)
-            // Avoid software emulation by leveraging overloads that may compile to instrinsics
-            => ExtractBit((uint)value, offset & 15);
+        {
+            int shft = offset & 15;
+            uint mask = 1U << shft;
+
+            return (value & mask) != 0;
+        }
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -1094,6 +1102,7 @@ namespace System
             lsb = lsb % 11; // mod 11
 
             // TODO: For such a small range, would a switch be faster?
+
             // Alternative 1: JMP
 
             byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
