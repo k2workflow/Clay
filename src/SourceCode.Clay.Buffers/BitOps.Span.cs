@@ -64,6 +64,78 @@ namespace System
 
         #endregion
 
+        #region WriteBit
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        public static bool WriteBit(Span<byte> value, int offset, bool on)
+        {
+            var ix = offset >> 3; // div 8
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            ref byte val = ref value[ix];
+
+            var wrt = WriteBit(ref val, offset, on);
+            return wrt;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        public static bool WriteBit(Span<ushort> value, int offset, bool on)
+        {
+            var ix = offset >> 4; // div 16
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            ref ushort val = ref value[ix];
+
+            var wrt = WriteBit(ref val, offset, on);
+            return wrt;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        public static bool WriteBit(Span<uint> value, int offset, bool on)
+        {
+            var ix = offset >> 5; // div 32
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            ref uint val = ref value[ix];
+
+            var wrt = WriteBit(ref val, offset, on);
+            return wrt;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        public static bool WriteBit(Span<ulong> value, int offset, bool on)
+        {
+            var ix = offset >> 6; // div 64
+            if (ix < 0 || ix >= value.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+
+            ref ulong val = ref value[ix];
+
+            var wrt = WriteBit(ref val, offset, on);
+            return wrt;
+        }
+
+        #endregion
+
         #region ClearBit
 
         /// <summary>

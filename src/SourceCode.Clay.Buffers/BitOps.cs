@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -75,6 +76,185 @@ namespace System
             ulong mask = 1UL << offset;
 
             return (value & mask) != 0;
+        }
+
+        #endregion
+
+        #region WriteBit (Scalar)
+
+        // Prefer union to unsafe
+        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 4)]
+        private struct BoolToByte
+        {
+            [FieldOffset(0)]
+            public bool On;
+
+            [FieldOffset(0)]
+            public readonly byte U8; // Could make this uint
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte WriteBit(byte value, int offset, bool on)
+        {
+            int shft = offset & 7;
+            uint mask = 1U << shft;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << shft;
+
+            return (byte)((value & ~mask) | onn);
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ushort WriteBit(ushort value, int offset, bool on)
+        {
+            int shft = offset & 15;
+            uint mask = 1U << shft;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << shft;
+
+            return (ushort)((value & ~mask) | onn);
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint WriteBit(uint value, int offset, bool on)
+        {
+            uint mask = 1U << offset;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << offset;
+
+            return (value & ~mask) | onn;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong WriteBit(ulong value, int offset, bool on)
+        {
+            ulong mask = 1UL << offset;
+
+            var b2b = new BoolToByte { On = on };
+            ulong onn = (ulong)b2b.U8 << offset;
+
+            return (value & ~mask) | onn;
+        }
+
+        #endregion
+
+        #region WriteBit (Ref)
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref byte value, int offset, bool on)
+        {
+            int shft = offset & 7;
+            uint mask = 1U << shft;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << shft;
+
+            uint btr = value & mask;
+            value = (byte)((value & ~mask) | onn);
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref ushort value, int offset, bool on)
+        {
+            int shft = offset & 15;
+            uint mask = 1U << shft;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << shft;
+
+            uint btr = value & mask;
+            value = (ushort)((value & ~mask) | onn);
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref uint value, int offset, bool on)
+        {
+            uint mask = 1U << offset;
+
+            var b2b = new BoolToByte { On = on };
+            uint onn = (uint)b2b.U8 << offset;
+
+            uint btr = value & mask;
+            value = (value & ~mask) | onn;
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="offset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref ulong value, int offset, bool on)
+        {
+            ulong mask = 1UL << offset;
+
+            var b2b = new BoolToByte { On = on };
+            ulong onn = (ulong)b2b.U8 << offset;
+
+            ulong btr = value & mask;
+            value = (value & ~mask) | onn;
+
+            return btr != 0;
         }
 
         #endregion
