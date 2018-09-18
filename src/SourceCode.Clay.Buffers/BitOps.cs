@@ -106,8 +106,19 @@ namespace System
             int shft = offset & 7;
             uint mask = 1U << shft;
 
+            // TODO: Decide if safe or unsafe
+
+            // Safe, via union
             var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << shft;
+            uint onn = b2b.U8;
+
+            // Alternative: Unsafe
+            unsafe
+            {
+                onn = *(byte*)&on;
+            }
+
+            onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
         }
@@ -825,6 +836,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(byte value)
+            // Avoid software emulation by leveraging overloads that may compile to instrinsics
             => PopCount((uint)value);
 
         /// <summary>
@@ -833,6 +845,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ushort value)
+            // Avoid software emulation by leveraging overloads that may compile to instrinsics
             => PopCount((uint)value);
 
         /// <summary>
@@ -891,8 +904,8 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(byte value)
-            // FloorLog2 does not handle 0
             => value == 0 
+            // FloorLog2 does not handle 0
             ? 8 
             : 7 - FloorLog2Impl(value);
 
@@ -923,9 +936,9 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ushort value)
-            // FloorLog2 does not handle 0
             => value == 0 
-            ? 16 
+            // FloorLog2 does not handle 0
+            ? 16
             : 15 - FloorLog2Impl(value);
 
         /// <summary>
@@ -955,9 +968,9 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
-            // FloorLog2 does not handle 0
             => value == 0 
-            ? 32 
+            // FloorLog2 does not handle 0
+            ? 32
             : 31 - FloorLog2Impl(value);
 
         /// <summary>
@@ -984,9 +997,9 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
-            // FloorLog2 does not handle 0
             => value == 0 
-            ? 64 
+            // FloorLog2 does not handle 0
+            ? 64
             : 63 - FloorLog2Impl(value);
 
         /// <summary>
