@@ -22,36 +22,31 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Some platforms may compile to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(byte value, int offset)
-        {
-            int shft = offset & 7;
-            uint mask = 1U << shft;
-
-            return (value & mask) != 0;
-        }
+            // Avoid software emulation by leveraging overloads that may compile to instrinsics
+            => ExtractBit((uint)value, offset & 7);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Some platforms may compile to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ushort value, int offset)
-        {
-            int shft = offset & 15;
-            uint mask = 1U << shft;
-
-            return (value & mask) != 0;
-        }
+            // Avoid software emulation by leveraging overloads that may compile to instrinsics
+            => ExtractBit((uint)value, offset & 15);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Some platforms may compile to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -66,6 +61,7 @@ namespace System
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
+        /// Some platforms may compile to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to read.
@@ -95,6 +91,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -112,11 +109,14 @@ namespace System
             var b2b = new BoolToByte { On = on };
             uint onn = b2b.U8;
 
-            // Alternative: Unsafe
+            // Alternative 1: Unsafe
             unsafe
             {
                 onn = *(byte*)&on;
             }
+
+            // Alternative 2: Unsafe.As
+            //onn = Unsafe.As<bool, byte>(); // etc
 
             onn <<= shft;
 
@@ -125,6 +125,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -144,6 +145,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -162,6 +164,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -184,6 +187,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -206,6 +210,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -228,6 +233,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -249,6 +255,7 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -336,6 +343,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -354,6 +362,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -372,6 +381,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -389,6 +399,7 @@ namespace System
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to clear.
@@ -472,6 +483,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -490,6 +502,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -508,6 +521,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -525,6 +539,7 @@ namespace System
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.
@@ -624,6 +639,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -642,6 +658,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -660,6 +677,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -677,6 +695,7 @@ namespace System
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Some platforms may compile to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to complement.
@@ -828,8 +847,6 @@ namespace System
 
         #region PopCount
 
-        // Uses SWAR (SIMD Within A Register).
-
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
         /// </summary>
@@ -855,6 +872,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(uint value)
         {
+            // Uses SWAR (SIMD Within A Register)
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
             const uint c2 = 0x_0F0F_0F0F;
@@ -878,6 +896,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ulong value)
         {
+            // Uses SWAR (SIMD Within A Register)
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
             const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
@@ -904,8 +923,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(byte value)
-            => value == 0 
-            // FloorLog2 does not handle 0
+            => value == 0 // Log(0) is undefined
             ? 8 
             : 7 - FloorLog2Impl(value);
 
@@ -916,7 +934,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(byte value)
         {
-            // FloorLog2 does not handle 0
+            // Log(0) is undefined
             if (value == 0)
                 return 0;
 
@@ -936,8 +954,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ushort value)
-            => value == 0 
-            // FloorLog2 does not handle 0
+            => value == 0 // Log(0) is undefined
             ? 16
             : 15 - FloorLog2Impl(value);
 
@@ -948,7 +965,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ushort value)
         {
-            // FloorLog2 does not handle 0
+            // Log(0) is undefined
             if (value == 0)
                 return 0;
 
@@ -968,8 +985,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
-            => value == 0 
-            // FloorLog2 does not handle 0
+            => value == 0 // Log(0) is undefined
             ? 32
             : 31 - FloorLog2Impl(value);
 
@@ -980,7 +996,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(uint value)
         {
-            // FloorLog2 does not handle 0
+            // Log(0) is undefined
             if (value == 0)
                 return 0;
 
@@ -997,8 +1013,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
-            => value == 0 
-            // FloorLog2 does not handle 0
+            => value == 0 // Log(0) is undefined
             ? 64
             : 63 - FloorLog2Impl(value);
 
@@ -1009,7 +1024,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ulong value)
         {
-            // FloorLog2 does not handle 0
+            // Log(0) is undefined
             if (value == 0)
                 return 0;
 

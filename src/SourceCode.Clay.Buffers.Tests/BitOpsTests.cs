@@ -808,10 +808,6 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Span
-            Span<byte> span = stackalloc byte[4]; span[0] = 0b_0010_1100; span[2] = n; span[3] = byte.MaxValue >> 1;
-            Assert.Equal(3 + expected + 7, BitOps.PopCount(span));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_16u))]
@@ -839,10 +835,6 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Span
-            Span<ushort> span = stackalloc ushort[4]; span[0] = 0b_0010_1100; span[2] = n; span[3] = ushort.MaxValue >> 1;
-            Assert.Equal(3 + expected + 15, BitOps.PopCount(span));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_32u))]
@@ -873,10 +865,6 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Span
-            Span<uint> span = stackalloc uint[4]; span[0] = 0b_0010_1100; span[2] = n; span[3] = uint.MaxValue >> 1;
-            Assert.Equal(3 + expected + 31, BitOps.PopCount(span));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_64u))]
@@ -909,10 +897,6 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Span
-            Span<ulong> span = stackalloc ulong[4]; span[0] = 0b_0010_1100; span[2] = n; span[3] = ulong.MaxValue >> 1;
-            Assert.Equal(3 + expected + 63, BitOps.PopCount(span));
         }
 
         #endregion
