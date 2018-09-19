@@ -904,7 +904,7 @@ namespace System
             const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
             const ulong c3 = 0x_0101_0101_0101_0101;
 
-            var val = value;
+            ulong val = value;
 
             val -= (value >> 1) & c0;
             val = (val & c1) + ((val >> 2) & c1);
@@ -986,7 +986,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
         {
-            var val = value;
+            uint val = value;
 
             //                   1000 0000 0000 0000 0000 0000 0000 0000
             val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000
@@ -1012,7 +1012,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
         {
-            var val = value;
+            ulong val = value;
 
             //                   1000 0000 0000 0000 0000 0000 0000 0000 0...
             val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000 0...
@@ -1331,7 +1331,7 @@ namespace System
 
         #endregion
 
-        #region Log2
+        #region Log2Low
 
         /// <summary>
         /// Computes the highest power of 2 lower than the given value.
@@ -1352,7 +1352,8 @@ namespace System
 
             uint ix = (val * c_deBruijn32) >> 27;
 
-            return s_deBruijn32[ix];
+            byte log = s_deBruijn32[ix];
+            return log;
         }
 
         /// <summary>
@@ -1375,7 +1376,8 @@ namespace System
 
             uint ix = (val * c_deBruijn32) >> 27;
 
-            return s_deBruijn32[ix];
+            byte log = s_deBruijn32[ix];
+            return log;
         }
 
         /// <summary>
@@ -1388,17 +1390,19 @@ namespace System
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            var val = value;
+            uint val = value;
 
-            val |= val >> 01;
-            val |= val >> 02;
-            val |= val >> 04;
-            val |= val >> 08;
-            val |= val >> 16;
-            
+            //                   1000 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000
+            val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
+            val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
+
             uint ix = (val * c_deBruijn32) >> 27;
 
-            return s_deBruijn32[ix];
+            byte log = s_deBruijn32[ix];
+            return log;
         }
 
         /// <summary>
@@ -1428,6 +1432,67 @@ namespace System
             // Examine 32
             return inc + Log2Low(val);
         }
+        // TODO: Perf
+        //{
+        //    // Perf: Do not use guard clauses; callers must be trusted
+        //    Debug.Assert(value > 0);
+
+        //    ulong val = value;
+
+        //    //                   1000 0000 0000 0000 0000 0000 0000 0000 0...
+        //    val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000 0...
+        //    val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000 0...
+        //    val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000 0...
+        //    val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000 0...
+        //    val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111 0...
+        //    val |= val >> 32; // 1111 1111 1111 1111 1111 1111 1111 1111 1...
+
+        //    // Instead of using a 64-bit lookup table,
+        //    // we use the existing 32-bit table twice.
+
+        //    uint mv = (uint)(val >> 32); // High-32
+        //    uint nv = (uint)val; // Low-32
+
+        //    uint mi = (mv * c_deBruijn32) >> 27;
+        //    uint ni = (nv * c_deBruijn32) >> 27;
+
+        //    int ml = s_deBruijn32[mi];
+        //    int nl = s_deBruijn32[ni]; // Use warm cache
+
+        //    // Log(0) is undefined: Return 32 + 32.
+        //    //ml += BoolToByte((value >> 32) == 0);
+        //    //nl += BoolToByte((uint)value == 0);
+
+        //    // Truth table
+        //    // m   n  m32 actual   m + (n * m32)
+        //    // 32 32  1   32+32   32 + (32 * 1)
+        //    // 32  n  1   32+n    32 + (n * 1)
+        //    // m  32  0   m        m + (32 * 0)
+        //    // m   n  0   m        m + (n * 0)
+
+        //    //nl *= BoolToByte(ml == 31); // Only add n if m != 32
+        //    return ml + nl;
+        //}        
+
+        #endregion
+
+        #region Log2High
+
+        /// <summary>
+        /// Computes the lowest power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2High(byte value)
+            => Log2Low(value) + 1;
+
+        /// <summary>
+        /// Computes the lowest power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2High(ushort value)
+            => Log2Low(value) + 1;
 
         /// <summary>
         /// Computes the lowest power of 2 greater than the given value.
@@ -1447,7 +1512,58 @@ namespace System
 
         #endregion
 
-        #region Pow2
+        #region Pow2Low
+
+        // TODO: Perf
+
+        /// <summary>
+        /// Computes the next power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint Pow2Low(byte value)
+        {
+            Debug.Assert(value < byte.MaxValue);
+
+            uint val = value;
+
+            // If zero, add 1
+            val += BoolToByte(value == 0);
+
+            //         77        0100 1101
+            val--; //  76        0100 1100 (for exact powers of 2)
+            val |= val >> 01; // 0110 1110
+            val |= val >> 02; // 0111 1111
+            val |= val >> 04; // 0111 1111
+            val++; // 128        1000 0000 (for exact powers of 2)
+
+            return val;
+        }
+
+        /// <summary>
+        /// Computes the next power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint Pow2Low(ushort value)
+        {
+            Debug.Assert(value < ushort.MaxValue);
+
+            uint val = value;
+
+            // If zero, add 1
+            val += BoolToByte(value == 0);
+
+            //         77        0100 1101
+            val--; //  76        0100 1100 (for exact powers of 2)
+            val |= val >> 01; // 0110 1110
+            val |= val >> 02; // 0111 1111
+            val |= val >> 04; // 0111 1111
+            val |= val >> 08; // 0111 1111
+            val++; // 128        1000 0000 (for exact powers of 2)
+
+            return val;
+        }
 
         /// <summary>
         /// Computes the next power of 2 greater than the given value.
@@ -1500,6 +1616,26 @@ namespace System
 
             return val;
         }
+
+        #endregion
+
+        #region Pow2High
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint Pow2High(byte value)
+            => Pow2Low(value) - 1;
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint Pow2High(ushort value)
+            => Pow2Low(value) - 1;
 
         /// <summary>
         /// Computes the previous power of 2 less than the given value.
