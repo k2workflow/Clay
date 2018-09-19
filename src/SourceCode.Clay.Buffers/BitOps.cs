@@ -1087,11 +1087,11 @@ namespace System
 
         #endregion
 
-        #region TrailingCount
+        #region TrailingZeros
 
         // Build this table by taking n = 0,1,2,4,...,512
         // [2^n % 11] = tz(n) manually counted
-        private static readonly byte[] s_trail8u = new byte[11] // mod 11
+        private static readonly byte[] s_trail08u = new byte[11] // mod 11
         {
             //    2^n  % 11     b=bin(n)   z=tz(b)
             8, //   0  [ 0]     0000_0000  8
@@ -1128,51 +1128,13 @@ namespace System
             lsb = lsb % 11; // mod 11
 
             // TODO: For such a small range, would a switch be faster?
-
-            // Alternative 1: JMP
-
-            byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            byte cnt = s_trail08u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
             Debug.Assert(lsb != 3 && lsb != 6, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
 
-            // Alternative 2: SWITCH
-
-            // Build this table by taking n = 0,1,2,4,...,512
-            // [2^n % 11] = tz(n) manually counted
-            switch (lsb)
-            {
-                //    n                            2^n  % 11     b=bin(n)   z=tz(b)
-                case 00: cnt = 8; break;        //   0  [ 0]     0000_0000  8
-                case 01: cnt = 0; break;        //   1  [ 1]     0000_0001  0 
-                case 02: cnt = 1; break;        //   2  [ 2]     0000_0010  1
-                case 03: cnt = 8; goto default; // 256  [ 3]  01_0000_0000  8 (n/a) 1u << 8
-                                                
-                case 04: cnt = 2; break;        //   4  [ 4]     0000_0100  2
-                case 05: cnt = 4; break;        //  16  [ 5]     0001_0000  4
-                case 06: cnt = 9; goto default; // 512  [ 6]  10_0000_0000  9 (n/a) 1u << 9
-                case 07: cnt = 7; break;        // 128  [ 7]     1000_0000  7
-                                                
-                case 08: cnt = 3; break;        //   8  [ 8]     0000_1000  3
-                case 09: cnt = 6; break;        //  64  [ 9]     0100_0000  6
-                case 10: cnt = 5; break;        //  32  [10]     0010_0000  5
-
-                default:
-                    cnt = 10;
-                    Debug.Fail($"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
-                    break;
-            }
-
             return cnt;
         }
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(byte value)
-            => TrailingZeros((byte)~(uint)value); // Ones(N) == Zeros(~N)
 
         // See algorithm notes in TrailingCount(byte).
         // 19 is the closest prime greater than the range's cardinality of 17.
@@ -1212,9 +1174,10 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
         {
+            // See algorithm notes in TrailingZeros(byte)
+
             ushort val = value;
 
-            // See algorithm notes in TrailingZeros(byte)
             int lsb = val & -val;
             lsb = lsb % 19; // mod 19
 
@@ -1225,14 +1188,6 @@ namespace System
 
             return cnt;
         }
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(ushort value)
-            => TrailingZeros((ushort)~(uint)value); // Ones(N) == Zeros(~N)
 
         // See algorithm notes in TrailingCount(byte)
         // 37 is the closest prime greater than the range's cardinality of 33.
@@ -1246,7 +1201,7 @@ namespace System
 
             02, //              4  [ 4]       0000_0000_0000_0000_0000_0000_0000_0100   2
             23,
-            27,                  
+            27,
             32, //  4,294,967,296  [ 7]  0001_0000_0000_0000_0000_0000_0000_0000_0000  32 (n/a) 1ul << 32
 
             03, //              8  [ 8]       0000_0000_0000_0000_0000_0000_0000_1000   3
@@ -1295,9 +1250,10 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(uint value)
         {
+            // See algorithm notes in TrailingZeros(byte)
+
             uint val = value;
 
-            // See algorithm notes in TrailingZeros(byte)
             long lsb = val & -val;
             lsb = lsb % 37; // mod 37
 
@@ -1308,14 +1264,6 @@ namespace System
 
             return cnt;
         }
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(uint value)
-            => TrailingZeros(~value); // Ones(N) == Zeros(~N)
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1348,13 +1296,41 @@ namespace System
             return inc + TrailingZeros(val);
         }
 
+        #endregion
+
+        #region TrailingOnes
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(byte value)
+            => TrailingZeros((byte)~value);
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(ushort value)
+            => TrailingZeros((ushort)~value);
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(uint value)
+            => TrailingZeros(~value);
+
         /// <summary>
         /// Count the number of trailing one bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ulong value) 
-            => TrailingZeros(~value); // Ones(N) == Zeros(~N)
+            => TrailingZeros(~value);
 
         #endregion
 
