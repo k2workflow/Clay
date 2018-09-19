@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -86,22 +85,13 @@ namespace System
 
         #region WriteBit (Scalar)
 
-        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 4)]
-        private struct BoolToByte
-        {
-            [FieldOffset(0)]
-            public bool On;
-
-            [FieldOffset(0)]
-            public readonly byte U8;
-        }
-
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -110,21 +100,7 @@ namespace System
             int shft = offset & 7;
             uint mask = 1U << shft;
 
-            // TODO: Decide which alternative:
-
-            // 1: SAFE, via union
-            var b2b = new BoolToByte { On = on };
-            uint onn = b2b.U8;
-
-            // 2: UNSAFE
-            unsafe
-            {
-                onn = *(byte*)&on;
-            }
-
-            // 3: Unsafe.As
-            // onn = Unsafe.As<bool, uint>(ref on); // Unsafe is only available in CoreCLR I believe
-
+            uint onn = BoolToByte(on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -132,10 +108,11 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,18 +121,19 @@ namespace System
             int shft = offset & 15;
             uint mask = 1U << shft;
 
-            var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << shft;
+            uint onn = BoolToByte(on);
+            onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
         }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -163,18 +141,19 @@ namespace System
         {
             uint mask = 1U << offset;
 
-            var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << offset;
+            uint onn = BoolToByte(on);
+            onn <<= offset;
 
             return (value & ~mask) | onn;
         }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -182,8 +161,8 @@ namespace System
         {
             ulong mask = 1UL << offset;
 
-            var b2b = new BoolToByte { On = on };
-            ulong onn = (ulong)b2b.U8 << offset;
+            ulong onn = BoolToByte(on);
+            onn <<= offset;
 
             return (value & ~mask) | onn;
         }
@@ -194,10 +173,11 @@ namespace System
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -206,21 +186,22 @@ namespace System
             int shft = offset & 7;
             uint mask = 1U << shft;
 
-            var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << shft;
+            uint onn = BoolToByte(on);
+            onn <<= shft;
 
-            uint btr = value & mask;
+            uint btw = value & mask;
             value = (byte)((value & ~mask) | onn);
 
-            return btr != 0;
+            return btw != 0;
         }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -229,21 +210,22 @@ namespace System
             int shft = offset & 15;
             uint mask = 1U << shft;
 
-            var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << shft;
+            uint onn = BoolToByte(on);
+            onn <<= shft;
 
-            uint btr = value & mask;
+            uint btw = value & mask;
             value = (ushort)((value & ~mask) | onn);
 
-            return btr != 0;
+            return btw != 0;
         }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -251,21 +233,22 @@ namespace System
         {
             uint mask = 1U << offset;
 
-            var b2b = new BoolToByte { On = on };
-            uint onn = (uint)b2b.U8 << offset;
+            uint onn = BoolToByte(on);
+            onn <<= offset;
 
-            uint btr = value & mask;
+            uint btw = value & mask;
             value = (value & ~mask) | onn;
 
-            return btr != 0;
+            return btw != 0;
         }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="offset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -273,13 +256,13 @@ namespace System
         {
             ulong mask = 1UL << offset;
 
-            var b2b = new BoolToByte { On = on };
-            ulong onn = (ulong)b2b.U8 << offset;
+            ulong onn = BoolToByte(on);
+            onn <<= offset;
 
-            ulong btr = value & mask;
+            ulong btw = value & mask;
             value = (value & ~mask) | onn;
 
-            return btr != 0;
+            return btw != 0;
         }
 
         #endregion
@@ -1424,12 +1407,8 @@ namespace System
 
             uint val = value;
 
-            // If zero, return 1
-            bool zero = value == 0;
-            unsafe
-            {
-                val += *(byte*)&zero;
-            }
+            // If zero, add 1
+            val += BoolToByte(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1454,12 +1433,8 @@ namespace System
 
             ulong val = value;
 
-            // If zero, return 1
-            bool zero = value == 0;
-            unsafe
-            {
-                val += *(byte*)&zero;
-            }
+            // If zero, add 1
+            val += BoolToByte(value == 0);
 
             val--;
             val |= val >> 01;
@@ -1488,6 +1463,18 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ulong Pow2High(ulong value)
             => Pow2Low(value) - 1;
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Returns 1 if True, else returns 0.
+        /// </summary>
+        /// <param name="on">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static unsafe byte BoolToByte(bool on)
+            => *(byte*)&on;
 
         #endregion
     }
