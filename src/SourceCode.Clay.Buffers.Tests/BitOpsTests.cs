@@ -1116,7 +1116,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_FloorLog2_opt5(uint n, int expected)
         {
             // Test the optimization trick on the lower boundary (1-5)
-            var actual = BitOps.Log2Floor(n);
+            var actual = BitOps.Log2Low(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1149,7 +1149,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(uint.MaxValue)]
         public static void BitOps_FloorLog2_32u(uint n)
         {
-            var log = BitOps.Log2Floor(n);
+            var log = BitOps.Log2Low(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);
@@ -1191,7 +1191,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(ulong.MaxValue)]
         public static void BitOps_FloorLog2_64u(ulong n)
         {
-            var log = BitOps.Log2Floor(n);
+            var log = BitOps.Log2Low(n);
 
             var lo = Math.Pow(2, log);
             var hi = Math.Pow(2, log + 1);

@@ -945,7 +945,7 @@ namespace System
         public static int LeadingZeros(byte value)
             => value == 0 // Log(0) is undefined
             ? 8 
-            : 7 - Log2Floor(value);
+            : 7 - Log2Low(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -965,7 +965,7 @@ namespace System
             // Complement mask but remember to truncate carry-bits
             var val = (uint)(byte)~(uint)value;
 
-            return 7 - Log2Floor(val);
+            return 7 - Log2Low(val);
         }
 
         /// <summary>
@@ -977,7 +977,7 @@ namespace System
         public static int LeadingZeros(ushort value)
             => value == 0 // Log(0) is undefined
             ? 16
-            : 15 - Log2Floor(value);
+            : 15 - Log2Low(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -997,7 +997,7 @@ namespace System
             // Complement mask but remember to truncate carry-bits
             var val = (uint)(ushort)~(uint)value;
 
-            return 15 - Log2Floor(val);
+            return 15 - Log2Low(val);
         }
 
         /// <summary>
@@ -1009,7 +1009,7 @@ namespace System
         public static int LeadingZeros(uint value)
             => value == 0 // Log(0) is undefined
             ? 32
-            : 31 - Log2Floor(value);
+            : 31 - Log2Low(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1026,7 +1026,7 @@ namespace System
             if (value == uint.MaxValue)
                 return 32;
 
-            return 31 - Log2Floor(~value);
+            return 31 - Log2Low(~value);
         }
 
         /// <summary>
@@ -1038,7 +1038,7 @@ namespace System
         public static int LeadingZeros(ulong value)
             => value == 0 // Log(0) is undefined
             ? 64
-            : 63 - Log2Floor(value);
+            : 63 - Log2Low(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1055,7 +1055,7 @@ namespace System
             if (value == ulong.MaxValue)
                 return 64;
 
-            return 63 - Log2Floor(~value);
+            return 63 - Log2Low(~value);
         }
 
         #endregion
@@ -1107,7 +1107,7 @@ namespace System
             byte cnt = s_trail8u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(cnt < 8, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
+            Debug.Assert(lsb != 3 && lsb != 6, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
 
             // Alternative 2: SWITCH
 
@@ -1194,7 +1194,7 @@ namespace System
             byte cnt = s_trail16u[lsb];
 
             // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(cnt < 16, $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}, with count {cnt}");
+            Debug.Assert(lsb != 5 && lsb != 10, $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}, with count {cnt}");
 
             return cnt;
         }
@@ -1277,7 +1277,7 @@ namespace System
             byte cnt = s_trail32u[lsb];
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(cnt < 32, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
+            Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
 
             return cnt;
         }
@@ -1333,28 +1333,20 @@ namespace System
 
         #region Log2        
 
-        /// <summary>
-        /// Computes the highest power of 2 that is lower than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Floor(uint value)
-            => Log2Ceiling(value) - 1;
+        private static readonly byte[] s_deBruijn32 = new byte[32]
+        {
+            00, 09, 01, 10, 13, 21, 02, 29,
+            11, 14, 16, 18, 22, 25, 03, 30,
+            08, 12, 20, 28, 15, 17, 24, 07,
+            19, 27, 23, 06, 26, 05, 04, 31
+        };
 
         /// <summary>
-        /// Computes the highest power of 2 that is lower than the given value.
+        /// Computes the highest power of 2 lower than the given value.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Floor(ulong value)
-            => Log2Ceiling(value) - 1;
-
-        /// <summary>
-        /// Computes the lowest power of 2 that is greater than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Ceiling(uint value)
+        internal static int Log2Low(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
@@ -1367,63 +1359,66 @@ namespace System
             val |= val >> 08;
             val |= val >> 16;
 
-            val = ~val;
+            const uint c32 = 0x07C4_ACDDu;
+            uint ix = (val * c32) >> 27;
 
-            int tz = TrailingZeros(val);
-            return tz;
+            return s_deBruijn32[ix];
         }
 
         /// <summary>
-        /// Computes the lowest power of 2 that is greater than the given value.
+        /// Computes the highest power of 2 lower than the given value.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Ceiling(ulong value)
+        internal static int Log2Low(ulong value)
         {
-            // Perf: Do not use guard clauses; callers must be trusted
+            // Perf: Do not use guard clauses; callers MUST be trusted
             Debug.Assert(value > 0);
 
-            var val = value;
+            // We only have to count the low-32 or the high-32, depending on limits
 
-            val |= val >> 01;
-            val |= val >> 02;
-            val |= val >> 04;
-            val |= val >> 08;
-            val |= val >> 16;
-            val |= val >> 32;
+            // Assume we need only examine low-32
+            var val = (uint)value;
+            byte inc = 0;
 
-            val = ~val;
+            // If high-32 is non-zero
+            if (value > uint.MaxValue)
+            {
+                // Then we need only examine high-32 (and add 32 to the result)
+                val = (uint)(value >> 32); // Use high-32 instead
+                inc = 32;
+            }
 
-            int tz = TrailingZeros(val);
-            return tz;
+            // Examine 32
+            return inc + Log2Low(val);
         }
+
+        /// <summary>
+        /// Computes the lowest power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2High(uint value)
+            => Log2Low(value) + 1;
+
+        /// <summary>
+        /// Computes the lowest power of 2 greater than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2High(ulong value)
+            => Log2Low(value) + 1;
 
         #endregion
 
         #region Pow2
 
         /// <summary>
-        /// Computes the previous power of 2 less than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Pow2Ceiling(uint value)
-            => Pow2Floor(value) - 1;
-
-        /// <summary>
-        /// Computes the previous power of 2 less than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Pow2Ceiling(ulong value)
-            => Pow2Floor(value) - 1;
-
-        /// <summary>
         /// Computes the next power of 2 greater than the given value.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Pow2Floor(uint value)
+        internal static uint Pow2Low(uint value)
         {
             Debug.Assert(value < uint.MaxValue);
 
@@ -1453,7 +1448,7 @@ namespace System
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Pow2Floor(ulong value)
+        internal static ulong Pow2Low(ulong value)
         { 
             Debug.Assert(value < ulong.MaxValue);
 
@@ -1477,6 +1472,22 @@ namespace System
 
             return val;
         }
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint Pow2High(uint value)
+            => Pow2Low(value) - 1;
+
+        /// <summary>
+        /// Computes the previous power of 2 less than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static ulong Pow2High(ulong value)
+            => Pow2Low(value) - 1;
 
         #endregion
     }
