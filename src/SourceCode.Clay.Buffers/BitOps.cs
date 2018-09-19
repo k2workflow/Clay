@@ -24,12 +24,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(byte value, int offset)
+        public static bool ExtractBit(byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             return (value & mask) != 0;
@@ -40,12 +40,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ushort value, int offset)
+        public static bool ExtractBit(ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             return (value & mask) != 0;
@@ -56,12 +56,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(uint value, int offset)
+        public static bool ExtractBit(uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             return (value & mask) != 0;
         }
@@ -71,12 +71,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..63] is treated as congruent mod 63.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(ulong value, int offset)
+        public static bool ExtractBit(ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             return (value & mask) != 0;
         }
@@ -91,13 +91,13 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteBit(byte value, int offset, bool on)
+        public static byte WriteBit(byte value, int bitOffset, bool on)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             uint onn = BoolToByte(on);
@@ -112,13 +112,13 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort WriteBit(ushort value, int offset, bool on)
+        public static ushort WriteBit(ushort value, int bitOffset, bool on)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             uint onn = BoolToByte(on);
@@ -133,16 +133,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint WriteBit(uint value, int offset, bool on)
+        public static uint WriteBit(uint value, int bitOffset, bool on)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             uint onn = BoolToByte(on);
-            onn <<= offset;
+            onn <<= bitOffset;
 
             return (value & ~mask) | onn;
         }
@@ -153,16 +153,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong WriteBit(ulong value, int offset, bool on)
+        public static ulong WriteBit(ulong value, int bitOffset, bool on)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             ulong onn = BoolToByte(on);
-            onn <<= offset;
+            onn <<= bitOffset;
 
             return (value & ~mask) | onn;
         }
@@ -177,13 +177,13 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref byte value, int offset, bool on)
+        public static bool WriteBit(ref byte value, int bitOffset, bool on)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             uint onn = BoolToByte(on);
@@ -201,13 +201,13 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref ushort value, int offset, bool on)
+        public static bool WriteBit(ref ushort value, int bitOffset, bool on)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             uint onn = BoolToByte(on);
@@ -225,16 +225,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref uint value, int offset, bool on)
+        public static bool WriteBit(ref uint value, int bitOffset, bool on)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             uint onn = BoolToByte(on);
-            onn <<= offset;
+            onn <<= bitOffset;
 
             uint btw = value & mask;
             value = (value & ~mask) | onn;
@@ -248,16 +248,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref ulong value, int offset, bool on)
+        public static bool WriteBit(ref ulong value, int bitOffset, bool on)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             ulong onn = BoolToByte(on);
-            onn <<= offset;
+            onn <<= bitOffset;
 
             ulong btw = value & mask;
             value = (value & ~mask) | onn;
@@ -273,12 +273,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ClearBit(byte value, int offset)
+        public static byte ClearBit(byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             return (byte)(value & ~mask);
@@ -288,12 +288,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ClearBit(ushort value, int offset)
+        public static ushort ClearBit(ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             return (ushort)(value & ~mask);
@@ -303,12 +303,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ClearBit(uint value, int offset)
+        public static uint ClearBit(uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             return value & ~mask;
         }
@@ -317,12 +317,12 @@ namespace System
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ClearBit(ulong value, int offset)
+        public static ulong ClearBit(ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             return value & ~mask;
         }
@@ -336,12 +336,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref byte value, int offset)
+        public static bool ClearBit(ref byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             uint btr = value & mask;
@@ -355,12 +355,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref ushort value, int offset)
+        public static bool ClearBit(ref ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             uint btr = value & mask;
@@ -374,12 +374,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref uint value, int offset)
+        public static bool ClearBit(ref uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             uint btr = value & mask;
             value = value & ~mask;
@@ -392,12 +392,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref ulong value, int offset)
+        public static bool ClearBit(ref ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             ulong btr = value & mask;
             value = value & ~mask;
@@ -413,12 +413,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte InsertBit(byte value, int offset)
+        public static byte InsertBit(byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             return (byte)(value | mask);
@@ -428,12 +428,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort InsertBit(ushort value, int offset)
+        public static ushort InsertBit(ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             return (ushort)(value | mask);
@@ -443,12 +443,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint InsertBit(uint value, int offset)
+        public static uint InsertBit(uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             return value | mask;
         }
@@ -457,12 +457,12 @@ namespace System
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong InsertBit(ulong value, int offset)
+        public static ulong InsertBit(ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             return value | mask;
         }
@@ -476,12 +476,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref byte value, int offset)
+        public static bool InsertBit(ref byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
             
             uint bts = value & mask;
@@ -495,12 +495,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ushort value, int offset)
+        public static bool InsertBit(ref ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             uint bts = value & mask;
@@ -514,12 +514,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref uint value, int offset)
+        public static bool InsertBit(ref uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             uint bts = value & mask;
             value = value | mask;
@@ -532,12 +532,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref ulong value, int offset)
+        public static bool InsertBit(ref ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             ulong bts = value & mask;
             value = value | mask;
@@ -565,12 +565,12 @@ namespace System
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ComplementBit(byte value, int offset)
+        public static byte ComplementBit(byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             mask = ~(~mask ^ value);
@@ -581,12 +581,12 @@ namespace System
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ComplementBit(ushort value, int offset)
+        public static ushort ComplementBit(ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             mask = ~(~mask ^ value);
@@ -597,12 +597,12 @@ namespace System
         /// Complements the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ComplementBit(uint value, int offset)
+        public static uint ComplementBit(uint value, int bitOffset)
         {            
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             mask = ~(~mask ^ value);
             return mask;
@@ -612,12 +612,12 @@ namespace System
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ComplementBit(ulong value, int offset)
+        public static ulong ComplementBit(ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             mask = ~(~mask ^ value);
             return mask;
@@ -632,12 +632,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref byte value, int offset)
+        public static bool ComplementBit(ref byte value, int bitOffset)
         {
-            int shft = offset & 7;
+            int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
             uint btc = value & mask;
@@ -651,12 +651,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ushort value, int offset)
+        public static bool ComplementBit(ref ushort value, int bitOffset)
         {
-            int shft = offset & 15;
+            int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
             uint btc = value & mask;
@@ -670,12 +670,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref uint value, int offset)
+        public static bool ComplementBit(ref uint value, int bitOffset)
         {
-            uint mask = 1U << offset;
+            uint mask = 1U << bitOffset;
 
             uint btc = value & mask;
             value = ~(~mask ^ value);
@@ -688,12 +688,12 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="value">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref ulong value, int offset)
+        public static bool ComplementBit(ref ulong value, int bitOffset)
         {
-            ulong mask = 1UL << offset;
+            ulong mask = 1UL << bitOffset;
 
             ulong btc = value & mask;
             value = ~(~mask ^ value);
@@ -711,6 +711,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -729,6 +730,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -747,6 +749,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -765,6 +768,7 @@ namespace System
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
@@ -852,8 +856,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(byte value)
-            // Avoid software emulation by leveraging overloads that may compile to instrinsics
-            => PopCount((uint)value);
+            => PopCount((uint)value); // May compile to instrinsics
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -862,8 +865,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ushort value)
-            // Avoid software emulation by leveraging overloads that may compile to instrinsics
-            => PopCount((uint)value);
+            => PopCount((uint)value); // May compile to instrinsics
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -873,7 +875,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(uint value)
         {
-            // Uses SWAR (SIMD Within A Register)
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
             const uint c2 = 0x_0F0F_0F0F;
@@ -898,7 +899,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ulong value)
         {
-            // Uses SWAR (SIMD Within A Register)
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
             const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
