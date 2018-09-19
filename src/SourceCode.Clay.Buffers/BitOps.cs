@@ -100,7 +100,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -121,7 +121,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -141,7 +141,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -161,7 +161,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte(on);
+            ulong onn = BoolToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -186,7 +186,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -210,7 +210,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -233,7 +233,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte(on);
+            uint onn = BoolToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -256,7 +256,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte(on);
+            ulong onn = BoolToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -917,7 +917,7 @@ namespace System
 
         #endregion
 
-        #region LeadingCount
+        #region LeadingZeros
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -926,9 +926,94 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(byte value)
+        {
+            uint val = value;
+
+            //                   1000 0000
+            val |= val >> 01; // 1100 0000
+            val |= val >> 02; // 1111 0000
+            val |= val >> 04; // 1111 1111
+
+            const uint c32 = 0x07C4_ACDDu;
+            uint ix = (val * c32) >> 27;
+
+            int zeros = 7 - s_deBruijn32[ix];
+            
+            // Log(0) is undefined: Return 8.
+            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+
+            return zeros;
+        }
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(ushort value)
+        {
+            uint val = value;
+
+            //                   1000 0000 0000 0000
+            val |= val >> 01; // 1100 0000 0000 0000
+            val |= val >> 02; // 1111 0000 0000 0000
+            val |= val >> 04; // 1111 1111 0000 0000
+            val |= val >> 08; // 1111 1111 1111 1111
+
+            const uint c32 = 0x07C4_ACDDu;
+            uint ix = (val * c32) >> 27;
+
+            int zeros = 15 - s_deBruijn32[ix];
+
+            // Log(0) is undefined: Return 16.
+            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+
+            return zeros;
+        }
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(uint value)
+        {
+            var val = value;
+
+            //                   1000 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000
+            val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000
+            val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
+            val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
+
+            const uint c32 = 0x07C4_ACDDu;
+            uint ix = (val * c32) >> 27;
+
+            int zeros = 31 - s_deBruijn32[ix];
+
+            // Log(0) is undefined: Return 32.
+            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+
+            return zeros;
+        }
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(ulong value)
             => value == 0 // Log(0) is undefined
-            ? 8 
-            : 7 - Log2Low(value);
+            ? 64
+            : 63 - Log2Low(value);
+
+        #endregion
+
+        #region LeadingOnes
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -952,17 +1037,6 @@ namespace System
         }
 
         /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(ushort value)
-            => value == 0 // Log(0) is undefined
-            ? 16
-            : 15 - Log2Low(value);
-
-        /// <summary>
         /// Count the number of leading one bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
@@ -984,17 +1058,6 @@ namespace System
         }
 
         /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(uint value)
-            => value == 0 // Log(0) is undefined
-            ? 32
-            : 31 - Log2Low(value);
-
-        /// <summary>
         /// Count the number of leading one bits in a mask.
         /// </summary>
         /// <param name="value">The mask.</param>
@@ -1011,17 +1074,6 @@ namespace System
 
             return 31 - Log2Low(~value);
         }
-
-        /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int LeadingZeros(ulong value)
-            => value == 0 // Log(0) is undefined
-            ? 64
-            : 63 - Log2Low(value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1408,7 +1460,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte(value == 0); // value == 0 ? 1 : 0
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1434,7 +1486,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte(value == 0); // value == 0 ? 1 : 0
 
             val--;
             val |= val >> 01;
@@ -1470,6 +1522,7 @@ namespace System
 
         /// <summary>
         /// Returns 1 if True, else returns 0.
+        /// Branchless.
         /// </summary>
         /// <param name="on">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
