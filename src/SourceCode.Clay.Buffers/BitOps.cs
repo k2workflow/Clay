@@ -919,6 +919,16 @@ namespace System
 
         #region LeadingZeros
 
+        private static readonly byte[] s_deBruijn32 = new byte[32]
+        {
+            00, 09, 01, 10, 13, 21, 02, 29,
+            11, 14, 16, 18, 22, 25, 03, 30,
+            08, 12, 20, 28, 15, 17, 24, 07,
+            19, 27, 23, 06, 26, 05, 04, 31
+        };
+
+        private const uint c_deBruijn32 = 0x07C4_ACDDu;
+
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
@@ -933,14 +943,12 @@ namespace System
             val |= val >> 01; // 1100 0000
             val |= val >> 02; // 1111 0000
             val |= val >> 04; // 1111 1111
-
-            const uint c32 = 0x07C4_ACDDu;
-            uint ix = (val * c32) >> 27;
-
+            
+            uint ix = (val * c_deBruijn32) >> 27;
             int zeros = 7 - s_deBruijn32[ix];
             
             // Log(0) is undefined: Return 8.
-            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+            zeros += BoolToByte(value == 0);
 
             return zeros;
         }
@@ -961,13 +969,11 @@ namespace System
             val |= val >> 04; // 1111 1111 0000 0000
             val |= val >> 08; // 1111 1111 1111 1111
 
-            const uint c32 = 0x07C4_ACDDu;
-            uint ix = (val * c32) >> 27;
-
+            uint ix = (val * c_deBruijn32) >> 27;
             int zeros = 15 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 16.
-            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+            zeros += BoolToByte(value == 0);
 
             return zeros;
         }
@@ -989,13 +995,11 @@ namespace System
             val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
             val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
 
-            const uint c32 = 0x07C4_ACDDu;
-            uint ix = (val * c32) >> 27;
-
+            uint ix = (val * c_deBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += BoolToByte(value == 0); // value == 0 ? 1 : 0
+            zeros += BoolToByte(value == 0);
 
             return zeros;
         }
@@ -1007,9 +1011,43 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
-            => value == 0 // Log(0) is undefined
-            ? 64
-            : 63 - Log2Low(value);
+        {
+            var val = value;
+
+            //                   1000 0000 0000 0000 0000 0000 0000 0000 0...
+            val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000 0...
+            val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000 0...
+            val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000 0...
+            val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000 0...
+            val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111 0...
+            val |= val >> 32; // 1111 1111 1111 1111 1111 1111 1111 1111 1...
+
+            // Instead of using a 64-bit lookup table,
+            // we use the existing 32-bit table twice.
+
+            uint mv = (uint)(val >> 32); // High-32
+            uint nv = (uint)val; // Low-32
+
+            uint mi = (mv * c_deBruijn32) >> 27;
+            uint ni = (nv * c_deBruijn32) >> 27;
+
+            int mz = 31 - s_deBruijn32[mi];
+            int nz = 31 - s_deBruijn32[ni]; // Use warm cache
+
+            // Log(0) is undefined: Return 32 + 32.
+            mz += BoolToByte((value >> 32) == 0);
+            nz += BoolToByte((uint)value == 0);
+
+            // Truth table
+            // m   n  m32 actual   m + (n * m32)
+            // 32 32  1   32+32   32 + (32 * 1)
+            // 32  n  1   32+n    32 + (n * 1)
+            // m  32  0   m        m + (32 * 0)
+            // m   n  0   m        m + (n * 0)
+
+            nz *= BoolToByte(mz == 32); // Only add n if m != 32
+            return mz + nz;
+        }
 
         #endregion
 
@@ -1366,15 +1404,7 @@ namespace System
 
         #endregion
 
-        #region Log2        
-
-        private static readonly byte[] s_deBruijn32 = new byte[32]
-        {
-            00, 09, 01, 10, 13, 21, 02, 29,
-            11, 14, 16, 18, 22, 25, 03, 30,
-            08, 12, 20, 28, 15, 17, 24, 07,
-            19, 27, 23, 06, 26, 05, 04, 31
-        };
+        #region Log2
 
         /// <summary>
         /// Computes the highest power of 2 lower than the given value.
@@ -1394,8 +1424,8 @@ namespace System
             val |= val >> 08;
             val |= val >> 16;
 
-            const uint c32 = 0x07C4_ACDDu;
-            uint ix = (val * c32) >> 27;
+            
+            uint ix = (val * c_deBruijn32) >> 27;
 
             return s_deBruijn32[ix];
         }
@@ -1460,7 +1490,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0); // value == 0 ? 1 : 0
+            val += BoolToByte(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1486,7 +1516,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0); // value == 0 ? 1 : 0
+            val += BoolToByte(value == 0);
 
             val--;
             val |= val >> 01;
@@ -1527,7 +1557,7 @@ namespace System
         /// <param name="on">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe byte BoolToByte(bool on)
-            => *(byte*)&on;
+            => *(byte*)&on; // value == 0 ? 1 : 0
 
         #endregion
     }
