@@ -1117,15 +1117,13 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(byte value)
         {
-            byte val = value;
-
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...,128]
-            int lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
+            int lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
             // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
-            lsb = lsb % 11; // mod 11
+            lsb %= 11; // mod 11
 
             // TODO: For such a small range, would a switch be faster?
             byte cnt = s_trail08u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
@@ -1176,10 +1174,8 @@ namespace System
         {
             // See algorithm notes in TrailingZeros(byte)
 
-            ushort val = value;
-
-            int lsb = val & -val;
-            lsb = lsb % 19; // mod 19
+            int lsb = value & -value;
+            lsb %= 19; // mod 19
 
             byte cnt = s_trail16u[lsb];
 
@@ -1252,10 +1248,8 @@ namespace System
         {
             // See algorithm notes in TrailingZeros(byte)
 
-            uint val = value;
-
-            long lsb = val & -val;
-            lsb = lsb % 37; // mod 37
+            long lsb = value & -value;
+            lsb %= 37; // mod 37
 
             byte cnt = s_trail32u[lsb];
 
@@ -1273,27 +1267,30 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ulong value)
         {
-            // 0 is a special case since calling into the core uint routine
-            // will return 32 instead of 64
-            if (value == 0)
-                return 64;
+            // Instead of using a 64-bit lookup table,
+            // we use the existing 32-bit table twice.
 
-            // We only have to count the low-32 or the high-32, depending on limits
+            uint mv = (uint)(value >> 32); // High-32
+            uint nv = (uint)value; // Low-32
 
-            // Assume we need only examine low-32
-            var val = (uint)value;
-            byte inc = 0;
+            long mi = mv & -mv;
+            long ni = nv & -nv;
 
-            // If high-32 is non-zero and low-32 is zero
-            if (value > uint.MaxValue && val == 0)
-            {
-                // Then we need only examine high-32 (and add 32 to the result)
-                val = (uint)(value >> 32); // Use high-32 instead
-                inc = 32;
-            }
+            mi %= 37; // mod 37
+            ni %= 37;
 
-            // Examine 32
-            return inc + TrailingZeros(val);
+            byte mc = s_trail32u[mi];
+            byte nc = s_trail32u[ni]; // Use warm cache
+
+            // Truth table
+            // m   n  n32 actual  n + (m * n32)
+            // 32 32  1   32+32  32 + (32 * 1)
+            // 32  n  0   n       n + (32 * 0)
+            // m  32  1   32+m   32 + (m * 1)
+            // m   n  0   n       n + (m * 0)
+
+            mc *= BoolToByte(nc == 32); // Only add m if n != 32
+            return mc + nc;
         }
 
         #endregion
@@ -1341,6 +1338,51 @@ namespace System
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Low(byte value)
+        {
+            // Perf: Do not use guard clauses; callers must be trusted
+            Debug.Assert(value > 0);
+
+            uint val = value;
+
+            //                   1000 0000
+            val |= val >> 01; // 1100 0000
+            val |= val >> 02; // 1111 0000
+            val |= val >> 04; // 1111 1111
+
+            uint ix = (val * c_deBruijn32) >> 27;
+
+            return s_deBruijn32[ix];
+        }
+
+        /// <summary>
+        /// Computes the highest power of 2 lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Low(ushort value)
+        {
+            // Perf: Do not use guard clauses; callers must be trusted
+            Debug.Assert(value > 0);
+
+            uint val = value;
+
+            //                   1000 0000 0000 0000
+            val |= val >> 01; // 1100 0000 0000 0000
+            val |= val >> 02; // 1111 0000 0000 0000
+            val |= val >> 04; // 1111 1111 0000 0000
+            val |= val >> 08; // 1111 1111 1111 1111
+
+            uint ix = (val * c_deBruijn32) >> 27;
+
+            return s_deBruijn32[ix];
+        }
+
+        /// <summary>
+        /// Computes the highest power of 2 lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Log2Low(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
@@ -1353,7 +1395,6 @@ namespace System
             val |= val >> 04;
             val |= val >> 08;
             val |= val >> 16;
-
             
             uint ix = (val * c_deBruijn32) >> 27;
 
