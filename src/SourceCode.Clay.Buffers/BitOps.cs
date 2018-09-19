@@ -943,7 +943,7 @@ namespace System
             val |= val >> 01; // 1100 0000
             val |= val >> 02; // 1111 0000
             val |= val >> 04; // 1111 1111
-            
+
             uint ix = (val * c_deBruijn32) >> 27;
             int zeros = 7 - s_deBruijn32[ix];
             
@@ -1059,20 +1059,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(byte value)
-        {
-            // Log(0) is undefined
-            if (value == 0)
-                return 0;
-
-            // Complement of Max == 0; see above
-            if (value == byte.MaxValue)
-                return 8;
-
-            // Complement mask but remember to truncate carry-bits
-            var val = (uint)(byte)~(uint)value;
-
-            return 7 - Log2Low(val);
-        }
+            => LeadingZeros((byte)~value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1080,20 +1067,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ushort value)
-        {
-            // Log(0) is undefined
-            if (value == 0)
-                return 0;
-
-            // Complement of Max == 0; see above
-            if (value == ushort.MaxValue)
-                return 16;
-
-            // Complement mask but remember to truncate carry-bits
-            var val = (uint)(ushort)~(uint)value;
-
-            return 15 - Log2Low(val);
-        }
+            => LeadingZeros((ushort)~value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1101,17 +1075,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(uint value)
-        {
-            // Log(0) is undefined
-            if (value == 0)
-                return 0;
-
-            // Complement of Max == 0; see above
-            if (value == uint.MaxValue)
-                return 32;
-
-            return 31 - Log2Low(~value);
-        }
+            => LeadingZeros(~value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1119,17 +1083,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ulong value)
-        {
-            // Log(0) is undefined
-            if (value == 0)
-                return 0;
-
-            // Complement of Max == 0; see above
-            if (value == ulong.MaxValue)
-                return 64;
-
-            return 63 - Log2Low(~value);
-        }
+            => LeadingZeros(~value);
 
         #endregion
 
