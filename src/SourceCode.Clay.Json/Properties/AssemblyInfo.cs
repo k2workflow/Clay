@@ -5,4 +5,5 @@
 
 #endregion
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Json.Bench")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Json.Tests")]
