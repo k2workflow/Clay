@@ -1661,7 +1661,6 @@ namespace System
         /// Returns 1 of the bit count is odd, else 0.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Parity(byte value)
         {

@@ -808,6 +808,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
+
+            // Parity
+            Assert.Equal(expected % 2, BitOps.Parity(n));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_16u))]
@@ -835,6 +838,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
+
+            // Parity
+            Assert.Equal(expected % 2, BitOps.Parity(n));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_32u))]
@@ -865,6 +871,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
+
+            // Parity
+            Assert.Equal(expected % 2, BitOps.Parity(n));
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_64u))]
@@ -897,6 +906,9 @@ namespace SourceCode.Clay.Buffers.Tests
             // Scalar
             var actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
+
+            // Parity
+            Assert.Equal(expected % 2, BitOps.Parity(n));
         }
 
         #endregion
