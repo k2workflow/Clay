@@ -1659,6 +1659,7 @@ namespace System
 
         /// <summary>
         /// Returns 1 of the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1678,6 +1679,7 @@ namespace System
 
         /// <summary>
         /// Returns 1 of the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1697,6 +1699,7 @@ namespace System
 
         /// <summary>
         /// Returns 1 of the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1717,6 +1720,7 @@ namespace System
 
         /// <summary>
         /// Returns 1 of the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
