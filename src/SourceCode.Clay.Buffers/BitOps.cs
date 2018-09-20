@@ -1668,8 +1668,7 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(byte value)
-            => (value != 0)
-            && (value & (value - 1)) == 0;
+            => IsPowerOf2((uint)value);
 
         /// <summary>
         /// Returns True if the value is a power of 2, else False.
@@ -1677,17 +1676,17 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(ushort value)
-            => (value != 0)
-            && (value & (value - 1)) == 0;
+            => IsPowerOf2((uint)value);
 
-         /// <summary>
+        /// <summary>
         /// Returns True if the value is a power of 2, else False.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(uint value)
             => (value != 0)
-            && (value & (value - 1)) == 0;
+            & // && causes branch
+            (value & (value - 1)) == 0;
 
         /// <summary>
         /// Returns True if the value is a power of 2, else False.
@@ -1696,7 +1695,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(ulong value)
             => (value != 0)
-            && (value & (value - 1)) == 0;
+            & // && causes branch
+            (value & (value - 1)) == 0;
 
         #endregion
 
