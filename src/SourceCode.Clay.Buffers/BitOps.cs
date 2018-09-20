@@ -1655,6 +1655,90 @@ namespace System
 
         #endregion
 
+        #region Parity
+
+        /// <summary>
+        /// Returns 1 of the bit count is odd, else 0.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(byte value)
+        {
+            uint val = value;
+
+            //                  1010 0111 (odd)
+            val ^= val >> 4; // 1000 1101
+            val &= 15; //       0000 1101 (13)
+
+            val = 0b_0110_1001_1001_0110u >> (int)val; // 0011 (3)
+            val &= 1; // 0001 (1)
+
+            return (int)val; // 1==odd
+        }
+
+        /// <summary>
+        /// Returns 1 of the bit count is odd, else 0.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(ushort value)
+        {
+            uint val = value;
+
+            val ^= val >> 8;
+            val ^= val >> 4;
+            val &= 15;
+
+            val = 0b_0110_1001_1001_0110u >> (int)val;
+            val &= 1;
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns 1 of the bit count is odd, else 0.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(uint value)
+        {
+            uint val = value;
+
+            val ^= val >> 16;
+            val ^= val >> 08;
+            val ^= val >> 04;
+            val &= 15;
+
+            val = 0b_0110_1001_1001_0110u >> (int)val;
+            val &= 1;
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns 1 of the bit count is odd, else 0.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(ulong value)
+        {
+            ulong val = value;
+
+            val ^= val >> 32;
+            val ^= val >> 16;
+            val ^= val >> 08;
+            val ^= val >> 04;
+            val &= 15;
+
+            val = 0b_0110_1001_1001_0110u >> (int)val;
+            val &= 1;
+
+            return (int)val;
+        }
+
+        #endregion
+
         #region Helpers
 
         /// <summary>
@@ -1664,7 +1748,7 @@ namespace System
         /// <param name="on">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static unsafe byte BoolToByte(bool on)
-            => *(byte*)&on; // value == 0 ? 1 : 0
+            => *(byte*)&on;
 
         #endregion
     }
