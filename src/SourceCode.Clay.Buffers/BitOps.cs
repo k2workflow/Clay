@@ -1125,7 +1125,12 @@ namespace System
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb %= 11; // mod 11
 
-            // TODO: For such a small range, would a switch be faster?
+            // Benchmark: Lookup is 2x faster than Switch
+            // Method |     Mean |     Error | StdDev    | Scaled |
+            //------- | ---------| ----------| ----------| -------|
+            // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
+            // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
+
             byte cnt = s_trail08u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
             
             // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
@@ -1750,8 +1755,13 @@ namespace System
         /// </summary>
         /// <param name="on">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe byte BoolToByte(bool on)
-            => *(byte*)&on;
+        public static byte BoolToByte(bool on)
+        {
+            unsafe
+            {
+                return *(byte*)&on;
+            }
+        }
 
         #endregion
     }
