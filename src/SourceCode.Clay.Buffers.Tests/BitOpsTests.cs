@@ -811,6 +811,12 @@ namespace SourceCode.Clay.Buffers.Tests
 
             // Parity
             Assert.Equal(expected % 2, BitOps.Parity(n));
+
+            // IsPowerOf2
+            if (n != 0)
+            {
+                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
+            }
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_16u))]
@@ -841,6 +847,12 @@ namespace SourceCode.Clay.Buffers.Tests
 
             // Parity
             Assert.Equal(expected % 2, BitOps.Parity(n));
+
+            // IsPowerOf2
+            if (n != 0)
+            {
+                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
+            }
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_32u))]
@@ -874,6 +886,12 @@ namespace SourceCode.Clay.Buffers.Tests
 
             // Parity
             Assert.Equal(expected % 2, BitOps.Parity(n));
+
+            // IsPowerOf2
+            if (n != 0)
+            {
+                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
+            }
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_64u))]
@@ -909,6 +927,12 @@ namespace SourceCode.Clay.Buffers.Tests
 
             // Parity
             Assert.Equal(expected % 2, BitOps.Parity(n));
+
+            // IsPowerOf2
+            if (n != 0)
+            {
+                Assert.Equal(unchecked(((long)n & -(long)n) == (long)n), BitOps.IsPowerOf2(n));
+            }
         }
 
         #endregion
