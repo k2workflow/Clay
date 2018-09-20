@@ -5,4 +5,5 @@
 
 #endregion
 
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Buffers.Bench")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Buffers.Tests")]
