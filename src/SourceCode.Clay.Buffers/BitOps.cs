@@ -1660,10 +1660,50 @@ namespace System
 
         #endregion
 
+        #region IsPowerOf2
+
+        /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(byte value)
+            => (value != 0)
+            && (value & (value - 1)) == 0;
+
+        /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(ushort value)
+            => (value != 0)
+            && (value & (value - 1)) == 0;
+
+         /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(uint value)
+            => (value != 0)
+            && (value & (value - 1)) == 0;
+
+        /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(ulong value)
+            => (value != 0)
+            && (value & (value - 1)) == 0;
+
+        #endregion
+
         #region Parity
 
         /// <summary>
-        /// Returns 1 of the bit count is odd, else 0.
+        /// Returns 1 if the bit count is odd, else 0.
         /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -1683,7 +1723,7 @@ namespace System
         }
 
         /// <summary>
-        /// Returns 1 of the bit count is odd, else 0.
+        /// Returns 1 if the bit count is odd, else 0.
         /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -1703,7 +1743,7 @@ namespace System
         }
 
         /// <summary>
-        /// Returns 1 of the bit count is odd, else 0.
+        /// Returns 1 if the bit count is odd, else 0.
         /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -1724,7 +1764,7 @@ namespace System
         }
 
         /// <summary>
-        /// Returns 1 of the bit count is odd, else 0.
+        /// Returns 1 if the bit count is odd, else 0.
         /// Logically equivalent to PopCount mod 2.
         /// </summary>
         /// <param name="value">The value.</param>
