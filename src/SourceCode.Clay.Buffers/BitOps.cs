@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -100,7 +101,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -121,7 +122,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -141,7 +142,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -161,7 +162,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte(on); // true ? 1 : 0
+            ulong onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -186,7 +187,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -210,7 +211,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -233,7 +234,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte(on); // true ? 1 : 0
+            uint onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -256,7 +257,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte(on); // true ? 1 : 0
+            ulong onn = BoolToByte.Unsafe(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -948,7 +949,7 @@ namespace System
             int zeros = 7 - s_deBruijn32[ix];
             
             // Log(0) is undefined: Return 8.
-            zeros += BoolToByte(value == 0);
+            zeros += BoolToByte.Unsafe(value == 0);
 
             return zeros;
         }
@@ -973,7 +974,7 @@ namespace System
             int zeros = 15 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 16.
-            zeros += BoolToByte(value == 0);
+            zeros += BoolToByte.Unsafe(value == 0);
 
             return zeros;
         }
@@ -999,7 +1000,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += BoolToByte(value == 0);
+            zeros += BoolToByte.Unsafe(value == 0);
 
             return zeros;
         }
@@ -1035,8 +1036,8 @@ namespace System
             int nz = 31 - s_deBruijn32[ni]; // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            mz += BoolToByte((value >> 32) == 0);
-            nz += BoolToByte((uint)value == 0);
+            mz += BoolToByte.Unsafe((value >> 32) == 0);
+            nz += BoolToByte.Unsafe((uint)value == 0);
 
             // Truth table
             // m   n  m32 actual   m + (n * m32)
@@ -1045,7 +1046,7 @@ namespace System
             // m  32  0   m        m + (32 * 0)
             // m   n  0   m        m + (n * 0)
 
-            nz *= BoolToByte(mz == 32); // Only add n if m != 32
+            nz *= BoolToByte.Unsafe(mz == 32); // Only add n if m != 32
             return mz + nz;
         }
 
@@ -1294,7 +1295,7 @@ namespace System
             // m  32  1   32+m   32 + (m * 1)
             // m   n  0   n       n + (m * 0)
 
-            mc *= BoolToByte(nc == 32); // Only add m if n != 32
+            mc *= BoolToByte.Unsafe(nc == 32); // Only add m if n != 32
             return mc + nc;
         }
 
@@ -1533,7 +1534,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte.Unsafe(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1557,7 +1558,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte.Unsafe(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1582,7 +1583,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte.Unsafe(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1608,7 +1609,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += BoolToByte(value == 0);
+            val += BoolToByte.Unsafe(value == 0);
 
             val--;
             val |= val >> 01;
@@ -1789,17 +1790,38 @@ namespace System
 
         #region Helpers
 
-        /// <summary>
-        /// Returns 1 if True, else returns 0.
-        /// Branchless.
-        /// </summary>
-        /// <param name="on">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte BoolToByte(bool on)
+        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 1)]
+        private struct BoolToByte
         {
-            unsafe
+            [FieldOffset(0)]
+            public bool Bool;
+
+            [FieldOffset(0)]
+            public readonly byte Byte;
+
+            /// <summary>
+            /// Returns 1 if True, else returns 0.
+            /// Uses safe code.
+            /// Branchless.
+            /// </summary>
+            /// <param name="on">The value to convert.</param>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static byte Safe(bool on)
+                => (new BoolToByte { Bool = on }).Byte;
+
+            /// <summary>
+            /// Returns 1 if True, else returns 0.
+            /// Uses unsafe code.
+            /// Branchless.
+            /// </summary>
+            /// <param name="on">The value to convert.</param>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static byte Unsafe(bool on)
             {
-                return *(byte*)&on;
+                unsafe
+                {
+                    return *(byte*)&on;
+                }
             }
         }
 
