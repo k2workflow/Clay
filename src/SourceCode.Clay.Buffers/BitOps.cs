@@ -1800,21 +1800,21 @@ namespace System
             public readonly byte Byte;
 
             /// <summary>
-            /// Returns 1 if True, else returns 0.
+            /// Converts a bool to a byte value without branching
             /// Uses safe code.
-            /// Branchless.
             /// </summary>
             /// <param name="on">The value to convert.</param>
+            /// <returns>Returns 1 if True, else returns 0.</returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte Safe(bool on)
                 => (new BoolToByte { Bool = on }).Byte;
 
             /// <summary>
-            /// Returns 1 if True, else returns 0.
+            /// Converts a bool to a byte value without branching
             /// Uses unsafe code.
-            /// Branchless.
             /// </summary>
             /// <param name="on">The value to convert.</param>
+            /// <returns>Returns 1 if True, else returns 0.</returns>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte Unsafe(bool on)
             {
