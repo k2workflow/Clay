@@ -17,6 +17,10 @@ namespace System
         }
 
         public static byte ExtractByte(uint value, int bitOffset)
+            => ExtractByteImpl(value, bitOffset);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ExtractByteImpl(uint value, int bitOffset)
         {
             byte shft = Mod(sizeof(uint), bitOffset, sizeof(byte));
 
@@ -84,6 +88,10 @@ namespace System
         #region ExtractUInt16
 
         public static ushort ExtractUInt16(uint value, int bitOffset)
+            => ExtractUInt16Impl(value, bitOffset);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ushort ExtractUInt16Impl(uint value, int bitOffset)
         {
             byte shft = Mod(sizeof(uint), bitOffset, sizeof(ushort));
 

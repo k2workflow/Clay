@@ -18,7 +18,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<byte> span, int offset)
         {
             int ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset)); // TODO: Perf; do we want these guards?
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset)); // TODO: Perf; do we want these guards?
 
             var val = ExtractBit(span[ix], offset);
             return val;
@@ -33,7 +33,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<ushort> span, int offset)
         {
             int ix = offset >> 4; // div 16
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(span[ix], offset);
             return val;
@@ -48,7 +48,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<uint> span, int offset)
         {
             int ix = offset >> 5; // div 32
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(span[ix], offset);
             return val;
@@ -63,7 +63,7 @@ namespace System
         public static bool ExtractBit(ReadOnlySpan<ulong> span, int offset)
         {
             int ix = offset >> 6; // div 64
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             var val = ExtractBit(span[ix], offset);
             return val;
@@ -83,7 +83,7 @@ namespace System
         public static bool WriteBit(Span<byte> span, int offset, bool on)
         {
             var ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref span[ix];
 
@@ -101,7 +101,7 @@ namespace System
         public static bool WriteBit(Span<ushort> span, int offset, bool on)
         {
             var ix = offset >> 4; // div 16
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref span[ix];
 
@@ -119,7 +119,7 @@ namespace System
         public static bool WriteBit(Span<uint> span, int offset, bool on)
         {
             var ix = offset >> 5; // div 32
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref span[ix];
 
@@ -137,7 +137,7 @@ namespace System
         public static bool WriteBit(Span<ulong> span, int offset, bool on)
         {
             var ix = offset >> 6; // div 64
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref span[ix];
 
@@ -158,7 +158,7 @@ namespace System
         public static bool ClearBit(Span<byte> span, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref span[ix];
 
@@ -175,7 +175,7 @@ namespace System
         public static bool ClearBit(Span<ushort> span, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref span[ix];
 
@@ -192,7 +192,7 @@ namespace System
         public static bool ClearBit(Span<uint> span, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref span[ix];
 
@@ -209,7 +209,7 @@ namespace System
         public static bool ClearBit(Span<ulong> span, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref span[ix];
 
@@ -230,7 +230,7 @@ namespace System
         public static bool InsertBit(Span<byte> span, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref span[ix];
 
@@ -247,7 +247,7 @@ namespace System
         public static bool InsertBit(Span<ushort> span, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref span[ix];
 
@@ -264,7 +264,7 @@ namespace System
         public static bool InsertBit(Span<uint> span, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref span[ix];
 
@@ -281,7 +281,7 @@ namespace System
         public static bool InsertBit(Span<ulong> span, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref span[ix];
 
@@ -302,7 +302,7 @@ namespace System
         public static bool ComplementBit(Span<byte> span, int offset)
         {
             var ix = offset >> 3; // div 8
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref byte val = ref span[ix];
 
@@ -319,7 +319,7 @@ namespace System
         public static bool ComplementBit(Span<ushort> span, int offset)
         {
             var ix = offset >> 4; // div 16
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ushort val = ref span[ix];
 
@@ -336,7 +336,7 @@ namespace System
         public static bool ComplementBit(Span<uint> span, int offset)
         {
             var ix = offset >> 5; // div 32
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref uint val = ref span[ix];
 
@@ -353,7 +353,7 @@ namespace System
         public static bool ComplementBit(Span<ulong> span, int offset)
         {
             var ix = offset >> 6; // div 64
-            if (ix < 0 || ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
 
             ref ulong val = ref span[ix];
 
@@ -368,15 +368,15 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ExtractByteImpl(ReadOnlySpan<byte> span, int ix, byte bit)
         {
-            // Avoid branching by treating True/False as 1/0
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length); // 1 if within range, else 0
-            int iy = ix + t1; // (ix + 1) if within range, else (ix)
+            // Byte 0
+            uint u32 = span[ix];
+            
+            // Byte 1
+            byte j = BoolToByte.True(ix + 1 < span.Length); // 1 if within range, else 0
+            var n = (uint)(span[ix + j] * j); // ([iy] x 1) if within range, else (0)
+            u32 |= n << sizeof(byte);
 
-            var u16 = (ushort)(span[iy] * t1); // ([iy] x 1) if within range, else (0)
-            u16 <<= sizeof(byte);
-            u16 |= span[ix];
-
-            byte val = ExtractByte(u16, bit);
+            byte val = ExtractByteImpl(u32, bit);
             return val;
         }
 
@@ -386,7 +386,7 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             var bit = (byte)(bitOffset & 7); // mod 8
-
+        
             byte val = ExtractByteImpl(span, ix, bit);
             return val;
         }
@@ -460,39 +460,41 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var bit = (byte)(bitOffset & 7); // mod 8
-
             // Byte 0
             uint u32 = span[ix];
 
             // Byte 1
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var n = (uint)(span[ix + t1] * t1);
-            u32 |= n << sizeof(ushort);
+            byte j = BoolToByte.True(ix + 1 < span.Length);
+            var n = (uint)(span[ix + j] * j);
+            n <<= sizeof(byte);
+            u32 |= n;
 
             // Byte 2
-            t1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
-            n = (uint)(span[ix + t1] * t1);
-            u32 |= n << sizeof(ushort);
+            j = BoolToByte.True(ix + 2 < span.Length);
+            n = (uint)(span[ix + j * 2] * j);
+            n <<= (sizeof(byte) * 2);
+            u32 |= n;
 
-            // Byte 3
-            t1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
-            n = (uint)(span[ix + t1] * t1);
-            u32 |= n << sizeof(ushort);
+            var bit = (byte)(bitOffset & 7); // mod 8
 
-            ushort val = ExtractUInt16(u32, bit);
+            // Done
+            ushort val = ExtractUInt16Impl(u32, bit);
             return val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(ReadOnlySpan<ushort> span, int ix, byte bit)
         {
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var u32 = (uint)(span[ix + t1] * t1);
-            u32 <<= sizeof(ushort);
-            u32 |= span[ix];
+            // 0
+            uint u32 = span[ix];
 
-            ushort val = ExtractUInt16(u32, bit);
+            // 1
+            byte j = BoolToByte.True(ix + 1 < span.Length);
+            var n = (uint)(span[ix + j] * j);
+            n <<= sizeof(ushort);
+            u32 |= n;
+
+            ushort val = ExtractUInt16Impl(u32, bit);
             return val;
         }
 
@@ -570,39 +572,25 @@ namespace System
             ulong u64 = span[ix];
 
             // Byte 1
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
+            byte j = BoolToByte.True(ix + 1 < span.Length);
+            var n = (ulong)(span[ix + j] * j);
+            n <<= sizeof(byte);
+            u64 |= n;
 
             // Byte 2
-            t1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
+            j = BoolToByte.True(ix + 2 < span.Length);
+            n = (ulong)(span[ix + j * 2] * j);
+            u64 |= n << (sizeof(byte) * 2);
 
             // Byte 3
-            t1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
+            j = BoolToByte.True(ix + 3 < span.Length);
+            n = (ulong)(span[ix + j * 3] * j);
+            u64 |= n << (sizeof(byte) * 3);
 
             // Byte 4
-            t1 = BoolToByte.TrueTo1(ix + 4 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
-
-            // Byte 5
-            t1 += BoolToByte.TrueTo1(ix + 5 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
-
-            // Byte 6
-            t1 += BoolToByte.TrueTo1(ix + 6 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
-
-            // Byte 7
-            t1 += BoolToByte.TrueTo1(ix + 7 < span.Length);
-            n = (ulong)(span[ix + t1] * t1);
-            u64 |= n << sizeof(uint);
+            j = BoolToByte.True(ix + 4 < span.Length);
+            n = (ulong)(span[ix + j * 4] * j);
+            u64 |= n << (sizeof(byte) * 4);
 
             // Done
             uint val = ExtractUInt32(u64, bit);
@@ -623,8 +611,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ExtractUInt32Impl(ReadOnlySpan<uint> span, int ix, byte bit)
         {
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var u64 = (ulong)(span[ix + t1] * t1);
+            byte j = BoolToByte.True(ix + 1 < span.Length);
+            var u64 = (ulong)(span[ix + j] * j);
             u64 <<= sizeof(uint);
             u64 |= span[ix];
 
@@ -701,8 +689,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64Impl(ReadOnlySpan<ulong> span, int ix, byte bit)
         {
-            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var num = (ulong)(span[ix + t1] * t1);
+            byte j = BoolToByte.True(ix + 1 < span.Length);
+            var num = (ulong)(span[ix + j] * j);
             num <<= sizeof(uint);
             num |= span[ix];
 
