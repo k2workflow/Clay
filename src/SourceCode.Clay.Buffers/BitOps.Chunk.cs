@@ -12,7 +12,7 @@ namespace System
         {
             byte shft = Mod(sizeof(ushort), bitOffset, sizeof(byte));
 
-            var val = (uint)(value >> shft);
+            int val = value >> shft;
             return (byte)val;
         }
 

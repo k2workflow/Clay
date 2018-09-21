@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 namespace System
 {
 #pragma warning disable IDE0007 // Use implicit type
@@ -362,65 +365,66 @@ namespace System
 
         #region ExtractByte
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ExtractByteImpl(ReadOnlySpan<byte> span, int ix, byte bit)
+        {
+            // Avoid branching by treating True/False as 1/0
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length); // 1 if within range, else 0
+            int iy = ix + t_1; // (ix + 1) if within range, else (ix)
+
+            var num = (ushort)span[iy] * t_1; // ([iy] x 1) if within range, else (0)
+            num <<= sizeof(byte);
+            num |= span[ix];
+
+            byte val = ExtractByte((ushort)num, bit);
+            return val;
+        }
+
         public static byte ExtractByte(ReadOnlySpan<byte> span, int bitOffset)
         {
-            var spanBitLen = span.Length * 8;
-
             int ix = bitOffset >> 3; // div 8
-            if (ix >= spanBitLen) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ushort value = span[ix];
-            if (ix + 1 < spanBitLen)
-                value |= (ushort)(span[ix + 1] << 8);
+            var bit = (byte)(bitOffset & 7); // mod 8
 
-            var ofs = bitOffset & 7; // mod 8
-
-            var val = ExtractByte(value, ofs);
+            byte val = ExtractByteImpl(span, ix, bit);
             return val;
         }
 
         public static byte ExtractByte(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            var spanBitLen = span.Length * 16;
-
             int ix = bitOffset >> 4; // div 16
-            if (ix >= spanBitLen) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            uint value = span[ix];
-            if (ix + 1 < spanBitLen)
-                value |= (uint)(span[ix + 1] << 16);
+            ReadOnlySpan<byte> cast = MemoryMarshal.Cast<ushort, byte>(span);
+            var bit = (byte)(bitOffset & 15); // mod 16
 
-            var ofs = bitOffset & 15; // mod 16
-
-            var val = ExtractByte(value, bitOffset & ofs);
+            byte val = ExtractByteImpl(cast, ix, bit);
             return val;
         }
 
         public static byte ExtractByte(ReadOnlySpan<uint> span, int bitOffset)
         {
-            var spanBitLen = span.Length * 32;
-
             int ix = bitOffset >> 5; // div 32
-            if (ix >= spanBitLen) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ulong value = span[ix];
-            if (ix + 1 < spanBitLen)
-                value |= span[ix + 1] << 32;
+            ReadOnlySpan<byte> cast = MemoryMarshal.Cast<uint, byte>(span);
+            var bit = (byte)(bitOffset & 31); // mod 32
 
-            var ofs = bitOffset & 31; // mod 32
-
-            var val = ExtractByte(value, bitOffset & ofs);
+            byte val = ExtractByteImpl(cast, ix, bit);
             return val;
         }
 
         public static byte ExtractByte(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            var spanBitLen = span.Length * sizeof(uint); // 32
-
             int ix = bitOffset >> 6; // div 64
-            if (ix >= spanBitLen) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            return 0;
+            ReadOnlySpan<byte> cast = MemoryMarshal.Cast<ulong, byte>(span);
+            var bit = (byte)(bitOffset & 63); // mod 64
+
+            byte val = ExtractByteImpl(cast, ix, bit);
+            return val;
         }
 
         #endregion
@@ -453,22 +457,78 @@ namespace System
 
         public static ushort ExtractUInt16(ReadOnlySpan<byte> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            var bit = (byte)(bitOffset & 7); // mod 8
+
+            // Byte 0
+            uint num = span[ix];
+
+            // Byte 1
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var n = (uint)span[ix + t_1] * t_1;
+            num |= n << sizeof(ushort);
+
+            // Byte 2
+            t_1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
+            n = (uint)span[ix + t_1] * t_1;
+            num |= n << sizeof(ushort);
+
+            // Byte 3
+            t_1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
+            n = (uint)span[ix + t_1] * t_1;
+            num |= n << sizeof(ushort);
+
+            ushort val = ExtractUInt16(num, bit);
+            return val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ushort ExtractUInt16Impl(ReadOnlySpan<ushort> span, int ix, byte bit)
+        {
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var num = (uint)span[ix + t_1] * t_1;
+            num <<= sizeof(ushort);
+            num |= span[ix];
+
+            ushort val = ExtractUInt16(num, bit);
+            return val;
         }
 
         public static ushort ExtractUInt16(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            var bit = (byte)(bitOffset & 15); // mod 16
+
+            ushort val = ExtractUInt16Impl(span, ix, bit);
+            return val;
         }
 
         public static ushort ExtractUInt16(ReadOnlySpan<uint> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<ushort> cast = MemoryMarshal.Cast<uint, ushort>(span);
+            var bit = (byte)(bitOffset & 31); // mod 32
+
+            ushort val = ExtractUInt16Impl(cast, ix, bit);
+            return val;
         }
 
         public static ushort ExtractUInt16(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<ushort> cast = MemoryMarshal.Cast<ulong, ushort>(span);
+            var bit = (byte)(bitOffset & 63); // mod 64
+
+            ushort val = ExtractUInt16Impl(cast, ix, bit);
+            return val;
         }
 
         #endregion
@@ -501,7 +561,51 @@ namespace System
 
         public static uint ExtractUInt32(ReadOnlySpan<byte> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            var bit = (byte)(bitOffset & 7); // mod 8
+
+            // Byte 0
+            ulong num = span[ix];
+
+            // Byte 1
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 2
+            t_1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 3
+            t_1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 4
+            t_1 = BoolToByte.TrueTo1(ix + 4 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 5
+            t_1 += BoolToByte.TrueTo1(ix + 5 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 6
+            t_1 += BoolToByte.TrueTo1(ix + 6 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            // Byte 7
+            t_1 += BoolToByte.TrueTo1(ix + 7 < span.Length);
+            n = (ulong)span[ix + t_1] * t_1;
+            num |= n << sizeof(uint);
+
+            uint val = ExtractUInt32(num, bit);
+            return val;
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
@@ -509,14 +613,39 @@ namespace System
             return 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint ExtractUInt32Impl(ReadOnlySpan<uint> span, int ix, byte bit)
+        {
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var num = (ulong)span[ix + t_1] * t_1;
+            num <<= sizeof(uint);
+            num |= span[ix];
+
+            uint val = ExtractUInt32(num, bit);
+            return val;
+        }
+
         public static uint ExtractUInt32(ReadOnlySpan<uint> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            var bit = (byte)(bitOffset & 31); // mod 32
+
+            uint val = ExtractUInt32Impl(span, ix, bit);
+            return val;
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<uint> cast = MemoryMarshal.Cast<ulong, uint>(span);
+            var bit = (byte)(bitOffset & 63); // mod 64
+
+            uint val = ExtractUInt32Impl(cast, ix, bit);
+            return val;
         }
 
         #endregion
@@ -562,9 +691,29 @@ namespace System
             return 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ulong ExtractUInt64Impl(ReadOnlySpan<ulong> span, int ix, byte bit)
+        {
+            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var num = (ulong)span[ix + t_1] * t_1;
+            num <<= sizeof(uint);
+            num |= span[ix];
+
+            //ulong val = ExtractUInt64(num, bit);
+            //return val;
+
+            return 0;
+        }
+
         public static ulong ExtractUInt64(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            var bit = (byte)(bitOffset & 63); // mod 64
+
+            ulong val = ExtractUInt64Impl(span, ix, bit);
+            return val;
         }
 
         #endregion
