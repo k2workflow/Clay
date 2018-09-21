@@ -359,6 +359,210 @@ namespace System
         }
 
         #endregion
+
+        #region ExtractByte
+
+        public static byte ExtractByte(Span<byte> value, int bitOffset)
+        {
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= value.Length * 8) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
+
+            return 0;
+        }
+
+        public static byte ExtractByte(Span<ushort> value, int bitOffset)
+        {
+            int ix = bitOffset >> 4; // div 16
+            if (ix >= value.Length * 8) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
+
+            return 0;
+        }
+
+        public static byte ExtractByte(Span<uint> value, int bitOffset)
+        {
+            int ix = bitOffset >> 5; // div 32
+            if (ix >= value.Length * 8) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
+
+            return 0;
+        }
+
+        public static byte ExtractByte(Span<ulong> value, int bitOffset)
+        {
+            int ix = bitOffset >> 6; // div 64
+            if (ix >= value.Length * 8) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
+
+            return 0;
+        }
+
+        #endregion
+
+        #region InsertByte
+
+        public static byte InsertByte(Span<byte> value, int bitOffset, byte insert)
+        {
+            return 0;
+        }
+
+        public static byte InsertByte(Span<ushort> value, int bitOffset, byte insert)
+        {
+            return 0;
+        }
+
+        public static byte InsertByte(Span<uint> value, int bitOffset, byte insert)
+        {
+            return 0;
+        }
+
+        public static byte InsertByte(Span<ulong> value, int bitOffset, byte insert)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region ExtractUInt16
+
+        public static ushort ExtractUInt16(Span<byte> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ushort ExtractUInt16(Span<ushort> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ushort ExtractUInt16(Span<uint> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ushort ExtractUInt16(Span<ulong> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region InsertUInt16
+
+        public static ushort InsertUInt16(Span<byte> value, int bitOffset, ushort insert)
+        {
+            return 0;
+        }
+
+        public static ushort InsertUInt16(Span<ushort> value, int bitOffset, ushort insert)
+        {
+            return 0;
+        }
+
+        public static ushort InsertUInt16(Span<uint> value, int bitOffset, ushort insert)
+        {
+            return 0;
+        }
+
+        public static ushort InsertUInt16(Span<ulong> value, int bitOffset, ushort insert)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region ExtractUInt32
+
+        public static uint ExtractUInt32(Span<byte> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static uint ExtractUInt32(Span<ushort> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static uint ExtractUInt32(Span<uint> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static uint ExtractUInt32(Span<ulong> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region InsertUInt32
+
+        public static uint InsertUInt32(Span<byte> value, int bitOffset, uint insert)
+        {
+            return 0;
+        }
+
+        public static uint InsertUInt32(Span<ushort> value, int bitOffset, uint insert)
+        {
+            return 0;
+        }
+
+        public static uint InsertUInt32(Span<uint> value, int bitOffset, uint insert)
+        {
+            return 0;
+        }
+
+        public static uint InsertUInt32(Span<ulong> value, int bitOffset, uint insert)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region ExtractUInt64
+
+        public static ulong ExtractUInt64(Span<byte> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ulong ExtractUInt64(Span<ushort> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ulong ExtractUInt64(Span<uint> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        public static ulong ExtractUInt64(Span<ulong> value, int bitOffset)
+        {
+            return 0;
+        }
+
+        #endregion
+
+        #region InsertUInt64
+
+        public static ulong InsertUInt64(Span<byte> value, int bitOffset, ulong insert)
+        {
+            return 0;
+        }
+
+        public static ulong InsertUInt64(Span<ushort> value, int bitOffset, ulong insert)
+        {
+            return 0;
+        }
+
+        public static ulong InsertUInt64(Span<uint> value, int bitOffset, ulong insert)
+        {
+            return 0;
+        }
+
+        public static ulong InsertUInt64(Span<ulong> value, int bitOffset, ulong insert)
+        {
+            return 0;
+        }
+
+        #endregion
     }
 
 #pragma warning restore IDE0007 // Use implicit type

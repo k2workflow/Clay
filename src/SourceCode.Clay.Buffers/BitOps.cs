@@ -2,6 +2,10 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+// Utilize when/if non-Experimental:
+//using System.Runtime.Intrinsics;
+//using System.Runtime.Intrinsics.X86;
+
 namespace System
 {
 #pragma warning disable IDE0007 // Use implicit type
@@ -1808,6 +1812,11 @@ namespace System
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte Safe(bool on)
                 => (new BoolToByte { Bool = on }).Byte;
+
+            // TODO:
+            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+            //public static byte Safe2(bool on)
+            //    => MemoryMarshal.Cast<bool, byte>(on);
 
             /// <summary>
             /// Converts a bool to a byte value without branching
