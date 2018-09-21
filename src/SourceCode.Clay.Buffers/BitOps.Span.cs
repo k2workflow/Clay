@@ -369,14 +369,14 @@ namespace System
         private static byte ExtractByteImpl(ReadOnlySpan<byte> span, int ix, byte bit)
         {
             // Avoid branching by treating True/False as 1/0
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length); // 1 if within range, else 0
-            int iy = ix + t_1; // (ix + 1) if within range, else (ix)
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length); // 1 if within range, else 0
+            int iy = ix + t1; // (ix + 1) if within range, else (ix)
 
-            var num = (ushort)span[iy] * t_1; // ([iy] x 1) if within range, else (0)
-            num <<= sizeof(byte);
-            num |= span[ix];
+            var u16 = (ushort)(span[iy] * t1); // ([iy] x 1) if within range, else (0)
+            u16 <<= sizeof(byte);
+            u16 |= span[ix];
 
-            byte val = ExtractByte((ushort)num, bit);
+            byte val = ExtractByte(u16, bit);
             return val;
         }
 
@@ -463,36 +463,36 @@ namespace System
             var bit = (byte)(bitOffset & 7); // mod 8
 
             // Byte 0
-            uint num = span[ix];
+            uint u32 = span[ix];
 
             // Byte 1
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var n = (uint)span[ix + t_1] * t_1;
-            num |= n << sizeof(ushort);
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var n = (uint)(span[ix + t1] * t1);
+            u32 |= n << sizeof(ushort);
 
             // Byte 2
-            t_1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
-            n = (uint)span[ix + t_1] * t_1;
-            num |= n << sizeof(ushort);
+            t1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
+            n = (uint)(span[ix + t1] * t1);
+            u32 |= n << sizeof(ushort);
 
             // Byte 3
-            t_1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
-            n = (uint)span[ix + t_1] * t_1;
-            num |= n << sizeof(ushort);
+            t1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
+            n = (uint)(span[ix + t1] * t1);
+            u32 |= n << sizeof(ushort);
 
-            ushort val = ExtractUInt16(num, bit);
+            ushort val = ExtractUInt16(u32, bit);
             return val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(ReadOnlySpan<ushort> span, int ix, byte bit)
         {
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var num = (uint)span[ix + t_1] * t_1;
-            num <<= sizeof(ushort);
-            num |= span[ix];
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var u32 = (uint)(span[ix + t1] * t1);
+            u32 <<= sizeof(ushort);
+            u32 |= span[ix];
 
-            ushort val = ExtractUInt16(num, bit);
+            ushort val = ExtractUInt16(u32, bit);
             return val;
         }
 
@@ -567,61 +567,68 @@ namespace System
             var bit = (byte)(bitOffset & 7); // mod 8
 
             // Byte 0
-            ulong num = span[ix];
+            ulong u64 = span[ix];
 
             // Byte 1
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 2
-            t_1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 += BoolToByte.TrueTo1(ix + 2 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 3
-            t_1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 += BoolToByte.TrueTo1(ix + 3 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 4
-            t_1 = BoolToByte.TrueTo1(ix + 4 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 = BoolToByte.TrueTo1(ix + 4 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 5
-            t_1 += BoolToByte.TrueTo1(ix + 5 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 += BoolToByte.TrueTo1(ix + 5 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 6
-            t_1 += BoolToByte.TrueTo1(ix + 6 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 += BoolToByte.TrueTo1(ix + 6 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
             // Byte 7
-            t_1 += BoolToByte.TrueTo1(ix + 7 < span.Length);
-            n = (ulong)span[ix + t_1] * t_1;
-            num |= n << sizeof(uint);
+            t1 += BoolToByte.TrueTo1(ix + 7 < span.Length);
+            n = (ulong)(span[ix + t1] * t1);
+            u64 |= n << sizeof(uint);
 
-            uint val = ExtractUInt32(num, bit);
+            // Done
+            uint val = ExtractUInt32(u64, bit);
             return val;
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            return 0;
+            int ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<byte> cast = MemoryMarshal.Cast<ushort, byte>(span);
+
+            uint val = ExtractUInt32(cast, bitOffset); // TODO: Call chain
+            return val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ExtractUInt32Impl(ReadOnlySpan<uint> span, int ix, byte bit)
         {
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var num = (ulong)span[ix + t_1] * t_1;
-            num <<= sizeof(uint);
-            num |= span[ix];
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var u64 = (ulong)(span[ix + t1] * t1);
+            u64 <<= sizeof(uint);
+            u64 |= span[ix];
 
-            uint val = ExtractUInt32(num, bit);
+            uint val = ExtractUInt32(u64, bit);
             return val;
         }
 
@@ -694,8 +701,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64Impl(ReadOnlySpan<ulong> span, int ix, byte bit)
         {
-            byte t_1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
-            var num = (ulong)span[ix + t_1] * t_1;
+            byte t1 = BoolToByte.TrueTo1(ix + 1 < span.Length);
+            var num = (ulong)(span[ix + t1] * t1);
             num <<= sizeof(uint);
             num |= span[ix];
 
