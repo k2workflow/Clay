@@ -1811,7 +1811,7 @@ namespace System
             /// <param name="true">The value to convert.</param>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte False(bool condition)
-                => TrueUnsafe(!condition);
+                => True(!condition);
 
             /// <summary>
             /// Converts a bool to a byte value without branching.
@@ -1821,7 +1821,7 @@ namespace System
             /// <param name="on">The value to convert.</param>
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte FalseUnsafe(bool condition)
-                => True(!condition);
+                => TrueUnsafe(!condition);
 
             /// <summary>
             /// Converts a bool to a byte value without branching.

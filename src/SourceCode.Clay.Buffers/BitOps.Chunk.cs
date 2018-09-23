@@ -10,7 +10,7 @@ namespace System
 
         public static byte ExtractByte(ushort value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ushort), bitOffset, sizeof(byte));
+            byte shft = Mod(sizeof(byte), bitOffset, sizeof(ushort));
 
             int val = value >> shft;
             return (byte)val;
@@ -22,7 +22,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ExtractByteImpl(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(uint), bitOffset, sizeof(byte));
+            byte shft = Mod(sizeof(byte), bitOffset, sizeof(uint));
 
             uint val = value >> shft;
             return (byte)val;
@@ -30,7 +30,7 @@ namespace System
 
         public static byte ExtractByte(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(byte));
+            byte shft = Mod(sizeof(byte), bitOffset, sizeof(ulong));
 
             ulong val = value >> shft;
             return (byte)val;
@@ -74,7 +74,7 @@ namespace System
 
         public static ulong InsertByte(ulong value, int bitOffset, byte insert)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(byte));
+            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(ulong));
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertByteMask, shft);
@@ -93,7 +93,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(uint), bitOffset, sizeof(ushort));
+            byte shft = Mod(sizeof(ushort), bitOffset, sizeof(uint));
 
             uint val = value >> shft;
             return (ushort)val;
@@ -101,7 +101,7 @@ namespace System
 
         public static ushort ExtractUInt16(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(ushort));
+            byte shft = Mod(sizeof(ushort), bitOffset, sizeof(ulong));
 
             ulong val = value >> shft;
             return (ushort)val;
@@ -142,7 +142,7 @@ namespace System
 
         public static uint ExtractUInt32(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(uint));
+            byte shft = Mod(sizeof(uint), bitOffset, sizeof(ulong));
 
             ulong val = value >> shft;
             return (uint)val;
@@ -171,8 +171,8 @@ namespace System
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte Mod(byte valueSize, int bitOffset, byte size)
-            => (byte)(unchecked(bitOffset + size) & (valueSize - 1));
+        private static byte Mod(byte targetSize, int bitOffset, byte sourceSize)
+            => (byte)(unchecked(bitOffset + sourceSize) & (targetSize - 1));
 
         #endregion
     }
