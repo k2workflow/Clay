@@ -692,7 +692,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 5 bytes, so align on 8
-            len = Math.Min(len, 8); // TODO: Branchless Min()
+            len = Min(len, 8);
             Span<byte> aligned = stackalloc byte[8];
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -711,7 +711,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 3 ushorts, so align on 4
-            len = Math.Min(len, 4);
+            len = Min(len, 4);
             Span<ushort> aligned = stackalloc ushort[4];
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -730,7 +730,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 2 uints
-            len = Math.Min(len, 2);
+            len = Min(len, 2);
             Span<uint> aligned = stackalloc uint[2];
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -749,7 +749,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 2 ulongs
-            len = Math.Min(len, 2);
+            len = Min(len, 2);
             Span<ulong> aligned = stackalloc ulong[2];
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
