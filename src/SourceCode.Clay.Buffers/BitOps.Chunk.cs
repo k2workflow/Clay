@@ -10,7 +10,7 @@ namespace System
 
         public static byte ExtractByte(ushort value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), sizeof(ushort), bitOffset);
+            byte shft = Mod(8, 16, bitOffset);
 
             int val = value >> shft;
             return (byte)val;
@@ -18,7 +18,7 @@ namespace System
 
         public static byte ExtractByte(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), sizeof(uint), bitOffset);
+            byte shft = Mod(8, 32, bitOffset);
 
             uint val = value >> shft;
             return (byte)val;
@@ -26,7 +26,7 @@ namespace System
 
         public static byte ExtractByte(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), sizeof(ulong), bitOffset);
+            byte shft = Mod(8, 64, bitOffset);
 
             ulong val = value >> shft;
             return (byte)val;
@@ -37,13 +37,13 @@ namespace System
         #region InsertByte
 
         // FF00
-        private const uint InsertByteMask = (uint)byte.MaxValue << sizeof(byte);
+        private const uint InsertByteMask = (uint)byte.MaxValue << 8;
 
         public static ushort InsertByte(ushort value, int bitOffset, byte insert)
-            => (ushort)InsertByteImpl(sizeof(ushort), value, bitOffset, insert);
+            => (ushort)InsertByteImpl(16, value, bitOffset, insert);
         
         public static uint InsertByte(uint value, int bitOffset, byte insert)
-            => InsertByteImpl(sizeof(uint), value, bitOffset, insert);
+            => InsertByteImpl(32, value, bitOffset, insert);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint InsertByteImpl(byte valueSize, uint value, int bitOffset, byte insert)
@@ -53,7 +53,7 @@ namespace System
             // insert =      100 0011 1
 
             // eg 27->3, int.Max -> 7
-            byte shft = Mod(valueSize, sizeof(byte), bitOffset);
+            byte shft = Mod(valueSize, 8, bitOffset);
             var ins = (uint)(insert << shft); //                 0000_0 | 100_0 011_1 | 000
 
             //                                                   15  12 | 11  8 7   3 |   0
@@ -70,7 +70,7 @@ namespace System
 
         public static ulong InsertByte(ulong value, int bitOffset, byte insert)
         {
-            byte shft = Mod(sizeof(ulong), sizeof(ulong), bitOffset);
+            byte shft = Mod(64, 64, bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertByteMask, shft);
@@ -89,7 +89,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ushort), sizeof(uint), bitOffset);
+            byte shft = Mod(16, 32, bitOffset);
 
             uint val = value >> shft;
             return (ushort)val;
@@ -97,7 +97,7 @@ namespace System
 
         public static ushort ExtractUInt16(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ushort), sizeof(ulong), bitOffset);
+            byte shft = Mod(16, 64, bitOffset);
 
             ulong val = value >> shft;
             return (ushort)val;
@@ -108,11 +108,11 @@ namespace System
         #region InsertUInt16
 
         // FFFF 0000
-        private const uint InsertUInt16Mask = (uint)ushort.MaxValue << sizeof(ushort);
+        private const uint InsertUInt16Mask = (uint)ushort.MaxValue << 16;
 
         public static uint InsertUInt16(uint value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(sizeof(uint), sizeof(ushort), bitOffset);
+            byte shft = Mod(32, 16, bitOffset);
             var ins = (uint)(insert << shft);
 
             uint mask = RotateLeft(InsertUInt16Mask, shft);
@@ -123,7 +123,7 @@ namespace System
 
         public static ulong InsertUInt16(ulong value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(sizeof(ulong), sizeof(ushort), bitOffset);
+            byte shft = Mod(64, 16, bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertUInt16Mask, shft);
@@ -138,7 +138,7 @@ namespace System
 
         public static uint ExtractUInt32(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(uint), sizeof(ulong), bitOffset);
+            byte shft = Mod(32, 64, bitOffset);
 
             ulong val = value >> shft;
             return (uint)val;
@@ -149,11 +149,11 @@ namespace System
         #region InsertUInt32
 
         // FFFF FFFF 0000 0000
-        private const ulong InsertUInt32Mask = (ulong)uint.MaxValue << sizeof(uint);
+        private const ulong InsertUInt32Mask = (ulong)uint.MaxValue << 32;
 
         public static ulong InsertUInt32(ulong value, int bitOffset, uint insert)
         {
-            byte shft = Mod(sizeof(ulong), sizeof(uint), bitOffset);
+            byte shft = Mod(64, 32, bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft(InsertUInt32Mask, shft);
