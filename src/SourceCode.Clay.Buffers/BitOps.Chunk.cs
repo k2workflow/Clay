@@ -168,7 +168,7 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
-            => (byte)(unchecked(bitOffset + sourceSize) & (targetSize - 1));
+            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));
 
         #endregion
     }

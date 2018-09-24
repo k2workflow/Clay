@@ -368,9 +368,9 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(byte), sizeof(byte), bitOffset);
+            int shft = bitOffset & (sizeof(byte) - 1); // mod 8
 
-            uint val = 0;
+            uint val;
             switch (len)
             {
                 // [0,1,..]
@@ -380,12 +380,13 @@ namespace System
 
                 // [0,1]
                 case 2:
-                    val = (uint)span[ix + 1] << (sizeof(byte) - shft);
-                    goto case 1; // Fallthru
+                    ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
+                    val = (uint)cast2[ix << 1] >> shft;
+                    break;
 
                 // [0]
                 case 1:
-                    val |= (uint)span[ix] >> shft;
+                    val = (uint)span[ix] >> shft;
                     break;
             }
 
@@ -399,7 +400,7 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(byte), sizeof(ushort), bitOffset);
+            int shft = bitOffset & (sizeof(ushort) - 1); // mod 16
 
             uint val;
             switch (len)
@@ -431,9 +432,9 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(byte), sizeof(uint), bitOffset);
+            int shft = bitOffset & (sizeof(uint) - 1); // mod 32
 
-            uint val = 0;
+            uint val;
             switch (len)
             {
                 // [0,1,..]
@@ -443,12 +444,13 @@ namespace System
 
                 // [0,1]
                 case 2:
-                    val = span[ix + 1] << (sizeof(uint) - shft);
-                    goto case 1; // Fallthru
+                    ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
+                    val = (uint)(cast2[ix << 1] >> shft);
+                    break;
 
                 // [0]
                 case 1:
-                    val |= span[ix] >> shft;
+                    val = span[ix] >> shft;
                     break;
             }
 
@@ -462,7 +464,7 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(byte), sizeof(ulong), bitOffset);
+            int shft = bitOffset & (sizeof(ulong) - 1); // mod 64
 
             ulong val = 0;
             switch (len)
@@ -521,7 +523,7 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ushort), sizeof(byte), bitOffset);
+            int shft = bitOffset & (sizeof(byte) - 1); // mod 8
 
             uint val = 0;
             switch (len)
@@ -539,7 +541,7 @@ namespace System
 
                 // [0,1,2]
                 case 3:
-                    val = (uint)span[ix + 2] << (sizeof(ushort) - shft);
+                    val = (uint)span[ix + 2] << (sizeof(byte) - shft);
                     goto case 2; // Fallthru
 
                 // [0,1]
@@ -564,7 +566,7 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ushort), sizeof(ushort), bitOffset);
+            int shft = bitOffset & (sizeof(ushort) - 1); // mod 16
 
             uint val;
             switch (len)
@@ -596,9 +598,9 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ushort), sizeof(uint), bitOffset);
+            int shft = bitOffset & (sizeof(uint) - 1); // mod 32
 
-            ulong val;
+            uint val;
             switch (len)
             {
                 // [0,1,..]
@@ -609,7 +611,7 @@ namespace System
                 // [0,1]
                 case 2:
                     ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
-                    val = cast2[ix << 1] >> shft;
+                    val = (uint)(cast2[ix << 1] >> shft);
                     break;
 
                 // [0]
@@ -628,7 +630,7 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ushort), sizeof(ulong), bitOffset);
+            int shft = bitOffset & (sizeof(ulong) - 1); // mod 64
 
             ulong val = 0;
             switch (len)
@@ -687,9 +689,9 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(uint), sizeof(byte), bitOffset);
+            int shft = bitOffset & (sizeof(byte) - 1); // mod 8
 
-            ulong val = 0;
+            uint val = 0;
             switch (len)
             {
                 // [0,1,2,3,4,5,6,7,..]
@@ -700,22 +702,22 @@ namespace System
                 // [0,1,2,3,4,5,6,7]
                 case 8:
                     ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<byte, ulong>(span);
-                    val = cast8[ix << 3] >> shft;
+                    val = (uint)(cast8[ix << 3] >> shft);
                     break;
 
                 // [0,1,2,3,4,5,6]
                 case 7:
-                    val = (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
+                    val = (uint)span[ix + 6] << (6 * sizeof(byte) - shft);
                     goto case 6; // Fallthru
 
                 // [0,1,2,3,4,5]
                 case 6:
-                    val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
+                    val |= (uint)span[ix + 5] << (5 * sizeof(byte) - shft);
                     goto case 5; // Fallthru
 
                 // [0,1,2,3,4]
                 case 5:
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
+                    val |= (uint)span[ix + 4] << (4 * sizeof(byte) - shft);
                     goto case 4; // Fallthru
 
                 // [0,1,2,3]
@@ -726,22 +728,22 @@ namespace System
 
                 // [0,1,2]
                 case 3:
-                    val = (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
+                    val = (uint)span[ix + 2] << (2 * sizeof(byte) - shft);
                     goto case 2; // Fallthru
 
                 // [0,1]
                 case 2:
                     ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
-                    val |= (ulong)cast2[ix << 1] >> shft;
+                    val |= (uint)cast2[ix << 1] >> shft;
                     break;
                 
                 // [0]
                 case 1:
-                    val = (ulong)span[ix] >> shft;
+                    val = (uint)span[ix] >> shft;
                     break;
             }
 
-            return (uint)val;
+            return val;
 
         Error:
             throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -751,9 +753,9 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(uint), sizeof(ushort), bitOffset);
+            int shft = bitOffset & (sizeof(ushort) - 1); // mod 16
 
-            ulong val = 0;
+            uint val = 0;
             switch (len)
             {
                 // [0,1,2,3,..]
@@ -764,12 +766,12 @@ namespace System
                 // [0,1,2,3]
                 case 4:
                     ReadOnlySpan<ulong> cast4 = MemoryMarshal.Cast<ushort, ulong>(span);
-                    val = cast4[ix << 2] >> shft;
+                    val = (uint)(cast4[ix << 2] >> shft);
                     break;
 
                 // [0,1,2]
                 case 3:
-                    val = (ulong)span[ix + 2] << (sizeof(uint) - shft);
+                    val = (uint)span[ix + 2] << (sizeof(ushort) - shft);
                     goto case 2; // Fallthru
 
                 // [0,1]
@@ -784,7 +786,7 @@ namespace System
                     break;
             }
 
-            return (uint)val;
+            return val;
 
         Error:
             throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -794,9 +796,9 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(uint), sizeof(uint), bitOffset);
+            int shft = bitOffset & (sizeof(uint) - 1); // mod 32
 
-            ulong val;
+            uint val;
             switch (len)
             {
                 // [0,1,..]
@@ -807,7 +809,7 @@ namespace System
                 // [0,1]
                 case 2:
                     ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
-                    val = cast2[ix << 1] >> shft;
+                    val = (uint)(cast2[ix << 1] >> shft);
                     break;
 
                 // [0]
@@ -816,7 +818,7 @@ namespace System
                     break;
             }
 
-            return (uint)val;
+            return val;
 
         Error:
             throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -826,7 +828,7 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(uint), sizeof(ulong), bitOffset);
+            int shft = bitOffset & (sizeof(ulong) - 1); // mod 64
 
             ulong val = 0;
             switch (len)
@@ -885,7 +887,7 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ulong), sizeof(byte), bitOffset);
+            int shft = bitOffset & (sizeof(byte) - 1); // mod 8
 
             ulong val = 0;
             switch (len)
@@ -991,7 +993,7 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ulong), sizeof(ushort), bitOffset);
+            int shft = bitOffset & (sizeof(ushort) - 1); // mod 16
 
             ulong val = 0;
             switch (len)
@@ -1005,7 +1007,7 @@ namespace System
                 case 8:
                     ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<ushort, ulong>(span);
                     val = cast8[ix << 2] >> shft;
-                    val |= cast8[ix << 2 + 1] >> (sizeof(ulong) - shft);
+                    val |= cast8[ix << 2 + 1] >> (sizeof(ushort) - shft);
                     break;
 
                 // [0,1,2,3,4,5,6]
@@ -1056,7 +1058,7 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ulong), sizeof(uint), bitOffset);
+            int shft = bitOffset & (sizeof(uint) - 1); // mod 32
 
             ulong val = 0;
             switch (len)
@@ -1070,12 +1072,12 @@ namespace System
                 case 4:
                     ReadOnlySpan<ulong> cast4 = MemoryMarshal.Cast<uint, ulong>(span);
                     val = cast4[ix << 1] >> shft;
-                    val |= cast4[ix << 1 + 1] >> (sizeof(ulong) - shft);
+                    val |= cast4[ix << 1 + 1] >> (sizeof(uint) - shft);
                     break;
 
                 // [0,1,2]
                 case 3:
-                    val = (ulong)span[ix + 2] << (sizeof(ulong) - shft);
+                    val = (ulong)span[ix + 2] << (sizeof(uint) - shft);
                     goto case 2; // Fallthru
 
                 // [0,1]
@@ -1100,7 +1102,7 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             var len = span.Length - ix;
-            byte shft = Mod(sizeof(ulong), sizeof(ulong), bitOffset);
+            int shft = bitOffset & (sizeof(ulong) - 1); // mod 64
 
             ulong val = 0;
             switch (len)
