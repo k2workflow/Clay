@@ -367,87 +367,126 @@ namespace System
         public static byte ExtractByte(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(byte), sizeof(byte), bitOffset);
 
-            // [0]
-            var val = (uint)span[ix] >> shft;
-
-            // TODO: Benchmark vs BoolToByte
-            
-            // [0,1]
-            if (len >= 2)
+            uint val = 0;
+            switch (len)
             {
-                val |= (uint)span[ix + 1] << (sizeof(byte) - shft);
+                // [0,1,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    val = (uint)span[ix + 1] << (sizeof(byte) - shft);
+                    goto case 1; // Fallthru
+
+                // [0]
+                case 1:
+                    val |= (uint)span[ix] >> shft;
+                    break;
             }
 
             return (byte)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
     
         public static byte ExtractByte(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(byte), sizeof(ushort), bitOffset);
 
-            // [0]
-            var val = (uint)span[ix] >> shft;
-
-            // [0,1]
-            if (len >= 2)
+            uint val;
+            switch (len)
             {
-                val |= (uint)span[ix + 1] << (sizeof(ushort) - shft);
+                // [0,1,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    ReadOnlySpan<uint> cast2 = MemoryMarshal.Cast<ushort, uint>(span);
+                    val = cast2[ix << 1] >> shft;
+                    break;
+
+                // [0]
+                case 1:
+                    val = (uint)span[ix] >> shft;
+                    break;
             }
 
             return (byte)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static byte ExtractByte(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(byte), sizeof(uint), bitOffset);
 
-            // [0]
-            uint val = span[ix] >> shft;
-
-            // [0,1]
-            if (len >= 2)
+            uint val = 0;
+            switch (len)
             {
-                val |= span[ix + 1] << (sizeof(uint) - shft);
+                // [0,1,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    val = span[ix + 1] << (sizeof(uint) - shft);
+                    goto case 1; // Fallthru
+
+                // [0]
+                case 1:
+                    val |= span[ix] >> shft;
+                    break;
             }
 
             return (byte)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static byte ExtractByte(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(byte), sizeof(ulong), bitOffset);
 
-            // [0]
-            ulong val = span[ix] >> shft;
-
-            // [0,1]
-            if (len >= 2)
+            ulong val = 0;
+            switch (len)
             {
-                val |= span[ix + 1] << (sizeof(ulong) - shft);
+                // [0,1,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    val = span[ix + 1] << (sizeof(ulong) - shft);
+                    goto case 1; // Fallthru
+
+                // [0]
+                case 1:
+                    val |= span[ix] >> shft;
+                    break;
             }
 
             return (byte)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         #endregion
@@ -487,23 +526,27 @@ namespace System
             uint val = 0;
             switch (len)
             {
-                // [0,1,2,N]
+                // [0,1,2,3,..]
                 default:
                     if (len <= 0) goto Error;
+                    goto case 4;
 
-                    ReadOnlySpan<ushort> cast4 = MemoryMarshal.Cast<byte, ushort>(span);
-                    val = (uint)cast4[ix << 1] >> shft;
+                // [0,1,2,3]
+                case 4:
+                    ReadOnlySpan<uint> cast4 = MemoryMarshal.Cast<byte, uint>(span);
+                    val = cast4[ix << 2] >> shft;
                     break;
 
                 // [0,1,2]
                 case 3:
-                    val = (uint)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    goto case 2;
+                    val = (uint)span[ix + 2] << (sizeof(ushort) - shft);
+                    goto case 2; // Fallthru
 
                 // [0,1]
                 case 2:
-                    val |= (uint)span[ix + 1] << (1 * sizeof(byte) - shft);
-                    goto case 1;
+                    ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
+                    val |= (uint)cast2[ix << 1] >> shft;
+                    break;
 
                 // [0]
                 case 1:
@@ -526,21 +569,27 @@ namespace System
             uint val;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    if (len <= 0) goto Error;
+                    goto case 2;
 
-                    val = (uint)span[ix] >> shft;
-                    val |= (uint)span[ix + 1] << (sizeof(ushort) - shft);
+                // [0,1]
+                case 2:
+                    ReadOnlySpan<uint> cast2 = MemoryMarshal.Cast<ushort, uint>(span);
+                    val = cast2[ix << 1] >> shft;
                     break;
          
                 // [0]
-                case 1: 
+                case 1:
                     val = (uint)span[ix] >> shft;
                     break;
             }
 
             return (ushort)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static ushort ExtractUInt16(ReadOnlySpan<uint> span, int bitOffset)
@@ -552,12 +601,15 @@ namespace System
             ulong val;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    if (len <= 0) goto Error;
+                    goto case 2;
 
-                    val = span[ix] >> shft;
-                    val |= span[ix + 1] << (sizeof(uint) - shft);
+                // [0,1]
+                case 2:
+                    ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
+                    val = cast2[ix << 1] >> shft;
                     break;
 
                 // [0]
@@ -567,6 +619,9 @@ namespace System
             }
 
             return (ushort)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static ushort ExtractUInt16(ReadOnlySpan<ulong> span, int bitOffset)
@@ -575,24 +630,29 @@ namespace System
             var len = span.Length - ix;
             byte shft = Mod(sizeof(ushort), sizeof(ulong), bitOffset);
 
-            ulong val;
+            ulong val = 0;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    if (len <= 0) goto Error;
+                    goto case 2;
 
-                    val = span[ix] >> shft;
-                    val |= span[ix + 1] << (sizeof(ulong) - shft);
-                    break;
+                // [0,1]
+                case 2:
+                    val = span[ix + 1] << (sizeof(ulong) - shft);
+                    goto case 1; // Fallthru
 
                 // [0]
                 case 1:
-                    val = span[ix] >> shft;
+                    val |= span[ix] >> shft;
                     break;
             }
 
             return (ushort)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         #endregion
@@ -629,40 +689,62 @@ namespace System
             var len = span.Length - ix;
             byte shft = Mod(sizeof(uint), sizeof(byte), bitOffset);
 
-            uint val = 0;
+            ulong val = 0;
             switch (len)
             {
-                // [0,1,2,3,4,N]
+                // [0,1,2,3,4,5,6,7,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    if (len <= 0) goto Error;
+                    goto case 8;
 
-                    val = (uint)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    goto case 4;
+                // [0,1,2,3,4,5,6,7]
+                case 8:
+                    ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<byte, ulong>(span);
+                    val = cast8[ix << 3] >> shft;
+                    break;
+
+                // [0,1,2,3,4,5,6]
+                case 7:
+                    val = (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
+                    goto case 6; // Fallthru
+
+                // [0,1,2,3,4,5]
+                case 6:
+                    val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
+                    goto case 5; // Fallthru
+
+                // [0,1,2,3,4]
+                case 5:
+                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
+                    goto case 4; // Fallthru
 
                 // [0,1,2,3]
                 case 4:
                     ReadOnlySpan<uint> cast4 = MemoryMarshal.Cast<byte, uint>(span);
-                    val |= cast4[0] >> shft;
+                    val |= cast4[ix << 2] >> shft;
                     break;
 
                 // [0,1,2]
                 case 3:
-                    val = (uint)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    goto case 2;
+                    val = (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
+                    goto case 2; // Fallthru
 
                 // [0,1]
                 case 2:
                     ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
-                    val |= (uint)cast2[0] >> shft;
+                    val |= (ulong)cast2[ix << 1] >> shft;
                     break;
                 
                 // [0]
                 case 1:
-                    val = (uint)span[ix] >> shft;
+                    val = (ulong)span[ix] >> shft;
                     break;
             }
 
-            return val;
+            return (uint)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
@@ -671,18 +753,27 @@ namespace System
             var len = span.Length - ix;
             byte shft = Mod(sizeof(uint), sizeof(ushort), bitOffset);
 
-            uint val = 0;
+            ulong val = 0;
             switch (len)
             {
-                // [0,1,N]
+                // [0,1,2,3,..]
                 default:
-                    val = (uint)span[ix + 2] << (sizeof(uint) - shft);
-                    goto case 2;
+                    if (len <= 0) goto Error;
+                    goto case 4;
+
+                // [0,1,2,3]
+                case 4:
+                    ReadOnlySpan<ulong> cast4 = MemoryMarshal.Cast<ushort, ulong>(span);
+                    val = cast4[ix << 2] >> shft;
+                    break;
+
+                // [0,1,2]
+                case 3:
+                    val = (ulong)span[ix + 2] << (sizeof(uint) - shft);
+                    goto case 2; // Fallthru
 
                 // [0,1]
                 case 2:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
                     ReadOnlySpan<uint> cast2 = MemoryMarshal.Cast<ushort, uint>(span);
                     val |= cast2[ix << 1] >> shft;
                     break;
@@ -693,7 +784,10 @@ namespace System
                     break;
             }
 
-            return val;
+            return (uint)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<uint> span, int bitOffset)
@@ -705,10 +799,13 @@ namespace System
             ulong val;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    if (len <= 0) goto Error;
+                    goto case 2;
 
+                // [0,1]
+                case 2:
                     ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
                     val = cast2[ix << 1] >> shft;
                     break;
@@ -720,39 +817,40 @@ namespace System
             }
 
             return (uint)val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static uint ExtractUInt32(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(uint), sizeof(ulong), bitOffset);
 
+            ulong val = 0;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-                    break;
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    val = span[ix + 1] << (sizeof(ulong) - shft);
+                    goto case 1; // Fallthru
 
                 // [0]
                 case 1:
+                    val |= span[ix] >> shft;
                     break;
             }
 
-            // [0]
-            var val = (uint)span[ix] >> shft;
+            return (uint)val;
 
-            // [0,1]
-            if (len >= 2)
-            {
-                val |= (uint)span[ix + 1] << (sizeof(uint) - shft);
-            }
-
-            return val;
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         #endregion
@@ -786,203 +884,247 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(ulong), sizeof(byte), bitOffset);
 
-            // [0]
-            var val = (ulong)span[ix] >> shft;
-
+            ulong val = 0;
             switch (len)
             {
-                // [0]
-                case 1: break;
+                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 16;
 
-                // [0,1]
-                case 2:
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
+                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+                case 16:
+                    ReadOnlySpan<ulong> cast16 = MemoryMarshal.Cast<byte, ulong>(span);
+                    val = cast16[ix << 3] >> shft;
+                    val |= cast16[ix << 3 + 1] >> (15 * sizeof(byte) - shft);
                     break;
 
-                // [0,1,2]
-                case 3:
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
-                    break;
+                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+                case 15:
+                    val = (ulong)span[ix + 14] << (14 * sizeof(byte) - shft);
+                    goto case 14; // Fallthru
 
-                // [0,1,2,3]
-                case 4:
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
-                    break;
+                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+                case 14:
+                    val |= (ulong)span[ix + 13] << (13 * sizeof(byte) - shft);
+                    goto case 13; // Fallthru
 
-                // [0,1,2,3,4]
-                case 5:
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
-                    break;
+                // [0,1,2,3,4,5,6,7,8,9,10,11,12]
+                case 13:
+                    val |= (ulong)span[ix + 12] << (12 * sizeof(byte) - shft);
+                    goto case 12; // Fallthru
 
-                // [0,1,2,3,4,5]
-                case 6:
-                    val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
+                // [0,1,2,3,4,5,6,7,8,9,10,11]
+                case 12:
+                    val |= (ulong)span[ix + 11] << (11 * sizeof(byte) - shft);
+                    goto case 11; // Fallthru
+
+                // [0,1,2,3,4,5,6,7,8,9,10]
+                case 11:
+                    val |= (ulong)span[ix + 10] << (10 * sizeof(byte) - shft);
+                    goto case 10; // Fallthru
+
+                // [0,1,2,3,4,5,6,7,8,9]
+                case 10:
+                    val |= (ulong)span[ix + 9] << (9 * sizeof(byte) - shft);
+                    goto case 9; // Fallthru
+
+                // [0,1,2,3,4,5,6,7,8]
+                case 9:
+                    val |= (ulong)span[ix + 8] << (8 * sizeof(byte) - shft);
+                    goto case 8; // Fallthru
+
+                // [0,1,2,3,4,5,6,7]
+                case 8:
+                    ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<byte, ulong>(span);
+                    val |= cast8[ix << 3] >> shft;
                     break;
 
                 // [0,1,2,3,4,5,6]
                 case 7:
-                    val |= (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
+                    val = (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
+                    goto case 6; // Fallthru
+
+                // [0,1,2,3,4,5]
+                case 6:
                     val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
+                    goto case 5; // Fallthru
+
+                // [0,1,2,3,4]
+                case 5:
                     val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
+                    goto case 4; // Fallthru
+
+                // [0,1,2,3]
+                case 4:
+                    ReadOnlySpan<uint> cast4 = MemoryMarshal.Cast<byte, uint>(span);
+                    val |= (ulong)cast4[ix << 2] >> shft;
                     break;
 
-                // [0,1,2,3,4,5,6,7]
-                case 8:
-                    val |= (ulong)span[ix + 7] << (7 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
+                // [0,1,2]
+                case 3:
+                    val = (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
+                    goto case 2; // Fallthru
+
+                // [0,1]
+                case 2:
+                    ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
+                    val |= (ulong)cast2[ix << 1] >> shft;
                     break;
 
-                // [0,1,2,3,4,5,6,7,N]
-                default:
-                    val |= (ulong)span[ix + 8] << (8 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 7] << (7 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 6] << (6 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 5] << (5 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(byte) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(byte) - shft);
+                // [0]
+                case 1:
+                    val = (ulong)span[ix] >> shft;
                     break;
             }
 
             return val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static ulong ExtractUInt64(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(ulong), sizeof(ushort), bitOffset);
 
-            // [0]
-            var val = (ulong)span[ix] >> shft;
-
+            ulong val = 0;
             switch (len)
             {
-                // [0]
-                case 1: break;
+                // [0,1,2,3,4,5,6,7,..]
+                default:
+                    if (len <= 0) goto Error;
+                    goto case 8;
 
-                // [0,1]
-                case 2:
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(ushort) - shft);
+                // [0,1,2,3,4,5,6,7]
+                case 8:
+                    ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<ushort, ulong>(span);
+                    val = cast8[ix << 2] >> shft;
+                    val |= cast8[ix << 2 + 1] >> (sizeof(ulong) - shft);
+                    break;
+
+                // [0,1,2,3,4,5,6]
+                case 7:
+                    val = (ulong)span[ix + 6] << (6 * sizeof(ushort) - shft);
+                    goto case 6; // Fallthru
+
+                // [0,1,2,3,4,5]
+                case 6:
+                    val |= (ulong)span[ix + 5] << (5 * sizeof(ushort) - shft);
+                    goto case 5; // Fallthru
+
+                // [0,1,2,3,4]
+                case 5:
+                    val |= (ulong)span[ix + 4] << (4 * sizeof(ushort) - shft);
+                    goto case 4; // Fallthru
+
+                // [0,1,2,3]
+                case 4:
+                    ReadOnlySpan<ulong> cast4 = MemoryMarshal.Cast<ushort, ulong>(span);
+                    val |= cast4[ix << 2] >> shft;
                     break;
 
                 // [0,1,2]
                 case 3:
                     val |= (ulong)span[ix + 2] << (2 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(ushort) - shft);
+                    goto case 2; // Fallthru
+
+                // [0,1]
+                case 2:
+                    ReadOnlySpan<uint> cast2 = MemoryMarshal.Cast<ushort, uint>(span);
+                    val |= (ulong)cast2[ix << 1] >> shft;
                     break;
 
-                // [0,1,2,3]
-                case 4:
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(ushort) - shft);
-                    break;
-
-                // [0,1,2,3,N]
-                default:
-                    val |= (ulong)span[ix + 4] << (4 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 3] << (3 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(ushort) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(ushort) - shft);
+                // [0]
+                case 1:
+                    val = (ulong)span[ix] >> shft;
                     break;
             }
 
             return val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static ulong ExtractUInt64(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(ulong), sizeof(uint), bitOffset);
 
-            // [0]
-            var val = (ulong)span[ix] >> shft;
-
+            ulong val = 0;
             switch (len)
             {
-                // [0,1,2,N]
+                // [0,1,2,3,..]
                 default:
-                    val |= (ulong)span[ix + 2] << (2 * sizeof(uint) - shft);
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(uint) - shft);
+                    if (len <= 0) goto Error;
+                    goto case 4;
+
+                // [0,1,2,3]
+                case 4:
+                    ReadOnlySpan<ulong> cast4 = MemoryMarshal.Cast<uint, ulong>(span);
+                    val = cast4[ix << 1] >> shft;
+                    val |= cast4[ix << 1 + 1] >> (sizeof(ulong) - shft);
                     break;
+
+                // [0,1,2]
+                case 3:
+                    val = (ulong)span[ix + 2] << (sizeof(ulong) - shft);
+                    goto case 2; // Fallthru
 
                 // [0,1]
                 case 2:
-                    val |= (ulong)span[ix + 1] << (1 * sizeof(uint) - shft);
+                    ReadOnlySpan<ulong> cast2 = MemoryMarshal.Cast<uint, ulong>(span);
+                    val |= cast2[ix << 1] >> shft;
                     break;
 
                 // [0]
                 case 1:
+                    val = (ulong)span[ix] >> shft;
                     break;
             }
 
             return val;
+
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         public static ulong ExtractUInt64(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
-
             var len = span.Length - ix;
-            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
             byte shft = Mod(sizeof(ulong), sizeof(ulong), bitOffset);
 
+            ulong val = 0;
             switch (len)
             {
-                // [0,N]
+                // [0,1,..]
                 default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-                    break;
+                    if (len <= 0) goto Error;
+                    goto case 2;
+
+                // [0,1]
+                case 2:
+                    val = span[ix + 1] << (sizeof(ulong) - shft);
+                    goto case 1; // Fallthru
 
                 // [0]
                 case 1:
+                    val |= span[ix] >> shft;
                     break;
             }
 
-            // [0]
-            ulong val = span[ix] >> shft;
+            return val;
 
-            // [0,1]
-            if (len >= 2)
-            {
-                val |= span[ix + 1] << (sizeof(ulong) - shft);
-            }
-
-            return (byte)val;
+        Error:
+            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
 
         #endregion
