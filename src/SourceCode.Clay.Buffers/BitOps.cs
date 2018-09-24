@@ -1818,11 +1818,12 @@ namespace System
                   Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
                 Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
             
-                unsafe { return *(byte*)&condition; }
             */
 
-            // Branching is faster than unsafe (or safe union struct)
-            return (byte)(condition ? 1 : 0);
+            // TODO: Branching is faster than unsafe (or safe union struct)
+            //return (byte)(condition ? 1 : 0);
+
+            unsafe { return *(byte*)&condition; }
         }
 
         #endregion

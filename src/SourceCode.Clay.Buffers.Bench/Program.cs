@@ -13,10 +13,14 @@ namespace SourceCode.Clay.Buffers.Bench
     {
         public static void Main(string[] args)
         {
-            var bench = new SwitchBench();
+            //var bench = new SwitchBench();
             //var summary = BenchmarkRunner.Run<SwitchBench>();
             //var summary = BenchmarkRunner.Run<BoolBench>();
-            var summary = BenchmarkRunner.Run<MinBench>();
+            //var summary = BenchmarkRunner.Run<MinBench>();
+            var summary = BenchmarkRunner.Run<SpanBench>();
+
+            //SpanBench.Legacy();
+            //SpanBench.SpanCast();
         }
     }
 }
