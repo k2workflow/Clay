@@ -1689,7 +1689,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(uint value)
             => (value != 0)
-            & // && causes branch
+            && // Note: && causes branch
             (value & (value - 1)) == 0;
 
         /// <summary>
@@ -1699,7 +1699,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(ulong value)
             => (value != 0)
-            & // && causes branch
+            && // Note: && causes branch
             (value & (value - 1)) == 0;
 
         #endregion
@@ -1817,11 +1817,12 @@ namespace System
                 Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
                   Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
                 Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+            
+                unsafe { return *(byte*)&condition; }
             */
 
-            // Branching is faster
+            // Branching is faster than unsafe
             return (byte)(condition ? 1 : 0);
-            //unsafe { return *(byte*)&condition; }
         }
 
         #endregion
