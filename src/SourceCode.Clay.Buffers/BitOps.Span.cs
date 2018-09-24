@@ -377,6 +377,7 @@ namespace System
             // Need at least 1+1 bytes
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
+
             Span<byte> aligned = stackalloc byte[2];
             slice.CopyTo(aligned);
 
@@ -400,6 +401,7 @@ namespace System
             // Need at least 1+1 ushorts
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
+
             Span<ushort> aligned = stackalloc ushort[2];
             slice.CopyTo(aligned);
 
@@ -423,6 +425,7 @@ namespace System
             // Need at least 1+1 uints
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
+
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
@@ -446,6 +449,7 @@ namespace System
             // Need at least 1+1 ulongs
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
+
             Span<ulong> aligned = stackalloc ulong[2];
             slice.CopyTo(aligned);
 
@@ -497,6 +501,7 @@ namespace System
             // Need at least 2+1 bytes, so align on 4
             int len = Math.Min(span.Length - ix, 4);
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
+
             Span<byte> aligned = stackalloc byte[4];
             slice.CopyTo(aligned);
 
@@ -520,6 +525,7 @@ namespace System
             // Need at least 1+1 ushorts
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
+
             Span<ushort> aligned = stackalloc ushort[2];
             slice.CopyTo(aligned);
 
@@ -543,6 +549,7 @@ namespace System
             // Need at least 1+1 uints
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
+
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
@@ -566,6 +573,7 @@ namespace System
             // Need at least 1+1 ulongs
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
+
             Span<ulong> aligned = stackalloc ulong[2];
             slice.CopyTo(aligned);
 
@@ -617,6 +625,7 @@ namespace System
             // Need at least 4+1 bytes, so align on 8
             int len = Math.Min(span.Length - ix, 8);
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
+
             Span<byte> aligned = stackalloc byte[8];
             slice.CopyTo(aligned);
 
@@ -640,6 +649,7 @@ namespace System
             // Need at least 2+1 ushorts, so align on 4
             int len = Math.Min(span.Length - ix, 4);
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
+
             Span<ushort> aligned = stackalloc ushort[4];
             slice.CopyTo(aligned);
 
@@ -663,6 +673,7 @@ namespace System
             // Need at least 1+1 uints
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
+
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
@@ -686,6 +697,7 @@ namespace System
             // Need at least 1+1 ulongs
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
+
             Span<ulong> aligned = stackalloc ulong[2];
             slice.CopyTo(aligned);
 
@@ -737,6 +749,7 @@ namespace System
             // Need at least 8+1 bytes, so align on 16
             int len = Math.Min(span.Length - ix, 16);
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
+
             Span<byte> aligned = stackalloc byte[16];
             slice.CopyTo(aligned);
 
@@ -761,6 +774,7 @@ namespace System
             // Need at least 4+1 ushorts, so align on 8
             int len = Math.Min(span.Length - ix, 8);
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
+
             Span<ushort> aligned = stackalloc ushort[8];
             slice.CopyTo(aligned);
 
@@ -785,6 +799,7 @@ namespace System
             // Need at least 2+1 uints, so align on 4
             int len = Math.Min(span.Length - ix, 4);
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
+
             Span<uint> aligned = stackalloc uint[8];
             slice.CopyTo(aligned);
 
@@ -809,6 +824,7 @@ namespace System
             // Need at least 1+1 ulongs
             int len = Math.Min(span.Length - ix, 2);
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
+
             Span<ulong> aligned = stackalloc ulong[2];
             slice.CopyTo(aligned);
 
