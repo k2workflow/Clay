@@ -15,13 +15,12 @@ namespace SourceCode.Clay
     public static class BoolExtensions
     {
         /// <summary>
-        /// Converts a bool to a byte value without branching
-        /// Uses unsafe code.
+        /// Converts a bool to a byte value.
+        /// Returns 1 if True, else returns 0.
         /// </summary>
-        /// <param name="on">The value to convert.</param>
-        /// <returns>Returns 1 if True, else returns 0.</returns>
+        /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByte(this bool on)
+        public static byte ToByte(this bool condition)
         {
             /*
                 Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
@@ -30,10 +29,10 @@ namespace SourceCode.Clay
                   Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
                 Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
             */
-            unsafe
-            {
-                return *(byte*)&on;
-            }
+
+            // Branching is faster
+            return (byte)(condition ? 1 : 0);
+            //unsafe { return *(byte*)&condition; }
         }
     }
 }

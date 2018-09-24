@@ -1793,45 +1793,24 @@ namespace System
 
         #region Helpers
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
-            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));
-
-
         /// <summary>
-        /// Calculates the Minimum of two numbers without branching.
+        /// Calculates the mod of an offset wrt the bit lengths.
         /// </summary>
-        /// <param name="x">The first number.</param>
-        /// <param name="y">The second number.</param>
+        /// <param name="targetSize"></param>
+        /// <param name="sourceSize"></param>
+        /// <param name="bitOffset">The offset.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static int Min(int x, int y)
-        {
-            // eg, y = 8
-            // x       x^8     -(x<8)  &       8^
-            // 0000    1000    1111    1000    0000
-            // 0001    1001    1111    1001    0001
-            // 0010    1010    1111    1010    0010
-            // 0011    1011    1111    1011    0011
-            // 0100    1100    1111    1100    0100
-            // 0101    1101    1111    1101    0101
-            // 0110    1110    1111    1110    0110
-            // 0111    1111    1111    1111    0111
-            // 1000    0000    0000    0000    1000
-            // 1001    0001    0000    0000    1000
-
-            return y ^ ((x ^ y) & -ToByte(x < y));
-        }
+        internal static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
+            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));        
 
         /// <summary>
-        /// Converts a bool to a byte value without branching.
+        /// Converts a bool to a byte value.
         /// Returns 1 if True, else returns 0.
-        /// Uses unsafe code.
         /// </summary>
-        /// <param name="on">The value to convert.</param>
+        /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ToByte(bool condition)
         {
-            // TODO: Branching is faster?
             /*
                 Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
                ------- |---------:|----------:|----------:|-------:|---------:|
@@ -1839,10 +1818,10 @@ namespace System
                   Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
                 Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
             */
-            unsafe
-            {
-                return *(byte*)&condition;
-            }
+
+            // Branching is faster
+            return (byte)(condition ? 1 : 0);
+            //unsafe { return *(byte*)&condition; }
         }
 
         #endregion

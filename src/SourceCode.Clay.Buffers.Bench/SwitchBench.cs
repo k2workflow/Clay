@@ -51,7 +51,7 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingZerosSwitch(byte value)
+        private static int TrailingZerosSwitch(byte value)
         {
             var val = value;
 
@@ -62,9 +62,6 @@ namespace SourceCode.Clay.Buffers.Bench
             // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // mod 11
-
-            // TODO: For such a small range, would a switch be faster?
-            // Alternative:
 
             // Build this table by taking n = 0,1,2,4,...,512
             // [2^n % 11] = tz(n) manually counted

@@ -376,7 +376,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 bytes
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<byte> aligned = stackalloc byte[2];
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -400,7 +400,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ushorts
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ushort> aligned = stackalloc ushort[2];
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -424,7 +424,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 uints
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<uint> aligned = stackalloc uint[2];
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -448,7 +448,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ulongs
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ulong> aligned = stackalloc ulong[2];
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -500,7 +500,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 2+1 bytes, so align on 4
-            len = Min(len, 4);
+            len = Math.Min(len, 4);
             Span<byte> aligned = stackalloc byte[4];
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -524,7 +524,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ushorts
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ushort> aligned = stackalloc ushort[2];
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -548,7 +548,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 uints
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<uint> aligned = stackalloc uint[2];
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -572,7 +572,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ulongs
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ulong> aligned = stackalloc ulong[2];
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -624,7 +624,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 4+1 bytes, so align on 8
-            len = Min(len, 8);
+            len = Math.Min(len, 8);
             Span<byte> aligned = stackalloc byte[8];
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -648,7 +648,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 2+1 ushorts, so align on 4
-            len = Min(len, 4);
+            len = Math.Min(len, 4);
             Span<ushort> aligned = stackalloc ushort[4];
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -672,7 +672,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 uints
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<uint> aligned = stackalloc uint[2];
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -696,7 +696,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ulongs
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ulong> aligned = stackalloc ulong[2];
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -748,7 +748,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 8+1 bytes, so align on 16
-            len = Min(len, 16);
+            len = Math.Min(len, 16);
             Span<byte> aligned = stackalloc byte[16];
             ReadOnlySpan<byte> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -773,7 +773,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 4+1 ushorts, so align on 8
-            len = Min(len, 8);
+            len = Math.Min(len, 8);
             Span<ushort> aligned = stackalloc ushort[8];
             ReadOnlySpan<ushort> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -798,7 +798,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 2+1 uints, so align on 4
-            len = Min(len, 4);
+            len = Math.Min(len, 4);
             Span<uint> aligned = stackalloc uint[8];
             ReadOnlySpan<uint> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
@@ -823,7 +823,7 @@ namespace System
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at least 1+1 ulongs
-            len = Min(len, 2);
+            len = Math.Min(len, 2);
             Span<ulong> aligned = stackalloc ulong[2];
             ReadOnlySpan<ulong> slice = span.Slice(ix, len);
             slice.CopyTo(aligned);
