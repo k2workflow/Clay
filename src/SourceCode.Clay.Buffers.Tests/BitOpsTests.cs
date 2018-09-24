@@ -43,11 +43,20 @@ namespace SourceCode.Clay.Buffers.Tests
 
                 Assert.Equal(offset >= 8 ? false : expected, actual);
 
-                var val = BitOps.ExtractByte(span, 2 * 8);
-                Assert.Equal(n, val);
+                var val8 = BitOps.ExtractByte(span, 2 * 8);
+                Assert.Equal(n, val8);
 
-                val = BitOps.ExtractByte(span, 2 * 8 + 5);
-                Assert.Equal(n >> 5, val);
+                val8 = BitOps.ExtractByte(span, 2 * 8 + 5);
+                Assert.Equal(n >> 5, val8);
+
+                var val16 = BitOps.ExtractUInt16(span, 2 * 8);
+                Assert.Equal(n, val16);
+
+                var val32 = BitOps.ExtractUInt32(span, 2 * 8);
+                Assert.Equal(n, val32);
+
+                var val64 = BitOps.ExtractUInt64(span, 2 * 8);
+                Assert.Equal(n, val64);
             }
         }
 
@@ -82,11 +91,20 @@ namespace SourceCode.Clay.Buffers.Tests
                 actual = BitOps.ExtractBit(span, (byte)(16 * 2 + offset));
                 Assert.Equal(offset >= 16 ? false : expected, actual);
 
-                var val = BitOps.ExtractUInt16(span, 2 * 16);
-                Assert.Equal(n, val);
+                var val16 = BitOps.ExtractUInt16(span, 2 * 16);
+                Assert.Equal(n, val16);
 
-                val = BitOps.ExtractUInt16(span, 2 * 16 + 9);
-                Assert.Equal(n >> 9, val);
+                val16 = BitOps.ExtractUInt16(span, 2 * 16 + 9);
+                Assert.Equal(n >> 9, val16);
+
+                var val8 = BitOps.ExtractByte(span, 2 * 16);
+                Assert.Equal((byte)n, val8);
+
+                var val32 = BitOps.ExtractUInt32(span, 2 * 16);
+                Assert.Equal(n, val32);
+
+                var val64 = BitOps.ExtractUInt64(span, 2 * 16);
+                Assert.Equal(n, val64);
             }
         }
 
@@ -123,11 +141,17 @@ namespace SourceCode.Clay.Buffers.Tests
                 actual = BitOps.ExtractBit(span, (byte)(32 * 2 + offset));
                 Assert.Equal(offset >= 32 ? false : expected, actual);
 
-                var val = BitOps.ExtractUInt32(span, 2 * 32);
-                Assert.Equal(n, val);
+                var val32 = BitOps.ExtractUInt32(span, 2 * 32);
+                Assert.Equal(n, val32);
 
-                val = BitOps.ExtractUInt32(span, 2 * 32 + 17);
-                Assert.Equal(n >> 17, val);
+                val32 = BitOps.ExtractUInt32(span, 2 * 32 + 17);
+                Assert.Equal(n >> 17, val32);
+
+                var val16 = BitOps.ExtractUInt16(span, 2 * 32);
+                Assert.Equal((ushort)n, val16);
+
+                var val64 = BitOps.ExtractUInt64(span, 2 * 32);
+                Assert.Equal(n, val64);
             }
         }
 
@@ -166,11 +190,20 @@ namespace SourceCode.Clay.Buffers.Tests
                 actual = BitOps.ExtractBit(span, (byte)(64 * 2 + offset));
                 Assert.Equal(offset >= 64 ? false : expected, actual);
 
-                var val = BitOps.ExtractUInt64(span, 2 * 64);
-                Assert.Equal(n, val);
+                var val64 = BitOps.ExtractUInt64(span, 2 * 64);
+                Assert.Equal(n, val64);
 
-                val = BitOps.ExtractUInt32(span, 2 * 64 + 33);
-                Assert.Equal(n >> 33, val);
+                val64 = BitOps.ExtractUInt64(span, 2 * 64 + 33);
+                Assert.Equal(n >> 33, val64);
+
+                var val8 = BitOps.ExtractByte(span, 2 * 64);
+                Assert.Equal((byte)n, val8);
+
+                var val16 = BitOps.ExtractUInt16(span, 2 * 64);
+                Assert.Equal((ushort)n, val16);
+
+                var val32 = BitOps.ExtractUInt32(span, 2 * 64);
+                Assert.Equal((uint)n, val32);
             }
         }
 
