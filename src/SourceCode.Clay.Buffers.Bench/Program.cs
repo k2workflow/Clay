@@ -20,7 +20,8 @@ namespace SourceCode.Clay.Buffers.Bench
             var summary = BenchmarkRunner.Run<SpanBench>();
 
             //SpanBench.Legacy();
-            //SpanBench.SpanCast();
+            //SpanBench.Cast();
+            //SpanBench.Ptr();
         }
     }
 }

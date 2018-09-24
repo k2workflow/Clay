@@ -12,12 +12,25 @@ using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
-    /*
+    /* 
+       If using AggressiveInlining:
+
          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
         ------- |---------:|----------:|----------:|-------:|---------:|
-         Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
-           Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
-         Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+         Actual | 14.79 ns | 0.2894 ns | 0.5576 ns |   1.01 |     0.05 |
+           Cast | 14.26 ns | 0.2803 ns | 0.4606 ns |   0.97 |     0.04 |
+            Ptr | 15.07 ns | 0.2962 ns | 0.2909 ns |   1.02 |     0.04 |
+         Unroll | 14.72 ns | 0.2925 ns | 0.4378 ns |   1.00 |     0.00 |
+
+       Else:
+
+         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+        ------- |---------:|----------:|----------:|-------:|---------:|
+         Actual | 14.86 ns | 0.2965 ns | 0.5641 ns |   1.01 |     0.05 |
+           Cast | 25.64 ns | 0.5088 ns | 0.9303 ns |   1.75 |     0.08 |
+            Ptr | 24.64 ns | 0.4696 ns | 0.5025 ns |   1.68 |     0.06 |
+         Unroll | 14.70 ns | 0.2908 ns | 0.4779 ns |   1.00 |     0.00 |
+
     */
 
     //[MemoryDiagnoser]
@@ -25,22 +38,65 @@ namespace SourceCode.Clay.Buffers.Bench
     {
         private const uint _iterations = 100;
         private const uint N = ushort.MaxValue;
-        private const long f = _iterations / long.MaxValue;
 
+        // Whatever is being used in the actual code
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong SpanCast()
+        public static ulong Actual()
         {
             var sum = 0ul;
 
             for (var i = 0; i < _iterations; i++)
             {
-                var v = (ulong)(i * f);
-                Span<ulong> span = stackalloc ulong[4] { 0, v, 0, 0 };
-                var bytes = MemoryMarshal.Cast<ulong, byte>(span);
-
                 for (var n = 0; n <= N; n++)
                 {
-                    sum = unchecked(sum + BitOps.ExtractUInt64(bytes, 64 * 2));
+                    var v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var bytes = BitConverter.GetBytes(v);
+
+                    var u64 = BitOps.ExtractUInt64(bytes, n & 63);
+
+                    sum = unchecked(sum + u64);
+                }
+            }
+
+            return sum;
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Cast()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    var v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var bytes = BitConverter.GetBytes(v);
+
+                    var u64 = ExtractUInt64_Cast(bytes, n & 63);
+
+                    sum = unchecked(sum + u64);
+                }
+            }
+
+            return sum;
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Ptr()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    var v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var bytes = BitConverter.GetBytes(v);
+
+                    var u64 = ExtractUInt64_Ptr(bytes, n & 63);
+
+                    sum = unchecked(sum + u64);
                 }
             }
 
@@ -48,129 +104,100 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Legacy()
+        public static ulong Unroll()
         {
             var sum = 0ul;
 
             for (var i = 0; i < _iterations; i++)
             {
-                var v = (ulong)(i * f);
-                Span<ulong> span = stackalloc ulong[4] { 0, v, 0, 0 };
-                var bytes = MemoryMarshal.Cast<ulong, byte>(span);
-
                 for (var n = 0; n <= N; n++)
                 {
-                    sum = unchecked(sum + ExtractUInt64(bytes, 64 * 2));
+                    var v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var bytes = BitConverter.GetBytes(v);
+
+                    var u64 = ExtractUInt64_Unroll(bytes, n & 63);
+
+                    sum = unchecked(sum + u64);
                 }
             }
 
             return sum;
         }
 
-        private static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong ExtractUInt64_Cast(ReadOnlySpan<byte> span, int bitOffset)
+        {
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            // Need at least 8+1 bytes, so align on 16
+            int len = Math.Min(span.Length - ix, 16);
+            Span<byte> aligned = stackalloc byte[16];
+            span.Slice(ix, len).CopyTo(aligned);
+
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<byte, ulong>(aligned);
+
+            int shft = bitOffset & 7; // mod 8
+            ulong val = cast[0] >> shft;
+            val |= cast[1] << (64 - shft);
+
+            return val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong ExtractUInt64_Ptr(ReadOnlySpan<byte> span, int bitOffset)
+        {
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            // Need at least 8+1 bytes, so align on 16
+            int len = Math.Min(span.Length - ix, 16);
+            Span<byte> aligned = stackalloc byte[16];
+            span.Slice(ix, len).CopyTo(aligned);
+
+            unsafe
+            {
+                fixed (byte* ptr = &MemoryMarshal.GetReference(aligned))
+                {
+                    var cast = (ulong*)ptr;
+
+                    int shft = bitOffset & 7; // mod 8
+                    ulong val = cast[0] >> shft;
+                    val |= cast[1] << (64 - shft);
+
+                    return val;
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
             var len = span.Length - ix;
-            int shft = bitOffset & (8 - 1); // mod 8
+            int shft = bitOffset & 7; // mod 8
 
             ulong val = 0;
             switch (len)
             {
-                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,..]
                 default:
-                    if (len <= 0) goto Error;
-                    goto case 16;
+                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    goto case 9;
 
-                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-                case 16:
-                    ReadOnlySpan<ulong> cast16 = MemoryMarshal.Cast<byte, ulong>(span);
-                    val = cast16[ix >> 4] >> shft;
-                    val |= cast16[ix >> 4 + 1] >> (15 * 8 - shft);
-                    break;
+                // Need at least 8+1 bytes
+                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
 
-                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-                case 15:
-                    val = (ulong)span[ix + 14] << (14 * 8 - shft);
-                    goto case 14; // Fallthru
+                case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
+                case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
+                case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
+                case 5: val |= (ulong)span[ix + 4] << (4 * 8 - shft); goto case 4;
 
-                // [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
-                case 14:
-                    val |= (ulong)span[ix + 13] << (13 * 8 - shft);
-                    goto case 13; // Fallthru
-
-                // [0,1,2,3,4,5,6,7,8,9,10,11,12]
-                case 13:
-                    val |= (ulong)span[ix + 12] << (12 * 8 - shft);
-                    goto case 12; // Fallthru
-
-                // [0,1,2,3,4,5,6,7,8,9,10,11]
-                case 12:
-                    val |= (ulong)span[ix + 11] << (11 * 8 - shft);
-                    goto case 11; // Fallthru
-
-                // [0,1,2,3,4,5,6,7,8,9,10]
-                case 11:
-                    val |= (ulong)span[ix + 10] << (10 * 8 - shft);
-                    goto case 10; // Fallthru
-
-                // [0,1,2,3,4,5,6,7,8,9]
-                case 10:
-                    val |= (ulong)span[ix + 9] << (9 * 8 - shft);
-                    goto case 9; // Fallthru
-
-                // [0,1,2,3,4,5,6,7,8]
-                case 9:
-                    val |= (ulong)span[ix + 8] << (8 * 8 - shft);
-                    goto case 8; // Fallthru
-
-                // [0,1,2,3,4,5,6,7]
-                case 8:
-                    ReadOnlySpan<ulong> cast8 = MemoryMarshal.Cast<byte, ulong>(span);
-                    val |= cast8[ix >> 3] >> shft;
-                    break;
-
-                // [0,1,2,3,4,5,6]
-                case 7:
-                    val = (ulong)span[ix + 6] << (6 * 8 - shft);
-                    goto case 6; // Fallthru
-
-                // [0,1,2,3,4,5]
-                case 6:
-                    val |= (ulong)span[ix + 5] << (5 * 8 - shft);
-                    goto case 5; // Fallthru
-
-                // [0,1,2,3,4]
-                case 5:
-                    val |= (ulong)span[ix + 4] << (4 * 8 - shft);
-                    goto case 4; // Fallthru
-
-                // [0,1,2,3]
-                case 4:
-                    ReadOnlySpan<uint> cast4 = MemoryMarshal.Cast<byte, uint>(span);
-                    val |= (ulong)cast4[ix >> 2] >> shft;
-                    break;
-
-                // [0,1,2]
-                case 3:
-                    val = (ulong)span[ix + 2] << (2 * 8 - shft);
-                    goto case 2; // Fallthru
-
-                // [0,1]
-                case 2:
-                    ReadOnlySpan<ushort> cast2 = MemoryMarshal.Cast<byte, ushort>(span);
-                    val |= (ulong)cast2[ix >> 1] >> shft;
-                    break;
-
-                // [0]
-                case 1:
-                    val = (ulong)span[ix] >> shft;
-                    break;
+                case 4: val |= (ulong)span[ix + 3] << (3 * 8 - shft); goto case 3;
+                case 3: val |= (ulong)span[ix + 2] << (2 * 8 - shft); goto case 2;
+                case 2: val |= (ulong)span[ix + 1] << (1 * 8 - shft); goto case 1;
+                case 1: val |= (ulong)span[ix + 0] >> shft;
+                    return val;
             }
-
-            return val;
-
-            Error:
-            throw new ArgumentOutOfRangeException(nameof(bitOffset));
         }
     }
 }

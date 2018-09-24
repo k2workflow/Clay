@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace System
@@ -376,12 +377,11 @@ namespace System
 
             // Need at least 1+1 bytes
             int len = Math.Min(span.Length - ix, 2);
-            ReadOnlySpan<byte> slice = span.Slice(ix, len);
-
             Span<byte> aligned = stackalloc byte[2];
-            slice.CopyTo(aligned);
+            span.Slice(ix, len).CopyTo(aligned);
 
-            Span<ushort> cast = MemoryMarshal.Cast<byte, ushort>(aligned);
+            ReadOnlySpan<ushort> cast = MemoryMarshal.Cast<byte, ushort>(aligned);
+
             int shft = bitOffset & 7; // mod 8
             uint val = (uint)cast[0] >> shft;
 
@@ -405,7 +405,8 @@ namespace System
             Span<ushort> aligned = stackalloc ushort[2];
             slice.CopyTo(aligned);
 
-            Span<uint> cast = MemoryMarshal.Cast<ushort, uint>(aligned);
+            ReadOnlySpan<uint> cast = MemoryMarshal.Cast<ushort, uint>(aligned);
+
             int shft = bitOffset & 15; // mod 16
             uint val = cast[0] >> shft;
 
@@ -429,7 +430,8 @@ namespace System
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+
             int shft = bitOffset & 31; // mod 32
             ulong val = cast[0] >> shft;
 
@@ -500,12 +502,11 @@ namespace System
 
             // Need at least 2+1 bytes, so align on 4
             int len = Math.Min(span.Length - ix, 4);
-            ReadOnlySpan<byte> slice = span.Slice(ix, len);
-
             Span<byte> aligned = stackalloc byte[4];
-            slice.CopyTo(aligned);
+            span.Slice(ix, len).CopyTo(aligned);
 
-            Span<uint> cast = MemoryMarshal.Cast<byte, uint>(aligned);
+            ReadOnlySpan<uint> cast = MemoryMarshal.Cast<byte, uint>(aligned);
+
             int shft = bitOffset & 7; // mod 8
             uint val = cast[0] >> shft;
 
@@ -529,7 +530,8 @@ namespace System
             Span<ushort> aligned = stackalloc ushort[2];
             slice.CopyTo(aligned);
 
-            Span<uint> cast = MemoryMarshal.Cast<ushort, uint>(aligned);
+            ReadOnlySpan<uint> cast = MemoryMarshal.Cast<ushort, uint>(aligned);
+
             int shft = bitOffset & 15; // mod 16
             uint val = cast[0] >> shft;
 
@@ -553,7 +555,8 @@ namespace System
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+
             int shft = bitOffset & 31; // mod 32
             ulong val = cast[0] >> shft;
 
@@ -624,12 +627,11 @@ namespace System
 
             // Need at least 4+1 bytes, so align on 8
             int len = Math.Min(span.Length - ix, 8);
-            ReadOnlySpan<byte> slice = span.Slice(ix, len);
-
             Span<byte> aligned = stackalloc byte[8];
-            slice.CopyTo(aligned);
+            span.Slice(ix, len).CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<byte, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<byte, ulong>(aligned);
+
             int shft = bitOffset & 7; // mod 8
             ulong val = cast[0] >> shft;
 
@@ -653,7 +655,8 @@ namespace System
             Span<ushort> aligned = stackalloc ushort[4];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<ushort, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<ushort, ulong>(aligned);
+
             int shft = bitOffset & 15; // mod 16
             ulong val = cast[0] >> shft;
 
@@ -677,7 +680,8 @@ namespace System
             Span<uint> aligned = stackalloc uint[2];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+
             int shft = bitOffset & 31; // mod 32
             ulong val = cast[0] >> shft;
 
@@ -744,21 +748,46 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 8+1 bytes, so align on 16
-            int len = Math.Min(span.Length - ix, 16);
-            ReadOnlySpan<byte> slice = span.Slice(ix, len);
-
-            Span<byte> aligned = stackalloc byte[16];
-            slice.CopyTo(aligned);
-
-            Span<ulong> cast = MemoryMarshal.Cast<byte, ulong>(aligned);
+            var len = span.Length - ix;
             int shft = bitOffset & 7; // mod 8
-            ulong val = cast[0] >> shft;
-            val |= cast[1] << (64 - shft);
 
-            return val;
+            ulong val = 0;
+            switch (len)
+            {
+                default:
+                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    goto case 9;
+
+                // Need at least 8+1 bytes
+                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
+
+                case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
+                case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
+                case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
+                case 5: val |= (ulong)span[ix + 4] << (4 * 8 - shft); goto case 4;
+
+                case 4: val |= (ulong)span[ix + 3] << (3 * 8 - shft); goto case 3;
+                case 3: val |= (ulong)span[ix + 2] << (2 * 8 - shft); goto case 2;
+                case 2: val |= (ulong)span[ix + 1] << (1 * 8 - shft); goto case 1;
+                case 1: val |= (ulong)span[ix + 0] >> shft;
+                    return val;
+            }
+
+            //int ix = bitOffset >> 3; // div 8
+            //if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            //// Need at least 8+1 bytes, so align on 16
+            //int len = Math.Min(span.Length - ix, 16);
+            //Span<byte> aligned = stackalloc byte[16];
+            //span.Slice(ix, len).CopyTo(aligned);
+
+            //ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<byte, ulong>(aligned);
+
+            //int shft = bitOffset & 7; // mod 8
+            //ulong val = cast[0] >> shft;
+            //val |= cast[1] << (64 - shft);
+
+            //return val;
         }
 
         /// <summary>
@@ -778,7 +807,8 @@ namespace System
             Span<ushort> aligned = stackalloc ushort[8];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<ushort, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<ushort, ulong>(aligned);
+
             int shft = bitOffset & 15; // mod 16
             ulong val = cast[0] >> shft;
             val |= cast[1] << (64 - shft);
@@ -803,7 +833,8 @@ namespace System
             Span<uint> aligned = stackalloc uint[8];
             slice.CopyTo(aligned);
 
-            Span<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+            ReadOnlySpan<ulong> cast = MemoryMarshal.Cast<uint, ulong>(aligned);
+
             int shft = bitOffset & 31; // mod 32
             ulong val = cast[0] >> shft;
             val |= cast[1] << (64 - shft);
