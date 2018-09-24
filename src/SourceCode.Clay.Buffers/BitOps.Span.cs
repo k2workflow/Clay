@@ -370,12 +370,13 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(byte), bitOffset, sizeof(byte));
+            byte iy = Mod(sizeof(byte), sizeof(byte), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
 
-            // TODO: Benchmark vs True(condition)
+            // TODO: Benchmark vs BoolToByte
+            
             // 1
             if (ix + 1 < span.Length)
             {
@@ -390,7 +391,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(byte), bitOffset, sizeof(ushort));
+            byte iy = Mod(sizeof(byte), sizeof(ushort), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -409,7 +410,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(byte), bitOffset, sizeof(uint));
+            byte iy = Mod(sizeof(byte), sizeof(uint), bitOffset);
 
             // 0
             uint val = span[ix] >> iy;
@@ -428,7 +429,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(byte), bitOffset, sizeof(ulong));
+            byte iy = Mod(sizeof(byte), sizeof(ulong), bitOffset);
 
             // 0
             ulong val = span[ix] >> iy;
@@ -475,7 +476,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ushort), bitOffset, sizeof(byte));
+            byte iy = Mod(sizeof(ushort), sizeof(byte), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -505,7 +506,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ushort), bitOffset, sizeof(ushort));
+            byte iy = Mod(sizeof(ushort), sizeof(ushort), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -524,7 +525,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ushort), bitOffset, sizeof(uint));
+            byte iy = Mod(sizeof(ushort), sizeof(uint), bitOffset);
 
             // 0
             uint val = span[ix] >> iy;
@@ -543,7 +544,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ushort), bitOffset, sizeof(ulong));
+            byte iy = Mod(sizeof(ushort), sizeof(ulong), bitOffset);
 
             // 0
             ulong val = span[ix] >> iy;
@@ -590,7 +591,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(uint), bitOffset, sizeof(byte));
+            byte iy = Mod(sizeof(uint), sizeof(byte), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -635,7 +636,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(uint), bitOffset, sizeof(ushort));
+            byte iy = Mod(sizeof(uint), sizeof(ushort), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -665,7 +666,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(uint), bitOffset, sizeof(uint));
+            byte iy = Mod(sizeof(uint), sizeof(uint), bitOffset);
 
             // 0
             uint val = span[ix] >> iy;
@@ -684,7 +685,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(uint), bitOffset, sizeof(ulong));
+            byte iy = Mod(sizeof(uint), sizeof(ulong), bitOffset);
 
             // 0
             var val = (uint)span[ix] >> iy;
@@ -731,7 +732,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ulong), bitOffset, sizeof(byte));
+            byte iy = Mod(sizeof(ulong), sizeof(byte), bitOffset);
 
             // 0
             var val = (ulong)span[ix] >> iy;
@@ -818,7 +819,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ulong), bitOffset, sizeof(ushort));
+            byte iy = Mod(sizeof(ulong), sizeof(ushort), bitOffset);
 
             // 0
             var val = (ulong)span[ix] >> iy;
@@ -863,7 +864,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ulong), bitOffset, sizeof(uint));
+            byte iy = Mod(sizeof(ulong), sizeof(uint), bitOffset);
 
             // 0
             var val = (ulong)span[ix] >> iy;
@@ -893,7 +894,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            byte iy = Mod(sizeof(ulong), bitOffset, sizeof(ulong));
+            byte iy = Mod(sizeof(ulong), sizeof(ulong), bitOffset);
 
             // 0
             ulong val = span[ix] >> iy;

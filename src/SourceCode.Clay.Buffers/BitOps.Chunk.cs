@@ -10,19 +10,15 @@ namespace System
 
         public static byte ExtractByte(ushort value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), bitOffset, sizeof(ushort));
+            byte shft = Mod(sizeof(byte), sizeof(ushort), bitOffset);
 
             int val = value >> shft;
             return (byte)val;
         }
 
         public static byte ExtractByte(uint value, int bitOffset)
-            => ExtractByteImpl(value, bitOffset);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ExtractByteImpl(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), bitOffset, sizeof(uint));
+            byte shft = Mod(sizeof(byte), sizeof(uint), bitOffset);
 
             uint val = value >> shft;
             return (byte)val;
@@ -30,7 +26,7 @@ namespace System
 
         public static byte ExtractByte(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(byte), bitOffset, sizeof(ulong));
+            byte shft = Mod(sizeof(byte), sizeof(ulong), bitOffset);
 
             ulong val = value >> shft;
             return (byte)val;
@@ -57,7 +53,7 @@ namespace System
             // insert =      100 0011 1
 
             // eg 27->3, int.Max -> 7
-            byte shft = Mod(valueSize, bitOffset, sizeof(byte));
+            byte shft = Mod(valueSize, sizeof(byte), bitOffset);
             var ins = (uint)(insert << shft); //                 0000_0 | 100_0 011_1 | 000
 
             //                                                   15  12 | 11  8 7   3 |   0
@@ -74,7 +70,7 @@ namespace System
 
         public static ulong InsertByte(ulong value, int bitOffset, byte insert)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(ulong));
+            byte shft = Mod(sizeof(ulong), sizeof(ulong), bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertByteMask, shft);
@@ -93,7 +89,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(uint value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ushort), bitOffset, sizeof(uint));
+            byte shft = Mod(sizeof(ushort), sizeof(uint), bitOffset);
 
             uint val = value >> shft;
             return (ushort)val;
@@ -101,7 +97,7 @@ namespace System
 
         public static ushort ExtractUInt16(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(ushort), bitOffset, sizeof(ulong));
+            byte shft = Mod(sizeof(ushort), sizeof(ulong), bitOffset);
 
             ulong val = value >> shft;
             return (ushort)val;
@@ -116,7 +112,7 @@ namespace System
 
         public static uint InsertUInt16(uint value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(sizeof(uint), bitOffset, sizeof(ushort));
+            byte shft = Mod(sizeof(uint), sizeof(ushort), bitOffset);
             var ins = (uint)(insert << shft);
 
             uint mask = RotateLeft(InsertUInt16Mask, shft);
@@ -127,7 +123,7 @@ namespace System
 
         public static ulong InsertUInt16(ulong value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(ushort));
+            byte shft = Mod(sizeof(ulong), sizeof(ushort), bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertUInt16Mask, shft);
@@ -142,7 +138,7 @@ namespace System
 
         public static uint ExtractUInt32(ulong value, int bitOffset)
         {
-            byte shft = Mod(sizeof(uint), bitOffset, sizeof(ulong));
+            byte shft = Mod(sizeof(uint), sizeof(ulong), bitOffset);
 
             ulong val = value >> shft;
             return (uint)val;
@@ -157,7 +153,7 @@ namespace System
 
         public static ulong InsertUInt32(ulong value, int bitOffset, uint insert)
         {
-            byte shft = Mod(sizeof(ulong), bitOffset, sizeof(uint));
+            byte shft = Mod(sizeof(ulong), sizeof(uint), bitOffset);
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft(InsertUInt32Mask, shft);
@@ -171,7 +167,7 @@ namespace System
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte Mod(byte targetSize, int bitOffset, byte sourceSize)
+        private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
             => (byte)(unchecked(bitOffset + sourceSize) & (targetSize - 1));
 
         #endregion
