@@ -14,13 +14,13 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<byte> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        public static bool ExtractBit(ReadOnlySpan<byte> span, int bitOffset)
         {
-            int ix = offset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset)); // TODO: Perf; do we want these guards?
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
 
-            var val = ExtractBit(span[ix], offset);
+            var val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -29,13 +29,13 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<ushort> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        public static bool ExtractBit(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            int ix = offset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            int ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], offset);
+            var val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -44,13 +44,13 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<uint> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        public static bool ExtractBit(ReadOnlySpan<uint> span, int bitOffset)
         {
-            int ix = offset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            int ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], offset);
+            var val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -59,13 +59,13 @@ namespace System
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to read.</param>
-        public static bool ExtractBit(ReadOnlySpan<ulong> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        public static bool ExtractBit(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            int ix = offset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            int ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], offset);
+            var val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -78,16 +78,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
-        public static bool WriteBit(Span<byte> span, int offset, bool on)
+        public static bool WriteBit(Span<byte> span, int bitOffset, bool on)
         {
-            var ix = offset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var wrt = WriteBit(ref val, offset, on);
+            var wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -96,16 +96,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
-        public static bool WriteBit(Span<ushort> span, int offset, bool on)
+        public static bool WriteBit(Span<ushort> span, int bitOffset, bool on)
         {
-            var ix = offset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var wrt = WriteBit(ref val, offset, on);
+            var wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -114,16 +114,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
-        public static bool WriteBit(Span<uint> span, int offset, bool on)
+        public static bool WriteBit(Span<uint> span, int bitOffset, bool on)
         {
-            var ix = offset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var wrt = WriteBit(ref val, offset, on);
+            var wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -132,16 +132,16 @@ namespace System
         /// Executes without branching.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
-        public static bool WriteBit(Span<ulong> span, int offset, bool on)
+        public static bool WriteBit(Span<ulong> span, int bitOffset, bool on)
         {
-            var ix = offset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var wrt = WriteBit(ref val, offset, on);
+            var wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -154,15 +154,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<byte> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<byte> span, int bitOffset)
         {
-            var ix = offset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var btr =  ClearBit(ref val, offset);
+            var btr =  ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -171,15 +171,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<ushort> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<ushort> span, int bitOffset)
         {
-            var ix = offset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var btr = ClearBit(ref val, offset);
+            var btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -188,15 +188,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<uint> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<uint> span, int bitOffset)
         {
-            var ix = offset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var btr = ClearBit(ref val, offset);
+            var btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -205,15 +205,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to clear.</param>
-        public static bool ClearBit(Span<ulong> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
+        public static bool ClearBit(Span<ulong> span, int bitOffset)
         {
-            var ix = offset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var btr = ClearBit(ref val, offset);
+            var btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -226,15 +226,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<byte> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
+        public static bool InsertBit(Span<byte> span, int bitOffset)
         {
-            var ix = offset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var bts = InsertBit(ref val, offset);
+            var bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -243,15 +243,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<ushort> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
+        public static bool InsertBit(Span<ushort> span, int bitOffset)
         {
-            var ix = offset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var bts = InsertBit(ref val, offset);
+            var bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -260,15 +260,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<uint> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
+        public static bool InsertBit(Span<uint> span, int bitOffset)
         {
-            var ix = offset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var bts = InsertBit(ref val, offset);
+            var bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -277,15 +277,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to write.</param>
-        public static bool InsertBit(Span<ulong> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to write.</param>
+        public static bool InsertBit(Span<ulong> span, int bitOffset)
         {
-            var ix = offset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var bts = InsertBit(ref val, offset);
+            var bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -298,15 +298,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<byte> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<byte> span, int bitOffset)
         {
-            var ix = offset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var btc = ComplementBit(ref val, offset);
+            var btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -315,15 +315,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<ushort> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<ushort> span, int bitOffset)
         {
-            var ix = offset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 4; // div 16
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var btc = ComplementBit(ref val, offset);
+            var btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -332,15 +332,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<uint> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<uint> span, int bitOffset)
         {
-            var ix = offset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 5; // div 32
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var btc = ComplementBit(ref val, offset);
+            var btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -349,15 +349,15 @@ namespace System
         /// Similar in behavior to the x86 instruction BTC.
         /// </summary>
         /// <param name="span">The mask.</param>
-        /// <param name="offset">The ordinal position of the bit to complement.</param>
-        public static bool ComplementBit(Span<ulong> span, int offset)
+        /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
+        public static bool ComplementBit(Span<ulong> span, int bitOffset)
         {
-            var ix = offset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(offset));
+            var ix = bitOffset >> 6; // div 64
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var btc = ComplementBit(ref val, offset);
+            var btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -427,7 +427,8 @@ namespace System
         public static byte ExtractByte(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            var foo = span.Length - ix - 1;
+            if (foo <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             byte iy = Mod(sizeof(byte), sizeof(ulong), bitOffset);
 
@@ -435,7 +436,7 @@ namespace System
             ulong val = span[ix] >> iy;
 
             // 1
-            if (ix + 1 < span.Length)
+            if (foo > 0)
             {
                 val |= span[ix + 1] << (sizeof(ulong) - iy);
             }
