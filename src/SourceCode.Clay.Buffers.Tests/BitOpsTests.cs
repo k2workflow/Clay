@@ -42,6 +42,12 @@ namespace SourceCode.Clay.Buffers.Tests
                 actual = BitOps.ExtractBit(span, (byte)(8 * 2 + offset));
 
                 Assert.Equal(offset >= 8 ? false : expected, actual);
+
+                var val = BitOps.ExtractByte(span, 2 * 8);
+                Assert.Equal(n, val);
+
+                val = BitOps.ExtractByte(span, 2 * 8 + 5);
+                Assert.Equal(n >> 5, val);
             }
         }
 
@@ -68,12 +74,19 @@ namespace SourceCode.Clay.Buffers.Tests
             actual = BitOps.ExtractBit(n, offset - 16 * 2);
             Assert.Equal(expected, actual);
 
-            // Spanif (offset > 0)
+            // Span
+            if (offset > 0)
             {
                 Span<ushort> span = stackalloc ushort[4]; span[2] = n;
 
                 actual = BitOps.ExtractBit(span, (byte)(16 * 2 + offset));
                 Assert.Equal(offset >= 16 ? false : expected, actual);
+
+                var val = BitOps.ExtractUInt16(span, 2 * 16);
+                Assert.Equal(n, val);
+
+                val = BitOps.ExtractUInt16(span, 2 * 16 + 9);
+                Assert.Equal(n >> 9, val);
             }
         }
 
@@ -102,12 +115,19 @@ namespace SourceCode.Clay.Buffers.Tests
             actual = BitOps.ExtractBit(n, offset - 32 * 2);
             Assert.Equal(expected, actual);
 
-            // Spanif (offset > 0)
+            // Span
+            if (offset > 0)
             {
                 Span<uint> span = stackalloc uint[4]; span[2] = n;
 
                 actual = BitOps.ExtractBit(span, (byte)(32 * 2 + offset));
                 Assert.Equal(offset >= 32 ? false : expected, actual);
+
+                var val = BitOps.ExtractUInt32(span, 2 * 32);
+                Assert.Equal(n, val);
+
+                val = BitOps.ExtractUInt32(span, 2 * 32 + 17);
+                Assert.Equal(n >> 17, val);
             }
         }
 
@@ -138,12 +158,19 @@ namespace SourceCode.Clay.Buffers.Tests
             actual = BitOps.ExtractBit(n, offset - 64 * 2);
             Assert.Equal(expected, actual);
 
-            // Spanif (offset > 0)
+            // Span
+            if (offset > 0)
             {
                 Span<ulong> span = stackalloc ulong[4]; span[2] = n;
 
                 actual = BitOps.ExtractBit(span, (byte)(64 * 2 + offset));
                 Assert.Equal(offset >= 64 ? false : expected, actual);
+
+                var val = BitOps.ExtractUInt64(span, 2 * 64);
+                Assert.Equal(n, val);
+
+                val = BitOps.ExtractUInt32(span, 2 * 64 + 33);
+                Assert.Equal(n >> 33, val);
             }
         }
 

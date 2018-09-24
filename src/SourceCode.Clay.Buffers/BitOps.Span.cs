@@ -380,9 +380,9 @@ namespace System
             Span<byte> aligned = stackalloc byte[2];
             slice.CopyTo(aligned);
 
-            Span<uint> cast = MemoryMarshal.Cast<byte, uint>(aligned);
+            Span<ushort> cast = MemoryMarshal.Cast<byte, ushort>(aligned);
             int shft = bitOffset & 7; // mod 8
-            uint val = cast[0] >> shft;
+            uint val = (uint)cast[0] >> shft;
 
             return (byte)val;
         }
