@@ -1809,7 +1809,7 @@ namespace System
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByte(bool condition)
+        internal static byte ToByte(bool condition)
         {
             /*
                 Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
@@ -1821,7 +1821,7 @@ namespace System
                 unsafe { return *(byte*)&condition; }
             */
 
-            // Branching is faster than unsafe
+            // Branching is faster than unsafe (or safe union struct)
             return (byte)(condition ? 1 : 0);
         }
 
