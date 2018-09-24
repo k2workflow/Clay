@@ -6,7 +6,6 @@
 #endregion
 
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
@@ -17,37 +16,24 @@ namespace SourceCode.Clay
     {
         /// <summary>
         /// Converts a bool to a byte value without branching
-        /// Uses safe code.
-        /// </summary>
-        /// <param name="on">The value to convert.</param>
-        /// <returns>Returns 1 if True, else returns 0.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByte(this bool on)
-            => (new BoolToByte { Bool = on }).Byte;
-
-        /// <summary>
-        /// Converts a bool to a byte value without branching
         /// Uses unsafe code.
         /// </summary>
         /// <param name="on">The value to convert.</param>
         /// <returns>Returns 1 if True, else returns 0.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByteUnsafe(this bool on)
+        public static byte ToByte(this bool on)
         {
+            /*
+                Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+               ------- |---------:|----------:|----------:|-------:|---------:|
+                Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
+                  Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
+                Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+            */
             unsafe
             {
                 return *(byte*)&on;
             }
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 1)]
-        private struct BoolToByte
-        {
-            [FieldOffset(0)]
-            public bool Bool;
-
-            [FieldOffset(0)]
-            public readonly byte Byte;
         }
     }
 }

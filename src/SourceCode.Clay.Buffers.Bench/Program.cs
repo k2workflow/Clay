@@ -14,7 +14,8 @@ namespace SourceCode.Clay.Buffers.Bench
         public static void Main(string[] args)
         {
             var bench = new SwitchBench();
-            var summary = BenchmarkRunner.Run<SwitchBench>();
+            //var summary = BenchmarkRunner.Run<SwitchBench>();
+            var summary = BenchmarkRunner.Run<BoolBench>();
         }
     }
 }

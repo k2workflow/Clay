@@ -16,9 +16,6 @@ namespace SourceCode.Clay.Tests
         {
             Assert.Equal(1, true.ToByte());
             Assert.Equal(0, false.ToByte());
-
-            Assert.Equal(1, true.ToByteUnsafe());
-            Assert.Equal(0, false.ToByteUnsafe());
         }
     }
 }

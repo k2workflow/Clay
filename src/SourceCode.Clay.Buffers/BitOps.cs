@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // Utilize when/if non-Experimental:
 //using System.Runtime.Intrinsics;
@@ -105,7 +104,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -126,7 +125,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -146,7 +145,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -166,7 +165,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte.True(on); // true ? 1 : 0
+            ulong onn = ToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -191,7 +190,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -215,7 +214,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -238,7 +237,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = BoolToByte.True(on); // true ? 1 : 0
+            uint onn = ToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -261,7 +260,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = BoolToByte.True(on); // true ? 1 : 0
+            ulong onn = ToByte(on); // true ? 1 : 0
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -953,7 +952,7 @@ namespace System
             int zeros = 7 - s_deBruijn32[ix];
             
             // Log(0) is undefined: Return 8.
-            zeros += BoolToByte.True(value == 0);
+            zeros += ToByte(value == 0);
 
             return zeros;
         }
@@ -978,7 +977,7 @@ namespace System
             int zeros = 15 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 16.
-            zeros += BoolToByte.True(value == 0);
+            zeros += ToByte(value == 0);
 
             return zeros;
         }
@@ -1004,7 +1003,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += BoolToByte.True(value == 0);
+            zeros += ToByte(value == 0);
 
             return zeros;
         }
@@ -1040,8 +1039,8 @@ namespace System
             int nz = 31 - s_deBruijn32[ni]; // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            mz += BoolToByte.True((value >> 32) == 0);
-            nz += BoolToByte.True((uint)value == 0);
+            mz += ToByte((value >> 32) == 0);
+            nz += ToByte((uint)value == 0);
 
             // Truth table
             // m   n  m32 actual   m + (n * m32)
@@ -1050,7 +1049,7 @@ namespace System
             // m  32  0   m        m + (32 * 0)
             // m   n  0   m        m + (n * 0)
 
-            nz *= BoolToByte.True(mz == 32); // Only add n if m != 32
+            nz *= ToByte(mz == 32); // Only add n if m != 32
             return mz + nz;
         }
 
@@ -1299,7 +1298,7 @@ namespace System
             // m  32  1   32+m   32 + (m * 1)
             // m   n  0   n       n + (m * 0)
 
-            mc *= BoolToByte.True(nc == 32); // Only add m if n != 32
+            mc *= ToByte(nc == 32); // Only add m if n != 32
             return mc + nc;
         }
 
@@ -1538,7 +1537,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte.True(value == 0);
+            val += ToByte(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1562,7 +1561,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte.True(value == 0);
+            val += ToByte(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1587,7 +1586,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += BoolToByte.True(value == 0);
+            val += ToByte(value == 0);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1613,7 +1612,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += BoolToByte.True(value == 0);
+            val += ToByte(value == 0);
 
             val--;
             val |= val >> 01;
@@ -1798,80 +1797,51 @@ namespace System
         private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
             => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));
 
-        /* y = 8
-         * x       x^8     -(x<8)  &       8^
-         * 0000    1000    1111    1000    0000
-         * 0001    1001    1111    1001    0001
-         * 0010    1010    1111    1010    0010
-         * 0011    1011    1111    1011    0011
-         * 0100    1100    1111    1100    0100
-         * 0101    1101    1111    1101    0101
-         * 0110    1110    1111    1110    0110
-         * 0111    1111    1111    1111    0111
-         * 1000    0000    0000    0000    1000
-         * 1001    0001    0000    0000    1000
-         */
+
+        /// <summary>
+        /// Calculates the Minimum of two numbers without branching.
+        /// </summary>
+        /// <param name="x">The first number.</param>
+        /// <param name="y">The second number.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int Min(int x, int y)
-            => y ^ ((x ^ y) & -BoolToByte.True(x < y));
-
-        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 1)]
-        private struct BoolToByte
         {
-            [FieldOffset(0)]
-            public bool Bool;
+            // eg, y = 8
+            // x       x^8     -(x<8)  &       8^
+            // 0000    1000    1111    1000    0000
+            // 0001    1001    1111    1001    0001
+            // 0010    1010    1111    1010    0010
+            // 0011    1011    1111    1011    0011
+            // 0100    1100    1111    1100    0100
+            // 0101    1101    1111    1101    0101
+            // 0110    1110    1111    1110    0110
+            // 0111    1111    1111    1111    0111
+            // 1000    0000    0000    0000    1000
+            // 1001    0001    0000    0000    1000
 
-            [FieldOffset(0)]
-            public readonly byte Byte;
+            return y ^ ((x ^ y) & -ToByte(x < y));
+        }
 
-            /// <summary>
-            /// Converts a bool to a byte value without branching.
-            /// Returns 0 if True, else returns 1.
-            /// Uses safe code.
-            /// </summary>
-            /// <param name="true">The value to convert.</param>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static byte False(bool condition)
-                => True(!condition);
-
-            /// <summary>
-            /// Converts a bool to a byte value without branching.
-            /// Returns 0 if True, else returns 1.
-            /// Uses unsafe code.
-            /// </summary>
-            /// <param name="on">The value to convert.</param>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static byte FalseUnsafe(bool condition)
-                => TrueUnsafe(!condition);
-
-            /// <summary>
-            /// Converts a bool to a byte value without branching.
-            /// Returns 1 if True, else returns 0.
-            /// Uses safe code.
-            /// </summary>
-            /// <param name="true">The value to convert.</param>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static byte True(bool condition)
-                => (new BoolToByte { Bool = condition }).Byte;
-
-            // TODO:
-            //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-            //public static byte Safe2(bool condition)
-            //    => MemoryMarshal.Cast<bool, byte>(condition);
-
-            /// <summary>
-            /// Converts a bool to a byte value without branching.
-            /// Returns 1 if True, else returns 0.
-            /// Uses unsafe code.
-            /// </summary>
-            /// <param name="on">The value to convert.</param>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static byte TrueUnsafe(bool condition)
+        /// <summary>
+        /// Converts a bool to a byte value without branching.
+        /// Returns 1 if True, else returns 0.
+        /// Uses unsafe code.
+        /// </summary>
+        /// <param name="on">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte ToByte(bool condition)
+        {
+            // TODO: Branching is faster?
+            /*
+                Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+               ------- |---------:|----------:|----------:|-------:|---------:|
+                Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
+                  Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
+                Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+            */
+            unsafe
             {
-                unsafe
-                {
-                    return *(byte*)&condition;
-                }
+                return *(byte*)&condition;
             }
         }
 

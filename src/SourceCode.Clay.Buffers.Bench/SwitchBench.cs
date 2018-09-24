@@ -12,13 +12,13 @@ using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
-    [MemoryDiagnoser]
+    //[MemoryDiagnoser]
     public class SwitchBench
     {
-        private const int _iterations = 100;
-        private const int N = byte.MaxValue;
+        private const uint _iterations = 100;
+        private const uint N = byte.MaxValue;
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Switch()
         {
             var sum = 0ul;
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Lookup()
         {
             var sum = 0ul;
