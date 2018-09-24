@@ -1794,6 +1794,27 @@ namespace System
 
         #region Helpers
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
+            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));
+
+        /* y = 8
+         * x       x^8     -(x<8)  &       8^
+         * 0000    1000    1111    1000    0000
+         * 0001    1001    1111    1001    0001
+         * 0010    1010    1111    1010    0010
+         * 0011    1011    1111    1011    0011
+         * 0100    1100    1111    1100    0100
+         * 0101    1101    1111    1101    0101
+         * 0110    1110    1111    1110    0110
+         * 0111    1111    1111    1111    0111
+         * 1000    0000    0000    0000    1000
+         * 1001    0001    0000    0000    1000
+         */
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int Min(int x, int y)
+            => y ^ ((x ^ y) & -BoolToByte.True(x < y));
+
         [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 1)]
         private struct BoolToByte
         {
