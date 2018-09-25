@@ -17,19 +17,21 @@ namespace SourceCode.Clay.Buffers.Bench
 
          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
         ------- |---------:|----------:|----------:|-------:|---------:|
-         Unroll | 26.62 ns | 0.4968 ns | 0.4880 ns |   1.00 |     0.00 |
-         Actual | 27.12 ns | 0.5385 ns | 1.1359 ns |   1.02 |     0.05 |
-           Cast | 23.01 ns | 0.4557 ns | 1.0561 ns |   0.86 |     0.04 | <----
+         Unroll | 27.08 ns | 0.5333 ns | 0.9480 ns |   1.00 |     0.00 |
+           Blit | 25.68 ns | 0.4996 ns | 0.6319 ns |   0.95 |     0.04 |
+         Actual | 25.80 ns | 0.5153 ns | 0.6517 ns |   0.95 |     0.04 |
+           Cast | 22.53 ns | 0.4461 ns | 0.7453 ns |   0.83 |     0.04 |
 
        Else:
 
          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
         ------- |---------:|----------:|----------:|-------:|---------:|
-         Unroll | 26.45 ns | 0.5115 ns | 0.6089 ns |   1.00 |     0.00 | <----
-         Actual | 26.94 ns | 0.5356 ns | 1.1643 ns |   1.02 |     0.05 |
-           Cast | 35.53 ns | 0.6935 ns | 1.2505 ns |   1.34 |     0.06 |
+         Unroll | 28.27 ns | 0.5615 ns | 1.5372 ns |   1.00 |     0.00 |
+           Blit | 26.52 ns | 0.5273 ns | 0.8210 ns |   0.94 |     0.06 |
+         Actual | 25.99 ns | 0.5493 ns | 0.6947 ns |   0.92 |     0.05 |
+           Cast | 34.99 ns | 0.6713 ns | 0.6593 ns |   1.24 |     0.07 |
 
-        Unroll is consistent (26ms), whether inlined or not.
+        Unroll/Blit are consistent (26ms), whether inlined or not.
         Cast is faster (23ms) when inlined, but slower (35ms) when not.
         Some callsites may not inline.
     */
@@ -151,7 +153,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -180,21 +182,22 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Blit(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            var blit = new Blit64();
+            var blit = new BitOps.Blit64();
             ulong val = 0;
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 8+1 bytes
                 default:
-                case 9:
-                    val = (ulong)span[ix + 8] << (8 * 8 - shft);
+                    val = (ulong)span[ix + 8] << (64 - shft);
                     goto case 8;
 
                 case 8: blit.b7 = span[ix + 7]; goto case 7;
@@ -204,68 +207,14 @@ namespace SourceCode.Clay.Buffers.Bench
                 case 4: blit.b3 = span[ix + 3]; goto case 3;
                 case 3: blit.b2 = span[ix + 2]; goto case 2;
                 case 2: blit.b1 = span[ix + 1]; goto case 1;
-
-                case 1: blit.b0 = span[ix + 0];
-                    val |= blit.u64 >> shft;
-                    break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 1: blit.b0 = span[ix + 0]; break;
             }
 
+            val |= blit.u64 >> shft;
             return val;
         }
 
-        [StructLayout(LayoutKind.Explicit, Pack = 8, Size = 8)]
-        private struct Blit64
-        {
-            [FieldOffset(0)]
-            public byte b0;
-
-            [FieldOffset(1)]
-            public byte b1;
-
-            [FieldOffset(2)]
-            public byte b2;
-
-            [FieldOffset(3)]
-            public byte b3;
-
-            [FieldOffset(4)]
-            public byte b4;
-
-            [FieldOffset(5)]
-            public byte b5;
-
-            [FieldOffset(6)]
-            public byte b6;
-
-            [FieldOffset(7)]
-            public byte b7;
-
-            [FieldOffset(0)]
-            public ulong u64;
-        }
-
-        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 4)]
-        private struct Blit32
-        {
-            [FieldOffset(0)]
-            public byte b0;
-
-            [FieldOffset(1)]
-            public byte b1;
-
-            [FieldOffset(2)]
-            public byte b2;
-
-            [FieldOffset(3)]
-            public byte b3;
-
-            [FieldOffset(0)]
-            public uint u32;
-        }
-
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64_Cast(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8

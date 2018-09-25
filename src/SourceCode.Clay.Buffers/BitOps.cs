@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // Utilize when/if non-Experimental:
 //using System.Runtime.Intrinsics;
@@ -1824,6 +1825,94 @@ namespace System
             //return (byte)(condition ? 1 : 0);
 
             unsafe { return *(byte*)&condition; }
+        }
+
+        [StructLayout(LayoutKind.Explicit, Size = 8)]
+        internal struct Blit64
+        {
+            // byte
+
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            [FieldOffset(4)]
+            public byte b4;
+
+            [FieldOffset(5)]
+            public byte b5;
+
+            [FieldOffset(6)]
+            public byte b6;
+
+            [FieldOffset(7)]
+            public byte b7;
+
+            // ushort
+
+            [FieldOffset(0)]
+            public ushort s0;
+
+            [FieldOffset(1)]
+            public ushort s1;
+
+            [FieldOffset(2)]
+            public ushort s2;
+
+            [FieldOffset(3)]
+            public ushort s3;
+
+            // uint
+
+            [FieldOffset(0)]
+            public uint i0;
+
+            [FieldOffset(1)]
+            public uint i1;
+
+            // ulong
+
+            [FieldOffset(0)]
+            public ulong u64;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Size = 4)]
+        internal struct Blit32
+        {
+            // byte
+
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            // ushort
+
+            [FieldOffset(0)]
+            public ushort s0;
+
+            [FieldOffset(1)]
+            public ushort s1;
+
+            // uint
+
+            [FieldOffset(0)]
+            public uint u32;
         }
 
         #endregion

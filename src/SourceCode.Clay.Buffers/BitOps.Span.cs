@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace System
 {
 #pragma warning disable IDE0007 // Use implicit type
@@ -371,20 +373,21 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 7; // mod 8
 
-            uint val = 0;
+            var blit = new Blit32();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 bytes
                 default:
-                case 02: val = (uint)span[ix + 1] << (8 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.b1 = span[ix + 1]; goto case 1;
+                case 1: blit.b0 = span[ix + 0]; break;
             }
 
-            return (byte)val;
+            int shft = bitOffset & 7; // mod 8
+            blit.u32 >>= shft;
+            return blit.b0;
         }
 
         /// <summary>
@@ -396,20 +399,21 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 15; // mod 16
 
-            uint val = 0;
+            var blit = new Blit32();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 ushorts
                 default:
-                case 02: val = (uint)span[ix + 1] << (16 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.s1 = span[ix + 1]; goto case 1;
+                case 1: blit.s0 = span[ix + 0]; break;
             }
 
-            return (byte)val;
+            int shft = bitOffset & 15; // mod 16
+            blit.u32 >>= shft;
+            return blit.b0;
         }
 
         /// <summary>
@@ -421,20 +425,21 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 31; // mod 32
 
-            uint val = 0;
+            var blit = new Blit64();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 uints
                 default:
-                case 02: val = span[ix + 1] << (32 - shft); goto case 1;
-                case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.i1 = span[ix + 1]; goto case 1;
+                case 1: blit.i0 = span[ix + 0]; break;
             }
 
-            return (byte)val;
+            int shft = bitOffset & 31; // mod 32
+            blit.u64 >>= shft;
+            return blit.b0;
         }
 
         /// <summary>
@@ -514,21 +519,22 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 7; // mod 8
 
-            uint val = 0;
+            var blit = new Blit32();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 2+1 bytes
                 default:
-                case 03: val = (uint)span[ix + 2] << (2 * 8 - shft); goto case 2;
-                case 2: val |= (uint)span[ix + 1] << (1 * 8 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 3: blit.b2 = span[ix + 2]; goto case 2;
+                case 2: blit.b1 = span[ix + 1]; goto case 1;
+                case 1: blit.b0 = span[ix + 0]; break;
             }
 
-            return (ushort)val;
+            int shft = bitOffset & 7; // mod 8
+            blit.u32 >>= shft;
+            return blit.s0;
         }
 
         /// <summary>
@@ -540,20 +546,21 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 15; // mod 16
 
-            uint val = 0;
+            var blit = new Blit32();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 ushorts
                 default:
-                case 02: val = (uint)span[ix + 1] << (16 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.s1 = span[ix + 1]; goto case 1;
+                case 1: blit.s0 = span[ix + 0]; break;
             }
 
-            return (ushort)val;
+            int shft = bitOffset & 15; // mod 16
+            blit.u32 >>= shft;
+            return blit.s0;
         }
 
         /// <summary>
@@ -565,20 +572,21 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 31; // mod 31
 
-            uint val = 0;
+            var blit = new Blit64();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 uints
                 default:
-                case 02: val = span[ix + 1] << (32 - shft); goto case 1;
-                case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.i1 = span[ix + 1]; goto case 1;
+                case 1: blit.i0 = span[ix + 0]; break;
             }
 
-            return (ushort)val;
+            int shft = bitOffset & 31; // mod 32
+            blit.u64 >>= shft;
+            return blit.s0;
         }
 
         /// <summary>
@@ -595,12 +603,12 @@ namespace System
             ulong val = 0;
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 ulongs
                 default:
                 case 02: val = span[ix + 1] << (64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
             }
 
             return (ushort)val;
@@ -639,23 +647,24 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 7; // mod 8
 
-            uint val = 0;
+            var blit = new Blit64();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 4+1 bytes
                 default:
-                case 05: val = (uint)span[ix + 4] << (4 * 8 - shft); goto case 4;
-                case 4: val |= (uint)span[ix + 3] << (3 * 8 - shft); goto case 3;
-                case 3: val |= (uint)span[ix + 2] << (2 * 8 - shft); goto case 2;
-                case 2: val |= (uint)span[ix + 1] << (1 * 8 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 5: blit.b4 = span[ix + 4]; goto case 4;
+                case 4: blit.b3 = span[ix + 3]; goto case 3;
+                case 3: blit.b2 = span[ix + 2]; goto case 2;
+                case 2: blit.b1 = span[ix + 1]; goto case 1;
+                case 1: blit.b0 = span[ix + 0]; break;
             }
 
-            return val;
+            int shft = bitOffset & 7; // mod 8
+            blit.u64 >>= shft;
+            return blit.i0;
         }
 
         /// <summary>
@@ -667,21 +676,22 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 15; // mod 16
 
-            uint val = 0;
+            var blit = new Blit64();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 2+1 ushorts
                 default:
-                case 03: val = (uint)span[ix + 2] << (2 * 16 - shft); goto case 2;
-                case 2: val |= (uint)span[ix + 1] << (1 * 16 - shft); goto case 1;
-                case 1: val |= (uint)span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 3: blit.s2 = span[ix + 2]; goto case 2;
+                case 2: blit.s1 = span[ix + 1]; goto case 1;
+                case 1: blit.s0 = span[ix + 0]; break;
             }
 
-            return val;
+            int shft = bitOffset & 15; // mod 16
+            blit.u64 >>= shft;
+            return blit.i0;
         }
 
         /// <summary>
@@ -693,20 +703,21 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             var len = Math.Max(0, span.Length - ix);
-            int shft = bitOffset & 31; // mod 32
 
-            uint val = 0;
+            var blit = new Blit64();
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 uints
                 default:
-                case 02: val = span[ix + 1] << (1 * 32 - shft); goto case 1;
-                case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.i1 = span[ix + 1]; goto case 1;
+                case 1: blit.i0 = span[ix + 0]; break;
             }
 
-            return val;
+            int shft = bitOffset & 31; // mod 32
+            blit.u64 >>= shft;
+            return blit.i0;
         }
 
         /// <summary>
@@ -723,12 +734,12 @@ namespace System
             ulong val = 0;
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 ulongs
                 default:
                 case 02: val = span[ix + 1] << (1 * 64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
             }
 
             return (uint)val;
@@ -763,29 +774,37 @@ namespace System
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
+            var blit = new Blit64();
             ulong val = 0;
+
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 8+1 bytes
                 default:
-                case 09: val = (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
-                case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
-                case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
-                case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
-                case 5: val |= (ulong)span[ix + 4] << (4 * 8 - shft); goto case 4;
-                case 4: val |= (ulong)span[ix + 3] << (3 * 8 - shft); goto case 3;
-                case 3: val |= (ulong)span[ix + 2] << (2 * 8 - shft); goto case 2;
-                case 2: val |= (ulong)span[ix + 1] << (1 * 8 - shft); goto case 1;
-                case 1: val |= (ulong)span[ix + 0] >> shft; return val;
+                    val = (ulong)span[ix + 8] << (64 - shft);
+                    goto case 8;
 
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 8: blit.b7 = span[ix + 7]; goto case 7;
+                case 7: blit.b6 = span[ix + 6]; goto case 6;
+                case 6: blit.b5 = span[ix + 5]; goto case 5;
+                case 5: blit.b4 = span[ix + 4]; goto case 4;
+                case 4: blit.b3 = span[ix + 3]; goto case 3;
+                case 3: blit.b2 = span[ix + 2]; goto case 2;
+                case 2: blit.b1 = span[ix + 1]; goto case 1;
+                case 1: blit.b0 = span[ix + 0]; break;
             }
+
+            val |= blit.u64 >> shft;
+            return val;
         }
 
         /// <summary>
@@ -799,20 +818,25 @@ namespace System
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 15; // mod 16
 
+            var blit = new Blit64();
             ulong val = 0;
+
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 4+1 ushorts
                 default:
-                case 05: val = (ulong)span[ix + 4] << (4 * 16 - shft); goto case 4;
-                case 4: val |= (ulong)span[ix + 3] << (3 * 16 - shft); goto case 3;
-                case 3: val |= (ulong)span[ix + 2] << (2 * 16 - shft); goto case 2;
-                case 2: val |= (ulong)span[ix + 1] << (1 * 16 - shft); goto case 1;
-                case 1: val |= (ulong)span[ix + 0] >> shft; break;
+                    val = (ulong)span[ix + 4] << (64 - shft);
+                    goto case 4;
 
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 4: blit.s3 = span[ix + 3]; goto case 3;
+                case 3: blit.s2 = span[ix + 2]; goto case 2;
+                case 2: blit.s1 = span[ix + 1]; goto case 1;
+                case 1: blit.s0 = span[ix + 0]; break;
             }
 
+            val |= blit.u64 >> shft;
             return val;
         }
 
@@ -827,18 +851,23 @@ namespace System
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 31; // mod 32
 
+            var blit = new Blit64();
             ulong val = 0;
+
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 2+1 uints
                 default:
-                case 03: val = (ulong)span[ix + 2] << (2 * 32 - shft); goto case 2;
-                case 2: val |= (ulong)span[ix + 1] << (1 * 32 - shft); goto case 1;
-                case 1: val |= (ulong)span[ix + 0] >> shft; break;
+                    val = (ulong)span[ix + 2] << (64 - shft);
+                    goto case 2;
 
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                case 2: blit.i1 = span[ix + 1]; goto case 1;
+                case 1: blit.i0 = span[ix + 0]; break;
             }
 
+            val |= blit.u64 >> shft;
             return val;
         }
 
@@ -856,12 +885,12 @@ namespace System
             ulong val = 0;
             switch (len)
             {
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
                 // Need at least 1+1 ulongs
                 default:
                 case 02: val = span[ix + 1] << (64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
-
-                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
             }
 
             return val;
@@ -887,7 +916,7 @@ namespace System
         {
         }
 
-        #endregion
+        #endregion        
     }
 
 #pragma warning restore IDE0007 // Use implicit type
