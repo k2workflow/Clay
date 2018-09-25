@@ -17,25 +17,25 @@ namespace SourceCode.Clay.Buffers.Bench
 
           Method |     Mean |     Error |    StdDev | Scaled |
         -------- |---------:|----------:|----------:|-------:|
-          Unroll | 26.73 ns | 0.1357 ns | 0.1270 ns |   1.00 |
-            Blit | 26.04 ns | 0.1890 ns | 0.1768 ns |   0.97 |
-         Hybrid1 | 22.14 ns | 0.1040 ns | 0.0973 ns |   0.83 |
-         Hybrid2 | 25.25 ns | 0.2036 ns | 0.1904 ns |   0.94 |
-          Actual | 22.19 ns | 0.1096 ns | 0.1025 ns |   0.83 |
-           Cast1 | 20.39 ns | 0.1658 ns | 0.1551 ns |   0.76 | x
-           Cast2 | 22.65 ns | 0.1510 ns | 0.1179 ns |   0.85 |
+          Unroll | 26.76 ns | 0.2114 ns | 0.1978 ns |   1.00 |
+            Blit | 25.97 ns | 0.1513 ns | 0.1416 ns |   0.97 |
+         Hybrid1 | 21.96 ns | 0.1348 ns | 0.1195 ns |   0.82 |
+         Hybrid2 | 25.41 ns | 0.1689 ns | 0.1580 ns |   0.95 |
+          Actual | 20.66 ns | 0.1174 ns | 0.1041 ns |   0.77 | x
+           Cast1 | 20.49 ns | 0.1084 ns | 0.0961 ns |   0.77 | x
+           Cast2 | 22.48 ns | 0.0906 ns | 0.0803 ns |   0.84 |
 
        Else:
 
-          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-        -------- |---------:|----------:|----------:|-------:|---------:|
-          Unroll | 26.70 ns | 0.1489 ns | 0.1393 ns |   1.00 |     0.00 |
-            Blit | 26.55 ns | 0.5376 ns | 0.5753 ns |   0.99 |     0.02 |
-         Hybrid1 | 22.24 ns | 0.2635 ns | 0.2201 ns |   0.83 |     0.01 |
-         Hybrid2 | 25.35 ns | 0.0910 ns | 0.0807 ns |   0.95 |     0.01 |
-          Actual | 22.20 ns | 0.1928 ns | 0.1803 ns |   0.83 |     0.01 |
-           Cast1 | 20.60 ns | 0.1107 ns | 0.0982 ns |   0.77 |     0.01 | x
-           Cast2 | 35.46 ns | 0.4645 ns | 0.4345 ns |   1.33 |     0.02 |
+          Method |     Mean |     Error |    StdDev | Scaled |
+        -------- |---------:|----------:|----------:|-------:|
+          Unroll | 26.76 ns | 0.1428 ns | 0.1336 ns |   1.00 |
+            Blit | 26.24 ns | 0.2536 ns | 0.2372 ns |   0.98 |
+         Hybrid1 | 23.66 ns | 0.2209 ns | 0.2066 ns |   0.88 |
+         Hybrid2 | 25.22 ns | 0.2099 ns | 0.1963 ns |   0.94 |
+          Actual | 20.74 ns | 0.1182 ns | 0.1048 ns |   0.78 | x
+           Cast1 | 20.64 ns | 0.1738 ns | 0.1540 ns |   0.77 | x
+           Cast2 | 35.34 ns | 0.1551 ns | 0.1451 ns |   1.32 |
 
         Cast2 is fast when inlined, but much slower when not.
         All others are consistent, whether inlined or not.

@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // Utilize when/if non-Experimental:
 //using System.Runtime.Intrinsics;
