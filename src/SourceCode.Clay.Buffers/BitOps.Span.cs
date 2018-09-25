@@ -378,7 +378,7 @@ namespace System
             {
                 // Need at least 1+1 bytes
                 default:
-                case 2: val |= (uint)span[ix + 1] << (8 - shft); goto case 1;
+                case 02: val = (uint)span[ix + 1] << (8 - shft); goto case 1;
                 case 1: val |= (uint)span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -403,7 +403,7 @@ namespace System
             {
                 // Need at least 1+1 ushorts
                 default:
-                case 2: val |= (uint)span[ix + 1] << (16 - shft); goto case 1;
+                case 02: val = (uint)span[ix + 1] << (16 - shft); goto case 1;
                 case 1: val |= (uint)span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -428,7 +428,7 @@ namespace System
             {
                 // Need at least 1+1 uints
                 default:
-                case 2: val |= span[ix + 1] << (32 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (32 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -453,7 +453,7 @@ namespace System
             {
                 // Need at least 1+1 ulongs
                 default:
-                case 2: val |= span[ix + 1] << (64 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -521,7 +521,7 @@ namespace System
             {
                 // Need at least 2+1 bytes
                 default:
-                case 3: val |= (uint)span[ix + 2] << (2 * 8 - shft); goto case 2;
+                case 03: val = (uint)span[ix + 2] << (2 * 8 - shft); goto case 2;
                 case 2: val |= (uint)span[ix + 1] << (1 * 8 - shft); goto case 1;
                 case 1: val |= (uint)span[ix + 0] >> shft; break;
 
@@ -547,7 +547,7 @@ namespace System
             {
                 // Need at least 1+1 ushorts
                 default:
-                case 2: val |= (uint)span[ix + 1] << (16 - shft); goto case 1;
+                case 02: val = (uint)span[ix + 1] << (16 - shft); goto case 1;
                 case 1: val |= (uint)span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -572,7 +572,7 @@ namespace System
             {
                 // Need at least 1+1 uints
                 default:
-                case 2: val |= span[ix + 1] << (32 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (32 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -597,7 +597,7 @@ namespace System
             {
                 // Need at least 1+1 ulongs
                 default:
-                case 2: val |= span[ix + 1] << (64 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -646,7 +646,7 @@ namespace System
             {
                 // Need at least 4+1 bytes
                 default:
-                case 5: val |= (uint)span[ix + 4] << (4 * 8 - shft); goto case 4;
+                case 05: val = (uint)span[ix + 4] << (4 * 8 - shft); goto case 4;
                 case 4: val |= (uint)span[ix + 3] << (3 * 8 - shft); goto case 3;
                 case 3: val |= (uint)span[ix + 2] << (2 * 8 - shft); goto case 2;
                 case 2: val |= (uint)span[ix + 1] << (1 * 8 - shft); goto case 1;
@@ -674,7 +674,7 @@ namespace System
             {
                 // Need at least 2+1 ushorts
                 default:
-                case 3: val |= (uint)span[ix + 2] << (2 * 16 - shft); goto case 2;
+                case 03: val = (uint)span[ix + 2] << (2 * 16 - shft); goto case 2;
                 case 2: val |= (uint)span[ix + 1] << (1 * 16 - shft); goto case 1;
                 case 1: val |= (uint)span[ix + 0] >> shft; break;
 
@@ -700,7 +700,7 @@ namespace System
             {
                 // Need at least 1+1 uints
                 default:
-                case 2: val |= span[ix + 1] << (1 * 32 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (1 * 32 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -725,7 +725,7 @@ namespace System
             {
                 // Need at least 1+1 ulongs
                 default:
-                case 2: val |= span[ix + 1] << (1 * 64 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (1 * 64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
@@ -774,7 +774,7 @@ namespace System
             {
                 // Need at least 8+1 bytes
                 default:
-                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
+                case 09: val = (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
                 case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
                 case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
                 case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
@@ -804,7 +804,7 @@ namespace System
             {
                 // Need at least 4+1 ushorts
                 default:
-                case 5: val |= (ulong)span[ix + 4] << (4 * 16 - shft); goto case 4;
+                case 05: val = (ulong)span[ix + 4] << (4 * 16 - shft); goto case 4;
                 case 4: val |= (ulong)span[ix + 3] << (3 * 16 - shft); goto case 3;
                 case 3: val |= (ulong)span[ix + 2] << (2 * 16 - shft); goto case 2;
                 case 2: val |= (ulong)span[ix + 1] << (1 * 16 - shft); goto case 1;
@@ -832,7 +832,7 @@ namespace System
             {
                 // Need at least 2+1 uints
                 default:
-                case 3: val |= (ulong)span[ix + 2] << (2 * 32 - shft); goto case 2;
+                case 03: val = (ulong)span[ix + 2] << (2 * 32 - shft); goto case 2;
                 case 2: val |= (ulong)span[ix + 1] << (1 * 32 - shft); goto case 1;
                 case 1: val |= (ulong)span[ix + 0] >> shft; break;
 
@@ -858,7 +858,7 @@ namespace System
             {
                 // Need at least 1+1 ulongs
                 default:
-                case 2: val |= span[ix + 1] << (64 - shft); goto case 1;
+                case 02: val = span[ix + 1] << (64 - shft); goto case 1;
                 case 1: val |= span[ix + 0] >> shft; break;
 
                 case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
