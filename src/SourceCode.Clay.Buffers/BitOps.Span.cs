@@ -366,7 +366,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -391,7 +391,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
@@ -416,7 +416,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
@@ -441,7 +441,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
@@ -509,7 +509,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -535,7 +535,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
@@ -560,7 +560,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
@@ -585,7 +585,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
@@ -634,7 +634,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -662,7 +662,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
@@ -688,7 +688,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
@@ -713,7 +713,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
@@ -762,7 +762,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -792,7 +792,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4; // div 16
@@ -820,7 +820,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5; // div 32
@@ -846,7 +846,7 @@ namespace System
         /// Reads the specified byte from a span, given the bit offset.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6; // div 64
