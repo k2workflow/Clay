@@ -1828,7 +1828,7 @@ namespace System
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 8)]
-        internal struct Blit64
+        internal ref struct Blit64
         {
             // byte
 
@@ -1885,7 +1885,7 @@ namespace System
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 4)]
-        internal struct Blit32
+        internal ref struct Blit32
         {
             // byte
 
