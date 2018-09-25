@@ -466,24 +466,39 @@ namespace System
 
         #region InsertByte
 
-        public static byte InsertByte(Span<byte> span, int bitOffset, byte insert)
+        /// <summary>
+        /// Writes the specified value to a span, given the bit offset.
+        /// </summary>
+        /// <param name="span">The span.</param>
+        /// <param name="bitOffset">The ordinal position to read.</param>
+        /// <param name="value">The value to write.</param>
+        public static void InsertByte(Span<byte> span, int bitOffset, byte value)
         {
-            return 0;
+            int ix = bitOffset >> 3; // div 8
+            var len = Math.Max(0, span.Length - ix);
+            int shft = bitOffset & 7; // mod 8
+
+            //switch (len)
+            //{
+            //    // Need at least 1+1 bytes
+            //    default:
+            //    case 2: span[ix + 1] = (uint)value >> (8 - shft); goto case 1;
+            //    case 1: span[ix + 0] = (uint)value << shft; break;
+
+            //    case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            //}
         }
 
-        public static byte InsertByte(Span<ushort> span, int bitOffset, byte insert)
+        public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
         {
-            return 0;
         }
 
-        public static byte InsertByte(Span<uint> span, int bitOffset, byte insert)
+        public static void InsertByte(Span<uint> span, int bitOffset, byte value)
         {
-            return 0;
         }
 
-        public static byte InsertByte(Span<ulong> span, int bitOffset, byte insert)
+        public static void InsertByte(Span<ulong> span, int bitOffset, byte value)
         {
-            return 0;
         }
 
         #endregion
@@ -595,24 +610,20 @@ namespace System
 
         #region InsertUInt16
 
-        public static ushort InsertUInt16(Span<byte> span, int bitOffset, ushort insert)
+        public static void InsertUInt16(Span<byte> span, int bitOffset, ushort value)
         {
-            return 0;
         }
 
-        public static ushort InsertUInt16(Span<ushort> span, int bitOffset, ushort insert)
+        public static void InsertUInt16(Span<ushort> span, int bitOffset, ushort value)
         {
-            return 0;
         }
 
-        public static ushort InsertUInt16(Span<uint> span, int bitOffset, ushort insert)
+        public static void InsertUInt16(Span<uint> span, int bitOffset, ushort value)
         {
-            return 0;
         }
 
-        public static ushort InsertUInt16(Span<ulong> span, int bitOffset, ushort insert)
+        public static void InsertUInt16(Span<ulong> span, int bitOffset, ushort value)
         {
-            return 0;
         }
 
         #endregion
@@ -727,24 +738,20 @@ namespace System
 
         #region InsertUInt32
 
-        public static uint InsertUInt32(Span<byte> span, int bitOffset, uint insert)
+        public static void InsertUInt32(Span<byte> span, int bitOffset, uint value)
         {
-            return 0;
         }
 
-        public static uint InsertUInt32(Span<ushort> span, int bitOffset, uint insert)
+        public static void InsertUInt32(Span<ushort> span, int bitOffset, uint value)
         {
-            return 0;
         }
 
-        public static uint InsertUInt32(Span<uint> span, int bitOffset, uint insert)
+        public static void InsertUInt32(Span<uint> span, int bitOffset, uint value)
         {
-            return 0;
         }
 
-        public static uint InsertUInt32(Span<ulong> span, int bitOffset, uint insert)
+        public static void InsertUInt32(Span<ulong> span, int bitOffset, uint value)
         {
-            return 0;
         }
 
         #endregion
@@ -864,24 +871,20 @@ namespace System
 
         #region InsertUInt64
 
-        public static ulong InsertUInt64(Span<byte> span, int bitOffset, ulong insert)
+        public static void InsertUInt64(Span<byte> span, int bitOffset, ulong value)
         {
-            return 0;
         }
 
-        public static ulong InsertUInt64(Span<ushort> span, int bitOffset, ulong insert)
+        public static void InsertUInt64(Span<ushort> span, int bitOffset, ulong value)
         {
-            return 0;
         }
 
-        public static ulong InsertUInt64(Span<uint> span, int bitOffset, ulong insert)
+        public static void InsertUInt64(Span<uint> span, int bitOffset, ulong value)
         {
-            return 0;
         }
 
-        public static ulong InsertUInt64(Span<ulong> span, int bitOffset, ulong insert)
+        public static void InsertUInt64(Span<ulong> span, int bitOffset, ulong value)
         {
-            return 0;
         }
 
         #endregion
