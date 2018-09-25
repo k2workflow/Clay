@@ -15,26 +15,29 @@ namespace SourceCode.Clay.Buffers.Bench
     /* 
        If using AggressiveInlining:
 
-         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-        ------- |---------:|----------:|----------:|-------:|---------:|
-         Unroll | 26.95 ns | 0.3066 ns | 0.2561 ns |   1.00 |     0.00 |
-           Blit | 26.41 ns | 0.2227 ns | 0.1974 ns |   0.98 |     0.01 |
-        Hybrid1 | 22.82 ns | 0.3205 ns | 0.2998 ns |   0.85 |     0.01 | x
-        Hybrid2 | 25.86 ns | 0.3910 ns | 0.3466 ns |   0.96 |     0.02 |
-           Cast | 22.74 ns | 0.1473 ns | 0.1306 ns |   0.84 |     0.01 | x
+          Method |     Mean |     Error |    StdDev | Scaled |
+        -------- |---------:|----------:|----------:|-------:|
+          Unroll | 26.73 ns | 0.1357 ns | 0.1270 ns |   1.00 |
+            Blit | 26.04 ns | 0.1890 ns | 0.1768 ns |   0.97 |
+         Hybrid1 | 22.14 ns | 0.1040 ns | 0.0973 ns |   0.83 |
+         Hybrid2 | 25.25 ns | 0.2036 ns | 0.1904 ns |   0.94 |
+          Actual | 22.19 ns | 0.1096 ns | 0.1025 ns |   0.83 |
+           Cast1 | 20.39 ns | 0.1658 ns | 0.1551 ns |   0.76 | x
+           Cast2 | 22.65 ns | 0.1510 ns | 0.1179 ns |   0.85 |
 
        Else:
 
-         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-        ------- |---------:|----------:|----------:|-------:|---------:|
-         Unroll | 27.05 ns | 0.2262 ns | 0.2116 ns |   1.00 |     0.00 |
-           Blit | 26.50 ns | 0.2109 ns | 0.1870 ns |   0.98 |     0.01 |
-        Hybrid1 | 22.60 ns | 0.3478 ns | 0.3083 ns |   0.84 |     0.01 | x
-        Hybrid2 | 25.90 ns | 0.2589 ns | 0.2162 ns |   0.96 |     0.01 |
-           Cast | 35.89 ns | 0.7697 ns | 0.6824 ns |   1.33 |     0.03 |
+          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+        -------- |---------:|----------:|----------:|-------:|---------:|
+          Unroll | 26.70 ns | 0.1489 ns | 0.1393 ns |   1.00 |     0.00 |
+            Blit | 26.55 ns | 0.5376 ns | 0.5753 ns |   0.99 |     0.02 |
+         Hybrid1 | 22.24 ns | 0.2635 ns | 0.2201 ns |   0.83 |     0.01 |
+         Hybrid2 | 25.35 ns | 0.0910 ns | 0.0807 ns |   0.95 |     0.01 |
+          Actual | 22.20 ns | 0.1928 ns | 0.1803 ns |   0.83 |     0.01 |
+           Cast1 | 20.60 ns | 0.1107 ns | 0.0982 ns |   0.77 |     0.01 | x
+           Cast2 | 35.46 ns | 0.4645 ns | 0.4345 ns |   1.33 |     0.02 |
 
-
-        Cast is faster (23ms) when inlined, but slower (35ms) when not.
+        Cast2 is fast when inlined, but much slower when not.
         All others are consistent, whether inlined or not.
         Some callsites may not inline.
     */
@@ -157,7 +160,7 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Cast()
+        public static ulong Cast1()
         {
             var sum = 0ul;
 
@@ -169,7 +172,7 @@ namespace SourceCode.Clay.Buffers.Bench
                     var b = BitConverter.GetBytes(v);
                     b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
 
-                    var u64 = ExtractUInt64_Cast(b, n % b.Length);
+                    var u64 = ExtractUInt64_Cast1(b, n % b.Length);
 
                     sum = unchecked(sum + u64);
                 }
@@ -178,7 +181,29 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Cast2()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
+
+                    var u64 = ExtractUInt64_Cast2(b, n % b.Length);
+
+                    sum = unchecked(sum + u64);
+                }
+            }
+
+            return sum;
+        }
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -207,7 +232,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Blit(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -240,7 +265,7 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Hybrid1(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -276,7 +301,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Hybrid2(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -320,8 +345,26 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ExtractUInt64_Cast(ReadOnlySpan<byte> span, int bitOffset)
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong ExtractUInt64_Cast1(ReadOnlySpan<byte> span, int bitOffset)
+        {
+            int ix = bitOffset >> 3; // div 8
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ulong cast = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(span.Slice(ix)));
+            //ulong cast = Unsafe.As<byte, ulong>(ref Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(span), (IntPtr)ix));
+
+            int shft = bitOffset & 7; // mod 8
+            ulong val = cast >> shft;
+
+            if (ix + 8 < span.Length)
+                val |= (ulong)span[ix + 8] << (64 - shft);
+
+            return val;
+        }
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong ExtractUInt64_Cast2(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));

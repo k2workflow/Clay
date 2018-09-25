@@ -775,7 +775,7 @@ namespace System
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
