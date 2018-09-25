@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -793,13 +794,16 @@ namespace System
                     val = (ulong)span[ix + 8] << (64 - shft);
                     goto case 8;
 
-                case 8: blit.b7 = span[ix + 7]; goto case 7;
+                case 8: blit.u64 = MemoryMarshal.Cast<byte, ulong>(span.Slice(ix, 8))[0]; break;
+
                 case 7: blit.b6 = span[ix + 6]; goto case 6;
                 case 6: blit.b5 = span[ix + 5]; goto case 5;
                 case 5: blit.b4 = span[ix + 4]; goto case 4;
-                case 4: blit.b3 = span[ix + 3]; goto case 3;
+                case 4: blit.i0 = MemoryMarshal.Cast<byte, uint>(span.Slice(ix, 4))[0]; break;
+
                 case 3: blit.b2 = span[ix + 2]; goto case 2;
-                case 2: blit.b1 = span[ix + 1]; goto case 1;
+                case 2: blit.s0 = MemoryMarshal.Cast<byte, ushort>(span.Slice(ix, 2))[0]; break;
+
                 case 1: blit.b0 = span[ix + 0]; break;
             }
 
