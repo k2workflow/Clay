@@ -62,6 +62,28 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Blit()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
+
+                    var u64 = ExtractUInt64_Blit(b, n % b.Length);
+
+                    sum = unchecked(sum + u64);
+                }
+            }
+
+            return sum;
+        }
+
         // Whatever is being used in the actual code
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Actual()
@@ -144,7 +166,7 @@ namespace SourceCode.Clay.Buffers.Bench
                     if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
                     goto case 9;
 
-                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
+                case 09: val = (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
                 case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
                 case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
                 case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
@@ -156,6 +178,91 @@ namespace SourceCode.Clay.Buffers.Bench
             }
 
             return val;
+        }
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ulong ExtractUInt64_Blit(ReadOnlySpan<byte> span, int bitOffset)
+        {
+            int ix = bitOffset >> 3; // div 8
+            var len = Math.Max(0, span.Length - ix);
+            int shft = bitOffset & 7; // mod 8
+
+            var blit = new Blit64();
+            ulong val = 0;
+            switch (len)
+            {
+                // Need at least 8+1 bytes
+                default:
+                case 9:
+                    val = (ulong)span[ix + 8] << (8 * 8 - shft);
+                    goto case 8;
+
+                case 8: blit.b7 = span[ix + 7]; goto case 7;
+                case 7: blit.b6 = span[ix + 6]; goto case 6;
+                case 6: blit.b5 = span[ix + 5]; goto case 5;
+                case 5: blit.b4 = span[ix + 4]; goto case 4;
+                case 4: blit.b3 = span[ix + 3]; goto case 3;
+                case 3: blit.b2 = span[ix + 2]; goto case 2;
+                case 2: blit.b1 = span[ix + 1]; goto case 1;
+
+                case 1: blit.b0 = span[ix + 0];
+                    val |= blit.u64 >> shft;
+                    break;
+
+                case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            }
+
+            return val;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 8, Size = 8)]
+        private struct Blit64
+        {
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            [FieldOffset(4)]
+            public byte b4;
+
+            [FieldOffset(5)]
+            public byte b5;
+
+            [FieldOffset(6)]
+            public byte b6;
+
+            [FieldOffset(7)]
+            public byte b7;
+
+            [FieldOffset(0)]
+            public ulong u64;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 4)]
+        private struct Blit32
+        {
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            [FieldOffset(0)]
+            public uint u32;
         }
 
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
