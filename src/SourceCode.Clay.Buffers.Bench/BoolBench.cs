@@ -13,11 +13,12 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-        ------- |---------:|----------:|----------:|-------:|---------:|
-         Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
-           Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
-         Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+         Method |      Mean |     Error |    StdDev | Scaled |
+    ----------- |----------:|----------:|----------:|-------:|
+     UnsafeCode | 0.9050 ns | 0.0038 ns | 0.0035 ns |   0.50 | x
+       UnsafeAs | 0.9074 ns | 0.0085 ns | 0.0076 ns |   0.50 | x
+          Union | 1.0628 ns | 0.0062 ns | 0.0058 ns |   0.59 |
+         Branch | 1.8081 ns | 0.0076 ns | 0.0067 ns |   1.00 |
     */
 
     //[MemoryDiagnoser]
@@ -26,8 +27,14 @@ namespace SourceCode.Clay.Buffers.Bench
         private const uint _iterations = 1000;
         private const uint N = ushort.MaxValue;
 
+        // Prevent optimization by leaving non-readonly
+#pragma warning disable IDE0044 // Add readonly modifier
+        private static bool @true = true;
+        private static bool @false = false;
+#pragma warning restore IDE0044 // Add readonly modifier
+
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Unsafe()
+        public static ulong UnsafeCode()
         {
             var sum = 0ul;
 
@@ -35,7 +42,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += BitOps.ToByte(n % 17 == 0);
+                    sum += BitOps.ToByte(@true);
+                    sum++;
+                    sum -= BitOps.ToByte(@false);
                 }
             }
 
@@ -43,7 +52,7 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Safe()
+        public static ulong UnsafeAs()
         {
             var sum = 0ul;
 
@@ -51,7 +60,27 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += BoolToByte.ToByte(n % 17 == 0);
+                    sum += Unsafe.As<bool, byte>(ref @true);
+                    sum++;
+                    sum -= Unsafe.As<bool, byte>(ref @false);
+                }
+            }
+
+            return sum;
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Union()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    sum += BoolToByte.ToByte(@true);
+                    sum++;
+                    sum -= BoolToByte.ToByte(@false);
                 }
             }
 
@@ -67,7 +96,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += (byte)(n % 17 == 0 ? 1 : 0);
+                    sum += (byte)(@true ? 1 : 0);
+                    sum++;
+                    sum -= (byte)(@false ? 1 : 0);
                 }
             }
 
