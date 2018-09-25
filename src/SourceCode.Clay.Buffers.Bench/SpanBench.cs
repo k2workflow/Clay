@@ -17,20 +17,21 @@ namespace SourceCode.Clay.Buffers.Bench
 
          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
         ------- |---------:|----------:|----------:|-------:|---------:|
-         Actual | 14.79 ns | 0.2894 ns | 0.5576 ns |   1.01 |     0.05 |
-           Cast | 14.26 ns | 0.2803 ns | 0.4606 ns |   0.97 |     0.04 |
-            Ptr | 15.07 ns | 0.2962 ns | 0.2909 ns |   1.02 |     0.04 |
-         Unroll | 14.72 ns | 0.2925 ns | 0.4378 ns |   1.00 |     0.00 |
+         Unroll | 26.62 ns | 0.4968 ns | 0.4880 ns |   1.00 |     0.00 |
+         Actual | 27.12 ns | 0.5385 ns | 1.1359 ns |   1.02 |     0.05 |
+           Cast | 23.01 ns | 0.4557 ns | 1.0561 ns |   0.86 |     0.04 | <----
 
        Else:
 
          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
         ------- |---------:|----------:|----------:|-------:|---------:|
-         Actual | 14.86 ns | 0.2965 ns | 0.5641 ns |   1.01 |     0.05 |
-           Cast | 25.64 ns | 0.5088 ns | 0.9303 ns |   1.75 |     0.08 |
-            Ptr | 24.64 ns | 0.4696 ns | 0.5025 ns |   1.68 |     0.06 |
-         Unroll | 14.70 ns | 0.2908 ns | 0.4779 ns |   1.00 |     0.00 |
+         Unroll | 26.45 ns | 0.5115 ns | 0.6089 ns |   1.00 |     0.00 | <----
+         Actual | 26.94 ns | 0.5356 ns | 1.1643 ns |   1.02 |     0.05 |
+           Cast | 35.53 ns | 0.6935 ns | 1.2505 ns |   1.34 |     0.06 |
 
+        Unroll is consistent (26ms), whether inlined or not.
+        Cast is faster (23ms) when inlined, but slower (35ms) when not.
+        Some callsites may not inline.
     */
 
     //[MemoryDiagnoser]
@@ -38,6 +39,28 @@ namespace SourceCode.Clay.Buffers.Bench
     {
         private const uint _iterations = 100;
         private const uint N = ushort.MaxValue;
+
+        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Unroll()
+        {
+            var sum = 0ul;
+
+            for (var i = 0; i < _iterations; i++)
+            {
+                for (var n = 0; n <= N; n++)
+                {
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
+
+                    var u64 = ExtractUInt64_Unroll(b, n % b.Length);
+
+                    sum = unchecked(sum + u64);
+                }
+            }
+
+            return sum;
+        }
 
         // Whatever is being used in the actual code
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
@@ -49,10 +72,11 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    var v = i * n * ushort.MaxValue + uint.MaxValue;
-                    var bytes = BitConverter.GetBytes(v);
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
 
-                    var u64 = BitOps.ExtractUInt64(bytes, n & 63);
+                    var u64 = BitOps.ExtractUInt64(b, n % b.Length);
 
                     sum = unchecked(sum + u64);
                 }
@@ -70,10 +94,11 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    var v = i * n * ushort.MaxValue + uint.MaxValue;
-                    var bytes = BitConverter.GetBytes(v);
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
 
-                    var u64 = ExtractUInt64_Cast(bytes, n & 63);
+                    var u64 = ExtractUInt64_Cast(b, n % b.Length);
 
                     sum = unchecked(sum + u64);
                 }
@@ -82,7 +107,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        //[Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Ptr()
         {
             var sum = 0ul;
@@ -91,10 +116,11 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    var v = i * n * ushort.MaxValue + uint.MaxValue;
-                    var bytes = BitConverter.GetBytes(v);
+                    long v = i * n * ushort.MaxValue + uint.MaxValue;
+                    var b = BitConverter.GetBytes(v);
+                    b = new byte[25] { 0, 0, 0, b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], 0, 0, 1, 0, 0, 0, 1, 2, 0, 4, 5, 3, 0, 100 };
 
-                    var u64 = ExtractUInt64_Ptr(bytes, n & 63);
+                    var u64 = ExtractUInt64_Ptr(b, n % b.Length);
 
                     sum = unchecked(sum + u64);
                 }
@@ -103,28 +129,36 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Unroll()
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
         {
-            var sum = 0ul;
+            int ix = bitOffset >> 3; // div 8
+            var len = span.Length - ix;
+            int shft = bitOffset & 7; // mod 8
 
-            for (var i = 0; i < _iterations; i++)
+            ulong val = 0;
+            switch (len)
             {
-                for (var n = 0; n <= N; n++)
-                {
-                    var v = i * n * ushort.MaxValue + uint.MaxValue;
-                    var bytes = BitConverter.GetBytes(v);
+                // Need at least 8+1 bytes
+                default:
+                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+                    goto case 9;
 
-                    var u64 = ExtractUInt64_Unroll(bytes, n & 63);
-
-                    sum = unchecked(sum + u64);
-                }
+                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
+                case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
+                case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
+                case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
+                case 5: val |= (ulong)span[ix + 4] << (4 * 8 - shft); goto case 4;
+                case 4: val |= (ulong)span[ix + 3] << (3 * 8 - shft); goto case 3;
+                case 3: val |= (ulong)span[ix + 2] << (2 * 8 - shft); goto case 2;
+                case 2: val |= (ulong)span[ix + 1] << (1 * 8 - shft); goto case 1;
+                case 1: val |= (ulong)span[ix + 0] >> shft; break;
             }
 
-            return sum;
+            return val;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64_Cast(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -144,7 +178,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64_Ptr(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -167,36 +201,6 @@ namespace SourceCode.Clay.Buffers.Bench
 
                     return val;
                 }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
-        {
-            int ix = bitOffset >> 3; // div 8
-            var len = span.Length - ix;
-            int shft = bitOffset & 7; // mod 8
-
-            ulong val = 0;
-            switch (len)
-            {
-                default:
-                    if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-                    goto case 9;
-
-                // Need at least 8+1 bytes
-                case 9: val |= (ulong)span[ix + 8] << (8 * 8 - shft); goto case 8;
-
-                case 8: val |= (ulong)span[ix + 7] << (7 * 8 - shft); goto case 7;
-                case 7: val |= (ulong)span[ix + 6] << (6 * 8 - shft); goto case 6;
-                case 6: val |= (ulong)span[ix + 5] << (5 * 8 - shft); goto case 5;
-                case 5: val |= (ulong)span[ix + 4] << (4 * 8 - shft); goto case 4;
-
-                case 4: val |= (ulong)span[ix + 3] << (3 * 8 - shft); goto case 3;
-                case 3: val |= (ulong)span[ix + 2] << (2 * 8 - shft); goto case 2;
-                case 2: val |= (ulong)span[ix + 1] << (1 * 8 - shft); goto case 1;
-                case 1: val |= (ulong)span[ix + 0] >> shft;
-                    return val;
             }
         }
     }
