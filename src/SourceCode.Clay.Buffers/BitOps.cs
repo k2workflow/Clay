@@ -1817,102 +1817,14 @@ namespace System
                ------- |---------:|----------:|----------:|-------:|---------:|
                 Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
                   Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
-                Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
+                Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 | x
             
             */
 
             // TODO: Branching is faster than unsafe (or safe union struct)
-            //return (byte)(condition ? 1 : 0);
+            //unsafe { return *(byte*)&condition; }
 
-            unsafe { return *(byte*)&condition; }
-        }
-
-        [StructLayout(LayoutKind.Explicit, Size = 8)]
-        internal ref struct Blit64
-        {
-            // byte
-
-            [FieldOffset(0)]
-            public byte b0;
-
-            [FieldOffset(1)]
-            public byte b1;
-
-            [FieldOffset(2)]
-            public byte b2;
-
-            [FieldOffset(3)]
-            public byte b3;
-
-            [FieldOffset(4)]
-            public byte b4;
-
-            [FieldOffset(5)]
-            public byte b5;
-
-            [FieldOffset(6)]
-            public byte b6;
-
-            [FieldOffset(7)]
-            public byte b7;
-
-            // ushort
-
-            [FieldOffset(0)]
-            public ushort s0;
-
-            [FieldOffset(1)]
-            public ushort s1;
-
-            [FieldOffset(2)]
-            public ushort s2;
-
-            [FieldOffset(3)]
-            public ushort s3;
-
-            // uint
-
-            [FieldOffset(0)]
-            public uint i0;
-
-            [FieldOffset(1)]
-            public uint i1;
-
-            // ulong
-
-            [FieldOffset(0)]
-            public ulong u64;
-        }
-
-        [StructLayout(LayoutKind.Explicit, Size = 4)]
-        internal ref struct Blit32
-        {
-            // byte
-
-            [FieldOffset(0)]
-            public byte b0;
-
-            [FieldOffset(1)]
-            public byte b1;
-
-            [FieldOffset(2)]
-            public byte b2;
-
-            [FieldOffset(3)]
-            public byte b3;
-
-            // ushort
-
-            [FieldOffset(0)]
-            public ushort s0;
-
-            [FieldOffset(1)]
-            public ushort s1;
-
-            // uint
-
-            [FieldOffset(0)]
-            public uint u32;
+            return (byte)(condition ? 1 : 0);
         }
 
         #endregion

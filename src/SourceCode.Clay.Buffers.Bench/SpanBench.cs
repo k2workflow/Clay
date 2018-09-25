@@ -239,7 +239,7 @@ namespace SourceCode.Clay.Buffers.Bench
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            var blit = new BitOps.Blit64();
+            var blit = new Blit64();
             ulong val = 0;
             switch (len)
             {
@@ -264,7 +264,6 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Hybrid1(ReadOnlySpan<byte> span, int bitOffset)
         {
@@ -272,7 +271,7 @@ namespace SourceCode.Clay.Buffers.Bench
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            var blit = new BitOps.Blit64();
+            var blit = new Blit64();
             ulong val = 0;
 
             switch (len)
@@ -308,7 +307,7 @@ namespace SourceCode.Clay.Buffers.Bench
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            var blit = new BitOps.Blit64();
+            var blit = new Blit64();
             ulong val = 0;
             switch (len)
             {
@@ -381,6 +380,94 @@ namespace SourceCode.Clay.Buffers.Bench
             val |= cast[1] << (64 - shft);
 
             return val;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Size = 8)]
+        private ref struct Blit64
+        {
+            // byte
+
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            [FieldOffset(4)]
+            public byte b4;
+
+            [FieldOffset(5)]
+            public byte b5;
+
+            [FieldOffset(6)]
+            public byte b6;
+
+            [FieldOffset(7)]
+            public byte b7;
+
+            // ushort
+
+            [FieldOffset(0)]
+            public ushort s0;
+
+            [FieldOffset(1)]
+            public ushort s1;
+
+            [FieldOffset(2)]
+            public ushort s2;
+
+            [FieldOffset(3)]
+            public ushort s3;
+
+            // uint
+
+            [FieldOffset(0)]
+            public uint i0;
+
+            [FieldOffset(1)]
+            public uint i1;
+
+            // ulong
+
+            [FieldOffset(0)]
+            public ulong u64;
+        }
+
+        [StructLayout(LayoutKind.Explicit, Size = 4)]
+        private ref struct Blit32
+        {
+            // byte
+
+            [FieldOffset(0)]
+            public byte b0;
+
+            [FieldOffset(1)]
+            public byte b1;
+
+            [FieldOffset(2)]
+            public byte b2;
+
+            [FieldOffset(3)]
+            public byte b3;
+
+            // ushort
+
+            [FieldOffset(0)]
+            public ushort s0;
+
+            [FieldOffset(1)]
+            public ushort s1;
+
+            // uint
+
+            [FieldOffset(0)]
+            public uint u32;
         }
     }
 }
