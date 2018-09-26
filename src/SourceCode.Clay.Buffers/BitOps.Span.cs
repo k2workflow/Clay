@@ -626,7 +626,7 @@ namespace System
                 // Need at least 4+1 bytes
                 default:
                 case 5: blit = (ulong)bytes[4] << 32; goto case 4;
-                case 4: blit |= ReadAs<uint>(bytes); break;
+                case 4: blit |= ReadUInt32(bytes); break;
 
                 case 3: blit = (ulong)bytes[2] << 16; goto case 2;
                 case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
@@ -736,7 +736,6 @@ namespace System
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -751,12 +750,12 @@ namespace System
                 // Need at least 8+1 bytes
                 default:
                 case 9: left = bytes[8]; goto case 8;
-                case 8: blit = ReadAs<ulong>(bytes); break;
+                case 8: blit = ReadUInt64(bytes); break;
 
                 case 7: blit = (ulong)bytes[6] << 48; goto case 6;
                 case 6: blit |= (ulong)bytes[5] << 40; goto case 5;
                 case 5: blit |= (ulong)bytes[4] << 32; goto case 4;
-                case 4: blit |= ReadAs<uint>(bytes); break;
+                case 4: blit |= ReadUInt32(bytes); break;
 
                 case 3: blit = (ulong)bytes[2] << 16; goto case 2;
                 case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
@@ -873,9 +872,16 @@ namespace System
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T ReadAs<T>(ReadOnlySpan<byte> bytes)
-            where T : unmanaged, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable // Constrain to integer types as much as possible
-            => Unsafe.ReadUnaligned<T>(ref MemoryMarshal.GetReference(bytes));
+        internal static uint ReadUInt16(ReadOnlySpan<byte> bytes)
+            => Unsafe.ReadUnaligned<ushort>(ref MemoryMarshal.GetReference(bytes));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static uint ReadUInt32(ReadOnlySpan<byte> bytes)
+            => Unsafe.ReadUnaligned<uint>(ref MemoryMarshal.GetReference(bytes));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static ulong ReadUInt64(ReadOnlySpan<byte> bytes)
+            => Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(bytes));
 
         #endregion
     }

@@ -15,23 +15,25 @@ namespace SourceCode.Clay.Buffers.Bench
     /* 
        If using AggressiveInlining:
 
-          Method |     Mean |     Error |    StdDev | Scaled |
-        -------- |---------:|----------:|----------:|-------:|
-          Unroll | 26.76 ns | 0.2114 ns | 0.1978 ns |   1.00 |
-            Blit | 25.97 ns | 0.1513 ns | 0.1416 ns |   0.97 |
-         Hybrid1 | 21.96 ns | 0.1348 ns | 0.1195 ns |   0.82 | x
-          Actual | 20.66 ns | 0.1174 ns | 0.1041 ns |   0.77 | x
-            Cast | 22.48 ns | 0.0906 ns | 0.0803 ns |   0.84 |
+          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+        -------- |---------:|----------:|----------:|-------:|---------:|
+          Actual | 21.24 ns | 0.1442 ns | 0.1349 ns |   1.00 |     0.00 | X
+          Unroll | 27.40 ns | 0.4784 ns | 0.4475 ns |   1.29 |     0.02 |
+            Blit | 26.38 ns | 0.2007 ns | 0.1878 ns |   1.24 |     0.01 |
+         Hybrid1 | 22.64 ns | 0.3441 ns | 0.3219 ns |   1.07 |     0.02 | x
+         Hybrid2 | 21.24 ns | 0.2131 ns | 0.1994 ns |   1.00 |     0.01 | x
+            Cast | 23.29 ns | 0.1943 ns | 0.1818 ns |   1.10 |     0.01 | x
 
        Else:
 
-          Method |     Mean |     Error |    StdDev | Scaled |
-        -------- |---------:|----------:|----------:|-------:|
-          Unroll | 26.76 ns | 0.1428 ns | 0.1336 ns |   1.00 |
-            Blit | 26.24 ns | 0.2536 ns | 0.2372 ns |   0.98 |
-         Hybrid1 | 23.66 ns | 0.2209 ns | 0.2066 ns |   0.88 | x
-          Actual | 20.74 ns | 0.1182 ns | 0.1048 ns |   0.78 | x
-            Cast | 35.34 ns | 0.1551 ns | 0.1451 ns |   1.32 |
+          Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+        -------- |---------:|----------:|----------:|-------:|---------:|
+          Actual | 21.45 ns | 0.1922 ns | 0.1704 ns |   1.00 |     0.00 | X
+          Unroll | 27.19 ns | 0.1992 ns | 0.1766 ns |   1.27 |     0.01 |
+            Blit | 26.64 ns | 0.2264 ns | 0.2118 ns |   1.24 |     0.01 |
+         Hybrid1 | 22.90 ns | 0.2583 ns | 0.2416 ns |   1.07 |     0.01 | x
+         Hybrid2 | 21.58 ns | 0.3742 ns | 0.3317 ns |   1.01 |     0.02 | x
+            Cast | 36.24 ns | 0.6614 ns | 0.6186 ns |   1.69 |     0.03 |
 
         Cast is fast when inlined, but much slower when not.
         All others are consistent, whether inlined or not.
@@ -177,7 +179,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Unroll(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -206,7 +208,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Blit(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -238,7 +240,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Hybrid1(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -274,7 +276,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return val;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ulong ExtractUInt64_Hybrid2(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
@@ -289,12 +291,12 @@ namespace SourceCode.Clay.Buffers.Bench
                 // Need at least 8+1 bytes
                 default:
                 case 9: left = bytes[8]; goto case 8;
-                case 8: blit = BitOps.ReadAs<ulong>(bytes); break;
+                case 8: blit = BitOps.ReadUInt64(bytes); break;
 
                 case 7: blit = (ulong)bytes[6] << 48; goto case 6;
                 case 6: blit |= (ulong)bytes[5] << 40; goto case 5;
                 case 5: blit |= (ulong)bytes[4] << 32; goto case 4;
-                case 4: blit |= BitOps.ReadAs<uint>(bytes); break;
+                case 4: blit |= BitOps.ReadUInt32(bytes); break;
 
                 case 3: blit = (ulong)bytes[2] << 16; goto case 2;
                 case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
@@ -306,7 +308,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return blit;
         }
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ExtractUInt64_Cast(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3; // div 8
