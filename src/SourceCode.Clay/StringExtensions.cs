@@ -123,8 +123,8 @@ namespace SourceCode.Clay
         /// Uses <see cref="StringComparison.Ordinal"/>.
         /// </summary>
         /// <param name="suffix">The prefix to remove.</param>
-        public static string RemovePrefix(this string str, string prefix)
-            => RemovePrefix(str, prefix, StringComparison.Ordinal);
+        public static string RemoveStart(this string str, string prefix)
+            => RemoveStart(str, prefix, StringComparison.Ordinal);
 
         /// <summary>
         /// Removes the specified prefix if it is found at the start of the string.
@@ -132,7 +132,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="suffix">The prefix to remove.</param>
         /// <param name="comparisonType">The string comparison method to use.</param>
-        public static string RemovePrefix(this string str, string prefix, StringComparison comparisonType)
+        public static string RemoveStart(this string str, string prefix, StringComparison comparisonType)
         {
             if (string.IsNullOrEmpty(str)
                 || string.IsNullOrEmpty(prefix))
@@ -158,8 +158,8 @@ namespace SourceCode.Clay
         /// Uses <see cref="StringComparison.Ordinal"/>.
         /// </summary>
         /// <param name="suffix">The suffix to remove.</param>
-        public static string RemoveSuffix(this string str, string suffix)
-            => RemoveSuffix(str, suffix, StringComparison.Ordinal);
+        public static string RemoveEnd(this string str, string suffix)
+            => RemoveEnd(str, suffix, StringComparison.Ordinal);
 
         /// <summary>
         /// Removes the specified suffix if it is found at the end of the string.
@@ -167,7 +167,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="suffix">The suffix to remove.</param>
         /// <param name="comparisonType">The string comparison method to use.</param>
-        public static string RemoveSuffix(this string str, string suffix, StringComparison comparisonType)
+        public static string RemoveEnd(this string str, string suffix, StringComparison comparisonType)
         {
             if (string.IsNullOrEmpty(str)
                 || string.IsNullOrEmpty(suffix))
