@@ -21,7 +21,7 @@ namespace SourceCode.Clay
         // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteImpl(this bool condition)
+        private static byte EvaluateImpl(this bool condition)
             => new BoolToByte { Bool = condition }.Byte; // 1|0
 
         /// <summary>
@@ -32,9 +32,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByte(this bool condition, byte trueValue = 1, byte falseValue = 0)
+        public static byte Evaluate(this bool condition, byte trueValue, byte falseValue = 0)
         {
-            uint val = ToByteImpl(condition);
+            uint val = EvaluateImpl(condition);
+
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
@@ -49,9 +50,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ToUInt16(this bool condition, ushort trueValue = 1, ushort falseValue = 0)
+        public static ushort Evaluate(this bool condition, ushort trueValue, ushort falseValue = 0)
         {
-            uint val = ToByteImpl(condition);
+            uint val = EvaluateImpl(condition);
+
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
@@ -66,9 +68,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ToUInt32(this bool condition, uint trueValue = 1, uint falseValue = 0)
+        public static uint Evaluate(this bool condition, uint trueValue, uint falseValue = 0)
         {
-            uint val = ToByteImpl(condition);
+            uint val = EvaluateImpl(condition);
+
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
@@ -83,9 +86,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ToUInt64(this bool condition, ulong trueValue = 1, ulong falseValue = 0)
+        public static ulong Evaluate(this bool condition, ulong trueValue, ulong falseValue = 0)
         {
-            ulong val = ToByteImpl(condition);
+            ulong val = EvaluateImpl(condition);
+
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
