@@ -418,29 +418,28 @@ namespace System
             ref byte r1 = ref @null;
             ref byte r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            uint val = (uint)r1 << 8 | r0;
-            
-            // Save original value
-            var orig = (byte)(val >> shft);
 
-            // Build new value
+            // Build original mask & value
+            uint mask = (uint)r1 << 8 | r0;
+            uint orig = mask >> shft;
+
+            // Build new mask
             uint hole = ~((uint)byte.MaxValue << shft);
             uint ins = (uint)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (byte)(val >> 8);
-            r0 = (byte)val;
+            r1 = (byte)(mask >> 8);
+            r0 = (byte)mask;
 
-            // Return original value
-            return orig;
+            return (byte)orig;
         }
 
         public static byte InsertByte(Span<ushort> span, int bitOffset, byte insert)
@@ -454,29 +453,28 @@ namespace System
             ref ushort r1 = ref @null;
             ref ushort r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            uint val = (uint)r1 << 16 | r0;
 
-            // Save original value
-            var orig = (byte)(val >> shft);
+            // Build original mask & value
+            uint mask = (uint)r1 << 16 | r0;
+            uint orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             uint hole = ~((uint)byte.MaxValue << shft);
             uint ins = (uint)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (ushort)(val >> 16);
-            r0 = (ushort)val;
+            r1 = (ushort)(mask >> 16);
+            r0 = (ushort)mask;
 
-            // Return original value
-            return orig;
+            return (byte)orig;
         }
 
         public static byte InsertByte(Span<uint> span, int bitOffset, byte insert)
@@ -490,34 +488,67 @@ namespace System
             ref uint r1 = ref @null;
             ref uint r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            ulong val = r1 << 32 | r0;
 
-            // Save original value
-            var orig = (byte)(val >> shft);
+            // Build original mask & value
+            ulong mask = r1 << 32 | r0;
+            ulong orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             ulong hole = ~((ulong)byte.MaxValue << shft);
             ulong ins = (ulong)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (uint)(val >> 32);
-            r0 = (uint)val;
+            r1 = (uint)(mask >> 32);
+            r0 = (uint)mask;
 
-            // Return original value
-            return orig;
+            return (byte)orig;
         }
 
         public static byte InsertByte(Span<ulong> span, int bitOffset, byte insert)
         {
-            return 0;
+            int ix = bitOffset >> 6;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 63;
+
+            // Need at most 1+1 ulongs
+            ulong @null = 0;
+            ref ulong r1 = ref @null;
+            ref ulong r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original value
+            ulong orig = r0 >> shft;
+            orig |= r1 << (64 - shft);
+
+            // Build new masks
+            ulong hole1 = ~((ulong)byte.MaxValue >> (64 - shft));
+            ulong ins1 = (ulong)insert >> (64 - shft);
+            ulong mask1 = (r1 & hole1) | ins1;
+
+            ulong hole0 = ~((ulong)byte.MaxValue << shft);
+            ulong ins0 = (ulong)insert << shft;
+            ulong mask0 = (r0 & hole0) | ins0;
+
+            // Write element refs
+            r1 = mask1;
+            r0 = mask0;
+
+            return (byte)orig;
         }
 
         #endregion
@@ -603,7 +634,7 @@ namespace System
             ref byte r1 = ref @null;
             ref byte r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
@@ -611,23 +642,22 @@ namespace System
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            uint val = (uint)r2 << 16 | (uint)r1 << 8 | r0;
 
-            // Save original value
-            var orig = (ushort)(val >> shft);
+            // Build original mask & value
+            uint mask = (uint)r2 << 16 | (uint)r1 << 8 | r0;
+            uint orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             uint hole = ~((uint)ushort.MaxValue << shft);
             uint ins = (uint)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r2 = (byte)(val >> 16);
-            r1 = (byte)(val >> 8);
-            r0 = (byte)val;
+            r2 = (byte)(mask >> 16);
+            r1 = (byte)(mask >> 8);
+            r0 = (byte)mask;
 
-            // Return original value
-            return orig;
+            return (ushort)orig;
         }
 
         public static ushort InsertUInt16(Span<ushort> span, int bitOffset, ushort insert)
@@ -641,29 +671,28 @@ namespace System
             ref ushort r1 = ref @null;
             ref ushort r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            uint val = (uint)r1 << 16 | r0;
 
-            // Save original value
-            var orig = (ushort)(val >> shft);
+            // Build original mask & value
+            uint mask = (uint)r1 << 16 | r0;
+            uint orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             uint hole = ~((uint)ushort.MaxValue << shft);
             uint ins = (uint)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (ushort)(val >> 16);
-            r0 = (ushort)val;
+            r1 = (ushort)(mask >> 16);
+            r0 = (ushort)mask;
 
-            // Return original value
-            return orig;
+            return (ushort)orig;
         }
 
         public static ushort InsertUInt16(Span<uint> span, int bitOffset, ushort insert)
@@ -677,34 +706,67 @@ namespace System
             ref uint r1 = ref @null;
             ref uint r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            ulong val = (ulong)r1 << 32 | r0;
 
-            // Save original value
-            var orig = (ushort)(val >> shft);
+            // Build original mask & value
+            ulong mask = (ulong)r1 << 32 | r0;
+            ulong orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             ulong hole = ~((ulong)ushort.MaxValue << shft);
             ulong ins = (ulong)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (uint)(val >> 32);
-            r0 = (uint)val;
+            r1 = (uint)(mask >> 32);
+            r0 = (uint)mask;
 
-            // Return original value
-            return orig;
+            return (ushort)orig;
         }
 
         public static ushort InsertUInt16(Span<ulong> span, int bitOffset, ushort insert)
         {
-            return 0;
+            int ix = bitOffset >> 6;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 63;
+
+            // Need at most 1+1 ulongs
+            ulong @null = 0;
+            ref ulong r1 = ref @null;
+            ref ulong r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original value
+            ulong orig = r0 >> shft;
+            orig |= r1 << (64 - shft);
+
+            // Build new masks
+            ulong hole1 = ~((ulong)ushort.MaxValue >> (64 - shft));
+            ulong ins1 = (ulong)insert >> (64 - shft);
+            ulong mask1 = (r1 & hole1) | ins1;
+
+            ulong hole0 = ~((ulong)ushort.MaxValue << shft);
+            ulong ins0 = (ulong)insert << shft;
+            ulong mask0 = (r0 & hole0) | ins0;
+
+            // Write element refs
+            r1 = mask1;
+            r0 = mask0;
+
+            return (ushort)orig;
         }
 
         #endregion
@@ -813,36 +875,35 @@ namespace System
             ref byte r1 = ref @null;
             ref byte r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             var slice = span.Slice(ix);
             switch (span.Length - ix)
             {
                 default:
-                case 5: r4 = ref span[4]; goto case 4;
-                case 4: r3 = ref span[3]; goto case 3;
-                case 3: r2 = ref span[2]; goto case 2;
-                case 2: r1 = ref span[1]; goto case 1;
-                case 1: r0 = ref span[0]; break;
+                case 5: r4 = ref slice[4]; goto case 4;
+                case 4: r3 = ref slice[3]; goto case 3;
+                case 3: r2 = ref slice[2]; goto case 2;
+                case 2: r1 = ref slice[1]; goto case 1;
+                case 1: r0 = ref slice[0]; break;
             }
-            ulong val = (ulong)r4 << 32 | (ulong)r3 << 24 | (ulong)r2 << 16 | (ulong)r1 << 8 | r0;
 
-            // Save original value
-            var orig = (uint)(val >> shft);
+            // Build original mask & value
+            ulong mask = (ulong)r4 << 32 | (ulong)r3 << 24 | (ulong)r2 << 16 | (ulong)r1 << 8 | r0;
+            ulong orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             ulong hole = ~((ulong)uint.MaxValue << shft);
             ulong ins = (ulong)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r4 = (byte)(val >> 32);
-            r3 = (byte)(val >> 24);
-            r2 = (byte)(val >> 16);
-            r1 = (byte)(val >> 8);
-            r0 = (byte)val;
+            r4 = (byte)(mask >> 32);
+            r3 = (byte)(mask >> 24);
+            r2 = (byte)(mask >> 16);
+            r1 = (byte)(mask >> 8);
+            r0 = (byte)mask;
 
-            // Return original value
-            return orig;
+            return (uint)orig;
         }
 
         public static uint InsertUInt32(Span<ushort> span, int bitOffset, uint insert)
@@ -857,7 +918,7 @@ namespace System
             ref ushort r1 = ref @null;
             ref ushort r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
@@ -865,23 +926,22 @@ namespace System
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            ulong val = (ulong)r2 << 32 | (ulong)r1 << 16 | r0;
 
-            // Save original value
-            var orig = (uint)(val >> shft);
+            // Build original mask & value
+            ulong mask = (ulong)r2 << 32 | (ulong)r1 << 16 | r0;
+            ulong orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             ulong hole = ~((ulong)uint.MaxValue << shft);
             ulong ins = (ulong)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r2 = (ushort)(val >> 32);
-            r1 = (ushort)(val >> 16);
-            r0 = (ushort)val;
+            r2 = (ushort)(mask >> 32);
+            r1 = (ushort)(mask >> 16);
+            r0 = (ushort)mask;
 
-            // Return original value
-            return orig;
+            return (uint)orig;
         }
 
         public static uint InsertUInt32(Span<uint> span, int bitOffset, uint insert)
@@ -895,34 +955,67 @@ namespace System
             ref uint r1 = ref @null;
             ref uint r0 = ref @null;
 
-            // Extract element refs
+            // Read element refs
             switch (span.Length - ix)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
-            ulong val = (ulong)r1 << 32 | r0;
 
-            // Save original value
-            var orig = (uint)(val >> shft);
+            // Build original mask & value
+            ulong mask = (ulong)r1 << 32 | r0;
+            ulong orig = mask >> shft;
 
-            // Build new value
+            // Build new mask
             ulong hole = ~((ulong)uint.MaxValue << shft);
             ulong ins = (ulong)insert << shft;
-            val = (val & hole) | ins;
+            mask = (mask & hole) | ins;
 
             // Write element refs
-            r1 = (uint)(val >> 32);
-            r0 = (uint)val;
+            r1 = (uint)(mask >> 32);
+            r0 = (uint)mask;
 
-            // Return original value
-            return orig;
+            return (uint)orig;
         }
 
         public static uint InsertUInt32(Span<ulong> span, int bitOffset, uint insert)
         {
-            return 0;
+            int ix = bitOffset >> 6;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 63;
+
+            // Need at most 1+1 ulongs
+            ulong @null = 0;
+            ref ulong r1 = ref @null;
+            ref ulong r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original value
+            ulong orig = r0 >> shft;
+            orig |= r1 << (64 - shft);
+
+            // Build new masks
+            ulong hole1 = ~((ulong)uint.MaxValue >> (64 - shft));
+            ulong ins1 = (ulong)insert >> (64 - shft);
+            ulong mask1 = (r1 & hole1) | ins1;
+
+            ulong hole0 = ~((ulong)uint.MaxValue << shft);
+            ulong ins0 = (ulong)insert << shft;
+            ulong mask0 = (r0 & hole0) | ins0;
+
+            // Write element refs
+            r1 = mask1;
+            r0 = mask0;
+
+            return (uint)orig;
         }
 
         #endregion
@@ -1059,17 +1152,143 @@ namespace System
 
         public static ulong InsertUInt64(Span<ushort> span, int bitOffset, ulong insert)
         {
-            return 0;
+            int ix = bitOffset >> 4;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15;
+
+            // Need at most 4+1 ushorts
+            ushort @null = 0;
+            ref ushort r4 = ref @null;
+            ref ushort r3 = ref @null;
+            ref ushort r2 = ref @null;
+            ref ushort r1 = ref @null;
+            ref ushort r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 5: r4 = ref span[ix + 4]; goto case 4;
+                case 4: r3 = ref span[ix + 3]; goto case 3;
+                case 3: r2 = ref span[ix + 2]; goto case 2;
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original mask & value
+            ulong orig = (ulong)r0 >> shft;
+            orig |= (ulong)r1 << (16 - shft);
+            orig |= (ulong)r2 << (32 - shft);
+            orig |= (ulong)r3 << (48 - shft);
+            orig |= (ulong)r4 << (64 - shft);
+
+            // Build new mask
+            ulong hole4 = ~((ulong)uint.MaxValue << shft);
+            ulong hole3 = ~((ulong)uint.MaxValue << shft);
+            ulong hole2 = ~((ulong)uint.MaxValue << shft);
+            ulong hole1 = ~((ulong)uint.MaxValue >> (32 - shft));
+            ulong hole0 = ~((ulong)uint.MaxValue << shft);
+            ulong ins4 = insert << shft;
+            ulong ins3 = insert << shft;
+            ulong ins2 = insert << shft;
+            ulong ins1 = insert >> (32 - shft);
+            ulong ins0 = insert << shft;
+
+            // Write element refs
+            r2 = (ushort)((r4 & hole4) | ins4);
+            r2 = (ushort)((r3 & hole3) | ins3);
+            r2 = (ushort)((r2 & hole2) | ins2);
+            r1 = (ushort)((r1 & hole1) | ins1);
+            r0 = (ushort)((r0 & hole0) | ins0);
+
+            // Return original value
+            return orig;
         }
 
         public static ulong InsertUInt64(Span<uint> span, int bitOffset, ulong insert)
         {
-            return 0;
+            int ix = bitOffset >> 5;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31;
+
+            // Need at most 2+1 uints
+            uint @null = 0;
+            ref uint r2 = ref @null;
+            ref uint r1 = ref @null;
+            ref uint r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 3: r2 = ref span[ix + 2]; goto case 2;
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original value
+            ulong orig = r0 >> shft;
+            orig |= r1 << (32 - shft);
+            orig |= r2 >> shft; // BUG: Offsets not correct
+
+            // Build new masks
+            uint hole2 = ~(uint.MaxValue << shft);
+            uint ins2 = (uint)(insert >> shft);
+            uint mask2 = (r2 & hole2) | ins2;
+
+            uint hole1 = ~(uint.MaxValue >> (32 - shft));
+            uint ins1 = (uint)(insert >> (32 - shft));
+            uint mask1 = (r1 & hole1) | ins1;
+
+            uint hole0 = ~(uint.MaxValue << shft);
+            uint ins0 = (uint)(insert << shft);
+            uint mask0 = (r0 & hole0) | ins0;
+
+            // Write element refs
+            r2 = mask2;
+            r1 = mask1;
+            r0 = mask0;
+
+            return orig;
         }
 
         public static ulong InsertUInt64(Span<ulong> span, int bitOffset, ulong insert)
         {
-            return 0;
+            int ix = bitOffset >> 6;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 63;
+
+            // Need at most 1+1 ulongs
+            ulong @null = 0;
+            ref ulong r1 = ref @null;
+            ref ulong r0 = ref @null;
+
+            // Read element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+
+            // Build original value
+            ulong orig = r0 >> shft;
+            orig |= r1 << (64 - shft);
+
+            // Build new masks
+            ulong hole1 = ~(ulong.MaxValue >> (64 - shft));
+            ulong ins1 = insert >> (64 - shft);
+            ulong mask1 = (r1 & hole1) | ins1;
+
+            ulong hole0 = ~(ulong.MaxValue << shft);
+            ulong ins0 = insert << shft;
+            ulong mask0 = (r0 & hole0) | ins0;
+
+            // Write element refs
+            r1 = mask1;
+            r0 = mask0;
+
+            return orig;
         }
 
         #endregion
