@@ -374,16 +374,17 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 7; // mod 8
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 bytes
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= (uint)span[ix1] << (8 - shft);
+            uint blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (uint)span[ix + 1] << 8; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
+            blit >>= bitOffset & 7; // mod 8
             return (byte)blit;
         }
 
@@ -396,16 +397,17 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 15; // mod 16
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ushorts
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= (uint)span[ix1] << (16 - shft);
+            uint blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (uint)span[ix + 1] << 16; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
+            blit >>= bitOffset & 15; // mod 16
             return (byte)blit;
         }
 
@@ -418,16 +420,17 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 31; // mod 32
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 uints
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (32 - shft);
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
+            blit >>= bitOffset & 31; // mod 32
             return (byte)blit;
         }
 
@@ -440,15 +443,20 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 63; // mod 64
-
-            ulong blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (64 - shft);
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: left = span[ix + 1]; goto case 1;
+                case 1: blit = span[ix]; break;
+            }
+
+            int shft = bitOffset & 63; // mod 64
+            blit >>= shft;
+            blit |= left << (64 - shft);
 
             return (byte)blit;
         }
@@ -466,14 +474,11 @@ namespace System
         public static void InsertByte(Span<byte> span, int bitOffset, byte value)
         {
             int ix = bitOffset >> 3; // div 8
-            int len = Math.Max(0, span.Length - ix);
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7; // mod 8
-
-            uint foo = (uint)(value << shft);
 
             // Need at least 1+1 bytes
             Span<byte> byts = span.Slice(ix);
-            Unsafe.WriteUnaligned(ref MemoryMarshal.GetReference(byts), (ushort)value);
         }
 
         public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
@@ -504,10 +509,10 @@ namespace System
 
             ReadOnlySpan<byte> slice = span.Slice(ix);
 
+            // Need at least 2+1 bytes
             uint blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 2+1 bytes
                 default:
                 case 3: blit = (uint)slice[2] << 16; goto case 2;
                 case 2: blit |= (uint)slice[1] << 8; goto case 1;
@@ -527,16 +532,17 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 15; // mod 16
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ushorts
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= (uint)span[ix1] << (16 - shft);
+            uint blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (uint)span[ix + 1] << 16; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
+            blit >>= bitOffset & 15; // mod 16
             return (ushort)blit;
         }
 
@@ -549,16 +555,17 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 31; // mod 32
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 uints
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (32 - shft);
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
+            blit >>= bitOffset & 31; // mod 32
             return (ushort)blit;
         }
 
@@ -571,15 +578,20 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 63; // mod 64
-
-            ulong blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (64 - shft);
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: left = span[ix + 1]; goto case 1;
+                case 1: blit = span[ix]; break;
+            }
+
+            int shft = bitOffset & 63; // mod 64
+            blit >>= shft;
+            blit |= left << (64 - shft);
 
             return (ushort)blit;
         }
@@ -672,17 +684,18 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 31; // mod 32
-
-            uint blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 uints
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (32 - shft);
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
+                case 1: blit |= span[ix]; break;
+            }
 
-            return blit;
+            blit >>= bitOffset & 31; // mod 32
+            return (uint)blit;
         }
 
         /// <summary>
@@ -694,15 +707,20 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 63; // mod 64
-
-            ulong blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (64 - shft);
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: left = span[ix + 1]; goto case 1;
+                case 1: blit = span[ix]; break;
+            }
+
+            int shft = bitOffset & 63; // mod 64
+            blit >>= shft;
+            blit |= left << (64 - shft);
 
             return (uint)blit;
         }
@@ -743,11 +761,11 @@ namespace System
 
             ReadOnlySpan<byte> bytes = span.Slice(ix);
 
+            // Need at least 8+1 bytes
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 8+1 bytes
                 default:
                 case 9: left = bytes[8]; goto case 8;
                 case 8: blit = ReadUInt64(bytes); break;
@@ -779,11 +797,11 @@ namespace System
 
             ReadOnlySpan<ushort> slice = span.Slice(ix);
 
+            // Need at least 4+1 ushorts
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 4+1 ushorts
                 default:
                 case 5: left = slice[4]; goto case 4;
                 case 4: blit = (ulong)slice[3] << 48; goto case 3;
@@ -809,11 +827,11 @@ namespace System
 
             ReadOnlySpan<uint> slice = span.Slice(ix);
 
+            // Need at least 2+1 uints
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 2+1 uints
                 default:
                 case 3: left = slice[2]; goto case 2;
                 case 2: blit = (ulong)slice[1] << 32; goto case 1;
@@ -834,15 +852,20 @@ namespace System
         {
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 63; // mod 64
-
-            ulong blit = span[ix];
-            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            int ix1 = ix + 1;
-            if (ix1 < span.Length)
-                blit |= span[ix1] << (64 - shft);
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: left = span[ix + 1]; goto case 1;
+                case 1: blit = span[ix]; break;
+            }
+
+            int shft = bitOffset & 63; // mod 64
+            blit >>= shft;
+            blit |= left << (64 - shft);
 
             return blit;
         }
