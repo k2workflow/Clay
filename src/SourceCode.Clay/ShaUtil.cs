@@ -22,6 +22,9 @@ namespace SourceCode.Clay
             11, 12, 13, 14, 15                      // [50-54]       = 98..102= 'b'..'f'
         };
 
+        // Each byte is two hexits (our convention is lowercase)
+        private const string HexChars = "0123456789abcdef";
+
         private static bool TryParseHexit(in char c, out byte b)
         {
             b = 0;
@@ -91,28 +94,6 @@ namespace SourceCode.Clay
             return true;
         }
 
-        private static void ToHex(in ReadOnlySpan<byte> sha, in Span<char> span)
-        {
-            var byteLength = sha.Length; // 20|32
-            Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
-
-            // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
-            Debug.Assert(span.Length == Sha1.HexLength || span.Length == Sha256.HexLength);
-
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
-            {
-                // Each byte is two hexits (convention is lowercase)
-                var byt = sha[i];
-
-                var b = byt >> 4; // == b / 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-
-                b = byt & 0x0F; // == b % 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-            }
-        }
-
         /// <summary>
         /// Converts the <see cref="Sha1"/> or <see cref="Sha256"/> instance to a string using the 'N' format,
         /// and returns the value split into two tokens.
@@ -128,7 +109,15 @@ namespace SourceCode.Clay
             var hexLength = byteLength * 2;
 
             Span<char> span = stackalloc char[hexLength];
-            ToHex(sha, span);
+
+            var pos = 0;
+            for (var i = 0; i < byteLength; i++) // 20|32
+            {
+                // Each byte is two hexits
+                var byt = sha[i];
+                span[pos++] = HexChars[byt >> 4]; // == b / 16
+                span[pos++] = HexChars[byt & 15]; // == b % 16
+            }
 
             if (prefixLength >= hexLength)
             {
@@ -162,7 +151,14 @@ namespace SourceCode.Clay
             var hexLength = byteLength * 2; // 40|64
             Span<char> span = stackalloc char[hexLength];
 
-            ToHex(sha, span);
+            var pos = 0;
+            for (var i = 0; i < byteLength; i++) // 20|32
+            {
+                // Each byte is two hexits
+                var byt = sha[i];
+                span[pos++] = HexChars[byt >> 4]; // == b / 16
+                span[pos++] = HexChars[byt & 15]; // == b % 16
+            }
 
             var str = new string(span);
             return str;
@@ -195,12 +191,8 @@ namespace SourceCode.Clay
             {
                 // Each byte is two hexits (convention is lowercase)
                 var byt = sha[i];
-
-                var b = byt >> 4; // == b / 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
-
-                b = byt & 0x0F; // == b % 16
-                span[pos++] = (char)(b < 10 ? b + '0' : b - 10 + 'a'); // Inline for perf
+                span[pos++] = HexChars[byt >> 4]; // == b / 16
+                span[pos++] = HexChars[byt & 15]; // == b % 16
 
                 // Append a separator if required
                 if (pos == sep) // pos >= 2, sep = 0|N

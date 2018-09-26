@@ -115,7 +115,77 @@ namespace SourceCode.Clay
         /// <param name="y"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsOrdinal(this string x, in string y)
+        public static bool EqualsOrdinal(this string x, string y)
             => StringComparer.Ordinal.Equals(x, y);
+
+        /// <summary>
+        /// Removes the specified prefix if it is found at the start of the string.
+        /// Uses <see cref="StringComparison.Ordinal"/>.
+        /// </summary>
+        /// <param name="suffix">The prefix to remove.</param>
+        public static string RemovePrefix(this string str, string prefix)
+            => RemovePrefix(str, prefix, StringComparison.Ordinal);
+
+        /// <summary>
+        /// Removes the specified prefix if it is found at the start of the string.
+        /// Uses the specified <see cref="StringComparison"/>.
+        /// </summary>
+        /// <param name="suffix">The prefix to remove.</param>
+        /// <param name="comparisonType">The string comparison method to use.</param>
+        public static string RemovePrefix(this string str, string prefix, StringComparison comparisonType)
+        {
+            if (string.IsNullOrEmpty(str)
+                || string.IsNullOrEmpty(prefix))
+                return str;
+
+            var len = str.Length - prefix.Length;
+            if (len < 0)
+                return str;
+
+            var found = str.StartsWith(prefix, comparisonType);
+            if (!found)
+                return str;
+
+            if (len == 0)
+                return string.Empty;
+
+            var val = str.Substring(prefix.Length, len);
+            return val;
+        }
+
+        /// <summary>
+        /// Removes the specified suffix if it is found at the end of the string.
+        /// Uses <see cref="StringComparison.Ordinal"/>.
+        /// </summary>
+        /// <param name="suffix">The suffix to remove.</param>
+        public static string RemoveSuffix(this string str, string suffix)
+            => RemoveSuffix(str, suffix, StringComparison.Ordinal);
+
+        /// <summary>
+        /// Removes the specified suffix if it is found at the end of the string.
+        /// Uses the specified <see cref="StringComparison"/>.
+        /// </summary>
+        /// <param name="suffix">The suffix to remove.</param>
+        /// <param name="comparisonType">The string comparison method to use.</param>
+        public static string RemoveSuffix(this string str, string suffix, StringComparison comparisonType)
+        {
+            if (string.IsNullOrEmpty(str)
+                || string.IsNullOrEmpty(suffix))
+                return str;
+
+            var len = str.Length - suffix.Length;
+            if (len < 0)
+                return str;
+
+            var found = str.EndsWith(suffix, comparisonType);
+            if (!found)
+                return str;
+
+            if (len == 0)
+                return string.Empty;
+
+            var val = str.Substring(0, len);
+            return val;
+        }
     }
 }
