@@ -413,8 +413,8 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7; // mod 8
 
-            // Need at least 1+1 bytes
-            Span<byte> byts = span.Slice(ix);
+            // Need at most 1+1 bytes
+            Span<byte> bytes = span.Slice(ix);
         }
 
         public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
@@ -443,7 +443,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 2+1 bytes
+            // Need at most 2+1 bytes
             uint blit = 0;
             switch (span.Length - ix)
             {
@@ -467,7 +467,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 1+1 ushorts
+            // Need at most 1+1 ushorts
             uint blit = 0;
             switch (span.Length - ix)
             {
@@ -532,10 +532,10 @@ namespace System
 
             ReadOnlySpan<byte> bytes = span.Slice(ix);
 
+            // Need at most 4+1 bytes
             ulong blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 4+1 bytes
                 default:
                 case 5: blit = (ulong)bytes[4] << 32; goto case 4;
                 case 4: blit |= ReadUInt32(bytes); break;
@@ -559,10 +559,10 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
+            // Need at most 2+1 ushorts
             ulong blit = 0;
             switch (span.Length - ix)
             {
-                // Need at least 2+1 ushorts
                 default:
                 case 3: blit = (ulong)span[ix + 2] << 32; goto case 2;
                 case 2: blit |= (ulong)span[ix + 1] << 16; goto case 1;
@@ -583,7 +583,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 1+1 uints
+            // Need at most 1+1 uints
             ulong blit = 0;
             switch (span.Length - ix)
             {
@@ -640,7 +640,7 @@ namespace System
 
             ReadOnlySpan<byte> bytes = span.Slice(ix);
 
-            // Need at least 8+1 bytes
+            // Need at most 8+1 bytes
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
@@ -676,7 +676,7 @@ namespace System
 
             ReadOnlySpan<ushort> slice = span.Slice(ix);
 
-            // Need at least 4+1 ushorts
+            // Need at most 4+1 ushorts
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
@@ -704,7 +704,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 2+1 uints
+            // Need at most 2+1 uints
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
@@ -730,7 +730,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 1+1 ulongs
+            // Need at most 1+1 ulongs
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
