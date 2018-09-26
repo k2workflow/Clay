@@ -17,65 +17,93 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(BoolToByte))]
         public static void BoolToByte()
         {
-            Assert.Equal(1, @true.ToByte());
-            Assert.Equal(0, @false.ToByte());
+            const byte t0 = 0;
+            const byte t1 = 1;
+            const byte t2 = 2;
+            const byte t3 = 3;
+            const byte max = byte.MaxValue;
+            const byte min = byte.MinValue;
 
-            Assert.Equal(2, @true.ToByte(2));
-            Assert.Equal(3, @false.ToByte(falseValue: 3));
+            Assert.Equal(t1, @true.Evaluate(t1));
+            Assert.Equal(t0, @false.Evaluate(t1));
 
-            Assert.Equal(2, @true.ToByte(2, 3));
-            Assert.Equal(3, @false.ToByte(2, 3));
+            Assert.Equal(t2, @true.Evaluate(t2));
+            Assert.Equal(t3, @false.Evaluate(t1, t3));
 
-            Assert.Equal(byte.MaxValue, @true.ToByte(byte.MaxValue, byte.MinValue));
-            Assert.Equal(byte.MaxValue, @false.ToByte(byte.MinValue, byte.MaxValue));
+            Assert.Equal(t2, @true.Evaluate(t2, t3));
+            Assert.Equal(t3, @false.Evaluate(t2, t3));
+
+            Assert.Equal(max, @true.Evaluate(max, min));
+            Assert.Equal(max, @false.Evaluate(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt16))]
         public static void BoolToUInt16()
         {
-            Assert.Equal(1, @true.ToUInt16());
-            Assert.Equal(0, @false.ToUInt16());
+            const ushort t0 = 0;
+            const ushort t1 = 1;
+            const ushort t2 = 2;
+            const ushort t3 = 3;
+            const ushort max = ushort.MaxValue;
+            const ushort min = ushort.MinValue;
 
-            Assert.Equal(2, @true.ToUInt16(2));
-            Assert.Equal(3, @false.ToUInt16(falseValue: 3));
+            Assert.Equal(t1, @true.Evaluate(t1));
+            Assert.Equal(t0, @false.Evaluate(t1));
 
-            Assert.Equal(2, @true.ToUInt16(2, 3));
-            Assert.Equal(3, @false.ToUInt16(2, 3));
+            Assert.Equal(t2, @true.Evaluate(t2));
+            Assert.Equal(t3, @false.Evaluate(t1, t3));
 
-            Assert.Equal(ushort.MaxValue, @true.ToUInt16(ushort.MaxValue, ushort.MinValue));
-            Assert.Equal(ushort.MaxValue, @false.ToUInt16(ushort.MinValue, ushort.MaxValue));
+            Assert.Equal(t2, @true.Evaluate(t2, t3));
+            Assert.Equal(t3, @false.Evaluate(t2, t3));
+
+            Assert.Equal(max, @true.Evaluate(max, min));
+            Assert.Equal(max, @false.Evaluate(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt32))]
         public static void BoolToUInt32()
         {
-            Assert.Equal(1u, @true.ToUInt32());
-            Assert.Equal(0u, @false.ToUInt32());
+            const uint t0 = 0;
+            const uint t1 = 1;
+            const uint t2 = 2;
+            const uint t3 = 3;
+            const uint max = uint.MaxValue;
+            const uint min = uint.MinValue;
 
-            Assert.Equal(2u, @true.ToUInt32(2));
-            Assert.Equal(3u, @false.ToUInt32(falseValue: 3));
+            Assert.Equal(t1, @true.Evaluate(t1));
+            Assert.Equal(t0, @false.Evaluate(t1));
 
-            Assert.Equal(2u, @true.ToUInt32(2, 3));
-            Assert.Equal(3u, @false.ToUInt32(2, 3));
+            Assert.Equal(t2, @true.Evaluate(t2));
+            Assert.Equal(t3, @false.Evaluate(t1, t3));
 
-            Assert.Equal(uint.MaxValue, @true.ToUInt32(uint.MaxValue, uint.MinValue));
-            Assert.Equal(uint.MaxValue, @false.ToUInt32(uint.MinValue, uint.MaxValue));
+            Assert.Equal(t2, @true.Evaluate(t2, t3));
+            Assert.Equal(t3, @false.Evaluate(t2, t3));
+
+            Assert.Equal(max, @true.Evaluate(max, min));
+            Assert.Equal(max, @false.Evaluate(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt64))]
         public static void BoolToUInt64()
         {
-            Assert.Equal(1ul, @true.ToUInt64());
-            Assert.Equal(0ul, @false.ToUInt64());
+            const ulong t0 = 0;
+            const ulong t1 = 1;
+            const ulong t2 = 2;
+            const ulong t3 = 3;
+            const ulong max = ulong.MaxValue;
+            const ulong min = ulong.MinValue;
 
-            Assert.Equal(2ul, @true.ToUInt64(2));
-            Assert.Equal(3ul, @false.ToUInt64(falseValue: 3));
+            Assert.Equal(t1, @true.Evaluate(t1));
+            Assert.Equal(t0, @false.Evaluate(t1));
 
-            Assert.Equal(2ul, @true.ToUInt64(2, 3));
-            Assert.Equal(3ul, @false.ToUInt64(2, 3));
+            Assert.Equal(t2, @true.Evaluate(t2));
+            Assert.Equal(t3, @false.Evaluate(t1, t3));
 
-            Assert.Equal(ulong.MaxValue, @true.ToUInt64(ulong.MaxValue, ulong.MinValue));
-            Assert.Equal(ulong.MaxValue, @false.ToUInt64(ulong.MinValue, ulong.MaxValue));
+            Assert.Equal(t2, @true.Evaluate(t2, t3));
+            Assert.Equal(t3, @false.Evaluate(t2, t3));
+
+            Assert.Equal(max, @true.Evaluate(max, min));
+            Assert.Equal(max, @false.Evaluate(min, max));
         }
     }
 }
