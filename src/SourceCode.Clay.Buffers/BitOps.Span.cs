@@ -17,7 +17,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to read.</param>
         public static bool ExtractBit(ReadOnlySpan<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
 
             bool val = ExtractBit(span[ix], bitOffset);
@@ -32,7 +32,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to read.</param>
         public static bool ExtractBit(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             bool val = ExtractBit(span[ix], bitOffset);
@@ -47,7 +47,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to read.</param>
         public static bool ExtractBit(ReadOnlySpan<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             bool val = ExtractBit(span[ix], bitOffset);
@@ -62,7 +62,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to read.</param>
         public static bool ExtractBit(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             bool val = ExtractBit(span[ix], bitOffset);
@@ -82,7 +82,7 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<byte> span, int bitOffset, bool on)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
@@ -100,7 +100,7 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ushort> span, int bitOffset, bool on)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
@@ -118,7 +118,7 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<uint> span, int bitOffset, bool on)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
@@ -136,7 +136,7 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ulong> span, int bitOffset, bool on)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
@@ -157,7 +157,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
@@ -174,7 +174,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
@@ -191,7 +191,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
@@ -208,7 +208,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<ulong> span, int bitOffset)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
@@ -229,7 +229,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
@@ -246,7 +246,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
@@ -263,7 +263,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
@@ -280,7 +280,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<ulong> span, int bitOffset)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
@@ -301,7 +301,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
@@ -318,7 +318,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
@@ -335,7 +335,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
@@ -352,7 +352,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<ulong> span, int bitOffset)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
@@ -406,53 +406,118 @@ namespace System
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
-        /// <param name="value">The value to write.</param>
-        public static byte InsertByte(Span<byte> span, int bitOffset, byte value)
+        /// <param name="insert">The value to write.</param>
+        public static byte InsertByte(Span<byte> span, int bitOffset, byte insert)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7;
-            var len = span.Length - ix;
 
             // Need at most 1+1 bytes
-            var bytes = span.Slice(ix);
+            byte @null = 0;
+            ref byte r1 = ref @null;
+            ref byte r0 = ref @null;
 
-            // Extract original value
-            uint val = 0;
-            switch (len)
+            // Extract element refs
+            switch (span.Length - ix)
             {
                 default:
-                case 2: val |= (uint)bytes[1] << 8; goto case 1;
-                case 1: val |= bytes[0]; break;
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
             }
-            uint orig = val >> bitOffset & 7;
+            uint val = (uint)r1 << 8 | r0;
+            
+            // Save original value
+            var orig = (byte)(val >> shft);
 
-            // Create new value
-            val &= RotateLeft(0xFF_00u, shft);
-            val |= (uint)value << shft;
+            // Build new value
+            uint hole = ~((uint)byte.MaxValue << shft);
+            uint ins = (uint)insert << shft;
+            val = (val & hole) | ins;
 
-            // Write new value
-            switch (len)
-            {
-                default:
-                case 2: bytes[1] = (byte)(val >> 8); goto case 1;
-                case 1: bytes[0] = (byte)val; break;
-            }
+            // Write element refs
+            r1 = (byte)(val >> 8);
+            r0 = (byte)val;
 
             // Return original value
-            return (byte)orig;
+            return orig;
         }
 
-        public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
+        public static byte InsertByte(Span<ushort> span, int bitOffset, byte insert)
         {
+            int ix = bitOffset >> 4;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15;
+
+            // Need at most 1+1 ushorts
+            ushort @null = 0;
+            ref ushort r1 = ref @null;
+            ref ushort r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            uint val = (uint)r1 << 16 | r0;
+
+            // Save original value
+            var orig = (byte)(val >> shft);
+
+            // Build new value
+            uint hole = ~((uint)byte.MaxValue << shft);
+            uint ins = (uint)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r1 = (ushort)(val >> 16);
+            r0 = (ushort)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertByte(Span<uint> span, int bitOffset, byte value)
+        public static byte InsertByte(Span<uint> span, int bitOffset, byte insert)
         {
+            int ix = bitOffset >> 5;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31;
+
+            // Need at most 1+1 uints
+            uint @null = 0;
+            ref uint r1 = ref @null;
+            ref uint r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            ulong val = r1 << 32 | r0;
+
+            // Save original value
+            var orig = (byte)(val >> shft);
+
+            // Build new value
+            ulong hole = ~((ulong)byte.MaxValue << shft);
+            ulong ins = (ulong)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r1 = (uint)(val >> 32);
+            r0 = (uint)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertByte(Span<ulong> span, int bitOffset, byte value)
+        public static byte InsertByte(Span<ulong> span, int bitOffset, byte insert)
         {
+            return 0;
         }
 
         #endregion
@@ -466,7 +531,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 bytes
@@ -490,7 +555,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 ushorts
@@ -526,20 +591,120 @@ namespace System
 
         #region InsertUInt16
 
-        public static void InsertUInt16(Span<byte> span, int bitOffset, ushort value)
+        public static ushort InsertUInt16(Span<byte> span, int bitOffset, ushort insert)
         {
+            int ix = bitOffset >> 3;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 7;
+
+            // Need at most 2+1 bytes
+            byte @null = 0;
+            ref byte r2 = ref @null;
+            ref byte r1 = ref @null;
+            ref byte r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 3: r2 = ref span[ix + 2]; goto case 2;
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            uint val = (uint)r2 << 16 | (uint)r1 << 8 | r0;
+
+            // Save original value
+            var orig = (ushort)(val >> shft);
+
+            // Build new value
+            uint hole = ~((uint)ushort.MaxValue << shft);
+            uint ins = (uint)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r2 = (byte)(val >> 16);
+            r1 = (byte)(val >> 8);
+            r0 = (byte)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt16(Span<ushort> span, int bitOffset, ushort value)
+        public static ushort InsertUInt16(Span<ushort> span, int bitOffset, ushort insert)
         {
+            int ix = bitOffset >> 4;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15;
+
+            // Need at most 1+1 ushorts
+            ushort @null = 0;
+            ref ushort r1 = ref @null;
+            ref ushort r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            uint val = (uint)r1 << 16 | r0;
+
+            // Save original value
+            var orig = (ushort)(val >> shft);
+
+            // Build new value
+            uint hole = ~((uint)ushort.MaxValue << shft);
+            uint ins = (uint)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r1 = (ushort)(val >> 16);
+            r0 = (ushort)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt16(Span<uint> span, int bitOffset, ushort value)
+        public static ushort InsertUInt16(Span<uint> span, int bitOffset, ushort insert)
         {
+            int ix = bitOffset >> 5;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31;
+
+            // Need at most 1+1 uints
+            uint @null = 0;
+            ref uint r1 = ref @null;
+            ref uint r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            ulong val = (ulong)r1 << 32 | r0;
+
+            // Save original value
+            var orig = (ushort)(val >> shft);
+
+            // Build new value
+            ulong hole = ~((ulong)ushort.MaxValue << shft);
+            ulong ins = (ulong)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r1 = (uint)(val >> 32);
+            r0 = (uint)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt16(Span<ulong> span, int bitOffset, ushort value)
+        public static ushort InsertUInt16(Span<ulong> span, int bitOffset, ushort insert)
         {
+            return 0;
         }
 
         #endregion
@@ -553,22 +718,22 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ReadOnlySpan<byte> bytes = span.Slice(ix);
+            ReadOnlySpan<byte> slice = span.Slice(ix);
 
             // Need at most 4+1 bytes
             ulong blit = 0;
             switch (span.Length - ix)
             {
                 default:
-                case 5: blit = (ulong)bytes[4] << 32; goto case 4;
-                case 4: blit |= ReadUInt32(bytes); break;
+                case 5: blit = (ulong)slice[4] << 32; goto case 4;
+                case 4: blit |= ReadUInt32(slice); break;
 
-                case 3: blit = (ulong)bytes[2] << 16; goto case 2;
-                case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
-                case 1: blit |= bytes[0]; break;
+                case 3: blit = (ulong)slice[2] << 16; goto case 2;
+                case 2: blit |= (ulong)slice[1] << 8; goto case 1;
+                case 1: blit |= slice[0]; break;
             }
 
             blit >>= bitOffset & 7;
@@ -582,7 +747,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 ushorts
@@ -606,7 +771,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 uints
@@ -634,20 +799,130 @@ namespace System
 
         #region InsertUInt32
 
-        public static void InsertUInt32(Span<byte> span, int bitOffset, uint value)
+        public static uint InsertUInt32(Span<byte> span, int bitOffset, uint insert)
         {
+            int ix = bitOffset >> 3;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 7;
+
+            // Need at most 4+1 bytes
+            byte @null = 0;
+            ref byte r4 = ref @null;
+            ref byte r3 = ref @null;
+            ref byte r2 = ref @null;
+            ref byte r1 = ref @null;
+            ref byte r0 = ref @null;
+
+            // Extract element refs
+            var slice = span.Slice(ix);
+            switch (span.Length - ix)
+            {
+                default:
+                case 5: r4 = ref span[4]; goto case 4;
+                case 4: r3 = ref span[3]; goto case 3;
+                case 3: r2 = ref span[2]; goto case 2;
+                case 2: r1 = ref span[1]; goto case 1;
+                case 1: r0 = ref span[0]; break;
+            }
+            ulong val = (ulong)r4 << 32 | (ulong)r3 << 24 | (ulong)r2 << 16 | (ulong)r1 << 8 | r0;
+
+            // Save original value
+            var orig = (uint)(val >> shft);
+
+            // Build new value
+            ulong hole = ~((ulong)uint.MaxValue << shft);
+            ulong ins = (ulong)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r4 = (byte)(val >> 32);
+            r3 = (byte)(val >> 24);
+            r2 = (byte)(val >> 16);
+            r1 = (byte)(val >> 8);
+            r0 = (byte)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt32(Span<ushort> span, int bitOffset, uint value)
+        public static uint InsertUInt32(Span<ushort> span, int bitOffset, uint insert)
         {
+            int ix = bitOffset >> 4;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15;
+
+            // Need at most 2+1 ushorts
+            ushort @null = 0;
+            ref ushort r2 = ref @null;
+            ref ushort r1 = ref @null;
+            ref ushort r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 3: r2 = ref span[ix + 2]; goto case 2;
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            ulong val = (ulong)r2 << 32 | (ulong)r1 << 16 | r0;
+
+            // Save original value
+            var orig = (uint)(val >> shft);
+
+            // Build new value
+            ulong hole = ~((ulong)uint.MaxValue << shft);
+            ulong ins = (ulong)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r2 = (ushort)(val >> 32);
+            r1 = (ushort)(val >> 16);
+            r0 = (ushort)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt32(Span<uint> span, int bitOffset, uint value)
+        public static uint InsertUInt32(Span<uint> span, int bitOffset, uint insert)
         {
+            int ix = bitOffset >> 5;
+            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31;
+
+            // Need at most 1+1 uints
+            uint @null = 0;
+            ref uint r1 = ref @null;
+            ref uint r0 = ref @null;
+
+            // Extract element refs
+            switch (span.Length - ix)
+            {
+                default:
+                case 2: r1 = ref span[ix + 1]; goto case 1;
+                case 1: r0 = ref span[ix]; break;
+            }
+            ulong val = (ulong)r1 << 32 | r0;
+
+            // Save original value
+            var orig = (uint)(val >> shft);
+
+            // Build new value
+            ulong hole = ~((ulong)uint.MaxValue << shft);
+            ulong ins = (ulong)insert << shft;
+            val = (val & hole) | ins;
+
+            // Write element refs
+            r1 = (uint)(val >> 32);
+            r0 = (uint)val;
+
+            // Return original value
+            return orig;
         }
 
-        public static void InsertUInt32(Span<ulong> span, int bitOffset, uint value)
+        public static uint InsertUInt32(Span<ulong> span, int bitOffset, uint insert)
         {
+            return 0;
         }
 
         #endregion
@@ -661,10 +936,10 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
-            int ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ReadOnlySpan<byte> bytes = span.Slice(ix);
+            ReadOnlySpan<byte> slice = span.Slice(ix);
 
             // Need at most 8+1 bytes
             ulong left = 0;
@@ -672,17 +947,17 @@ namespace System
             switch (span.Length - ix)
             {
                 default:
-                case 9: left = bytes[8]; goto case 8;
-                case 8: blit = ReadUInt64(bytes); break;
+                case 9: left = slice[8]; goto case 8;
+                case 8: blit = ReadUInt64(slice); break;
 
-                case 7: blit = (ulong)bytes[6] << 48; goto case 6;
-                case 6: blit |= (ulong)bytes[5] << 40; goto case 5;
-                case 5: blit |= (ulong)bytes[4] << 32; goto case 4;
-                case 4: blit |= ReadUInt32(bytes); break;
+                case 7: blit = (ulong)slice[6] << 48; goto case 6;
+                case 6: blit |= (ulong)slice[5] << 40; goto case 5;
+                case 5: blit |= (ulong)slice[4] << 32; goto case 4;
+                case 4: blit |= ReadUInt32(slice); break;
 
-                case 3: blit = (ulong)bytes[2] << 16; goto case 2;
-                case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
-                case 1: blit |= bytes[0]; break;
+                case 3: blit = (ulong)slice[2] << 16; goto case 2;
+                case 2: blit |= (ulong)slice[1] << 8; goto case 1;
+                case 1: blit |= slice[0]; break;
             }
 
             int shft = bitOffset & 7;
@@ -697,7 +972,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<ushort> span, int bitOffset)
         {
-            int ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ReadOnlySpan<ushort> slice = span.Slice(ix);
@@ -727,7 +1002,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<uint> span, int bitOffset)
         {
-            int ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 uints
@@ -753,7 +1028,7 @@ namespace System
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ulong ExtractUInt64(ReadOnlySpan<ulong> span, int bitOffset)
         {
-            int ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6;
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 ulongs
@@ -777,20 +1052,24 @@ namespace System
 
         #region InsertUInt64
 
-        public static void InsertUInt64(Span<byte> span, int bitOffset, ulong value)
+        public static ulong InsertUInt64(Span<byte> span, int bitOffset, ulong insert)
         {
+            return 0;
         }
 
-        public static void InsertUInt64(Span<ushort> span, int bitOffset, ulong value)
+        public static ulong InsertUInt64(Span<ushort> span, int bitOffset, ulong insert)
         {
+            return 0;
         }
 
-        public static void InsertUInt64(Span<uint> span, int bitOffset, ulong value)
+        public static ulong InsertUInt64(Span<uint> span, int bitOffset, ulong insert)
         {
+            return 0;
         }
 
-        public static void InsertUInt64(Span<ulong> span, int bitOffset, ulong value)
+        public static ulong InsertUInt64(Span<ulong> span, int bitOffset, ulong insert)
         {
+            return 0;
         }
 
         #endregion

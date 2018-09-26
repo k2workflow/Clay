@@ -1891,14 +1891,14 @@ namespace System
 
             // eg 27->3, int.Max -> 7
             int shft = bitOffset & 15; // mod 16
-            var ins = (uint)(insert << shft); //       0000_0 | 100_0 011_1 | 000
+            var ins = (uint)(insert << shft); //           0000_0 | 100_0 011_1 | 000
 
-            // 11111111_00000000                       15  12 | 11  8 7   3 |   0
-            uint mask = RotateLeft(0xFF_00u, shft); // 1111_1 | 000_0 000_0 | 111
+            //                                             15  12 | 11  8 7   3 |   0
+            uint mask = ~((uint)byte.MaxValue << shft); // 1111_1 | 000_0 000_0 | 111
 
-            // value                                   1100_1 | 100_1 001_1 | 101
-            uint val = value & mask; //                1100_1 | 000_0 000_0 | 101
-            val |= ins; //                             1100_1 | 100_0 011_1 | 101
+            // value                                       1100_1 | 100_1 001_1 | 101
+            uint val = value & mask; //                    1100_1 | 000_0 000_0 | 101
+            val |= ins; //                                 1100_1 | 100_0 011_1 | 101
 
             // value               1100_1 1001 0011 101
             // insert                     1000 0111
@@ -1910,8 +1910,7 @@ namespace System
             int shft = bitOffset & 31;
             var ins = (uint)(insert << shft);
 
-            // 11111111_00000000
-            uint mask = RotateLeft(0xFF_00u, shft);
+            uint mask = ~((uint)byte.MaxValue << shft);
 
             uint val = (value & mask) | ins;
             return val;
@@ -1922,8 +1921,7 @@ namespace System
             int shft = bitOffset & 63;
             var ins = (ulong)(insert << shft);
 
-            // 11111111_00000000
-            ulong mask = RotateLeft(0xFF_00ul, shft);
+            ulong mask = ~((ulong)byte.MaxValue << shft);
 
             ulong val = (value & mask) | ins;
             return val;
@@ -1948,8 +1946,7 @@ namespace System
             int shft = bitOffset & 31;
             var ins = (uint)(insert << shft);
 
-            // 11111111_11111111_00000000_00000000
-            uint mask = RotateLeft(0xFFFF_0000u, shft);
+            uint mask = ~((uint)ushort.MaxValue << shft);
 
             uint val = (value & mask) | ins;
             return val;
@@ -1960,8 +1957,7 @@ namespace System
             int shft = bitOffset & 63;
             var ins = (ulong)(insert << shft);
 
-            // 11111111_11111111_00000000_00000000
-            ulong mask = RotateLeft(0xFFFF_0000ul, shft);
+            ulong mask = ~((ulong)ushort.MaxValue << shft);
 
             ulong val = (value & mask) | ins;
             return val;
@@ -1983,7 +1979,7 @@ namespace System
             int shft = bitOffset & 63;
             var ins = (ulong)(insert << shft);
 
-            ulong mask = RotateLeft(0xFFFF_FFFF_0000_0000ul, shft);
+            ulong mask = ~((ulong)uint.MaxValue << shft);
 
             ulong val = (value & mask) | ins;
             return val;
