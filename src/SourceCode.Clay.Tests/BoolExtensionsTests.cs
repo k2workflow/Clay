@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, @false.ToByte());
 
             Assert.Equal(2, @true.ToByte(2));
-            Assert.Equal(3, @false.ToByte(falseValue:3));
+            Assert.Equal(3, @false.ToByte(falseValue: 3));
 
             Assert.Equal(2, @true.ToByte(2, 3));
             Assert.Equal(3, @false.ToByte(2, 3));
