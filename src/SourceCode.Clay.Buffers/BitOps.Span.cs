@@ -374,13 +374,17 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 7; // mod 8
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 bytes
-            ReadOnlySpan<byte> byts = span.Slice(ix);
-            uint val = Unsafe.ReadUnaligned<uint>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= (uint)span[ix1] << (8 - shft);
 
-            val >>= bitOffset & 7; // mod 8
-            return (byte)val;
+            return (byte)blit;
         }
 
         /// <summary>
@@ -392,13 +396,17 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15; // mod 16
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 ushorts
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            uint val = Unsafe.ReadUnaligned<uint>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= (uint)span[ix1] << (16 - shft);
 
-            val >>= bitOffset & 15; // mod 16
-            return (byte)val;
+            return (byte)blit;
         }
 
         /// <summary>
@@ -410,13 +418,17 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31; // mod 32
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 uints
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= span[ix1] << (32 - shft);
 
-            val >>= bitOffset & 31; // mod 32
-            return (byte)val;
+            return (byte)blit;
         }
 
         /// <summary>
@@ -430,16 +442,15 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63; // mod 64
 
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
+            ulong blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            var ix1 = ix + 1;
+            int ix1 = ix + 1;
             if (ix1 < span.Length)
-                val |= span[ix1] << (64 - shft); // rem 64
+                blit |= span[ix1] << (64 - shft);
 
-            return (byte)val;
+            return (byte)blit;
         }
 
         #endregion
@@ -457,6 +468,8 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
+
+            var foo = (uint)(value << shft);
 
             // Need at least 1+1 bytes
             var byts = span.Slice(ix);
@@ -489,12 +502,20 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 2+1 bytes
-            ReadOnlySpan<byte> byts = span.Slice(ix);
-            uint val = Unsafe.ReadUnaligned<uint>(ref MemoryMarshal.GetReference(byts));
+            var slice = span.Slice(ix);
 
-            val >>= bitOffset & 7; // mod 8
-            return (ushort)val;
+            uint blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 2+1 bytes
+                default:
+                case 3: blit = (uint)slice[2] << 16; goto case 2;
+                case 2: blit |= (uint)slice[1] << 8; goto case 1;
+                case 1: blit |= slice[0]; break;
+            }
+
+            blit >>= bitOffset & 7; // mod 8
+            return (ushort)blit;
         }
 
         /// <summary>
@@ -506,13 +527,17 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 15; // mod 16
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 ushorts
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            uint val = Unsafe.ReadUnaligned<uint>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= (uint)span[ix1] << (16 - shft);
 
-            val >>= bitOffset & 15; // mod 16
-            return (ushort)val;
+            return (ushort)blit;
         }
 
         /// <summary>
@@ -524,13 +549,17 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31; // mod 32
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 uints
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= span[ix1] << (32 - shft);
 
-            val >>= bitOffset & 31; // mod 32
-            return (ushort)val;
+            return (ushort)blit;
         }
 
         /// <summary>
@@ -544,16 +573,15 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63; // mod 64
 
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
+            ulong blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            var ix1 = ix + 1;
+            int ix1 = ix + 1;
             if (ix1 < span.Length)
-                val |= span[ix1] << (64 - shft); // rem 64
+                blit |= span[ix1] << (64 - shft);
 
-            return (ushort)val;
+            return (ushort)blit;
         }
 
         #endregion
@@ -590,12 +618,23 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 4+1 bytes
-            ReadOnlySpan<byte> byts = span.Slice(ix);
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
+            ReadOnlySpan<byte> bytes = span.Slice(ix);
 
-            val >>= bitOffset & 7; // mod 8
-            return (uint)val;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 4+1 bytes
+                default:
+                case 5: blit = (ulong)bytes[4] << 32; goto case 4;
+                case 4: blit |= ReadAs<uint>(bytes); break;
+
+                case 3: blit = (ulong)bytes[2] << 16; goto case 2;
+                case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
+                case 1: blit |= bytes[0]; break;
+            }
+
+            blit >>= bitOffset & 7; // mod 8
+            return (uint)blit;
         }
 
         /// <summary>
@@ -608,12 +647,20 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            // Need at least 2+1 ushorts
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
+            var slice = span.Slice(ix);
 
-            val >>= bitOffset & 15; // mod 16
-            return (uint)val;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 2+1 ushorts
+                default:
+                case 3: blit = (ulong)slice[2] << 32; goto case 2;
+                case 2: blit |= (ulong)slice[1] << 16; goto case 1;
+                case 1: blit |= slice[0]; break;
+            }
+
+            blit >>= bitOffset & 15; // mod 16
+            return (uint)blit;
         }
 
         /// <summary>
@@ -625,13 +672,17 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int shft = bitOffset & 31; // mod 32
+
+            uint blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 uints
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= span[ix1] << (32 - shft);
 
-            val >>= bitOffset & 31; // mod 32
-            return (uint)val;
+            return blit;
         }
 
         /// <summary>
@@ -645,16 +696,15 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63; // mod 64
 
-            ReadOnlySpan<byte> byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
-            
-            // Need at least 1+1 ulongs
-            var ix1 = ix + 1;
-            if (ix1 < span.Length)
-                val |= span[ix1] << (64 - shft); // rem 64
+            ulong blit = span[ix];
+            blit >>= shft;
 
-            return (uint)val;
+            // Need at least 1+1 ulongs
+            int ix1 = ix + 1;
+            if (ix1 < span.Length)
+                blit |= span[ix1] << (64 - shft);
+
+            return (uint)blit;
         }
 
         #endregion
@@ -691,18 +741,31 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<byte> bytes = span.Slice(ix);
+
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 8+1 bytes
+                default:
+                case 9: left = bytes[8]; goto case 8;
+                case 8: blit = ReadAs<ulong>(bytes); break;
+
+                case 7: blit = (ulong)bytes[6] << 48; goto case 6;
+                case 6: blit |= (ulong)bytes[5] << 40; goto case 5;
+                case 5: blit |= (ulong)bytes[4] << 32; goto case 4;
+                case 4: blit |= ReadAs<uint>(bytes); break;
+
+                case 3: blit = (ulong)bytes[2] << 16; goto case 2;
+                case 2: blit |= (ulong)bytes[1] << 8; goto case 1;
+                case 1: blit |= bytes[0]; break;
+            }
+
             int shft = bitOffset & 7; // mod 8
-
-            ReadOnlySpan<byte> byts = span.Slice(ix);
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
-
-            // Need at least 8+1 bytes
-            var ix8 = ix + 8;
-            if (ix8 < span.Length)
-                val |= (ulong)span[ix8] << (8 - shft); // rem 8
-
-            return val;
+            blit = (left << (64 - shft)) | (blit >> shft);
+            return blit;
         }
 
         /// <summary>
@@ -714,18 +777,25 @@ namespace System
         {
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<ushort> slice = span.Slice(ix);
+
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 4+1 ushorts
+                default:
+                case 5: left = slice[4]; goto case 4;
+                case 4: blit = (ulong)slice[3] << 48; goto case 3;
+                case 3: blit |= (ulong)slice[2] << 32; goto case 2;
+                case 2: blit |= (ulong)slice[1] << 16; goto case 1;
+                case 1: blit |= slice[0]; break;
+            }
+
             int shft = bitOffset & 15; // mod 16
-
-            var byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
-
-            // Need at least 4+1 ushorts
-            var ix4 = ix + 4;
-            if (ix4 < span.Length)
-                val |= (ulong)span[ix4] << (16 - shft); // rem 16
-
-            return val;
+            blit = (left << (64 - shft)) | (blit >> shft);
+            return blit;
         }
 
         /// <summary>
@@ -737,18 +807,23 @@ namespace System
         {
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+
+            ReadOnlySpan<uint> slice = span.Slice(ix);
+
+            ulong left = 0;
+            ulong blit = 0;
+            switch (span.Length - ix)
+            {
+                // Need at least 2+1 uints
+                default:
+                case 3: left = slice[2]; goto case 2;
+                case 2: blit = (ulong)slice[1] << 32; goto case 1;
+                case 1: blit |= slice[0]; break;
+            }
+
             int shft = bitOffset & 31; // mod 32
-
-            var byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
-
-            // Need at least 2+1 uints
-            var ix2 = ix + 2;
-            if (ix2 < span.Length)
-                val |= (ulong)span[ix2] << (32 - shft); // rem 32
-
-            return val;
+            blit = (left << (64 - shft)) | (blit >> shft);
+            return blit;
         }
 
         /// <summary>
@@ -762,16 +837,15 @@ namespace System
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63; // mod 64
 
-            var byts = MemoryMarshal.AsBytes(span.Slice(ix));
-            ulong val = Unsafe.ReadUnaligned<ulong>(ref MemoryMarshal.GetReference(byts));
-            val >>= shft;
+            ulong blit = span[ix];
+            blit >>= shft;
 
             // Need at least 1+1 ulongs
-            var ix1 = ix + 1;
+            int ix1 = ix + 1;
             if (ix1 < span.Length)
-                val |= span[ix1] << (64 - shft); // rem 64
+                blit |= span[ix1] << (64 - shft);
 
-            return val;
+            return blit;
         }
 
         #endregion
@@ -794,7 +868,16 @@ namespace System
         {
         }
 
-        #endregion        
+        #endregion
+
+        #region Helpers
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T ReadAs<T>(ReadOnlySpan<byte> bytes)
+            where T : unmanaged, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable // Constrain to integer types as much as possible
+            => Unsafe.ReadUnaligned<T>(ref MemoryMarshal.GetReference(bytes));
+
+        #endregion
     }
 
 #pragma warning restore IDE0007 // Use implicit type

@@ -1821,7 +1821,7 @@ namespace System
         /// <param name="sourceSize"></param>
         /// <param name="bitOffset">The offset.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
+        private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
             => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));                
 
         #endregion
