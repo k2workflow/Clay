@@ -1872,25 +1872,19 @@ namespace System
 
         public static byte ExtractByte(ushort value, int bitOffset)
         {
-            byte shft = Mod(8, 16, bitOffset);
-
-            int val = value >> shft;
+            int val = value >> (bitOffset & 15); // mod 16
             return (byte)val;
         }
 
         public static byte ExtractByte(uint value, int bitOffset)
         {
-            byte shft = Mod(8, 32, bitOffset);
-
-            uint val = value >> shft;
+            uint val = value >> (bitOffset & 31); // mod 32
             return (byte)val;
         }
 
         public static byte ExtractByte(ulong value, int bitOffset)
         {
-            byte shft = Mod(8, 64, bitOffset);
-
-            ulong val = value >> shft;
+            ulong val = value >> (bitOffset & 63); // mod 64
             return (byte)val;
         }
 
@@ -1915,7 +1909,7 @@ namespace System
             // insert =      100 0011 1
 
             // eg 27->3, int.Max -> 7
-            byte shft = Mod(valueSize, 8, bitOffset);
+            int shft = bitOffset & (valueSize - 1); // mod valueSize
             var ins = (uint)(insert << shft); //                 0000_0 | 100_0 011_1 | 000
 
             //                                                   15  12 | 11  8 7   3 |   0
@@ -1932,7 +1926,7 @@ namespace System
 
         public static ulong InsertByte(ulong value, int bitOffset, byte insert)
         {
-            byte shft = Mod(64, 64, bitOffset);
+            int shft = bitOffset & 63; // mod 64
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertByteMask, shft);
@@ -1951,17 +1945,13 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static ushort ExtractUInt16Impl(uint value, int bitOffset)
         {
-            byte shft = Mod(16, 32, bitOffset);
-
-            uint val = value >> shft;
+            uint val = value >> (bitOffset & 31); // mod 32
             return (ushort)val;
         }
 
         public static ushort ExtractUInt16(ulong value, int bitOffset)
         {
-            byte shft = Mod(16, 64, bitOffset);
-
-            ulong val = value >> shft;
+            ulong val = value >> (bitOffset & 63); // mod 64
             return (ushort)val;
         }
 
@@ -1974,7 +1964,7 @@ namespace System
 
         public static uint InsertUInt16(uint value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(32, 16, bitOffset);
+            int shft = bitOffset & 31; // mod 32
             var ins = (uint)(insert << shft);
 
             uint mask = RotateLeft(InsertUInt16Mask, shft);
@@ -1985,7 +1975,7 @@ namespace System
 
         public static ulong InsertUInt16(ulong value, int bitOffset, ushort insert)
         {
-            byte shft = Mod(64, 16, bitOffset);
+            int shft = bitOffset & 63; // mod 64
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft((ulong)InsertUInt16Mask, shft);
@@ -2000,9 +1990,7 @@ namespace System
 
         public static uint ExtractUInt32(ulong value, int bitOffset)
         {
-            byte shft = Mod(32, 64, bitOffset);
-
-            ulong val = value >> shft;
+            ulong val = value >> (bitOffset & 63); // mod 64
             return (uint)val;
         }
 
@@ -2015,7 +2003,7 @@ namespace System
 
         public static ulong InsertUInt32(ulong value, int bitOffset, uint insert)
         {
-            byte shft = Mod(64, 32, bitOffset);
+            int shft = bitOffset & 63; // mod 64
             var ins = (ulong)(insert << shft);
 
             ulong mask = RotateLeft(InsertUInt32Mask, shft);
@@ -2028,15 +2016,7 @@ namespace System
 
         #region Helpers
 
-        /// <summary>
-        /// Calculates the mod of an offset wrt the bit lengths.
-        /// </summary>
-        /// <param name="targetSize"></param>
-        /// <param name="sourceSize"></param>
-        /// <param name="bitOffset">The offset.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
-            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));                
+        //          
 
         #endregion
     }
