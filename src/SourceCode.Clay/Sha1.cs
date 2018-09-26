@@ -45,32 +45,14 @@ namespace SourceCode.Clay
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
-        // In C# 7.3+ we can use 'readonly fixed byte'
+        // TODO: In C# 7.3+ we can use 'readonly fixed byte'
 
-        private readonly byte _00;
-        private readonly byte _01;
-        private readonly byte _02;
-        private readonly byte _03;
-
-        private readonly byte _04;
-        private readonly byte _05;
-        private readonly byte _06;
-        private readonly byte _07;
-
-        private readonly byte _08;
-        private readonly byte _09;
-        private readonly byte _10;
-        private readonly byte _11;
-
-        private readonly byte _12;
-        private readonly byte _13;
-        private readonly byte _14;
-        private readonly byte _15;
-
-        private readonly byte _16;
-        private readonly byte _17;
-        private readonly byte _18;
-        private readonly byte _19;
+        private readonly byte // 20
+        _00, _01, _02, _03,
+        _04, _05, _06, _07,
+        _08, _09, _10, _11,
+        _12, _13, _14, _15,
+        _16, _17, _18, _19;
 
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.

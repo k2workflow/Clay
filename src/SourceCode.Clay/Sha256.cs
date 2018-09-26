@@ -45,47 +45,18 @@ namespace SourceCode.Clay
 
         // We choose to use value types for primary storage so that we can live on the stack
         // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
-        // In C# 7.3+ we can use 'readonly fixed byte'
+        // TODO: In C# 7.3+ we can use 'readonly fixed byte'
 
-        private readonly byte _00;
-        private readonly byte _01;
-        private readonly byte _02;
-        private readonly byte _03;
+        private readonly byte // 32
+        _00, _01, _02, _03,
+        _04, _05, _06, _07,
+        _08, _09, _10, _11,
+        _12, _13, _14, _15,
 
-        private readonly byte _04;
-        private readonly byte _05;
-        private readonly byte _06;
-        private readonly byte _07;
-
-        private readonly byte _08;
-        private readonly byte _09;
-        private readonly byte _10;
-        private readonly byte _11;
-
-        private readonly byte _12;
-        private readonly byte _13;
-        private readonly byte _14;
-        private readonly byte _15;
-
-        private readonly byte _16;
-        private readonly byte _17;
-        private readonly byte _18;
-        private readonly byte _19;
-
-        private readonly byte _20;
-        private readonly byte _21;
-        private readonly byte _22;
-        private readonly byte _23;
-
-        private readonly byte _24;
-        private readonly byte _25;
-        private readonly byte _26;
-        private readonly byte _27;
-
-        private readonly byte _28;
-        private readonly byte _29;
-        private readonly byte _30;
-        private readonly byte _31;
+        _16, _17, _18, _19,
+        _20, _21, _22, _23,
+        _24, _25, _26, _27,
+        _28, _29, _30, _31;
 
         /// <summary>
         /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
