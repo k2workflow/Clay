@@ -105,7 +105,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [StructLayout(LayoutKind.Explicit, Pack = 4, Size = 1)]
+        [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
         private struct BoolToByte
         {
             [FieldOffset(0)]

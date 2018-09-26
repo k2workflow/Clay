@@ -6,6 +6,7 @@
 #endregion
 
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
@@ -15,24 +16,25 @@ namespace SourceCode.Clay
     public static class BoolExtensions
     {
         /// <summary>
-        /// Converts a bool to a byte value.
+        /// Converts a bool to a byte value, without branching.
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ToByte(this bool condition)
-        {
-            /*
-                Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-               ------- |---------:|----------:|----------:|-------:|---------:|
-                Unsafe | 1.574 ns | 0.0118 ns | 0.0092 ns |   1.10 |     0.05 |
-                  Safe | 1.575 ns | 0.0310 ns | 0.0380 ns |   1.10 |     0.05 |
-                Branch | 1.435 ns | 0.0285 ns | 0.0632 ns |   1.00 |     0.00 |
-            */
+            => new BoolToByte { Bool = condition }.Byte;
 
-            // Branching is faster
-            return (byte)(condition ? 1 : 0);
-            //unsafe { return *(byte*)&condition; }
+        // Union is nearly as fast as unsafe, but unsafe can't be inlined.
+        // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
+
+        [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
+        private struct BoolToByte
+        {
+            [FieldOffset(0)]
+            public bool Bool;
+
+            [FieldOffset(0)]
+            public readonly byte Byte;
         }
     }
 }

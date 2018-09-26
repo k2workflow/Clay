@@ -11,11 +11,14 @@ namespace SourceCode.Clay.Tests
 {
     public static class BoolExtensionsTests
     {
+        private static readonly bool @true = true;
+        private static readonly bool @false = false;
+
         [Fact(DisplayName = nameof(BoolToByte))]
         public static void BoolToByte()
         {
-            Assert.Equal(1, true.ToByte());
-            Assert.Equal(0, false.ToByte());
+            Assert.Equal(1, @true.ToByte());
+            Assert.Equal(0, @false.ToByte());
         }
     }
 }
