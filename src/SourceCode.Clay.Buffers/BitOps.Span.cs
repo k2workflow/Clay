@@ -411,7 +411,7 @@ namespace System
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            int shft = bitOffset & 7; // mod 8
+            int shft = bitOffset & 7;
 
             // Need at most 1+1 bytes
             Span<byte> bytes = span.Slice(ix);
@@ -453,7 +453,7 @@ namespace System
                 case 1: blit |= span[ix]; break;
             }
 
-            blit >>= bitOffset & 7; // mod 8
+            blit >>= bitOffset & 7;
             return (ushort)blit;
         }
 
@@ -476,7 +476,7 @@ namespace System
                 case 1: blit |= span[ix]; break;
             }
 
-            blit >>= bitOffset & 15; // mod 16
+            blit >>= bitOffset & 15;
             return (ushort)blit;
         }
 
@@ -545,7 +545,7 @@ namespace System
                 case 1: blit |= bytes[0]; break;
             }
 
-            blit >>= bitOffset & 7; // mod 8
+            blit >>= bitOffset & 7;
             return (uint)blit;
         }
 
@@ -569,7 +569,7 @@ namespace System
                 case 1: blit |= span[ix]; break;
             }
 
-            blit >>= bitOffset & 15; // mod 16
+            blit >>= bitOffset & 15;
             return (uint)blit;
         }
 
@@ -592,7 +592,7 @@ namespace System
                 case 1: blit |= span[ix]; break;
             }
 
-            blit >>= bitOffset & 31; // mod 32
+            blit >>= bitOffset & 31;
             return (uint)blit;
         }
 
@@ -659,7 +659,7 @@ namespace System
                 case 1: blit |= bytes[0]; break;
             }
 
-            int shft = bitOffset & 7; // mod 8
+            int shft = bitOffset & 7;
             blit = (left << (64 - shft)) | (blit >> shft);
             return blit;
         }
@@ -689,7 +689,7 @@ namespace System
                 case 1: blit |= slice[0]; break;
             }
 
-            int shft = bitOffset & 15; // mod 16
+            int shft = bitOffset & 15;
             blit = (left << (64 - shft)) | (blit >> shft);
             return blit;
         }
@@ -715,7 +715,7 @@ namespace System
                 case 1: blit |= span[ix]; break;
             }
 
-            int shft = bitOffset & 31; // mod 32
+            int shft = bitOffset & 31;
             blit = (left << (64 - shft)) | (blit >> shft);
             return blit;
         }
@@ -740,7 +740,7 @@ namespace System
                 case 1: blit = span[ix]; break;
             }
 
-            int shft = bitOffset & 63; // mod 64
+            int shft = bitOffset & 63;
             blit >>= shft;
             blit |= left << (64 - shft);
 
