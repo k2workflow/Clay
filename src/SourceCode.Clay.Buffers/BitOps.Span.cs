@@ -20,7 +20,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset)); // TODO: Perf; do we want these guards?
 
-            var val = ExtractBit(span[ix], bitOffset);
+            bool val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -35,7 +35,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], bitOffset);
+            bool val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -50,7 +50,7 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], bitOffset);
+            bool val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -65,7 +65,7 @@ namespace System
             int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var val = ExtractBit(span[ix], bitOffset);
+            bool val = ExtractBit(span[ix], bitOffset);
             return val;
         }
 
@@ -82,12 +82,12 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<byte> span, int bitOffset, bool on)
         {
-            var ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var wrt = WriteBit(ref val, bitOffset, on);
+            bool wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -100,12 +100,12 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ushort> span, int bitOffset, bool on)
         {
-            var ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var wrt = WriteBit(ref val, bitOffset, on);
+            bool wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -118,12 +118,12 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<uint> span, int bitOffset, bool on)
         {
-            var ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var wrt = WriteBit(ref val, bitOffset, on);
+            bool wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -136,12 +136,12 @@ namespace System
         /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ulong> span, int bitOffset, bool on)
         {
-            var ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var wrt = WriteBit(ref val, bitOffset, on);
+            bool wrt = WriteBit(ref val, bitOffset, on);
             return wrt;
         }
 
@@ -157,12 +157,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<byte> span, int bitOffset)
         {
-            var ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var btr =  ClearBit(ref val, bitOffset);
+            bool btr =  ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -174,12 +174,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<ushort> span, int bitOffset)
         {
-            var ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var btr = ClearBit(ref val, bitOffset);
+            bool btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -191,12 +191,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<uint> span, int bitOffset)
         {
-            var ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var btr = ClearBit(ref val, bitOffset);
+            bool btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -208,12 +208,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to clear.</param>
         public static bool ClearBit(Span<ulong> span, int bitOffset)
         {
-            var ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var btr = ClearBit(ref val, bitOffset);
+            bool btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
@@ -229,12 +229,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<byte> span, int bitOffset)
         {
-            var ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var bts = InsertBit(ref val, bitOffset);
+            bool bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -246,12 +246,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<ushort> span, int bitOffset)
         {
-            var ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var bts = InsertBit(ref val, bitOffset);
+            bool bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -263,12 +263,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<uint> span, int bitOffset)
         {
-            var ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var bts = InsertBit(ref val, bitOffset);
+            bool bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -280,12 +280,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to write.</param>
         public static bool InsertBit(Span<ulong> span, int bitOffset)
         {
-            var ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var bts = InsertBit(ref val, bitOffset);
+            bool bts = InsertBit(ref val, bitOffset);
             return bts;
         }
 
@@ -301,12 +301,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<byte> span, int bitOffset)
         {
-            var ix = bitOffset >> 3; // div 8
+            int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref byte val = ref span[ix];
 
-            var btc = ComplementBit(ref val, bitOffset);
+            bool btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -318,12 +318,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<ushort> span, int bitOffset)
         {
-            var ix = bitOffset >> 4; // div 16
+            int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ushort val = ref span[ix];
 
-            var btc = ComplementBit(ref val, bitOffset);
+            bool btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -335,12 +335,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<uint> span, int bitOffset)
         {
-            var ix = bitOffset >> 5; // div 32
+            int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref uint val = ref span[ix];
 
-            var btc = ComplementBit(ref val, bitOffset);
+            bool btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -352,12 +352,12 @@ namespace System
         /// <param name="bitOffset">The ordinal position of the bit to complement.</param>
         public static bool ComplementBit(Span<ulong> span, int bitOffset)
         {
-            var ix = bitOffset >> 6; // div 64
+            int ix = bitOffset >> 6; // div 64
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ref ulong val = ref span[ix];
 
-            var btc = ComplementBit(ref val, bitOffset);
+            bool btc = ComplementBit(ref val, bitOffset);
             return btc;
         }
 
@@ -466,13 +466,13 @@ namespace System
         public static void InsertByte(Span<byte> span, int bitOffset, byte value)
         {
             int ix = bitOffset >> 3; // div 8
-            var len = Math.Max(0, span.Length - ix);
+            int len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            var foo = (uint)(value << shft);
+            uint foo = (uint)(value << shft);
 
             // Need at least 1+1 bytes
-            var byts = span.Slice(ix);
+            Span<byte> byts = span.Slice(ix);
             Unsafe.WriteUnaligned(ref MemoryMarshal.GetReference(byts), (ushort)value);
         }
 
@@ -502,7 +502,7 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var slice = span.Slice(ix);
+            ReadOnlySpan<byte> slice = span.Slice(ix);
 
             uint blit = 0;
             switch (span.Length - ix)
@@ -647,7 +647,7 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            var slice = span.Slice(ix);
+            ReadOnlySpan<ushort> slice = span.Slice(ix);
 
             ulong blit = 0;
             switch (span.Length - ix)
