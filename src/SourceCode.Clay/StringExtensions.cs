@@ -131,6 +131,7 @@ namespace SourceCode.Clay
         /// Uses the specified <see cref="StringComparison"/>.
         /// </summary>
         /// <param name="suffix">The prefix to remove.</param>
+        /// <param name="comparisonType">The string comparison method to use.</param>
         public static string RemovePrefix(this string str, string prefix, StringComparison comparisonType)
         {
             if (string.IsNullOrEmpty(str)
