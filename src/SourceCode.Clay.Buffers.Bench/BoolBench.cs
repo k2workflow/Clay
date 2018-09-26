@@ -13,13 +13,13 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-    ----------- |---------:|----------:|----------:|-------:|---------:|
-         Actual | 2.319 ns | 0.0184 ns | 0.0163 ns |   0.79 |     0.01 | x
-     UnsafeCode | 3.370 ns | 0.0104 ns | 0.0087 ns |   1.15 |     0.01 |
-       UnsafeAs | 2.435 ns | 0.0468 ns | 0.0539 ns |   0.83 |     0.02 | x
-          Union | 2.808 ns | 0.0095 ns | 0.0084 ns |   0.96 |     0.01 |
-         Branch | 2.937 ns | 0.0422 ns | 0.0374 ns |   1.00 |     0.00 |
+         Method |     Mean |     Error |    StdDev | Scaled |
+    ----------- |---------:|----------:|----------:|-------:|
+         Actual | 2.565 ns | 0.0504 ns | 0.0447 ns |   0.77 | x
+     UnsafeCode | 3.387 ns | 0.0345 ns | 0.0323 ns |   1.02 |
+       UnsafeAs | 2.383 ns | 0.0096 ns | 0.0090 ns |   0.71 | x
+          Union | 3.051 ns | 0.0265 ns | 0.0248 ns |   0.92 | ~
+         Branch | 3.334 ns | 0.0146 ns | 0.0137 ns |   1.00 |
      */
 
     //[MemoryDiagnoser]
@@ -165,24 +165,30 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += (byte)(@true ? 1 : 0);
+                    sum += ToByteBranch(@true, 1);
                     sum++;
-                    sum -= (byte)(@false ? 1 : 0);
+                    sum -= ToByteBranch(@false, 1);
                     sum--;
 
-                    var val = (byte)(@true ? 4 : 0);
-                    sum += val;
-
-                    val = (byte)(@false ? 3 : 0);
-                    sum -= val;
-
-                    val = (byte)(@true ? 3 : 2);
-                    sum += val;
+                    sum += ToByteBranch(@true, 4);
+                    sum -= ToByteBranch(@false, 3);
+                    sum += ToByteBranch(@true, 3, 2);
                     sum -= 7;
                 }
             }
 
             return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteBranch(bool condition, byte trueValue, byte falseValue = 0)
+        {
+            var val = condition ? 1u : 0u;
+
+            val = (val * trueValue)
+                + ((1 - val) * falseValue);
+
+            return (byte)val;
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
