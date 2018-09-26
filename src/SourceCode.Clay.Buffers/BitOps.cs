@@ -12,6 +12,7 @@ namespace System
     /// <summary>
     /// Represents additional blit methods.
     /// </summary>
+    [CLSCompliant(false)]
     public static partial class BitOps // .Primitive
     {
         #region ExtractBit
@@ -1791,6 +1792,26 @@ namespace System
 
         #endregion
 
+        #region Bool
+
+        /// <summary>
+        /// Converts a bool to a byte value, without branching.
+        /// Returns 1 if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte ToByte(bool condition)
+        {
+            // Benchmark: Unsafe.As and unsafe are faster than
+            // branching or union-struct, but unsafe is not inlined.
+            return Unsafe.As<bool, byte>(ref condition);
+
+            //return (byte)(condition ? 1 : 0);
+            //unsafe { return *(byte*)&condition; }
+        }
+
+        #endregion
+
         #region Helpers
 
         /// <summary>
@@ -1801,23 +1822,7 @@ namespace System
         /// <param name="bitOffset">The offset.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static byte Mod(byte targetSize, byte sourceSize, int bitOffset)
-            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));        
-
-        /// <summary>
-        /// Converts a bool to a byte value.
-        /// Returns 1 if True, else returns 0.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static byte ToByte(bool condition)
-        {
-            // Benchmark: Unsafe.As and unsafe are faster than
-            // branching or union-struct, but unsafe is not inlined.
-            return Unsafe.As<bool, byte>(ref condition);
-
-            //unsafe { return *(byte*)&condition; }
-            //return (byte)(condition ? 1 : 0);
-        }
+            => (byte)(unchecked(sourceSize + bitOffset) & (targetSize - 1));                
 
         #endregion
     }
