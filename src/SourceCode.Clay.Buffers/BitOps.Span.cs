@@ -407,14 +407,40 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         /// <param name="value">The value to write.</param>
-        public static void InsertByte(Span<byte> span, int bitOffset, byte value)
+        public static byte InsertByte(Span<byte> span, int bitOffset, byte value)
         {
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7;
+            var len = span.Length - ix;
 
             // Need at most 1+1 bytes
-            Span<byte> bytes = span.Slice(ix);
+            var bytes = span.Slice(ix);
+
+            // Extract original value
+            uint val = 0;
+            switch (len)
+            {
+                default:
+                case 2: val |= (uint)bytes[1] << 8; goto case 1;
+                case 1: val |= bytes[0]; break;
+            }
+            uint orig = val >> bitOffset & 7;
+
+            // Create new value
+            val &= RotateLeft(0xFF_00u, shft);
+            val |= (uint)value << shft;
+
+            // Write new value
+            switch (len)
+            {
+                default:
+                case 2: bytes[1] = (byte)(val >> 8); goto case 1;
+                case 1: bytes[0] = (byte)val; break;
+            }
+
+            // Return original value
+            return (byte)orig;
         }
 
         public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
