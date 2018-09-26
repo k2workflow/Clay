@@ -12,10 +12,10 @@ using System.Runtime.CompilerServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |      Mean |     Error |    StdDev | Scaled | ScaledSD |
-       -------- |----------:|----------:|----------:|-------:|---------:|
-        Logical | 1.2163 ns | 0.0239 ns | 0.0437 ns |   1.25 |     0.07 |
-         Branch | 0.9743 ns | 0.0195 ns | 0.0407 ns |   1.00 |     0.00 |
+          Method |      Mean |     Error |    StdDev | Scaled | ScaledSD |
+        -------- |----------:|----------:|----------:|-------:|---------:|
+         Logical | 0.8917 ns | 0.0198 ns | 0.0235 ns |   1.05 |     0.03 |
+          Branch | 0.8529 ns | 0.0113 ns | 0.0106 ns |   1.00 |     0.00 |
     */
 
     //[MemoryDiagnoser]
@@ -77,7 +77,7 @@ namespace SourceCode.Clay.Buffers.Bench
             // 1000    0000    0000    0000    1000
             // 1001    0001    0000    0000    1000
 
-            return y ^ ((x ^ y) & -((x < y) ? 1 : 0));
+            return y ^ ((x ^ y) & -(x < y ? 1 : 0));
         }
     }
 }

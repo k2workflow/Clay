@@ -190,6 +190,8 @@ namespace SourceCode.Clay.Tests
             }
         }
 
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_elide_string_boundary))]
         // Narrow-1
         [InlineData("A", -1, 1)]
         [InlineData("A", 0, 1)]
@@ -232,8 +234,6 @@ namespace SourceCode.Clay.Tests
         [InlineData(TestConstants.SurrogatePair + TestConstants.SurrogatePair + TestConstants.SurrogatePair, 5, 5)]
         [InlineData(TestConstants.SurrogatePair + TestConstants.SurrogatePair + TestConstants.SurrogatePair, 6, 6)]
         [InlineData(TestConstants.SurrogatePair + TestConstants.SurrogatePair + TestConstants.SurrogatePair, 7, 6)]
-        [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_elide_string_boundary))]
         public static void When_elide_string_boundary(string str, int totalWidth, int expected)
         {
             var actual = str.Elide(totalWidth);
@@ -241,13 +241,13 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual.Length);
         }
 
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
         [InlineData(null, null, true)]
         [InlineData(null, "", false)]
         [InlineData(null, "a", false)]
         [InlineData("a", "a", true)]
         [InlineData(TestConstants.LongStr, TestConstants.LongStr, true)]
-        [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
         public static void When_String_EqualsOrdinal(string x, string y, bool expected)
         {
             // Forward
@@ -263,6 +263,62 @@ namespace SourceCode.Clay.Tests
 
             exp = StringComparer.Ordinal.Equals(y, x);
             Assert.Equal(exp, actual);
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_String_RemoveStart))]
+        [InlineData(null, null, null)]
+        [InlineData(null, "", null)]
+        [InlineData("", null, "")]
+        [InlineData("", "", "")]
+        [InlineData(null, "a", null)]
+        [InlineData("", "a", "")]
+        [InlineData("a", null, "a")]
+        [InlineData("a", "", "a")]
+        [InlineData("a", "a", "")]
+        [InlineData("aa", "a", "a")]
+        [InlineData("a", "aa", "a")]
+        [InlineData("ab", "a", "b")]
+        [InlineData("ba", "a", "ba")]
+        [InlineData("aab", "a", "ab")]
+        public static void When_String_RemoveStart(string str, string prefix, string expected)
+        {
+            var actual = str.RemoveStart(prefix);
+            Assert.Equal(expected, actual);
+
+            if (prefix != null)
+            {
+                actual = str.RemoveStart(prefix.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase);
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Trait("Type", "Unit")]
+        [Theory(DisplayName = nameof(When_String_RemoveEnd))]
+        [InlineData(null, null, null)]
+        [InlineData(null, "", null)]
+        [InlineData("", null, "")]
+        [InlineData("", "", "")]
+        [InlineData(null, "a", null)]
+        [InlineData("", "a", "")]
+        [InlineData("a", null, "a")]
+        [InlineData("a", "", "a")]
+        [InlineData("a", "a", "")]
+        [InlineData("aa", "a", "a")]
+        [InlineData("a", "aa", "a")]
+        [InlineData("ab", "a", "ab")]
+        [InlineData("ba", "a", "b")]
+        [InlineData("abb", "b", "ab")]
+        public static void When_String_RemoveEnd(string str, string suffix, string expected)
+        {
+            var actual = str.RemoveEnd(suffix);
+            Assert.Equal(expected, actual);
+
+            if (suffix != null)
+            {
+                actual = str.RemoveEnd(suffix.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase);
+                Assert.Equal(expected, actual);
+            }
         }
     }
 }
