@@ -1812,7 +1812,7 @@ namespace System
         internal static byte ToByte(bool condition)
         {
             // Benchmark: Unsafe.As and unsafe are faster than
-            // branching or union-struct, however unsafe is not inlined.
+            // branching or union-struct, but unsafe is not inlined.
             return Unsafe.As<bool, byte>(ref condition);
 
             //unsafe { return *(byte*)&condition; }

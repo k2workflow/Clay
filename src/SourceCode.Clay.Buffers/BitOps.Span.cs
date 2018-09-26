@@ -458,15 +458,9 @@ namespace System
             var len = Math.Max(0, span.Length - ix);
             int shft = bitOffset & 7; // mod 8
 
-            //switch (len)
-            //{
-            //    // Need at least 1+1 bytes
-            //    default:
-            //    case 2: span[ix + 1] = (uint)value >> (8 - shft); goto case 1;
-            //    case 1: span[ix + 0] = (uint)value << shft; break;
-
-            //    case 0: throw new ArgumentOutOfRangeException(nameof(bitOffset));
-            //}
+            // Need at least 1+1 bytes
+            var byts = span.Slice(ix);
+            Unsafe.WriteUnaligned(ref MemoryMarshal.GetReference(byts), (ushort)value);
         }
 
         public static void InsertByte(Span<ushort> span, int bitOffset, byte value)
