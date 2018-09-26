@@ -371,22 +371,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<byte> span, int bitOffset)
-        {
-            int ix = bitOffset >> 3; // div 8
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 bytes
-            uint blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: blit = (uint)span[ix + 1] << 8; goto case 1;
-                case 1: blit |= span[ix]; break;
-            }
-
-            blit >>= bitOffset & 7; // mod 8
-            return (byte)blit;
-        }
+            => (byte)ExtractUInt16(span, bitOffset);
 
         /// <summary>
         /// Reads the specified byte from a span, given the bit offset.
@@ -394,22 +379,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<ushort> span, int bitOffset)
-        {
-            int ix = bitOffset >> 4; // div 16
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 ushorts
-            uint blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: blit = (uint)span[ix + 1] << 16; goto case 1;
-                case 1: blit |= span[ix]; break;
-            }
-
-            blit >>= bitOffset & 15; // mod 16
-            return (byte)blit;
-        }
+            => (byte)ExtractUInt16(span, bitOffset);
 
         /// <summary>
         /// Reads the specified byte from a span, given the bit offset.
@@ -417,22 +387,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<uint> span, int bitOffset)
-        {
-            int ix = bitOffset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 uints
-            ulong blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
-                case 1: blit |= span[ix]; break;
-            }
-
-            blit >>= bitOffset & 31; // mod 32
-            return (byte)blit;
-        }
+            => (byte)ExtractUInt32(span, bitOffset);
 
         /// <summary>
         /// Reads the specified byte from a span, given the bit offset.
@@ -440,26 +395,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static byte ExtractByte(ReadOnlySpan<ulong> span, int bitOffset)
-        {
-            int ix = bitOffset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 ulongs
-            ulong left = 0;
-            ulong blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: left = span[ix + 1]; goto case 1;
-                case 1: blit = span[ix]; break;
-            }
-
-            int shft = bitOffset & 63; // mod 64
-            blit >>= shft;
-            blit |= left << (64 - shft);
-
-            return (byte)blit;
-        }
+            => (byte)ExtractUInt32(span, bitOffset);
 
         #endregion
 
@@ -507,16 +443,14 @@ namespace System
             int ix = bitOffset >> 3; // div 8
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ReadOnlySpan<byte> slice = span.Slice(ix);
-
             // Need at least 2+1 bytes
             uint blit = 0;
             switch (span.Length - ix)
             {
                 default:
-                case 3: blit = (uint)slice[2] << 16; goto case 2;
-                case 2: blit |= (uint)slice[1] << 8; goto case 1;
-                case 1: blit |= slice[0]; break;
+                case 3: blit = (uint)span[ix + 2] << 16; goto case 2;
+                case 2: blit |= (uint)span[ix + 1] << 8; goto case 1;
+                case 1: blit |= span[ix]; break;
             }
 
             blit >>= bitOffset & 7; // mod 8
@@ -552,22 +486,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<uint> span, int bitOffset)
-        {
-            int ix = bitOffset >> 5; // div 32
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 uints
-            ulong blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
-                case 1: blit |= span[ix]; break;
-            }
-
-            blit >>= bitOffset & 31; // mod 32
-            return (ushort)blit;
-        }
+            => (ushort)ExtractUInt32(span, bitOffset);
 
         /// <summary>
         /// Reads the specified byte from a span, given the bit offset.
@@ -575,26 +494,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static ushort ExtractUInt16(ReadOnlySpan<ulong> span, int bitOffset)
-        {
-            int ix = bitOffset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 ulongs
-            ulong left = 0;
-            ulong blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: left = span[ix + 1]; goto case 1;
-                case 1: blit = span[ix]; break;
-            }
-
-            int shft = bitOffset & 63; // mod 64
-            blit >>= shft;
-            blit |= left << (64 - shft);
-
-            return (ushort)blit;
-        }
+            => (ushort)ExtractUInt32(span, bitOffset);
 
         #endregion
 
@@ -659,16 +559,14 @@ namespace System
             int ix = bitOffset >> 4; // div 16
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ReadOnlySpan<ushort> slice = span.Slice(ix);
-
             ulong blit = 0;
             switch (span.Length - ix)
             {
                 // Need at least 2+1 ushorts
                 default:
-                case 3: blit = (ulong)slice[2] << 32; goto case 2;
-                case 2: blit |= (ulong)slice[1] << 16; goto case 1;
-                case 1: blit |= slice[0]; break;
+                case 3: blit = (ulong)span[ix + 2] << 32; goto case 2;
+                case 2: blit |= (ulong)span[ix + 1] << 16; goto case 1;
+                case 1: blit |= span[ix]; break;
             }
 
             blit >>= bitOffset & 15; // mod 16
@@ -704,26 +602,7 @@ namespace System
         /// <param name="span">The span.</param>
         /// <param name="bitOffset">The ordinal position to read.</param>
         public static uint ExtractUInt32(ReadOnlySpan<ulong> span, int bitOffset)
-        {
-            int ix = bitOffset >> 6; // div 64
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
-            // Need at least 1+1 ulongs
-            ulong left = 0;
-            ulong blit = 0;
-            switch (span.Length - ix)
-            {
-                default:
-                case 2: left = span[ix + 1]; goto case 1;
-                case 1: blit = span[ix]; break;
-            }
-
-            int shft = bitOffset & 63; // mod 64
-            blit >>= shft;
-            blit |= left << (64 - shft);
-
-            return (uint)blit;
-        }
+            => (uint)ExtractUInt64(span, bitOffset);
 
         #endregion
 
@@ -825,17 +704,15 @@ namespace System
             int ix = bitOffset >> 5; // div 32
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
-            ReadOnlySpan<uint> slice = span.Slice(ix);
-
             // Need at least 2+1 uints
             ulong left = 0;
             ulong blit = 0;
             switch (span.Length - ix)
             {
                 default:
-                case 3: left = slice[2]; goto case 2;
-                case 2: blit = (ulong)slice[1] << 32; goto case 1;
-                case 1: blit |= slice[0]; break;
+                case 3: left = span[ix + 2]; goto case 2;
+                case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
+                case 1: blit |= span[ix]; break;
             }
 
             int shft = bitOffset & 31; // mod 32
