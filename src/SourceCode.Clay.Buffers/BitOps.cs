@@ -105,7 +105,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -126,7 +126,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -146,7 +146,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -166,7 +166,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = ToByte(on); // true ? 1 : 0
+            ulong onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -191,7 +191,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -215,7 +215,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= shft;
 
             uint btw = value & mask;
@@ -238,7 +238,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = ToByte(on); // true ? 1 : 0
+            uint onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -261,7 +261,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = ToByte(on); // true ? 1 : 0
+            ulong onn = Evaluate(on, 1); // true ? 1 : 0
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -953,7 +953,7 @@ namespace System
             int zeros = 7 - s_deBruijn32[ix];
             
             // Log(0) is undefined: Return 8.
-            zeros += ToByte(value == 0);
+            zeros += Evaluate(value == 0, 1);
 
             return zeros;
         }
@@ -978,7 +978,7 @@ namespace System
             int zeros = 15 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 16.
-            zeros += ToByte(value == 0);
+            zeros += Evaluate(value == 0, 1);
 
             return zeros;
         }
@@ -1004,7 +1004,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += ToByte(value == 0);
+            zeros += Evaluate(value == 0, 1);
 
             return zeros;
         }
@@ -1040,8 +1040,8 @@ namespace System
             int nz = 31 - s_deBruijn32[ni]; // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            mz += ToByte((value >> 32) == 0);
-            nz += ToByte((uint)value == 0);
+            mz += Evaluate((value >> 32) == 0, 1);
+            nz += Evaluate((uint)value == 0, 1);
 
             // Truth table
             // m   n  m32 actual   m + (n * m32)
@@ -1050,7 +1050,7 @@ namespace System
             // m  32  0   m        m + (32 * 0)
             // m   n  0   m        m + (n * 0)
 
-            nz *= ToByte(mz == 32); // Only add n if m != 32
+            nz *= Evaluate(mz == 32, 1); // Only add n if m != 32
             return mz + nz;
         }
 
@@ -1299,7 +1299,7 @@ namespace System
             // m  32  1   32+m   32 + (m * 1)
             // m   n  0   n       n + (m * 0)
 
-            mc *= ToByte(nc == 32); // Only add m if n != 32
+            mc *= Evaluate(nc == 32, 1); // Only add m if n != 32
             return mc + nc;
         }
 
@@ -1538,7 +1538,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += ToByte(value == 0);
+            val += Evaluate(value == 0, 1);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1562,7 +1562,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += ToByte(value == 0);
+            val += Evaluate(value == 0, 1);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1587,7 +1587,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += ToByte(value == 0);
+            val += Evaluate(value == 0, 1);
 
             //         77        0100 1101
             val--; //  76        0100 1100 (for exact powers of 2)
@@ -1613,7 +1613,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += ToByte(value == 0);
+            val += Evaluate(value == 0, 1);
 
             val--;
             val |= val >> 01;
@@ -1792,7 +1792,7 @@ namespace System
 
         #endregion
 
-        #region Bool
+        #region Evaluate
 
         /// <summary>
         /// Converts a bool to a byte value, without branching.
@@ -1802,7 +1802,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ToByte(bool condition, byte trueValue = 1, byte falseValue = 0)
+        public static byte Evaluate(bool condition, byte trueValue, byte falseValue = 0)
         {
             uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -1820,7 +1820,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort ToUInt16(bool condition, ushort trueValue = 1, ushort falseValue = 0)
+        public static ushort Evaluate(bool condition, ushort trueValue, ushort falseValue = 0)
         {
             uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -1838,7 +1838,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ToUInt32(bool condition, uint trueValue = 1, uint falseValue = 0)
+        public static uint Evaluate(bool condition, uint trueValue, uint falseValue = 0)
         {
             uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -1856,7 +1856,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ToUInt64(bool condition, ulong trueValue = 1, ulong falseValue = 0)
+        public static ulong Evaluate(bool condition, ulong trueValue, ulong falseValue = 0)
         {
             ulong val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
