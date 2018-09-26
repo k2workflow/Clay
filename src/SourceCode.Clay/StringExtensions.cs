@@ -115,7 +115,7 @@ namespace SourceCode.Clay
         /// <param name="y"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool EqualsOrdinal(this string x, in string y)
+        public static bool EqualsOrdinal(this string x, string y)
             => StringComparer.Ordinal.Equals(x, y);
     }
 }

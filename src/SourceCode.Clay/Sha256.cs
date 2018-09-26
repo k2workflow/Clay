@@ -62,7 +62,7 @@ namespace SourceCode.Clay
         /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <param name="source">The buffer.</param>
-        public Sha256(in ReadOnlySpan<byte> source)
+        public Sha256(ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
             var src = source.Slice(0, ByteLength);
@@ -75,7 +75,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha256 Hash(in ReadOnlySpan<byte> span)
+        public static Sha256 Hash(ReadOnlySpan<byte> span)
         {
             if (span.Length == 0) return s_empty;
 
@@ -88,7 +88,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The string to hash.</param>
         /// <returns></returns>
-        public static Sha256 Hash(in string value)
+        public static Sha256 Hash(string value)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return s_empty;
@@ -116,7 +116,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
         /// <returns></returns>
-        public static Sha256 Hash(in byte[] bytes)
+        public static Sha256 Hash(byte[] bytes)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
             if (bytes.Length == 0) return s_empty;
@@ -134,7 +134,7 @@ namespace SourceCode.Clay
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha256 Hash(in byte[] bytes, int start, int length)
+        public static Sha256 Hash(byte[] bytes, int start, int length)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
@@ -164,7 +164,7 @@ namespace SourceCode.Clay
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Sha256 HashImpl(in ReadOnlySpan<byte> span)
+        private static Sha256 HashImpl(ReadOnlySpan<byte> span)
         {
             // Do NOT short-circuit here; rely on call-sites to do so
 
@@ -295,7 +295,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static bool TryParse(in ReadOnlySpan<char> hex, out Sha256 value)
+        public static bool TryParse(ReadOnlySpan<char> hex, out Sha256 value)
         {
             value = default;
 
@@ -334,7 +334,7 @@ namespace SourceCode.Clay
         /// <param name="hex">The hexadecimal.</param>
         /// <returns></returns>
         /// <exception cref="FormatException">Sha256</exception>
-        public static Sha256 Parse(in ReadOnlySpan<char> hex)
+        public static Sha256 Parse(ReadOnlySpan<char> hex)
         {
             Span<byte> sha = stackalloc byte[ByteLength];
             if (!ShaUtil.TryParse(hex, sha))
