@@ -105,7 +105,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -126,7 +126,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -146,7 +146,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -166,7 +166,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1); // true ? 1 : 0
+            ulong onn = Evaluate(on, 1);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -191,7 +191,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -215,7 +215,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -238,7 +238,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1); // true ? 1 : 0
+            uint onn = Evaluate(on, 1);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -261,7 +261,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1); // true ? 1 : 0
+            ulong onn = Evaluate(on, 1);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -861,7 +861,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(byte value)
-            => PopCount((uint)value); // May compile to instrinsics
+            => PopCount((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -870,7 +870,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ushort value)
-            => PopCount((uint)value); // May compile to instrinsics
+            => PopCount((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -932,7 +932,7 @@ namespace System
             19, 27, 23, 06, 26, 05, 04, 31
         };
 
-        private const uint c_deBruijn32 = 0x07C4_ACDDu;
+        private const uint deBruijn32 = 0x07C4_ACDDu;
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -941,22 +941,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(byte value)
-        {
-            uint val = value;
-
-            //                   1000 0000
-            val |= val >> 01; // 1100 0000
-            val |= val >> 02; // 1111 0000
-            val |= val >> 04; // 1111 1111
-
-            uint ix = (val * c_deBruijn32) >> 27;
-            int zeros = 7 - s_deBruijn32[ix];
-            
-            // Log(0) is undefined: Return 8.
-            zeros += Evaluate(value == 0, 1);
-
-            return zeros;
-        }
+            => LeadingZeros((uint)value) - 24; // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -965,23 +950,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ushort value)
-        {
-            uint val = value;
-
-            //                   1000 0000 0000 0000
-            val |= val >> 01; // 1100 0000 0000 0000
-            val |= val >> 02; // 1111 0000 0000 0000
-            val |= val >> 04; // 1111 1111 0000 0000
-            val |= val >> 08; // 1111 1111 1111 1111
-
-            uint ix = (val * c_deBruijn32) >> 27;
-            int zeros = 15 - s_deBruijn32[ix];
-
-            // Log(0) is undefined: Return 16.
-            zeros += Evaluate(value == 0, 1);
-
-            return zeros;
-        }
+            => LeadingZeros((uint)value) - 16; // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1000,7 +969,7 @@ namespace System
             val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
             val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * deBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
@@ -1033,8 +1002,8 @@ namespace System
             uint mv = (uint)(val >> 32); // High-32
             uint nv = (uint)val; // Low-32
 
-            uint mi = (mv * c_deBruijn32) >> 27;
-            uint ni = (nv * c_deBruijn32) >> 27;
+            uint mi = (mv * deBruijn32) >> 27;
+            uint ni = (nv * deBruijn32) >> 27;
 
             int mz = 31 - s_deBruijn32[mi];
             int nz = 31 - s_deBruijn32[ni]; // Use warm cache
@@ -1094,26 +1063,6 @@ namespace System
 
         #region TrailingZeros
 
-        // Build this table by taking n = 0,1,2,4,...,512
-        // [2^n % 11] = tz(n) manually counted
-        private static readonly byte[] s_trail08u = new byte[11] // mod 11
-        {
-            //    2^n  % 11     b=bin(n)   z=tz(b)
-            8, //   0  [ 0]     0000_0000  8
-            0, //   1  [ 1]     0000_0001  0 
-            1, //   2  [ 2]     0000_0010  1
-            8, // 256  [ 3]  01_0000_0000  8 (n/a) 1u << 8
-               
-            2, //   4  [ 4]     0000_0100  2
-            4, //  16  [ 5]     0001_0000  4
-            9, // 512  [ 6]  10_0000_0000  9 (n/a) 1u << 9
-            7, // 128  [ 7]     1000_0000  7
-               
-            3, //   8  [ 8]     0000_1000  3
-            6, //  64  [ 9]     0100_0000  6
-            5, //  32  [10]     0010_0000  5
-        };
-
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
         /// Similar in behavior to the x86 instruction TZCNT.
@@ -1121,58 +1070,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(byte value)
-        {
-            // The expression (n & -n) returns lsb(n).
-            // Only possible values are therefore [0,1,2,4,...,128]
-            int lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
-
-            // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
-            // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
-            lsb %= 11; // mod 11
-
-            // Benchmark: Lookup is 2x faster than Switch
-            // Method |     Mean |     Error | StdDev    | Scaled |
-            //------- | ---------| ----------| ----------| -------|
-            // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
-            // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
-
-            byte cnt = s_trail08u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
-            
-            // NoOp: Hashing scheme has unused outputs (inputs 256 and higher do not fit a byte)
-            Debug.Assert(lsb != 3 && lsb != 6, $"{value} resulted in unexpected {typeof(byte)} hash {lsb}, with count {cnt}");
-
-            return cnt;
-        }
-
-        // See algorithm notes in TrailingCount(byte).
-        // 19 is the closest prime greater than the range's cardinality of 17.
-        private static readonly byte[] s_trail16u = new byte[19] // mod 19
-        {
-            //        2^n  % 19     b=bin(n)             z=tz(b)
-            16, //      0  [ 0]     0000_0000_0000_0000  16
-            00, //      1  [ 1]     0000_0000_0000_0001   0
-            01, //      2  [ 2]     0000_0000_0000_0010   1
-            13, //   8192  [ 3]     0010_0000_0000_0000  13
-
-            02, //      4  [ 4]     0000_0000_0000_0100   2
-            16, //  65536  [ 5]  01_0000_0000_0000_0000  16 (n/a) 1u << 16
-            14, //  16384  [ 6]     0100_0000_0000_0000  14
-            06, //     64  [ 7]     0000_0000_0100_0000   6
-
-            03, //      8  [ 8]     0000_0000_0000_1000   3
-            08, //    256  [ 9]     0000_0001_0000_0000   8
-            17, // 131072  [10]  10_0000_0000_0000_0000  17 (n/a) 1u << 17
-            12, //   4096  [11]     0001_0000_0000_0000  12
-
-            15, //  32768  [12]     1000_0000_0000_0000  15
-            05, //     32  [13]     0000_0000_0010_0000   5
-            07, //    128  [14]     0000_0000_1000_0000   7
-            11, //   2048  [15]     0000_1000_0000_0000  11
-
-            04, //     16  [16]     0000_0000_0001_0000   4
-            10, //   1024  [17]     0000_0100_0000_0000  10
-            09  //    512  [18]     0000_0010_0000_0000   9
-        };
+            => Math.Min(8, TrailingZeros((uint)value)); // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1181,21 +1079,10 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
-        {
-            // See algorithm notes in TrailingZeros(byte)
+            => Math.Min(16, TrailingZeros((uint)value)); // Delegate to intrinsic
 
-            int lsb = value & -value;
-            lsb %= 19; // mod 19
-
-            byte cnt = s_trail16u[lsb];
-
-            // NoOp: Hashing scheme has unused outputs (inputs 65536 and higher do not fit a ushort)
-            Debug.Assert(lsb != 5 && lsb != 10, $"{value} resulted in unexpected {typeof(ushort)} hash {lsb}, with count {cnt}");
-
-            return cnt;
-        }
-
-        // See algorithm notes in TrailingCount(byte)
+        // Build this table by taking n = 0,1,2,4,...
+        // [2^n % 37] = tz(n) manually counted
         // 37 is the closest prime greater than the range's cardinality of 33.
         private static readonly byte[] s_trail32u = new byte[37] // mod 37
         {
@@ -1256,12 +1143,21 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(uint value)
         {
-            // See algorithm notes in TrailingZeros(byte)
+            // The expression (n & -n) returns lsb(n).
+            // Only possible values are therefore [0,1,2,4,...]
+            long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
-            long lsb = value & -value;
+            // We want to map [0,1,2,3,...] to the smallest contiguous range, ideally [0..33] since 33 is the range cardinality.
+            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the closest prime greater than 33.
             lsb %= 37; // mod 37
 
-            byte cnt = s_trail32u[lsb];
+            // Benchmark: Lookup is 2x faster than Switch
+            // Method |     Mean |     Error | StdDev    | Scaled |
+            //------- | ---------| ----------| ----------| -------|
+            // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
+            // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
+
+            byte cnt = s_trail32u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
             Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
@@ -1280,27 +1176,27 @@ namespace System
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
 
-            uint mv = (uint)(value >> 32); // High-32
-            uint nv = (uint)value; // Low-32
+            var hv = (uint)(value >> 32); // High-32
+            var bv = (uint)value; // Low-32
 
-            long mi = mv & -mv;
-            long ni = nv & -nv;
+            long hi = hv & -hv;
+            long bi = bv & -bv;
 
-            mi %= 37; // mod 37
-            ni %= 37;
+            hi %= 37; // mod 37
+            bi %= 37;
 
-            byte mc = s_trail32u[mi];
-            byte nc = s_trail32u[ni]; // Use warm cache
+            byte h = s_trail32u[hi];
+            byte b = s_trail32u[bi]; // Use warm cache
 
             // Truth table
-            // m   n  n32 actual  n + (m * n32)
+            // h   b  b32 actual  b + (h * b32 ? 1 : 0)
             // 32 32  1   32+32  32 + (32 * 1)
-            // 32  n  0   n       n + (32 * 0)
-            // m  32  1   32+m   32 + (m * 1)
-            // m   n  0   n       n + (m * 0)
+            // 32  b  0   b       b + (32 * 0)
+            // h  32  1   32+h   32 + (h * 1)
+            // h   b  0   b       b + (h * 0)
 
-            mc *= Evaluate(nc == 32, 1); // Only add m if n != 32
-            return mc + nc;
+            h = Evaluate(b == 32, h, 0); // Only add h if b==32
+            return b + h;
         }
 
         #endregion
@@ -1353,17 +1249,7 @@ namespace System
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            uint val = value;
-
-            //                   1000 0000
-            val |= val >> 01; // 1100 0000
-            val |= val >> 02; // 1111 0000
-            val |= val >> 04; // 1111 1111
-
-            uint ix = (val * c_deBruijn32) >> 27;
-
-            byte log = s_deBruijn32[ix];
-            return log;
+            return Log2Low((uint)value); // Delegate to intrinsic
         }
 
         /// <summary>
@@ -1376,18 +1262,7 @@ namespace System
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            uint val = value;
-
-            //                   1000 0000 0000 0000
-            val |= val >> 01; // 1100 0000 0000 0000
-            val |= val >> 02; // 1111 0000 0000 0000
-            val |= val >> 04; // 1111 1111 0000 0000
-            val |= val >> 08; // 1111 1111 1111 1111
-
-            uint ix = (val * c_deBruijn32) >> 27;
-
-            byte log = s_deBruijn32[ix];
-            return log;
+            return Log2Low((uint)value); // Delegate to intrinsic
         }
 
         /// <summary>
@@ -1409,7 +1284,7 @@ namespace System
             val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
             val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * deBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
             return log;
@@ -1442,48 +1317,7 @@ namespace System
             // Examine 32
             return inc + Log2Low(val);
         }
-        // TODO: Perf
-        //{
-        //    // Perf: Do not use guard clauses; callers must be trusted
-        //    Debug.Assert(value > 0);
-
-        //    ulong val = value;
-
-        //    //                   1000 0000 0000 0000 0000 0000 0000 0000 0...
-        //    val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000 0...
-        //    val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000 0...
-        //    val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000 0...
-        //    val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000 0...
-        //    val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111 0...
-        //    val |= val >> 32; // 1111 1111 1111 1111 1111 1111 1111 1111 1...
-
-        //    // Instead of using a 64-bit lookup table,
-        //    // we use the existing 32-bit table twice.
-
-        //    uint mv = (uint)(val >> 32); // High-32
-        //    uint nv = (uint)val; // Low-32
-
-        //    uint mi = (mv * c_deBruijn32) >> 27;
-        //    uint ni = (nv * c_deBruijn32) >> 27;
-
-        //    int ml = s_deBruijn32[mi];
-        //    int nl = s_deBruijn32[ni]; // Use warm cache
-
-        //    // Log(0) is undefined: Return 32 + 32.
-        //    //ml += BoolToByte((value >> 32) == 0);
-        //    //nl += BoolToByte((uint)value == 0);
-
-        //    // Truth table
-        //    // m   n  m32 actual   m + (n * m32)
-        //    // 32 32  1   32+32   32 + (32 * 1)
-        //    // 32  n  1   32+n    32 + (n * 1)
-        //    // m  32  0   m        m + (32 * 0)
-        //    // m   n  0   m        m + (n * 0)
-
-        //    //nl *= BoolToByte(ml == 31); // Only add n if m != 32
-        //    return ml + nl;
-        //}        
-
+        
         #endregion
 
         #region Log2High
@@ -1503,7 +1337,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Log2High(ushort value)
             => Log2Low(value) + 1;
-
+    
         /// <summary>
         /// Computes the lowest power of 2 greater than the given value.
         /// </summary>
@@ -1534,20 +1368,8 @@ namespace System
         internal static uint Pow2Low(byte value)
         {
             Debug.Assert(value < byte.MaxValue);
-
-            uint val = value;
-
-            // If zero, add 1
-            val += Evaluate(value == 0, 1);
-
-            //         77        0100 1101
-            val--; //  76        0100 1100 (for exact powers of 2)
-            val |= val >> 01; // 0110 1110
-            val |= val >> 02; // 0111 1111
-            val |= val >> 04; // 0111 1111
-            val++; // 128        1000 0000 (for exact powers of 2)
-
-            return val;
+            
+            return Pow2Low((uint)value); // Delegate to intrinsic
         }
 
         /// <summary>
@@ -1559,20 +1381,7 @@ namespace System
         {
             Debug.Assert(value < ushort.MaxValue);
 
-            uint val = value;
-
-            // If zero, add 1
-            val += Evaluate(value == 0, 1);
-
-            //         77        0100 1101
-            val--; //  76        0100 1100 (for exact powers of 2)
-            val |= val >> 01; // 0110 1110
-            val |= val >> 02; // 0111 1111
-            val |= val >> 04; // 0111 1111
-            val |= val >> 08; // 0111 1111
-            val++; // 128        1000 0000 (for exact powers of 2)
-
-            return val;
+            return Pow2Low((uint)value); // Delegate to intrinsic
         }
 
         /// <summary>
@@ -1673,7 +1482,7 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(byte value)
-            => IsPowerOf2((uint)value);
+            => IsPowerOf2((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns True if the value is a power of 2, else False.
@@ -1681,7 +1490,7 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPowerOf2(ushort value)
-            => IsPowerOf2((uint)value);
+            => IsPowerOf2((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns True if the value is a power of 2, else False.
@@ -1714,18 +1523,7 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Parity(byte value)
-        {
-            uint val = value;
-
-            //                  1010 0111 (odd)
-            val ^= val >> 4; // 1000 1101
-            val &= 15; //       0000 1101 (13)
-
-            val = 0b_0110_1001_1001_0110u >> (int)val; // 0011 (3)
-            val &= 1; // 0001 (1)
-
-            return (int)val; // 1==odd
-        }
+            => Parity((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns 1 if the bit count is odd, else 0.
@@ -1734,18 +1532,7 @@ namespace System
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Parity(ushort value)
-        {
-            uint val = value;
-
-            val ^= val >> 8;
-            val ^= val >> 4;
-            val &= 15;
-
-            val = 0b_0110_1001_1001_0110u >> (int)val;
-            val &= 1;
-
-            return (int)val;
-        }
+            => Parity((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns 1 if the bit count is odd, else 0.
@@ -1803,14 +1590,7 @@ namespace System
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Evaluate(bool condition, byte trueValue, byte falseValue = 0)
-        {
-            uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
-        }
+            => (byte)Evaluate(condition, (uint)trueValue, falseValue); // Delegate to intrinsic
 
         /// <summary>
         /// Converts a bool to a ushort value, without branching.
@@ -1821,14 +1601,7 @@ namespace System
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort Evaluate(bool condition, ushort trueValue, ushort falseValue = 0)
-        {
-            uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (ushort)val;
-        }
+            => (ushort)Evaluate(condition, (uint)trueValue, falseValue); // Delegate to intrinsic
 
         /// <summary>
         /// Converts a bool to a uint value, without branching.
