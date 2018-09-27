@@ -410,7 +410,8 @@ namespace System
         public static byte InsertByte(Span<byte> span, int bitOffset, byte insert)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7;
 
             // Need at most 1+1 bytes
@@ -419,14 +420,14 @@ namespace System
             ref byte r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             uint mask = (uint)r1 << 8 | r0;
             uint orig = mask >> shft;
 
@@ -445,7 +446,8 @@ namespace System
         public static byte InsertByte(Span<ushort> span, int bitOffset, byte insert)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 15;
 
             // Need at most 1+1 ushorts
@@ -454,14 +456,14 @@ namespace System
             ref ushort r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             uint mask = (uint)r1 << 16 | r0;
             uint orig = mask >> shft;
 
@@ -480,7 +482,8 @@ namespace System
         public static byte InsertByte(Span<uint> span, int bitOffset, byte insert)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 31;
 
             // Need at most 1+1 uints
@@ -489,14 +492,14 @@ namespace System
             ref uint r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong mask = r1 << 32 | r0;
             ulong orig = mask >> shft;
 
@@ -515,7 +518,8 @@ namespace System
         public static byte InsertByte(Span<ulong> span, int bitOffset, byte insert)
         {
             int ix = bitOffset >> 6;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63;
 
             // Need at most 1+1 ulongs
@@ -524,7 +528,7 @@ namespace System
             ref ulong r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
@@ -563,11 +567,12 @@ namespace System
         public static ushort ExtractUInt16(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 bytes
             uint blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: blit = (uint)span[ix + 2] << 16; goto case 2;
@@ -587,11 +592,13 @@ namespace System
         public static ushort ExtractUInt16(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4;
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 ushorts
             uint blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: blit = (uint)span[ix + 1] << 16; goto case 1;
@@ -625,7 +632,8 @@ namespace System
         public static ushort InsertUInt16(Span<byte> span, int bitOffset, ushort insert)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7;
 
             // Need at most 2+1 bytes
@@ -635,7 +643,7 @@ namespace System
             ref byte r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: r2 = ref span[ix + 2]; goto case 2;
@@ -643,7 +651,7 @@ namespace System
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             uint mask = (uint)r2 << 16 | (uint)r1 << 8 | r0;
             uint orig = mask >> shft;
 
@@ -663,7 +671,8 @@ namespace System
         public static ushort InsertUInt16(Span<ushort> span, int bitOffset, ushort insert)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 15;
 
             // Need at most 1+1 ushorts
@@ -672,14 +681,14 @@ namespace System
             ref ushort r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             uint mask = (uint)r1 << 16 | r0;
             uint orig = mask >> shft;
 
@@ -698,7 +707,8 @@ namespace System
         public static ushort InsertUInt16(Span<uint> span, int bitOffset, ushort insert)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 31;
 
             // Need at most 1+1 uints
@@ -707,14 +717,14 @@ namespace System
             ref uint r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong mask = (ulong)r1 << 32 | r0;
             ulong orig = mask >> shft;
 
@@ -733,7 +743,8 @@ namespace System
         public static ushort InsertUInt16(Span<ulong> span, int bitOffset, ushort insert)
         {
             int ix = bitOffset >> 6;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63;
 
             // Need at most 1+1 ulongs
@@ -742,7 +753,7 @@ namespace System
             ref ulong r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
@@ -781,13 +792,14 @@ namespace System
         public static uint ExtractUInt32(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ReadOnlySpan<byte> slice = span.Slice(ix);
 
             // Need at most 4+1 bytes
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 5: blit = (ulong)slice[4] << 32; goto case 4;
@@ -810,11 +822,12 @@ namespace System
         public static uint ExtractUInt32(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 ushorts
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: blit = (ulong)span[ix + 2] << 32; goto case 2;
@@ -834,11 +847,12 @@ namespace System
         public static uint ExtractUInt32(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 uints
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: blit = (ulong)span[ix + 1] << 32; goto case 1;
@@ -864,7 +878,8 @@ namespace System
         public static uint InsertUInt32(Span<byte> span, int bitOffset, uint insert)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 7;
 
             // Need at most 4+1 bytes
@@ -877,7 +892,7 @@ namespace System
 
             // Read element refs
             var slice = span.Slice(ix);
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 5: r4 = ref slice[4]; goto case 4;
@@ -887,7 +902,7 @@ namespace System
                 case 1: r0 = ref slice[0]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong mask = (ulong)r4 << 32 | (ulong)r3 << 24 | (ulong)r2 << 16 | (ulong)r1 << 8 | r0;
             ulong orig = mask >> shft;
 
@@ -909,7 +924,8 @@ namespace System
         public static uint InsertUInt32(Span<ushort> span, int bitOffset, uint insert)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 15;
 
             // Need at most 2+1 ushorts
@@ -919,7 +935,7 @@ namespace System
             ref ushort r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: r2 = ref span[ix + 2]; goto case 2;
@@ -927,7 +943,7 @@ namespace System
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong mask = (ulong)r2 << 32 | (ulong)r1 << 16 | r0;
             ulong orig = mask >> shft;
 
@@ -947,7 +963,8 @@ namespace System
         public static uint InsertUInt32(Span<uint> span, int bitOffset, uint insert)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 31;
 
             // Need at most 1+1 uints
@@ -956,14 +973,14 @@ namespace System
             ref uint r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong mask = (ulong)r1 << 32 | r0;
             ulong orig = mask >> shft;
 
@@ -982,7 +999,8 @@ namespace System
         public static uint InsertUInt32(Span<ulong> span, int bitOffset, uint insert)
         {
             int ix = bitOffset >> 6;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63;
 
             // Need at most 1+1 ulongs
@@ -991,7 +1009,7 @@ namespace System
             ref ulong r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
@@ -1030,14 +1048,15 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            var len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ReadOnlySpan<byte> slice = span.Slice(ix);
 
             // Need at most 8+1 bytes
             ulong left = 0;
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 9: left = slice[8]; goto case 8;
@@ -1066,14 +1085,15 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<ushort> span, int bitOffset)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ReadOnlySpan<ushort> slice = span.Slice(ix);
 
             // Need at most 4+1 ushorts
             ulong left = 0;
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 5: left = slice[4]; goto case 4;
@@ -1096,12 +1116,13 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<uint> span, int bitOffset)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 2+1 uints
             ulong left = 0;
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: left = span[ix + 2]; goto case 2;
@@ -1122,12 +1143,13 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<ulong> span, int bitOffset)
         {
             int ix = bitOffset >> 6;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             // Need at most 1+1 ulongs
             ulong left = 0;
             ulong blit = 0;
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: left = span[ix + 1]; goto case 1;
@@ -1153,7 +1175,8 @@ namespace System
         public static ulong InsertUInt64(Span<ushort> span, int bitOffset, ulong insert)
         {
             int ix = bitOffset >> 4;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 15;
 
             // Need at most 4+1 ushorts
@@ -1165,7 +1188,7 @@ namespace System
             ref ushort r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 5: r4 = ref span[ix + 4]; goto case 4;
@@ -1175,7 +1198,7 @@ namespace System
                 case 1: r0 = ref span[ix]; break;
             }
 
-            // Build original mask & value
+            // Extract original mask & value
             ulong orig = (ulong)r0 >> shft;
             orig |= (ulong)r1 << (16 - shft);
             orig |= (ulong)r2 << (32 - shft);
@@ -1208,7 +1231,8 @@ namespace System
         public static ulong InsertUInt64(Span<uint> span, int bitOffset, ulong insert)
         {
             int ix = bitOffset >> 5;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 31;
 
             // Need at most 2+1 uints
@@ -1218,7 +1242,7 @@ namespace System
             ref uint r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 3: r2 = ref span[ix + 2]; goto case 2;
@@ -1255,7 +1279,8 @@ namespace System
         public static ulong InsertUInt64(Span<ulong> span, int bitOffset, ulong insert)
         {
             int ix = bitOffset >> 6;
-            if (ix >= span.Length) throw new ArgumentOutOfRangeException(nameof(bitOffset));
+            int len = span.Length - ix;
+            if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
             int shft = bitOffset & 63;
 
             // Need at most 1+1 ulongs
@@ -1264,7 +1289,7 @@ namespace System
             ref ulong r0 = ref @null;
 
             // Read element refs
-            switch (span.Length - ix)
+            switch (len)
             {
                 default:
                 case 2: r1 = ref span[ix + 1]; goto case 1;
