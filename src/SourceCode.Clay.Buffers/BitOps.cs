@@ -954,7 +954,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += Evaluate(value == 0, 1);
+            zeros += (int)Evaluate(value == 0, 1);
 
             return zeros;
         }
@@ -980,28 +980,28 @@ namespace System
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
 
-            uint mv = (uint)(val >> 32); // High-32
-            uint nv = (uint)val; // Low-32
+            uint hv = (uint)(val >> 32); // High-32
+            uint bv = (uint)val; // Low-32
 
-            uint mi = (mv * deBruijn32) >> 27;
-            uint ni = (nv * deBruijn32) >> 27;
+            uint hi = (hv * deBruijn32) >> 27;
+            uint bi = (bv * deBruijn32) >> 27;
 
-            int mz = 31 - s_deBruijn32[mi];
-            int nz = 31 - s_deBruijn32[ni]; // Use warm cache
+            uint h = (uint)(31 - s_deBruijn32[hi]);
+            uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            mz += Evaluate((value >> 32) == 0, 1);
-            nz += Evaluate((uint)value == 0, 1);
+            h += Evaluate((value >> 32) == 0, 1);
+            b += Evaluate((uint)value == 0, 1);
 
             // Truth table
-            // m   n  m32 actual   m + (n * m32)
+            // h   b  h32 actual   h + (b * m32 ? 1 : 0)
             // 32 32  1   32+32   32 + (32 * 1)
-            // 32  n  1   32+n    32 + (n * 1)
-            // m  32  0   m        m + (32 * 0)
-            // m   n  0   m        m + (n * 0)
+            // 32  b  1   32+b    32 + (b * 1)
+            // h  32  0   h        h + (32 * 0)
+            // h   b  0   h        h + (b * 0)
 
-            nz *= Evaluate(mz == 32, 1); // Only add n if m != 32
-            return mz + nz;
+            b = Evaluate(h == 32, b); // Only add b if h==32
+            return (int)(h + b);
         }
 
         #endregion
@@ -1166,8 +1166,8 @@ namespace System
             hi %= 37; // mod 37
             bi %= 37;
 
-            byte h = s_trail32u[hi];
-            byte b = s_trail32u[bi]; // Use warm cache
+            uint h = s_trail32u[hi];
+            uint b = s_trail32u[bi]; // Use warm cache
 
             // Truth table
             // h   b  b32 actual  b + (h * b32 ? 1 : 0)
@@ -1176,8 +1176,8 @@ namespace System
             // h  32  1   32+h   32 + (h * 1)
             // h   b  0   b       b + (h * 0)
 
-            h = Evaluate(b == 32, h, 0); // Only add h if b==32
-            return b + h;
+            h = Evaluate(b == 32, h); // Only add h if b==32
+            return (int)(b + h);
         }
 
         #endregion
@@ -1447,28 +1447,6 @@ namespace System
         #region Evaluate
 
         /// <summary>
-        /// Converts a bool to a byte value, without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        /// <param name="trueValue">The value to return if True.</param>
-        /// <param name="falseValue">The value to return if False.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Evaluate(bool condition, byte trueValue, byte falseValue = 0)
-            => (byte)Evaluate(condition, (uint)trueValue, falseValue); // Delegate to intrinsic
-
-        /// <summary>
-        /// Converts a bool to a ushort value, without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        /// <param name="trueValue">The value to return if True.</param>
-        /// <param name="falseValue">The value to return if False.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort Evaluate(bool condition, ushort trueValue, ushort falseValue = 0)
-            => (ushort)Evaluate(condition, (uint)trueValue, falseValue); // Delegate to intrinsic
-
-        /// <summary>
         /// Converts a bool to a uint value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
@@ -1476,13 +1454,27 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Evaluate(bool condition, uint trueValue, uint falseValue = 0)
+        public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
         {
             uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
+            return val;
+        }
+
+        /// <summary>
+        /// Converts a bool to a uint value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Evaluate(bool condition, uint trueValue)
+        {
+            uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            val *= trueValue;
             return val;
         }
 
@@ -1494,13 +1486,27 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Evaluate(bool condition, ulong trueValue, ulong falseValue = 0)
+        public static ulong Evaluate(bool condition, ulong trueValue, ulong falseValue)
         {
             ulong val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
+            return val;
+        }
+
+        /// <summary>
+        /// Converts a bool to a ulong value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Evaluate(bool condition, ulong trueValue)
+        {
+            ulong val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            val *= trueValue;
             return val;
         }
 
