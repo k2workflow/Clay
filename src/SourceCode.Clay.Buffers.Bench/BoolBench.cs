@@ -43,14 +43,14 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += BitOps.Evaluate(@true, 1);
+                    sum += BitOps.Evaluate(@true, 1ul);
                     sum++;
-                    sum -= BitOps.Evaluate(@false, 1);
+                    sum -= BitOps.Evaluate(@false, 1ul);
                     sum--;
 
-                    sum += BitOps.Evaluate(@true, 4);
-                    sum -= BitOps.Evaluate(@false, 3);
-                    sum += BitOps.Evaluate(@true, 3, 2);
+                    sum += BitOps.Evaluate(@true, 4ul);
+                    sum -= BitOps.Evaluate(@false, 3ul);
+                    sum += BitOps.Evaluate(@true, 3ul, 2ul);
                     sum -= 7;
                 }
             }
