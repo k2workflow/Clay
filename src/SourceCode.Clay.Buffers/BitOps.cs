@@ -7,8 +7,6 @@ using System.Runtime.CompilerServices;
 
 namespace System
 {
-#pragma warning disable IDE0007 // Use implicit type
-
     /// <summary>
     /// Represents additional blit methods.
     /// </summary>
@@ -1679,6 +1677,4 @@ namespace System
 
         #endregion
     }
-
-#pragma warning restore IDE0007 // Use implicit type
 }
