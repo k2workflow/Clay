@@ -53,7 +53,7 @@ namespace SourceCode.Clay.Json.Bench
             var total = 0L;
             for (var j = 0; j < InvokeCount; j++)
             {
-                var clone = _newton.DeepClone();
+                JToken clone = _newton.DeepClone();
 
                 total += System.Linq.Enumerable.Count(clone.Children());
             }

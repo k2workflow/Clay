@@ -28,11 +28,11 @@ namespace SourceCode.Clay.Buffers
             if (x.Length != y.Length) return false; // (n, m)
             if (x.Length == 0) return true; // (0, 0)
 
-            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
+            IEqualityComparer<TSource> cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // Memory.Span throws if IsEmpty == true
-            var xs = x.Span;
-            var ys = y.Span;
+            ReadOnlySpan<TSource> xs = x.Span;
+            ReadOnlySpan<TSource> ys = y.Span;
 
             // Check items in sequential order
             for (var i = 0; i < xs.Length; i++)

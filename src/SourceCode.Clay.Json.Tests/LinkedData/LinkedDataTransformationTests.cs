@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
         [MemberData(nameof(Expand))]
         public static async Task LinkedDataTransformation_Expand(LinkedDataTestCase testCase)
         {
-            var actualObject = await LinkedDataTransformation.ExpandAsync(
+            JArray actualObject = await LinkedDataTransformation.ExpandAsync(
                 testCase.Input,
                 testCase.Options,
                 CancellationToken.None);
@@ -64,9 +64,9 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
         {
             get
             {
-                foreach (var asyncItem in LinkedDataTestCase.ReadAsync("expand-manifest.jsonld").Result)
+                foreach (ValueTask<LinkedDataTestCase> asyncItem in LinkedDataTestCase.ReadAsync("expand-manifest.jsonld").Result)
                 {
-                    var item = asyncItem.Result;
+                    LinkedDataTestCase item = asyncItem.Result;
                     yield return new object[] { item };
                 }
             }

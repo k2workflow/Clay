@@ -5,6 +5,7 @@
 
 #endregion
 
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
 namespace SourceCode.Clay.Buffers.Bench
@@ -14,7 +15,7 @@ namespace SourceCode.Clay.Buffers.Bench
         public static void Main(string[] args)
         {
             var bench = new SwitchBench();
-            var summary = BenchmarkRunner.Run<SwitchBench>();
+            Summary summary = BenchmarkRunner.Run<SwitchBench>();
         }
     }
 }

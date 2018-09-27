@@ -33,7 +33,7 @@ namespace SourceCode.Clay.Threading
             if (toExclusive < fromInclusive) throw new ArgumentOutOfRangeException(nameof(toExclusive));
             if (action is null) throw new ArgumentNullException(nameof(action));
 
-            var opt = Build(options);
+            ExecutionDataflowBlockOptions opt = Build(options);
 
             var block = new ActionBlock<int>(action, opt);
 
@@ -63,7 +63,7 @@ namespace SourceCode.Clay.Threading
 
             var dict = new ConcurrentDictionary<int, TValue>();
 
-            var opt = Build(options);
+            ExecutionDataflowBlockOptions opt = Build(options);
 
             var block = new TransformBlock<int, TValue>(func, opt);
 
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Threading
             // Receive
             for (var i = fromInclusive; i < toExclusive; i++)
             {
-                var value = await block.ReceiveAsync(opt.CancellationToken).ConfigureAwait(false);
+                TValue value = await block.ReceiveAsync(opt.CancellationToken).ConfigureAwait(false);
                 dict[i] = value;
             }
 
@@ -99,12 +99,12 @@ namespace SourceCode.Clay.Threading
             if (source is null) return;
             if (action is null) throw new ArgumentNullException(nameof(action));
 
-            var opt = Build(options);
+            ExecutionDataflowBlockOptions opt = Build(options);
 
             var block = new ActionBlock<TSource>(action, opt);
 
             // Send
-            foreach (var item in source)
+            foreach (TSource item in source)
             {
                 await block.SendAsync(item, opt.CancellationToken).ConfigureAwait(false);
             }
@@ -129,13 +129,13 @@ namespace SourceCode.Clay.Threading
 
             var dict = new ConcurrentDictionary<TSource, TValue>();
 
-            var opt = Build(options);
+            ExecutionDataflowBlockOptions opt = Build(options);
 
             var block = new TransformBlock<TSource, KeyValuePair<TSource, TValue>>(func, opt);
 
             // Send
             var count = 0;
-            foreach (var item in source)
+            foreach (TSource item in source)
             {
                 await block.SendAsync(item, opt.CancellationToken).ConfigureAwait(false);
                 count++;
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Threading
             // Receive
             for (var i = 0; i < count; i++)
             {
-                var value = await block.ReceiveAsync(opt.CancellationToken).ConfigureAwait(false);
+                KeyValuePair<TSource, TValue> value = await block.ReceiveAsync(opt.CancellationToken).ConfigureAwait(false);
                 dict[value.Key] = value.Value;
             }
 

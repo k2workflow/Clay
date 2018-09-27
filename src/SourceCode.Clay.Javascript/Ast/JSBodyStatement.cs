@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         protected JSBodyStatement(IEnumerable<JSStatement> body)
         {
-            foreach (var item in body)
+            foreach (JSStatement item in body)
                 Add(item);
         }
 
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSBodyStatement Add(IEnumerable<JSStatement> body)
         {
-            foreach (var item in body)
+            foreach (JSStatement item in body)
                 Add(item);
             return this;
         }

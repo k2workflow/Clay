@@ -34,19 +34,19 @@ namespace SourceCode.Clay
 
             static Converter()
             {
-                var @enum = typeof(TEnum);
-                var integer = typeof(TInteger);
+                Type @enum = typeof(TEnum);
+                Type integer = typeof(TInteger);
 
                 try
                 {
-                    var enumParam = Expression.Parameter(@enum, "value");
-                    var integerParam = Expression.Parameter(integer, "value");
-                    var underlying = @enum.GetEnumUnderlyingType();
+                    ParameterExpression enumParam = Expression.Parameter(@enum, "value");
+                    ParameterExpression integerParam = Expression.Parameter(integer, "value");
+                    Type underlying = @enum.GetEnumUnderlyingType();
 
                     var enumConv = (Expression)Expression.Convert(enumParam, underlying);
                     if (underlying != integer) enumConv = Convert(enumConv, integer);
 
-                    var integerConv = underlying == integer
+                    Expression integerConv = underlying == integer
                         ? integerParam
                         : Convert(integerParam, underlying);
                     integerConv = Expression.Convert(integerConv, @enum);
@@ -75,7 +75,7 @@ namespace SourceCode.Clay
         {
             internal static readonly Func<int> Length = () =>
             {
-                var @enum = typeof(TEnum);
+                Type @enum = typeof(TEnum);
 
                 var values = (ulong[])typeof(Enum)
                     .GetMethod("InternalGetValues", BindingFlags.Static | BindingFlags.NonPublic) // Also see InternalGetNames

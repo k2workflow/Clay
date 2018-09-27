@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
             using (var reader = new SqlCharReader(sql))
             {
-                var tokens = Tokenize(reader, skipSundry);
+                IReadOnlyCollection<SqlTokenInfo> tokens = Tokenize(reader, skipSundry);
                 return tokens;
             }
         }
@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Data.SqlParser
 
             using (var cr = new SqlCharReader(reader))
             {
-                var tokens = Tokenize(cr, skipSundry);
+                IReadOnlyCollection<SqlTokenInfo> tokens = Tokenize(cr, skipSundry);
                 return tokens;
             }
         }
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Data.SqlParser
                 if (peekLength <= 0) break;
 
                 SqlTokenInfo token;
-                var kind = Peek(peekBuffer, peekLength);
+                SqlTokenKind kind = Peek(peekBuffer, peekLength);
                 switch (kind)
                 {
                     case SqlTokenKind.Whitespace:
@@ -292,7 +292,7 @@ namespace SourceCode.Clay.Data.SqlParser
             const int averageLen = 10;
             var cap = peekLength + averageLen;
             var buffer = new char[cap];
-            var sb = skipSundry ? null : new StringBuilder(cap);
+            StringBuilder sb = skipSundry ? null : new StringBuilder(cap);
 
             // We already know the incoming data is "<whitespace>", so keep it
             if (!skipSundry)
@@ -436,20 +436,20 @@ namespace SourceCode.Clay.Data.SqlParser
             {
                 case '"': // "abc"
                     {
-                        var token = ReadQuotedString(sb, '"', reader);
+                        SqlTokenInfo token = ReadQuotedString(sb, '"', reader);
                         return token;
                     }
 
                 case '\'': // 'abc'
                     {
-                        var token = ReadQuotedString(sb, '\'', reader);
+                        SqlTokenInfo token = ReadQuotedString(sb, '\'', reader);
                         return token;
                     }
 
                 case 'N': // N'abc'
                     if (peekLength >= 2 && peekBuffer[1] == '\'')
                     {
-                        var token = ReadQuotedString(sb, '\'', reader);
+                        SqlTokenInfo token = ReadQuotedString(sb, '\'', reader);
                         return token;
                     }
                     break;
@@ -535,7 +535,7 @@ namespace SourceCode.Clay.Data.SqlParser
             // Perf: Assume comment is N chars
             const int bufferLen = 50;
             var buffer = new char[bufferLen];
-            var sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
+            StringBuilder sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
 
             // We already know the peeked token is /*, so keep it
             if (!skipSundry)
@@ -597,7 +597,7 @@ namespace SourceCode.Clay.Data.SqlParser
             // Perf: Assume comment is N chars
             const int bufferLen = 30;
             var buffer = new char[bufferLen];
-            var sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
+            StringBuilder sb = skipSundry ? null : new StringBuilder(2 + bufferLen);
 
             // We already know the peeked token is --, so keep it
             if (!skipSundry)

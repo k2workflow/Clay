@@ -71,7 +71,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSMemberExpression Add(IEnumerable<JSExpression> properties)
         {
-            foreach (var property in properties)
+            foreach (JSExpression property in properties)
                 Indices.Add(property);
             return this;
         }

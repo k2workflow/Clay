@@ -37,7 +37,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer, dictionaryCreationThreshold);
 
-            foreach (var item in items)
+            foreach (TItem item in items)
                 impl.Add(item);
 
             return impl;
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor, comparer);
 
-            foreach (var item in items)
+            foreach (TItem item in items)
                 impl.Add(item);
 
             return impl;
@@ -121,7 +121,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             var impl = new KeyedCollectionImpl<TKey, TItem>(keyExtractor);
 
-            foreach (var item in items)
+            foreach (TItem item in items)
                 impl.Add(item);
 
             return impl;

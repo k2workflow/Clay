@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Json.LinkedData
             if (baseUri is null) return pathToResolve;
             if (string.IsNullOrWhiteSpace(pathToResolve)) return baseUri;
 
-            if (Uri.TryCreate(baseUri, UriKind.Absolute, out var uri))
+            if (Uri.TryCreate(baseUri, UriKind.Absolute, out Uri uri))
             {
                 var builder = new UriBuilder(baseUri);
 
@@ -77,8 +77,8 @@ namespace SourceCode.Clay.Json.LinkedData
             else if (!containerMapping.Is(JTokenType.Array))
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidContainerMapping);
 
-            var result = ContainerMappings.None;
-            foreach (var raw in (JArray)containerMapping)
+            ContainerMappings result = ContainerMappings.None;
+            foreach (JToken raw in (JArray)containerMapping)
                 result |= ParseSingleContainerMapping(raw);
             return result;
         }

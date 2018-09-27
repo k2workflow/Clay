@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Algorithms
         /// <returns>A value indicating whether this edge is equal to another.</returns>
         public bool Equals(Edge<T> other)
         {
-            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            IEqualityComparer<T> equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
 
             return equalityComparer.Equals(From, other.From)
                    && equalityComparer.Equals(To, other.To);
@@ -77,7 +77,7 @@ namespace SourceCode.Clay.Algorithms
         /// <returns>A 32-bit signed integer that is the hashcode for this instance.</returns>
         public override int GetHashCode()
         {
-            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            IEqualityComparer<T> equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
 
             var hashCode = -1781160927;
             hashCode = hashCode * -1521134295 + equalityComparer.GetHashCode(From);

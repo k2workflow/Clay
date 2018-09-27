@@ -842,7 +842,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Body.Count; i++)
             {
-                var body = node.Body[i];
+                JSStatement body = node.Body[i];
                 await WriteNodeAsync(body).ConfigureAwait(false);
             }
         }

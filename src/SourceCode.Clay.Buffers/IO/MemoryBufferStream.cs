@@ -154,7 +154,7 @@ namespace SourceCode.Clay.IO
                 var rented = ArrayPool<byte>.Shared.Rent(bufferSize);
                 try
                 {
-                    var source = _memory.Span.Slice(_position);
+                    ReadOnlySpan<byte> source = _memory.Span.Slice(_position);
                     for (var i = _position; i < _memory.Length; i += rented.Length)
                     {
                         var toCopy = Math.Min(source.Length, rented.Length);
@@ -182,7 +182,7 @@ namespace SourceCode.Clay.IO
             var rented = ArrayPool<byte>.Shared.Rent(bufferSize);
             try
             {
-                var source = _memory.Slice(position);
+                ReadOnlyMemory<byte> source = _memory.Slice(position);
                 for (var i = position; i < _memory.Length; i += rented.Length)
                 {
                     var toCopy = Math.Min(source.Length, rented.Length);

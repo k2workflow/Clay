@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, int timeoutSeconds)
         {
-            var cmd = CreateCommand(sqlCon, commandText, commandType);
+            SqlCommand cmd = CreateCommand(sqlCon, commandText, commandType);
             cmd.CommandTimeout = timeoutSeconds;
 
             return cmd;
@@ -133,7 +133,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
                 // We need to properly-quote the username in order to avoid injection attacks
                 const string sql = "SELECT QUOTENAME(@username, N'''') AS [username];";
-                using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))
+                using (SqlCommand cmd = sqlCon.CreateCommand(sql, CommandType.Text))
                 {
                     cmd.Parameters.AddWithValue("username", user);
 
@@ -155,7 +155,7 @@ namespace SourceCode.Clay.Data.SqlClient
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
                     SELECT @cookie;";
-                using (var cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
+                using (SqlCommand cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
                 {
                     // Do not use ExecuteNonQuery(), it doesn't like the COOKIE option
                     var oc = cmd.ExecuteScalar();
@@ -195,7 +195,7 @@ namespace SourceCode.Clay.Data.SqlClient
 
                 // We need to properly-quote the username in order to avoid injection attacks
                 const string sql = "SELECT QUOTENAME(@username, N'''') AS [username];";
-                using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))
+                using (SqlCommand cmd = sqlCon.CreateCommand(sql, CommandType.Text))
                 {
                     cmd.Parameters.AddWithValue("username", user);
 
@@ -217,7 +217,7 @@ namespace SourceCode.Clay.Data.SqlClient
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
                     SELECT @cookie;";
-                using (var cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
+                using (SqlCommand cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
                 {
                     // Do not use ExecuteNonQuery(), it doesn't like the COOKIE option
                     var oc = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
@@ -251,9 +251,9 @@ namespace SourceCode.Clay.Data.SqlClient
                     if (!(cookie is null) && cookie.Length > 0) // @COOKIE is VARBINARY(100)
                     {
                         const string sql = "REVERT WITH COOKIE = @cookie;";
-                        using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))
+                        using (SqlCommand cmd = sqlCon.CreateCommand(sql, CommandType.Text))
                         {
-                            var p = cmd.Parameters.Add("cookie", SqlDbType.VarBinary, 100);
+                            SqlParameter p = cmd.Parameters.Add("cookie", SqlDbType.VarBinary, 100);
                             p.Value = cookie;
 
                             cmd.ExecuteNonQuery();
@@ -286,9 +286,9 @@ namespace SourceCode.Clay.Data.SqlClient
                     if (!(cookie is null) && cookie.Length > 0)
                     {
                         const string sql = "REVERT WITH COOKIE = @cookie;";
-                        using (var cmd = sqlCon.CreateCommand(sql, CommandType.Text))
+                        using (SqlCommand cmd = sqlCon.CreateCommand(sql, CommandType.Text))
                         {
-                            var p = cmd.Parameters.Add("cookie", SqlDbType.VarBinary, 100); // @COOKIE is VARBINARY(100)
+                            SqlParameter p = cmd.Parameters.Add("cookie", SqlDbType.VarBinary, 100); // @COOKIE is VARBINARY(100)
                             p.Value = cookie;
 
                             await cmd.ExecuteNonQueryAsync().ConfigureAwait(false);

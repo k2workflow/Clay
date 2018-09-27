@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSBlockStatement Add(IEnumerable<JSStatement> bodies)
         {
-            foreach (var body in bodies)
+            foreach (JSStatement body in bodies)
             Body.Add(body);
             return this;
         }

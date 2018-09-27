@@ -121,7 +121,7 @@ namespace SourceCode.Clay.OpenApi
         public static OasReference ParseUrl(Uri url)
         {
             if (url is null) throw new ArgumentNullException(nameof(url));
-            if (!TryParseUrl(url, out var result)) throw new FormatException("The specified value is not a valid reference.");
+            if (!TryParseUrl(url, out OasReference result)) throw new FormatException("The specified value is not a valid reference.");
             return result;
         }
 
@@ -178,7 +178,7 @@ namespace SourceCode.Clay.OpenApi
                 }
             }
 
-            if (!(frag is null) && !JsonPointer.TryParse(frag, out var pointer))
+            if (!(frag is null) && !JsonPointer.TryParse(frag, out JsonPointer pointer))
             {
                 result = default;
                 return false;
@@ -211,7 +211,7 @@ namespace SourceCode.Clay.OpenApi
         {
             if (string.IsNullOrEmpty(url)) return default;
 
-            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
                 uri = new Uri(url, UriKind.Relative);
 
             return ParseUrl(uri);

@@ -39,13 +39,13 @@ namespace SourceCode.Clay.Security
             certStore.Open(OpenFlags.ReadOnly);
             try
             {
-                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
                 if (certCollection.Count == 0)
                     throw new InvalidOperationException($@"Cannot find certificate in {storeName}/{storeLocation} with thumbprint '{thumbprint}'.");
 
                 // By convention we return the first certificate
-                var certificate = certCollection[0];
+                X509Certificate2 certificate = certCollection[0];
                 return certificate;
             }
             finally
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Security
             certStore.Open(OpenFlags.ReadOnly);
             try
             {
-                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
+                X509Certificate2Collection certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
                 if (certCollection.Count == 0)
                 {

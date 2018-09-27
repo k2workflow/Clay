@@ -136,7 +136,7 @@ namespace SourceCode.Clay.Algorithms
 
             if (Hierarchy.Count != other.Hierarchy.Count) return false;
 
-            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            IEqualityComparer<T> equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
             if (!equalityComparer.Equals(Node, other.Node)) return false;
 
             // Hierarchies have a greater probability of being different starting from the end
@@ -158,7 +158,7 @@ namespace SourceCode.Clay.Algorithms
 
             // Equal hierarchies probably represent the same node, losing this entropy is less
             // important than the hierarchy itself.
-            var equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
+            IEqualityComparer<T> equalityComparer = _equalityComparer ?? EqualityComparer<T>.Default;
             hashCode = hashCode * -1521134295 + equalityComparer.GetHashCode(Node);
 
             if (!(Hierarchy is null))

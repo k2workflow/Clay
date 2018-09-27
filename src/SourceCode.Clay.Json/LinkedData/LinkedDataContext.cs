@@ -84,7 +84,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
         private void AddTerms(IEnumerable<LinkedDataTerm> terms)
         {
-            foreach (var term in terms)
+            foreach (LinkedDataTerm term in terms)
                 _terms[term.Term] = term;
         }
 
@@ -105,11 +105,11 @@ namespace SourceCode.Clay.Json.LinkedData
                 Language);
 
             // 2) If local context is not an array, set it to an array containing only local context.
-            var localContextArray = localContext.Is(JTokenType.Array)
+            JArray localContextArray = localContext.Is(JTokenType.Array)
                 ? (JArray)localContext
                 : new JArray(localContext);
 
-            foreach (var context in localContextArray)
+            foreach (JToken context in localContextArray)
             {
                 // 3.1) If context is null, set result to a newly-initialized active context
                 //      and continue with the next context.
@@ -143,7 +143,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     // 3.2.3) If context was previously dereferenced, then the processor MUST NOT do
                     //        a further dereference, and context is set to the previously established
                     //        internal representation.
-                    if (_resolvedContexts.TryGetValue(uri, out var resolvedContext))
+                    if (_resolvedContexts.TryGetValue(uri, out LinkedDataContext resolvedContext))
                     {
                         _remoteContexts.Remove(uri);
                         result = resolvedContext;
@@ -183,7 +183,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 3.4) If context has an @base key and remote contexts is empty, i.e., the
                 //      currently being processed context is not a remote context:
                 if (_remoteContexts.Count == 0 &&
-                    contextObject.TryGetValue(LinkedDataKeywords.Base, out var baseToken))
+                    contextObject.TryGetValue(LinkedDataKeywords.Base, out JToken baseToken))
                 {
                     if (!baseToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidBaseIri);
@@ -214,7 +214,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
 
                 // 3.5) If context has an @vocab key:
-                if (contextObject.TryGetValue(LinkedDataKeywords.Vocab, out var vocabToken))
+                if (contextObject.TryGetValue(LinkedDataKeywords.Vocab, out JToken vocabToken))
                 {
                     if (!vocabToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidVocabMapping);
@@ -239,7 +239,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
 
                 // 3.6) If context has an @language key:
-                if (contextObject.TryGetValue(LinkedDataKeywords.Language, out var langToken))
+                if (contextObject.TryGetValue(LinkedDataKeywords.Language, out JToken langToken))
                 {
                     if (!langToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidDefaultLanguage);

@@ -96,7 +96,7 @@ namespace SourceCode.Clay.Json.Tests
                 ""m~n"": 8
             }");
 
-            var result = JsonPointer.Parse("").Evaluate(json);
+            JToken result = JsonPointer.Parse("").Evaluate(json);
             Assert.Equal(json, result);
 
             result = JsonPointer.Parse("/foo").Evaluate(json);

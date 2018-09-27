@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSVariableDeclaration Add(IEnumerable<JSVariableDeclarator> declarations)
         {
-            foreach (var declaration in declarations)
+            foreach (JSVariableDeclarator declaration in declarations)
                 Declarations.Add(declaration);
             return this;
         }

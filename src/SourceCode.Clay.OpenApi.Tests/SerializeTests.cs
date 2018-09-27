@@ -411,7 +411,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 }
             };
 
-            var actualJson = sut.Serialize(actualGraphBuilder.Build());
+            JToken actualJson = sut.Serialize(actualGraphBuilder.Build());
 
             var expectedJson = new JObject()
             {

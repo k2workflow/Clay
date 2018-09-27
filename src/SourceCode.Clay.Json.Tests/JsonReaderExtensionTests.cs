@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.ReadArray(() => (int)jr.Value);
+                IReadOnlyList<int> actual = jr.ReadArray(() => (int)jr.Value);
                 Assert.Empty(actual);
             }
 
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.EnumerateArray(() => (int)jr.Value);
+                IEnumerable<int> actual = jr.EnumerateArray(() => (int)jr.Value);
                 Assert.Empty(actual);
             }
 
@@ -162,7 +162,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.ReadArray(() => (string)jr.Value);
+                IReadOnlyList<string> actual = jr.ReadArray(() => (string)jr.Value);
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -170,7 +170,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.EnumerateArray(() => (string)jr.Value);
+                IEnumerable<string> actual = jr.EnumerateArray(() => (string)jr.Value);
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -336,7 +336,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.ReadArray(() => jr.Value);
+                IReadOnlyList<object> actual = jr.ReadArray(() => jr.Value);
                 Assert.Collection(actual, n => Assert.Equal("joe", n), n => Assert.Null(n), n => Assert.Equal(string.Empty, n), n => Assert.True((bool)n), n => Assert.Equal(99L, n));
             }
 
@@ -344,7 +344,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.EnumerateArray(() => jr.Value);
+                IEnumerable<object> actual = jr.EnumerateArray(() => jr.Value);
                 Assert.Collection(actual, n => Assert.Equal("joe", n), n => Assert.Null(n), n => Assert.Equal(string.Empty, n), n => Assert.True((bool)n), n => Assert.Equal(99L, n));
             }
 

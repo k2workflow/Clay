@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Json
         {
             get
             {
-                var json = _json[key];
+                JToken json = _json[key];
 
                 // Clone to avoid call-site mutation post-facto
                 if (!(json is null))
@@ -45,9 +45,9 @@ namespace SourceCode.Clay.Json
 
             if (source is null) return;
 
-            foreach (var item in source)
+            foreach (KeyValuePair<string, JToken> item in source)
             {
-                var value = item.Value;
+                JToken value = item.Value;
 
                 // Clone to avoid call-site mutation post-facto
                 if (!(value is null))
@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Json
 
             for (var i = 0; i < items.Length; i++)
             {
-                var value = items[i].Value;
+                JToken value = items[i].Value;
 
                 // Clone to avoid call-site mutation post-facto
                 if (!(value is null))
@@ -81,9 +81,9 @@ namespace SourceCode.Clay.Json
 
             if (items is null) return;
 
-            foreach (var kvp in items)
+            foreach (KeyValuePair<string, JToken> kvp in items)
             {
-                var value = kvp.Value;
+                JToken value = kvp.Value;
 
                 // Clone to avoid call-site mutation post-facto
                 if (!(value is null))
@@ -101,7 +101,7 @@ namespace SourceCode.Clay.Json
         {
             value = null;
 
-            if (!_json.TryGetValue(key, out var json))
+            if (!_json.TryGetValue(key, out JToken json))
                 return false;
 
             // Clone to avoid call-site mutation post-facto
@@ -139,7 +139,7 @@ namespace SourceCode.Clay.Json
             // TODO: This is slow - this and the ctor both enumerate
 
             var merged = (JObject)_json.DeepClone(); // Source is known to be a JObject
-            foreach (var kvp in nodes)
+            foreach (KeyValuePair<string, JToken> kvp in nodes)
                 merged[kvp.Key] = kvp.Value;
 
             return new ReadOnlyJObject(merged);

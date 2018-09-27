@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Tests
         [Theory(DisplayName = nameof(SemanticVersion_Parse))]
         public static void SemanticVersion_Parse(string version, int major, int minor, int patch, string pre, string meta)
         {
-            var success = SemanticVersion.TryParse(version, out var sut);
+            var success = SemanticVersion.TryParse(version, out SemanticVersion sut);
             Assert.True(success);
             Assert.Equal(new SemanticVersion(major, minor, patch, pre, meta), sut);
         }
@@ -146,7 +146,7 @@ namespace SourceCode.Clay.Tests
         {
             var sut1 = new SemanticVersion(major1, minor1, patch1, pre1, meta1);
             var sut2 = new SemanticVersion(major2, minor2, patch2, pre2, meta2);
-            var compat = SemanticVersion.GetCompatabilities(sut1, sut2);
+            SemanticVersionCompatabilities compat = SemanticVersion.GetCompatabilities(sut1, sut2);
             Assert.Equal(expected, compat);
         }
     }

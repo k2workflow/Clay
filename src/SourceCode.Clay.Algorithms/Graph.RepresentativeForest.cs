@@ -57,8 +57,8 @@ namespace SourceCode.Clay.Algorithms
             if (_nodes.Count == 0) return;
 
             // Capture
-            var nodes = _nodes;
-            var equalityComparer = _equalityComparer;
+            System.Collections.Concurrent.ConcurrentDictionary<T, Node> nodes = _nodes;
+            IEqualityComparer<T> equalityComparer = _equalityComparer;
 
             // Identify cycles.
             var stack = new Stack<T>();
@@ -76,9 +76,9 @@ namespace SourceCode.Clay.Algorithms
 
                 if (!(vstate.Edges is null))
                 {
-                    foreach (var w in vstate.Edges)
+                    foreach (KeyValuePair<T, EdgeOptions> w in vstate.Edges)
                     {
-                        var wstate = nodes[w.Key];
+                        Node wstate = nodes[w.Key];
                         if (!wstate.Options.HasFlag(NodeOptions.StrongConnectExecuted))
                         {
                             // Successor w has not yet been visited; recurse on it.
@@ -116,23 +116,23 @@ namespace SourceCode.Clay.Algorithms
                 }
             }
 
-            foreach (var node in nodes)
+            foreach (KeyValuePair<T, Node> node in nodes)
             {
                 if (node.Value.Options.HasFlag(NodeOptions.Descendant)) continue;
                 if (node.Value.Options.HasFlag(NodeOptions.StrongConnectExecuted)) continue;
 
-                var state = node.Value;
+                Node state = node.Value;
                 StrongConnect(node.Key, ref state);
             }
 
             // Fallback if no nodes are roots.
             if (index == 0)
             {
-                foreach (var node in nodes)
+                foreach (KeyValuePair<T, Node> node in nodes)
                 {
                     if (node.Value.Options.HasFlag(NodeOptions.StrongConnectExecuted)) continue;
 
-                    var state = node.Value;
+                    Node state = node.Value;
 
                     // Lie about it being a root so that other loops can start at this node.
                     state.Options &= ~NodeOptions.Descendant;
@@ -146,11 +146,11 @@ namespace SourceCode.Clay.Algorithms
                 if (vstate.Edges is null) return;
 
                 // The entry-point for cycles contains the list of exit nodes.
-                var cycleState = nodes[vstate.Cycle];
+                Node cycleState = nodes[vstate.Cycle];
 
-                foreach (var w in vstate.Edges)
+                foreach (KeyValuePair<T, EdgeOptions> w in vstate.Edges)
                 {
-                    var wstate = nodes[w.Key];
+                    Node wstate = nodes[w.Key];
 
                     // If w is in a different cycle, then it is an escape from the current cycle.
                     if (!equalityComparer.Equals(wstate.Cycle, vstate.Cycle))
@@ -171,7 +171,7 @@ namespace SourceCode.Clay.Algorithms
                 }
             }
 
-            foreach (var node in nodes)
+            foreach (KeyValuePair<T, Node> node in nodes)
             {
                 if (node.Value.Options.HasFlag(NodeOptions.Descendant)) continue;
 
@@ -193,7 +193,7 @@ namespace SourceCode.Clay.Algorithms
                 var currentIndex = hierarchy.Count;
                 hierarchy.Add(0);
 
-                foreach (var w in vstate.Exits)
+                foreach (T w in vstate.Exits)
                 {
                     FindTrees(w, nodes[w]);
                     hierarchy[currentIndex]++;
@@ -203,7 +203,7 @@ namespace SourceCode.Clay.Algorithms
             }
 
             index = 0;
-            foreach (var node in nodes)
+            foreach (KeyValuePair<T, Node> node in nodes)
             {
                 if (node.Value.Options.HasFlag(NodeOptions.Descendant)) continue;
 

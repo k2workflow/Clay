@@ -170,7 +170,7 @@ namespace SourceCode.Clay
         {
             if (string.IsNullOrEmpty(s))
                 throw new ArgumentNullException(nameof(s));
-            if (!TryParse(s, out var result))
+            if (!TryParse(s, out SemanticVersion result))
                 throw new FormatException();
             return result;
         }
@@ -275,7 +275,7 @@ namespace SourceCode.Clay
         /// </returns>
         public static SemanticVersionCompatabilities GetCompatabilities(SemanticVersion baseline, SemanticVersion comparand)
         {
-            var compatability = SemanticVersionCompatabilities.Identical;
+            SemanticVersionCompatabilities compatability = SemanticVersionCompatabilities.Identical;
 
             // Major versions must match.
             if (baseline.Major > comparand.Major)

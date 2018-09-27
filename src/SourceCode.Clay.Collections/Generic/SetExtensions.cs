@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Collections.Generic
                 if (xCount == 0) return true; // (0, 0)
             }
 
-            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
+            IEqualityComparer<TSource> cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // Build an ISet for each input collection, ensuring the same equality comparer
             var xss = new HashSet<TSource>(xe, cmpr);

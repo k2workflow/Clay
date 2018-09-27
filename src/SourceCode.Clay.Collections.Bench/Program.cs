@@ -5,6 +5,7 @@
 
 #endregion
 
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
 namespace SourceCode.Clay.Collections.Bench
@@ -17,7 +18,7 @@ namespace SourceCode.Clay.Collections.Bench
             test1.Lookup();
             test1.Switch();
 
-            var summary1 = BenchmarkRunner.Run<Int32SwitchVsDictionaryBench>();
+            Summary summary1 = BenchmarkRunner.Run<Int32SwitchVsDictionaryBench>();
         }
     }
 }

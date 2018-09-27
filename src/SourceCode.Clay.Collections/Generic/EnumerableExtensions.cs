@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (ye is null) return false; // (x, null)
             if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
-            var cmpr = comparer ?? EqualityComparer<TSource>.Default;
+            IEqualityComparer<TSource> cmpr = comparer ?? EqualityComparer<TSource>.Default;
 
             // If both are some kind of collection
             if (BothAreCollections(xe, ye, out var xCount, out var yCount))
@@ -85,8 +85,8 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // Else resort to an IEnumerable comparison
-            using (var xi = xe.GetEnumerator())
-            using (var yi = ye.GetEnumerator())
+            using (IEnumerator<TSource> xi = xe.GetEnumerator())
+            using (IEnumerator<TSource> yi = ye.GetEnumerator())
             {
                 while (xi.MoveNext())
                 {

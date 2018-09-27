@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_ForEach_Action_Default_Arguments(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
             Func<int, Task> action = null;
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_ForEach_Action(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             Task action(int n)
             {
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_For_Action_Default_Arguments(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
             Func<int, Task> action = null;
@@ -131,7 +131,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_For_Action(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             Task action(int i)
             {
@@ -154,7 +154,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_ForEach_Func_Default_Arguments(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
             Func<int, Task<KeyValuePair<int, int>>> func = null;
@@ -169,7 +169,7 @@ namespace SourceCode.Clay.Threading.Tests
 
             // Null source
             actual = 0;
-            var result = ParallelAsync.ForEachAsync(null, options, func).Result;
+            IReadOnlyDictionary<int, int> result = ParallelAsync.ForEachAsync(null, options, func).Result;
             Assert.Equal(0, actual);
             Assert.Empty(result);
 
@@ -190,14 +190,14 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_ForEach_Func(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             Task<KeyValuePair<int, int>> func(int n)
             {
                 return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
             }
 
-            var actual = ParallelAsync.ForEachAsync(data, options, func);
+            ValueTask<IReadOnlyDictionary<int, int>> actual = ParallelAsync.ForEachAsync(data, options, func);
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
         }
@@ -212,7 +212,7 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_For_Func_Default_Arguments(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             // Null body
             Func<int, Task<KeyValuePair<int, int>>> func = null;
@@ -230,7 +230,7 @@ namespace SourceCode.Clay.Threading.Tests
 
             // Empty source (-1)
             actual = 0;
-            var result = ParallelAsync.ForAsync(-1, -1, options, func).Result;
+            IReadOnlyDictionary<int, KeyValuePair<int, int>> result = ParallelAsync.ForAsync(-1, -1, options, func).Result;
             Assert.Equal(0, actual);
             Assert.Empty(result);
 
@@ -257,14 +257,14 @@ namespace SourceCode.Clay.Threading.Tests
         public static void ParallelAsync_For_Func(int? maxDop)
         {
             var data = new int[] { 0, 1, 2 };
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             Task<int> func(int i)
             {
                 return Task.FromResult(data[i] * 2);
             }
 
-            var actual = ParallelAsync.ForAsync(0, data.Length, options, func);
+            Task<IReadOnlyDictionary<int, int>> actual = ParallelAsync.ForAsync(0, data.Length, options, func);
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
         }
@@ -279,7 +279,7 @@ namespace SourceCode.Clay.Threading.Tests
         [InlineData(4)]
         public static void ParallelAsync_For_Action_Delay(int? maxDop)
         {
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             var sw = new Stopwatch();
             sw.Start();
@@ -306,7 +306,7 @@ namespace SourceCode.Clay.Threading.Tests
         [InlineData(4)]
         public static void ParallelAsync_For_Func_Delay(int? maxDop)
         {
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             var sw = new Stopwatch();
             sw.Start();
@@ -319,7 +319,7 @@ namespace SourceCode.Clay.Threading.Tests
                 return new KeyValuePair<int, int>(n, n * 2);
             }
 
-            var result = ParallelAsync.ForAsync(0, loops, options, func).Result;
+            IReadOnlyDictionary<int, KeyValuePair<int, int>> result = ParallelAsync.ForAsync(0, loops, options, func).Result;
 
             sw.Stop();
 
@@ -335,7 +335,7 @@ namespace SourceCode.Clay.Threading.Tests
         [InlineData(4)]
         public static void ParallelAsync_ForEach_Action_Delay(int? maxDop)
         {
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             var sw = new Stopwatch();
             sw.Start();
@@ -362,7 +362,7 @@ namespace SourceCode.Clay.Threading.Tests
         [InlineData(4)]
         public static void ParallelAsync_ForEach_Func_Delay(int? maxDop)
         {
-            var options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
+            ParallelOptions options = maxDop.HasValue ? new ParallelOptions { MaxDegreeOfParallelism = maxDop.Value } : null;
 
             var sw = new Stopwatch();
             sw.Start();
@@ -375,7 +375,7 @@ namespace SourceCode.Clay.Threading.Tests
                 return new KeyValuePair<int, int>(n, n * 2);
             }
 
-            var result = ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Result;
+            IReadOnlyDictionary<int, int> result = ParallelAsync.ForEachAsync(Enumerable.Range(0, loops), options, func).Result;
 
             sw.Stop();
 

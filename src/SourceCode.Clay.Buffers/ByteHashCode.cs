@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Buffers
         {
             uint acc;
             var length = (uint)values.Length;
-            var ints = MemoryMarshal.Cast<byte, uint>(values);
+            ReadOnlySpan<uint> ints = MemoryMarshal.Cast<byte, uint>(values);
 
             if (values.Length < 16)
             {
@@ -136,7 +136,7 @@ namespace SourceCode.Clay.Buffers
             var index = _length++;
             var position = (byte)(index % 16);
 
-            var octets = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4));
+            Span<byte> octets = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4));
             octets[position] = value;
 
             if (position == 15)
@@ -166,9 +166,9 @@ namespace SourceCode.Clay.Buffers
 
             acc += (uint)length;
 
-            var remainder = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4))
+            Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4))
                 .Slice(0, (int)(length % 16));
-            var ints = MemoryMarshal.Cast<byte, uint>(remainder);
+            Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
 
             while (ints.Length > 0)
             {

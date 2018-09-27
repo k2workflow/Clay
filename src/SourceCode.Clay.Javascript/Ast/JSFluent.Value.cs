@@ -36,10 +36,10 @@ namespace SourceCode.Clay.Javascript.Ast
             if (Equals(value, default(T))) // TODO: ReferenceEquals
                 return JSNull();
             if (value is JSExpression expression) return expression;
-            var rth = typeof(T) == typeof(object)
+            RuntimeTypeHandle rth = typeof(T) == typeof(object)
                 ? Type.GetTypeHandle(value)
                 : typeof(T).TypeHandle;
-            var factory = _factories.GetOrAdd(rth, CreateFactory);
+            Func<object, JSExpression> factory = _factories.GetOrAdd(rth, CreateFactory);
             if (factory is null) throw new NotSupportedException();
             return factory(value);
         }
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             var type = Type.GetTypeFromHandle(typeHandle);
 
-            var factory = CreateAnyExpression(type);
+            Expression<Func<object, JSExpression>> factory = CreateAnyExpression(type);
             if (factory is null) return default;
 
             return factory.Compile();
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             return TypeofJSExpression.IsAssignableFrom(propertyType)
                 ? CreateJSExpressionExpression(propertyType)
-                : _typeFactories.TryGetValue(propertyType.TypeHandle, out var factoryFactory)
+                : _typeFactories.TryGetValue(propertyType.TypeHandle, out Func<Type, Expression<Func<object, JSExpression>>> factoryFactory)
                     ? factoryFactory(propertyType)
                     : CreateFactoryExpression(propertyType);
         }
@@ -67,25 +67,25 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             if (type.GetCustomAttribute<CompilerGeneratedAttribute>(false) is null) return default;
 
-            var param = Expression.Parameter(TypeofObject, "value");
-            var convertedParam = Expression.Convert(param, type);
+            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
+            UnaryExpression convertedParam = Expression.Convert(param, type);
 
-            var variable = Expression.Variable(TypeofJSObjectExpression);
+            ParameterExpression variable = Expression.Variable(TypeofJSObjectExpression);
             var result = (Expression)Expression.New(TypeofJSObjectExpression);
 
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             for (var i = 0; i < props.Length; i++)
             {
-                var prop = props[i];
-                var propertyType = prop.PropertyType;
-                var accessor = Expression.Convert(Expression.Property(convertedParam, prop), TypeofObject);
-                var identifier = Expression.Convert(Expression.New(ConstructorOfJSIdentifier, Expression.Constant(prop.Name)), TypeofJSExpression);
-                var descrim = Expression.New(ConstructorOfProperty_Identifier, identifier);
+                PropertyInfo prop = props[i];
+                Type propertyType = prop.PropertyType;
+                UnaryExpression accessor = Expression.Convert(Expression.Property(convertedParam, prop), TypeofObject);
+                UnaryExpression identifier = Expression.Convert(Expression.New(ConstructorOfJSIdentifier, Expression.Constant(prop.Name)), TypeofJSExpression);
+                NewExpression descrim = Expression.New(ConstructorOfProperty_Identifier, identifier);
 
-                var factory = CreateAnyExpression(propertyType);
+                Expression<Func<object, JSExpression>> factory = CreateAnyExpression(propertyType);
                 if (factory is null) return null;
 
-                var invoked = Expression.Invoke(factory, accessor);
+                InvocationExpression invoked = Expression.Invoke(factory, accessor);
                 result = Expression.Call(result, MethodOfJSObjectExpression_Property, descrim, invoked);
             }
 
@@ -95,16 +95,16 @@ namespace SourceCode.Clay.Javascript.Ast
 
         private static Expression<Func<object, JSExpression>> CreateJSExpressionExpression(Type type)
         {
-            var param = Expression.Parameter(TypeofObject, "value");
-            var result = Expression.Convert(param, TypeofJSExpression);
+            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
+            UnaryExpression result = Expression.Convert(param, TypeofJSExpression);
             return Expression.Lambda<Func<object, JSExpression>>(result, param);
         }
 
         private static Expression<Func<object, JSExpression>> CreateJSLiteralExpression(Type type)
         {
-            var param = Expression.Parameter(TypeofObject, "value");
-            var constant = Expression.New(ConstructorOfJSLiteral, param);
-            var result = Expression.Convert(constant, TypeofJSExpression);
+            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
+            NewExpression constant = Expression.New(ConstructorOfJSLiteral, param);
+            UnaryExpression result = Expression.Convert(constant, TypeofJSExpression);
             return Expression.Lambda<Func<object, JSExpression>>(result, param);
         }
     }

@@ -38,13 +38,13 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
 
         public override async ValueTask<LinkedDataOptions> WithContextAsync(JToken localContext, CancellationToken cancellationToken = default)
         {
-            var context = await CreateContextAsync(localContext, cancellationToken);
+            LinkedDataContext context = await CreateContextAsync(localContext, cancellationToken);
             return new LinkedDataTestOptions(Base, context);
         }
 
         public override ValueTask<JToken> GetContextAsync(string iri, CancellationToken cancellationToken)
         {
-            if (_contexts.TryGetValue(iri, out var result)) return new ValueTask<JToken>(result);
+            if (_contexts.TryGetValue(iri, out JToken result)) return new ValueTask<JToken>(result);
             throw new FileNotFoundException();
         }
     }
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
 
         public static async ValueTask<IEnumerable<ValueTask<LinkedDataTestCase>>> ReadAsync(string resourceName)
         {
-            var manifest = await ReadResourceAsync(resourceName);
+            JToken manifest = await ReadResourceAsync(resourceName);
             return ReadAsync((JObject)manifest);
         }
 
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
             var sequence = (JArray)manifest["sequence"];
             for (var i = 0; i < sequence.Count; i++)
             {
-                var caseJson = sequence[i];
+                JToken caseJson = sequence[i];
                 var id = baseIri + (string)caseJson["@id"];
                 var name = (string)caseJson["name"];
                 var input = (string)caseJson["input"];
@@ -94,26 +94,26 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
         private static async ValueTask<LinkedDataTestCase> ReadAsync(string baseIri, string id, string name, string input, string expect, JObject option, JObject contexts)
         {
             baseIri += input;
-            var inputDoc = await ReadResourceAsync(input);
-            var expectDoc = await ReadResourceAsync(expect);
+            JToken inputDoc = await ReadResourceAsync(input);
+            JToken expectDoc = await ReadResourceAsync(expect);
             var options = new LinkedDataTestOptions(baseIri);
 
             if (!(option is null))
             {
-                if (option.TryGetValue("base", out var baseToken))
+                if (option.TryGetValue("base", out JToken baseToken))
                 {
                     options = new LinkedDataTestOptions((string)baseToken);
                 }
-                if (option.TryGetValue("expandContext", out var expandContextToken))
+                if (option.TryGetValue("expandContext", out JToken expandContextToken))
                 {
-                    var expandObject = await ReadResourceAsync((string)expandContextToken);
+                    JToken expandObject = await ReadResourceAsync((string)expandContextToken);
                     options = (LinkedDataTestOptions)await options.WithContextAsync(expandObject);
                 }
             }
 
             if (!(contexts is null))
             {
-                foreach (var (iri, contextValue) in contexts)
+                foreach ((string iri, JToken contextValue) in contexts)
                 {
                     var wrappedContext = new JObject()
                     {
@@ -129,7 +129,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
         private static async ValueTask<JToken> ReadResourceAsync(string resource)
         {
             resource = typeof(LinkedDataTestCase).Namespace + ".Cases." + resource;
-            using (var res = typeof(LinkedDataTestCase).Assembly.GetManifestResourceStream(resource))
+            using (Stream res = typeof(LinkedDataTestCase).Assembly.GetManifestResourceStream(resource))
             using (var reader = new StreamReader(res))
             using (var jreader = new JsonTextReader(reader))
             {
