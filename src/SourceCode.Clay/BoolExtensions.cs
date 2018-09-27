@@ -15,49 +15,22 @@ namespace SourceCode.Clay
     /// </summary>
     public static class BoolExtensions
     {
-        // See benchmarks: Unsafe.As is fastest.
-        // Union and unsafe (which cannot be inlined) are faster
-        // than idiomatic branching expression.
-        // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte EvaluateImpl(this bool condition)
-            => new BoolToByte { Bool = condition }.Byte; // 1|0
-
         /// <summary>
-        /// Converts a bool to a byte value, without branching.
+        /// Converts a bool to a uint value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Evaluate(this bool condition, byte trueValue, byte falseValue = 0)
+        public static uint Evaluate(this bool condition, uint trueValue, uint falseValue)
         {
             uint val = EvaluateImpl(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
-            return (byte)val;
-        }
-
-        /// <summary>
-        /// Converts a bool to a ushort value, without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        /// <param name="trueValue">The value to return if True.</param>
-        /// <param name="falseValue">The value to return if False.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ushort Evaluate(this bool condition, ushort trueValue, ushort falseValue = 0)
-        {
-            uint val = EvaluateImpl(condition);
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (ushort)val;
+            return val;
         }
 
         /// <summary>
@@ -68,9 +41,47 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Evaluate(this bool condition, uint trueValue, uint falseValue = 0)
+        public static int Evaluate(this bool condition, int trueValue, int falseValue)
         {
-            uint val = EvaluateImpl(condition);
+            int val = EvaluateImpl(condition);
+
+            val = (val * trueValue)
+                + ((1 - val) * falseValue);
+
+            return val;
+        }
+
+        /// <summary>
+        /// Converts a bool to a uint value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Evaluate(this bool condition, uint trueValue)
+            => EvaluateImpl(condition) * trueValue;
+
+        /// <summary>
+        /// Converts a bool to a uint value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Evaluate(this bool condition, int trueValue)
+            => EvaluateImpl(condition) * trueValue;
+
+        /// <summary>
+        /// Converts a bool to a ulong value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        /// <param name="falseValue">The value to return if False.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Evaluate(this bool condition, ulong trueValue, ulong falseValue)
+        {
+            ulong val = EvaluateImpl(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -86,15 +97,44 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Evaluate(this bool condition, ulong trueValue, ulong falseValue = 0)
+        public static long Evaluate(this bool condition, long trueValue, long falseValue)
         {
-            ulong val = EvaluateImpl(condition);
+            long val = EvaluateImpl(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
 
             return val;
         }
+
+        /// <summary>
+        /// Converts a bool to a ulong value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong Evaluate(this bool condition, ulong trueValue)
+            => EvaluateImpl(condition) * trueValue;
+
+        /// <summary>
+        /// Converts a bool to a ulong value, without branching.
+        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <param name="trueValue">The value to return if True.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long Evaluate(this bool condition, long trueValue)
+            => EvaluateImpl(condition) * trueValue;
+
+        // See benchmarks: Unsafe.As is fastest.
+        // Union and unsafe (which cannot be inlined) are faster
+        // than idiomatic branching expression.
+        // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte EvaluateImpl(this bool condition)
+            => new BoolToByte { Bool = condition }.Byte; // 1|0
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
         private struct BoolToByte
