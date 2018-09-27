@@ -859,24 +859,6 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(byte value)
-            => PopCount((uint)value); // Delegate to intrinsic
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(ushort value)
-            => PopCount((uint)value); // Delegate to intrinsic
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(uint value)
         {
             const uint c0 = 0x_5555_5555;
@@ -1243,32 +1225,6 @@ namespace System
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Low(byte value)
-        {
-            // Perf: Do not use guard clauses; callers must be trusted
-            Debug.Assert(value > 0);
-
-            return Log2Low((uint)value); // Delegate to intrinsic
-        }
-
-        /// <summary>
-        /// Computes the highest power of 2 lower than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Low(ushort value)
-        {
-            // Perf: Do not use guard clauses; callers must be trusted
-            Debug.Assert(value > 0);
-
-            return Log2Low((uint)value); // Delegate to intrinsic
-        }
-
-        /// <summary>
-        /// Computes the highest power of 2 lower than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Log2Low(uint value)
         {
             // Perf: Do not use guard clauses; callers must be trusted
@@ -1326,22 +1282,6 @@ namespace System
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2High(byte value)
-            => Log2Low(value) + 1;
-
-        /// <summary>
-        /// Computes the lowest power of 2 greater than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2High(ushort value)
-            => Log2Low(value) + 1;
-    
-        /// <summary>
-        /// Computes the lowest power of 2 greater than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Log2High(uint value)
             => Log2Low(value) + 1;
 
@@ -1358,30 +1298,6 @@ namespace System
         #region Pow2Low
 
         // TODO: Perf
-
-        /// <summary>
-        /// Computes the next power of 2 greater than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint Pow2Low(byte value)
-        {
-            Debug.Assert(value < byte.MaxValue);
-            
-            return Pow2Low((uint)value); // Delegate to intrinsic
-        }
-
-        /// <summary>
-        /// Computes the next power of 2 greater than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint Pow2Low(ushort value)
-        {
-            Debug.Assert(value < ushort.MaxValue);
-
-            return Pow2Low((uint)value); // Delegate to intrinsic
-        }
 
         /// <summary>
         /// Computes the next power of 2 greater than the given value.
@@ -1444,22 +1360,6 @@ namespace System
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint Pow2High(byte value)
-            => Pow2Low(value) - 1;
-
-        /// <summary>
-        /// Computes the previous power of 2 less than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint Pow2High(ushort value)
-            => Pow2Low(value) - 1;
-
-        /// <summary>
-        /// Computes the previous power of 2 less than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static uint Pow2High(uint value)
             => Pow2Low(value) - 1;
 
@@ -1473,23 +1373,7 @@ namespace System
 
         #endregion
 
-        #region IsPowerOf2
-
-        /// <summary>
-        /// Returns True if the value is a power of 2, else False.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPowerOf2(byte value)
-            => IsPowerOf2((uint)value); // Delegate to intrinsic
-
-        /// <summary>
-        /// Returns True if the value is a power of 2, else False.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPowerOf2(ushort value)
-            => IsPowerOf2((uint)value); // Delegate to intrinsic
+        #region IsPowerOf2        
 
         /// <summary>
         /// Returns True if the value is a power of 2, else False.
@@ -1514,24 +1398,6 @@ namespace System
         #endregion
 
         #region Parity
-
-        /// <summary>
-        /// Returns 1 if the bit count is odd, else 0.
-        /// Logically equivalent to PopCount mod 2.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Parity(byte value)
-            => Parity((uint)value); // Delegate to intrinsic
-
-        /// <summary>
-        /// Returns 1 if the bit count is odd, else 0.
-        /// Logically equivalent to PopCount mod 2.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Parity(ushort value)
-            => Parity((uint)value); // Delegate to intrinsic
 
         /// <summary>
         /// Returns 1 if the bit count is odd, else 0.

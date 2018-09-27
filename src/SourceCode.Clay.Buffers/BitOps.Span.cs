@@ -1048,7 +1048,7 @@ namespace System
         public static ulong ExtractUInt64(ReadOnlySpan<byte> span, int bitOffset)
         {
             int ix = bitOffset >> 3;
-            var len = span.Length - ix;
+            int len = span.Length - ix;
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
 
             ReadOnlySpan<byte> slice = span.Slice(ix);
