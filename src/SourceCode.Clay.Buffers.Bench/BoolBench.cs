@@ -13,13 +13,13 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev | Scaled |
-    ----------- |---------:|----------:|----------:|-------:|
-         Actual | 2.565 ns | 0.0504 ns | 0.0447 ns |   0.77 | x
-     UnsafeCode | 3.387 ns | 0.0345 ns | 0.0323 ns |   1.02 |
-       UnsafeAs | 2.383 ns | 0.0096 ns | 0.0090 ns |   0.71 | x
-          Union | 3.051 ns | 0.0265 ns | 0.0248 ns |   0.92 | ~
-         Branch | 3.334 ns | 0.0146 ns | 0.0137 ns |   1.00 |
+         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
+    ----------- |---------:|----------:|----------:|-------:|---------:|
+         Actual | 2.432 ns | 0.0150 ns | 0.0140 ns |   0.70 |     0.01 | x
+     UnsafeCode | 3.502 ns | 0.0504 ns | 0.0471 ns |   1.01 |     0.02 |
+       UnsafeAs | 2.453 ns | 0.0173 ns | 0.0153 ns |   0.71 |     0.01 | x
+          Union | 2.925 ns | 0.0577 ns | 0.0881 ns |   0.84 |     0.03 | ~
+         Branch | 3.466 ns | 0.0564 ns | 0.0528 ns |   1.00 |     0.00 |
      */
 
     //[MemoryDiagnoser]
@@ -141,14 +141,14 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += BoolToByte.ToByte(@true, 1);
+                    sum += BoolToByte.Evaluate(@true, 1);
                     sum++;
-                    sum -= BoolToByte.ToByte(@false, 1);
+                    sum -= BoolToByte.Evaluate(@false, 1);
                     sum--;
 
-                    sum += BoolToByte.ToByte(@true, 4);
-                    sum -= BoolToByte.ToByte(@false, 3);
-                    sum += BoolToByte.ToByte(@true, 3, 2);
+                    sum += BoolToByte.Evaluate(@true, 4);
+                    sum -= BoolToByte.Evaluate(@false, 3);
+                    sum += BoolToByte.Evaluate(@true, 3, 2);
                     sum -= 7;
                 }
             }
@@ -201,18 +201,22 @@ namespace SourceCode.Clay.Buffers.Bench
             public readonly byte Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private static byte ToByteImpl(bool condition)
+            private static uint Evaluate(bool condition)
                 => new BoolToByte { Bool = condition }.Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static byte ToByte(bool condition, byte trueValue, byte falseValue = 0)
+            public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
             {
-                uint val = ToByteImpl(condition);
+                var val = Evaluate(condition);
                 val = (val * trueValue)
                     + ((1 - val) * falseValue);
 
                 return (byte)val;
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static uint Evaluate(bool condition, uint trueValue) 
+                => Evaluate(condition) * trueValue;
         }
     }
 }

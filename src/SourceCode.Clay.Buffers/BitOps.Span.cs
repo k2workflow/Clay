@@ -569,7 +569,7 @@ namespace System
             int ix = bitOffset >> 3;
             int len = span.Length - ix;
             if (len <= 0) throw new ArgumentOutOfRangeException(nameof(bitOffset));
-
+            
             // Need at most 2+1 bytes
             uint blit = 0;
             switch (len)
