@@ -16,7 +16,7 @@ namespace SourceCode.Clay
     public static class BoolExtensions
     {
         /// <summary>
-        /// Converts a bool to a uint value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -34,7 +34,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a bool to a uint value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -52,7 +52,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a bool to a uint value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -62,7 +62,7 @@ namespace SourceCode.Clay
             => EvaluateImpl(condition) * trueValue;
 
         /// <summary>
-        /// Converts a bool to a uint value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -72,7 +72,7 @@ namespace SourceCode.Clay
             => EvaluateImpl(condition) * trueValue;
 
         /// <summary>
-        /// Converts a bool to a ulong value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -90,7 +90,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a bool to a ulong value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -108,7 +108,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a bool to a ulong value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -118,7 +118,7 @@ namespace SourceCode.Clay
             => EvaluateImpl(condition) * trueValue;
 
         /// <summary>
-        /// Converts a bool to a ulong value, without branching.
+        /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
