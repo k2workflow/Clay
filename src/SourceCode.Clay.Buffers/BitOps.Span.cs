@@ -3,8 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace System
 {
-#pragma warning disable IDE0007 // Use implicit type
-
     partial class BitOps // .Span
     {
         #region ExtractBit
@@ -891,7 +889,7 @@ namespace System
             ref byte r0 = ref @null;
 
             // Read element refs
-            var slice = span.Slice(ix);
+            Span<byte> slice = span.Slice(ix);
             switch (len)
             {
                 default:
@@ -1334,6 +1332,4 @@ namespace System
 
         #endregion
     }
-
-#pragma warning restore IDE0007 // Use implicit type
 }
