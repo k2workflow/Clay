@@ -723,7 +723,7 @@ namespace System
         public static byte RotateLeft(byte value, int offset)
         {
             int shft = offset & 7;
-            var val = (uint)value;
+            uint val = value;
             
             // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (8 - shft));
@@ -742,7 +742,7 @@ namespace System
         public static byte RotateRight(byte value, int offset)
         {
             int shft = offset & 7;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (8 - shft));
@@ -761,7 +761,7 @@ namespace System
         public static ushort RotateLeft(ushort value, int offset)
         {
             int shft = offset & 15;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (16 - shft));
@@ -780,7 +780,7 @@ namespace System
         public static ushort RotateRight(ushort value, int offset)
         {
             int shft = offset & 15;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (16 - shft));
@@ -1155,8 +1155,8 @@ namespace System
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
 
-            var hv = (uint)(value >> 32); // High-32
-            var bv = (uint)value; // Low-32
+            uint hv = (uint)(value >> 32); // High-32
+            uint bv = (uint)value; // Low-32
 
             long hi = hv & -hv;
             long bi = bv & -bv;
@@ -1426,7 +1426,7 @@ namespace System
 
             // eg 27->3, int.Max -> 7
             int shft = bitOffset & 15; // mod 16
-            var ins = (uint)(insert << shft); //           0000_0 | 100_0 011_1 | 000
+            uint ins = (uint)(insert << shft); //           0000_0 | 100_0 011_1 | 000
 
             //                                             15  12 | 11  8 7   3 |   0
             uint mask = ~((uint)byte.MaxValue << shft); // 1111_1 | 000_0 000_0 | 111
@@ -1443,7 +1443,7 @@ namespace System
         public static uint InsertByte(uint value, int bitOffset, byte insert)
         {
             int shft = bitOffset & 31;
-            var ins = (uint)(insert << shft);
+            uint ins = (uint)(insert << shft);
 
             uint mask = ~((uint)byte.MaxValue << shft);
 
@@ -1454,7 +1454,7 @@ namespace System
         public static ulong InsertByte(ulong value, int bitOffset, byte insert)
         {
             int shft = bitOffset & 63;
-            var ins = (ulong)(insert << shft);
+            ulong ins = (ulong)(insert << shft);
 
             ulong mask = ~((ulong)byte.MaxValue << shft);
 
@@ -1479,7 +1479,7 @@ namespace System
         public static uint InsertUInt16(uint value, int bitOffset, ushort insert)
         {
             int shft = bitOffset & 31;
-            var ins = (uint)(insert << shft);
+            uint ins = (uint)(insert << shft);
 
             uint mask = ~((uint)ushort.MaxValue << shft);
 
@@ -1490,7 +1490,7 @@ namespace System
         public static ulong InsertUInt16(ulong value, int bitOffset, ushort insert)
         {
             int shft = bitOffset & 63;
-            var ins = (ulong)(insert << shft);
+            ulong ins = (ulong)(insert << shft);
 
             ulong mask = ~((ulong)ushort.MaxValue << shft);
 
@@ -1512,7 +1512,7 @@ namespace System
         public static ulong InsertUInt32(ulong value, int bitOffset, uint insert)
         {
             int shft = bitOffset & 63;
-            var ins = (ulong)(insert << shft);
+            ulong ins = (ulong)(insert << shft);
 
             ulong mask = ~((ulong)uint.MaxValue << shft);
 
@@ -1562,7 +1562,7 @@ namespace System
             // We only have to count the low-32 or the high-32, depending on limits
 
             // Assume we need only examine low-32
-            var val = (uint)value;
+            uint val = (uint)value;
             byte inc = 0;
 
             // If high-32 is non-zero
