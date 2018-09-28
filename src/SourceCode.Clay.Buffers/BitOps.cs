@@ -722,7 +722,7 @@ namespace System
         public static byte RotateLeft(byte value, int offset)
         {
             int shft = offset & 7;
-            var val = (uint)value;
+            uint val = value;
             
             // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (8 - shft));
@@ -741,7 +741,7 @@ namespace System
         public static byte RotateRight(byte value, int offset)
         {
             int shft = offset & 7;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (8 - shft));
@@ -760,7 +760,7 @@ namespace System
         public static ushort RotateLeft(ushort value, int offset)
         {
             int shft = offset & 15;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (16 - shft));
@@ -779,7 +779,7 @@ namespace System
         public static ushort RotateRight(ushort value, int offset)
         {
             int shft = offset & 15;
-            var val = (uint)value;
+            uint val = value;
 
             // Will NOT compile to instrinsics
             val = (val >> shft) | (val << (16 - shft));
@@ -1424,7 +1424,7 @@ namespace System
             // We only have to count the low-32 or the high-32, depending on limits
 
             // Assume we need only examine low-32
-            var val = (uint)value;
+            uint val = (uint)value;
             byte inc = 0;
 
             // If high-32 is non-zero
