@@ -75,7 +75,7 @@ namespace SourceCode.Clay.Json
             // Curry delegate into local function
             void Curry()
             {
-                var item = itemFactory();
+                T item = itemFactory();
 
                 if (list.Count == 0)
                     list = new List<T>();
@@ -114,7 +114,7 @@ namespace SourceCode.Clay.Json
                     // Item
                     default:
                         {
-                            var item = itemFactory();
+                            T item = itemFactory();
 
                             jr.Read();
                             yield return item;

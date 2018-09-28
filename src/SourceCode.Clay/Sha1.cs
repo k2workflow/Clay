@@ -61,8 +61,8 @@ namespace SourceCode.Clay
         public Sha1(ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
-            var src = source.Slice(0, ByteLength);
-            var dst = MemoryMarshal.CreateSpan(ref _00, ByteLength);
+            ReadOnlySpan<byte> src = source.Slice(0, ByteLength);
+            Span<byte> dst = MemoryMarshal.CreateSpan(ref _00, ByteLength);
             src.CopyTo(dst);
         }
 
@@ -75,7 +75,7 @@ namespace SourceCode.Clay
         {
             if (span.Length == 0) return s_empty;
 
-            var sha = HashImpl(span);
+            Sha1 sha = HashImpl(span);
             return sha;
         }
 
@@ -98,7 +98,7 @@ namespace SourceCode.Clay
 
                 var span = new ReadOnlySpan<byte>(rented, 0, count);
 
-                var sha = HashImpl(span);
+                Sha1 sha = HashImpl(span);
                 return sha;
             }
             finally
@@ -119,7 +119,7 @@ namespace SourceCode.Clay
 
             var span = new ReadOnlySpan<byte>(bytes);
 
-            var sha = HashImpl(span);
+            Sha1 sha = HashImpl(span);
             return sha;
         }
 
@@ -139,7 +139,7 @@ namespace SourceCode.Clay
 
             if (length == 0) return s_empty;
 
-            var sha = HashImpl(span);
+            Sha1 sha = HashImpl(span);
             return sha;
         }
 
@@ -279,7 +279,7 @@ namespace SourceCode.Clay
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
-                    var kvp = ShaUtil.Split(sha, prefixLength);
+                    KeyValuePair<string, string> kvp = ShaUtil.Split(sha, prefixLength);
                     return kvp;
                 }
             }

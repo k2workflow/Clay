@@ -54,7 +54,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryShort))]
         public static void BufferComparer_GetHashCode_MemoryShort()
         {
-            var bytes = GenerateSegment(0, 16);
+            ArraySegment<byte> bytes = GenerateSegment(0, 16);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes), hash);
 
@@ -67,7 +67,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryMedium))]
         public static void BufferComparer_GetHashCode_MemoryMedium()
         {
-            var bytes = GenerateSegment(0, 712);
+            ArraySegment<byte> bytes = GenerateSegment(0, 712);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryLong))]
         public static void BufferComparer_GetHashCode_MemoryLong()
         {
-            var bytes = GenerateSegment(0, 1024);
+            ArraySegment<byte> bytes = GenerateSegment(0, 1024);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -93,7 +93,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryShort))]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryShort()
         {
-            var bytes = GenerateSegment(0, 16).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> bytes = GenerateSegment(0, 16).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.Span), hash);
 
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryMedium))]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryMedium()
         {
-            var bytes = GenerateSegment(0, 712).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> bytes = GenerateSegment(0, 712).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -119,7 +119,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryLong))]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryLong()
         {
-            var bytes = GenerateSegment(0, 1024).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> bytes = GenerateSegment(0, 1024).AsReadOnlyMemory();
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.Span.Slice(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -159,7 +159,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentShort))]
         public static void BufferComparer_GetHashCode_ArraySegmentShort()
         {
-            var bytes = GenerateSegment(0, 16);
+            ArraySegment<byte> bytes = GenerateSegment(0, 16);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes), hash);
 
@@ -172,7 +172,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentMedium))]
         public static void BufferComparer_GetHashCode_ArraySegmentMedium()
         {
-            var bytes = GenerateSegment(0, 712);
+            ArraySegment<byte> bytes = GenerateSegment(0, 712);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -185,7 +185,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentLong))]
         public static void BufferComparer_GetHashCode_ArraySegmentLong()
         {
-            var bytes = GenerateSegment(0, 1024);
+            ArraySegment<byte> bytes = GenerateSegment(0, 1024);
             var hash = BufferComparer.Memory.GetHashCode(bytes);
             Assert.Equal(ByteHashCode.Combine(bytes.AsSpan(0, BufferComparer.DefaultHashCodeFidelity)), hash);
 
@@ -223,11 +223,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Equals_Memory))]
         public static void BufferComparer_Equals_Memory()
         {
-            var a = GenerateSegment(0, 16);
-            var a1 = GenerateSegment(10, 16); // Same
-            var a2 = GenerateSegment(0, 16); // Same
-            var c = GenerateSegment(0, 16, 1);
-            var d = GenerateSegment(0, 15);
+            ArraySegment<byte> a = GenerateSegment(0, 16);
+            ArraySegment<byte> a1 = GenerateSegment(10, 16); // Same
+            ArraySegment<byte> a2 = GenerateSegment(0, 16); // Same
+            ArraySegment<byte> c = GenerateSegment(0, 16, 1);
+            ArraySegment<byte> d = GenerateSegment(0, 15);
 
             Assert.Equal(a, a1, BufferComparer.Memory);
             Assert.Equal(a, a2, BufferComparer.Memory);
@@ -239,11 +239,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Equals_ReadOnlyMemory))]
         public static void BufferComparer_Equals_ReadOnlyMemory()
         {
-            var a = GenerateSegment(0, 16).AsReadOnlyMemory();
-            var a1 = GenerateSegment(10, 16).AsReadOnlyMemory(); // Same
-            var a2 = GenerateSegment(0, 16).AsReadOnlyMemory(); // Same
-            var c = GenerateSegment(0, 16, 1).AsReadOnlyMemory();
-            var d = GenerateSegment(0, 15).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> a = GenerateSegment(0, 16).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> a1 = GenerateSegment(10, 16).AsReadOnlyMemory(); // Same
+            ReadOnlyMemory<byte> a2 = GenerateSegment(0, 16).AsReadOnlyMemory(); // Same
+            ReadOnlyMemory<byte> c = GenerateSegment(0, 16, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> d = GenerateSegment(0, 15).AsReadOnlyMemory();
 
             Assert.Equal(a, a1, BufferComparer.Memory);
             Assert.Equal(a, a2, BufferComparer.Memory);
@@ -275,11 +275,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Equals_ArraySegment))]
         public static void BufferComparer_Equals_ArraySegment()
         {
-            var a = GenerateSegment(0, 16);
-            var a1 = GenerateSegment(10, 16); // Same
-            var a2 = GenerateSegment(0, 16); // Same
-            var c = GenerateSegment(0, 16, 1);
-            var d = GenerateSegment(0, 15);
+            ArraySegment<byte> a = GenerateSegment(0, 16);
+            ArraySegment<byte> a1 = GenerateSegment(10, 16); // Same
+            ArraySegment<byte> a2 = GenerateSegment(0, 16); // Same
+            ArraySegment<byte> c = GenerateSegment(0, 16, 1);
+            ArraySegment<byte> d = GenerateSegment(0, 15);
 
             Assert.Equal(a, a1, BufferComparer.Memory);
             Assert.Equal(a, a2, BufferComparer.Memory);
@@ -342,11 +342,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Length_N))]
         public static void BufferComparer_Compare_Array_Length_N()
         {
-            var a = GenerateSegment(0, 16);
-            var a1 = GenerateSegment(0, 16); // Same
-            var a2 = GenerateSegment(10, 16); // Same
-            var c = GenerateSegment(0, 16, 1);
-            var d = GenerateSegment(0, 15);
+            ArraySegment<byte> a = GenerateSegment(0, 16);
+            ArraySegment<byte> a1 = GenerateSegment(0, 16); // Same
+            ArraySegment<byte> a2 = GenerateSegment(10, 16); // Same
+            ArraySegment<byte> c = GenerateSegment(0, 16, 1);
+            ArraySegment<byte> d = GenerateSegment(0, 15);
 
             // Array
             Assert.True(BufferComparer.Array.Compare(a.Array, a1.Array) == 0);
@@ -406,11 +406,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Compare_ArraySegment_Length_N))]
         public static void BufferComparer_Compare_ArraySegment_Length_N()
         {
-            var a = GenerateSegment(0, 16);
-            var a1 = GenerateSegment(0, 16); // Same
-            var a2 = GenerateSegment(10, 16); // Same
-            var c = GenerateSegment(0, 16, 1);
-            var d = GenerateSegment(0, 15);
+            ArraySegment<byte> a = GenerateSegment(0, 16);
+            ArraySegment<byte> a1 = GenerateSegment(0, 16); // Same
+            ArraySegment<byte> a2 = GenerateSegment(10, 16); // Same
+            ArraySegment<byte> c = GenerateSegment(0, 16, 1);
+            ArraySegment<byte> d = GenerateSegment(0, 15);
 
             // ArraySegment (implicit conversion)
             Assert.True(BufferComparer.Memory.Compare(a, a1) == 0);
@@ -441,11 +441,11 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BufferComparer_Compare_Memory_With_Comparison))]
         public static void BufferComparer_Compare_Memory_With_Comparison()
         {
-            var expected = new byte[4] { 1, 2, 3, 4 }.AsReadOnlyMemory();
+            ReadOnlyMemory<byte> expected = new byte[4] { 1, 2, 3, 4 }.AsReadOnlyMemory();
 
-            var a1 = new byte[4] { 1, 2, 3, 6 }.AsReadOnlyMemory();
-            var a2 = new byte[4] { 1, 2, 3, 7 }.AsReadOnlyMemory();
-            var a3 = new byte[4] { 1, 2, 3, 5 }.AsReadOnlyMemory();
+            ReadOnlyMemory<byte> a1 = new byte[4] { 1, 2, 3, 6 }.AsReadOnlyMemory();
+            ReadOnlyMemory<byte> a2 = new byte[4] { 1, 2, 3, 7 }.AsReadOnlyMemory();
+            ReadOnlyMemory<byte> a3 = new byte[4] { 1, 2, 3, 5 }.AsReadOnlyMemory();
 
             var list = new List<ReadOnlyMemory<byte>>(new[] { a1, a2, expected, a3 });
             list.Sort(BufferComparer.Memory.Compare);

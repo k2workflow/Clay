@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSObjectExpression Add(IEnumerable<JSProperty> properties)
         {
-            foreach (var property in properties)
+            foreach (JSProperty property in properties)
                 Properties.Add(property);
             return this;
         }

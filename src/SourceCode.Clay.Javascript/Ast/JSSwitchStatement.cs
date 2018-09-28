@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSSwitchStatement Add(IEnumerable<JSSwitchCase> cases)
         {
-            foreach (var @case in cases)
+            foreach (JSSwitchCase @case in cases)
                 Cases.Add(@case);
             return this;
         }

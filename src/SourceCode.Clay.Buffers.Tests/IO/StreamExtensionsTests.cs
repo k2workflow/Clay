@@ -19,7 +19,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(StreamExtensions_Write))]
         public static void StreamExtensions_Write()
         {
-            var buffer = BufferComparerTests.GenerateSegment(0, 64, 1);
+            ArraySegment<byte> buffer = BufferComparerTests.GenerateSegment(0, 64, 1);
             var memory = new ReadOnlyMemory<byte>(buffer.Array, buffer.Offset, buffer.Count);
 
             using (var specimen = new MemoryStream())
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(StreamExtensions_WriteAsync))]
         public static async Task StreamExtensions_WriteAsync()
         {
-            var buffer = BufferComparerTests.GenerateSegment(0, 64, 1);
+            ArraySegment<byte> buffer = BufferComparerTests.GenerateSegment(0, 64, 1);
             var memory = new ReadOnlyMemory<byte>(buffer.Array, buffer.Offset, buffer.Count);
 
             using (var specimen = new MemoryStream())

@@ -42,7 +42,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSArrayExpression Add(IEnumerable<JSExpression> elements)
         {
-            foreach (var element in elements)
+            foreach (JSExpression element in elements)
                 Elements.Add(element);
             return this;
         }

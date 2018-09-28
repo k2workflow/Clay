@@ -63,7 +63,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
 
             private Delegate CreateSerializer<T>(SerializerKey key)
             {
-                var argType = typeof(T);
+                Type argType = typeof(T);
                 var instType = Type.GetTypeFromHandle(key.InstanceType);
 
                 MethodInfo method = default;
@@ -80,24 +80,24 @@ namespace SourceCode.Clay.OpenApi.Serialization
                         (x, y) => throw new NotSupportedException($"Serializing the type {instType.FullName} is not supported."));
                 }
 
-                var serParam = Expression.Parameter(typeof(OasSerializer), "serializer");
-                var param = Expression.Parameter(argType, "value");
+                ParameterExpression serParam = Expression.Parameter(typeof(OasSerializer), "serializer");
+                ParameterExpression param = Expression.Parameter(argType, "value");
 
-                var ser = _serializerType == serParam.Type
+                Expression ser = _serializerType == serParam.Type
                     ? (Expression)serParam
                     : Expression.Convert(serParam, _serializerType);
 
-                var conv = argType == instType
+                Expression conv = argType == instType
                     ? (Expression)param
                     : Expression.Convert(param, instType);
-                var call = Expression.Call(ser, method, conv);
+                MethodCallExpression call = Expression.Call(ser, method, conv);
                 return Expression.Lambda<Func<OasSerializer, T, JToken>>(call, serParam, param).Compile();
             }
 
             public JToken Serialize<T>(OasSerializer serializer, T value)
             {
                 var key = new SerializerKey(typeof(T).TypeHandle, value.GetType().TypeHandle);
-                var del = _delegates.GetOrAdd(key, CreateSerializer<T>);
+                Delegate del = _delegates.GetOrAdd(key, CreateSerializer<T>);
                 return ((Func<OasSerializer, T, JToken>)del)(serializer, value);
             }
         }
@@ -112,7 +112,7 @@ namespace SourceCode.Clay.OpenApi.Serialization
         {
             if (ReferenceEquals(value, default(T))) return null;
 
-            var mySerializers = _mySerializers;
+            SerializerInfo mySerializers = _mySerializers;
             if (mySerializers is null)
             {
                 Thread.MemoryBarrier();

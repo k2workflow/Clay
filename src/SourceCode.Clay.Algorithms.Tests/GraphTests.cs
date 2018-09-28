@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Algorithms.Tests
 
         private static void AssertSetEqual<T>(HashSet<T> expected, HashSet<T> actual)
         {
-            foreach (var item in expected)
+            foreach (T item in expected)
             {
                 Assert.Contains(item, actual);
                 actual.Remove(item);

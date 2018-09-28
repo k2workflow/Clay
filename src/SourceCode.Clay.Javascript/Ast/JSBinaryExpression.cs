@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Javascript.Ast
             if (right is JSBinaryExpression binary && binary.Operator == Operator)
             {
                 Right.Add(binary.Left);
-                foreach (var rght in binary.Right)
+                foreach (JSExpression rght in binary.Right)
                     Right.Add(rght);
                 return this;
             }
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSBinaryExpression Add(IEnumerable<JSExpression> right)
         {
-            foreach (var item in right)
+            foreach (JSExpression item in right)
                 Add(item);
             return this;
         }

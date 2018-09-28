@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Security
             if (ss is null) return null;
 
             // https://blogs.msdn.microsoft.com/fpintos/2009/06/12/how-to-properly-convert-securestring-to-string/
-            var ptr = IntPtr.Zero;
+            IntPtr ptr = IntPtr.Zero;
             try
             {
                 ptr = Marshal.SecureStringToGlobalAllocUnicode(ss);

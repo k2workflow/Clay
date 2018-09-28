@@ -21,14 +21,14 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 
             using (var sqlCon = new SqlConnection())
             {
-                using (var sqlCmd = sqlCon.CreateCommand(tsql, CommandType.Text))
+                using (SqlCommand sqlCmd = sqlCon.CreateCommand(tsql, CommandType.Text))
                 {
                     Assert.Equal(sqlCon, sqlCmd.Connection);
                     Assert.Equal(tsql, sqlCmd.CommandText);
                     Assert.Equal(CommandType.Text, sqlCmd.CommandType);
                 }
 
-                using (var sqlCmd = sqlCon.CreateCommand(tsql, CommandType.StoredProcedure, 91))
+                using (SqlCommand sqlCmd = sqlCon.CreateCommand(tsql, CommandType.StoredProcedure, 91))
                 {
                     Assert.Equal(sqlCon, sqlCmd.Connection);
                     Assert.Equal(tsql, sqlCmd.CommandText);

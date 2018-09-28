@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Tests
             }
             catch (Exception e)
             {
-                var actual = e.Suppress();
+                Exception actual = e.Suppress();
 
                 Assert.Equal(expected, actual);
             }

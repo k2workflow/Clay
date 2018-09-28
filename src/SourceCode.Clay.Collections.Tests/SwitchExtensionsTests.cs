@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Collections.Tests
                 [true] = 1
             };
 
-            var @switch = dict.ToDynamicSwitch();
+            IDynamicSwitch<bool, int> @switch = dict.ToDynamicSwitch();
 
             Assert.Equal(dict.Count, @switch.Count);
             Assert.Equal(dict.ContainsKey(false), @switch.ContainsKey(false));
@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Collections.Tests
                 [3] = "three"
             };
 
-            var @switch = dict.ToDynamicSwitch();
+            IDynamicSwitch<int, string> @switch = dict.ToDynamicSwitch();
 
             Assert.Equal(dict.Count, @switch.Count);
             Assert.Equal(dict.ContainsKey(-1), @switch.ContainsKey(-1));
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Collections.Tests
                 30
             };
 
-            var @switch = list.ToDynamicSwitch(x => x / 10);
+            IDynamicSwitch<int, int> @switch = list.ToDynamicSwitch(x => x / 10);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => @switch[4]);
 
@@ -82,14 +82,14 @@ namespace SourceCode.Clay.Collections.Tests
         [Fact(DisplayName = nameof(ToDynamicSwitch_KeyValueExtractor))]
         public static void ToDynamicSwitch_KeyValueExtractor()
         {
-            var list = new[]
+            Tuple<int, AttributeTargets>[] list = new[]
             {
                 Tuple.Create(10, AttributeTargets.Class),
                 Tuple.Create(20, AttributeTargets.Constructor),
                 Tuple.Create(30, AttributeTargets.Delegate)
             };
 
-            var @switch = list.ToDynamicSwitch(x => x.Item1 / 10, x => x.Item2);
+            IDynamicSwitch<int, AttributeTargets> @switch = list.ToDynamicSwitch(x => x.Item1 / 10, x => x.Item2);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => @switch[4]);
 

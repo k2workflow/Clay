@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Buffers
             if (obj.Length == 0) return ByteHashCode.Empty;
 
             // Calculate on full length
-            var span = obj.Span;
+            ReadOnlySpan<byte> span = obj.Span;
 
             // Calculate on prefix
             if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)

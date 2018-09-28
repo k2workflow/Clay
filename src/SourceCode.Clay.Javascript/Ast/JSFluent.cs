@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Javascript.Ast
         #region Binary
         public static JSBinaryExpression JSBinary(this Expression left, JSBinaryOperator @operator, IEnumerable<Expression> right)
         {
-            var result = left is JSBinaryExpression leftBinary && leftBinary.Operator == @operator
+            JSBinaryExpression result = left is JSBinaryExpression leftBinary && leftBinary.Operator == @operator
                 ? leftBinary
                 : new JSBinaryExpression(left, @operator);
             result.Add(right);

@@ -360,10 +360,10 @@ namespace SourceCode.Clay.Json
 
         private static Func<RuntimeTypeHandle, object, Number> CreateObjectFactory()
         {
-            var rthParam = Expression.Parameter(typeof(RuntimeTypeHandle), "rth");
-            var objParam = Expression.Parameter(typeof(object), "value");
+            ParameterExpression rthParam = Expression.Parameter(typeof(RuntimeTypeHandle), "rth");
+            ParameterExpression objParam = Expression.Parameter(typeof(object), "value");
 
-            var types = new[]
+            Type[] types = new[]
             {
                 // Signed
                 typeof(sbyte),
@@ -386,26 +386,26 @@ namespace SourceCode.Clay.Json
             var cases = new SwitchCase[types.Length];
             for (var i = 0; i < types.Length; i++)
             {
-                var type = types[i];
-                var ctor = typeof(Number).GetConstructor(new[] { type });
-                var cast = Expression.Convert(objParam, type);
-                var create = Expression.New(ctor, cast);
+                Type type = types[i];
+                ConstructorInfo ctor = typeof(Number).GetConstructor(new[] { type });
+                UnaryExpression cast = Expression.Convert(objParam, type);
+                NewExpression create = Expression.New(ctor, cast);
                 cases[i] = Expression.SwitchCase(create, Expression.Constant(type.TypeHandle));
             }
 
-            var thrwCtor = typeof(ArgumentOutOfRangeException).GetConstructor(new[] { typeof(string) });
-            var thrw = Expression.Throw(Expression.New(thrwCtor, Expression.Constant("value")), typeof(Number));
+            ConstructorInfo thrwCtor = typeof(ArgumentOutOfRangeException).GetConstructor(new[] { typeof(string) });
+            UnaryExpression thrw = Expression.Throw(Expression.New(thrwCtor, Expression.Constant("value")), typeof(Number));
 
-            var comp = typeof(Number).GetMethod(nameof(TypeHandleEquals), BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo comp = typeof(Number).GetMethod(nameof(TypeHandleEquals), BindingFlags.NonPublic | BindingFlags.Static);
 
-            var swtch = Expression.Switch(
+            SwitchExpression swtch = Expression.Switch(
                 rthParam,
                 thrw,
                 comp,
                 cases
             );
 
-            var lambda = Expression.Lambda<Func<RuntimeTypeHandle, object, Number>>(swtch, rthParam, objParam).Compile();
+            Func<RuntimeTypeHandle, object, Number> lambda = Expression.Lambda<Func<RuntimeTypeHandle, object, Number>>(swtch, rthParam, objParam).Compile();
             return lambda;
         }
 

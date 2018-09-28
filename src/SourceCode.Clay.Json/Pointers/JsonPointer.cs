@@ -132,7 +132,7 @@ namespace SourceCode.Clay.Json.Pointers
         public static JsonPointer Parse(string s)
         {
             if (s is null) throw new ArgumentNullException(nameof(s));
-            if (!TryParse(s, out var result)) throw new FormatException("The specified value is not a valid Json pointer.");
+            if (!TryParse(s, out JsonPointer result)) throw new FormatException("The specified value is not a valid Json pointer.");
             return result;
         }
 
@@ -224,7 +224,7 @@ namespace SourceCode.Clay.Json.Pointers
 
             for (var i = 0; i < _tokens.Length; i++)
             {
-                var token = _tokens[i];
+                JsonPointerToken token = _tokens[i];
 
                 if (target is null || target.Type == JTokenType.Null)
                 {

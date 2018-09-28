@@ -204,7 +204,7 @@ namespace SourceCode.Clay.Security.Tests
             var norm = CertificateLoader.NormalizeThumbprint(thumbprint);
             Assert.Equal(CertificateLoader.Sha1Length, norm.Length);
 
-            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out var actual);
+            var found = CertificateLoader.TryLoadCertificate(StoreName.My, StoreLocation.CurrentUser, thumbprint, false, out X509Certificate2 actual);
             Assert.True(found);
             Assert.Equal(s_existingCertificate.SerialNumber, actual.SerialNumber);
 

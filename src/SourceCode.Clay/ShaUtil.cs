@@ -57,7 +57,7 @@ namespace SourceCode.Clay
                 return false;
 
             // Check if the hex specifier '0x' is present
-            var slice = hex;
+            ReadOnlySpan<char> slice = hex;
             if (slice[0] == '0' && (slice[1] == 'x' || slice[1] == 'X'))
             {
                 // Length must be at least 40+2|64+2

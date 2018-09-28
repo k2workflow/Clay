@@ -722,7 +722,7 @@ namespace SourceCode.Clay.Javascript.Ast
             }
             for (var i = 0; i < node.Cases.Count; i++)
             {
-                var @case = node.Cases[i];
+                JSSwitchCase @case = node.Cases[i];
                 WriteNode(@case);
             }
             if (Minify) Write("}");
@@ -914,7 +914,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Body.Count; i++)
             {
-                var body = node.Body[i];
+                JSStatement body = node.Body[i];
                 WriteNode(body);
             }
         }

@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Data.SqlClient.Azure
         {
             if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
 
-            var opt = options ?? SqlConnectionRetryOptions.Default;
+            SqlConnectionRetryOptions opt = options ?? SqlConnectionRetryOptions.Default;
 
             // Add AzureDb-specific tokens
             if (!string.IsNullOrWhiteSpace(sqlCsb.DataSource))

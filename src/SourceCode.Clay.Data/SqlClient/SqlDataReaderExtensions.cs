@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Data.SqlClient
             if (sqlDr.IsDBNull(ord))
                 return null;
 
-            var val = sqlDr.GetSqlBytes(ord);
+            System.Data.SqlTypes.SqlBytes val = sqlDr.GetSqlBytes(ord);
             return val.IsNull ? null : val.Buffer;
         }
 
@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Data.SqlClient
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = sqlDr.GetSqlString(ord);
+            System.Data.SqlTypes.SqlString val = sqlDr.GetSqlString(ord);
 
             if (val.IsNull)
                 return null;
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.Data.SqlClient
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = sqlDr.GetSqlXml(ord);
+            System.Data.SqlTypes.SqlXml val = sqlDr.GetSqlXml(ord);
 
             if (val.IsNull)
                 return null;
@@ -92,12 +92,12 @@ namespace SourceCode.Clay.Data.SqlClient
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
             var ord = sqlDr.GetOrdinal(name); // Throws IndexOutOfRangeException
-            var val = sqlDr.GetSqlXml(ord);
+            System.Data.SqlTypes.SqlXml val = sqlDr.GetSqlXml(ord);
 
             if (val.IsNull)
                 return null;
 
-            using (var xmr = val.CreateReader())
+            using (System.Xml.XmlReader xmr = val.CreateReader())
             {
                 var xml = XDocument.Load(xmr);
                 return xml;

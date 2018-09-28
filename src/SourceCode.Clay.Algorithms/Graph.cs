@@ -64,9 +64,9 @@ namespace SourceCode.Clay.Algorithms
         /// <param name="to">The vertex that the edge terminates at.</param>
         public void Add(T from, T to)
         {
-            var nodes = _nodes;
+            ConcurrentDictionary<T, Node> nodes = _nodes;
 
-            var fromState = GetOrAdd(from);
+            Node fromState = GetOrAdd(from);
             if (fromState.Edges is null)
             {
                 fromState.Edges = new ConcurrentDictionary<T, EdgeOptions>(_equalityComparer);

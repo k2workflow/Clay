@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Buffers.Tests
                 arr[i] = (byte)i;
 
             var bytes = new Span<byte>(arr, 0, arr.Length);
-            var ints = MemoryMarshal.Cast<byte, int>(bytes);
+            Span<int> ints = MemoryMarshal.Cast<byte, int>(bytes);
 
             var expected = AddMethod(ints);
             var actual = AddMethod(bytes);

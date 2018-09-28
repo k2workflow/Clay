@@ -62,7 +62,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSFunctionDeclaration Add(IEnumerable<IJSPattern> parameters)
         {
-            foreach (var parameter in parameters)
+            foreach (IJSPattern parameter in parameters)
                 Parameters.Add(parameter);
             return this;
         }

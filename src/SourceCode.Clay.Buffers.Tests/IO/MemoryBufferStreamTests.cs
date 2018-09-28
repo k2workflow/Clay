@@ -20,7 +20,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_Read_SmallBuffer))]
         public static void MemoryBufferStream_Read_SmallBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
             var buffer = new byte[100];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -46,7 +46,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_Read_BigBuffer))]
         public static void MemoryBufferStream_Read_BigBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
             var buffer = new byte[1024];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_AsyncPatternRead_SmallBuffer))]
         public static void MemoryBufferStream_AsyncPatternRead_SmallBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
             var buffer = new byte[100];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_AsyncPatternRead_BigBuffer))]
         public static void MemoryBufferStream_AsyncPatternRead_BigBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
             var buffer = new byte[1024];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -121,7 +121,7 @@ namespace SourceCode.Clay.IO.Tests
                     wait.Set();
                 });
 
-                var ar = stream.BeginRead(buffer, offset, count, cb, expectedState);
+                IAsyncResult ar = stream.BeginRead(buffer, offset, count, cb, expectedState);
 
                 Assert.True(ar.CompletedSynchronously);
                 Assert.True(ar.IsCompleted);
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_ReadAsync_SmallBuffer))]
         public static async Task MemoryBufferStream_ReadAsync_SmallBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 203, 1).AsReadOnlyMemory();
             var buffer = new byte[100];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -163,7 +163,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_ReadAsync_BigBuffer))]
         public static async Task MemoryBufferStream_ReadAsync_BigBuffer()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
             var buffer = new byte[1024];
             using (var sut = new MemoryBufferStream(truth))
             {
@@ -181,7 +181,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_ReadByte))]
         public static void MemoryBufferStream_ReadByte()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 107, 1).AsReadOnlyMemory();
             using (var sut = new MemoryBufferStream(truth))
             {
                 for (var i = 0; i < truth.Length; i++)
@@ -237,7 +237,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_Copy))]
         public static void MemoryBufferStream_Copy()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
             using (var sut = new MemoryBufferStream(truth))
             using (var ms = new MemoryStream())
             {
@@ -252,7 +252,7 @@ namespace SourceCode.Clay.IO.Tests
         [Fact(DisplayName = nameof(MemoryBufferStream_CopyAsync))]
         public static void MemoryBufferStream_CopyAsync()
         {
-            var truth = BufferComparerTests.GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
+            ReadOnlyMemory<byte> truth = BufferComparerTests.GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
             using (var sut = new MemoryBufferStream(truth))
             using (var ms = new MemoryStream())
             {

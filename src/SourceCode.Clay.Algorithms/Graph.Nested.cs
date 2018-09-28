@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Algorithms
 
             public Node SetOptions(NodeOptions remove = NodeOptions.None, NodeOptions add = NodeOptions.None)
             {
-                var node = this;
+                Node node = this;
                 node.Options = (node.Options & ~remove) | add;
                 return node;
             }

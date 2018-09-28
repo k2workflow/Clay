@@ -56,7 +56,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSCallExpression Add(IEnumerable<JSExpression> arguments)
         {
-            foreach (var argument in arguments)
+            foreach (JSExpression argument in arguments)
                 Arguments.Add(argument);
             return this;
         }
