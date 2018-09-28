@@ -129,7 +129,7 @@ namespace SourceCode.Clay.Json.Units
         {
             // [-214748.3648, +214748.3647]
             var range = new NumberConstraint(System.Data.SqlTypes.SqlMoney.MinValue.Value, System.Data.SqlTypes.SqlMoney.MaxValue.Value);
-            var actual = range;
+            NumberConstraint actual = range;
 
             Assert.True(range == actual);
             Assert.NotEqual(0, range.GetHashCode());

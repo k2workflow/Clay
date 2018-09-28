@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Json.LinkedData
             string activeProperty,
             JToken value)
         {
-            var hasTerm = activeContext.TryGetTerm(activeProperty, out var term);
+            var hasTerm = activeContext.TryGetTerm(activeProperty, out LinkedDataTerm term);
             if (hasTerm)
             {
                 if (term.TypeMapping == LinkedDataKeywords.Id)
@@ -78,13 +78,13 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 2) If local context is not null, it contains a key that equals value, and the value associated with the
             //    key that equals value in defined is not true
-            if (!(localContext is null) && localContext.TryGetValue(value, out var termToken) &&
+            if (!(localContext is null) && localContext.TryGetValue(value, out JToken termToken) &&
                 !defined.ContainsKey(value))
             {
                 activeContext.AddTerm(activeContext, localContext, value, termToken, defined);
             }
 
-            if (activeContext.TryGetTerm(value, out var term))
+            if (activeContext.TryGetTerm(value, out LinkedDataTerm term))
             {
                 // 3) If active context has a term definition for value, and the associated IRI mapping is a keyword,
                 //    return that keyword.

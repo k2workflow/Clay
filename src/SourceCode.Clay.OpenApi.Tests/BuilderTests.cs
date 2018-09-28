@@ -22,20 +22,20 @@ namespace SourceCode.Clay.OpenApi.Tests
     {
         private static void TestBuilder(object builder)
         {
-            var builderType = builder.GetType();
-            var buildMethod = builderType.GetMethod("Build", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+            Type builderType = builder.GetType();
+            MethodInfo buildMethod = builderType.GetMethod("Build", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
             var built = buildMethod.Invoke(builder, new object[0]);
             var reverseBuilder = builderType.GetConstructors().First(x => x.GetParameters().Length == 1).Invoke(new object[] { built });
 
-            var builtType = builderType
+            Type builtType = builderType
                 .GetInterfaces()
                 .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IOasBuilder<>))
                 .Select(x => x.GetGenericArguments()[0])
                 .Last();
 
-            foreach (var builderProp in builderType.GetProperties())
+            foreach (PropertyInfo builderProp in builderType.GetProperties())
             {
-                var builtProp = builtType.GetProperty(builderProp.Name);
+                PropertyInfo builtProp = builtType.GetProperty(builderProp.Name);
 
                 var builderValue = builderProp.GetValue(builder);
                 var builtValue = builtProp.GetValue(built);
@@ -65,7 +65,7 @@ namespace SourceCode.Clay.OpenApi.Tests
                 [OasExpression.Parse("http://test/{$statusCode}")] = new OasReferable<OasPath>("#/test"),
                 [OasExpression.Parse("http://test/1/{$statusCode}")] = new OasReferable<OasPath>("#/test/1"),
             };
-            var cb = cbb.Build();
+            OasCallback cb = cbb.Build();
             var rcb = new OasCallbackBuilder(cb);
 
             Assert.Equal(cbb, cb);

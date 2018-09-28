@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Json.LinkedData
         public static IEnumerable<LinkedDataTerm> Parse(LinkedDataContext activeContext, JObject localContext)
         {
             var defined = new Dictionary<string, bool>(StringComparer.Ordinal);
-            foreach (var item in localContext)
+            foreach (KeyValuePair<string, JToken> item in localContext)
             {
                 if (item.Key == LinkedDataKeywords.Base || item.Key == LinkedDataKeywords.Vocab ||
                     item.Key == LinkedDataKeywords.Language)
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     throw new LinkedDataException(LinkedDataErrorCode.CyclicIriMapping);
                 }
 
-                foreach (var result in Parse(activeContext, localContext, item, defined))
+                foreach (LinkedDataTerm result in Parse(activeContext, localContext, item, defined))
                     yield return result;
             }
         }
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.Json.LinkedData
             KeyValuePair<string, JToken> termPair,
             Dictionary<string, bool> defined)
         {
-            var (term, value) = termPair;
+            (string term, JToken value) = termPair;
             defined[term] = false;
 
             // 3) Since keywords cannot be overridden, term must not be a keyword. Otherwise, a keyword redefinition
@@ -83,7 +83,7 @@ namespace SourceCode.Clay.Json.LinkedData
             //    definition in active context to null, set the value associated with defined's key term to true, and
             //    return.
             if (value.Is(JTokenType.Null) ||
-                (value is JObject o && o.TryGetValue(LinkedDataKeywords.Id, out var idToken) &&
+                (value is JObject o && o.TryGetValue(LinkedDataKeywords.Id, out global::Newtonsoft.Json.Linq.JToken idToken) &&
                     idToken.Is(JTokenType.Null)))
             {
                 defined[term] = true;
@@ -97,10 +97,10 @@ namespace SourceCode.Clay.Json.LinkedData
                 yield break;
             }
 
-            var options = LinkedDataTermOptions.None;
+            LinkedDataTermOptions options = LinkedDataTermOptions.None;
             string typeMapping = null;
             string iriMapping = null;
-            var containerMappings = ContainerMappings.None;
+            ContainerMappings containerMappings = ContainerMappings.None;
             string language = null;
 
             // 7) Otherwise, if value is a string, convert it to a dictionary consisting of a single member whose key
@@ -119,7 +119,7 @@ namespace SourceCode.Clay.Json.LinkedData
             var valueObject = (JObject)value;
 
             // 10) If value contains the key @type:
-            if (valueObject.TryGetValue(LinkedDataKeywords.Type, out var typeToken))
+            if (valueObject.TryGetValue(LinkedDataKeywords.Type, out JToken typeToken))
             {
                 if (!typeToken.Is(JTokenType.String))
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidTypeMapping);
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.Json.LinkedData
             }
 
             // 11) If value contains the key @reverse:
-            if (valueObject.TryGetValue(LinkedDataKeywords.Reverse, out var reverseToken))
+            if (valueObject.TryGetValue(LinkedDataKeywords.Reverse, out JToken reverseToken))
             {
                 // 11.1) If value contains an @id, member, an invalid reverse property error has been detected and
                 //       processing is aborted.
@@ -162,7 +162,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidIriMapping);
 
                 // 11.4) If value contains an @container member, set the container mapping of definition to its value
-                if (valueObject.TryGetValue(LinkedDataKeywords.Container, out var reverseContainerToken))
+                if (valueObject.TryGetValue(LinkedDataKeywords.Container, out JToken reverseContainerToken))
                 {
                     if (!reverseContainerToken.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidReverseProperty);
@@ -213,10 +213,10 @@ namespace SourceCode.Clay.Json.LinkedData
 
                 // 14.1) If term is a compact IRI with a prefix that is a key in local context a dependency has been
                 //       found.
-                if (index > 0 && localContext.TryGetValue(prefix, out var prefixTokenDeclaration))
+                if (index > 0 && localContext.TryGetValue(prefix, out JToken prefixTokenDeclaration))
                 {
                     // Use this algorithm recursively
-                    foreach (var item in Parse(
+                    foreach (LinkedDataTerm item in Parse(
                         activeContext,
                         localContext,
                         new KeyValuePair<string, JToken>(prefix, prefixTokenDeclaration),
@@ -227,7 +227,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 14.2) If term's prefix has a term definition in active context, set the IRI mapping of definition to
                 //       the result of concatenating the value associated with the prefix's IRI mapping and the term's
                 //       suffix.
-                if (activeContext.TryGetTerm(prefix, out var existingTerm))
+                if (activeContext.TryGetTerm(prefix, out LinkedDataTerm existingTerm))
                     iriMapping = existingTerm.IriMapping + term.Substring(index + 1);
                 // 14.3) Otherwise, term is an absolute IRI or blank node identifier. Set the IRI mapping of definition
                 //       to term.
@@ -246,7 +246,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidIriMapping);
 
             // 16) If value contains the key @container:
-            if (valueObject.TryGetValue(LinkedDataKeywords.Container, out var containerToken))
+            if (valueObject.TryGetValue(LinkedDataKeywords.Container, out JToken containerToken))
             {
                 containerMappings = Utils.ParseContainerMapping(containerToken);
                 if (!ValidContainerMappings.Contains(containerMappings))
@@ -254,7 +254,7 @@ namespace SourceCode.Clay.Json.LinkedData
             }
 
             // 17) If value contains the key @language and does not contain the key @type:
-            if (valueObject.TryGetValue(LinkedDataKeywords.Language, out var languageToken) &&
+            if (valueObject.TryGetValue(LinkedDataKeywords.Language, out JToken languageToken) &&
                 !valueObject.ContainsKey(LinkedDataKeywords.Type))
             {
                 if (languageToken.Is(JTokenType.Null))

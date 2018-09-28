@@ -67,7 +67,7 @@ namespace SourceCode.Clay.Json
                         {
                             if (objectFactory is null) return default;
 
-                            var obj = objectFactory();
+                            T obj = objectFactory();
                             return obj;
                         }
                 }

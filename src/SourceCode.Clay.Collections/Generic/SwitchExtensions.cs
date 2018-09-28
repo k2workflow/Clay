@@ -115,16 +115,16 @@ namespace SourceCode.Clay.Collections.Generic
             if (valueExtractor is null) throw new ArgumentNullException(nameof(valueExtractor));
 
             var unique = new Dictionary<int, TValue>(cases.Count);
-            foreach (var @case in cases)
+            foreach (TItem @case in cases)
             {
                 var key = keyExtractor(@case);
-                var value = valueExtractor(@case);
+                TValue value = valueExtractor(@case);
 
                 // Rely on this throwing if there are any duplicates
                 unique.Add(key, value);
             }
 
-            var impl = unique.ToDynamicSwitch();
+            IDynamicSwitch<int, TValue> impl = unique.ToDynamicSwitch();
             return impl;
         }
 
@@ -140,7 +140,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (cases is null) throw new ArgumentNullException(nameof(cases));
             if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
-            var impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);
+            IDynamicSwitch<int, TItem> impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);
             return impl;
 
             // Local functions

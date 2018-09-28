@@ -39,7 +39,7 @@ namespace SourceCode.Clay.Json.LinkedData
             JToken localContext,
             CancellationToken cancellationToken = default)
         {
-            var expanded = await CreateContextAsync(localContext, cancellationToken).ConfigureAwait(false);
+            LinkedDataContext expanded = await CreateContextAsync(localContext, cancellationToken).ConfigureAwait(false);
             return new LinkedDataOptions(Base, expanded);
         }
 
@@ -49,17 +49,17 @@ namespace SourceCode.Clay.Json.LinkedData
         {
             if (!(localContext is JObject o) || !o.TryGetValue(LinkedDataKeywords.Context, out localContext))
                 throw new LinkedDataException(LinkedDataErrorCode.InvalidExpandContext);
-            var remoteContext = await ExpandContext.ParseAsync(localContext, cancellationToken).ConfigureAwait(false);
+            LinkedDataContext remoteContext = await ExpandContext.ParseAsync(localContext, cancellationToken).ConfigureAwait(false);
             return remoteContext;
         }
 
         public virtual async ValueTask<JToken> GetContextAsync(string iri, CancellationToken cancellationToken)
         {
-            var wr = WebRequest.CreateHttp(new Uri(iri));
+            HttpWebRequest wr = WebRequest.CreateHttp(new Uri(iri));
             wr.Method = "GET";
 
-            using (var response = await wr.GetResponseAsync().ConfigureAwait(false))
-            using (var responseStream = response.GetResponseStream())
+            using (WebResponse response = await wr.GetResponseAsync().ConfigureAwait(false))
+            using (Stream responseStream = response.GetResponseStream())
             using (var streamReader = new StreamReader(responseStream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {

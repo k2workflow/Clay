@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (ye is null) return false; // (x, null)
             if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
-            var cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
+            IEqualityComparer<TValue> cmpr = valueComparer ?? EqualityComparer<TValue>.Default;
 
             // If both are some kind of collection
             if (EnumerableExtensions.BothAreCollections(xe, ye, out var xCount, out var yCount))
@@ -43,10 +43,10 @@ namespace SourceCode.Clay.Collections.Generic
                 if (xe is IDictionary<TKey, TValue> xd)
                 {
                     // For each key in the second dictionary...
-                    foreach (var yi in ye)
+                    foreach (KeyValuePair<TKey, TValue> yi in ye)
                     {
                         // ...check if that same key exists in the first dictionary
-                        if (!xd.TryGetValue(yi.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+                        if (!xd.TryGetValue(yi.Key, out TValue xVal)) return false; // Key: Uses the equality comparer from the first dictionary
 
                         // And if so, whether the corresponding values match
                         if (!cmpr.Equals(yi.Value, xVal)) return false; // Value: Uses the specified equality comparer
@@ -60,10 +60,10 @@ namespace SourceCode.Clay.Collections.Generic
                 if (xe is IReadOnlyDictionary<TKey, TValue> xrd)
                 {
                     // For each key in the second dictionary...
-                    foreach (var yi in ye)
+                    foreach (KeyValuePair<TKey, TValue> yi in ye)
                     {
                         // ...check if that same key exists in the first dictionary
-                        if (!xrd.TryGetValue(yi.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+                        if (!xrd.TryGetValue(yi.Key, out TValue xVal)) return false; // Key: Uses the equality comparer from the first dictionary
 
                         // And if so, whether the corresponding values match
                         if (!cmpr.Equals(yi.Value, xVal)) return false; // Value: Uses the specified equality comparer
@@ -77,10 +77,10 @@ namespace SourceCode.Clay.Collections.Generic
             var xdd = new Dictionary<TKey, TValue>(xe);
 
             // For each key in the second dictionary...
-            foreach (var yvp in ye)
+            foreach (KeyValuePair<TKey, TValue> yvp in ye)
             {
                 // ...check if that same key exists in the first dictionary
-                if (!xdd.TryGetValue(yvp.Key, out var xVal)) return false; // Key: Uses the equality comparer from the first dictionary
+                if (!xdd.TryGetValue(yvp.Key, out TValue xVal)) return false; // Key: Uses the equality comparer from the first dictionary
 
                 // And if so, whether the corresponding values match
                 if (!cmpr.Equals(yvp.Value, xVal)) return false; // Value: Uses the specified equality comparer

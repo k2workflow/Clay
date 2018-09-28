@@ -49,7 +49,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlTransaction sqlTxn, string commandText, CommandType commandType, int timeoutSeconds)
         {
-            var cmd = CreateCommand(sqlTxn, commandText, commandType);
+            SqlCommand cmd = CreateCommand(sqlTxn, commandText, commandType);
             cmd.CommandTimeout = timeoutSeconds;
 
             return cmd;

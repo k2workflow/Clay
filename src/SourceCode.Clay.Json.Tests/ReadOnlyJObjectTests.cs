@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(jobj.Count, json.Count);
             Assert.Equal(jobj.ToString(), json.ToString());
 
-            var clone = json.DeepClone();
+            ReadOnlyJObject clone = json.DeepClone();
             Assert.Equal(json, clone, ReadOnlyJObjectComparer.Default);
 
             Assert.Equal(json.Count, clone.Count);
@@ -80,7 +80,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(json.ToString(), mutable.ToString());
 
             Assert.True(json["bool"].Type == JTokenType.Boolean);
-            Assert.True(json.TryGetValue("bool", out var jv) && (bool)jv);
+            Assert.True(json.TryGetValue("bool", out JToken jv) && (bool)jv);
 
             Assert.True(json["int"].Type == JTokenType.Integer);
             Assert.True(json.TryGetValue("int", out jv) && jv.Value<long>() == 123);

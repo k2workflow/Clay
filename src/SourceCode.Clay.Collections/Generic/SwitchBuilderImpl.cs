@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="cases">The cases.</param>
         public SwitchBuilderImpl(IReadOnlyDictionary<TKey, TValue> cases)
         {
-            var (values, indexer) = BuildSwitchExpression(cases);
+            (TValue[] values, Func<TKey, int> indexer) = BuildSwitchExpression(cases);
 
             _values = values;
             _indexer = indexer;
@@ -84,10 +84,10 @@ namespace SourceCode.Clay.Collections.Generic
             Expression<Func<TKey, int>> expr;
 
             // Return -1 if key is not found (per standard convention for IndexOf())
-            var notFound = Expression.Constant(-1);
+            ConstantExpression notFound = Expression.Constant(-1);
 
             // Define formal parameter
-            var formalParam = Expression.Parameter(typeof(TKey), "key");
+            ParameterExpression formalParam = Expression.Parameter(typeof(TKey), "key");
 
             // Fast path if no cases
             if (cases is null || cases.Count == 0)
@@ -102,7 +102,7 @@ namespace SourceCode.Clay.Collections.Generic
 
                 // Extract values and ensure keys are unique
                 var i = 0;
-                foreach (var @case in cases)
+                foreach (KeyValuePair<TKey, TValue> @case in cases)
                 {
                     values[i] = @case.Value;
 
@@ -115,11 +115,11 @@ namespace SourceCode.Clay.Collections.Generic
                 // Create <Key, SwitchCase>[] list
                 i = 0;
                 var switchCases = new SwitchCase[cases.Count];
-                foreach (var @case in unique)
+                foreach (KeyValuePair<TKey, int> @case in unique)
                 {
                     // Create Case Expression
-                    var key = Expression.Constant(@case.Key);
-                    var value = Expression.Constant(@case.Value);
+                    ConstantExpression key = Expression.Constant(@case.Key);
+                    ConstantExpression value = Expression.Constant(@case.Value);
 
                     switchCases[i] = Expression.SwitchCase(value, key);
 
@@ -127,14 +127,14 @@ namespace SourceCode.Clay.Collections.Generic
                 }
 
                 // Create Switch Expression
-                var switchExpr = Expression.Switch(formalParam, notFound, switchCases);
+                SwitchExpression switchExpr = Expression.Switch(formalParam, notFound, switchCases);
 
                 // Create final Expression
                 expr = Expression.Lambda<Func<TKey, int>>(switchExpr, formalParam);
             }
 
             // Compile Expression
-            var func = expr.Compile();
+            Func<TKey, int> func = expr.Compile();
             return (values, func);
         }
     }

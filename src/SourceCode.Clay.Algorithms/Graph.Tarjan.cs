@@ -25,8 +25,8 @@ namespace SourceCode.Clay.Algorithms
         {
             var index = 0;
             var stack = new Stack<T>();
-            var nodes = _nodes;
-            var equalityComparer = _equalityComparer;
+            System.Collections.Concurrent.ConcurrentDictionary<T, Node> nodes = _nodes;
+            IEqualityComparer<T> equalityComparer = _equalityComparer;
             var result = new List<IReadOnlyList<T>>(nodes.Count);
 
             void StrongConnect(T v, ref Node vstate)
@@ -41,9 +41,9 @@ namespace SourceCode.Clay.Algorithms
 
                 if (!(vstate.Edges is null))
                 {
-                    foreach (var w in vstate.Edges)
+                    foreach (KeyValuePair<T, EdgeOptions> w in vstate.Edges)
                     {
-                        var wstate = nodes[w.Key];
+                        Node wstate = nodes[w.Key];
                         if (!wstate.Options.HasFlag(NodeOptions.StrongConnectExecuted))
                         {
                             // Successor w has not yet been visited; recurse on it.
@@ -85,11 +85,11 @@ namespace SourceCode.Clay.Algorithms
                 }
             }
 
-            foreach (var node in nodes)
+            foreach (KeyValuePair<T, Node> node in nodes)
             {
                 if (node.Value.Options.HasFlag(NodeOptions.StrongConnectExecuted)) continue;
 
-                var state = node.Value;
+                Node state = node.Value;
                 StrongConnect(node.Key, ref state);
             }
 

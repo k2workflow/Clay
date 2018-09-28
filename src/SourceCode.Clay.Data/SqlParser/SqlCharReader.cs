@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Data.SqlParser
             if (_undo.Count > 0)
             {
                 // Pop top undo
-                var pop = _undo.Pop();
+                ArraySegment<char> pop = _undo.Pop();
 
                 // If it's longer than what we require
                 count = pop.Count;

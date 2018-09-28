@@ -26,7 +26,7 @@ namespace SourceCode.Clay
             if (span.Length == 0 || length <= 0) return default;
             if (length >= span.Length) return span;
 
-            var slice = span.Slice(0, length);
+            ReadOnlySpan<T> slice = span.Slice(0, length);
             return slice;
         }
 
@@ -42,7 +42,7 @@ namespace SourceCode.Clay
             if (memory.Length == 0 || length <= 0) return default;
             if (length >= memory.Length) return memory;
 
-            var slice = memory.Slice(0, length);
+            ReadOnlyMemory<T> slice = memory.Slice(0, length);
             return slice;
         }
 
@@ -57,8 +57,8 @@ namespace SourceCode.Clay
         {
             if (span.Length == 0 || length <= 0) return default;
             if (length >= span.Length) return span;
-            
-            var slice = span.Slice(span.Length - length);
+
+            ReadOnlySpan<T> slice = span.Slice(span.Length - length);
             return slice;
         }
 
@@ -74,7 +74,7 @@ namespace SourceCode.Clay
             if (memory.Length == 0 || length <= 0) return default;
             if (length >= memory.Length) return memory;
 
-            var slice = memory.Slice(memory.Length - length);
+            ReadOnlyMemory<T> slice = memory.Slice(memory.Length - length);
             return slice;
         }
 
@@ -89,7 +89,7 @@ namespace SourceCode.Clay
         {
             if (span.Length == 0) return -1;
 
-            var slice = span.Slice(startIndex);
+            ReadOnlySpan<char> slice = span.Slice(startIndex);
 
             var index = slice.IndexOf(@char);
             if (index == -1)

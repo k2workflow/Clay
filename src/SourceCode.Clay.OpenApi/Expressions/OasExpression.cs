@@ -113,7 +113,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         public static OasExpression Parse(string s)
         {
             if (s is null) throw new ArgumentNullException(nameof(s));
-            if (!TryParse(s, out var result)) throw new FormatException();
+            if (!TryParse(s, out OasExpression result)) throw new FormatException();
             return result;
         }
 
@@ -158,7 +158,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
                     }
                     else
                     {
-                        if (c != '{' || !OasFieldExpression.TryParse(s, out var field, ref i, true) || i >= s.Length || s[i] != '}')
+                        if (c != '{' || !OasFieldExpression.TryParse(s, out OasFieldExpression field, ref i, true) || i >= s.Length || s[i] != '}')
                         {
                             result = default;
                             return false;
@@ -198,7 +198,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             var sb = new StringBuilder();
             for (var i = 0; i < _components.Length; i++)
             {
-                var component = _components[i];
+                OasExpressionComponent component = _components[i];
 
                 if (component is OasLiteralExpression literal)
                 {

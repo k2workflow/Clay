@@ -42,7 +42,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSSequenceExpression Add(IEnumerable<JSExpression> expressions)
         {
-            foreach (var expression in expressions)
+            foreach (JSExpression expression in expressions)
                 Expressions.Add(expression);
             return this;
         }

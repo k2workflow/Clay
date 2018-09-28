@@ -409,7 +409,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
             }
             else if (source == OasFieldExpressionSource.Body)
             {
-                if (!JsonPointer.TryParse(name, out var pointer))
+                if (!JsonPointer.TryParse(name, out JsonPointer pointer))
                 {
                     result = default;
                     return false;
@@ -454,7 +454,7 @@ namespace SourceCode.Clay.OpenApi.Expressions
         /// <exception cref="FormatException"><paramref name="s"/> is not in a format compliant with the Open API specification.</exception>
         public static OasFieldExpression Parse(string s)
         {
-            if (!TryParse(s, out var result)) throw new FormatException("The expression is not a valid field expression.");
+            if (!TryParse(s, out OasFieldExpression result)) throw new FormatException("The expression is not a valid field expression.");
             return result;
         }
 

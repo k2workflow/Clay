@@ -25,17 +25,17 @@ namespace SourceCode.Clay.OpenApi.Tests
             Assert.Equal(ExpressionType.New, constructor.Body.NodeType);
             var newExpression = (NewExpression)constructor.Body;
 
-            var p1 = Expression.Parameter(typeof(T), "p1");
-            var p2 = Expression.Parameter(typeof(T), "p2");
-            var eq = Expression.Lambda<Func<T, T, bool>>(Expression.Equal(p1, p2), p1, p2).Compile();
-            var neq = Expression.Lambda<Func<T, T, bool>>(Expression.NotEqual(p1, p2), p1, p2).Compile();
+            ParameterExpression p1 = Expression.Parameter(typeof(T), "p1");
+            ParameterExpression p2 = Expression.Parameter(typeof(T), "p2");
+            Func<T, T, bool> eq = Expression.Lambda<Func<T, T, bool>>(Expression.Equal(p1, p2), p1, p2).Compile();
+            Func<T, T, bool> neq = Expression.Lambda<Func<T, T, bool>>(Expression.NotEqual(p1, p2), p1, p2).Compile();
 
-            var ctor = newExpression.Constructor;
-            var constructorArguments = newExpression.Arguments;
-            var ctorParams = ctor.GetParameters();
+            System.Reflection.ConstructorInfo ctor = newExpression.Constructor;
+            System.Collections.ObjectModel.ReadOnlyCollection<Expression> constructorArguments = newExpression.Arguments;
+            System.Reflection.ParameterInfo[] ctorParams = ctor.GetParameters();
 
             var param = new Expression[ctorParams.Length];
-            var allValues = constructor.Compile()();
+            T allValues = constructor.Compile()();
             var hs = new HashSet<T>();
 
             for (var i = -1; i < constructorArguments.Count; i++)
@@ -47,10 +47,10 @@ namespace SourceCode.Clay.OpenApi.Tests
                         : Expression.Default(ctorParams[j].ParameterType);
                 }
 
-                var nw = Expression.New(ctor, param);
-                var lambda = Expression.Lambda<Func<T>>(nw).Compile();
+                NewExpression nw = Expression.New(ctor, param);
+                Func<T> lambda = Expression.Lambda<Func<T>>(nw).Compile();
 
-                var current = lambda();
+                T current = lambda();
                 hs.Add(current);
                 if (i == -1)
                 {

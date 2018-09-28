@@ -191,7 +191,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Elements.Count; i++)
             {
-                var item = node.Elements[i];
+                JSExpression item = node.Elements[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -210,7 +210,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             writer.WriteStartObject();
 
-            var (type, op) = ConvertBinaryOperator(node.Operator);
+            (var type, var op) = ConvertBinaryOperator(node.Operator);
 
             writer.WritePropertyName("type");
             writer.WriteValue(type);
@@ -303,7 +303,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Body.Count; i++)
             {
-                var item = node.Body[i];
+                JSStatement item = node.Body[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -343,7 +343,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Arguments.Count; i++)
             {
-                var item = node.Arguments[i];
+                JSExpression item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -380,7 +380,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < items.Count; i++)
             {
-                var item = items[i];
+                JSStatement item = items[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -719,7 +719,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Arguments.Count; i++)
             {
-                var item = node.Arguments[i];
+                JSExpression item = node.Arguments[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -740,7 +740,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Properties.Count; i++)
             {
-                var item = node.Properties[i];
+                JSProperty item = node.Properties[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -761,7 +761,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             for (var i = 0; i < node.Body.Count; i++)
             {
-                var item = node.Body[i];
+                JSStatement item = node.Body[i];
                 WriteJson(writer, item, serializer);
             }
 
@@ -936,7 +936,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             writer.WriteStartObject();
 
-            var (type, op, prefix) = ConvertUnaryOperator(node.Operator);
+            (var type, var op, var prefix) = ConvertUnaryOperator(node.Operator);
 
             writer.WritePropertyName("type");
             writer.WriteValue(type);

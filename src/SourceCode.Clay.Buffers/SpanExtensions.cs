@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Swap<T>(Span<T> span, int a, int b)
         {
-            var tmp = span[a];
+            T tmp = span[a];
             span[a] = span[b];
             span[b] = tmp;
         }
@@ -109,7 +109,7 @@ namespace SourceCode.Clay.Buffers
             for (var i = lo; i < hi; i++)
             {
                 var j = i;
-                var t = span[i + 1];
+                T t = span[i + 1];
 
                 while (j >= lo && comparison(t, span[j]) < 0)
                 {
@@ -123,7 +123,7 @@ namespace SourceCode.Clay.Buffers
 
         private static void DownHeap<T>(Span<T> span, Comparison<T> comparison, int i, int n, int lo)
         {
-            var d = span[lo + i - 1];
+            T d = span[lo + i - 1];
 
             while (i <= n >> 1) // div 2
             {
@@ -152,7 +152,7 @@ namespace SourceCode.Clay.Buffers
             SwapIfGreater(span, comparison, lo, hi);
             SwapIfGreater(span, comparison, mid, hi);
 
-            var pivot = span[mid];
+            T pivot = span[mid];
             Swap(span, mid, hi - 1);
 
             // We already partitioned lo and hi and put the pivot in hi - 1.  And we pre-increment & decrement below.

@@ -32,7 +32,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(DateTimeExtensions_FromPosixFileTime))]
         public static void DateTimeExtensions_FromPosixFileTime()
         {
-            var dt = DateTimeExtensions.FromPosixFileTime(5380218331230000).ToUniversalTime();
+            DateTime dt = DateTimeExtensions.FromPosixFileTime(5380218331230000).ToUniversalTime();
             Assert.Equal(new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc), dt);
         }
 
@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(DateTimeExtensions_FromPosixFileTimeUtc))]
         public static void DateTimeExtensions_FromPosixFileTimeUtc()
         {
-            var dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);
+            DateTime dt = DateTimeExtensions.FromPosixFileTimeUtc(5380218331230000);
             Assert.Equal(new DateTime(1987, 01, 19, 02, 30, 33, 123, DateTimeKind.Utc), dt);
         }
 
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(DateTimeExtensions_RoundMinute))]
         public static void DateTimeExtensions_RoundMinute()
         {
-            var tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownMinute();
+            DateTime tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownMinute();
             Assert.Equal(new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc), tt);
 
             tt = new DateTime(1987, 01, 19, 02, 29, 0, 0, DateTimeKind.Utc).RoundDownMinute();
@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(DateTimeExtensions_RoundHour))]
         public static void DateTimeExtensions_RoundHour()
         {
-            var tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
+            DateTime tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
             Assert.Equal(new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc), tt);
 
             tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(DateTimeExtensions_RoundDay))]
         public static void DateTimeExtensions_RoundDay()
         {
-            var tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();
+            DateTime tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();
             Assert.Equal(new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc), tt);
 
             tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();

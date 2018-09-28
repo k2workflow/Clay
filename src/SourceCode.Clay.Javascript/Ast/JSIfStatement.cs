@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIfStatement Else(IEnumerable<JSStatement> body)
         {
-            foreach (var item in body)
+            foreach (JSStatement item in body)
                 Else(item);
             return this;
         }
