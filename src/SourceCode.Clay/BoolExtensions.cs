@@ -5,6 +5,7 @@
 
 #endregion
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -127,14 +128,105 @@ namespace SourceCode.Clay
         public static long Evaluate(this bool condition, long trueValue)
             => EvaluateImpl(condition) * trueValue;
 
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns True if 1, else returns False.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this uint value)
+            => EvaluateImpl(value);
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns True if 1, else returns False.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this ulong value)
+            => EvaluateImpl(value);
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns True if 1, else returns False.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this int value)
+            => EvaluateImpl(unchecked((uint)value));
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns True if 1, else returns False.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this long value)
+            => EvaluateImpl(unchecked((ulong)value));
+
+        #region Helpers
+
         // See benchmarks: Unsafe.As is fastest.
         // Union and unsafe (which cannot be inlined) are faster
         // than idiomatic branching expression.
         // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
 
+        private static bool EvaluateImpl(uint value)
+        {
+            uint val = value;
+
+            //                   1000 0000 0000 0000
+            val |= val >> 01; // 1100 0000 0000 0000
+            val |= val >> 02; // 1111 0000 0000 0000
+            val |= val >> 04; // 1111 1111 0000 0000
+            val |= val >> 08; // 1111 1111 1111 1111
+
+            val = val & 1;    // 0000 0000 0000 0001
+
+            // Ensure the value is 1|0 only
+            Debug.Assert(val == 0 || val == 1);
+
+            var b2b = new BoolToByte { Byte = (byte)val };
+            return b2b.Bool; // 1|0
+        }
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns True if 1, else returns False.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool EvaluateImpl(ulong value)
+        {
+            ulong val = value;
+
+            //                   1000 0000 0000 0000 0..0000
+            val |= val >> 01; // 1100 0000 0000 0000 0..0000
+            val |= val >> 02; // 1111 0000 0000 0000 0..0000
+            val |= val >> 04; // 1111 1111 0000 0000 0..0000
+            val |= val >> 08; // 1111 1111 1111 1111 0..0000
+            val |= val >> 16; // 1111 1111 1111 1111 1..1111
+
+            val = val & 1;    // 0000 0000 0000 0000 0..0001
+
+            // Ensure the value is 1|0 only
+            Debug.Assert(val == 0 || val == 1);
+
+            var b2b = new BoolToByte { Byte = (byte)val };
+            return b2b.Bool; // 1|0
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte EvaluateImpl(this bool condition)
-            => new BoolToByte { Bool = condition }.Byte; // 1|0
+        {
+            var b2b = new BoolToByte { Bool = condition };
+
+            // Ensure the value is 1|0 only
+            byte val = b2b.Byte;
+            Debug.Assert(val == 0 || val == 1);
+
+            return val; // 1|0
+        }
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
         private struct BoolToByte
@@ -143,7 +235,9 @@ namespace SourceCode.Clay
             public bool Bool;
 
             [FieldOffset(0)]
-            public readonly byte Byte;
+            public byte Byte;
         }
+
+        #endregion
     }
 }
