@@ -1575,7 +1575,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(sbyte value)
-            => LeadingZeros((int)value) - 24; // Delegate to intrinsic
+            => unchecked(LeadingZeros((byte)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1593,7 +1593,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(short value)
-            => LeadingZeros((int)value) - 16; // Delegate to intrinsic
+            => unchecked(LeadingZeros((ushort)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1687,7 +1687,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(sbyte value)
-            => LeadingZeros((sbyte)~value);
+            => unchecked(LeadingOnes((byte)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1703,7 +1703,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(short value)
-            => LeadingZeros((short)~value);
+            => unchecked(LeadingOnes((ushort)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1719,7 +1719,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(int value)
-            => LeadingZeros(~value);
+            => unchecked(LeadingOnes((uint)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1735,7 +1735,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(long value)
-            => LeadingZeros(~value);
+            => unchecked(LeadingOnes((ulong)value));
 
         #endregion
 
@@ -1757,7 +1757,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(sbyte value)
-            => unchecked(TrailingOnes((byte)value));
+            => unchecked(TrailingZeros((byte)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1775,7 +1775,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(short value)
-            => unchecked(TrailingOnes((ushort)value));
+            => unchecked(TrailingZeros((ushort)value));
 
         // Build this table by taking n = 0,1,2,4,...
         // [2^n % 37] = tz(n) manually counted
@@ -1868,7 +1868,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(int value)
-            => unchecked(TrailingOnes((uint)value));
+            => unchecked(TrailingZeros((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1911,7 +1911,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(long value)
-            => unchecked(TrailingOnes((ulong)value));
+            => unchecked(TrailingZeros((ulong)value));
 
         #endregion
 
