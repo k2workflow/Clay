@@ -1,16 +1,16 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-// Utilize when/if non-Experimental:
+// TODO:Utilize when/if non-Experimental:
 //using System.Runtime.Intrinsics;
 //using System.Runtime.Intrinsics.X86;
 
 namespace System
 {
     /// <summary>
-    /// Represents additional blit methods.
+    /// Represents operations that work on single bits in a mask.
     /// </summary>
-    public static partial class BitOps // .Primitive
+    public static partial class BitOps
     {
         #region ExtractBit
 
