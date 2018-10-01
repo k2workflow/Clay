@@ -130,7 +130,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
-        /// Returns True if 1, else returns False.
+        /// Returns False if 0, else returns True.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,7 +139,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
-        /// Returns True if 1, else returns False.
+        /// Returns False if 0, else returns True.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -148,7 +148,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
-        /// Returns True if 1, else returns False.
+        /// Returns False if 0, else returns True.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,7 +157,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
-        /// Returns True if 1, else returns False.
+        /// Returns False if 0, else returns True.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
