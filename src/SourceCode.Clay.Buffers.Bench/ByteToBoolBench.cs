@@ -7,80 +7,118 @@
 
 using BenchmarkDotNet.Attributes;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-     */
+         Method |     Mean |     Error |    StdDev | Scaled |
+    ----------- |---------:|----------:|----------:|-------:|
+         Branch | 1.801 ns | 0.0234 ns | 0.0219 ns |   1.00 |
+         Actual | 1.108 ns | 0.0173 ns | 0.0161 ns |   0.62 | x
+     UnsafeCode | 3.419 ns | 0.0339 ns | 0.0265 ns |   1.90 |
+       UnsafeAs | 1.079 ns | 0.0213 ns | 0.0269 ns |   0.60 | x
+          Union | 1.148 ns | 0.0063 ns | 0.0056 ns |   0.64 | ~
+    */
 
     //[MemoryDiagnoser]
     public class ByteToBoolBench
     {
         private const uint _iterations = 1000;
-        private const uint N = ushort.MaxValue;
+        private const uint N = ushort.MaxValue - short.MinValue;
 
-        // Prevent optimization by leaving non-readonly
 #pragma warning disable IDE0044 // Add readonly modifier
+        // Prevent folding by using non-readonly non-constant
         private static bool @true = true;
         private static bool @false = false;
 #pragma warning restore IDE0044 // Add readonly modifier
 
+        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Branch()
+        {
+            ulong sum = 0ul;
+
+            for (int i = 0; i < _iterations; i++)
+            {
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
+                {
+                    if (ToBoolBranch(n) == @true)
+                        sum++;
+                }
+            }
+
+            return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool ToBoolBranch(int value)
+        {
+            bool val = value == 0 ? false : true;
+            return val;
+        }
+
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Actual()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
                 {
-                    BitOps.Evaluate(n);
+                    if (BitOps.Evaluate(n) == @true)
+                        sum++;
                 }
             }
 
             return sum;
         }
 
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong UnsafeCode()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
                 {
-                    sum += ToByteUnsafe(@true, 1);
-                    sum++;
+                    if (ToBoolUnsafe(n) == @true)
+                        sum++;
                 }
             }
 
             return sum;
         }
 
-        private static bool ToByteUnsafe(int condition)
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        private static bool ToBoolUnsafe(int value)
         {
-            bool val;
+            byte val = (byte)BitOps.FillTrailingOnes(unchecked((uint)value));
+            val &= 1;
+            Debug.Assert(val == 0 || val == 1);
+
+            bool tf;
             unsafe
             {
-                val = *(bool*)&condition;
+                tf = *(bool*)&val;
             }
 
-            return val;
+            return tf;
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong UnsafeAs()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
                 {
-                    sum += ToBoolUnsafeAs(@true, 1);
-                    sum++;
+                    if (ToBoolUnsafeAs(n) == @true)
+                        sum++;
                 }
             }
 
@@ -88,97 +126,31 @@ namespace SourceCode.Clay.Buffers.Bench
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool ToBoolUnsafeAs(byte condition)
+        private static bool ToBoolUnsafeAs(int value)
         {
-            uint val = Unsafe.As<byte, bool>(ref condition);
+            byte val = (byte)BitOps.FillTrailingOnes(unchecked((uint)value));
+            val &= 1;
+            Debug.Assert(val == 0 || val == 1);
 
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+            bool tf = Unsafe.As<byte, bool>(ref val);
+            return tf;
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Union()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
                 {
-                    sum += BoolToByte.Evaluate(@true, 1);
-                    sum++;
-                    sum -= BoolToByte.Evaluate(@false, 1);
-                    sum--;
-
-                    sum += BoolToByte.Evaluate(@true, 4);
-                    sum -= BoolToByte.Evaluate(@false, 3);
-                    sum += BoolToByte.Evaluate(@true, 3, 2);
-                    sum -= 7;
+                    if (BoolToByteBench.BoolToByte.Evaluate(n) == @true)
+                        sum++;
                 }
             }
 
             return sum;
-        }
-
-        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Branch()
-        {
-            var sum = 0ul;
-
-            for (var i = 0; i < _iterations; i++)
-            {
-                for (var n = 0; n <= N; n++)
-                {
-                    sum += ToByteBranch(@true, 1);
-                    sum++;
-                    sum -= ToByteBranch(@false, 1);
-                    sum--;
-
-                    sum += ToByteBranch(@true, 4);
-                    sum -= ToByteBranch(@false, 3);
-                    sum += ToByteBranch(@true, 3, 2);
-                    sum -= 7;
-                }
-            }
-
-            return sum;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool ToByteBranch(byte condition)
-        {
-            var val = condition == 0 ? false : true;
-            return val;
-        }
-
-        [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
-        private struct BoolToByte
-        {
-            [FieldOffset(0)]
-            public bool Bool;
-
-            [FieldOffset(0)]
-            public byte Byte;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private static uint Evaluate(bool condition)
-                => new BoolToByte { Bool = condition }.Byte;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
-            {
-                var val = Evaluate(condition);
-                val = (val * trueValue)
-                    + ((1 - val) * falseValue);
-
-                return (byte)val;
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition, uint trueValue) 
-                => Evaluate(condition) * trueValue;
         }
     }
 }

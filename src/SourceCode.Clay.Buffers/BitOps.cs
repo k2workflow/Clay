@@ -1374,7 +1374,7 @@ namespace System
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint FillTrailingOnes(uint value)
+        internal static uint FillTrailingOnes(uint value)
         {
             uint val = value;
 
@@ -1390,7 +1390,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static ulong FillTrailingOnes(ulong value)
+        internal static ulong FillTrailingOnes(ulong value)
         {
             ulong val = value;
 
