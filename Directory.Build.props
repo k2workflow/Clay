@@ -38,5 +38,8 @@
     <PackageProjectUrl>https://github.com/k2workflow/Clay/</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/k2workflow/Clay/master/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 </Project>
