@@ -1315,6 +1315,60 @@ namespace System
         public static long Evaluate(bool condition, long trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
 
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns False if 0, else returns True.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this uint value)
+        {
+            byte val = (byte)FillTrailingOnes(value);
+            val &= 1; // 1|0
+
+            // Ensure value is 1|0 only, despite any code drift above
+            Debug.Assert(val == 0 || val == 1);
+
+            bool b2b = Unsafe.As<byte, bool>(ref val);
+            return b2b; // 1|0
+        }
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns False if 0, else returns True.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this ulong value)
+        {
+            byte val = (byte)FillTrailingOnes(value);
+            val &= 1; // 1|0
+
+            // Ensure value is 1|0 only, despite any code drift above
+            Debug.Assert(val == 0 || val == 1);
+
+            bool b2b = Unsafe.As<byte, bool>(ref val);
+            return b2b; // 1|0
+        }
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns False if 0, else returns True.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this int value)
+            => Evaluate(unchecked((uint)value));
+
+        /// <summary>
+        /// Converts an integer value to a boolean, without branching.
+        /// Returns False if 0, else returns True.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Evaluate(this long value)
+            => Evaluate(unchecked((ulong)value));
+
         #endregion
 
         #region Helpers
