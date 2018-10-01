@@ -939,15 +939,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
         {
-            uint val = value;
-
-            // byte#                     4         3   2  1
-            //                   1000 0000 0000 0000  00 00
-            val |= val >> 01; // 1100 0000 0000 0000  00 00
-            val |= val >> 02; // 1111 0000 0000 0000  00 00
-            val |= val >> 04; // 1111 1111 0000 0000  00 00
-            val |= val >> 08; // 1111 1111 1111 1111  00 00
-            val |= val >> 16; // 1111 1111 1111 1111  FF FF
+            uint val = FillTrailingOnes(value);
 
             uint ix = (val * deBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
@@ -966,16 +958,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
         {
-            ulong val = value;
-
-            // byte#                     8         7   6  5   4  3   2  1
-            //                   1000 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 01; // 1100 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 02; // 1111 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 04; // 1111 1111 0000 0000  00 00  00 00  00 00
-            val |= val >> 08; // 1111 1111 1111 1111  00 00  00 00  00 00
-            val |= val >> 16; // 1111 1111 1111 1111  FF FF  00 00  00 00
-            val |= val >> 32; // 1111 1111 1111 1111  FF FF  FF FF  FF FF
+            ulong val = FillTrailingOnes(value);
 
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
@@ -1331,6 +1314,43 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Evaluate(bool condition, long trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
+
+        #endregion
+
+        #region Helpers
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint FillTrailingOnes(uint value)
+        {
+            uint val = value;
+
+            // byte#                     4         3   2  1
+            //                   1000 0000 0000 0000  00 00
+            val |= val >> 01; // 1100 0000 0000 0000  00 00
+            val |= val >> 02; // 1111 0000 0000 0000  00 00
+            val |= val >> 04; // 1111 1111 0000 0000  00 00
+            val |= val >> 08; // 1111 1111 1111 1111  00 00
+            val |= val >> 16; // 1111 1111 1111 1111  FF FF
+
+            return val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static ulong FillTrailingOnes(ulong value)
+        {
+            ulong val = value;
+
+            // byte#                     8         7   6  5   4  3   2  1
+            //                   1000 0000 0000 0000  00 00  00 00  00 00
+            val |= val >> 01; // 1100 0000 0000 0000  00 00  00 00  00 00
+            val |= val >> 02; // 1111 0000 0000 0000  00 00  00 00  00 00
+            val |= val >> 04; // 1111 1111 0000 0000  00 00  00 00  00 00
+            val |= val >> 08; // 1111 1111 1111 1111  00 00  00 00  00 00
+            val |= val >> 16; // 1111 1111 1111 1111  FF FF  00 00  00 00
+            val |= val >> 32; // 1111 1111 1111 1111  FF FF  FF FF  FF FF
+
+            return val;
+        }
 
         #endregion
     }

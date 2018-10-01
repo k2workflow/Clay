@@ -207,15 +207,7 @@ namespace System
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            uint val = value;
-
-            //                   1000 0000 0000 0000 0000 0000 0000 0000
-            val |= val >> 01; // 1100 0000 0000 0000 0000 0000 0000 0000
-            val |= val >> 02; // 1111 0000 0000 0000 0000 0000 0000 0000
-            val |= val >> 04; // 1111 1111 0000 0000 0000 0000 0000 0000
-            val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
-            val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
-
+            uint val = FillTrailingOnes(value);
             uint ix = (val * deBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
@@ -290,14 +282,10 @@ namespace System
             // If zero, add 1
             val += Evaluate(value == 0, 1u);
 
-            //         77        0100 1101
-            val--; //  76        0100 1100 (for exact powers of 2)
-            val |= val >> 01; // 0110 1110
-            val |= val >> 02; // 0111 1111
-            val |= val >> 04; // 0111 1111
-            val |= val >> 08; // 0111 1111
-            val |= val >> 16; // 0111 1111
-            val++; // 128        1000 0000 (for exact powers of 2)
+            //         77                   0100 1101
+            val--; //  76                   0100 1100 (for exact powers of 2)
+            val = FillTrailingOnes(val); // 0111 1111
+            val++; // 128                   1000 0000 (for exact powers of 2)
 
             return val;
         }
@@ -317,12 +305,7 @@ namespace System
             val += Evaluate(value == 0, 1ul);
 
             val--;
-            val |= val >> 01;
-            val |= val >> 02;
-            val |= val >> 04;
-            val |= val >> 08;
-            val |= val >> 16;
-            val |= val >> 32;
+            val = FillTrailingOnes(val);
             val++;
 
             return val;
