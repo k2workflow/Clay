@@ -182,10 +182,9 @@ namespace SourceCode.Clay
             val |= val >> 04; // 1111 1111 0000 0000  00 00
             val |= val >> 08; // 1111 1111 1111 1111  00 00
             val |= val >> 16; // 1111 1111 1111 1111  FF FF
+            val &= 1;         // 0000 0000 0000 0000  00 01
 
-            val = val & 1;    // 0000 0000 0000 0000  00 01
-
-            // Ensure the value is 1|0 only
+            // Ensure value is 1|0 only, despite any code drift
             Debug.Assert(val == 0 || val == 1);
 
             var b2b = new BoolToByte { Byte = (byte)val };
@@ -210,10 +209,9 @@ namespace SourceCode.Clay
             val |= val >> 08; // 1111 1111 1111 1111  00 00  00 00  00 00
             val |= val >> 16; // 1111 1111 1111 1111  FF FF  00 00  00 00
             val |= val >> 32; // 1111 1111 1111 1111  FF FF  FF FF  FF FF
+            val &= 1;         // 0000 0000 0000 0000  00 00  00 00  00 01
 
-            val = val & 1;    // 0000 0000 0000 0000  00 00  00 00  00 01
-
-            // Ensure the value is 1|0 only
+            // Ensure value is 1|0 only, despite any code drift
             Debug.Assert(val == 0 || val == 1);
 
             var b2b = new BoolToByte { Byte = (byte)val };
