@@ -43,6 +43,17 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExtractBit(sbyte value, int bitOffset)
+            => unchecked(ExtractBit((byte)value, bitOffset));
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ushort value, int bitOffset)
@@ -52,6 +63,17 @@ namespace System
 
             return (value & mask) != 0;
         }
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExtractBit(short value, int bitOffset)
+            => unchecked(ExtractBit((ushort)value, bitOffset));
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -74,6 +96,17 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExtractBit(int value, int bitOffset)
+            => unchecked(ExtractBit((uint)value, bitOffset));
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..63] is treated as congruent mod 63.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ulong value, int bitOffset)
@@ -82,6 +115,17 @@ namespace System
 
             return (value & mask) != 0;
         }
+
+        /// <summary>
+        /// Reads whether the specified bit in a mask is set.
+        /// Similar in behavior to the x86 instruction BT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to read.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ExtractBit(long value, int bitOffset)
+            => unchecked(ExtractBit((ulong)value, bitOffset));
 
         #endregion
 
@@ -102,11 +146,24 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
         }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte WriteBit(sbyte value, int bitOffset, bool on)
+            => unchecked((sbyte)WriteBit((byte)value, bitOffset, on));
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
@@ -123,11 +180,24 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
         }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short WriteBit(short value, int bitOffset, bool on)
+            => unchecked((short)WriteBit((ushort)value, bitOffset, on));
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
@@ -143,11 +213,24 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
         }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int WriteBit(int value, int bitOffset, bool on)
+            => unchecked((int)WriteBit((uint)value, bitOffset, on));
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
@@ -163,11 +246,24 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1ul);
+            ulong onn = Evaluate(on, 1UL);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
         }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns the new value.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long WriteBit(long value, int bitOffset, bool on)
+            => unchecked((long)WriteBit((ulong)value, bitOffset, on));
 
         #endregion
 
@@ -188,11 +284,35 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= shft;
 
             uint btw = value & mask;
             value = (byte)((value & ~mask) | onn);
+
+            return btw != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref sbyte value, int bitOffset, bool on)
+        {
+            int shft = bitOffset & 7;
+            int mask = 1 << shft;
+
+            int onn = Evaluate(on, 1);
+            onn <<= shft;
+
+            int btw = value & mask;
+            value = (sbyte)((value & ~mask) | onn);
 
             return btw != 0;
         }
@@ -212,11 +332,35 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= shft;
 
             uint btw = value & mask;
             value = (ushort)((value & ~mask) | onn);
+
+            return btw != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref short value, int bitOffset, bool on)
+        {
+            int shft = bitOffset & 15;
+            int mask = 1 << shft;
+
+            int onn = Evaluate(on, 1);
+            onn <<= shft;
+
+            int btw = value & mask;
+            value = (short)((value & ~mask) | onn);
 
             return btw != 0;
         }
@@ -235,10 +379,33 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1u);
+            uint onn = Evaluate(on, 1U);
             onn <<= bitOffset;
 
             uint btw = value & mask;
+            value = (value & ~mask) | onn;
+
+            return btw != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref int value, int bitOffset, bool on)
+        {
+            int mask = 1 << bitOffset;
+
+            int onn = Evaluate(on, 1);
+            onn <<= bitOffset;
+
+            int btw = value & mask;
             value = (value & ~mask) | onn;
 
             return btw != 0;
@@ -258,10 +425,33 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1ul);
+            ulong onn = Evaluate(on, 1UL);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
+            value = (value & ~mask) | onn;
+
+            return btw != 0;
+        }
+
+        /// <summary>
+        /// Writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// Executes without branching.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref long value, int bitOffset, bool on)
+        {
+            long mask = 1L << bitOffset;
+
+            long onn = Evaluate(on, 1L);
+            onn <<= bitOffset;
+
+            long btw = value & mask;
             value = (value & ~mask) | onn;
 
             return btw != 0;
@@ -291,6 +481,16 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte ClearBit(sbyte value, int bitOffset)
+            => unchecked((sbyte)ClearBit((byte)value, bitOffset));
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort ClearBit(ushort value, int bitOffset)
@@ -300,6 +500,16 @@ namespace System
 
             return (ushort)(value & ~mask);
         }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short ClearBit(short value, int bitOffset)
+            => unchecked((short)ClearBit((ushort)value, bitOffset));
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -320,6 +530,16 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ClearBit(int value, int bitOffset)
+            => unchecked((int)ClearBit((uint)value, bitOffset));
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ClearBit(ulong value, int bitOffset)
@@ -328,6 +548,16 @@ namespace System
 
             return value & ~mask;
         }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long ClearBit(long value, int bitOffset)
+            => unchecked((long)ClearBit((ulong)value, bitOffset));
 
         #endregion
 
@@ -358,6 +588,25 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref sbyte value, int bitOffset)
+        {
+            int shft = bitOffset & 7;
+            int mask = 1 << shft;
+
+            int btr = value & mask;
+            value = (sbyte)(value & ~mask);
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref ushort value, int bitOffset)
@@ -367,6 +616,25 @@ namespace System
 
             uint btr = value & mask;
             value = (ushort)(value & ~mask);
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref short value, int bitOffset)
+        {
+            int shft = bitOffset & 15;
+            int mask = 1 << shft;
+
+            int btr = value & mask;
+            value = (short)(value & ~mask);
 
             return btr != 0;
         }
@@ -395,6 +663,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref int value, int bitOffset)
+        {
+            int mask = 1 << bitOffset;
+
+            int btr = value & mask;
+            value = value & ~mask;
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ClearBit(ref ulong value, int bitOffset)
@@ -402,6 +688,24 @@ namespace System
             ulong mask = 1UL << bitOffset;
 
             ulong btr = value & mask;
+            value = value & ~mask;
+
+            return btr != 0;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref long value, int bitOffset)
+        {
+            long mask = 1L << bitOffset;
+
+            long btr = value & mask;
             value = value & ~mask;
 
             return btr != 0;
@@ -431,6 +735,16 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte InsertBit(sbyte value, int bitOffset)
+            => unchecked((sbyte)InsertBit((byte)value, bitOffset));
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort InsertBit(ushort value, int bitOffset)
@@ -440,6 +754,16 @@ namespace System
 
             return (ushort)(value | mask);
         }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short InsertBit(short value, int bitOffset)
+            => unchecked((short)InsertBit((ushort)value, bitOffset));
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -460,6 +784,16 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int InsertBit(int value, int bitOffset)
+            => unchecked((int)InsertBit((uint)value, bitOffset));
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong InsertBit(ulong value, int bitOffset)
@@ -468,6 +802,16 @@ namespace System
 
             return value | mask;
         }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long InsertBit(long value, int bitOffset)
+            => unchecked((long)InsertBit((ulong)value, bitOffset));
 
         #endregion
 
@@ -498,6 +842,25 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsertBit(ref sbyte value, int bitOffset)
+        {
+            int shft = bitOffset & 7;
+            int mask = 1 << shft;
+
+            int bts = value & mask;
+            value = (sbyte)(value | mask);
+
+            return bts != 0;
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref ushort value, int bitOffset)
@@ -507,6 +870,25 @@ namespace System
 
             uint bts = value & mask;
             value = (ushort)(value | mask);
+
+            return bts != 0;
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsertBit(ref short value, int bitOffset)
+        {
+            int shft = bitOffset & 15;
+            int mask = 1 << shft;
+
+            int bts = value & mask;
+            value = (short)(value | mask);
 
             return bts != 0;
         }
@@ -535,6 +917,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsertBit(ref int value, int bitOffset)
+        {
+            int mask = 1 << bitOffset;
+
+            int bts = value & mask;
+            value = value | mask;
+
+            return bts != 0;
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref ulong value, int bitOffset)
@@ -542,6 +942,24 @@ namespace System
             ulong mask = 1UL << bitOffset;
 
             ulong bts = value & mask;
+            value = value | mask;
+
+            return bts != 0;
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsertBit(ref long value, int bitOffset)
+        {
+            long mask = 1L << bitOffset;
+
+            long bts = value & mask;
             value = value | mask;
 
             return bts != 0;
@@ -584,6 +1002,16 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte ComplementBit(sbyte value, int bitOffset)
+            => unchecked((sbyte)ComplementBit((byte)value, bitOffset));
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort ComplementBit(ushort value, int bitOffset)
@@ -594,6 +1022,16 @@ namespace System
             mask = ~(~mask ^ value);
             return (ushort)mask;
         }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short ComplementBit(short value, int bitOffset)
+            => unchecked((short)ComplementBit((ushort)value, bitOffset));
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
@@ -611,6 +1049,16 @@ namespace System
         }
 
         /// <summary>
+        /// Complements the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ComplementBit(int value, int bitOffset)
+            => unchecked((int)ComplementBit((uint)value, bitOffset));
+
+        /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
         /// </summary>
         /// <param name="value">The mask.</param>
@@ -624,6 +1072,16 @@ namespace System
             mask = ~(~mask ^ value);
             return mask;
         }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long ComplementBit(long value, int bitOffset)
+            => unchecked((long)ComplementBit((ulong)value, bitOffset));
 
         #endregion
 
@@ -654,6 +1112,25 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ComplementBit(ref sbyte value, int bitOffset)
+        {
+            int shft = bitOffset & 7;
+            int mask = 1 << shft;
+
+            int btc = value & mask;
+            value = (sbyte)~(~mask ^ value);
+
+            return btc != 0;
+        }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref ushort value, int bitOffset)
@@ -663,6 +1140,25 @@ namespace System
 
             uint btc = value & mask;
             value = (ushort)~(~mask ^ value);
+
+            return btc != 0;
+        }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ComplementBit(ref short value, int bitOffset)
+        {
+            int shft = bitOffset & 15;
+            int mask = 1 << shft;
+
+            int btc = value & mask;
+            value = (short)~(~mask ^ value);
 
             return btc != 0;
         }
@@ -691,6 +1187,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ComplementBit(ref int value, int bitOffset)
+        {
+            int mask = 1 << bitOffset;
+
+            int btc = value & mask;
+            value = ~(~mask ^ value);
+
+            return btc != 0;
+        }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ComplementBit(ref ulong value, int bitOffset)
@@ -698,6 +1212,24 @@ namespace System
             ulong mask = 1UL << bitOffset;
 
             ulong btc = value & mask;
+            value = ~(~mask ^ value);
+
+            return btc != 0;
+        }
+
+        /// <summary>
+        /// Complements the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTC.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to complement.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ComplementBit(ref long value, int bitOffset)
+        {
+            long mask = 1L << bitOffset;
+
+            long btc = value & mask;
             value = ~(~mask ^ value);
 
             return btc != 0;
@@ -731,6 +1263,18 @@ namespace System
         }
 
         /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte RotateLeft(sbyte value, int offset)
+            => unchecked((sbyte)RotateLeft((byte)value, offset));
+
+        /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
@@ -748,6 +1292,18 @@ namespace System
             val = (val >> shft) | (val << (8 - shft));
             return (byte)val;
         }
+
+        /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte RotateRight(sbyte value, int offset)
+            => unchecked((sbyte)RotateRight((byte)value, offset));
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
@@ -769,6 +1325,18 @@ namespace System
         }
 
         /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short RotateLeft(short value, int offset)
+            => unchecked((short)RotateLeft((ushort)value, offset));
+
+        /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
@@ -788,6 +1356,18 @@ namespace System
         }
 
         /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short RotateRight(short value, int offset)
+            => unchecked((short)RotateRight((ushort)value, offset));
+
+        /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
@@ -801,6 +1381,18 @@ namespace System
             uint val = (value << offset) | (value >> (32 - offset));
             return val;
         }
+
+        /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int RotateLeft(int value, int offset)
+            => unchecked((int)RotateLeft((uint)value, offset));
 
         /// <summary>
         /// Rotates the specified value right by the specified number of bits.
@@ -818,6 +1410,18 @@ namespace System
         }
 
         /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int RotateRight(int value, int offset)
+            => unchecked((int)RotateRight((uint)value, offset));
+
+        /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROL.
         /// </summary>
@@ -833,6 +1437,18 @@ namespace System
         }
 
         /// <summary>
+        /// Rotates the specified value left by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROL.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long RotateLeft(long value, int offset)
+            => unchecked((long)RotateLeft((ulong)value, offset));
+
+        /// <summary>
         /// Rotates the specified value right by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROR.
         /// </summary>
@@ -846,6 +1462,18 @@ namespace System
             ulong val = (value >> offset) | (value << (64 - offset));
             return val;
         }
+
+        /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long RotateRight(long value, int offset)
+            => unchecked((long)RotateRight((ulong)value, offset));
 
         #endregion
 
@@ -881,6 +1509,15 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(int value)
+            => unchecked(PopCount((uint)value));
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(ulong value)
         {
             const ulong c0 = 0x_5555_5555_5555_5555;
@@ -898,6 +1535,15 @@ namespace System
 
             return (int)val;
         }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(long value)
+            => unchecked(PopCount((ulong)value));
 
         #endregion
 
@@ -928,8 +1574,26 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(sbyte value)
+            => LeadingZeros((int)value) - 24; // Delegate to intrinsic
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ushort value)
             => LeadingZeros((uint)value) - 16; // Delegate to intrinsic
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(short value)
+            => LeadingZeros((int)value) - 16; // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -956,6 +1620,15 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(int value)
+            => unchecked(LeadingZeros((uint)value));
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
         {
             ulong val = FillTrailingOnes(value);
@@ -973,8 +1646,8 @@ namespace System
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += Evaluate((value >> 32) == 0, 1u);
-            b += Evaluate(value == 0, 1u);
+            h += Evaluate((value >> 32) == 0, 1U);
+            b += Evaluate(value == 0, 1U);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -986,6 +1659,15 @@ namespace System
             b = Evaluate(h == 32, b); // Only add b if h==32
             return (int)(h + b);
         }
+
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeros(long value)
+            => unchecked(LeadingZeros((ulong)value));
 
         #endregion
 
@@ -1004,8 +1686,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingOnes(sbyte value)
+            => LeadingZeros((sbyte)~value);
+
+        /// <summary>
+        /// Count the number of leading one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ushort value)
             => LeadingZeros((ushort)~value);
+
+        /// <summary>
+        /// Count the number of leading one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingOnes(short value)
+            => LeadingZeros((short)~value);
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1020,7 +1718,23 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingOnes(int value)
+            => LeadingZeros(~value);
+
+        /// <summary>
+        /// Count the number of leading one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(ulong value)
+            => LeadingZeros(~value);
+
+        /// <summary>
+        /// Count the number of leading one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingOnes(long value)
             => LeadingZeros(~value);
 
         #endregion
@@ -1042,8 +1756,26 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingZeros(sbyte value)
+            => unchecked(TrailingOnes((byte)value));
+
+        /// <summary>
+        /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
             => Math.Min(16, TrailingZeros((uint)value)); // Delegate to intrinsic
+
+        /// <summary>
+        /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingZeros(short value)
+            => unchecked(TrailingOnes((ushort)value));
 
         // Build this table by taking n = 0,1,2,4,...
         // [2^n % 37] = tz(n) manually counted
@@ -1059,7 +1791,7 @@ namespace System
             02, //              4  [ 4]       0000_0000_0000_0000_0000_0000_0000_0100   2
             23,
             27,
-            32, //  4,294,967,296  [ 7]  0001_0000_0000_0000_0000_0000_0000_0000_0000  32 (n/a) 1ul << 32
+            32, //  4,294,967,296  [ 7]  0001_0000_0000_0000_0000_0000_0000_0000_0000  32 (n/a) 1UL << 32
 
             03, //              8  [ 8]       0000_0000_0000_0000_0000_0000_0000_1000   3
             16,
@@ -1068,13 +1800,13 @@ namespace System
 
             28,
             11, //           2048  [13]       0000_0000_0000_0000_0000_1000_0000_0000  11
-            33, //  8,589,934,592  [14]  0010_0000_0000_0000_0000_0000_0000_0000_0000  33 (n/a) 1ul << 33
+            33, //  8,589,934,592  [14]  0010_0000_0000_0000_0000_0000_0000_0000_0000  33 (n/a) 1UL << 33
             13,
 
             04, //             16  [16]       0000_0000_0000_0000_0000_0000_0001_0000   4
             07, //            128  [17]       0000_0000_0000_0000_0000_0000_1000_0000   7
             17,
-            35, // 34,359,738,368  [19]  1000_0000_0000_0000_0000_0000_0000_0000_0000  35 (n/a) 1ul << 35
+            35, // 34,359,738,368  [19]  1000_0000_0000_0000_0000_0000_0000_0000_0000  35 (n/a) 1UL << 35
 
             25,
             22,
@@ -1086,7 +1818,7 @@ namespace System
             12, //           4096  [26]       0000_0000_0000_0000_0001_0000_0000_0000  12
             06, //             64  [27]       0000_0000_0000_0000_0000_0000_0100_0000   6
 
-            34, // 17,179,869,184  [28]  0100_0000_0000_0000_0000_0000_0000_0000_0000  34 (n/a) 1ul << 34
+            34, // 17,179,869,184  [28]  0100_0000_0000_0000_0000_0000_0000_0000_0000  34 (n/a) 1UL << 34
             21,
             14,
             09, //            512  [31]       0000_0000_0000_0000_0000_0010_0000_0000   9
@@ -1135,6 +1867,15 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingZeros(int value)
+            => unchecked(TrailingOnes((uint)value));
+
+        /// <summary>
+        /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ulong value)
         {
             // Instead of using a 64-bit lookup table,
@@ -1163,6 +1904,15 @@ namespace System
             return (int)(b + h);
         }
 
+        /// <summary>
+        /// Count the number of trailing zero bits in a mask.
+        /// Similar in behavior to the x86 instruction TZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingZeros(long value)
+            => unchecked(TrailingOnes((ulong)value));
+
         #endregion
 
         #region TrailingOnes
@@ -1180,8 +1930,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(sbyte value)
+            => unchecked(TrailingOnes((byte)value));
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ushort value)
             => TrailingZeros((ushort)~value);
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(short value)
+            => unchecked(TrailingOnes((ushort)value));
 
         /// <summary>
         /// Count the number of trailing one bits in a mask.
@@ -1196,8 +1962,24 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(int value)
+            => unchecked(TrailingOnes((uint)value));
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(ulong value) 
             => TrailingZeros(~value);
+
+        /// <summary>
+        /// Count the number of trailing one bits in a mask.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int TrailingOnes(long value)
+            => unchecked(TrailingOnes((ulong)value));
 
         #endregion
 
@@ -1358,7 +2140,7 @@ namespace System
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Evaluate(this int value)
-            => Evaluate(unchecked((uint)value));
+            => unchecked(Evaluate((uint)value));
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
@@ -1367,7 +2149,7 @@ namespace System
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Evaluate(this long value)
-            => Evaluate(unchecked((ulong)value));
+            => unchecked(Evaluate((ulong)value));
 
         #endregion
 

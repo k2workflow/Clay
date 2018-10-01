@@ -280,7 +280,7 @@ namespace System
             uint val = value;
 
             // If zero, add 1
-            val += Evaluate(value == 0, 1u);
+            val += Evaluate(value == 0, 1U);
 
             //         77                   0100 1101
             val--; //  76                   0100 1100 (for exact powers of 2)
@@ -302,7 +302,7 @@ namespace System
             ulong val = value;
 
             // If zero, add 1
-            val += Evaluate(value == 0, 1ul);
+            val += Evaluate(value == 0, 1UL);
 
             val--;
             val = FillTrailingOnes(val);
