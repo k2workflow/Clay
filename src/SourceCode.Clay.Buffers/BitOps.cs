@@ -947,7 +947,7 @@ namespace System
             val |= val >> 02; // 1111 0000 0000 0000  00 00
             val |= val >> 04; // 1111 1111 0000 0000  00 00
             val |= val >> 08; // 1111 1111 1111 1111  00 00
-            val |= val >> 16; // 1111 1111 1111 1111  11 11
+            val |= val >> 16; // 1111 1111 1111 1111  FF FF
 
             uint ix = (val * deBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
