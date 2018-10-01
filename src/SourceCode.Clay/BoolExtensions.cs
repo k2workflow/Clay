@@ -184,7 +184,7 @@ namespace SourceCode.Clay
             val |= val >> 16; // 1111 1111 1111 1111  FF FF
             val &= 1;         // 0000 0000 0000 0000  00 01
 
-            // Ensure value is 1|0 only, despite any code drift
+            // Ensure value is 1|0 only, despite any code drift above
             Debug.Assert(val == 0 || val == 1);
 
             var b2b = new BoolToByte { Byte = (byte)val };
@@ -211,7 +211,7 @@ namespace SourceCode.Clay
             val |= val >> 32; // 1111 1111 1111 1111  FF FF  FF FF  FF FF
             val &= 1;         // 0000 0000 0000 0000  00 00  00 00  00 01
 
-            // Ensure value is 1|0 only, despite any code drift
+            // Ensure value is 1|0 only, despite any code drift above
             Debug.Assert(val == 0 || val == 1);
 
             var b2b = new BoolToByte { Byte = (byte)val };
