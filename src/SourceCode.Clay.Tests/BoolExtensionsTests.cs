@@ -11,8 +11,11 @@ namespace SourceCode.Clay.Tests
 {
     public static class BoolExtensionsTests
     {
-        private static readonly bool @true = true;
-        private static readonly bool @false = false;
+#pragma warning disable IDE0044 // Add readonly modifier
+        // Prevent folding by using non-readonly non-constant
+        private static bool @true = true;
+        private static bool @false = false;
+#pragma warning restore IDE0044 // Add readonly modifier
 
         [Fact(DisplayName = nameof(BoolToByte))]
         public static void BoolToByte()

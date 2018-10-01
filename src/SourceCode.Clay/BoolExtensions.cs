@@ -231,7 +231,7 @@ namespace SourceCode.Clay
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
-        private struct BoolToByte
+        private ref struct BoolToByte
         {
             [FieldOffset(0)]
             public bool Bool;
