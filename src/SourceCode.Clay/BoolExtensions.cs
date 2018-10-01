@@ -220,7 +220,14 @@ namespace SourceCode.Clay
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte EvaluateImpl(this bool condition)
-            => new BoolToByte { Bool = condition }.Byte; // 1|0
+        {
+            var val = new BoolToByte { Bool = condition }.Byte;
+
+            // Ensure the value is 1|0 only, despite any code drift above
+            Debug.Assert(val == 0 || val == 1);
+
+            return val; // 1|0
+        }
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
         private ref struct BoolToByte

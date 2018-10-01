@@ -1247,7 +1247,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Evaluate(bool condition, uint trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
+            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to a uint value, without branching.
@@ -1257,7 +1257,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Evaluate(bool condition, int trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
+            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value, without branching.
@@ -1303,7 +1303,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Evaluate(bool condition, ulong trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
+            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value, without branching.
@@ -1313,7 +1313,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Evaluate(bool condition, long trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // 1|0
+            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
@@ -1330,7 +1330,7 @@ namespace System
             Debug.Assert(val == 0 || val == 1);
 
             bool b2b = Unsafe.As<byte, bool>(ref val);
-            return b2b; // 1|0
+            return b2b;
         }
 
         /// <summary>
@@ -1348,7 +1348,7 @@ namespace System
             Debug.Assert(val == 0 || val == 1);
 
             bool b2b = Unsafe.As<byte, bool>(ref val);
-            return b2b; // 1|0
+            return b2b;
         }
 
         /// <summary>
