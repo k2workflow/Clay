@@ -13,17 +13,10 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev | Scaled | ScaledSD |
-    ----------- |---------:|----------:|----------:|-------:|---------:|
-         Actual | 2.432 ns | 0.0150 ns | 0.0140 ns |   0.70 |     0.01 | x
-     UnsafeCode | 3.502 ns | 0.0504 ns | 0.0471 ns |   1.01 |     0.02 |
-       UnsafeAs | 2.453 ns | 0.0173 ns | 0.0153 ns |   0.71 |     0.01 | x
-          Union | 2.925 ns | 0.0577 ns | 0.0881 ns |   0.84 |     0.03 | ~
-         Branch | 3.466 ns | 0.0564 ns | 0.0528 ns |   1.00 |     0.00 |
      */
 
     //[MemoryDiagnoser]
-    public class BoolBench
+    public class ByteToBoolBench
     {
         private const uint _iterations = 1000;
         private const uint N = ushort.MaxValue;
@@ -43,22 +36,13 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += BitOps.Evaluate(@true, 1ul);
-                    sum++;
-                    sum -= BitOps.Evaluate(@false, 1ul);
-                    sum--;
-
-                    sum += BitOps.Evaluate(@true, 4ul);
-                    sum -= BitOps.Evaluate(@false, 3ul);
-                    sum += BitOps.Evaluate(@true, 3ul, 2ul);
-                    sum -= 7;
+                    BitOps.Evaluate(n);
                 }
             }
 
             return sum;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong UnsafeCode()
         {
             var sum = 0ul;
@@ -69,32 +53,21 @@ namespace SourceCode.Clay.Buffers.Bench
                 {
                     sum += ToByteUnsafe(@true, 1);
                     sum++;
-                    sum -= ToByteUnsafe(@false, 0);
-                    sum--;
-
-                    sum += ToByteUnsafe(@true, 4);
-                    sum -= ToByteUnsafe(@false, 3);
-                    sum += ToByteUnsafe(@true, 3, 2);
-                    sum -= 7;
                 }
             }
 
             return sum;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafe(bool condition, byte trueValue, byte falseValue = 0)
+        private static bool ToByteUnsafe(int condition)
         {
-            uint val;
+            bool val;
             unsafe
             {
-                val = *(byte*)&condition;
+                val = *(bool*)&condition;
             }
 
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+            return val;
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
@@ -106,15 +79,8 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += ToByteUnsafeAs(@true, 1);
+                    sum += ToBoolUnsafeAs(@true, 1);
                     sum++;
-                    sum -= ToByteUnsafeAs(@false, 1);
-                    sum--;
-
-                    sum += ToByteUnsafeAs(@true, 4);
-                    sum -= ToByteUnsafeAs(@false, 3);
-                    sum += ToByteUnsafeAs(@true, 3, 2);
-                    sum -= 7;
                 }
             }
 
@@ -122,9 +88,9 @@ namespace SourceCode.Clay.Buffers.Bench
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAs(bool condition, byte trueValue, byte falseValue = 0)
+        private static bool ToBoolUnsafeAs(byte condition)
         {
-            uint val = Unsafe.As<bool, byte>(ref condition);
+            uint val = Unsafe.As<byte, bool>(ref condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -181,14 +147,10 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteBranch(bool condition, byte trueValue, byte falseValue = 0)
+        private static bool ToByteBranch(byte condition)
         {
-            var val = condition ? 1u : 0u;
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+            var val = condition == 0 ? false : true;
+            return val;
         }
 
         [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
@@ -198,7 +160,7 @@ namespace SourceCode.Clay.Buffers.Bench
             public bool Bool;
 
             [FieldOffset(0)]
-            public readonly byte Byte;
+            public byte Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static uint Evaluate(bool condition)
