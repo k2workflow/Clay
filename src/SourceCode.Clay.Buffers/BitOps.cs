@@ -1843,7 +1843,7 @@ namespace System
             // Only possible values are therefore [0,1,2,4,...]
             long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
-            // We want to map [0,1,2,3,...] to the smallest contiguous range, ideally [0..33] since 33 is the range cardinality.
+            // We want to map [0,1,2,4,...] to the smallest contiguous range, ideally [0..33] since 33 is the range cardinality.
             // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the closest prime greater than 33.
             lsb %= 37; // mod 37
 
