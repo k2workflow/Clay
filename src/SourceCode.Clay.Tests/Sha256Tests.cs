@@ -791,7 +791,7 @@ namespace SourceCode.Clay.Tests
         {
             const string whitespace = " \n  \t \r ";
 
-            var expected = Sha256.Hash("abc"); // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
+            var expected = Sha256.Hash("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
             string str = expected.ToString();
 
             // Leading whitespace
