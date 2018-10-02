@@ -86,13 +86,15 @@ namespace SourceCode.Clay
 
                 sha[i] = (byte)((h1 << 4) | h2);
 
+                // TODO: This will not prevent long chains of delimiters
                 if (pos < hexLength && (slice[pos] == '-' || slice[pos] == ' '))
                     pos++;
             }
 
             // Skip trailing whitespace
-            while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
-                pos++;
+            // TODO: This will permit infix whitespace
+            //while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
+            //    pos++;
 
             // If the string is not fully consumed, it had an invalid length
             if (pos != slice.Length)

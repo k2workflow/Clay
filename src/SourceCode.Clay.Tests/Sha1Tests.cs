@@ -716,6 +716,7 @@ namespace SourceCode.Clay.Tests
             {
                 Assert.Throws<FormatException>(() => Sha1.Parse(" "));
                 Assert.Throws<FormatException>(() => Sha1.Parse("\t"));
+                Assert.Throws<FormatException>(() => Sha1.Parse(expected_N + " "));
             }
 
             // "0x"
@@ -793,16 +794,16 @@ namespace SourceCode.Clay.Tests
             string str = expected.ToString();
 
             // Leading whitespace
-            var actual = Sha1.Parse(str + whitespace);
+            var actual = Sha1.Parse(whitespace + str);
             Assert.Equal(expected, actual);
 
             // Trailing whitespace
-            actual = Sha1.Parse(whitespace + str);
-            Assert.Equal(expected, actual);
+            //actual = Sha1.Parse(str + whitespace);
+            //Assert.Equal(expected, actual);
 
             // Both
-            actual = Sha1.Parse(whitespace + str + whitespace);
-            Assert.Equal(expected, actual);
+            //actual = Sha1.Parse(whitespace + str + whitespace);
+            //Assert.Equal(expected, actual);
 
             // Fail
             Assert.False(Sha1.TryParse("1" + str, out _));
