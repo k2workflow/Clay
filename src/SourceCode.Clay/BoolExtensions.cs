@@ -175,14 +175,15 @@ namespace SourceCode.Clay
         {
             uint val = value;
 
-            // byte#                     4         3   2  1
-            //                   1000 0000 0000 0000  00 00
-            val |= val >> 01; // 1100 0000 0000 0000  00 00
-            val |= val >> 02; // 1111 0000 0000 0000  00 00
-            val |= val >> 04; // 1111 1111 0000 0000  00 00
-            val |= val >> 08; // 1111 1111 1111 1111  00 00
-            val |= val >> 16; // 1111 1111 1111 1111  FF FF
-            val &= 1;         // 0000 0000 0000 0000  00 01
+            // byte#                     4          3   2  1
+            //                   1000 0000  0000 0000  00 00
+            val |= val >> 01; // 1100 0000  0000 0000  00 00
+            val |= val >> 02; // 1111 0000  0000 0000  00 00
+            val |= val >> 04; // 1111 1111  0000 0000  00 00
+            val |= val >> 08; // 1111 1111  1111 1111  00 00
+            val |= val >> 16; // 1111 1111  1111 1111  FF FF
+
+            val &= 1;         // 0000 0000  0000 0000  00 01
 
             // Ensure value is 1|0 only, despite any code drift above
             Debug.Assert(val == 0 || val == 1);
@@ -191,25 +192,21 @@ namespace SourceCode.Clay
             return b2b.Bool; // 1|0
         }
 
-        /// <summary>
-        /// Converts an integer value to a boolean, without branching.
-        /// Returns True if 1, else returns False.
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool EvaluateImpl(ulong value)
         {
             ulong val = value;
 
-            // byte#                     8         7   6  5   4  3   2  1
-            //                   1000 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 01; // 1100 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 02; // 1111 0000 0000 0000  00 00  00 00  00 00
-            val |= val >> 04; // 1111 1111 0000 0000  00 00  00 00  00 00
-            val |= val >> 08; // 1111 1111 1111 1111  00 00  00 00  00 00
-            val |= val >> 16; // 1111 1111 1111 1111  FF FF  00 00  00 00
-            val |= val >> 32; // 1111 1111 1111 1111  FF FF  FF FF  FF FF
-            val &= 1;         // 0000 0000 0000 0000  00 00  00 00  00 01
+            // byte#                     8          7   6  5   4  3   2  1
+            //                   1000 0000  0000 0000  00 00  00 00  00 00
+            val |= val >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
+            val |= val >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
+            val |= val >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
+            val |= val >> 08; // 1111 1111  1111 1111  00 00  00 00  00 00
+            val |= val >> 16; // 1111 1111  1111 1111  FF FF  00 00  00 00
+            val |= val >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
+
+            val &= 1;         // 0000 0000  0000 0000  00 00  00 00  00 01
 
             // Ensure value is 1|0 only, despite any code drift above
             Debug.Assert(val == 0 || val == 1);
