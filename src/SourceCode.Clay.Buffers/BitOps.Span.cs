@@ -160,7 +160,7 @@ namespace System
 
             ref byte val = ref span[ix];
 
-            bool btr =  ClearBit(ref val, bitOffset);
+            bool btr = ClearBit(ref val, bitOffset);
             return btr;
         }
 
