@@ -63,9 +63,6 @@ namespace SourceCode.Clay.Buffers.Bench
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.
             lsb = lsb % 11; // mod 11
 
-            // TODO: For such a small range, would a switch be faster?
-            // Alternative:
-
             // Build this table by taking n = 0,1,2,4,...,512
             // [2^n % 11] = tz(n) manually counted
             byte cnt;
