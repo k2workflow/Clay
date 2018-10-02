@@ -829,7 +829,7 @@ namespace System
         {
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
-            
+
             uint bts = value & mask;
             value = (byte)(value | mask);
 
@@ -1041,7 +1041,7 @@ namespace System
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ComplementBit(uint value, int bitOffset)
-        {            
+        {
             uint mask = 1U << bitOffset;
 
             mask = ~(~mask ^ value);
@@ -1256,7 +1256,7 @@ namespace System
         {
             int shft = offset & 7;
             uint val = value;
-            
+
             // Will NOT compile to instrinsics
             val = (val << shft) | (val >> (8 - shft));
             return (byte)val;
@@ -1741,6 +1741,28 @@ namespace System
 
         #region TrailingZeros
 
+        static BitOps()
+        {
+            // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
+            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
+            const int p = 37;
+
+            long n = 1;
+            for (byte i = 1; i < p; i++)
+            {
+                int m = (int)(n % p); // Hash
+                byte z = (byte)(i - 1); // Trailing zeros
+
+                s_trail32u[m] = z;
+
+                n <<= 1; // mul 2
+            }
+
+            s_trail32u[0] = 32; // Loop excludes [0]
+        }
+
+        private static readonly byte[] s_trail32u = new byte[37];
+
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
         /// Similar in behavior to the x86 instruction TZCNT.
@@ -1777,61 +1799,6 @@ namespace System
         public static int TrailingZeros(short value)
             => unchecked(TrailingZeros((ushort)value));
 
-        // Build this table by taking n = 0,1,2,4,...
-        // [2^n % 37] = tz(2^n) manually counted
-        // 37 is the closest prime greater than the range's cardinality of 33.
-        private static readonly byte[] s_trail32u = new byte[37] // mod 37
-        {
-            //                       n
-            //                2^n  % 37       b=bin(2^n)                               z=tz(b)
-            32, //              0  [ 0]       0000_0000_0000_0000_0000_0000_0000_0000  32
-            00, //              1  [ 1]       0000_0000_0000_0000_0000_0000_0000_0001   0
-            01, //              2  [ 2]       0000_0000_0000_0000_0000_0000_0000_0010   1
-            26,
-
-            02, //              4  [ 4]       0000_0000_0000_0000_0000_0000_0000_0100   2
-            23,
-            27,
-            32, //  4,294,967,296  [ 7]  0001_0000_0000_0000_0000_0000_0000_0000_0000  32 (n/a) 1UL << 32
-
-            03, //              8  [ 8]       0000_0000_0000_0000_0000_0000_0000_1000   3
-            16, //          65536  [ 9]       0000_0000_0000_0001_0000_0000_0000_0000  16
-            24,
-            30,
-
-            28,
-            11, //           2048  [13]       0000_0000_0000_0000_0000_1000_0000_0000  11
-            33, //  8,589,934,592  [14]  0010_0000_0000_0000_0000_0000_0000_0000_0000  33 (n/a) 1UL << 33
-            13,
-
-            04, //             16  [16]       0000_0000_0000_0000_0000_0000_0001_0000   4
-            07, //            128  [17]       0000_0000_0000_0000_0000_0000_1000_0000   7
-            17,
-            35, // 34,359,738,368  [19]  1000_0000_0000_0000_0000_0000_0000_0000_0000  35 (n/a) 1UL << 35
-
-            25,
-            22,
-            31,
-            15, //           8192  [15]       0000_0000_0000_0000_0010_0000_0000_0000  13
-
-            29,
-            10, //           1024  [25]       0000_0000_0000_0000_0000_0100_0000_0000  10
-            12, //           4096  [26]       0000_0000_0000_0000_0001_0000_0000_0000  12
-            06, //             64  [27]       0000_0000_0000_0000_0000_0000_0100_0000   6
-
-            34, // 17,179,869,184  [28]  0100_0000_0000_0000_0000_0000_0000_0000_0000  34 (n/a) 1UL << 34
-            21,
-            14,
-            09, //            512  [31]       0000_0000_0000_0000_0000_0010_0000_0000   9
-
-            05, //             32  [32]       0000_0000_0000_0000_0000_0000_0010_0000   5
-            20,
-            08, //            256  [34]       0000_0000_0000_0000_0000_0001_0000_0000   8
-            19,
-
-            18  //        262,144  [36]       0000_0000_0000_0100_0000_0000_0000_0000  18
-        };
-
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
         /// Similar in behavior to the x86 instruction TZCNT.
@@ -1844,8 +1811,6 @@ namespace System
             // Only possible values are therefore [0,1,2,4,...]
             long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
-            // We want to map [0,1,2,4,...] to the smallest contiguous range, ideally [0..33] since 33 is the range cardinality.
-            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the closest prime greater than 33.
             lsb %= 37; // mod 37
 
             // Benchmark: Lookup is 2x faster than Switch
@@ -1854,7 +1819,7 @@ namespace System
             // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
             // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
 
-            byte cnt = s_trail32u[lsb]; // eg 44 -> 4 -> 2 (44==0010 1100 has 2 trailing zeros)
+            byte cnt = s_trail32u[lsb]; // eg 44 -> 2 (44==0010 1100 has 2 trailing zeros)
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
             Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
