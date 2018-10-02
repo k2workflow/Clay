@@ -716,7 +716,6 @@ namespace SourceCode.Clay.Tests
             {
                 Assert.Throws<FormatException>(() => Sha1.Parse(" "));
                 Assert.Throws<FormatException>(() => Sha1.Parse("\t"));
-                Assert.Throws<FormatException>(() => Sha1.Parse(" " + expected_N));
             }
 
             // "0x"
@@ -785,19 +784,33 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_parse_sha1_trailing_whitespace))]
-        public static void When_parse_sha1_trailing_whitespace()
+        [Fact(DisplayName = nameof(When_parse_sha1_whitespace))]
+        public static void When_parse_sha1_whitespace()
         {
+            const string whitespace = " \n  \t \r ";
+
             var expected = Sha1.Hash("abc"); // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
-
             string str = expected.ToString();
-            str += " \n  \t \r ";
-            var actual = Sha1.Parse(str);
 
+            // Leading whitespace
+            var actual = Sha1.Parse(str + whitespace);
             Assert.Equal(expected, actual);
 
-            str += "1";
-            Assert.False(Sha1.TryParse(str, out _));
+            // Trailing whitespace
+            actual = Sha1.Parse(whitespace + str);
+            Assert.Equal(expected, actual);
+
+            // Both
+            actual = Sha1.Parse(whitespace + str + whitespace);
+            Assert.Equal(expected, actual);
+
+            // Fail
+            Assert.False(Sha1.TryParse("1" + str, out _));
+            Assert.False(Sha1.TryParse(str + "1", out _));
+            Assert.False(Sha1.TryParse("1" + whitespace + str, out _));
+            Assert.False(Sha1.TryParse(str + whitespace + "1", out _));
+            Assert.False(Sha1.TryParse("1" + whitespace + str + whitespace, out _));
+            Assert.False(Sha1.TryParse(whitespace + str + whitespace + "1", out _));
         }
     }
 }

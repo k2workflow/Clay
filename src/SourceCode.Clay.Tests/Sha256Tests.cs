@@ -717,7 +717,6 @@ namespace SourceCode.Clay.Tests
             {
                 Assert.Throws<FormatException>(() => Sha256.Parse(" "));
                 Assert.Throws<FormatException>(() => Sha256.Parse("\t"));
-                Assert.Throws<FormatException>(() => Sha256.Parse(" " + expected_N));
             }
 
             // "0x"
@@ -786,19 +785,33 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_parse_sha256_trailing_whitespace))]
-        public static void When_parse_sha256_trailing_whitespace()
+        [Fact(DisplayName = nameof(When_parse_sha256_whitespace))]
+        public static void When_parse_sha256_whitespace()
         {
+            const string whitespace = " \n  \t \r ";
+
             var expected = Sha256.Hash("abc"); // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
-
             string str = expected.ToString();
-            str += " \n  \t \r ";
-            var actual = Sha256.Parse(str);
 
+            // Leading whitespace
+            var actual = Sha256.Parse(str + whitespace);
             Assert.Equal(expected, actual);
 
-            str += "1";
-            Assert.False(Sha256.TryParse(str, out _));
+            // Trailing whitespace
+            actual = Sha256.Parse(whitespace + str);
+            Assert.Equal(expected, actual);
+
+            // Both
+            actual = Sha256.Parse(whitespace + str + whitespace);
+            Assert.Equal(expected, actual);
+
+            // Fail
+            Assert.False(Sha256.TryParse("1" + str, out _));
+            Assert.False(Sha256.TryParse(str + "1", out _));
+            Assert.False(Sha256.TryParse("1" + whitespace + str, out _));
+            Assert.False(Sha256.TryParse(str + whitespace + "1", out _));
+            Assert.False(Sha256.TryParse("1" + whitespace + str + whitespace, out _));
+            Assert.False(Sha256.TryParse(whitespace + str + whitespace + "1", out _));
         }
     }
 }

@@ -56,8 +56,13 @@ namespace SourceCode.Clay
             if (hex.Length < hexLength)
                 return false;
 
+            // Skip leading whitespace
+            int pos = 0;
+            while (pos < hex.Length && char.IsWhiteSpace(hex[pos]))
+                pos++;
+
             // Check if the hex specifier '0x' is present
-            ReadOnlySpan<char> slice = hex;
+            ReadOnlySpan<char> slice = hex.Slice(pos);
             if (slice[0] == '0' && (slice[1] == 'x' || slice[1] == 'X'))
             {
                 // Length must be at least 40+2|64+2
@@ -71,7 +76,7 @@ namespace SourceCode.Clay
             // Text is treated as 5|8 groups of 8 chars (4 bytes); 4|7 separators optional
             // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
             // "cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0"
-            int pos = 0;
+            pos = 0;
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // We read 4x2 chars at a time, 2 hexits per byte: aaaa bbbb
@@ -85,7 +90,7 @@ namespace SourceCode.Clay
                     pos++;
             }
 
-            // TODO: Is this correct: do we not already permit longer strings to be passed in?
+            // Skip trailing whitespace
             while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
                 pos++;
 
