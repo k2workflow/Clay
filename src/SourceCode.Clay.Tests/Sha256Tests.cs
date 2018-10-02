@@ -717,7 +717,6 @@ namespace SourceCode.Clay.Tests
             {
                 Assert.Throws<FormatException>(() => Sha256.Parse(" "));
                 Assert.Throws<FormatException>(() => Sha256.Parse("\t"));
-                Assert.Throws<FormatException>(() => Sha256.Parse(expected_N + " "));
             }
 
             // "0x"
@@ -799,12 +798,12 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
 
             // Trailing whitespace
-            //actual = Sha256.Parse(str + whitespace);
-            //Assert.Equal(expected, actual);
+            actual = Sha256.Parse(str + whitespace);
+            Assert.Equal(expected, actual);
 
             // Both
-            //actual = Sha256.Parse(whitespace + str + whitespace);
-            //Assert.Equal(expected, actual);
+            actual = Sha256.Parse(whitespace + str + whitespace);
+            Assert.Equal(expected, actual);
 
             // Fail
             Assert.False(Sha256.TryParse("1" + str, out _));
