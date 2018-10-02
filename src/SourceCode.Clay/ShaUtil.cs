@@ -32,7 +32,7 @@ namespace SourceCode.Clay
             if (c < '0' || c > 'f')
                 return false;
 
-            var bex = s_hexits[c - '0'];
+            byte bex = s_hexits[c - '0'];
             if (bex == __) // Sentinel value for n/a (128)
                 return false;
 
@@ -48,11 +48,11 @@ namespace SourceCode.Clay
         /// <returns></returns>
         internal static bool TryParse(in ReadOnlySpan<char> hex, in Span<byte> sha)
         {
-            var byteLength = sha.Length;
+            int byteLength = sha.Length;
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
-            var hexLength = byteLength * 2; // 40|64
+            int hexLength = byteLength * 2; // 40|64
             if (hex.Length < hexLength)
                 return false;
 
@@ -71,12 +71,12 @@ namespace SourceCode.Clay
             // Text is treated as 5|8 groups of 8 chars (4 bytes); 4|7 separators optional
             // "34aa973c-d4c4daa4-f61eeb2b-dbad2731-6534016f"
             // "cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0"
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
+            int pos = 0;
+            for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // We read 4x2 chars at a time, 2 hexits per byte: aaaa bbbb
-                if (!TryParseHexit(slice[pos++], out var h1)
-                    || !TryParseHexit(slice[pos++], out var h2))
+                if (!TryParseHexit(slice[pos++], out byte h1)
+                    || !TryParseHexit(slice[pos++], out byte h2))
                     return false;
 
                 sha[i] = (byte)((h1 << 4) | h2);
@@ -86,6 +86,8 @@ namespace SourceCode.Clay
             }
 
             // TODO: Is this correct: do we not already permit longer strings to be passed in?
+            while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
+                pos++;
 
             // If the string is not fully consumed, it had an invalid length
             if (pos != slice.Length)
@@ -102,37 +104,37 @@ namespace SourceCode.Clay
         /// <returns></returns>
         internal static KeyValuePair<string, string> Split(in ReadOnlySpan<byte> sha, int prefixLength)
         {
-            var byteLength = sha.Length; // 20|32
+            int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
-            var hexLength = byteLength * 2;
+            int hexLength = byteLength * 2;
 
             Span<char> span = stackalloc char[hexLength];
 
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
+            int pos = 0;
+            for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
-                var byt = sha[i];
+                byte byt = sha[i];
                 span[pos++] = HexChars[byt >> 4]; // == b / 16
                 span[pos++] = HexChars[byt & 15]; // == b % 16
             }
 
             if (prefixLength >= hexLength)
             {
-                var pfx = new string(span);
+                string pfx = new string(span);
                 return new KeyValuePair<string, string>(pfx, string.Empty);
             }
 
             if (prefixLength <= 0)
             {
-                var ext = new string(span);
+                string ext = new string(span);
                 return new KeyValuePair<string, string>(string.Empty, ext);
             }
 
-            var prefix = new string(span.Slice(0, prefixLength));
-            var extra = new string(span.Slice(prefixLength, hexLength - prefixLength));
+            string prefix = new string(span.Slice(0, prefixLength));
+            string extra = new string(span.Slice(prefixLength, hexLength - prefixLength));
 
             var kvp = new KeyValuePair<string, string>(prefix, extra);
             return kvp;
@@ -144,23 +146,23 @@ namespace SourceCode.Clay
         /// <returns></returns>
         internal static string ToString(in ReadOnlySpan<byte> sha)
         {
-            var byteLength = sha.Length; // 20|32
+            int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
-            var hexLength = byteLength * 2; // 40|64
+            int hexLength = byteLength * 2; // 40|64
             Span<char> span = stackalloc char[hexLength];
 
-            var pos = 0;
-            for (var i = 0; i < byteLength; i++) // 20|32
+            int pos = 0;
+            for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
-                var byt = sha[i];
+                byte byt = sha[i];
                 span[pos++] = HexChars[byt >> 4]; // == b / 16
                 span[pos++] = HexChars[byt & 15]; // == b % 16
             }
 
-            var str = new string(span);
+            string str = new string(span);
             return str;
         }
 
@@ -177,20 +179,20 @@ namespace SourceCode.Clay
         {
             Debug.Assert(separator == '-' || separator == ' ');
 
-            var byteLength = sha.Length; // 20|32
+            int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes) with 4|7 separators
-            var hexLength = byteLength * 2; // 40|64
-            var n = hexLength / 8; // 5|8
+            int hexLength = byteLength * 2; // 40|64
+            int n = hexLength / 8; // 5|8
             Span<char> span = stackalloc char[hexLength + n - 1]; // + 4|7
 
-            var pos = 0;
-            var sep = 8;
-            for (var i = 0; i < byteLength; i++) // 20|32
+            int pos = 0;
+            int sep = 8;
+            for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits (convention is lowercase)
-                var byt = sha[i];
+                byte byt = sha[i];
                 span[pos++] = HexChars[byt >> 4]; // == b / 16
                 span[pos++] = HexChars[byt & 15]; // == b % 16
 
@@ -205,7 +207,7 @@ namespace SourceCode.Clay
                 }
             }
 
-            var str = new string(span);
+            string str = new string(span);
             return str;
         }
     }
