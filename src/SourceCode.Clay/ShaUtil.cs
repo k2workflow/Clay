@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
@@ -25,6 +26,7 @@ namespace SourceCode.Clay
         // Each byte is two hexits (our convention is lowercase)
         private const string HexChars = "0123456789abcdef";
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool TryParseHexit(in char c, out byte b)
         {
             b = 0;
@@ -86,15 +88,13 @@ namespace SourceCode.Clay
 
                 sha[i] = (byte)((h1 << 4) | h2);
 
-                // TODO: This will not prevent long chains of delimiters
                 if (pos < hexLength && (slice[pos] == '-' || slice[pos] == ' '))
                     pos++;
             }
 
             // Skip trailing whitespace
-            // TODO: This will permit infix whitespace
-            //while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
-            //    pos++;
+            while (pos < slice.Length && char.IsWhiteSpace(slice[pos]))
+                pos++;
 
             // If the string is not fully consumed, it had an invalid length
             if (pos != slice.Length)
