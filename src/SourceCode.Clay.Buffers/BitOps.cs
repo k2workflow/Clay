@@ -1952,6 +1952,15 @@ namespace System
         #region Evaluate
 
         /// <summary>
+        /// Converts a boolean to a byte value, without branching.
+        /// Returns 1 if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte Evaluate(bool condition)
+            => Unsafe.As<bool, byte>(ref condition); // N|0
+
+        /// <summary>
         /// Converts a boolean to an integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
@@ -1998,7 +2007,7 @@ namespace System
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
-        /// Converts a boolean to a uint value, without branching.
+        /// Converts a boolean to a integer value, without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
