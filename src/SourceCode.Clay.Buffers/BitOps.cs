@@ -850,10 +850,11 @@ namespace System
         public static bool InsertBit(ref sbyte value, int bitOffset)
         {
             int shft = bitOffset & 7;
-            int mask = 1 << shft;
+            uint mask = 1U << shft;
 
-            int bts = value & mask;
-            value = (sbyte)(value | mask);
+            uint val = (uint)value;
+            uint bts = val & mask;
+            value = (sbyte)(val | mask);
 
             return bts != 0;
         }
@@ -888,10 +889,11 @@ namespace System
         public static bool InsertBit(ref short value, int bitOffset)
         {
             int shft = bitOffset & 15;
-            int mask = 1 << shft;
+            uint mask = 1U << shft;
 
-            int bts = value & mask;
-            value = (short)(value | mask);
+            uint val = (uint)value;
+            uint bts = val & mask;
+            value = (short)(val | mask);
 
             return bts != 0;
         }
