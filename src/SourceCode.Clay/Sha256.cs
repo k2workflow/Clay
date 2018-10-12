@@ -44,19 +44,17 @@ namespace SourceCode.Clay
         private static readonly Sha256 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
-        // Using byte[] or String means a dereference to the heap (& 'fixed byte' would require unsafe)
-        // TODO: In C# 7.3+ we can use 'readonly fixed byte'
+        // TODO: In C# 7.4+ we can use 'readonly fixed byte'
 
-        private readonly byte // 32
-        _00, _01, _02, _03,
-        _04, _05, _06, _07,
-        _08, _09, _10, _11,
-        _12, _13, _14, _15,
+        private readonly Block _bytes;
 
-        _16, _17, _18, _19,
-        _20, _21, _22, _23,
-        _24, _25, _26, _27,
-        _28, _29, _30, _31;
+        [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
+        private unsafe struct Block
+        {
+#pragma warning disable IDE0044 // Add readonly modifier
+            private fixed byte _bytes[ByteLength];
+#pragma warning restore IDE0044 // Add readonly modifier
+        }
 
         /// <summary>
         /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
@@ -65,9 +63,18 @@ namespace SourceCode.Clay
         public Sha256(ReadOnlySpan<byte> source)
             : this() // Compiler doesn't know we're indirectly setting all the fields
         {
+            if (source.Length < ByteLength) throw new ArgumentOutOfRangeException(nameof(source));
+
             ReadOnlySpan<byte> src = source.Slice(0, ByteLength);
-            Span<byte> dst = MemoryMarshal.CreateSpan(ref _00, ByteLength);
-            src.CopyTo(dst);
+
+            unsafe
+            {
+                fixed (Block* ptr = &_bytes)
+                {
+                    var dst = new Span<byte>(ptr, ByteLength);
+                    src.CopyTo(dst);
+                }
+            }
         }
 
         /// <summary>
@@ -93,12 +100,12 @@ namespace SourceCode.Clay
             if (value is null) throw new ArgumentNullException(nameof(value));
             if (value.Length == 0) return s_empty;
 
-            var maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
+            int maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
 
-            var rented = ArrayPool<byte>.Shared.Rent(maxLen);
+            byte[] rented = ArrayPool<byte>.Shared.Rent(maxLen);
             try
             {
-                var count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
+                int count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
 
                 var span = new ReadOnlySpan<byte>(rented, 0, count);
 
@@ -157,7 +164,7 @@ namespace SourceCode.Clay
             if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
-            var hash = t_sha.Value.ComputeHash(stream);
+            byte[] hash = t_sha.Value.ComputeHash(stream);
 
             var sha = new Sha256(hash);
             return sha;
@@ -183,7 +190,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* ptr = &_00)
+                fixed (Block* ptr = &_bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     src.CopyTo(destination);
@@ -200,11 +207,10 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* ptr = &_00)
+                fixed (Block* ptr = &_bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
-                    var ok = src.TryCopyTo(destination);
-                    return ok;
+                    return src.TryCopyTo(destination);
                 }
             }
         }
@@ -233,7 +239,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (byte* ptr = &_00)
+                fixed (Block* ptr = &_bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -243,7 +249,7 @@ namespace SourceCode.Clay
                         case 'n':
                         case 'N':
                             {
-                                var str = ShaUtil.ToString(sha);
+                                string str = ShaUtil.ToString(sha);
                                 return str;
                             }
 
@@ -251,7 +257,7 @@ namespace SourceCode.Clay
                         case 'd':
                         case 'D':
                             {
-                                var str = ShaUtil.ToString(sha, '-');
+                                string str = ShaUtil.ToString(sha, '-');
                                 return str;
                             }
 
@@ -259,7 +265,7 @@ namespace SourceCode.Clay
                         case 's':
                         case 'S':
                             {
-                                var str = ShaUtil.ToString(sha, ' ');
+                                string str = ShaUtil.ToString(sha, ' ');
                                 return str;
                             }
                     }
@@ -279,7 +285,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* ptr = &_00)
+                fixed (Block* ptr = &_bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -367,21 +373,7 @@ namespace SourceCode.Clay
         }
 
         public bool Equals(Sha256 other)
-        {
-            unsafe
-            {
-                fixed (byte* src = &_00)
-                {
-                    var dst = &other._00;
-
-                    for (var i = 0; i < ByteLength; i++)
-                        if (src[i] != dst[i])
-                            return false;
-                }
-
-                return true;
-            }
-        }
+            => CompareTo(other) == 0;
 
         public override bool Equals(object obj)
             => obj is Sha256 other
@@ -391,47 +383,23 @@ namespace SourceCode.Clay
         {
             var hash = new HashCode();
 
-            hash.Add(_00);
-            hash.Add(_01);
-            hash.Add(_02);
-            hash.Add(_03);
+            unsafe
+            {
+                fixed (Block* src = &_bytes)
+                {
+                    hash.Add(src[0]);
+                    hash.Add(src[4]);
+                    hash.Add(src[9]);
+                    hash.Add(src[14]);
+                    hash.Add(src[19]);
 
-            hash.Add(_04);
-            hash.Add(_05);
-            hash.Add(_06);
-            hash.Add(_07);
+                    hash.Add(src[24]);
+                    hash.Add(src[29]);
+                    hash.Add(src[31]);
+                }
+            }
 
-            hash.Add(_08);
-            hash.Add(_09);
-            hash.Add(_10);
-            hash.Add(_11);
-
-            hash.Add(_12);
-            hash.Add(_13);
-            hash.Add(_14);
-            hash.Add(_15);
-
-            hash.Add(_16);
-            hash.Add(_17);
-            hash.Add(_18);
-            hash.Add(_19);
-
-            hash.Add(_20);
-            hash.Add(_21);
-            hash.Add(_22);
-            hash.Add(_23);
-
-            hash.Add(_24);
-            hash.Add(_25);
-            hash.Add(_26);
-            hash.Add(_27);
-
-            hash.Add(_28);
-            hash.Add(_29);
-            hash.Add(_30);
-            hash.Add(_31);
-
-            var hc = hash.ToHashCode();
+            int hc = hash.ToHashCode();
             return hc;
         }
 
@@ -439,22 +407,14 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (byte* src = &_00)
+                fixed (Block* src = &_bytes)
                 {
-                    var dst = &other._00;
+                    Block* dst = &other._bytes;
 
-                    for (var i = 0; i < ByteLength; i++)
-                    {
-                        var cmp = src[i].CompareTo(dst[i]); // CLR returns (a - b) for byte comparisons
-                        if (cmp == 0)
-                            continue;
-
-                        return cmp < 0 ? -1 : 1; // Normalize to [-1, 0, +1]
-                    }
+                    int cmp = ShaUtil.NativeMethods.MemCompare((byte*)src, (byte*)dst, ByteLength);
+                    return cmp;
                 }
             }
-
-            return 0;
         }
 
         public static bool operator ==(Sha256 x, Sha256 y) => x.Equals(y);

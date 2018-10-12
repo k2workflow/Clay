@@ -64,7 +64,7 @@ namespace SourceCode.Clay.Buffers
             if (HashCodeFidelity > 0 && obj.Length > HashCodeFidelity)
                 span = span.Slice(0, HashCodeFidelity);
 
-            var hc = ByteHashCode.Combine(span);
+            int hc = ByteHashCode.Combine(span);
             return hc;
         }
 
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Buffers
             // Note that this does *not* check to see if the *contents* are equal.
             if (x == y) return 0;
 
-            var cmp = x.Length.CompareTo(y.Length);
+            int cmp = x.Length.CompareTo(y.Length);
             if (cmp != 0) return cmp; // ([n], [m])
 
             // ([n], [n])
