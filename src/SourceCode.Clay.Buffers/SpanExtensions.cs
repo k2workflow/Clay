@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
@@ -20,7 +19,7 @@ namespace SourceCode.Clay.Buffers
             if (comparison is null) throw new ArgumentNullException(nameof(comparison));
 
             // Short-circuit for small N
-            var len = (uint)span.Length;
+            uint len = (uint)span.Length;
             switch (len)
             {
                 // 0 or 1 members
@@ -42,7 +41,7 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N > 3 due to previous checks
-            var limit = BitOps.Log2Low(len);
+            int limit = BitOps.Log2Low(len);
 
             limit <<= 1; // mul 2
 
@@ -68,7 +67,7 @@ namespace SourceCode.Clay.Buffers
         {
             while (hi > lo)
             {
-                var partitionSize = hi - lo + 1;
+                int partitionSize = hi - lo + 1;
                 if (partitionSize <= IntrosortSizeThreshold)
                 {
                     if (partitionSize == 1) return;
@@ -98,7 +97,7 @@ namespace SourceCode.Clay.Buffers
                 }
                 depthLimit--;
 
-                var p = PickPivot(span, comparison, lo, hi);
+                int p = PickPivot(span, comparison, lo, hi);
                 IntrospectiveSort(span, comparison, p + 1, hi, depthLimit);
                 hi = p - 1;
             }
@@ -106,9 +105,9 @@ namespace SourceCode.Clay.Buffers
 
         private static void InsertionSort<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
-            for (var i = lo; i < hi; i++)
+            for (int i = lo; i < hi; i++)
             {
-                var j = i;
+                int j = i;
                 T t = span[i + 1];
 
                 while (j >= lo && comparison(t, span[j]) < 0)
@@ -127,7 +126,7 @@ namespace SourceCode.Clay.Buffers
 
             while (i <= n >> 1) // div 2
             {
-                var child = i << 1; // mul 2
+                int child = i << 1; // mul 2
 
                 if (child < n && comparison(span[lo + child - 1], span[lo + child]) < 0)
                     child++;
@@ -145,7 +144,7 @@ namespace SourceCode.Clay.Buffers
         private static int PickPivot<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
             // Compute median-of-three.  But also partition them, since we've done the comparison.
-            var mid = lo + ((hi - lo) >> 1); // div 2
+            int mid = lo + ((hi - lo) >> 1); // div 2
 
             // Sort lo, mid and hi appropriately, then pick mid as the pivot.
             SwapIfGreater(span, comparison, lo, mid);
@@ -156,8 +155,8 @@ namespace SourceCode.Clay.Buffers
             Swap(span, mid, hi - 1);
 
             // We already partitioned lo and hi and put the pivot in hi - 1.  And we pre-increment & decrement below.
-            var left = lo;
-            var right = hi - 1;
+            int left = lo;
+            int right = hi - 1;
 
             while (left < right)
             {
@@ -176,12 +175,12 @@ namespace SourceCode.Clay.Buffers
 
         internal static void HeapSort<T>(Span<T> span, Comparison<T> comparison, int lo, int hi)
         {
-            var n = hi - lo + 1;
-            for (var i = n >> 1; i >= 1; i = i - 1) // div 2
+            int n = hi - lo + 1;
+            for (int i = n >> 1; i >= 1; i = i - 1) // div 2
             {
                 DownHeap(span, comparison, i, n, lo);
             }
-            for (var i = n; i > 1; i = i - 1)
+            for (int i = n; i > 1; i = i - 1)
             {
                 Swap(span, lo, lo + i - 1);
                 DownHeap(span, comparison, 1, i - 1, lo);

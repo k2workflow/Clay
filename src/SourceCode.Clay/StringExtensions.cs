@@ -29,7 +29,7 @@ namespace SourceCode.Clay
             if (length == 1) return char.ToString(str[0]);
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            var s = str.Substring(0, length);
+            string s = str.Substring(0, length);
             return s;
         }
 
@@ -47,7 +47,7 @@ namespace SourceCode.Clay
             if (length == 1) return char.ToString(str[str.Length - 1]);
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            var s = str.Substring(str.Length - length);
+            string s = str.Substring(str.Length - length);
             return s;
         }
 
@@ -74,8 +74,8 @@ namespace SourceCode.Clay
             // https://stackoverflow.com/questions/14347799/how-do-i-create-a-string-with-a-surrogate-pair-inside-of-it
 
             // Expect non-surrogates by default
-            var len = totalWidth;
-            var len_1 = len - 1;
+            int len = totalWidth;
+            int len_1 = len - 1;
 
             // High | Low (default on x86/x64)
             if (BitConverter.IsLittleEndian)
@@ -98,7 +98,7 @@ namespace SourceCode.Clay
             }
 
             // Write directly into the string’s memory on the heap, thus avoiding any intermediate allocations
-            var sb = string.Create(len, len - 1, (dst, last) => // Say string has len=4, => last=3
+            string sb = string.Create(len, len - 1, (dst, last) => // Say string has len=4, => last=3
             {
                 str.AsSpan(0, last).CopyTo(dst); // Only copy first 3 chars: [0, 1, 2]
                 dst[last] = '…'; // Explicitly set 4th char: [3]
@@ -138,18 +138,18 @@ namespace SourceCode.Clay
                 || string.IsNullOrEmpty(prefix))
                 return str;
 
-            var len = str.Length - prefix.Length;
+            int len = str.Length - prefix.Length;
             if (len < 0)
                 return str;
 
-            var found = str.StartsWith(prefix, comparisonType);
+            bool found = str.StartsWith(prefix, comparisonType);
             if (!found)
                 return str;
 
             if (len == 0)
                 return string.Empty;
 
-            var val = str.Substring(prefix.Length, len);
+            string val = str.Substring(prefix.Length, len);
             return val;
         }
 
@@ -173,18 +173,18 @@ namespace SourceCode.Clay
                 || string.IsNullOrEmpty(suffix))
                 return str;
 
-            var len = str.Length - suffix.Length;
+            int len = str.Length - suffix.Length;
             if (len < 0)
                 return str;
 
-            var found = str.EndsWith(suffix, comparisonType);
+            bool found = str.EndsWith(suffix, comparisonType);
             if (!found)
                 return str;
 
             if (len == 0)
                 return string.Empty;
 
-            var val = str.Substring(0, len);
+            string val = str.Substring(0, len);
             return val;
         }
     }

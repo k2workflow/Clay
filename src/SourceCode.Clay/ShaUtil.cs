@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
@@ -216,6 +217,13 @@ namespace SourceCode.Clay
 
             string str = new string(span);
             return str;
+        }
+
+        internal static unsafe class NativeMethods
+        {
+            [System.Security.SecurityCritical]
+            [DllImport("msvcrt.dll", EntryPoint = "memcmp", CallingConvention = CallingConvention.Cdecl, SetLastError = false)]
+            public static extern int MemCompare(byte* x, byte* y, int count);
         }
     }
 }
