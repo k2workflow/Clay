@@ -5,6 +5,9 @@ using System.Runtime.CompilerServices;
 //using System.Runtime.Intrinsics;
 //using System.Runtime.Intrinsics.X86;
 
+// Some of this inspired by the Stanford Bit Widdling Hacks by Sean Eron Anderson:
+// http://graphics.stanford.edu/~seander/bithacks.html
+
 namespace System
 {
     /// <summary>
