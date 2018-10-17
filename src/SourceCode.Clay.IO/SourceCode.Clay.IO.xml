@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.IO</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.IO.FileLock">
+            <summary>
+            Represents methods for file locking.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.IO.FileLock.WaitForFileAsync(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously waits for a lock on a file.
+            </summary>
+            <param name="path">The path to the file to lock.</param>
+            <param name="mode">The mode for opening the file.</param>
+            <param name="access">The access to request on the file.</param>
+            <param name="share">The lock sharing option.</param>
+            <param name="bufferSize">The size of the buffer. The default is 81920.</param>
+            <param name="pollInterval">The interval in milliseconds at which the filesystem is polled. The default is the timer resolution on the system.</param>
+            <param name="timeout">The maximum interval in milliseconds that the method will wait.</param>
+            <param name="cancellationToken">The cancellation token. The default is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> that represents the pending file. The value of <see cref="T:System.Threading.Tasks.Task`1" /> will contain
+            the locked file when the operation completes.</returns>
+        </member>
+    </members>
+</doc>

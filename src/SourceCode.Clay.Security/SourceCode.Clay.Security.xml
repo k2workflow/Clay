@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.Security</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.Security.CertificateLoader">
+            <summary>
+            Represents <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2"/> extensions.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Security.CertificateLoader.Sha1Length">
+            <summary>
+            The number of hex characters required to represent a Sha1 thumbprint.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Security.CertificateLoader.LoadCertificate(System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String,System.Boolean)">
+            <summary>
+            Load a <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2"/> given its store location and thumbprint.
+            </summary>
+            <param name="storeName">The certificate <see cref="T:System.Security.Cryptography.X509Certificates.StoreName"/> to use.</param>
+            <param name="storeLocation">The certificate <see cref="T:System.Security.Cryptography.X509Certificates.StoreLocation"/> to use.</param>
+            <param name="thumbprint">The certificate thumbprint to find.</param>
+            <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
+            <returns>If found, the certificate with the specified thumbprint.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Security.CertificateLoader.TryLoadCertificate(System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String,System.Boolean,System.Security.Cryptography.X509Certificates.X509Certificate2@)">
+            <summary>
+            Try to load a <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2"/> given its store location and thumbprint.
+            </summary>
+            <param name="storeName">The certificate <see cref="T:System.Security.Cryptography.X509Certificates.StoreName"/> to use.</param>
+            <param name="storeLocation">The certificate <see cref="T:System.Security.Cryptography.X509Certificates.StoreLocation"/> to use.</param>
+            <param name="thumbprint">The certificate thumbprint to find.</param>
+            <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
+            <param name="certificate">If found, the certificate with the specified thumbprint.</param>
+            <returns>true if the specified certificate was found; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Security.CertificateLoader.NormalizeThumbprint(System.String)">
+            <summary>
+            Trims all leading/trailing characters that are not alphanumeric.
+            Truncates the resulting output to 40 characters if it is longer than that.
+            (If the thumbprint was copied from MMC, it likely contains special characters)
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.Security.SecureStringExtensions">
+            <summary>
+            Utility functions for <see cref="T:System.Security.SecureString"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Security.SecureStringExtensions.ToUnsecureString(System.Security.SecureString)">
+            <summary>
+            Safely converts a <see cref="T:System.Security.SecureString"/> to a <see cref="T:System.String"/>.
+            </summary>
+            <param name="ss"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Security.Clay.SafeRandom">
+            <summary>
+            Represents a thread-safe <see cref="T:System.Random"/> implementation using a crypto seed.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Security.Clay.SafeRandom.Next">
+            <summary>
+            Returns a non-negative random integer.
+            </summary>
+            <returns>
+            A 32-bit signed integer that is greater than or equal to 0 and less than <see cref="F:System.Int32.MaxValue" />.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Security.Clay.SafeRandom.Next(System.Int32)">
+            <summary>
+            Returns a non-negative random integer that is less than the specified maximum.
+            </summary>
+            <param name="maxValue">The exclusive upper bound of the random number to be generated. <paramref name="maxValue" /> must be greater than or equal to 0.</param>
+            <returns>
+            A 32-bit signed integer that is greater than or equal to 0, and less than <paramref name="maxValue" />; that is, the range of return values ordinarily includes 0 but not <paramref name="maxValue" />. However, if <paramref name="maxValue" /> equals 0, <paramref name="maxValue" /> is returned.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Security.Clay.SafeRandom.Next(System.Int32,System.Int32)">
+            <summary>
+            Returns a random integer that is within a specified range.
+            </summary>
+            <param name="minValue">The inclusive lower bound of the random number returned.</param>
+            <param name="maxValue">The exclusive upper bound of the random number returned. <paramref name="maxValue" /> must be greater than or equal to <paramref name="minValue" />.</param>
+            <returns>
+            A 32-bit signed integer greater than or equal to <paramref name="minValue" /> and less than <paramref name="maxValue" />; that is, the range of return values includes <paramref name="minValue" /> but not <paramref name="maxValue" />. If <paramref name="minValue" /> equals <paramref name="maxValue" />, <paramref name="minValue" /> is returned.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Security.Clay.SafeRandom.NextBytes(System.Byte[])">
+            <summary>
+            Fills the elements of a specified array of bytes with random numbers.
+            </summary>
+            <param name="buffer">An array of bytes to contain random numbers.</param>
+        </member>
+        <member name="M:SourceCode.Security.Clay.SafeRandom.NextDouble">
+            <summary>
+            Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0.
+            </summary>
+            <returns>
+            A double-precision floating point number that is greater than or equal to 0.0, and less than 1.0.
+            </returns>
+        </member>
+    </members>
+</doc>

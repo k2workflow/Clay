@@ -62,7 +62,7 @@ namespace SourceCode.Clay.IO
         }
 
         /// <summary>
-        /// Asynchronously writes the specified <see cref="ReadOnlyMemory{T}{T}" /> to the specified
+        /// Asynchronously writes the specified <see cref="ReadOnlyMemory{T}" /> to the specified
         /// <see cref="Stream" />.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>

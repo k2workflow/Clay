@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <AssemblyName>SourceCode.Clay.OpenApi</AssemblyName>
+    <RootNamespace>SourceCode.Clay.OpenApi</RootNamespace>
+    <DocumentationFile>SourceCode.Clay.OpenApi.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <!-- S4035 (Current equality system, issue logged) Seal class ... or implement 'IEqualityComparer<T>' instead. -->
     <!-- CA2225 (Ctor and Build()) Provide a method named 'To...' or 'From...' as an alternate for operator op_Implicit -->
     <!-- CA1043 (Indexers use validating types) Use Integral Or String Argument For Indexers -->
@@ -33,13 +39,5 @@
     <PackageTags>clay json open-api swagger</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.0\SourceCode.Clay.OpenApi.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\SourceCode.Clay.OpenApi.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

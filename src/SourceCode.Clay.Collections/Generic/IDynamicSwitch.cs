@@ -13,7 +13,6 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of key used in the switch.</typeparam>
     /// <typeparam name="TValue">The type of value used in the switch.</typeparam>
-    /// <seealso cref="Expression.Switch"/>
     public interface IDynamicSwitch<in TKey, TValue>
     {
         /// <summary>

@@ -42,11 +42,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// <summary>
         /// Gets the value with the specified key.
         /// </summary>
-        /// <value>
-        /// The <see cref="TValue"/>.
-        /// </value>
         /// <param name="key">The key.</param>
-        /// <returns></returns>
         public TValue this[TKey key] => _values[_indexer(key)];
 
         /// <summary>

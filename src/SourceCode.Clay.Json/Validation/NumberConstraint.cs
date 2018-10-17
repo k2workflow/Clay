@@ -84,6 +84,7 @@ namespace SourceCode.Clay.Json.Validation
         /// <param name="maximum">The maximum value.</param>
         /// <param name="rangeOptions">The range options.</param>
         /// <param name="multipleOf">The value which the range should be a multiple of.</param>
+        /// <param name="required"></param>
         public NumberConstraint(Number? minimum, Number? maximum, RangeOptions rangeOptions, Number? multipleOf, bool required)
         {
             // Validate min/max/multiple

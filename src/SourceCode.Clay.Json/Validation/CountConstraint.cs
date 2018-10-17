@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>
         /// Implicitly converts from a <see cref="uint"/> to an exact <see cref="CountConstraint"/>.
         /// </summary>
-        /// <param name="exact">The minimum and maximum value.</param>
+        /// <param name="count">The minimum and maximum value.</param>
         public static CountConstraint Exact(uint count) => new CountConstraint(count, count);
 
         public bool IsValid(long value)

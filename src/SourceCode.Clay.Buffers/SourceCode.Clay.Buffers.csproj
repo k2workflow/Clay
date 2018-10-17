@@ -7,6 +7,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AssemblyName>SourceCode.Clay.Buffers</AssemblyName>
+    <RootNamespace>SourceCode.Clay.Buffers</RootNamespace>
+    <DocumentationFile>SourceCode.Clay.Buffers.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.2" PrivateAssets="All" />
@@ -17,7 +23,7 @@
     <PackageId>SourceCode.Clay.Buffers</PackageId>
     <Authors>SourceCode</Authors>
     <Description>Tools and extensions for working with buffers.</Description>
-    <PackageTags>clay utility extension buffer byte array</PackageTags>
+    <PackageTags>clay utility extension buffer byte array blit span</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>

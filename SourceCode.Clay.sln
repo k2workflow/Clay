@@ -7,37 +7,37 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\Sour
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{C8ACBBA9-16BD-4361-A5FB-B35278752B19}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Tests", "src\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj", "{4B6223A6-3156-486B-808B-6B18AAADBF63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Tests", "tests\SourceCode.Clay.Tests\SourceCode.Clay.Tests.csproj", "{4B6223A6-3156-486B-808B-6B18AAADBF63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers", "src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj", "{8FF666DA-C555-4D21-96D1-73289057EC1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Tests", "src\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj", "{6745404E-CC66-4226-A28D-6E2C16357863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Tests", "tests\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj", "{6745404E-CC66-4226-A28D-6E2C16357863}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Text", "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj", "{19DA033D-DCDE-4961-96BE-9A0CCE533541}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Text.Tests", "src\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj", "{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Text.Tests", "tests\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj", "{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections", "src\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj", "{DAA43329-D360-44FC-A093-B84E72A6A856}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Tests", "src\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj", "{7E20382C-A1AE-4D67-AE08-F26E4B54D472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Tests", "tests\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj", "{7E20382C-A1AE-4D67-AE08-F26E4B54D472}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data", "src\SourceCode.Clay.Data\SourceCode.Clay.Data.csproj", "{323ED161-1D48-42C1-B312-3C93559DA6B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data.Tests", "src\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj", "{D602DE90-7BB2-491A-98D4-22A9E45E6869}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Data.Tests", "tests\SourceCode.Clay.Data.Tests\SourceCode.Clay.Data.Tests.csproj", "{D602DE90-7BB2-491A-98D4-22A9E45E6869}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json", "src\SourceCode.Clay.Json\SourceCode.Clay.Json.csproj", "{93785833-A2A6-4FB7-87EC-2AFCF49A7186}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Tests", "src\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj", "{83089EA0-510E-43A4-B316-FADC3C1D4C67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Tests", "tests\SourceCode.Clay.Json.Tests\SourceCode.Clay.Json.Tests.csproj", "{83089EA0-510E-43A4-B316-FADC3C1D4C67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Bench", "src\SourceCode.Clay.Collections.Bench\SourceCode.Clay.Collections.Bench.csproj", "{C0107BC5-3058-40DD-AC85-FF3E0F9404B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Bench", "tests\SourceCode.Clay.Collections.Bench\SourceCode.Clay.Collections.Bench.csproj", "{C0107BC5-3058-40DD-AC85-FF3E0F9404B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.OpenApi", "src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj", "{70A6FD5F-A1DE-4443-8233-110C94011215}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.OpenApi.Tests", "src\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj", "{D54EA12F-1949-4BC3-A119-6FD48869DEDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.OpenApi.Tests", "tests\SourceCode.Clay.OpenApi.Tests\SourceCode.Clay.OpenApi.Tests.csproj", "{D54EA12F-1949-4BC3-A119-6FD48869DEDA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading", "src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj", "{EC96B9A0-9244-4AA3-B6FA-366C1226ACCD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading.Tests", "src\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj", "{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading.Tests", "tests\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj", "{E23B716F-DAF6-42EF-A5A8-DDEFAD26D916}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".files", ".files", "{B2F708DF-EF63-4F62-A95D-9A148D01421E}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,27 +49,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".files", ".files", "{B2F708
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Bench", "src\SourceCode.Clay.Json.Bench\SourceCode.Clay.Json.Bench.csproj", "{7AB59F3C-9B6B-4E3F-9BFE-95F99435CD6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Json.Bench", "tests\SourceCode.Clay.Json.Bench\SourceCode.Clay.Json.Bench.csproj", "{7AB59F3C-9B6B-4E3F-9BFE-95F99435CD6B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO", "src\SourceCode.Clay.IO\SourceCode.Clay.IO.csproj", "{03B741C3-837F-41D5-9129-0674ECF7FB44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO.Tests", "src\SourceCode.Clay.IO.Tests\SourceCode.Clay.IO.Tests.csproj", "{14DA1C2D-3A63-4993-847A-15F6E4659E52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.IO.Tests", "tests\SourceCode.Clay.IO.Tests\SourceCode.Clay.IO.Tests.csproj", "{14DA1C2D-3A63-4993-847A-15F6E4659E52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms", "src\SourceCode.Clay.Algorithms\SourceCode.Clay.Algorithms.csproj", "{712342E0-045F-4C8E-9E0C-618A330DE7E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.Tests", "src\SourceCode.Clay.Algorithms.Tests\SourceCode.Clay.Algorithms.Tests.csproj", "{3A79B7F5-243E-4553-9EC7-1A7A838008AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.Tests", "tests\SourceCode.Clay.Algorithms.Tests\SourceCode.Clay.Algorithms.Tests.csproj", "{3A79B7F5-243E-4553-9EC7-1A7A838008AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Security", "src\SourceCode.Clay.Security\SourceCode.Clay.Security.csproj", "{28690A32-2A29-40AE-BE4A-DC00F6346791}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Security.Tests", "src\SourceCode.Clay.Security.Tests\SourceCode.Clay.Security.Tests.csproj", "{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Security.Tests", "tests\SourceCode.Clay.Security.Tests\SourceCode.Clay.Security.Tests.csproj", "{C1F19A6E-C89C-4A23-84D6-7E2008A0BA23}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Javascript", "src\SourceCode.Clay.Javascript\SourceCode.Clay.Javascript.csproj", "{C1BCF34A-7727-4698-86C6-60360BA9AA83}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Javascript.Tests", "src\SourceCode.Clay.Javascript.Tests\SourceCode.Clay.Javascript.Tests.csproj", "{9410BE85-BB36-4D93-A4A6-C080BB9FBA54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Javascript.Tests", "tests\SourceCode.Clay.Javascript.Tests\SourceCode.Clay.Javascript.Tests.csproj", "{9410BE85-BB36-4D93-A4A6-C080BB9FBA54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.Bench", "src\SourceCode.Clay.Algorithms.Bench\SourceCode.Clay.Algorithms.Bench.csproj", "{9CE85CF8-5C27-4D33-B3D3-44FEB306DDDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.Bench", "tests\SourceCode.Clay.Algorithms.Bench\SourceCode.Clay.Algorithms.Bench.csproj", "{9CE85CF8-5C27-4D33-B3D3-44FEB306DDDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Bench", "src\SourceCode.Clay.Buffers.Bench\SourceCode.Clay.Buffers.Bench.csproj", "{7F4C3CD6-C310-408B-B3C6-68D6774998EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Bench", "tests\SourceCode.Clay.Buffers.Bench\SourceCode.Clay.Buffers.Bench.csproj", "{7F4C3CD6-C310-408B-B3C6-68D6774998EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,1104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.Json</name>
+    </assembly>
+    <members>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ProcessArray(Newtonsoft.Json.JsonReader,System.Action)">
+            <summary>
+            Processes the current token value as Json array.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="itemFactory">The item factory.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ReadArray``1(Newtonsoft.Json.JsonReader,System.Func{``0})">
+            <summary>
+            Reads the current token value as a Json <see cref="T:System.Collections.Generic.IReadOnlyList`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the array.</typeparam>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="itemFactory">The item factory.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.EnumerateArray``1(Newtonsoft.Json.JsonReader,System.Func{``0})">
+            <summary>
+            Reads the current token value as a Json <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the array.</typeparam>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="itemFactory">The item factory.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.SkipCountArray(Newtonsoft.Json.JsonReader)">
+            <summary>
+            Skips all items in a Json array, but returns the count.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <returns>The number of items skipped.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ParseEnum``1(Newtonsoft.Json.JsonReader,System.Boolean)">
+            <summary>
+            Reads the current token value as a string, then converts it to a <see cref="T:System.Enum"/>.
+            Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="F:System.String.Empty"/>.
+            </summary>
+            <typeparam name="TEnum">The enum to convert to.</typeparam>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="ignoreCase">True to ignore case; False to regard case.</param>
+            <returns>The parsed enum value or null.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ParseGuid(Newtonsoft.Json.JsonReader)">
+            <summary>
+            Reads the current token value as a string, then converts it to a nullable <see cref="T:System.Guid"/>.
+            Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="F:System.String.Empty"/>.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <returns>The parsed guid value or null.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ParseGuidExact(Newtonsoft.Json.JsonReader,System.String)">
+            <summary>
+            Reads the current token value as a string, then converts it to a nullable <see cref="T:System.Guid"/>.
+            Returns null if the Json value is null, or the string value is <see langword="null"/> or <see cref="F:System.String.Empty"/>.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="format">Specifier indicating the exact format to use when interpreting the input.</param>
+            <returns>The parsed guid value or null.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ReadObject``1(Newtonsoft.Json.JsonReader,System.Func{System.String,System.Boolean},System.Func{``0})">
+            <summary>
+            Reads the current token value as a Json object.
+            </summary>
+            <typeparam name="T">The type of item to return.</typeparam>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="propertyHandler">The property switch.</param>
+            <param name="objectFactory">The object factory.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ProcessObject(Newtonsoft.Json.JsonReader,System.Func{System.String,System.Boolean},System.Action)">
+            <summary>
+            Processes the current token value as a Json object.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="propertyHandler">The property switch.</param>
+            <param name="objectFactory">The object factory.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.ProcessObject(Newtonsoft.Json.JsonReader,System.Func{System.String,System.Boolean})">
+            <summary>
+            Processes the current token value as a Json object.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+            <param name="propertyHandler">The property switch.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.JsonReaderExtensions.SkipCountObject(Newtonsoft.Json.JsonReader)">
+            <summary>
+            Processes the current token value as a Json object but ignores all values.
+            </summary>
+            <param name="jr">The <see cref="T:Newtonsoft.Json.JsonReader"/> instance.</param>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Number">
+            <summary>
+            Represents an efficient discriminated union across all the primitive number types.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.SByte">
+            <summary>
+            Gets the value as a <see cref="T:System.SByte"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.SByte"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Byte">
+            <summary>
+            Gets the value as a <see cref="T:System.Byte"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Byte"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.UInt16">
+            <summary>
+            Gets the value as a <see cref="T:System.UInt16"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.UInt16"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Int16">
+            <summary>
+            Gets the value as a <see cref="T:System.Int16"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Int16"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.UInt32">
+            <summary>
+            Gets the value as a <see cref="T:System.UInt32"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.UInt32"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Int32">
+            <summary>
+            Gets the value as a <see cref="T:System.Int32"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Int32"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.UInt64">
+            <summary>
+            Gets the value as a <see cref="T:System.UInt64"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.UInt64"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Int64">
+            <summary>
+            Gets the value as a <see cref="T:System.Int64"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Int64"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Single">
+            <summary>
+            Gets the value as a <see cref="T:System.Single"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Single"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Double">
+            <summary>
+            Gets the value as a <see cref="T:System.Double"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Double"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Decimal">
+            <summary>
+            Gets the value as a <see cref="T:System.Decimal"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The value of <see cref="P:SourceCode.Clay.Json.Number.ValueTypeCode"/> is not <see cref="F:System.TypeCode.Decimal"/>.</exception>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.Value">
+            <summary>
+            Gets the value boxed in a <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Number.ValueTypeCode">
+            <summary>
+            Gets the <see cref="T:System.TypeCode"/> that indicates what the number type is.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.SByte)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Byte)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Int16)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.UInt16)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.UInt32)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Int64)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.UInt64)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Single)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Double)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.#ctor(System.Decimal)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct.
+            </summary>
+            <param name="value">The value to be contained by the number.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.CreateFromObject(System.Object)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.Number"/> struct, given an unknown
+            value type.
+            </summary>
+            <param name="value">The value.</param>
+            <returns>The <see cref="T:SourceCode.Clay.Json.Number"/> instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.ToString(System.String)">
+            <summary>Returns a string representation of the <see cref="T:SourceCode.Clay.Json.Number"/> value.</summary>
+            <param name="format">The format of the number to use.</param>
+            <returns>A string representation of the number.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.ToString(System.IFormatProvider)">
+            <summary>Returns a string representation of the <see cref="T:SourceCode.Clay.Json.Number"/> value.</summary>
+            <param name="provider">The format provider to use.</param>
+            <returns>A string representation of the number.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.ToString">
+            <summary>Returns a string representation of the <see cref="T:SourceCode.Clay.Json.Number"/> value.</summary>
+            <returns>A <see cref="T:System.String" /> containing the number.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.ToString(System.String,System.IFormatProvider)">
+            <summary>Returns a string representation of the <see cref="T:SourceCode.Clay.Json.Number"/> value.</summary>
+            <param name="format">The format of the number to use.</param>
+            <param name="formatProvider">The format provider to use.</param>
+            <returns>A string representation of the number.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <returns>true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+            <param name="obj">The object to compare with the current instance.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.Equals(SourceCode.Clay.Json.Number)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <returns>true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
+            <param name="other">An object to compare with this object.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Number.CompareTo(SourceCode.Clay.Json.Number)">
+            <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
+            <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
+            <param name="other">An object to compare with this instance.</param>
+        </member>
+        <member name="T:SourceCode.Clay.Json.NumberComparer">
+            <summary>
+            Represents a way to compare different <see cref="T:SourceCode.Clay.Json.Number"/> values.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.NumberComparer.Default">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.Json.NumberComparer"/> that compares all fields of a <see cref="T:SourceCode.Clay.Json.Number"/> value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.NumberComparer.Compare(SourceCode.Clay.Json.Number,SourceCode.Clay.Json.Number)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.NumberComparer.Equals(SourceCode.Clay.Json.Number,SourceCode.Clay.Json.Number)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.NumberComparer.Equals(System.Nullable{SourceCode.Clay.Json.Number},System.Nullable{SourceCode.Clay.Json.Number})">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.NumberComparer.GetHashCode(SourceCode.Clay.Json.Number)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Pointers.JsonPointer">
+            <summary>
+            Represents a Json pointer.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Pointers.JsonPointer.Count">
+            <summary>Gets the number of elements in the collection.</summary>
+            <returns>The number of elements in the collection.</returns>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Pointers.JsonPointer.Item(System.Int32)">
+            <summary>Gets the element at the specified index in the read-only list.</summary>
+            <param name="index">The zero-based index of the element to get.</param>
+            <returns>The element at the specified index in the read-only list.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.#ctor(SourceCode.Clay.Json.Pointers.JsonPointerToken[])">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/> value.
+            </summary>
+            <param name="tokens">The pointer tokens.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.GetEnumerator">
+            <summary>Returns an enumerator that iterates through the collection.</summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.System#Collections#IEnumerable#GetEnumerator">
+            <summary>Returns an enumerator that iterates through a collection.</summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"></see> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Add(SourceCode.Clay.Json.Pointers.JsonPointerToken@)">
+            <summary>
+            Create a new <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/> instance by appending
+            a <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> to the current <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/>.
+            </summary>
+            <param name="token">The <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> instance to append.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Merge(SourceCode.Clay.Json.Pointers.JsonPointerToken[])">
+            <summary>
+            Create a new <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/> instance by appending
+            multiple <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> instances to the current <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/>.
+            </summary>
+            <param name="tokens">The <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> instances to append.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Merge(SourceCode.Clay.Json.Pointers.JsonPointer@)">
+            <summary>
+            Create a new <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/> instance by appending
+            multiple <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> instances to the current <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/>.
+            </summary>
+            <param name="pointer">The <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> instances to append.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Parse(System.String)">
+            <summary>
+            Converts the string representation of a Json pointer to its structured equivalent.
+            </summary>
+            <param name="s">A string containing a Json pointer to convert.</param>
+            <returns>The structured equivalent of the Json pointer contained in <paramref name="s"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="s"/> is null.</exception>
+            <exception cref="T:System.FormatException"><paramref name="s"/> is not in a format compliant with the Json pointer specification.</exception>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.TryParse(System.String,SourceCode.Clay.Json.Pointers.JsonPointer@)">
+            <summary>
+            Converts the string representation of a Json pointer to its structured equivalent.
+            A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="s">A string containing a Json pointer to convert.</param>
+            <param name="result">
+            When this method returns, contains the structured equivalent of the Json pointer contained in <paramref name="s"/>,
+            if the conversion succeeded, or default if the conversion failed. The conversion fails if the <paramref name="s"/> parameter
+            is not in a format compliant with the Json pointer specification. This parameter is passed uninitialized;
+            any value originally supplied in result will be overwritten.
+            </param>
+            <returns><c>true</c> if s was converted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Evaluate(Newtonsoft.Json.Linq.JToken,SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions)">
+            <summary>
+            Evaluates the current <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/> against the specified target.
+            </summary>
+            <param name="target">The target <see cref="T:Newtonsoft.Json.Linq.JToken"/>.</param>
+            <param name="options">The evaluation options.</param>
+            <returns>The result of the evaluation.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.Equals(SourceCode.Clay.Json.Pointers.JsonPointer)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointer.ToString">
+            <summary>Returns the the Json pointer as a string value.</summary>
+            <returns>The Json pointer.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions">
+            <summary>
+            Determines options for evaluating a <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointer"/>.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.None">
+            <summary>
+            The default options.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.NullCoalescing">
+            <summary>
+            Null values will be coalesced.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.MissingMembersAreNull">
+            <summary>
+            Objects yield null when indexed by a missing member.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.PrimitiveMembersAndIndiciesAreNull">
+            <summary>
+            String and boolean values yield null when indexed.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.ArrayMembersAreNull">
+            <summary>
+            Arrays yield null when indexed by name.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.InvalidIndiciesAreNull">
+            <summary>
+            Arrays yield null when index by the new index ('-') or when
+            outside of the index range.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Pointers.JsonPointerEvaluationOptions.NeverFail">
+            <summary>
+            Evaluation returns null when any error condition is encountered.
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Pointers.JsonPointerToken">
+            <summary>
+            Represents a Json pointer token.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Pointers.JsonPointerToken.Value">
+            <summary>
+            Gets the member name.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Pointers.JsonPointerToken.ArrayIndex">
+            <summary>
+            Gets the array index.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointerToken.#ctor(System.String)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Pointers.JsonPointerToken"/> value.
+            </summary>
+            <param name="value">The token value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointerToken.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointerToken.Equals(SourceCode.Clay.Json.Pointers.JsonPointerToken)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointerToken.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Pointers.JsonPointerToken.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.ReadOnlyJObject">
+            <summary>
+            A readonly version of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.Count">
+            <inheritdoc/>
+        </member>
+        <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.Item(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#Generic#IReadOnlyDictionary{System#String,Newtonsoft#Json#Linq#JToken}#ContainsKey(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.TryGetValue(System.String,Newtonsoft.Json.Linq.JToken@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.ToJObject">
+            <summary>
+            Make a copy of the <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/> as a <see cref="T:Newtonsoft.Json.Linq.JObject"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.Merge(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Newtonsoft.Json.Linq.JToken}})">
+            <summary>
+            Merge the specified nodes into the current <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/>.
+            </summary>
+            <param name="nodes"></param>
+        </member>
+        <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#Generic#IReadOnlyDictionary{System#String,Newtonsoft#Json#Linq#JToken}#Keys">
+            <inheritdoc/>
+        </member>
+        <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#Generic#IReadOnlyDictionary{System#String,Newtonsoft#Json#Linq#JToken}#Values">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#Generic#IEnumerable{System#Collections#Generic#KeyValuePair{System#String,Newtonsoft#Json#Linq#JToken}}#GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObject.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.Json.ReadOnlyJObjectComparer">
+            <summary>
+            Represents a way to compare <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/> values.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.ReadOnlyJObjectComparer.Default">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.Json.ReadOnlyJObjectComparer"/> that compares all fields of a <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/>
+            value in a strict manner (ordinal string comparisons, deterministic ordering of members).
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Json.ReadOnlyJObjectComparer"/> class.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.Equals(SourceCode.Clay.Json.ReadOnlyJObject,SourceCode.Clay.Json.ReadOnlyJObject)">
+            <summary>
+            Determines whether the specified objects are equal.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>
+            true if the specified objects are equal; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.GetHashCode(SourceCode.Clay.Json.ReadOnlyJObject)">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.ReadOnlyJObjectComparer.StrictComparer">
+            <summary>
+            Represents a way to compare two <see cref="T:Newtonsoft.Json.Linq.JObject"/> or <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/> instances
+            in a case-sensitive and order-sensitive manner.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.StrictComparer.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.StrictComparer.Equals(SourceCode.Clay.Json.ReadOnlyJObject,SourceCode.Clay.Json.ReadOnlyJObject)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Json.ReadOnlyJObjectComparer.StrictComparer.GetHashCode(SourceCode.Clay.Json.ReadOnlyJObject)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.CountConstraint">
+            <summary>
+            Represents a Json count constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.CountConstraint.Minimum">
+            <summary>
+            Gets the minimum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.CountConstraint.Maximum">
+            <summary>
+            Gets the maximum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.CountConstraint.IsBounded">
+            <summary>
+            Gets a value indicating whether <see cref="P:SourceCode.Clay.Json.Validation.CountConstraint.Maximum"/> has a value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.#ctor(System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum count.</param>
+            <param name="maximum">The maximum count.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.#ctor(System.UInt32)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> value with an exact value.
+            </summary>
+            <param name="exact">The minimum count.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.Exact(System.UInt32)">
+            <summary>
+            Implicitly converts from a <see cref="T:System.UInt32"/> to an exact <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/>.
+            </summary>
+            <param name="count">The minimum and maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.Equals(SourceCode.Clay.Json.Validation.CountConstraint)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.op_Equality(SourceCode.Clay.Json.Validation.CountConstraint,SourceCode.Clay.Json.Validation.CountConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> is equal to <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.op_Inequality(SourceCode.Clay.Json.Validation.CountConstraint,SourceCode.Clay.Json.Validation.CountConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/> is not similar to <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.op_Implicit(System.UInt32)~SourceCode.Clay.Json.Validation.CountConstraint">
+            <summary>
+            Implicitly converts from a <see cref="T:System.UInt32"/> to an exact <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/>.
+            </summary>
+            <param name="exact">The minimum and maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.DecimalConstraint">
+            <summary>
+            Represents a Json Decimal value constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.Minimum">
+            <summary>
+            Gets the minimum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.Maximum">
+            <summary>
+            Gets the maximum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.RangeOptions">
+            <summary>
+            Gets the range options.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.MultipleOf">
+            <summary>
+            Gets a value that the value should be a multiple of.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.Required">
+            <summary>
+            Gets a value specifying whether a value is required.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DecimalConstraint.IsConstrained">
+            <summary>
+            Gets a value indicating whether any of the constraints are specified.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.#ctor(System.Nullable{System.Decimal},System.Nullable{System.Decimal},SourceCode.Clay.Json.Validation.RangeOptions,System.Nullable{System.Decimal},System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+            <param name="multipleOf">The value which the value should be a multiple of.</param>
+            <param name="required">Whether or not a value is required.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.#ctor(System.Nullable{System.Decimal},System.Nullable{System.Decimal},SourceCode.Clay.Json.Validation.RangeOptions)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.#ctor(System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.Equals(SourceCode.Clay.Json.Validation.DecimalConstraint)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.op_Equality(SourceCode.Clay.Json.Validation.DecimalConstraint,SourceCode.Clay.Json.Validation.DecimalConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> is equal to <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.op_Inequality(SourceCode.Clay.Json.Validation.DecimalConstraint,SourceCode.Clay.Json.Validation.DecimalConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/> is not similar to <see cref="T:SourceCode.Clay.Json.Validation.DecimalConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DecimalConstraint.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.DoubleConstraint">
+            <summary>
+            Represents a Json Double value constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.Minimum">
+            <summary>
+            Gets the minimum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.Maximum">
+            <summary>
+            Gets the maximum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.RangeOptions">
+            <summary>
+            Gets the range options.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.MultipleOf">
+            <summary>
+            Gets a value that the value should be a multiple of.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.Required">
+            <summary>
+            Gets a value specifying whether a value is required.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.DoubleConstraint.IsConstrained">
+            <summary>
+            Gets a value indicating whether any of the constraints are specified.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.#ctor(System.Nullable{System.Double},System.Nullable{System.Double},SourceCode.Clay.Json.Validation.RangeOptions,System.Nullable{System.Double},System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+            <param name="multipleOf">The value which the value should be a multiple of.</param>
+            <param name="required">Whether or not a value is required.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.#ctor(System.Nullable{System.Double},System.Nullable{System.Double},SourceCode.Clay.Json.Validation.RangeOptions)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.#ctor(System.Nullable{System.Double},System.Nullable{System.Double})">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.Equals(SourceCode.Clay.Json.Validation.DoubleConstraint)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed doubleeger that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.op_Equality(SourceCode.Clay.Json.Validation.DoubleConstraint,SourceCode.Clay.Json.Validation.DoubleConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> is equal to <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.op_Inequality(SourceCode.Clay.Json.Validation.DoubleConstraint,SourceCode.Clay.Json.Validation.DoubleConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/> is not similar to <see cref="T:SourceCode.Clay.Json.Validation.DoubleConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.DoubleConstraint.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.Int64Constraint">
+            <summary>
+            Represents a Json Int64 value constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.Minimum">
+            <summary>
+            Gets the minimum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.Maximum">
+            <summary>
+            Gets the maximum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.RangeOptions">
+            <summary>
+            Gets the range options.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.MultipleOf">
+            <summary>
+            Gets a value that the value should be a multiple of.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.Required">
+            <summary>
+            Gets a value specifying whether a value is required.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.Int64Constraint.IsConstrained">
+            <summary>
+            Gets a value indicating whether any of the constraints are specified.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64},SourceCode.Clay.Json.Validation.RangeOptions,System.Nullable{System.Int64},System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+            <param name="multipleOf">The value which the value should be a multiple of.</param>
+            <param name="required">Whether or not a value is required.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64},SourceCode.Clay.Json.Validation.RangeOptions)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64})">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.Equals(SourceCode.Clay.Json.Validation.Int64Constraint)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.op_Equality(SourceCode.Clay.Json.Validation.Int64Constraint,SourceCode.Clay.Json.Validation.Int64Constraint)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> is equal to <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.op_Inequality(SourceCode.Clay.Json.Validation.Int64Constraint,SourceCode.Clay.Json.Validation.Int64Constraint)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/> is not similar to <see cref="T:SourceCode.Clay.Json.Validation.Int64Constraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.Int64Constraint.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.NumberConstraint">
+            <summary>
+            Represents a Json range constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.Minimum">
+            <summary>
+            Gets the minimum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.Maximum">
+            <summary>
+            Gets the maximum value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.RangeOptions">
+            <summary>
+            Gets the range options.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.MultipleOf">
+            <summary>
+            Gets a value that the range should be a multiple of.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.Required">
+            <summary>
+            Gets a value specifying whether a value is required.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.NumberConstraint.IsConstrained">
+            <summary>
+            Gets a value indicating whether any of the constraints are specified.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.#ctor(System.Nullable{SourceCode.Clay.Json.Number},System.Nullable{SourceCode.Clay.Json.Number},SourceCode.Clay.Json.Validation.RangeOptions,System.Nullable{SourceCode.Clay.Json.Number},System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+            <param name="multipleOf">The value which the range should be a multiple of.</param>
+            <param name="required"></param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.#ctor(System.Nullable{SourceCode.Clay.Json.Number},System.Nullable{SourceCode.Clay.Json.Number},SourceCode.Clay.Json.Validation.RangeOptions)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+            <param name="rangeOptions">The range options.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.#ctor(System.Nullable{SourceCode.Clay.Json.Number},System.Nullable{SourceCode.Clay.Json.Number})">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> value.
+            </summary>
+            <param name="minimum">The minimum value.</param>
+            <param name="maximum">The maximum value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.Equals(SourceCode.Clay.Json.Validation.NumberConstraint)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.op_Equality(SourceCode.Clay.Json.Validation.NumberConstraint,SourceCode.Clay.Json.Validation.NumberConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> is equal to <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.op_Inequality(SourceCode.Clay.Json.Validation.NumberConstraint,SourceCode.Clay.Json.Validation.NumberConstraint)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/> is not similar to <see cref="T:SourceCode.Clay.Json.Validation.NumberConstraint"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary>
+            <returns>The fully qualified type name.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.PatternConstraint">
+            <summary>
+            Represents a Json pattern constraint.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.PatternConstraint.Required">
+            <summary>
+            Gets a value specifying whether a value is required.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Json.Validation.PatternConstraint.IsConstrained">
+            <summary>
+            Gets a value indicating whether any of the constraints are specified.
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.Json.Validation.RangeOptions">
+            <summary>
+            Indicates options for validating a range.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Validation.RangeOptions.Exclusive">
+            <summary>
+            The range is exclusive for both minimum and maximum.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Validation.RangeOptions.MinimumInclusive">
+            <summary>
+            The range is inclusive for minimum.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Validation.RangeOptions.MaximumInclusive">
+            <summary>
+            The range is inclusive for maximum.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Json.Validation.RangeOptions.Inclusive">
+            <summary>
+            The range is inclusive for both minimum and maximum.
+            </summary>
+        </member>
+    </members>
+</doc>

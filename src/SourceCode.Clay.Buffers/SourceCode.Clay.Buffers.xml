@@ -1,0 +1,1112 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.Buffers</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.Buffers.ArrayBufferComparer">
+            <summary>
+            Represents a way to compare the contents of byte[].
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.ArrayBufferComparer"/> class, that considers the full
+            buffer when calculating the hashcode.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.ArrayBufferComparer"/> class.
+            </summary>
+            <param name="hashCodeFidelity">
+            The maximum number of octets processed when calculating a hashcode.
+            Pass zero to disable the limit.
+            </param>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.Compare(System.Byte[],System.Byte[])">
+            <summary>
+            Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>
+            A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.Equals(System.Byte[],System.Byte[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.GetHashCode(System.Byte[])">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="T:SourceCode.Clay.Buffers.BufferComparer">
+            <summary>
+            Represents a way to compare binary buffers.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Buffers.BufferComparer.DefaultHashCodeFidelity">
+            <summary>
+            The prefix of octets processed when calculating a hashcode.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Buffers.BufferComparer.Array">
+            <summary>
+            Gets the default instance of the byte[] buffer comparer that uses FNV with default fidelity.
+            </summary>
+            <value>
+            The default instance of the buffer comparer that uses FNV.
+            </value>
+        </member>
+        <member name="P:SourceCode.Clay.Buffers.BufferComparer.Memory">
+            <summary>
+            Gets the default instance of the <see cref="T:System.ReadOnlyMemory`1"/> buffer comparer that uses FNV with default fidelity.
+            This also supports comparison of byte[] and ArraySegment due to their implicit conversion to <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+            <value>
+            The default instance of the buffer comparer that uses FNV.
+            </value>
+        </member>
+        <member name="T:SourceCode.Clay.Buffers.BufferComparer`1">
+            <summary>
+            Represents a way to compare binary buffers.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Buffers.BufferComparer`1.HashCodeFidelity">
+            <summary>
+            The prefix of the buffer that is considered for hashcode calculation.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.BufferComparer`1.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.BufferComparer"/> class.
+            </summary>
+            <param name="hashCodeFidelity">
+            The maximum number of octets processed when calculating a hashcode.
+            Pass zero to disable the limit.
+            </param>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.BufferComparer`1.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.BufferComparer"/> class, that considers the full
+            buffer when calculating the hashcode.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.BufferComparer`1.Equals(`0,`0)">
+            <summary>
+            Determines whether the specified objects are equal.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>
+            true if the specified objects are equal; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.BufferComparer`1.GetHashCode(`0)">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="T:SourceCode.Clay.Buffers.ByteHashCode">
+            <summary>
+            Calculates a HashCode of a sequence of bytes.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.ByteHashCode.Add(System.Byte)">
+            <summary>
+            Adds the specified byte to the HashCode.
+            </summary>
+            <param name="value">The byte sequence to add</param>
+        </member>
+        <member name="T:SourceCode.Clay.Buffers.MemoryBufferComparer">
+            <summary>
+            Represents a way to compare the contents of <see cref="T:System.ReadOnlyMemory`1"/> buffers.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.MemoryBufferComparer"/> class, that considers the full
+            buffer when calculating the hashcode.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:SourceCode.Clay.Buffers.MemoryBufferComparer"/> class.
+            </summary>
+            <param name="hashCodeFidelity">
+            The maximum number of octets processed when calculating a hashcode.
+            Pass zero to disable the limit.
+            </param>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.Compare(System.ReadOnlyMemory{System.Byte},System.ReadOnlyMemory{System.Byte})">
+            <summary>
+            Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            </summary>
+            <param name="x">The first object to compare.</param>
+            <param name="y">The second object to compare.</param>
+            <returns>
+            A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.Value Meaning Less than zero<paramref name="x" /> is less than <paramref name="y" />.Zero<paramref name="x" /> equals <paramref name="y" />.Greater than zero<paramref name="x" /> is greater than <paramref name="y" />.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.Equals(System.ReadOnlyMemory{System.Byte},System.ReadOnlyMemory{System.Byte})">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.GetHashCode(System.ReadOnlyMemory{System.Byte})">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <param name="obj">The object.</param>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryBufferComparer.CompareSpan(System.ReadOnlySpan{System.Byte}@,System.ReadOnlySpan{System.Byte}@)">
+            <summary>
+            Compare the contexts of two <see cref="T:System.ReadOnlySpan`1"/> buffers.
+            </summary>
+            <param name="x">Span 1</param>
+            <param name="y">Span 2</param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.Buffers.MemoryExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryExtensions.MemoryEquals``1(System.ReadOnlyMemory{``0},System.ReadOnlyMemory{``0}@,System.Collections.Generic.IEqualityComparer{``0}@)">
+            <summary>
+            Performs an optimized item-by-item comparison, using a custom <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>.
+            </summary>
+            <typeparam name="TSource">The type of items.</typeparam>
+            <param name="x">Memory 1</param>
+            <param name="y">Memory 2</param>
+            <param name="comparer">The comparer to use to test for equality.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Buffers.MemoryExtensions.MemoryEquals``1(System.ReadOnlyMemory{``0},System.ReadOnlyMemory{``0}@)">
+            <summary>
+            Performs an optimized item-by-item comparison, using the default comparer for the type.
+            </summary>
+            <typeparam name="TSource">The type of items.</typeparam>
+            <param name="x">Memory 1</param>
+            <param name="y">Memory 2</param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.IO.StreamExtensions">
+            <summary>
+            Represents buffer extensions for <see cref="T:System.IO.Stream"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.IO.StreamExtensions.Write(System.IO.Stream,System.ReadOnlyMemory{System.Byte}@,System.Int32)">
+            <summary>
+            Writes the specified <see cref="T:System.ReadOnlyMemory`1" /> to the specified
+            <see cref="T:System.IO.Stream" />.
+            </summary>
+            <param name="stream">The stream to write to.</param>
+            <param name="memory">The memory to write.</param>
+            <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
+        </member>
+        <member name="M:SourceCode.Clay.IO.StreamExtensions.Write(System.IO.Stream,System.ReadOnlySpan{System.Byte}@,System.Int32)">
+            <summary>
+            Writes the specified <see cref="T:System.ReadOnlySpan`1" /> to the specified
+            <see cref="T:System.IO.Stream" />.
+            </summary>
+            <param name="stream">The stream to write to.</param>
+            <param name="span">The span to write.</param>
+            <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
+        </member>
+        <member name="M:SourceCode.Clay.IO.StreamExtensions.WriteAsync(System.IO.Stream,System.ReadOnlyMemory{System.Byte},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Asynchronously writes the specified <see cref="T:System.ReadOnlyMemory`1" /> to the specified
+            <see cref="T:System.IO.Stream" />.
+            </summary>
+            <param name="stream">The stream to write to.</param>
+            <param name="memory">The memory to write.</param>
+            <param name="bufferLength">The maximum length of the buffer. The default is 81920.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="T:System.BitOps">
+            <summary>
+            Represents additional blit methods.
+            </summary>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.Byte,System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to read.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.UInt16,System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to read.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.UInt32,System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to read.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.UInt64,System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to read.
+            Any value outside the range [0..63] is treated as congruent mod 63.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Byte,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt16,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt32,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt64,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Byte@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt16@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt32@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt64@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Byte,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt16,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt32,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt64,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Byte@,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt16@,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt32@,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.UInt64@,System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to clear.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Byte,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt16,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt32,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt64,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Byte@,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt16@,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt32@,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.UInt64@,System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Byte,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt16,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt32,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns the new value.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt64,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Byte@,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt16@,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt32@,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.UInt64@,System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to complement.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        </member>
+        <member name="M:System.BitOps.RotateLeft(System.Byte,System.Int32)">
+            <summary>
+            Rotates the specified value left by the specified number of bits.
+            Similar in behavior to the x86 instruction ROL.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateRight(System.Byte,System.Int32)">
+            <summary>
+            Rotates the specified value right by the specified number of bits.
+            Similar in behavior to the x86 instruction ROR.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateLeft(System.UInt16,System.Int32)">
+            <summary>
+            Rotates the specified value left by the specified number of bits.
+            Similar in behavior to the x86 instruction ROL.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateRight(System.UInt16,System.Int32)">
+            <summary>
+            Rotates the specified value right by the specified number of bits.
+            Similar in behavior to the x86 instruction ROR.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateLeft(System.UInt32,System.Int32)">
+            <summary>
+            Rotates the specified value left by the specified number of bits.
+            Similar in behavior to the x86 instruction ROL.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateRight(System.UInt32,System.Int32)">
+            <summary>
+            Rotates the specified value right by the specified number of bits.
+            Similar in behavior to the x86 instruction ROR.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateLeft(System.UInt64,System.Int32)">
+            <summary>
+            Rotates the specified value left by the specified number of bits.
+            Similar in behavior to the x86 instruction ROL.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.RotateRight(System.UInt64,System.Int32)">
+            <summary>
+            Rotates the specified value right by the specified number of bits.
+            Similar in behavior to the x86 instruction ROR.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="M:System.BitOps.PopCount(System.Byte)">
+            <summary>
+            Returns the population count (number of bits set) of a mask.
+            Similar in behavior to the x86 instruction POPCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.PopCount(System.UInt16)">
+            <summary>
+            Returns the population count (number of bits set) of a mask.
+            Similar in behavior to the x86 instruction POPCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.PopCount(System.UInt32)">
+            <summary>
+            Returns the population count (number of bits set) of a mask.
+            Similar in behavior to the x86 instruction POPCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.PopCount(System.UInt64)">
+            <summary>
+            Returns the population count (number of bits set) of a mask.
+            Similar in behavior to the x86 instruction POPCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingZeros(System.Byte)">
+            <summary>
+            Count the number of leading zero bits in a mask.
+            Similar in behavior to the x86 instruction LZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingZeros(System.UInt16)">
+            <summary>
+            Count the number of leading zero bits in a mask.
+            Similar in behavior to the x86 instruction LZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingZeros(System.UInt32)">
+            <summary>
+            Count the number of leading zero bits in a mask.
+            Similar in behavior to the x86 instruction LZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingZeros(System.UInt64)">
+            <summary>
+            Count the number of leading zero bits in a mask.
+            Similar in behavior to the x86 instruction LZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingOnes(System.Byte)">
+            <summary>
+            Count the number of leading one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingOnes(System.UInt16)">
+            <summary>
+            Count the number of leading one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingOnes(System.UInt32)">
+            <summary>
+            Count the number of leading one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.LeadingOnes(System.UInt64)">
+            <summary>
+            Count the number of leading one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingZeros(System.Byte)">
+            <summary>
+            Count the number of trailing zero bits in a mask.
+            Similar in behavior to the x86 instruction TZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingZeros(System.UInt16)">
+            <summary>
+            Count the number of trailing zero bits in a mask.
+            Similar in behavior to the x86 instruction TZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingZeros(System.UInt32)">
+            <summary>
+            Count the number of trailing zero bits in a mask.
+            Similar in behavior to the x86 instruction TZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingZeros(System.UInt64)">
+            <summary>
+            Count the number of trailing zero bits in a mask.
+            Similar in behavior to the x86 instruction TZCNT.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingOnes(System.Byte)">
+            <summary>
+            Count the number of trailing one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingOnes(System.UInt16)">
+            <summary>
+            Count the number of trailing one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingOnes(System.UInt32)">
+            <summary>
+            Count the number of trailing one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.TrailingOnes(System.UInt64)">
+            <summary>
+            Count the number of trailing one bits in a mask.
+            </summary>
+            <param name="value">The mask.</param>
+        </member>
+        <member name="M:System.BitOps.Log2Low(System.Byte)">
+            <summary>
+            Computes the highest power of 2 lower than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2Low(System.UInt16)">
+            <summary>
+            Computes the highest power of 2 lower than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2Low(System.UInt32)">
+            <summary>
+            Computes the highest power of 2 lower than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2Low(System.UInt64)">
+            <summary>
+            Computes the highest power of 2 lower than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2High(System.Byte)">
+            <summary>
+            Computes the lowest power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2High(System.UInt16)">
+            <summary>
+            Computes the lowest power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2High(System.UInt32)">
+            <summary>
+            Computes the lowest power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Log2High(System.UInt64)">
+            <summary>
+            Computes the lowest power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2Low(System.Byte)">
+            <summary>
+            Computes the next power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2Low(System.UInt16)">
+            <summary>
+            Computes the next power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2Low(System.UInt32)">
+            <summary>
+            Computes the next power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2Low(System.UInt64)">
+            <summary>
+            Computes the next power of 2 greater than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2High(System.Byte)">
+            <summary>
+            Computes the previous power of 2 less than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2High(System.UInt16)">
+            <summary>
+            Computes the previous power of 2 less than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2High(System.UInt32)">
+            <summary>
+            Computes the previous power of 2 less than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Pow2High(System.UInt64)">
+            <summary>
+            Computes the previous power of 2 less than the given value.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.IsPowerOf2(System.Byte)">
+            <summary>
+            Returns True if the value is a power of 2, else False.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.IsPowerOf2(System.UInt16)">
+            <summary>
+            Returns True if the value is a power of 2, else False.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.IsPowerOf2(System.UInt32)">
+            <summary>
+            Returns True if the value is a power of 2, else False.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.IsPowerOf2(System.UInt64)">
+            <summary>
+            Returns True if the value is a power of 2, else False.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Parity(System.Byte)">
+            <summary>
+            Returns 1 if the bit count is odd, else 0.
+            Logically equivalent to PopCount mod 2.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Parity(System.UInt16)">
+            <summary>
+            Returns 1 if the bit count is odd, else 0.
+            Logically equivalent to PopCount mod 2.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Parity(System.UInt32)">
+            <summary>
+            Returns 1 if the bit count is odd, else 0.
+            Logically equivalent to PopCount mod 2.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.Parity(System.UInt64)">
+            <summary>
+            Returns 1 if the bit count is odd, else 0.
+            Logically equivalent to PopCount mod 2.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.BitOps.BoolToByte.Safe(System.Boolean)">
+            <summary>
+            Converts a bool to a byte value without branching
+            Uses safe code.
+            </summary>
+            <param name="on">The value to convert.</param>
+            <returns>Returns 1 if True, else returns 0.</returns>
+        </member>
+        <member name="M:System.BitOps.BoolToByte.Unsafe(System.Boolean)">
+            <summary>
+            Converts a bool to a byte value without branching
+            Uses unsafe code.
+            </summary>
+            <param name="on">The value to convert.</param>
+            <returns>Returns 1 if True, else returns 0.</returns>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.ReadOnlySpan{System.Byte},System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to read.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.ReadOnlySpan{System.UInt16},System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to read.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.ReadOnlySpan{System.UInt32},System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to read.</param>
+        </member>
+        <member name="M:System.BitOps.ExtractBit(System.ReadOnlySpan{System.UInt64},System.Int32)">
+            <summary>
+            Reads whether the specified bit in a mask is set.
+            Similar in behavior to the x86 instruction BT.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to read.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.Byte},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt16},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt32},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt64},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Span{System.Byte},System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to clear.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Span{System.UInt16},System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to clear.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Span{System.UInt32},System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to clear.</param>
+        </member>
+        <member name="M:System.BitOps.ClearBit(System.Span{System.UInt64},System.Int32)">
+            <summary>
+            Clears the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTR.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to clear.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Span{System.Byte},System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Span{System.UInt16},System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Span{System.UInt32},System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+        </member>
+        <member name="M:System.BitOps.InsertBit(System.Span{System.UInt64},System.Int32)">
+            <summary>
+            Sets the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTS.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Span{System.Byte},System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to complement.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Span{System.UInt16},System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to complement.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Span{System.UInt32},System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to complement.</param>
+        </member>
+        <member name="M:System.BitOps.ComplementBit(System.Span{System.UInt64},System.Int32)">
+            <summary>
+            Complements the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instruction BTC.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to complement.</param>
+        </member>
+    </members>
+</doc>

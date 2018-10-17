@@ -74,7 +74,7 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<byte> value, int offset, bool on)
         {
             int ix = offset >> 3; // div 8
@@ -92,7 +92,7 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ushort> value, int offset, bool on)
         {
             int ix = offset >> 4; // div 16
@@ -110,7 +110,7 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<uint> value, int offset, bool on)
         {
             int ix = offset >> 5; // div 32
@@ -128,7 +128,7 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="offset">The ordinal position of the bit to write.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         public static bool WriteBit(Span<ulong> value, int offset, bool on)
         {
             int ix = offset >> 6; // div 64

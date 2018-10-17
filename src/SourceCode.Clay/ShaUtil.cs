@@ -47,8 +47,7 @@ namespace SourceCode.Clay
         /// Tries to parse the specified hexadecimal.
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <param name="sha">The buffer to populate with the Sha value.</param>
         internal static bool TryParse(in ReadOnlySpan<char> hex, in Span<byte> sha)
         {
             int byteLength = sha.Length;
@@ -108,6 +107,7 @@ namespace SourceCode.Clay
         /// Converts the <see cref="Sha1"/> or <see cref="Sha256"/> instance to a string using the 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
+        /// <param name="sha">The sha value.</param>
         /// <param name="prefixLength">The length of the first token.</param>
         /// <returns></returns>
         internal static KeyValuePair<string, string> Split(in ReadOnlySpan<byte> sha, int prefixLength)
