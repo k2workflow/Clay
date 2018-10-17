@@ -20,7 +20,7 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <summary>
         /// Create a <see cref="SqlCommand"/> using the provided parameters.
         /// </summary>
-        /// <param name="sqlCon">The <see cref="SqlTransaction"/> to use.</param>
+        /// <param name="sqlTxn">The <see cref="SqlTransaction"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
         /// <param name="commandType">The type of command.</param>
         /// <returns></returns>

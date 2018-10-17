@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay.Buffers
 {
@@ -116,8 +117,9 @@ namespace SourceCode.Clay.Buffers
                     {
                         unsafe
                         {
-                            fixed (byte* xp = x)
-                            fixed (byte* yp = y)
+                            // https://github.com/dotnet/corefx/pull/32669#issuecomment-429579594
+                            fixed (byte* xp = &MemoryMarshal.GetReference(x))
+                            fixed (byte* yp = &MemoryMarshal.GetReference(y))
                             {
                                 cmp = NativeMethods.MemCompare(xp, yp, x.Length);
                                 return cmp;

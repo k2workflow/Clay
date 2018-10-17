@@ -208,7 +208,7 @@ namespace System
             Debug.Assert(value > 0);
 
             uint val = FillTrailingOnes(value);
-            uint ix = (val * deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
             return log;

@@ -20,7 +20,7 @@ namespace SourceCode.Clay.Buffers
         public const int DefaultHashCodeFidelity = 512;
 
         /// <summary>
-        /// Gets the default instance of the <see cref="Byte[]"/> buffer comparer that uses FNV with default fidelity.
+        /// Gets the default instance of the byte[] buffer comparer that uses FNV with default fidelity.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Buffers
 
         /// <summary>
         /// Gets the default instance of the <see cref="ReadOnlyMemory{T}"/> buffer comparer that uses FNV with default fidelity.
-        /// This also supports comparison of <see cref="byte[]"/> and <see cref="ArraySegment{T}"/> due to their implicit conversion to <see cref="ReadOnlyMemory{T}"/>.
+        /// This also supports comparison of byte[] and ArraySegment due to their implicit conversion to <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <value>
         /// The default instance of the buffer comparer that uses FNV.

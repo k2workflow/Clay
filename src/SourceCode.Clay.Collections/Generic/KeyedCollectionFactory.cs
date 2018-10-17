@@ -72,7 +72,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="items">The items to populate the dictionary with.</param>
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
         /// <param name="comparer">The comparer to use.</param>
-        /// </param>
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
@@ -95,7 +94,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="TItem">The type of items in the collection.</typeparam>
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
         /// <param name="comparer">The comparer to use.</param>
-        /// </param>
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor, in IEqualityComparer<TKey> comparer)
         {
@@ -113,7 +111,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="TItem">The type of items in the collection.</typeparam>
         /// <param name="items">The items to populate the dictionary with.</param>
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
-        /// </param>
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in IEnumerable<TItem> items, in Func<TItem, TKey> keyExtractor)
         {
@@ -133,7 +130,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <typeparam name="TKey">The type of keys in the collection.</typeparam>
         /// <typeparam name="TItem">The type of items in the collection.</typeparam>
         /// <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
-        /// </param>
         /// <returns>An instance of the Dictionary.</returns>
         public static KeyedCollection<TKey, TItem> Create<TKey, TItem>(in Func<TItem, TKey> keyExtractor)
         {

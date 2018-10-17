@@ -50,9 +50,9 @@ namespace SourceCode.Clay
         [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
         private unsafe struct Block
         {
-#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0044 // Add readonly modifier (vs bug)
             private fixed byte _bytes[ByteLength];
-#pragma warning restore IDE0044 // Add readonly modifier
+#pragma warning restore IDE0044 // Add readonly modifier (vs bug)
         }
 
         /// <summary>

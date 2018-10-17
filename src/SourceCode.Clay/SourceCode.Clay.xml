@@ -1,0 +1,1533 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.BoolExtensions">
+            <summary>
+            Represents <see cref="T:System.Boolean"/> extensions.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.UInt32,System.UInt32)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.UInt32)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.Int32)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.UInt64,System.UInt64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.Int64,System.Int64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.UInt64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Boolean,System.Int64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.UInt32)">
+            <summary>
+            Converts an integer value to a boolean, without branching.
+            Returns False if 0, else returns True.
+            </summary>
+            <param name="value">The value to convert.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.UInt64)">
+            <summary>
+            Converts an integer value to a boolean, without branching.
+            Returns False if 0, else returns True.
+            </summary>
+            <param name="value">The value to convert.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Int32)">
+            <summary>
+            Converts an integer value to a boolean, without branching.
+            Returns False if 0, else returns True.
+            </summary>
+            <param name="value">The value to convert.</param>
+        </member>
+        <member name="M:SourceCode.Clay.BoolExtensions.Evaluate(System.Int64)">
+            <summary>
+            Converts an integer value to a boolean, without branching.
+            Returns False if 0, else returns True.
+            </summary>
+            <param name="value">The value to convert.</param>
+        </member>
+        <member name="T:SourceCode.Clay.DateTimeExtensions">
+            <summary>
+            Represents <see cref="T:System.DateTime"/> extensions.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.DateTimeExtensions.UnixEpochDifference">
+            <summary>
+            Gets the difference between the Unix epoch and the Windows epoch.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.ToPosixFileTime(System.DateTime)">
+            <summary>
+            Converts the specified <see cref="T:System.DateTime"/> to a Posix timestamp.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The Posix timestamp.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.ToPosixFileTimeUtc(System.DateTime)">
+            <summary>
+            Converts the specified <see cref="T:System.DateTime"/> to a UTC Posix timestamp.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The UTC Posix timestamp.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.FromPosixFileTime(System.Int64)">
+            <summary>
+            Converts the specified Posix timestamp to a <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="posix">The Posix timestamp to convert.</param>
+            <returns>The <see cref="T:System.DateTime"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.FromPosixFileTimeUtc(System.Int64)">
+            <summary>
+            Converts the specified Posix timestamp to a <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="posix">The Posix timestamp to convert.</param>
+            <returns>The <see cref="T:System.DateTime"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.RoundDownMinute(System.DateTime)">
+            <summary>
+            Rounds down the specified <see cref="T:System.DateTime"/> to the current minute.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The rounded-down value.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.RoundDownHour(System.DateTime)">
+            <summary>
+            Rounds down the specified <see cref="T:System.DateTime"/> to the current hour.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The rounded-down value.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.DateTimeExtensions.RoundDownDay(System.DateTime)">
+            <summary>
+            Rounds down the specified <see cref="T:System.DateTime"/> to the current day.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <returns>The rounded-down value.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.Discriminated`2">
+            <summary>
+            Represents a discriminated union of two types.
+            </summary>
+            <typeparam name="TItem1">The first type.</typeparam>
+            <typeparam name="TItem2">The second type.</typeparam>
+        </member>
+        <member name="P:SourceCode.Clay.Discriminated`2.HasValue">
+            <summary>
+            Determines whether the union has a value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Discriminated`2.IsItem1">
+            <summary>
+            Determines whether the first item is set.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Discriminated`2.IsItem2">
+            <summary>
+            Determines whether the second item is set.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Discriminated`2.Item1">
+            <summary>
+            Gets the first item.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Discriminated`2.Item2">
+            <summary>
+            Gets the second item.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.#ctor(`0)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Discriminated`2"/> with a <typeparamref name="TItem1"/>.
+            </summary>
+            <param name="item1">The <typeparamref name="TItem1"/>.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.#ctor(`1)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.Discriminated`2"/> with a <typeparamref name="TItem2"/>.
+            </summary>
+            <param name="item2">The <typeparamref name="TItem2"/>.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.Select(System.Action,System.Action{`0},System.Action{`1})">
+            <summary>
+            Executes a delegate when one of the values is selected.
+            </summary>
+            <param name="empty">The delegate to execute if no value is selected.</param>
+            <param name="item1">The delegate to execute if the first value is selected.</param>
+            <param name="item2">The delegate to execute if the second value is selected.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.Select``1(System.Func{``0},System.Func{`0,``0},System.Func{`1,``0})">
+            <summary>
+            Executes a delegate when one of the values is selected.
+            </summary>
+            <param name="empty">The delegate to execute if no value is selected.</param>
+            <param name="item1">The delegate to execute if the first value is selected.</param>
+            <param name="item2">The delegate to execute if the second value is selected.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.Equals(System.Object)">
+            <summary>
+            Determines if this <see cref="T:SourceCode.Clay.Discriminated`2"/> is equal to another.
+            </summary>
+            <param name="obj">The <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <returns>A value indicating whether the <see cref="T:SourceCode.Clay.Discriminated`2"/> are equal.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.Equals(SourceCode.Clay.Discriminated{`0,`1})">
+            <summary>
+            Determines if this <see cref="T:SourceCode.Clay.Discriminated`2"/> is equal to another.
+            </summary>
+            <param name="other">The <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <returns>A value indicating whether the <see cref="T:SourceCode.Clay.Discriminated`2"/> are equal.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.GetHashCode">
+            <summary>
+            Gets the hash code for this <see cref="T:SourceCode.Clay.Discriminated`2"/>.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.op_Implicit(`0)~SourceCode.Clay.Discriminated{`0,`1}">
+            <summary>
+            Implicitly converts a <typeparamref name="TItem1"/> to a <see cref="T:SourceCode.Clay.Discriminated`2"/>.
+            </summary>
+            <param name="item1">The <typeparamref name="TItem1"/>.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.op_Implicit(`1)~SourceCode.Clay.Discriminated{`0,`1}">
+            <summary>
+            Implicitly converts a <typeparamref name="TItem2"/> to a <see cref="T:SourceCode.Clay.Discriminated`2"/>.
+            </summary>
+            <param name="item2">The <typeparamref name="TItem2"/>.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.op_Equality(SourceCode.Clay.Discriminated{`0,`1},SourceCode.Clay.Discriminated{`0,`1})">
+            <summary>
+            Determines whether two <see cref="T:SourceCode.Clay.Discriminated`2"/> are equal.
+            </summary>
+            <param name="discriminated1">The first <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <param name="discriminated2">The second <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <returns>A value indicating whether the <see cref="T:SourceCode.Clay.Discriminated`2"/> are equal.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Discriminated`2.op_Inequality(SourceCode.Clay.Discriminated{`0,`1},SourceCode.Clay.Discriminated{`0,`1})">
+            <summary>
+            Determines whether two <see cref="T:SourceCode.Clay.Discriminated`2"/> are unequal.
+            </summary>
+            <param name="discriminated1">The first <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <param name="discriminated2">The second <see cref="T:SourceCode.Clay.Discriminated`2"/>.</param>
+            <returns>A value indicating whether the <see cref="T:SourceCode.Clay.Discriminated`2"/> are unequal.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.EnumConvert">
+            <summary>
+            Allows the conversion of enum values to integral values.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt64``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt64"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt64"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.UInt64)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt64"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt64"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt64``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int64"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int64"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.Int64)">
+            <summary>
+            Converts the specified <see cref="T:System.Int64"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt32``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt32"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt32"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.UInt32)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt32"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt32"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt32``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int32"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.Int32)">
+            <summary>
+            Converts the specified <see cref="T:System.Int32"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt16``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt16"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt16"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.UInt16)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt16"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt16``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int16"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int16"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.Int16)">
+            <summary>
+            Converts the specified <see cref="T:System.Int16"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int16"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToByte``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Byte"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Byte"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.Byte)">
+            <summary>
+            Converts the specified <see cref="T:System.Byte"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Byte"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToSByte``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.SByte"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.SByte"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnum``1(System.SByte)">
+            <summary>
+            Converts the specified <see cref="T:System.SByte"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.SByte"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt64Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt64"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.UInt64.MinValue"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt64"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.UInt64)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt64"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt64"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt64Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int64"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is larger than
+            <see cref="F:System.Int64.MaxValue"/>, or if <typeparamref name="TEnum"/> is
+            not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int64"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.Int64)">
+            <summary>
+            Converts the specified <see cref="T:System.Int64"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt32Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt32"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.UInt32.MinValue"/> or larger than <see cref="F:System.UInt32.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt32"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.UInt32)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt32"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt32"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt32Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int32"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.Int32.MinValue"/> or larger than <see cref="F:System.Int32.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.Int32)">
+            <summary>
+            Converts the specified <see cref="T:System.Int32"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToUInt16Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.UInt16"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.UInt16.MinValue"/> or larger than <see cref="F:System.UInt16.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.UInt16"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ConvertToEnumChecked``1(System.UInt16)">
+            <summary>
+            Converts the specified <see cref="T:System.UInt16"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToInt16Checked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Int16"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.Int16.MinValue"/> or larger than <see cref="F:System.UInt16.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Int16"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.Int16)">
+            <summary>
+            Converts the specified <see cref="T:System.Int16"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Int16"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToByteChecked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.Byte"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.Byte.MinValue"/> or larger than <see cref="F:System.Byte.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.Byte"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.Byte)">
+            <summary>
+            Converts the specified <see cref="T:System.Byte"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.Byte"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToSByteChecked``1(``0)">
+            <summary>
+            Converts the specified <typeparamref name="TEnum"/> into
+            a <see cref="T:System.SByte"/>.
+            </summary>
+            <remarks>
+            This method will fail if the enum value is less than
+            <see cref="F:System.SByte.MinValue"/> or larger than <see cref="F:System.SByte.MaxValue"/>,
+            or if <typeparamref name="TEnum"/> is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The enum value to convert.</param>
+            <returns>The <see cref="T:System.SByte"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.ToEnumChecked``1(System.SByte)">
+            <summary>
+            Converts the specified <see cref="T:System.SByte"/> into
+            a <typeparamref name="TEnum"/>.
+            </summary>
+            <remarks>
+            This method will fail if the <paramref name="value"/> is outside
+            the range of valid values for the underlying type of
+            <typeparamref name="TEnum"/>, or if <typeparamref name="TEnum"/>
+            is not an enum.
+            </remarks>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="value">The <see cref="T:System.SByte"/> to convert.</param>
+            <returns>The <typeparamref name="TEnum"/>.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.EnumConvert.Length``1">
+            <summary>
+            Gets the number of items in the specified <see cref="T:System.Enum"/>.
+            </summary>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <returns>The member count.</returns>
+        </member>
+        <member name="T:SourceCode.Clay.EquatableExtensions">
+            <summary>
+            Represents <see cref="T:System.IEquatable`1"/> extensions.
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.ExceptionExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Exception"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.ExceptionExtensions.Suppress(System.Exception)">
+            <summary>
+            Does nothing.
+            </summary>
+            <remarks>
+            Used to indicate that an exception has been intentionally suppressed.
+            </remarks>
+            <param name="exception">The exception to suppress.</param>
+        </member>
+        <member name="T:SourceCode.Clay.MemoryExtensions">
+            <summary>
+            Utility functions for <see cref="T:System.Memory`1"/> and <see cref="T:System.Span`1"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.MemoryExtensions.Left``1(System.ReadOnlySpan{``0},System.Int32)">
+            <summary>
+            Returns the specified number of items from the left of a span.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="span">The span.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.MemoryExtensions.Left``1(System.ReadOnlyMemory{``0},System.Int32)">
+            <summary>
+            Returns the specified number of items from the left of a memory.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="memory">The memory.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.MemoryExtensions.Right``1(System.ReadOnlySpan{``0},System.Int32)">
+            <summary>
+            Returns the specified number of items from the right of a span.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="span">The span.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.MemoryExtensions.Right``1(System.ReadOnlyMemory{``0},System.Int32)">
+            <summary>
+            Returns the specified number of items from the right of a memory.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="memory">The memory.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.MemoryExtensions.IndexOf(System.ReadOnlySpan{System.Char},System.Char,System.Int32)">
+            <summary>
+            Returns the index of the first location of the specified <paramref name="char"/>, starting from the given <paramref name="startIndex"/>.
+            </summary>
+            <param name="span">The span.</param>
+            <param name="char">The character to find.</param>
+            <param name="startIndex">The index to start searching from.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.SemanticVersion">
+            <summary>
+            Represents a semantic version that conforms to the <a href="http://semver.org/spec/v2.0.0.html">v2.0.0 specification</a>.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.Empty">
+            <summary>
+            Gets the default value of <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.Major">
+            <summary>
+            Gets the major version.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.Minor">
+            <summary>
+            Gets the minor version.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.Patch">
+            <summary>
+            Gets the patch version.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.PreRelease">
+            <summary>
+            Gets the pre-release version.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersion.BuildMetadata">
+            <summary>
+            Gets the build metadata.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.SemanticVersion"/> with the specified
+            <see cref="P:SourceCode.Clay.SemanticVersion.Major"/>, <see cref="P:SourceCode.Clay.SemanticVersion.Minor"/> and <see cref="P:SourceCode.Clay.SemanticVersion.Patch"/>
+            values.
+            </summary>
+            <param name="major">The major version.</param>
+            <param name="minor">The minor version.</param>
+            <param name="patch">The patch version.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <para>
+                Thrown in any of the following cases:
+                <list type="bullet">
+                    <item><description><paramref name="major"/> is less than 0.</description></item>
+                    <item><description><paramref name="minor"/> is less than 0.</description></item>
+                    <item><description><paramref name="patch"/> is less than 0.</description></item>
+                </list>
+            </para>
+            </exception>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.#ctor(System.Int32,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Creates a new <see cref="T:SourceCode.Clay.SemanticVersion"/> with the specified
+            <see cref="P:SourceCode.Clay.SemanticVersion.Major"/>, <see cref="P:SourceCode.Clay.SemanticVersion.Minor"/>, <see cref="P:SourceCode.Clay.SemanticVersion.Patch"/>
+            and <see cref="P:SourceCode.Clay.SemanticVersion.PreRelease"/> values.
+            </summary>
+            <param name="major">The major version.</param>
+            <param name="minor">The minor version.</param>
+            <param name="patch">The patch version.</param>
+            <param name="preRelease">The prelease data.</param>
+            <param name="buildMetadata">The build metadata.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <para>
+                Thrown in any of the following cases:
+                <list type="bullet">
+                    <item><description><paramref name="major"/> is less than 0.</description></item>
+                    <item><description><paramref name="minor"/> is less than 0.</description></item>
+                    <item><description><paramref name="patch"/> is less than 0.</description></item>
+                    <item><description><paramref name="preRelease"/> contains characters that don't match the regular expression <c>[A-Za-z0-9\-]</c>.</description></item>
+                    <item><description><paramref name="buildMetadata"/> contains characters that don't match the regular expression <c>[A-Za-z0-9\-\.]</c>.</description></item>
+                </list>
+            </para>
+            </exception>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.Parse(System.String)">
+            <summary>
+            Converts the <see cref="T:System.String"/> representation of a semantic version to its structured equivalent.
+            </summary>
+            <param name="s">A <see cref="T:System.String"/> containing a number to convert.</param>
+            <returns>A <see cref="T:SourceCode.Clay.SemanticVersion"/> equivalent to the semantic version contained in <paramref name="s"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="s"/> is null or <see cref="F:System.String.Empty"/>.</exception>
+            <exception cref="T:System.FormatException"><paramref name="s"/> is not in the correct format.</exception>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.TryParse(System.String,SourceCode.Clay.SemanticVersion@)">
+            <summary>
+            Converts the <see cref="T:System.String"/> representation of a semantic version to its structured equivalent.
+            A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="s">A <see cref="T:System.String"/> containing a number to convert.</param>
+            <param name="result">
+            When this method returns, contains the structured equivalent of the semantic version contained in
+            <paramref name="s"/>, if the conversion succeeded, or <see cref="P:SourceCode.Clay.SemanticVersion.Empty"/> if the conversion failed. The
+            conversion fails if the <paramref name="s"/> parameter is null or <see cref="F:System.String.Empty"/>, does not conform
+            to the semantic version specification, or contains version components less than 0 or greater than
+            <see cref="F:System.Int32.MaxValue"/>. This parameter is passed uninitialized.
+            </param>
+            <returns><c>true</c> if <paramref name="s"/> was converted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.GetCompatabilities(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines how the specified <paramref name="comparand"/> is compatible with the specified <paramref name="baseline"/>.
+            </summary>
+            <param name="baseline">The baseline <see cref="T:SourceCode.Clay.SemanticVersion"/>.</param>
+            <param name="comparand">The <see cref="T:SourceCode.Clay.SemanticVersion"/> to test for compatability.</param>
+            <remarks>
+            The presence of the <see cref="F:SourceCode.Clay.SemanticVersionCompatabilities.Incompatible"/> flag indicates that
+            <paramref name="comparand"/> is incompatible with <paramref name="baseline"/>. Any other value
+            indicates compatability. <see cref="P:SourceCode.Clay.SemanticVersion.BuildMetadata"/> is completely ignored.
+            </remarks>
+            <returns>
+            A value that contains information on how the <see cref="T:SourceCode.Clay.SemanticVersion"/> values are incompatible.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.CompareTo(SourceCode.Clay.SemanticVersion)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.Equals(SourceCode.Clay.SemanticVersion)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_LessThan(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is a smaller version than <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is smaller than the <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_GreaterThan(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is a greater version than <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is smaller than the <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_LessThanOrEqual(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is a smaller or similar version than <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is smaller or similar than the <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_GreaterThanOrEqual(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is a greater or similar version than <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is greater or similar than the <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_Equality(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is a similar version to <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is similar to <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.op_Inequality(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <summary>
+            Determines if <paramref name="a"/> is not a similar version to <paramref name="b"/>.
+            </summary>
+            <param name="a">The first <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <param name="b">The second <see cref="T:SourceCode.Clay.SemanticVersion"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.SemanticVersion"/> is not similar to <see cref="T:SourceCode.Clay.SemanticVersion"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.ToString(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersion.ToString(System.String,System.IFormatProvider)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.SemanticVersionComparer">
+            <summary>
+            Represents a way to compare different <see cref="T:SourceCode.Clay.SemanticVersion"/> values.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersionComparer.Strict">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.SemanticVersionComparer"/> that compares all fields of a <see cref="T:SourceCode.Clay.SemanticVersion"/>
+            value.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.SemanticVersionComparer.Standard">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.SemanticVersionComparer"/> that only compares the <see cref="P:SourceCode.Clay.SemanticVersion.Major"/>,
+            <see cref="P:SourceCode.Clay.SemanticVersion.Minor"/>, <see cref="P:SourceCode.Clay.SemanticVersion.Patch"/> and <see cref="P:SourceCode.Clay.SemanticVersion.PreRelease"/>
+            values.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersionComparer.Compare(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersionComparer.Equals(SourceCode.Clay.SemanticVersion,SourceCode.Clay.SemanticVersion)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.SemanticVersionComparer.GetHashCode(SourceCode.Clay.SemanticVersion)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.SemanticVersionCompatabilities">
+            <summary>
+            Represents the different levels of <see cref="T:SourceCode.Clay.SemanticVersion"/> compatability.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.Identical">
+            <summary>
+            The two versions are completely identical.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.Incompatible">
+            <summary>
+            The two versions are completely incompatible.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.OlderMajorVersion">
+            <summary>
+            The second specified version has an older minor version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.NewerMajorVersion">
+            <summary>
+            The second specified version has a newer minor version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.OlderMinorVersion">
+            <summary>
+            The second specified version has an older minor version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.NewerMinorVersion">
+            <summary>
+            The second specified version has a newer minor version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.OlderPatchVersion">
+            <summary>
+            The second specified version has an older patch version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.NewerPatchVersion">
+            <summary>
+            The second specified version has a newer patch version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.PreReleaseRemoved">
+            <summary>
+            The second specified version has a pre-release version removed.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.PreReleaseAdded">
+            <summary>
+            The second specified version has a pre-release version added.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.OlderPreRelease">
+            <summary>
+            The second specified version has an older pre-release version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.NewerPreRelease">
+            <summary>
+            The second specified version has a newer pre-release version.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.BuildMetadataRemoved">
+            <summary>
+            The first specifid version has additional build metadata.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.BuildMetadataAdded">
+            <summary>
+            The second specifid version has additional build metadata.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.SemanticVersionCompatabilities.DifferentBuildMetadata">
+            <summary>
+            The two versions have different build metadata.
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.Sha1">
+            <summary>
+            Represents a <see cref="T:SourceCode.Clay.Sha1"/> value.
+            </summary>
+            <seealso cref="T:System.Security.Cryptography.SHA1" />
+            <seealso cref="T:System.IEquatable`1" />
+            <seealso cref="T:System.IComparable`1" />
+        </member>
+        <member name="F:SourceCode.Clay.Sha1.ByteLength">
+            <summary>
+            The standard byte length of a <see cref="T:SourceCode.Clay.Sha1"/> value.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Sha1.HexLength">
+            <summary>
+            The number of hex characters required to represent a <see cref="T:SourceCode.Clay.Sha1"/> value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.#ctor(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Deserializes a <see cref="T:SourceCode.Clay.Sha1"/> value from the provided <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+            <param name="source">The buffer.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="span">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.String)">
+            <summary>
+            Hashes the specified value using utf8 encoding.
+            </summary>
+            <param name="value">The string to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[])">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="bytes">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[],System.Int32@,System.Int32@)">
+            <summary>
+            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
+            </summary>
+            <param name="bytes">The bytes to hash.</param>
+            <param name="start">The offset.</param>
+            <param name="length">The count.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.IO.Stream@)">
+            <summary>
+            Hashes the specified stream.
+            </summary>
+            <param name="stream">The stream to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.CopyTo(System.Span{System.Byte})">
+            <summary>
+            Copies the <see cref="T:SourceCode.Clay.Sha1"/> value to the provided buffer.
+            </summary>
+            <param name="destination">The buffer to copy to.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.TryCopyTo(System.Span{System.Byte})">
+            <summary>
+            Tries to copy the <see cref="T:SourceCode.Clay.Sha1"/> value to the provided buffer.
+            </summary>
+            <param name="destination">The buffer to copy to.</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.ToString">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha1"/> instance using the 'N' format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.ToString(System.String)">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha1"/> instance.
+            N: a9993e364706816aba3e25717850c26c9cd0d89d,
+            D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d,
+            S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Split(System.Int32@)">
+            <summary>
+            Converts the <see cref="T:SourceCode.Clay.Sha1"/> instance to a string using the 'N' format,
+            and returns the value split into two tokens.
+            </summary>
+            <param name="prefixLength">The length of the first token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.TryParse(System.ReadOnlySpan{System.Char},SourceCode.Clay.Sha1@)">
+            <summary>
+            Tries to parse the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.TryParse(System.String,SourceCode.Clay.Sha1@)">
+            <summary>
+            Tries to parse the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Parse(System.ReadOnlySpan{System.Char})">
+            <summary>
+            Parses the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <returns></returns>
+            <exception cref="T:System.FormatException">Sha1</exception>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1.Parse(System.String)">
+            <summary>
+            Parses the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <returns></returns>
+            <exception cref="T:System.FormatException">Sha1</exception>
+        </member>
+        <member name="T:SourceCode.Clay.Sha1Comparer">
+            <summary>
+            Represents a way to compare different <see cref="T:SourceCode.Clay.Sha1"/> values.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Sha1Comparer.Default">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.Sha1Comparer"/> that compares all fields of a <see cref="T:SourceCode.Clay.Sha1"/> value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Comparer.Compare(SourceCode.Clay.Sha1,SourceCode.Clay.Sha1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Comparer.Equals(SourceCode.Clay.Sha1,SourceCode.Clay.Sha1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Comparer.GetHashCode(SourceCode.Clay.Sha1)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SourceCode.Clay.Sha256">
+            <summary>
+            Represents a <see cref="T:SourceCode.Clay.Sha256"/> value.
+            </summary>
+            <seealso cref="T:System.Security.Cryptography.SHA256" />
+            <seealso cref="T:System.IEquatable`1" />
+            <seealso cref="T:System.IComparable`1" />
+        </member>
+        <member name="F:SourceCode.Clay.Sha256.ByteLength">
+            <summary>
+            The standard byte length of a <see cref="T:SourceCode.Clay.Sha256"/> value.
+            </summary>
+        </member>
+        <member name="F:SourceCode.Clay.Sha256.HexLength">
+            <summary>
+            The number of hex characters required to represent a <see cref="T:SourceCode.Clay.Sha256"/> value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.#ctor(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Deserializes a <see cref="T:SourceCode.Clay.Sha256"/> value from the provided <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+            <param name="source">The buffer.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Hash(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="span">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Hash(System.String)">
+            <summary>
+            Hashes the specified value using utf8 encoding.
+            </summary>
+            <param name="value">The string to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[])">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="bytes">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
+            </summary>
+            <param name="bytes">The bytes to hash.</param>
+            <param name="start">The offset.</param>
+            <param name="length">The count.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Hash(System.IO.Stream)">
+            <summary>
+            Hashes the specified stream.
+            </summary>
+            <param name="stream">The stream to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.CopyTo(System.Span{System.Byte})">
+            <summary>
+            Copies the <see cref="T:SourceCode.Clay.Sha256"/> value to the provided buffer.
+            </summary>
+            <param name="destination">The buffer to copy to.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.TryCopyTo(System.Span{System.Byte})">
+            <summary>
+            Tries to copy the <see cref="T:SourceCode.Clay.Sha256"/> value to the provided buffer.
+            </summary>
+            <param name="destination">The buffer to copy to.</param>
+            <returns>True if successful</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.ToString">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha256"/> instance using the 'N' format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.ToString(System.String)">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha256"/> instance.
+            N: cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0,
+            D: cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0,
+            S: cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Split(System.Int32)">
+            <summary>
+            Converts the <see cref="T:SourceCode.Clay.Sha256"/> instance to a string using the 'N' format,
+            and returns the value split into two tokens.
+            </summary>
+            <param name="prefixLength">The length of the first token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.TryParse(System.ReadOnlySpan{System.Char},SourceCode.Clay.Sha256@)">
+            <summary>
+            Tries to parse the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.TryParse(System.String,SourceCode.Clay.Sha256@)">
+            <summary>
+            Tries to parse the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Parse(System.ReadOnlySpan{System.Char})">
+            <summary>
+            Parses the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <returns></returns>
+            <exception cref="T:System.FormatException">Sha256</exception>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256.Parse(System.String)">
+            <summary>
+            Parses the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <returns></returns>
+            <exception cref="T:System.FormatException">Sha256</exception>
+        </member>
+        <member name="T:SourceCode.Clay.Sha256Comparer">
+            <summary>
+            Represents a way to compare different <see cref="T:SourceCode.Clay.Sha256"/> values.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Sha256Comparer.Default">
+            <summary>
+            Gets a <see cref="T:SourceCode.Clay.Sha256Comparer"/> that compares all fields of a <see cref="T:SourceCode.Clay.Sha256"/> value.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Comparer.Compare(SourceCode.Clay.Sha256,SourceCode.Clay.Sha256)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Comparer.Equals(SourceCode.Clay.Sha256,SourceCode.Clay.Sha256)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Comparer.GetHashCode(SourceCode.Clay.Sha256)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.ShaUtil.TryParse(System.ReadOnlySpan{System.Char}@,System.Span{System.Byte}@)">
+            <summary>
+            Tries to parse the specified hexadecimal.
+            </summary>
+            <param name="hex">The hexadecimal.</param>
+            <param name="sha">The buffer to populate with the Sha value.</param>
+        </member>
+        <member name="M:SourceCode.Clay.ShaUtil.Split(System.ReadOnlySpan{System.Byte}@,System.Int32)">
+            <summary>
+            Converts the <see cref="T:SourceCode.Clay.Sha1"/> or <see cref="T:SourceCode.Clay.Sha256"/> instance to a string using the 'N' format,
+            and returns the value split into two tokens.
+            </summary>
+            <param name="sha">The sha value.</param>
+            <param name="prefixLength">The length of the first token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.ShaUtil.ToString(System.ReadOnlySpan{System.Byte}@)">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha1"/> or <see cref="T:SourceCode.Clay.Sha256"/> instance using the 'N' format.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.ShaUtil.ToString(System.ReadOnlySpan{System.Byte}@,System.Char@)">
+            <summary>
+            Returns a string representation of the <see cref="T:SourceCode.Clay.Sha1"/> or <see cref="T:SourceCode.Clay.Sha256"/> instance.
+            N: a9993e364706816aba3e25717850c26c9cd0d89d, cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
+            D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d, cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
+            S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d, cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
+            </summary>
+            <param name="sha"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.StringExtensions">
+            <summary>
+            Utility functions for <see cref="T:System.String"/>.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.Left(System.String,System.Int32@)">
+            <summary>
+            Returns the specified number of characters from the left of a string.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="str">The string.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.Right(System.String,System.Int32@)">
+            <summary>
+            Returns the specified number of characters from the right of a string.
+            Tolerates <paramref name="length"/> values that are too large or too small (or negative).
+            </summary>
+            <param name="str">The string.</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.Elide(System.String,System.Int32@)">
+            <summary>
+            Truncates a string to a specified width, respecting surrogate pairs and inserting
+            an ellipsis '…' in the final position.
+            Tolerates width values that are too large, too small or negative.
+            If the value is already smaller than the specified width, the original value is returned.
+            If the character at the elided boundary is in a surrogate pair then the pair is treated atomically.
+            In this case the result may be shorter than specified.
+            </summary>
+            <param name="str">The string.</param>
+            <param name="totalWidth">The total width.</param>
+            <returns>The elided string.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.EqualsOrdinal(System.String,System.String)">
+            <summary>
+            Compares two strings using ordinal rules, with checks for null and reference equality.
+            A partner for the framework-provided <see cref="M:System.String.CompareOrdinal(System.String,System.String)"/> method.
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.RemoveStart(System.String,System.String)">
+            <summary>
+            Removes the specified prefix if it is found at the start of the string.
+            Uses <see cref="F:System.StringComparison.Ordinal"/>.
+            </summary>
+            <param name="str"></param>
+            <param name="prefix">The prefix to remove.</param>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.RemoveStart(System.String,System.String,System.StringComparison)">
+            <summary>
+            Removes the specified prefix if it is found at the start of the string.
+            Uses the specified <see cref="T:System.StringComparison"/>.
+            </summary>
+            <param name="str"></param>
+            <param name="prefix">The prefix to remove.</param>
+            <param name="comparisonType">The string comparison method to use.</param>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.RemoveEnd(System.String,System.String)">
+            <summary>
+            Removes the specified suffix if it is found at the end of the string.
+            Uses <see cref="F:System.StringComparison.Ordinal"/>.
+            </summary>
+            <param name="str"></param>
+            <param name="suffix">The suffix to remove.</param>
+        </member>
+        <member name="M:SourceCode.Clay.StringExtensions.RemoveEnd(System.String,System.String,System.StringComparison)">
+            <summary>
+            Removes the specified suffix if it is found at the end of the string.
+            Uses the specified <see cref="T:System.StringComparison"/>.
+            </summary>
+            <param name="str"></param>
+            <param name="suffix">The suffix to remove.</param>
+            <param name="comparisonType">The string comparison method to use.</param>
+        </member>
+        <member name="T:SourceCode.Clay.VoidResult">
+            <summary>
+            An empty struct, used to represent <see cref="T:System.Void"/> in generic types.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.VoidResult.Equals(SourceCode.Clay.VoidResult)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.VoidResult.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.VoidResult.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.VoidResult.op_Equality(SourceCode.Clay.VoidResult,SourceCode.Clay.VoidResult)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.VoidResult.op_Inequality(SourceCode.Clay.VoidResult,SourceCode.Clay.VoidResult)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

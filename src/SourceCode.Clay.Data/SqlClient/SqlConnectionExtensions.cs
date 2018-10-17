@@ -270,7 +270,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <summary>
         /// Close the specified <see cref="SqlConnection"/> and revert any impersonation.
         /// </summary>
-        /// </summary>
         /// <param name="sqlCon">The SqlConnection to use.</param>
         /// <param name="cookie">The impersonation cookie returned from the Open() method</param>
         public static async Task CloseImpersonatedAsync(this SqlConnection sqlCon, byte[] cookie)

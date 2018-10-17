@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
-    /// Represents extensions for <see cref="Dictionary{TKey, TValue}"/> and <see cref="IReadOnlyDictionary{TKey, TValue}{T}"/>.
+    /// Represents extensions for Dictionary and IReadOnlyDictionary.
     /// </summary>
     public static class DictionaryExtensions
     {
@@ -19,7 +19,8 @@ namespace SourceCode.Clay.Collections.Generic
         /// using the <see cref="IEqualityComparer{T}"/> from the first dictionary for Key comparisons
         /// and the specified <see cref="IEqualityComparer{T}"/> for Value comparisons.
         /// </summary>
-        /// <typeparam name="T">The type of items.</typeparam>
+        /// <typeparam name="TKey">The type of key.</typeparam>
+        /// <typeparam name="TValue">The type of value.</typeparam>
         /// <param name="xe">Input 1</param>
         /// <param name="ye">Input 2</param>
         /// <param name="valueComparer">The comparer to use to test for Value equality.</param>

@@ -122,7 +122,8 @@ namespace SourceCode.Clay
         /// Removes the specified prefix if it is found at the start of the string.
         /// Uses <see cref="StringComparison.Ordinal"/>.
         /// </summary>
-        /// <param name="suffix">The prefix to remove.</param>
+        /// <param name="str"></param>
+        /// <param name="prefix">The prefix to remove.</param>
         public static string RemoveStart(this string str, string prefix)
             => RemoveStart(str, prefix, StringComparison.Ordinal);
 
@@ -130,7 +131,8 @@ namespace SourceCode.Clay
         /// Removes the specified prefix if it is found at the start of the string.
         /// Uses the specified <see cref="StringComparison"/>.
         /// </summary>
-        /// <param name="suffix">The prefix to remove.</param>
+        /// <param name="str"></param>
+        /// <param name="prefix">The prefix to remove.</param>
         /// <param name="comparisonType">The string comparison method to use.</param>
         public static string RemoveStart(this string str, string prefix, StringComparison comparisonType)
         {
@@ -157,6 +159,7 @@ namespace SourceCode.Clay
         /// Removes the specified suffix if it is found at the end of the string.
         /// Uses <see cref="StringComparison.Ordinal"/>.
         /// </summary>
+        /// <param name="str"></param>
         /// <param name="suffix">The suffix to remove.</param>
         public static string RemoveEnd(this string str, string suffix)
             => RemoveEnd(str, suffix, StringComparison.Ordinal);
@@ -165,6 +168,7 @@ namespace SourceCode.Clay
         /// Removes the specified suffix if it is found at the end of the string.
         /// Uses the specified <see cref="StringComparison"/>.
         /// </summary>
+        /// <param name="str"></param>
         /// <param name="suffix">The suffix to remove.</param>
         /// <param name="comparisonType">The string comparison method to use.</param>
         public static string RemoveEnd(this string str, string suffix, StringComparison comparisonType)

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.Text</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.Text.StringBuilderExtensions">
+            <summary>
+            Represents <see cref="T:System.Text.StringBuilder"/> extensions.
+            </summary>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.String,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.String,System.Object,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <param name="arg1">The second format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <param name="arg1">The second format argument.</param>
+            <param name="arg2">The second format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.String,System.Object[])">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="format">The format string.</param>
+            <param name="args">The format arguments.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.IFormatProvider,System.String,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="provider">An object that supplies culture-specific formatting information.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.IFormatProvider,System.String,System.Object,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="provider">An object that supplies culture-specific formatting information.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <param name="arg1">The second format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.IFormatProvider,System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="provider">An object that supplies culture-specific formatting information.</param>
+            <param name="format">The format string.</param>
+            <param name="arg0">The first format argument.</param>
+            <param name="arg1">The second format argument.</param>
+            <param name="arg2">The second format argument.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Text.StringBuilderExtensions.AppendFormatLine(System.Text.StringBuilder,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            Appends a formatted string (using zero or more format items) to this instance,
+            followed by the default line terminator.
+            </summary>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> instance to append to.</param>
+            <param name="provider">An object that supplies culture-specific formatting information.</param>
+            <param name="format">The format string.</param>
+            <param name="args">The format arguments.</param>
+            <returns>A reference to this instance with format appended.</returns>
+        </member>
+    </members>
+</doc>
