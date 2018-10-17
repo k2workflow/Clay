@@ -7,13 +7,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SourceCode.Clay.Collections.Generic
 {
     /// <summary>
     /// Represents extensions that generate dynamic switches from dictionaries and lists.
     /// </summary>
-    /// <seealso cref="Expression.Switch"/>
     public static class SwitchExtensions
     {
         /// <summary>
@@ -104,6 +104,7 @@ namespace SourceCode.Clay.Collections.Generic
         /// Builds a dynamic switch with <see cref="System.Int32"/> keys.
         /// </summary>
         /// <typeparam name="TItem">The type of the elements.</typeparam>
+        /// <typeparam name="TValue">The type of the values.</typeparam>
         /// <param name="cases">The items.</param>
         /// <param name="keyExtractor">The key extractor.</param>
         /// <param name="valueExtractor">The value extractor.</param>
@@ -140,12 +141,12 @@ namespace SourceCode.Clay.Collections.Generic
             if (cases is null) throw new ArgumentNullException(nameof(cases));
             if (keyExtractor is null) throw new ArgumentNullException(nameof(keyExtractor));
 
-            IDynamicSwitch<int, TItem> impl = cases.ToDynamicSwitch(keyExtractor, valueExtractor);
+            IDynamicSwitch<int, TItem> impl = cases.ToDynamicSwitch(keyExtractor, ValueExtractor);
             return impl;
 
             // Local functions
 
-            TItem valueExtractor(TItem item) => item; 
+            TItem ValueExtractor(TItem item) => item; 
         }
     }
 }

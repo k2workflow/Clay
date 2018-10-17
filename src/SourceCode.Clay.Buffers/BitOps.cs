@@ -92,7 +92,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte WriteBit(byte value, int bitOffset, bool on)
         {
@@ -113,7 +113,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort WriteBit(ushort value, int bitOffset, bool on)
         {
@@ -134,7 +134,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint WriteBit(uint value, int bitOffset, bool on)
         {
@@ -154,7 +154,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong WriteBit(ulong value, int bitOffset, bool on)
         {
@@ -178,7 +178,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref byte value, int bitOffset, bool on)
         {
@@ -202,7 +202,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref ushort value, int bitOffset, bool on)
         {
@@ -226,7 +226,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref uint value, int bitOffset, bool on)
         {
@@ -249,7 +249,7 @@ namespace System
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        /// <param name="on"/>True to set the bit to 1, or false to set it to 0.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref ulong value, int bitOffset, bool on)
         {
@@ -926,7 +926,7 @@ namespace System
             19, 27, 23, 06, 26, 05, 04, 31
         };
 
-        private const uint c_deBruijn32 = 0x07C4_ACDDu;
+        private const uint DeBruijn32 = 0x07C4_ACDDu;
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -943,7 +943,7 @@ namespace System
             val |= val >> 02; // 1111 0000
             val |= val >> 04; // 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
             int zeros = 7 - s_deBruijn32[ix];
             
             // Log(0) is undefined: Return 8.
@@ -968,7 +968,7 @@ namespace System
             val |= val >> 04; // 1111 1111 0000 0000
             val |= val >> 08; // 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
             int zeros = 15 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 16.
@@ -994,7 +994,7 @@ namespace System
             val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
             val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
@@ -1027,8 +1027,8 @@ namespace System
             uint mv = (uint)(val >> 32); // High-32
             uint nv = (uint)val; // Low-32
 
-            uint mi = (mv * c_deBruijn32) >> 27;
-            uint ni = (nv * c_deBruijn32) >> 27;
+            uint mi = (mv * DeBruijn32) >> 27;
+            uint ni = (nv * DeBruijn32) >> 27;
 
             int mz = 31 - s_deBruijn32[mi];
             int nz = 31 - s_deBruijn32[ni]; // Use warm cache
@@ -1354,7 +1354,7 @@ namespace System
             val |= val >> 02; // 1111 0000
             val |= val >> 04; // 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
             return log;
@@ -1378,7 +1378,7 @@ namespace System
             val |= val >> 04; // 1111 1111 0000 0000
             val |= val >> 08; // 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
             return log;
@@ -1403,7 +1403,7 @@ namespace System
             val |= val >> 08; // 1111 1111 1111 1111 0000 0000 0000 0000
             val |= val >> 16; // 1111 1111 1111 1111 1111 1111 1111 1111
 
-            uint ix = (val * c_deBruijn32) >> 27;
+            uint ix = (val * DeBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
             return log;

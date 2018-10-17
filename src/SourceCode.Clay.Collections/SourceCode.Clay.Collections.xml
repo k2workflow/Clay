@@ -6,7 +6,7 @@
     <members>
         <member name="T:SourceCode.Clay.Collections.Generic.DictionaryExtensions">
             <summary>
-            Represents extensions for <see cref="T:System.Collections.Generic.Dictionary`2"/> and <see cref="!:IReadOnlyDictionary&lt;TKey, TValue&gt;&lt;T&gt;"/>.
+            Represents extensions for Dictionary and IReadOnlyDictionary.
             </summary>
         </member>
         <member name="M:SourceCode.Clay.Collections.Generic.DictionaryExtensions.NullableDictionaryEqual``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``1})">
@@ -15,7 +15,8 @@
             using the <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> from the first dictionary for Key comparisons
             and the specified <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> for Value comparisons.
             </summary>
-            <typeparam name="T">The type of items.</typeparam>
+            <typeparam name="TKey">The type of key.</typeparam>
+            <typeparam name="TValue">The type of value.</typeparam>
             <param name="xe">Input 1</param>
             <param name="ye">Input 2</param>
             <param name="valueComparer">The comparer to use to test for Value equality.</param>
@@ -55,7 +56,6 @@
             </summary>
             <typeparam name="TKey">The type of key used in the switch.</typeparam>
             <typeparam name="TValue">The type of value used in the switch.</typeparam>
-            <seealso cref="!:Expression.Switch"/>
         </member>
         <member name="P:SourceCode.Clay.Collections.Generic.IDynamicSwitch`2.Count">
             <summary>
@@ -116,10 +116,46 @@
             </param>
             <returns>An instance of the Dictionary.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Collections.Generic.IEnumerable{``1}@,System.Func{``1,``0}@,System.Collections.Generic.IEqualityComparer{``0}@)" -->
-        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Func{``1,``0}@,System.Collections.Generic.IEqualityComparer{``0}@)" -->
-        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Collections.Generic.IEnumerable{``1}@,System.Func{``1,``0}@)" -->
-        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Func{``1,``0}@)" -->
+        <member name="M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Collections.Generic.IEnumerable{``1}@,System.Func{``1,``0}@,System.Collections.Generic.IEqualityComparer{``0}@)">
+            <summary>
+            Creates a Dictionary that stores values containing embedded keys.
+            </summary>
+            <typeparam name="TKey">The type of keys in the collection.</typeparam>
+            <typeparam name="TItem">The type of items in the collection.</typeparam>
+            <param name="items">The items to populate the dictionary with.</param>
+            <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
+            <param name="comparer">The comparer to use.</param>
+            <returns>An instance of the Dictionary.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Func{``1,``0}@,System.Collections.Generic.IEqualityComparer{``0}@)">
+            <summary>
+            Creates a Dictionary that stores values containing embedded keys.
+            </summary>
+            <typeparam name="TKey">The type of keys in the collection.</typeparam>
+            <typeparam name="TItem">The type of items in the collection.</typeparam>
+            <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
+            <param name="comparer">The comparer to use.</param>
+            <returns>An instance of the Dictionary.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Collections.Generic.IEnumerable{``1}@,System.Func{``1,``0}@)">
+            <summary>
+            Creates a Dictionary that stores values containing embedded keys.
+            </summary>
+            <typeparam name="TKey">The type of keys in the collection.</typeparam>
+            <typeparam name="TItem">The type of items in the collection.</typeparam>
+            <param name="items">The items to populate the dictionary with.</param>
+            <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
+            <returns>An instance of the Dictionary.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Collections.Generic.KeyedCollectionFactory.Create``2(System.Func{``1,``0}@)">
+            <summary>
+            Creates a Dictionary that stores values containing embedded keys.
+            </summary>
+            <typeparam name="TKey">The type of keys in the collection.</typeparam>
+            <typeparam name="TItem">The type of items in the collection.</typeparam>
+            <param name="keyExtractor">A delegate that extracts the embedded key from each item.</param>
+            <returns>An instance of the Dictionary.</returns>
+        </member>
         <member name="T:SourceCode.Clay.Collections.Generic.SetExtensions">
             <summary>
             Represents extensions for <see cref="T:System.Collections.Generic.ISet`1"/>.
@@ -157,11 +193,7 @@
             <summary>
             Gets the value with the specified key.
             </summary>
-            <value>
-            The <see cref="!:TValue"/>.
-            </value>
             <param name="key">The key.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Collections.Generic.SwitchBuilderImpl`2.ContainsKey(`0)">
             <summary>
@@ -189,7 +221,6 @@
             <summary>
             Represents extensions that generate dynamic switches from dictionaries and lists.
             </summary>
-            <seealso cref="!:Expression.Switch"/>
         </member>
         <member name="M:SourceCode.Clay.Collections.Generic.SwitchExtensions.ToDynamicSwitch``1(System.Collections.Generic.IReadOnlyDictionary{System.Boolean,``0})">
             <summary>
@@ -252,6 +283,7 @@
             Builds a dynamic switch with <see cref="T:System.Int32"/> keys.
             </summary>
             <typeparam name="TItem">The type of the elements.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
             <param name="cases">The items.</param>
             <param name="keyExtractor">The key extractor.</param>
             <param name="valueExtractor">The value extractor.</param>

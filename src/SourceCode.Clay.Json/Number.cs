@@ -435,7 +435,7 @@ namespace SourceCode.Clay.Json
 
         /// <summary>Returns a string representation of the <see cref="Number"/> value.</summary>
         /// <param name="format">The format of the number to use.</param>
-        /// <param name="provider">The format provider to use.</param>
+        /// <param name="formatProvider">The format provider to use.</param>
         /// <returns>A string representation of the number.</returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {

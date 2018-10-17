@@ -10,7 +10,7 @@ using System;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// Represents a way to compare the contents of <see cref="Byte[]"/>.
+    /// Represents a way to compare the contents of byte[].
     /// </summary>
     public sealed class ArrayBufferComparer : BufferComparer<byte[]>
     {

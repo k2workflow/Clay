@@ -7,7 +7,6 @@
         <member name="T:SourceCode.Clay.Data.SqlClient.Azure.SqlConnectionStringBuilderAzureExtensions">
             <summary>
             Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/> instances.
-            See <see cref="!:https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462"/>
             </summary>
             <seealso cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/>
         </member>
@@ -79,7 +78,13 @@
             <param name="sqlCon">The SqlConnection to use.</param>
             <param name="cookie">The impersonation cookie returned from the Open() method</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CloseImpersonatedAsync(System.Data.SqlClient.SqlConnection,System.Byte[])" -->
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CloseImpersonatedAsync(System.Data.SqlClient.SqlConnection,System.Byte[])">
+            <summary>
+            Close the specified <see cref="T:System.Data.SqlClient.SqlConnection"/> and revert any impersonation.
+            </summary>
+            <param name="sqlCon">The SqlConnection to use.</param>
+            <param name="cookie">The impersonation cookie returned from the Open() method</param>
+        </member>
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions">
             <summary>
             A property bag to hold various connection retry options.
@@ -107,7 +112,6 @@
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions">
             <summary>
             Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/> instances.
-            See <see cref="!:https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462"/>
             </summary>
             <seealso cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/>
         </member>
@@ -167,7 +171,7 @@
             <summary>
             Create a <see cref="T:System.Data.SqlClient.SqlCommand"/> using the provided parameters.
             </summary>
-            <param name="sqlCon">The <see cref="T:System.Data.SqlClient.SqlTransaction"/> to use.</param>
+            <param name="sqlTxn">The <see cref="T:System.Data.SqlClient.SqlTransaction"/> to use.</param>
             <param name="commandText">The sql command text to use.</param>
             <param name="commandType">The type of command.</param>
             <returns></returns>
@@ -299,8 +303,6 @@
             
              </summary>
              <param name="peekBuffer"></param>
-             <param name="peekLength"></param>
-             <param name="isBlockComment"></param>
              <param name="reader"></param>
              <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
              <returns></returns>
@@ -310,8 +312,6 @@
             
              </summary>
              <param name="peekBuffer"></param>
-             <param name="peekLength"></param>
-             <param name="isBlockComment"></param>
              <param name="reader"></param>
              <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
              <returns></returns>

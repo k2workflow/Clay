@@ -1402,14 +1402,14 @@
             Tries to parse the specified hexadecimal.
             </summary>
             <param name="hex">The hexadecimal.</param>
-            <param name="value">The value.</param>
-            <returns></returns>
+            <param name="sha">The buffer to populate with the Sha value.</param>
         </member>
         <member name="M:SourceCode.Clay.ShaUtil.Split(System.ReadOnlySpan{System.Byte}@,System.Int32)">
             <summary>
             Converts the <see cref="T:SourceCode.Clay.Sha1"/> or <see cref="T:SourceCode.Clay.Sha256"/> instance to a string using the 'N' format,
             and returns the value split into two tokens.
             </summary>
+            <param name="sha">The sha value.</param>
             <param name="prefixLength">The length of the first token.</param>
             <returns></returns>
         </member>
@@ -1480,14 +1480,16 @@
             Removes the specified prefix if it is found at the start of the string.
             Uses <see cref="F:System.StringComparison.Ordinal"/>.
             </summary>
-            <param name="suffix">The prefix to remove.</param>
+            <param name="str"></param>
+            <param name="prefix">The prefix to remove.</param>
         </member>
         <member name="M:SourceCode.Clay.StringExtensions.RemoveStart(System.String,System.String,System.StringComparison)">
             <summary>
             Removes the specified prefix if it is found at the start of the string.
             Uses the specified <see cref="T:System.StringComparison"/>.
             </summary>
-            <param name="suffix">The prefix to remove.</param>
+            <param name="str"></param>
+            <param name="prefix">The prefix to remove.</param>
             <param name="comparisonType">The string comparison method to use.</param>
         </member>
         <member name="M:SourceCode.Clay.StringExtensions.RemoveEnd(System.String,System.String)">
@@ -1495,6 +1497,7 @@
             Removes the specified suffix if it is found at the end of the string.
             Uses <see cref="F:System.StringComparison.Ordinal"/>.
             </summary>
+            <param name="str"></param>
             <param name="suffix">The suffix to remove.</param>
         </member>
         <member name="M:SourceCode.Clay.StringExtensions.RemoveEnd(System.String,System.String,System.StringComparison)">
@@ -1502,6 +1505,7 @@
             Removes the specified suffix if it is found at the end of the string.
             Uses the specified <see cref="T:System.StringComparison"/>.
             </summary>
+            <param name="str"></param>
             <param name="suffix">The suffix to remove.</param>
             <param name="comparisonType">The string comparison method to use.</param>
         </member>

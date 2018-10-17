@@ -54,19 +54,19 @@ namespace SourceCode.Clay.Data.SqlParser
         {
             if (string.IsNullOrEmpty(identifier)) return identifier;
 
-            const string OpenSquare = "[";
-            const string CloseSquare = "]";
-            const string CloseSquareEscaped = CloseSquare + CloseSquare;
+            const string openSquare = "[";
+            const string closeSquare = "]";
+            const string closeSquareEscaped = closeSquare + closeSquare;
 
             // Need 2 delimiters. Assume 1 escape.
             var capacity = identifier.Length + 2 + 1;
 
-            var sb = new StringBuilder(OpenSquare, capacity);
+            var sb = new StringBuilder(openSquare, capacity);
             {
                 sb.Append(identifier);
-                sb.Replace(CloseSquare, CloseSquareEscaped); // Escape embedded delimiters
+                sb.Replace(closeSquare, closeSquareEscaped); // Escape embedded delimiters
             }
-            sb.Append(CloseSquare);
+            sb.Append(closeSquare);
 
             var quoted = sb.ToString();
             return quoted;
@@ -76,8 +76,8 @@ namespace SourceCode.Clay.Data.SqlParser
         {
             if (string.IsNullOrEmpty(identifier)) return identifier;
 
-            const string Quote = "\"";
-            const string QuoteEscaped = Quote + Quote;
+            const string quote = "\"";
+            const string quoteEscaped = quote + quote;
 
             // Need 2 delimiters. Assume 1 escape.
             var capacity = identifier.Length + 2 + 1;
@@ -85,10 +85,10 @@ namespace SourceCode.Clay.Data.SqlParser
             var sb = new StringBuilder("~", capacity); // Placeholder. See #1 below
             {
                 sb.Append(identifier);
-                sb.Replace(Quote, QuoteEscaped); // Escape embedded delimiters
+                sb.Replace(quote, quoteEscaped); // Escape embedded delimiters
             }
-            sb[0] = Quote[0]; // Replace placeholder. See #1 above
-            sb.Append(Quote);
+            sb[0] = quote[0]; // Replace placeholder. See #1 above
+            sb.Append(quote);
 
             var quoted = sb.ToString();
             return quoted;
@@ -521,8 +521,6 @@ namespace SourceCode.Clay.Data.SqlParser
         ///
         /// </summary>
         /// <param name="peekBuffer"></param>
-        /// <param name="peekLength"></param>
-        /// <param name="isBlockComment"></param>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>
@@ -583,8 +581,6 @@ namespace SourceCode.Clay.Data.SqlParser
         ///
         /// </summary>
         /// <param name="peekBuffer"></param>
-        /// <param name="peekLength"></param>
-        /// <param name="isBlockComment"></param>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
         /// <returns></returns>

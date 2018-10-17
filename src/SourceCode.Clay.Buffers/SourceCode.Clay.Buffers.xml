@@ -6,7 +6,7 @@
     <members>
         <member name="T:SourceCode.Clay.Buffers.ArrayBufferComparer">
             <summary>
-            Represents a way to compare the contents of <see cref="!:Byte[]"/>.
+            Represents a way to compare the contents of byte[].
             </summary>
         </member>
         <member name="M:SourceCode.Clay.Buffers.ArrayBufferComparer.#ctor">
@@ -58,7 +58,7 @@
         </member>
         <member name="P:SourceCode.Clay.Buffers.BufferComparer.Array">
             <summary>
-            Gets the default instance of the <see cref="!:Byte[]"/> buffer comparer that uses FNV with default fidelity.
+            Gets the default instance of the byte[] buffer comparer that uses FNV with default fidelity.
             </summary>
             <value>
             The default instance of the buffer comparer that uses FNV.
@@ -67,7 +67,7 @@
         <member name="P:SourceCode.Clay.Buffers.BufferComparer.Memory">
             <summary>
             Gets the default instance of the <see cref="T:System.ReadOnlyMemory`1"/> buffer comparer that uses FNV with default fidelity.
-            This also supports comparison of <see cref="!:byte[]"/> and <see cref="T:System.ArraySegment`1"/> due to their implicit conversion to <see cref="T:System.ReadOnlyMemory`1"/>.
+            This also supports comparison of byte[] and ArraySegment due to their implicit conversion to <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
             <value>
             The default instance of the buffer comparer that uses FNV.
@@ -227,7 +227,7 @@
         </member>
         <member name="M:SourceCode.Clay.IO.StreamExtensions.WriteAsync(System.IO.Stream,System.ReadOnlyMemory{System.Byte},System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously writes the specified <see cref="!:ReadOnlyMemory&lt;T&gt;&lt;T&gt;" /> to the specified
+            Asynchronously writes the specified <see cref="T:System.ReadOnlyMemory`1" /> to the specified
             <see cref="T:System.IO.Stream" />.
             </summary>
             <param name="stream">The stream to write to.</param>
@@ -276,14 +276,94 @@
             <param name="bitOffset">The ordinal position of the bit to read.
             Any value outside the range [0..63] is treated as congruent mod 63.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Byte,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt16,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt32,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt64,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Byte@,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt16@,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt32@,System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.UInt64@,System.Int32,System.Boolean)" -->
+        <member name="M:System.BitOps.WriteBit(System.Byte,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt16,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt32,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt64,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns the new value.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Byte@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..7] is treated as congruent mod 8.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt16@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..15] is treated as congruent mod 16.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt32@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.UInt64@,System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Similar in behavior to the x86 instructions BTS and BTR.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="bitOffset">The ordinal position of the bit to write.
+            Any value outside the range [0..63] is treated as congruent mod 64.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
         <member name="M:System.BitOps.ClearBit(System.Byte,System.Int32)">
             <summary>
             Clears the specified bit in a mask and returns the new value.
@@ -896,10 +976,42 @@
             <param name="value">The mask.</param>
             <param name="offset">The ordinal position of the bit to read.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Span{System.Byte},System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Span{System.UInt16},System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Span{System.UInt32},System.Int32,System.Boolean)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.BitOps.WriteBit(System.Span{System.UInt64},System.Int32,System.Boolean)" -->
+        <member name="M:System.BitOps.WriteBit(System.Span{System.Byte},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt16},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt32},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
+        <member name="M:System.BitOps.WriteBit(System.Span{System.UInt64},System.Int32,System.Boolean)">
+            <summary>
+            Writes the specified bit in a mask and returns whether it was originally set.
+            Executes without branching.
+            </summary>
+            <param name="value">The mask.</param>
+            <param name="offset">The ordinal position of the bit to write.</param>
+            <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        </member>
         <member name="M:System.BitOps.ClearBit(System.Span{System.Byte},System.Int32)">
             <summary>
             Clears the specified bit in a mask and returns whether it was originally set.

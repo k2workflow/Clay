@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Json
 #pragma warning disable CA1710 // Identifiers should have correct suffix
 
     /// <summary>
-    /// A readonly version of <see cref="JsonObject"/>.
+    /// A readonly version of <see cref="JObject"/>.
     /// </summary>
     public sealed class ReadOnlyJObject : IReadOnlyDictionary<string, JToken>
 #pragma warning restore CA1710 // Identifiers should have correct suffix
@@ -127,7 +127,7 @@ namespace SourceCode.Clay.Json
         /// <summary>
         /// Merge the specified nodes into the current <see cref="ReadOnlyJObject"/>.
         /// </summary>
-        /// <param name="extra"></param>
+        /// <param name="nodes"></param>
         public ReadOnlyJObject Merge(IEnumerable<KeyValuePair<string, JToken>> nodes)
         {
             if (nodes is null || !System.Linq.Enumerable.Any(nodes))

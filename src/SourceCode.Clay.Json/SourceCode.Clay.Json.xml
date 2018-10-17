@@ -266,7 +266,7 @@
         <member name="M:SourceCode.Clay.Json.Number.ToString(System.String,System.IFormatProvider)">
             <summary>Returns a string representation of the <see cref="T:SourceCode.Clay.Json.Number"/> value.</summary>
             <param name="format">The format of the number to use.</param>
-            <param name="provider">The format provider to use.</param>
+            <param name="formatProvider">The format provider to use.</param>
             <returns>A string representation of the number.</returns>
         </member>
         <member name="M:SourceCode.Clay.Json.Number.Equals(System.Object)">
@@ -493,7 +493,7 @@
         </member>
         <member name="T:SourceCode.Clay.Json.ReadOnlyJObject">
             <summary>
-            A readonly version of <see cref="!:JsonObject"/>.
+            A readonly version of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.
             </summary>
         </member>
         <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.Count">
@@ -518,7 +518,7 @@
             <summary>
             Merge the specified nodes into the current <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/>.
             </summary>
-            <param name="extra"></param>
+            <param name="nodes"></param>
         </member>
         <member name="P:SourceCode.Clay.Json.ReadOnlyJObject.System#Collections#Generic#IReadOnlyDictionary{System#String,Newtonsoft#Json#Linq#JToken}#Keys">
             <inheritdoc/>
@@ -572,7 +572,7 @@
         </member>
         <member name="T:SourceCode.Clay.Json.ReadOnlyJObjectComparer.StrictComparer">
             <summary>
-            Represents a way to compare two <see cref="!:JObject"/> or <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/> instances
+            Represents a way to compare two <see cref="T:Newtonsoft.Json.Linq.JObject"/> or <see cref="T:SourceCode.Clay.Json.ReadOnlyJObject"/> instances
             in a case-sensitive and order-sensitive manner.
             </summary>
         </member>
@@ -622,7 +622,7 @@
             <summary>
             Implicitly converts from a <see cref="T:System.UInt32"/> to an exact <see cref="T:SourceCode.Clay.Json.Validation.CountConstraint"/>.
             </summary>
-            <param name="exact">The minimum and maximum value.</param>
+            <param name="count">The minimum and maximum value.</param>
         </member>
         <member name="M:SourceCode.Clay.Json.Validation.CountConstraint.Equals(System.Object)">
             <summary>Indicates whether this instance and a specified object are equal.</summary>
@@ -1005,6 +1005,7 @@
             <param name="maximum">The maximum value.</param>
             <param name="rangeOptions">The range options.</param>
             <param name="multipleOf">The value which the range should be a multiple of.</param>
+            <param name="required"></param>
         </member>
         <member name="M:SourceCode.Clay.Json.Validation.NumberConstraint.#ctor(System.Nullable{SourceCode.Clay.Json.Number},System.Nullable{SourceCode.Clay.Json.Number},SourceCode.Clay.Json.Validation.RangeOptions)">
             <summary>

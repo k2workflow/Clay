@@ -12,7 +12,6 @@ namespace SourceCode.Clay.Data.SqlClient
 {
     /// <summary>
     /// Represents extensions for <see cref="SqlConnectionStringBuilder"/> instances.
-    /// See <see cref="https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462"/>
     /// </summary>
     /// <seealso cref="System.Data.SqlClient.SqlConnectionStringBuilder"/>
     public static class SqlConnectionStringBuilderExtensions
