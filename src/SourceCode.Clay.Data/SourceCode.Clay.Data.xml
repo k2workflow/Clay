@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SourceCode.Clay.Data</name>
+    </assembly>
+    <members>
+        <member name="T:SourceCode.Clay.Data.SqlClient.Azure.SqlConnectionStringBuilderAzureExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/> instances.
+            See <see cref="!:https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462"/>
+            </summary>
+            <seealso cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.Azure.SqlConnectionStringBuilderAzureExtensions.MakeRobust(System.Data.SqlClient.SqlConnectionStringBuilder,SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions)">
+            <summary>
+            Add retry and timeout settings according to AzureDb best practices.
+            </summary>
+            <param name="sqlCsb">The builder instance.</param>
+            <param name="options">The options to set.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnection"/> instances.
+            </summary>
+            <seealso cref="T:System.Data.SqlClient.SqlConnection"/>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CreateCommand(System.Data.SqlClient.SqlConnection,System.String,System.Data.CommandType)">
+            <summary>
+            Create a <see cref="T:System.Data.SqlClient.SqlCommand"/> using the provided parameters.
+            </summary>
+            <param name="sqlCon">The <see cref="T:System.Data.SqlClient.SqlConnection"/> to use.</param>
+            <param name="commandText">The sql command text to use.</param>
+            <param name="commandType">The type of command.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CreateCommand(System.Data.SqlClient.SqlConnection,System.String,System.Data.CommandType,System.Int32)">
+            <summary>
+            Create a <see cref="T:System.Data.SqlClient.SqlCommand"/> using the provided parameters.
+            </summary>
+            <param name="sqlCon">The <see cref="T:System.Data.SqlClient.SqlConnection"/> to use.</param>
+            <param name="commandText">The sql command text to use.</param>
+            <param name="commandType">The type of command.</param>
+            <param name="timeoutSeconds">The command timeout.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.Reopen(System.Data.SqlClient.SqlConnection)">
+            <summary>
+            Reopens the specified <see cref="T:System.Data.SqlClient.SqlConnection"/>.
+            </summary>
+            <param name="sqlCon">The connection.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.ReopenAsync(System.Data.SqlClient.SqlConnection)">
+            <summary>
+            Reopens the specified <see cref="T:System.Data.SqlClient.SqlConnection"/>.
+            </summary>
+            <param name="sqlCon">The connection.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.OpenImpersonated(System.Data.SqlClient.SqlConnection,System.String)">
+            <summary>
+            Opens the specified <see cref="T:System.Data.SqlClient.SqlConnection"/> using impersonation.
+            </summary>
+            <param name="sqlCon">The SqlConnection to use.</param>
+            <param name="impersonatedUsername">The username to be impersonated.</param>
+            <returns>Cookie value that will be required to close the connection</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.OpenImpersonatedAsync(System.Data.SqlClient.SqlConnection,System.String)">
+            <summary>
+            Opens the specified <see cref="T:System.Data.SqlClient.SqlConnection"/> using impersonation.
+            </summary>
+            <param name="sqlCon">The SqlConnection to use.</param>
+            <param name="impersonatedUsername">The username to be impersonated.</param>
+            <returns>Cookie value that will be required to close the connection</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CloseImpersonated(System.Data.SqlClient.SqlConnection,System.Byte[])">
+            <summary>
+            Close the specified <see cref="T:System.Data.SqlClient.SqlConnection"/> and revert any impersonation.
+            </summary>
+            <param name="sqlCon">The SqlConnection to use.</param>
+            <param name="cookie">The impersonation cookie returned from the Open() method</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.CloseImpersonatedAsync(System.Data.SqlClient.SqlConnection,System.Byte[])" -->
+        <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions">
+            <summary>
+            A property bag to hold various connection retry options.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions.ConnectRetryCount">
+            <summary>
+            The number of reconnections attempted after identifying that there was an
+            idle connection failure. This must be an integer between 0 and 255. Default is 5.
+            Set to 0 to disable reconnecting on idle connection failures.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions.ConnectRetryInterval">
+            <summary>
+            Amount of time (in seconds) between each reconnection attempt after identifying that there was an
+            idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
+            </summary>
+        </member>
+        <member name="P:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions.ConnectTimeout">
+            <summary>
+            Gets or sets the length of time (in seconds) to wait for a connection to the
+            server before terminating the attempt and generating an error. The default is 30 seconds.
+            </summary>
+        </member>
+        <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/> instances.
+            See <see cref="!:https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462"/>
+            </summary>
+            <seealso cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.ClearInlineCredentials(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Clear any inline credentials store in the builder. This is useful for logging.
+            </summary>
+            <param name="sqlCsb"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Data.SqlClient.SqlDataReader"/> instances.
+            </summary>
+            <seealso cref="T:System.Data.SqlClient.SqlDataReader"/>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions.GetSqlBytes(System.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>
+            Gets the value of the specified binary column as <see cref="T:System.Byte"/>[].
+            </summary>
+            <param name="sqlDr">The data reader.</param>
+            <param name="name">The column name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions.GetSqlEnum``1(System.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>
+            Gets the value of the specified text column as an <see cref="T:System.Enum"/>.
+            </summary>
+            <param name="sqlDr">The data reader.</param>
+            <param name="name">The column name.</param>
+            <typeparam name="TEnum">The type of enum.</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions.GetSqlXml(System.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>
+            Gets the value of the specified xml column as a <see cref="T:System.String"/>.
+            </summary>
+            <param name="sqlDr">The data reader.</param>
+            <param name="name">The column name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions.GetSqlXDocument(System.Data.SqlClient.SqlDataReader,System.String)">
+            <summary>
+            Gets the value of the specified xml column as a <see cref="T:System.Xml.Linq.XDocument"/>.
+            </summary>
+            <param name="sqlDr">The data reader.</param>
+            <param name="name">The column name.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SourceCode.Clay.Data.SqlClient.SqlTransactionExtensions">
+            <summary>
+            Represents extensions for <see cref="T:System.Data.SqlClient.SqlTransaction"/> instances.
+            </summary>
+            <seealso cref="T:System.Data.SqlClient.SqlTransaction"/>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlTransactionExtensions.CreateCommand(System.Data.SqlClient.SqlTransaction,System.String,System.Data.CommandType)">
+            <summary>
+            Create a <see cref="T:System.Data.SqlClient.SqlCommand"/> using the provided parameters.
+            </summary>
+            <param name="sqlCon">The <see cref="T:System.Data.SqlClient.SqlTransaction"/> to use.</param>
+            <param name="commandText">The sql command text to use.</param>
+            <param name="commandType">The type of command.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlTransactionExtensions.CreateCommand(System.Data.SqlClient.SqlTransaction,System.String,System.Data.CommandType,System.Int32)">
+            <summary>
+            Create a <see cref="T:System.Data.SqlClient.SqlCommand"/> using the provided parameters.
+            </summary>
+            <param name="sqlTxn">The <see cref="T:System.Data.SqlClient.SqlTransaction"/> to use.</param>
+            <param name="commandText">The sql command text to use.</param>
+            <param name="commandType">The type of command.</param>
+            <param name="timeoutSeconds">The command timeout.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlCharReader.FillLength(System.Char[],System.Int32,System.Int32@)">
+            <summary>
+            Attempty to fill the provided buffer with (at least) the specified number of characters.
+            </summary>
+            <param name="buffer">The buffer to fill.</param>
+            <param name="minimumCount">The minimum number of characters required.</param>
+            <param name="count">The number of characters filled. This may be more (or less, if the source is empty) than requested.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlCharReader.FillRemaining(System.Char[],System.Int32,System.Int32@)">
+            <summary>
+            Fill the provided buffer with as many characters as are available, from the given offset.
+            </summary>
+            <param name="buffer">The buffer to fill.</param>
+            <param name="offset">The offset in the buffer from where to start filling.</param>
+            <param name="count">The number of characters filled. This may or may not fill the rest of buffer depending on whether the source is empty.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlCharReader.Undo(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Return the specified number of characters to the pool.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlParamInfo.op_Equality(SourceCode.Clay.Data.SqlParser.SqlParamInfo,SourceCode.Clay.Data.SqlParser.SqlParamInfo)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> is equal to <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlParamInfo.op_Inequality(SourceCode.Clay.Data.SqlParser.SqlParamInfo,SourceCode.Clay.Data.SqlParser.SqlParamInfo)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/> is not similar to <see cref="T:SourceCode.Clay.Data.SqlParser.SqlParamInfo"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenInfo.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if <paramref name="obj">obj</paramref> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenInfo.Equals(SourceCode.Clay.Data.SqlParser.SqlTokenInfo)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenInfo.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenInfo.op_Equality(SourceCode.Clay.Data.SqlParser.SqlTokenInfo,SourceCode.Clay.Data.SqlParser.SqlTokenInfo)">
+            <summary>
+            Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> is equal to <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenInfo.op_Inequality(SourceCode.Clay.Data.SqlParser.SqlTokenInfo,SourceCode.Clay.Data.SqlParser.SqlTokenInfo)">
+            <summary>
+            Determines if <paramref name="x"/> is not a similar version to <paramref name="y"/>.
+            </summary>
+            <param name="x">The first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> to compare.</param>
+            <param name="y">The second <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> to compare.</param>
+            <returns>
+            A value indicating whether the first <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/> is not similar to <see cref="T:SourceCode.Clay.Data.SqlParser.SqlTokenInfo"/>.
+            </returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.Tokenize(System.String,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="sql"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.Tokenize(System.IO.TextReader,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="reader"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.Tokenize(SourceCode.Clay.Data.SqlParser.SqlCharReader,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="reader"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.ReadWhitespace(System.Char[],System.Int32,SourceCode.Clay.Data.SqlParser.SqlCharReader,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="peekBuffer"></param>
+             <param name="peekLength"></param>
+             <param name="reader"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.ReadBlockComment(System.Char[],SourceCode.Clay.Data.SqlParser.SqlCharReader,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="peekBuffer"></param>
+             <param name="peekLength"></param>
+             <param name="isBlockComment"></param>
+             <param name="reader"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlParser.SqlTokenizer.ReadLineComment(System.Char[],SourceCode.Clay.Data.SqlParser.SqlCharReader,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="peekBuffer"></param>
+             <param name="peekLength"></param>
+             <param name="isBlockComment"></param>
+             <param name="reader"></param>
+             <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
+             <returns></returns>
+        </member>
+    </members>
+</doc>

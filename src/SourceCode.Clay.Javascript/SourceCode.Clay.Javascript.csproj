@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <AssemblyName>SourceCode.Clay.Javascript</AssemblyName>
+    <RootNamespace>SourceCode.Clay.Javascript</RootNamespace>
+    <DocumentationFile>SourceCode.Clay.Javascript.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <!-- CA1716	CLI holdover -->
     <!-- CA1010	Collection initializer hack requires implementing IEnumerable. -->
     <!-- CA1033	Types are not sealed for extensibility. -->
