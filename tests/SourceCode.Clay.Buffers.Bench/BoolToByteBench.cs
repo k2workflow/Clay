@@ -44,9 +44,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteBranch(s_true, 1);
+                    sum += ToByteBranch(s_true);
                     sum++;
-                    sum -= ToByteBranch(s_false, 1);
+                    sum -= ToByteBranch(s_false);
                     sum--;
 
                     sum += ToByteBranch(s_true, 4);
@@ -57,6 +57,13 @@ namespace SourceCode.Clay.Buffers.Bench
             }
 
             return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteBranch(bool condition)
+        {
+            uint val = condition ? 1u : 0u;
+            return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,9 +86,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BitOps.Evaluate(s_true, 1ul);
+                    sum += BitOps.Evaluate(s_true);
                     sum++;
-                    sum -= BitOps.Evaluate(s_false, 1ul);
+                    sum -= BitOps.Evaluate(s_false);
                     sum--;
 
                     sum += BitOps.Evaluate(s_true, 4ul);
@@ -103,9 +110,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteUnsafe(s_true, 1);
+                    sum += ToByteUnsafe(s_true);
                     sum++;
-                    sum -= ToByteUnsafe(s_false, 0);
+                    sum -= ToByteUnsafe(s_false);
                     sum--;
 
                     sum += ToByteUnsafe(s_true, 4);
@@ -116,6 +123,18 @@ namespace SourceCode.Clay.Buffers.Bench
             }
 
             return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafe(bool condition)
+        {
+            uint val;
+            unsafe
+            {
+                val = *(byte*)&condition;
+            }
+
+            return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -142,9 +161,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteUnsafeAs(s_true, 1);
+                    sum += ToByteUnsafeAs(s_true);
                     sum++;
-                    sum -= ToByteUnsafeAs(s_false, 1);
+                    sum -= ToByteUnsafeAs(s_false);
                     sum--;
 
                     sum += ToByteUnsafeAs(s_true, 4);
@@ -156,7 +175,14 @@ namespace SourceCode.Clay.Buffers.Bench
 
             return sum;
         }
-        
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafeAs(bool condition)
+        {
+            uint val = Unsafe.As<bool, byte>(ref condition);
+            return (byte)val;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ToByteUnsafeAs(bool condition, byte trueValue, byte falseValue = 0)
         {
@@ -177,9 +203,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BoolToByte.Evaluate(s_true, 1);
+                    sum += BoolToByte.Evaluate(s_true);
                     sum++;
-                    sum -= BoolToByte.Evaluate(s_false, 1);
+                    sum -= BoolToByte.Evaluate(s_false);
                     sum--;
 
                     sum += BoolToByte.Evaluate(s_true, 4);
@@ -204,7 +230,7 @@ namespace SourceCode.Clay.Buffers.Bench
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
             {
-                uint val = EvaluateImpl(condition);
+                uint val = Evaluate(condition);
                 val = (val * trueValue)
                     + ((1 - val) * falseValue);
 
@@ -213,10 +239,10 @@ namespace SourceCode.Clay.Buffers.Bench
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint Evaluate(bool condition, uint trueValue) 
-                => EvaluateImpl(condition) * trueValue;
+                => Evaluate(condition) * trueValue;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private static uint EvaluateImpl(bool condition)
+            public static uint Evaluate(bool condition)
                 => new BoolToByte { Bool = condition }.Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
