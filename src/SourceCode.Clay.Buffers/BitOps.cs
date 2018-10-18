@@ -149,7 +149,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -183,7 +183,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -216,7 +216,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -249,7 +249,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on);
+            ulong onn = If(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -287,7 +287,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -311,7 +311,7 @@ namespace System
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = Evaluate(on);
+            int onn = If(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -335,7 +335,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -359,7 +359,7 @@ namespace System
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = Evaluate(on);
+            int onn = If(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -382,7 +382,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on);
+            uint onn = If(on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -405,7 +405,7 @@ namespace System
         {
             int mask = 1 << bitOffset;
 
-            int onn = Evaluate(on);
+            int onn = If(on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -428,7 +428,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on);
+            ulong onn = If(on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -451,7 +451,7 @@ namespace System
         {
             long mask = 1L << bitOffset;
 
-            long onn = Evaluate(on);
+            long onn = If(on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1614,7 +1614,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += Evaluate(value == 0);
+            zeros += If(value == 0);
 
             return zeros;
         }
@@ -1651,8 +1651,8 @@ namespace System
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += Evaluate((value >> 32) == 0);
-            b += Evaluate(value == 0);
+            h += If((value >> 32) == 0);
+            b += If(value == 0);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -1661,7 +1661,7 @@ namespace System
             // h  32  0   h        h + (32 * 0)
             // h   b  0   h        h + (b * 0)
 
-            b = Evaluate(h == 32, b); // Only add b if h==32
+            b = If(h == 32, b); // Only add b if h==32
             return (int)(h + b);
         }
 
@@ -1871,7 +1871,7 @@ namespace System
             // h  32  1   32+h   32 + (h * 1)
             // h   b  0   b       b + (h * 0)
 
-            h = Evaluate(b == 32, h); // Only add h if b==32
+            h = If(b == 32, h); // Only add h if b==32
             return (int)(b + h);
         }
 
@@ -1954,7 +1954,7 @@ namespace System
 
         #endregion
 
-        #region Evaluate
+        #region If
 
         /// <summary>
         /// Converts a boolean to a byte value, without branching.
@@ -1962,7 +1962,7 @@ namespace System
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Evaluate(bool condition)
+        public static byte If(bool condition)
             => Unsafe.As<bool, byte>(ref condition); // 1|0
 
         /// <summary>
@@ -1972,7 +1972,7 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Evaluate(bool condition, uint trueValue)
+        public static uint If(bool condition, uint trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
@@ -1983,7 +1983,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
+        public static uint If(bool condition, uint trueValue, uint falseValue)
         {
             uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -2000,7 +2000,7 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Evaluate(bool condition, int trueValue)
+        public static int If(bool condition, int trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
@@ -2011,7 +2011,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Evaluate(bool condition, int trueValue, int falseValue)
+        public static int If(bool condition, int trueValue, int falseValue)
         {
             int val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -2028,7 +2028,7 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Evaluate(bool condition, ulong trueValue)
+        public static ulong If(bool condition, ulong trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
@@ -2039,7 +2039,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong Evaluate(bool condition, ulong trueValue, ulong falseValue)
+        public static ulong If(bool condition, ulong trueValue, ulong falseValue)
         {
             ulong val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -2056,7 +2056,7 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Evaluate(bool condition, long trueValue)
+        public static long If(bool condition, long trueValue)
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
@@ -2067,7 +2067,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long Evaluate(bool condition, long trueValue, long falseValue)
+        public static long If(bool condition, long trueValue, long falseValue)
         {
             long val = Unsafe.As<bool, byte>(ref condition); // 1|0
 
@@ -2077,13 +2077,17 @@ namespace System
             return val; // N|M
         }
 
+        #endregion
+
+        #region NotEqualToZero
+
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
         /// Returns False if 0, else returns True.
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Evaluate(this uint value)
+        public static bool NotEqualToZero(this uint value)
         {
             byte val = (byte)FillTrailingOnes(value);
             val &= 1; // 1|0
@@ -2101,7 +2105,7 @@ namespace System
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Evaluate(this ulong value)
+        public static bool NotEqualToZero(this ulong value)
         {
             byte val = (byte)FillTrailingOnes(value);
             val &= 1; // 1|0
@@ -2119,8 +2123,8 @@ namespace System
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Evaluate(this int value)
-            => unchecked(Evaluate((uint)value));
+        public static bool NotEqualToZero(this int value)
+            => unchecked(NotEqualToZero((uint)value));
 
         /// <summary>
         /// Converts an integer value to a boolean, without branching.
@@ -2128,8 +2132,8 @@ namespace System
         /// </summary>
         /// <param name="value">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Evaluate(this long value)
-            => unchecked(Evaluate((ulong)value));
+        public static bool NotEqualToZero(this long value)
+            => unchecked(NotEqualToZero((ulong)value));
 
         #endregion
 

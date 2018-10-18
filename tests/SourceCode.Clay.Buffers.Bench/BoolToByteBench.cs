@@ -96,14 +96,14 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BitOps.Evaluate(s_true);
+                    sum += BitOps.If(s_true);
                     sum++;
-                    sum -= BitOps.Evaluate(s_false);
+                    sum -= BitOps.If(s_false);
                     sum--;
 
-                    sum += BitOps.Evaluate(s_true, 4);
-                    sum -= BitOps.Evaluate(s_false, 3);
-                    sum += BitOps.Evaluate(s_true, 3, 2);
+                    sum += BitOps.If(s_true, 4);
+                    sum -= BitOps.If(s_false, 3);
+                    sum += BitOps.If(s_true, 3, 2);
                     sum -= 7;
                 }
             }

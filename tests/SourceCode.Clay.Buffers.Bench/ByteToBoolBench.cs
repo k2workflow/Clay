@@ -59,6 +59,27 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
+        public static ulong Logical()
+        {
+            ulong sum = 0ul;
+
+            for (int i = 0; i < _iterations; i++)
+            {
+                for (int n = short.MinValue; n <= short.MaxValue; n++)
+                {
+                    if (ToBoolLogical(n) == s_true)
+                        sum++;
+                }
+            }
+
+            return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool ToBoolLogical(int value)
+            => value != 0;
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Actual()
         {
             ulong sum = 0ul;
@@ -67,7 +88,7 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = short.MinValue; n <= short.MaxValue; n++)
                 {
-                    if (BitOps.Evaluate(n) == s_true)
+                    if (BitOps.NotEqualToZero(n) == s_true)
                         sum++;
                 }
             }
