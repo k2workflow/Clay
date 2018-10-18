@@ -13,8 +13,8 @@ namespace SourceCode.Clay.Tests
     {
 #pragma warning disable IDE0044 // Add readonly modifier
         // Prevent folding by using non-readonly non-constant
-        private static bool @true = true;
-        private static bool @false = false;
+        private static volatile bool s_true = true;
+        private static volatile bool s_false = false;
 #pragma warning restore IDE0044 // Add readonly modifier
 
         [Fact(DisplayName = nameof(BoolToByte))]
@@ -27,17 +27,17 @@ namespace SourceCode.Clay.Tests
             const byte max = byte.MaxValue;
             const byte min = byte.MinValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.Evaluate(t1));
+            Assert.Equal(t0, s_false.Evaluate(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2));
+            Assert.Equal(t3, s_false.Evaluate(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2, t3));
+            Assert.Equal(t3, s_false.Evaluate(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.Evaluate(max, min));
+            Assert.Equal(max, s_false.Evaluate(min, max));
         }
 
         [Fact(DisplayName = nameof(ByteToBool))]
@@ -68,17 +68,17 @@ namespace SourceCode.Clay.Tests
             const ushort max = ushort.MaxValue;
             const ushort min = ushort.MinValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.Evaluate(t1));
+            Assert.Equal(t0, s_false.Evaluate(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2));
+            Assert.Equal(t3, s_false.Evaluate(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2, t3));
+            Assert.Equal(t3, s_false.Evaluate(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.Evaluate(max, min));
+            Assert.Equal(max, s_false.Evaluate(min, max));
         }
 
         [Fact(DisplayName = nameof(UInt16ToBool))]
@@ -109,17 +109,17 @@ namespace SourceCode.Clay.Tests
             const uint max = uint.MaxValue;
             const uint min = uint.MinValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.Evaluate(t1));
+            Assert.Equal(t0, s_false.Evaluate(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2));
+            Assert.Equal(t3, s_false.Evaluate(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2, t3));
+            Assert.Equal(t3, s_false.Evaluate(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.Evaluate(max, min));
+            Assert.Equal(max, s_false.Evaluate(min, max));
         }
 
         [Theory(DisplayName = nameof(UInt32ToBool))]
@@ -176,17 +176,17 @@ namespace SourceCode.Clay.Tests
             const ulong max = ulong.MaxValue;
             const ulong min = ulong.MinValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.Evaluate(t1));
+            Assert.Equal(t0, s_false.Evaluate(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2));
+            Assert.Equal(t3, s_false.Evaluate(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.Evaluate(t2, t3));
+            Assert.Equal(t3, s_false.Evaluate(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.Evaluate(max, min));
+            Assert.Equal(max, s_false.Evaluate(min, max));
         }
 
         [Theory(DisplayName = nameof(UInt64ToBool))]

@@ -30,8 +30,8 @@ namespace SourceCode.Clay.Buffers.Bench
 
 #pragma warning disable IDE0044 // Add readonly modifier
         // Prevent folding by using non-readonly non-constant
-        private static bool s_true = true;
-        private static bool s_false = false;
+        private static volatile bool s_true = true;
+        private static volatile bool s_false = false;
 #pragma warning restore IDE0044 // Add readonly modifier
 
         [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]

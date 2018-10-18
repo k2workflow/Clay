@@ -14,31 +14,31 @@ using System.Runtime.InteropServices;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev | Scaled |
-    ----------- |---------:|----------:|----------:|-------:|
-         Branch | 3.847 ns | 0.0747 ns | 0.1071 ns |   1.00 |
-         Actual | 2.491 ns | 0.0270 ns | 0.0239 ns |   0.65 | x
-     UnsafeCode | 3.636 ns | 0.0436 ns | 0.0408 ns |   0.95 |
-       UnsafeAs | 2.442 ns | 0.0223 ns | 0.0208 ns |   0.64 | x
-          Union | 2.925 ns | 0.0641 ns | 0.0658 ns |   0.76 | ~
+         Method |     Mean |     Error |    StdDev |   Median | Scaled |
+    ----------- |---------:|----------:|----------:|---------:|-------:|
+         Branch | 4.114 ns | 0.0820 ns | 0.1816 ns | 4.014 ns |   1.52 | !
+         Actual | 3.304 ns | 0.0215 ns | 0.0190 ns | 3.306 ns |   1.22 | ~
+     UnsafeCode | 3.624 ns | 0.0694 ns | 0.0649 ns | 3.599 ns |   1.34 |
+       UnsafeAs | 2.700 ns | 0.0252 ns | 0.0197 ns | 2.706 ns |   1.00 | x
+          Union | 3.579 ns | 0.0281 ns | 0.0249 ns | 3.575 ns |   1.33 |
     */
 
     //[MemoryDiagnoser]
     public class BoolToByteBench
     {
-        private const uint _iterations = 1000;
-        private const uint N = ushort.MaxValue;
+        private const int _iterations = 2000;
+        private const int N = ushort.MaxValue;
 
 #pragma warning disable IDE0044 // Add readonly modifier
         // Prevent folding by using non-readonly non-constant
-        private static bool s_true = true;
-        private static bool s_false = false;
+        private static volatile bool s_true = true;
+        private static volatile bool s_false = false;
 #pragma warning restore IDE0044 // Add readonly modifier
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Branch()
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public static long Branch()
         {
-            ulong sum = 0ul;
+            long sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -62,14 +62,24 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ToByteBranch(bool condition)
         {
-            uint val = condition ? 1u : 0u;
+            int val = condition ? 1 : 0;
             return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteBranch(bool condition, byte trueValue, byte falseValue = 0)
+        private static byte ToByteBranch(bool condition, int trueValue)
         {
-            uint val = condition ? 1u : 0u;
+            int val = condition ? 1 : 0;
+
+            val *= trueValue;
+
+            return (byte)val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteBranch(bool condition, int trueValue, int falseValue)
+        {
+            int val = condition ? 1 : 0;
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -77,10 +87,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Actual()
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public static long Actual()
         {
-            ulong sum = 0ul;
+            long sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -91,9 +101,9 @@ namespace SourceCode.Clay.Buffers.Bench
                     sum -= BitOps.Evaluate(s_false);
                     sum--;
 
-                    sum += BitOps.Evaluate(s_true, 4ul);
-                    sum -= BitOps.Evaluate(s_false, 3ul);
-                    sum += BitOps.Evaluate(s_true, 3ul, 2ul);
+                    sum += BitOps.Evaluate(s_true, 4);
+                    sum -= BitOps.Evaluate(s_false, 3);
+                    sum += BitOps.Evaluate(s_true, 3, 2);
                     sum -= 7;
                 }
             }
@@ -101,10 +111,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong UnsafeCode()
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public static long UnsafeCode()
         {
-            ulong sum = 0ul;
+            long sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -128,7 +138,7 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ToByteUnsafe(bool condition)
         {
-            uint val;
+            int val;
             unsafe
             {
                 val = *(byte*)&condition;
@@ -138,9 +148,23 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafe(bool condition, byte trueValue, byte falseValue = 0)
+        private static byte ToByteUnsafe(bool condition, int trueValue)
         {
-            uint val;
+            int val;
+            unsafe
+            {
+                val = *(byte*)&condition;
+            }
+
+            val *= trueValue;
+
+            return (byte)val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafe(bool condition, int trueValue, int falseValue)
+        {
+            int val;
             unsafe
             {
                 val = *(byte*)&condition;
@@ -152,10 +176,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong UnsafeAs()
+        [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        public static long UnsafeAs()
         {
-            ulong sum = 0ul;
+            long sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -178,15 +202,19 @@ namespace SourceCode.Clay.Buffers.Bench
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ToByteUnsafeAs(bool condition)
+            => Unsafe.As<bool, byte>(ref condition);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafeAs(bool condition, int trueValue)
         {
-            uint val = Unsafe.As<bool, byte>(ref condition);
+            int val = Unsafe.As<bool, byte>(ref condition) * trueValue;
             return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAs(bool condition, byte trueValue, byte falseValue = 0)
+        private static byte ToByteUnsafeAs(bool condition, int trueValue, int falseValue)
         {
-            uint val = Unsafe.As<bool, byte>(ref condition);
+            int val = Unsafe.As<bool, byte>(ref condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -194,10 +222,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
-        [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
-        public static ulong Union()
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public static long Union()
         {
-            ulong sum = 0ul;
+            long sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -218,7 +246,7 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
-        [StructLayout(LayoutKind.Explicit, Size = 1)] // Runtime can choose Pack
+        [StructLayout(LayoutKind.Explicit, Size = 1, Pack = 1)]
         internal ref struct BoolToByte
         {
             [FieldOffset(0)]
@@ -228,9 +256,18 @@ namespace SourceCode.Clay.Buffers.Bench
             public byte Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition, uint trueValue, uint falseValue)
+            public static int Evaluate(bool condition)
+                => new BoolToByte { Bool = condition }.Byte;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static int Evaluate(bool condition, int trueValue) 
+                => Evaluate(condition) * trueValue;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static uint Evaluate(bool condition, int trueValue, int falseValue)
             {
-                uint val = Evaluate(condition);
+                int val = Evaluate(condition);
+
                 val = (val * trueValue)
                     + ((1 - val) * falseValue);
 
@@ -238,22 +275,14 @@ namespace SourceCode.Clay.Buffers.Bench
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition, uint trueValue) 
-                => Evaluate(condition) * trueValue;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition)
-                => new BoolToByte { Bool = condition }.Byte;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool Evaluate(int value)
             {
-                byte val = (byte)BitOps.FillTrailingOnes(unchecked((uint)value));
+                uint val = BitOps.FillTrailingOnes(unchecked((uint)value));
                 val &= 1;
 
                 Debug.Assert(val == 0 || val == 1);
 
-                return new BoolToByte { Byte = val }.Bool;
+                return new BoolToByte { Byte = (byte)val }.Bool;
             }
         }
     }

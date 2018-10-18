@@ -1299,6 +1299,14 @@
             </summary>
             <param name="condition">The value to convert.</param>
         </member>
+        <member name="M:System.BitOps.Evaluate(System.Boolean,System.UInt32)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+        </member>
         <member name="M:System.BitOps.Evaluate(System.Boolean,System.UInt32,System.UInt32)">
             <summary>
             Converts a boolean to an integer value, without branching.
@@ -1308,23 +1316,6 @@
             <param name="trueValue">The value to return if True.</param>
             <param name="falseValue">The value to return if False.</param>
         </member>
-        <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int32,System.Int32)">
-            <summary>
-            Converts a boolean to an integer value, without branching.
-            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
-            </summary>
-            <param name="condition">The value to convert.</param>
-            <param name="trueValue">The value to return if True.</param>
-            <param name="falseValue">The value to return if False.</param>
-        </member>
-        <member name="M:System.BitOps.Evaluate(System.Boolean,System.UInt32)">
-            <summary>
-            Converts a boolean to an integer value, without branching.
-            Returns <paramref name="trueValue"/> if True, else returns 0.
-            </summary>
-            <param name="condition">The value to convert.</param>
-            <param name="trueValue">The value to return if True.</param>
-        </member>
         <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int32)">
             <summary>
             Converts a boolean to a integer value, without branching.
@@ -1333,16 +1324,7 @@
             <param name="condition">The value to convert.</param>
             <param name="trueValue">The value to return if True.</param>
         </member>
-        <member name="M:System.BitOps.Evaluate(System.Boolean,System.UInt64,System.UInt64)">
-            <summary>
-            Converts a boolean to an integer value, without branching.
-            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
-            </summary>
-            <param name="condition">The value to convert.</param>
-            <param name="trueValue">The value to return if True.</param>
-            <param name="falseValue">The value to return if False.</param>
-        </member>
-        <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int64,System.Int64)">
+        <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int32,System.Int32)">
             <summary>
             Converts a boolean to an integer value, without branching.
             Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
@@ -1359,6 +1341,15 @@
             <param name="condition">The value to convert.</param>
             <param name="trueValue">The value to return if True.</param>
         </member>
+        <member name="M:System.BitOps.Evaluate(System.Boolean,System.UInt64,System.UInt64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
+        </member>
         <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int64)">
             <summary>
             Converts a boolean to an integer value, without branching.
@@ -1366,6 +1357,15 @@
             </summary>
             <param name="condition">The value to convert.</param>
             <param name="trueValue">The value to return if True.</param>
+        </member>
+        <member name="M:System.BitOps.Evaluate(System.Boolean,System.Int64,System.Int64)">
+            <summary>
+            Converts a boolean to an integer value, without branching.
+            Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+            </summary>
+            <param name="condition">The value to convert.</param>
+            <param name="trueValue">The value to return if True.</param>
+            <param name="falseValue">The value to return if False.</param>
         </member>
         <member name="M:System.BitOps.Evaluate(System.UInt32)">
             <summary>
