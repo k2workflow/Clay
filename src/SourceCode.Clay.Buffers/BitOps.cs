@@ -149,7 +149,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -183,7 +183,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -216,7 +216,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -249,7 +249,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1UL);
+            ulong onn = Evaluate(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -287,7 +287,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -311,7 +311,7 @@ namespace System
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = Evaluate(on, 1);
+            int onn = Evaluate(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -335,7 +335,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -359,7 +359,7 @@ namespace System
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = Evaluate(on, 1);
+            int onn = Evaluate(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -382,7 +382,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Evaluate(on, 1U);
+            uint onn = Evaluate(on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -405,7 +405,7 @@ namespace System
         {
             int mask = 1 << bitOffset;
 
-            int onn = Evaluate(on, 1);
+            int onn = Evaluate(on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -428,7 +428,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Evaluate(on, 1UL);
+            ulong onn = Evaluate(on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -451,7 +451,7 @@ namespace System
         {
             long mask = 1L << bitOffset;
 
-            long onn = Evaluate(on, 1L);
+            long onn = Evaluate(on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1614,7 +1614,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += Evaluate(value == 0, 1);
+            zeros += Evaluate(value == 0);
 
             return zeros;
         }
@@ -1651,8 +1651,8 @@ namespace System
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += Evaluate((value >> 32) == 0, 1U);
-            b += Evaluate(value == 0, 1U);
+            h += Evaluate((value >> 32) == 0);
+            b += Evaluate(value == 0);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -1752,6 +1752,8 @@ namespace System
             // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
             const int p = 37;
 
+            s_trail32u[0] = 32; // Loop excludes [0]
+
             long n = 1;
             for (byte i = 1; i < p; i++)
             {
@@ -1762,8 +1764,6 @@ namespace System
 
                 n <<= 1; // mul 2
             }
-
-            s_trail32u[0] = 32; // Loop excludes [0]
         }
 
         private static readonly byte[] s_trail32u = new byte[37];
