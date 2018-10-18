@@ -16,8 +16,7 @@ namespace SourceCode.Clay.Buffers.Bench
         {
             //Summary bench = new SwitchBench();
             //Summary summary = BenchmarkRunner.Run<SwitchBench>();
-            //Summary summary = BenchmarkRunner.Run<BoolToByteBench>();
-            Summary summary = BenchmarkRunner.Run<ByteToBoolBench>();
+            Summary summary = BenchmarkRunner.Run<BoolToByteBench>();
             //Summary summary = BenchmarkRunner.Run<MinBench>();
             //Summary summary = BenchmarkRunner.Run<SpanBench>();
 

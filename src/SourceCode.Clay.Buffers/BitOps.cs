@@ -1941,7 +1941,7 @@ namespace System
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int TrailingOnes(ulong value) 
+        public static int TrailingOnes(ulong value)
             => TrailingZeros(~value);
 
         /// <summary>
@@ -2076,64 +2076,6 @@ namespace System
 
             return val; // N|M
         }
-
-        #endregion
-
-        #region NotEqualToZero
-
-        /// <summary>
-        /// Converts an integer value to a boolean, without branching.
-        /// Returns False if 0, else returns True.
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool NotEqualToZero(this uint value)
-        {
-            byte val = (byte)FillTrailingOnes(value);
-            val &= 1; // 1|0
-
-            // Ensure value is 1|0 only, despite any code drift above
-            Debug.Assert(val == 0 || val == 1);
-
-            bool b2b = Unsafe.As<byte, bool>(ref val);
-            return b2b;
-        }
-
-        /// <summary>
-        /// Converts an integer value to a boolean, without branching.
-        /// Returns False if 0, else returns True.
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool NotEqualToZero(this ulong value)
-        {
-            byte val = (byte)FillTrailingOnes(value);
-            val &= 1; // 1|0
-
-            // Ensure value is 1|0 only, despite any code drift above
-            Debug.Assert(val == 0 || val == 1);
-
-            bool b2b = Unsafe.As<byte, bool>(ref val);
-            return b2b;
-        }
-
-        /// <summary>
-        /// Converts an integer value to a boolean, without branching.
-        /// Returns False if 0, else returns True.
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool NotEqualToZero(this int value)
-            => unchecked(NotEqualToZero((uint)value));
-
-        /// <summary>
-        /// Converts an integer value to a boolean, without branching.
-        /// Returns False if 0, else returns True.
-        /// </summary>
-        /// <param name="value">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool NotEqualToZero(this long value)
-            => unchecked(NotEqualToZero((ulong)value));
 
         #endregion
 
