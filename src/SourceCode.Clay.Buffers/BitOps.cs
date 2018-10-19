@@ -1966,9 +1966,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // 0..255
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
 
-            // CLR permits other values for True
+            // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
 
             val = -val; // If non-zero, negation will set sign-bit
@@ -1986,9 +1986,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // 0..255
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
 
-            // CLR permits other values for True
+            // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
 
             val = -val; // If non-zero, negation will set sign-bit
