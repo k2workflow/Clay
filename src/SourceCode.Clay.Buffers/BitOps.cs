@@ -2011,8 +2011,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue)
         {
-            uint mask = AsByte(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return ~mask & trueValue;
+            uint val = AsByte(ref condition);
+            return val * trueValue;
         }
 
         /// <summary>
@@ -2025,8 +2025,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue, uint falseValue)
         {
-            uint mask = AsByte(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            uint val = AsByte(ref condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         /// <summary>
@@ -2059,8 +2059,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue)
         {
-            ulong mask = AsByte(ref condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
-            return ~mask & trueValue;
+            ulong val = AsByte(ref condition);
+            return val * trueValue;
         }
 
         /// <summary>
@@ -2073,8 +2073,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong mask = AsByte(ref condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            ulong val = AsByte(ref condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         /// <summary>

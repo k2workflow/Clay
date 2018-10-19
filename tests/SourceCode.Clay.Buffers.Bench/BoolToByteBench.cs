@@ -66,15 +66,15 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ToByteBranch(bool condition, uint trueValue)
         {
-            uint mask = AsByteBranch(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return ~mask & trueValue;
+            uint val = AsByteBranch(condition);
+            return val * trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ToByteBranch(bool condition, uint trueValue, uint falseValue)
         {
-            uint mask = AsByteBranch(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            uint val = AsByteBranch(condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         #endregion
@@ -149,15 +149,15 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint IfUnsafe(bool condition, uint trueValue)
         {
-            uint mask = AsByteUnsafe(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return ~mask & trueValue;
+            uint val = AsByteUnsafe(condition);
+            return val * trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint IfUnsafe(bool condition, uint trueValue, uint falseValue)
         {
-            uint mask = AsByteUnsafe(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            uint val = AsByteUnsafe(condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         #endregion
@@ -200,15 +200,15 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint IfUnsafeAs(bool condition, uint trueValue)
         {
-            uint mask = AsByteUnsafeAs(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return ~mask & trueValue;
+            uint val = AsByteUnsafeAs(condition);
+            return val * trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint IfUnsafeAs(bool condition, uint trueValue, uint falseValue)
         {
-            uint mask = AsByteUnsafeAs(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            uint val = AsByteUnsafeAs(condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         #endregion
@@ -253,15 +253,15 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ToByteUnsafeAsRef(ref bool condition, uint trueValue)
         {
-            uint mask = AsByteUnsafeAsRef(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return ~mask & trueValue;
+            uint val = AsByteUnsafeAsRef(ref condition);
+            return val * trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ToByteUnsafeAsRef(ref bool condition, uint trueValue, uint falseValue)
         {
-            uint mask = AsByteUnsafeAsRef(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-            return (mask & falseValue) | (~mask & trueValue);
+            uint val = AsByteUnsafeAsRef(ref condition);
+            return (val * trueValue) + (1 - val) * falseValue;
         }
 
         #endregion
@@ -313,15 +313,15 @@ namespace SourceCode.Clay.Buffers.Bench
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint If(bool condition, uint trueValue)
             {
-                uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-                return ~mask & trueValue;
+                uint val = AsByte(condition);
+                return val * trueValue;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint If(bool condition, uint trueValue, uint falseValue)
             {
-                uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
-                return (mask & falseValue) | (~mask & trueValue);
+                uint val = AsByte(condition);
+                return (val * trueValue) + (1 - val) * falseValue;
             }
         }
 
