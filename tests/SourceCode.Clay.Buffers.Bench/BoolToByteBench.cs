@@ -96,9 +96,9 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BitOps.If(s_true);
+                    sum += BitOps.AsByte(s_true);
                     sum++;
-                    sum -= BitOps.If(s_false);
+                    sum -= BitOps.AsByte(s_false);
                     sum--;
 
                     sum += BitOps.If(s_true, 4);

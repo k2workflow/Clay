@@ -149,7 +149,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -183,7 +183,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -216,7 +216,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -249,7 +249,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = If(on);
+            ulong onn = AsByte(on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -287,7 +287,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -311,7 +311,7 @@ namespace System
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = If(on);
+            int onn = AsByte(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -335,7 +335,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -359,7 +359,7 @@ namespace System
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = If(on);
+            int onn = AsByte(on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -382,7 +382,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = If(on);
+            uint onn = AsByte(on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -405,7 +405,7 @@ namespace System
         {
             int mask = 1 << bitOffset;
 
-            int onn = If(on);
+            int onn = AsByte(on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -428,7 +428,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = If(on);
+            ulong onn = AsByte(on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -451,7 +451,7 @@ namespace System
         {
             long mask = 1L << bitOffset;
 
-            long onn = If(on);
+            long onn = AsByte(on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1614,7 +1614,7 @@ namespace System
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += If(value == 0);
+            zeros += AsByte(value == 0);
 
             return zeros;
         }
@@ -1651,8 +1651,8 @@ namespace System
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += If((value >> 32) == 0);
-            b += If(value == 0);
+            h += AsByte((value >> 32) == 0);
+            b += AsByte(value == 0);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -1957,16 +1957,16 @@ namespace System
         #region If
 
         /// <summary>
-        /// Converts a boolean to a byte value, without branching.
+        /// Converts a boolean to a byte value without branching.
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte If(bool condition)
+        public static byte AsByte(bool condition)
             => Unsafe.As<bool, byte>(ref condition); // 1|0
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -1976,7 +1976,7 @@ namespace System
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -1994,7 +1994,7 @@ namespace System
         }
 
         /// <summary>
-        /// Converts a boolean to a integer value, without branching.
+        /// Converts a boolean to a integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2004,7 +2004,7 @@ namespace System
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2022,7 +2022,7 @@ namespace System
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2032,7 +2032,7 @@ namespace System
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2050,7 +2050,7 @@ namespace System
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2060,7 +2060,7 @@ namespace System
             => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
