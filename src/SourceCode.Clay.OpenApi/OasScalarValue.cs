@@ -5,8 +5,8 @@
 
 #endregion
 
-using SourceCode.Clay.Json;
 using System;
+using SourceCode.Clay.Json;
 
 namespace SourceCode.Clay.OpenApi
 {
@@ -135,7 +135,7 @@ namespace SourceCode.Clay.OpenApi
         public OasScalarValue(bool boolean)
         {
             _typeCode = (byte)TypeCode.Boolean;
-            _number = new Number(boolean.Evaluate(1));
+            _number = new Number(boolean.ConvertFast());
             _string = null;
         }
 
