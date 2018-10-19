@@ -1608,7 +1608,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
         {
-            uint val = CascadeTrailing(value);
+            uint val = value;
+            CascadeTrailing(ref val);
 
             uint ix = (val * DeBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
@@ -1636,7 +1637,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
         {
-            ulong val = CascadeTrailing(value);
+            ulong val = value;
+            CascadeTrailing(ref val);
 
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
@@ -1954,7 +1956,7 @@ namespace System
 
         #endregion
 
-        #region If
+        #region AsByte
 
         /// <summary>
         /// Converts a boolean to a byte value without branching.
@@ -1964,12 +1966,16 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
         {
-            byte val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            int val = Unsafe.As<bool, byte>(ref condition); // 0..255
 
-            // Ensure the value is 1|0 only, despite any implementation drift above
-            Debug.Assert(val == 0 || val == 1);
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
 
-            return val; // 1|0
+            val = -val; // If non-zero, negation will set sign-bit
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
+
+            return (byte)val; // 0|1
         }
 
         /// <summary>
@@ -1980,13 +1986,21 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
         {
-            byte val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            int val = Unsafe.As<bool, byte>(ref condition); // 0..255
 
-            // Ensure the value is 1|0 only, despite any implementation drift above
-            Debug.Assert(val == 0 || val == 1);
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
 
-            return val; // 1|0
+            val = -val; // If non-zero, negation will set sign-bit
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
+
+            return (byte)val; // 0|1
         }
+
+        #endregion
+
+        #region If
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -1996,7 +2010,10 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue)
-            => AsByte(ref condition) * trueValue; // N|0
+        {
+            uint mask = AsByte(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
+        }
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2008,12 +2025,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = AsByte(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val; // N|M
+            uint mask = AsByte(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         /// <summary>
@@ -2024,7 +2037,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue)
-            => AsByte(ref condition) * trueValue; // N|0
+            => unchecked((int)If(condition, (uint)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2035,14 +2048,7 @@ namespace System
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue, int falseValue)
-        {
-            int val = AsByte(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val; // N|M
-        }
+            => unchecked((int)If(condition, (uint)trueValue, (uint)falseValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2052,7 +2058,10 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue)
-            => AsByte(ref condition) * trueValue; // N|0
+        {
+            ulong mask = AsByte(ref condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
+            return ~mask & trueValue;
+        }
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2064,12 +2073,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = AsByte(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val; // N|M
+            ulong mask = AsByte(ref condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         /// <summary>
@@ -2080,7 +2085,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue)
-            => AsByte(ref condition) * trueValue; // N|0
+            => unchecked((long)If(condition, (ulong)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2091,51 +2096,36 @@ namespace System
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue, long falseValue)
-        {
-            long val = AsByte(ref condition); // 1|0
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val; // N|M
-        }
+            => unchecked((long)If(condition, (ulong)trueValue, (ulong)falseValue));
 
         #endregion
 
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint CascadeTrailing(uint value)
+        internal static void CascadeTrailing(ref uint value)
         {
-            uint val = value;
-
             // byte#                     4          3   2  1
             //                   1000 0000  0000 0000  00 00
-            val |= val >> 01; // 1100 0000  0000 0000  00 00
-            val |= val >> 02; // 1111 0000  0000 0000  00 00
-            val |= val >> 04; // 1111 1111  0000 0000  00 00
-            val |= val >> 08; // 1111 1111  1111 1111  00 00
-            val |= val >> 16; // 1111 1111  1111 1111  FF FF
-
-            return val;
+            value |= value >> 01; // 1100 0000  0000 0000  00 00
+            value |= value >> 02; // 1111 0000  0000 0000  00 00
+            value |= value >> 04; // 1111 1111  0000 0000  00 00
+            value |= value >> 08; // 1111 1111  1111 1111  00 00
+            value |= value >> 16; // 1111 1111  1111 1111  FF FF
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ulong CascadeTrailing(ulong value)
+        internal static void CascadeTrailing(ref ulong value)
         {
-            ulong val = value;
-
             // byte#                     8          7   6  5   4  3   2  1
             //                   1000 0000  0000 0000  00 00  00 00  00 00
-            val |= val >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
-            val |= val >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
-            val |= val >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
-            val |= val >> 08; // 1111 1111  1111 1111  00 00  00 00  00 00
-            val |= val >> 16; // 1111 1111  1111 1111  FF FF  00 00  00 00
+            value |= value >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
+            value |= value >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
+            value |= value >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
+            value |= value >> 08; // 1111 1111  1111 1111  00 00  00 00  00 00
+            value |= value >> 16; // 1111 1111  1111 1111  FF FF  00 00  00 00
 
-            val |= val >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
-
-            return CascadeTrailing((uint)val);
+            value |= value >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
         }
 
         #endregion

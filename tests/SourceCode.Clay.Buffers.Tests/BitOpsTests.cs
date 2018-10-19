@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
@@ -1301,6 +1302,28 @@ namespace SourceCode.Clay.Buffers.Tests
         //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl(0)); // uint
         //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl((ulong)0));
         //}
+
+        #endregion
+
+        #region AsByte
+
+        [Fact(DisplayName = nameof(BitOps_AsByte))]
+        public static void BitOps_AsByte()
+        {
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
+
+            for (var i = 0; i <= byte.MaxValue; i++)
+            {
+                var expected = i == 0 ? 0 : 1;
+
+                var n = (byte)i;
+                var tf = Unsafe.As<byte, bool>(ref n);
+                int actual = BitOps.AsByte(tf);
+
+                Assert.Equal(expected, actual);
+            }
+        }
 
         #endregion
 

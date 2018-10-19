@@ -6,7 +6,6 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
@@ -14,14 +13,14 @@ using BenchmarkDotNet.Attributes;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-          Method |     Mean |     Error |    StdDev | Scaled |
-    ------------ |---------:|----------:|----------:|-------:|
-          Branch | 3.923 ns | 0.0884 ns | 0.1322 ns |   1.50 | !
-          Actual | 3.288 ns | 0.0649 ns | 0.1218 ns |   1.25 | ~
-      UnsafeCode | 3.431 ns | 0.0358 ns | 0.0334 ns |   1.31 |
-        UnsafeAs | 2.629 ns | 0.1356 ns | 0.1392 ns |   1.00 | x
-     UnsafeAsRef | 2.329 ns | 0.0178 ns | 0.0149 ns |   0.89 | x
-     UnionStruct | 3.505 ns | 0.1408 ns | 0.1446 ns |   1.34 |
+      Method |     Mean |     Error |    StdDev |   Median | Scaled |
+------------ |---------:|----------:|----------:|---------:|-------:|
+      Branch | 4.449 ns | 0.0890 ns | 0.2297 ns | 4.367 ns |   0.98 | x
+      Actual | 4.510 ns | 0.0197 ns | 0.0164 ns | 4.504 ns |   0.99 | x
+  UnsafeCode | 5.645 ns | 0.0117 ns | 0.0091 ns | 5.645 ns |   1.24 |
+    UnsafeAs | 4.552 ns | 0.0186 ns | 0.0156 ns | 4.552 ns |   1.00 | x
+ UnsafeAsRef | 2.529 ns | 0.0157 ns | 0.0131 ns | 2.522 ns |   0.56 | xx
+ UnionStruct | 5.646 ns | 0.0155 ns | 0.0137 ns | 5.644 ns |   1.24 |
     */
 
     //[MemoryDiagnoser]
@@ -29,25 +28,25 @@ namespace SourceCode.Clay.Buffers.Bench
     {
         private const int _iterations = 2000;
         private const int N = ushort.MaxValue;
-        
-        // Prevent folding by using non-readonly non-constant
+
+        // Prevent folding by using volatile non-readonly non-constant
         private static volatile bool s_true = true;
         private static volatile bool s_false = false;
 
         #region Branch
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static long Branch()
+        public static ulong Branch()
         {
-            long sum = 0;
+            ulong sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteBranch(s_true);
+                    sum += AsByteBranch(s_true);
                     sum++;
-                    sum -= ToByteBranch(s_false);
+                    sum -= AsByteBranch(s_false);
                     sum--;
 
                     sum += ToByteBranch(s_true, 4);
@@ -61,31 +60,21 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteBranch(bool condition)
+        private static byte AsByteBranch(bool condition)
+            => (byte)(condition ? 1 : 0);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint ToByteBranch(bool condition, uint trueValue)
         {
-            int val = condition ? 1 : 0;
-            return (byte)val;
+            uint mask = AsByteBranch(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteBranch(bool condition, int trueValue)
+        private static uint ToByteBranch(bool condition, uint trueValue, uint falseValue)
         {
-            int val = condition ? 1 : 0;
-
-            val *= trueValue;
-
-            return (byte)val;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteBranch(bool condition, int trueValue, int falseValue)
-        {
-            int val = condition ? 1 : 0;
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+            uint mask = AsByteBranch(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         #endregion
@@ -93,9 +82,9 @@ namespace SourceCode.Clay.Buffers.Bench
         #region Actual
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static long Actual()
+        public static ulong Actual()
         {
-            long sum = 0;
+            ulong sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -106,9 +95,9 @@ namespace SourceCode.Clay.Buffers.Bench
                     sum -= BitOps.AsByte(s_false);
                     sum--;
 
-                    sum += BitOps.If(s_true, 4);
-                    sum -= BitOps.If(s_false, 3);
-                    sum += BitOps.If(s_true, 3, 2);
+                    sum += BitOps.If(s_true, 4u);
+                    sum -= BitOps.If(s_false, 3u);
+                    sum += BitOps.If(s_true, 3u, 2u);
                     sum -= 7;
                 }
             }
@@ -121,22 +110,22 @@ namespace SourceCode.Clay.Buffers.Bench
         #region UnsafeCode
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static long UnsafeCode()
+        public static ulong UnsafeCode()
         {
-            long sum = 0;
+            ulong sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteUnsafe(s_true);
+                    sum += AsByteUnsafe(s_true);
                     sum++;
-                    sum -= ToByteUnsafe(s_false);
+                    sum -= AsByteUnsafe(s_false);
                     sum--;
 
-                    sum += ToByteUnsafe(s_true, 4);
-                    sum -= ToByteUnsafe(s_false, 3);
-                    sum += ToByteUnsafe(s_true, 3, 2);
+                    sum += IfUnsafe(s_true, 4);
+                    sum -= IfUnsafe(s_false, 3);
+                    sum += IfUnsafe(s_true, 3, 2);
                     sum -= 7;
                 }
             }
@@ -145,44 +134,30 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafe(bool condition)
+        private static byte AsByteUnsafe(bool condition)
         {
             int val;
             unsafe
             {
                 val = *(byte*)&condition;
             }
+            NormalizeBool(ref val);
 
             return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafe(bool condition, int trueValue)
+        private static uint IfUnsafe(bool condition, uint trueValue)
         {
-            int val;
-            unsafe
-            {
-                val = *(byte*)&condition;
-            }
-
-            val *= trueValue;
-
-            return (byte)val;
+            uint mask = AsByteUnsafe(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafe(bool condition, int trueValue, int falseValue)
+        private static uint IfUnsafe(bool condition, uint trueValue, uint falseValue)
         {
-            int val;
-            unsafe
-            {
-                val = *(byte*)&condition;
-            }
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+            uint mask = AsByteUnsafe(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         #endregion
@@ -190,22 +165,22 @@ namespace SourceCode.Clay.Buffers.Bench
         #region UnsafeAs
 
         [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
-        public static long UnsafeAs()
+        public static ulong UnsafeAs()
         {
-            long sum = 0;
+            ulong sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += ToByteUnsafeAs(s_true);
+                    sum += AsByteUnsafeAs(s_true);
                     sum++;
-                    sum -= ToByteUnsafeAs(s_false);
+                    sum -= AsByteUnsafeAs(s_false);
                     sum--;
 
-                    sum += ToByteUnsafeAs(s_true, 4);
-                    sum -= ToByteUnsafeAs(s_false, 3);
-                    sum += ToByteUnsafeAs(s_true, 3, 2);
+                    sum += IfUnsafeAs(s_true, 4);
+                    sum -= IfUnsafeAs(s_false, 3);
+                    sum += IfUnsafeAs(s_true, 3, 2);
                     sum -= 7;
                 }
             }
@@ -214,25 +189,26 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAs(bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAs(bool condition, int trueValue)
+        private static byte AsByteUnsafeAs(bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition) * trueValue;
+            int val = Unsafe.As<bool, byte>(ref condition);
+            NormalizeBool(ref val);
+
             return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAs(bool condition, int trueValue, int falseValue)
+        private static uint IfUnsafeAs(bool condition, uint trueValue)
         {
-            int val = Unsafe.As<bool, byte>(ref condition);
+            uint mask = AsByteUnsafeAs(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
+        }
 
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint IfUnsafeAs(bool condition, uint trueValue, uint falseValue)
+        {
+            uint mask = AsByteUnsafeAs(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         #endregion
@@ -240,18 +216,18 @@ namespace SourceCode.Clay.Buffers.Bench
         #region UnsafeAsRef
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static long UnsafeAsRef()
+        public static ulong UnsafeAsRef()
         {
-            long sum = 0;
+            ulong sum = 0;
 
             for (int i = 0; i < _iterations; i++)
             {
                 for (int n = 0; n <= N; n++)
                 {
 #pragma warning disable CS0420 // A reference to a volatile field will not be treated as volatile
-                    sum += ToByteUnsafeAsRef(ref s_true);
+                    sum += AsByteUnsafeAsRef(ref s_true);
                     sum++;
-                    sum -= ToByteUnsafeAsRef(ref s_false);
+                    sum -= AsByteUnsafeAsRef(ref s_false);
                     sum--;
 
                     sum += ToByteUnsafeAsRef(ref s_true, 4);
@@ -266,25 +242,26 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAsRef(ref bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAsRef(ref bool condition, int trueValue)
+        private static byte AsByteUnsafeAsRef(ref bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition) * trueValue;
+            int val = Unsafe.As<bool, byte>(ref condition);
+            NormalizeBool(ref val);
+
             return (byte)val;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte ToByteUnsafeAsRef(ref bool condition, int trueValue, int falseValue)
+        private static uint ToByteUnsafeAsRef(ref bool condition, uint trueValue)
         {
-            int val = Unsafe.As<bool, byte>(ref condition);
+            uint mask = AsByteUnsafeAsRef(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
+        }
 
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return (byte)val;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint ToByteUnsafeAsRef(ref bool condition, uint trueValue, uint falseValue)
+        {
+            uint mask = AsByteUnsafeAsRef(ref condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         #endregion
@@ -300,14 +277,14 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BoolToByte.Evaluate(s_true);
+                    sum += BoolToByte.AsByte(s_true);
                     sum++;
-                    sum -= BoolToByte.Evaluate(s_false);
+                    sum -= BoolToByte.AsByte(s_false);
                     sum--;
 
-                    sum += BoolToByte.Evaluate(s_true, 4);
-                    sum -= BoolToByte.Evaluate(s_false, 3);
-                    sum += BoolToByte.Evaluate(s_true, 3, 2);
+                    sum += BoolToByte.If(s_true, 4);
+                    sum -= BoolToByte.If(s_false, 3);
+                    sum += BoolToByte.If(s_true, 3, 2);
                     sum -= 7;
                 }
             }
@@ -325,34 +302,39 @@ namespace SourceCode.Clay.Buffers.Bench
             public byte Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static int Evaluate(bool condition)
-                => new BoolToByte { Bool = condition }.Byte;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static int Evaluate(bool condition, int trueValue)
-                => Evaluate(condition) * trueValue;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static uint Evaluate(bool condition, int trueValue, int falseValue)
+            public static uint AsByte(bool condition)
             {
-                int val = Evaluate(condition);
-
-                val = (val * trueValue)
-                    + ((1 - val) * falseValue);
+                int val = new BoolToByte { Bool = condition }.Byte;
+                NormalizeBool(ref val);
 
                 return (byte)val;
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static bool Evaluate(int value)
+            public static uint If(bool condition, uint trueValue)
             {
-                uint val = BitOps.CascadeTrailing(unchecked((uint)value));
-                val &= 1;
-
-                Debug.Assert(val == 0 || val == 1);
-
-                return new BoolToByte { Byte = (byte)val }.Bool;
+                uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+                return ~mask & trueValue;
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static uint If(bool condition, uint trueValue, uint falseValue)
+            {
+                uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+                return (mask & falseValue) | (~mask & trueValue);
+            }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void NormalizeBool(ref int val)
+        {
+            val = -val; // If non-zero, negation will set sign-bit
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
         }
 
         #endregion
