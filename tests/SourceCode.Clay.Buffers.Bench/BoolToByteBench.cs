@@ -346,7 +346,7 @@ namespace SourceCode.Clay.Buffers.Bench
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool Evaluate(int value)
             {
-                uint val = BitOps.FillTrailingOnes(unchecked((uint)value));
+                uint val = BitOps.CascadeTrailing(unchecked((uint)value));
                 val &= 1;
 
                 Debug.Assert(val == 0 || val == 1);

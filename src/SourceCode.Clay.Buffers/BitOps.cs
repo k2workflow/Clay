@@ -1608,7 +1608,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(uint value)
         {
-            uint val = FillTrailingOnes(value);
+            uint val = CascadeTrailing(value);
 
             uint ix = (val * DeBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
@@ -1636,7 +1636,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(ulong value)
         {
-            ulong val = FillTrailingOnes(value);
+            ulong val = CascadeTrailing(value);
 
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
@@ -2105,7 +2105,7 @@ namespace System
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static uint FillTrailingOnes(uint value)
+        internal static uint CascadeTrailing(uint value)
         {
             uint val = value;
 
@@ -2121,7 +2121,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ulong FillTrailingOnes(ulong value)
+        internal static ulong CascadeTrailing(ulong value)
         {
             ulong val = value;
 
@@ -2132,9 +2132,10 @@ namespace System
             val |= val >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
             val |= val >> 08; // 1111 1111  1111 1111  00 00  00 00  00 00
             val |= val >> 16; // 1111 1111  1111 1111  FF FF  00 00  00 00
+
             val |= val >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
 
-            return val;
+            return CascadeTrailing((uint)val);
         }
 
         #endregion

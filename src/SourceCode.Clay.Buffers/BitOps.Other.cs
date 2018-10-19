@@ -207,7 +207,7 @@ namespace System
             // Perf: Do not use guard clauses; callers must be trusted
             Debug.Assert(value > 0);
 
-            uint val = FillTrailingOnes(value);
+            uint val = CascadeTrailing(value);
             uint ix = (val * DeBruijn32) >> 27;
 
             byte log = s_deBruijn32[ix];
@@ -284,7 +284,7 @@ namespace System
 
             //         77                   0100 1101
             val--; //  76                   0100 1100 (for exact powers of 2)
-            val = FillTrailingOnes(val); // 0111 1111
+            val = CascadeTrailing(val); //  0111 1111
             val++; // 128                   1000 0000 (for exact powers of 2)
 
             return val;
@@ -305,7 +305,7 @@ namespace System
             val += If(value == 0, 1UL);
 
             val--;
-            val = FillTrailingOnes(val);
+            val = CascadeTrailing(val);
             val++;
 
             return val;
