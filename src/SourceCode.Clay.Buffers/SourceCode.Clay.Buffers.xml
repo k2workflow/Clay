@@ -1292,16 +1292,16 @@
             </summary>
             <param name="value">The mask.</param>
         </member>
-        <member name="M:System.BitOps.If(System.Boolean)">
+        <member name="M:System.BitOps.AsByte(System.Boolean)">
             <summary>
-            Converts a boolean to a byte value, without branching.
+            Converts a boolean to a byte value without branching.
             Returns 1 if True, else returns 0.
             </summary>
             <param name="condition">The value to convert.</param>
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.UInt32)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns 0.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1309,7 +1309,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.UInt32,System.UInt32)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1318,7 +1318,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.Int32)">
             <summary>
-            Converts a boolean to a integer value, without branching.
+            Converts a boolean to a integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns 0.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1326,7 +1326,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.Int32,System.Int32)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1335,7 +1335,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.UInt64)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns 0.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1343,7 +1343,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.UInt64,System.UInt64)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1352,7 +1352,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.Int64)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns 0.
             </summary>
             <param name="condition">The value to convert.</param>
@@ -1360,7 +1360,7 @@
         </member>
         <member name="M:System.BitOps.If(System.Boolean,System.Int64,System.Int64)">
             <summary>
-            Converts a boolean to an integer value, without branching.
+            Converts a boolean to an integer value without branching.
             Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
             </summary>
             <param name="condition">The value to convert.</param>

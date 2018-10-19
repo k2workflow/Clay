@@ -1963,7 +1963,14 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
-            => Unsafe.As<bool, byte>(ref condition); // 1|0
+        {
+            byte val = Unsafe.As<bool, byte>(ref condition); // 1|0
+
+            // Ensure the value is 1|0 only, despite any implementation drift above
+            Debug.Assert(val == 0 || val == 1);
+
+            return val; // 1|0
+        }
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -1973,7 +1980,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
+            => AsByte(condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -1985,7 +1992,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            uint val = AsByte(condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2001,7 +2008,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
+            => AsByte(condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2013,7 +2020,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue, int falseValue)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            int val = AsByte(condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2029,7 +2036,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
+            => AsByte(condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2041,7 +2048,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            ulong val = AsByte(condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2057,7 +2064,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue)
-            => Unsafe.As<bool, byte>(ref condition) * trueValue; // N|0
+            => AsByte(condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2069,7 +2076,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue, long falseValue)
         {
-            long val = Unsafe.As<bool, byte>(ref condition); // 1|0
+            long val = AsByte(condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);

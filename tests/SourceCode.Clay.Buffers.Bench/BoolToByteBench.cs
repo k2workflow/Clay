@@ -5,22 +5,23 @@
 
 #endregion
 
-using BenchmarkDotNet.Attributes;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using BenchmarkDotNet.Attributes;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-         Method |     Mean |     Error |    StdDev |   Median | Scaled |
-    ----------- |---------:|----------:|----------:|---------:|-------:|
-         Branch | 4.114 ns | 0.0820 ns | 0.1816 ns | 4.014 ns |   1.52 | !
-         Actual | 3.304 ns | 0.0215 ns | 0.0190 ns | 3.306 ns |   1.22 | ~
-     UnsafeCode | 3.624 ns | 0.0694 ns | 0.0649 ns | 3.599 ns |   1.34 |
-       UnsafeAs | 2.700 ns | 0.0252 ns | 0.0197 ns | 2.706 ns |   1.00 | x
-          Union | 3.579 ns | 0.0281 ns | 0.0249 ns | 3.575 ns |   1.33 |
+          Method |     Mean |     Error |    StdDev | Scaled |
+    ------------ |---------:|----------:|----------:|-------:|
+          Branch | 3.787 ns | 0.0393 ns | 0.0328 ns |   1.48 | !
+          Actual | 3.126 ns | 0.0319 ns | 0.0299 ns |   1.22 |
+      UnsafeCode | 3.441 ns | 0.0428 ns | 0.0379 ns |   1.34 |
+        UnsafeAs | 2.565 ns | 0.0329 ns | 0.0292 ns |   1.00 | x
+     UnsafeAsRef | 2.328 ns | 0.0384 ns | 0.0340 ns |   0.91 | x
+     UnionStruct | 3.409 ns | 0.0482 ns | 0.0427 ns |   1.33 |
     */
 
     //[MemoryDiagnoser]
@@ -34,6 +35,8 @@ namespace SourceCode.Clay.Buffers.Bench
         private static volatile bool s_true = true;
         private static volatile bool s_false = false;
 #pragma warning restore IDE0044 // Add readonly modifier
+
+        #region Branch
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
         public static long Branch()
@@ -87,6 +90,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
+        #endregion
+
+        #region Actual
+
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
         public static long Actual()
         {
@@ -110,6 +117,10 @@ namespace SourceCode.Clay.Buffers.Bench
 
             return sum;
         }
+
+        #endregion
+
+        #region UnsafeCode
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
         public static long UnsafeCode()
@@ -176,6 +187,10 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
+        #endregion
+
+        #region UnsafeAs
+
         [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
         public static long UnsafeAs()
         {
@@ -222,8 +237,64 @@ namespace SourceCode.Clay.Buffers.Bench
             return (byte)val;
         }
 
+        #endregion
+
+        #region UnsafeAsRef
+
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static long Union()
+        public static long UnsafeAsRef()
+        {
+            long sum = 0;
+
+            for (int i = 0; i < _iterations; i++)
+            {
+                for (int n = 0; n <= N; n++)
+                {
+#pragma warning disable CS0420 // A reference to a volatile field will not be treated as volatile
+                    sum += ToByteUnsafeAsRef(ref s_true);
+                    sum++;
+                    sum -= ToByteUnsafeAsRef(ref s_false);
+                    sum--;
+
+                    sum += ToByteUnsafeAsRef(ref s_true, 4);
+                    sum -= ToByteUnsafeAsRef(ref s_false, 3);
+                    sum += ToByteUnsafeAsRef(ref s_true, 3, 2);
+                    sum -= 7;
+#pragma warning restore CS0420 // A reference to a volatile field will not be treated as volatile
+                }
+            }
+
+            return sum;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafeAsRef(ref bool condition)
+            => Unsafe.As<bool, byte>(ref condition);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafeAsRef(ref bool condition, int trueValue)
+        {
+            int val = Unsafe.As<bool, byte>(ref condition) * trueValue;
+            return (byte)val;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static byte ToByteUnsafeAsRef(ref bool condition, int trueValue, int falseValue)
+        {
+            int val = Unsafe.As<bool, byte>(ref condition);
+
+            val = (val * trueValue)
+                + ((1 - val) * falseValue);
+
+            return (byte)val;
+        }
+
+        #endregion
+
+        #region UnionStruct
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public static long UnionStruct()
         {
             long sum = 0;
 
@@ -260,7 +331,7 @@ namespace SourceCode.Clay.Buffers.Bench
                 => new BoolToByte { Bool = condition }.Byte;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static int Evaluate(bool condition, int trueValue) 
+            public static int Evaluate(bool condition, int trueValue)
                 => Evaluate(condition) * trueValue;
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -285,5 +356,7 @@ namespace SourceCode.Clay.Buffers.Bench
                 return new BoolToByte { Byte = (byte)val }.Bool;
             }
         }
+
+        #endregion
     }
 }
