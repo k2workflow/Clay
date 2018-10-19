@@ -25,20 +25,20 @@ namespace SourceCode.Clay.Tests
             const byte max = byte.MaxValue;
             const byte min = byte.MinValue;
 
-            Assert.Equal(1, s_true.ConvertFast());
-            Assert.Equal(0, s_false.ConvertFast());
+            Assert.Equal(1, s_true.AsByte());
+            Assert.Equal(0, s_false.AsByte());
 
-            Assert.Equal(t1, s_true.ConvertFast(t1));
-            Assert.Equal(t0, s_false.ConvertFast(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2));
-            Assert.Equal(t3, s_false.ConvertFast(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2, t3));
-            Assert.Equal(t3, s_false.ConvertFast(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, s_true.ConvertFast(max, min));
-            Assert.Equal(max, s_false.ConvertFast(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt16))]
@@ -51,17 +51,17 @@ namespace SourceCode.Clay.Tests
             const ushort max = ushort.MaxValue;
             const ushort min = ushort.MinValue;
 
-            Assert.Equal(t1, s_true.ConvertFast(t1));
-            Assert.Equal(t0, s_false.ConvertFast(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2));
-            Assert.Equal(t3, s_false.ConvertFast(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2, t3));
-            Assert.Equal(t3, s_false.ConvertFast(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, s_true.ConvertFast(max, min));
-            Assert.Equal(max, s_false.ConvertFast(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt32))]
@@ -74,17 +74,17 @@ namespace SourceCode.Clay.Tests
             const uint max = uint.MaxValue;
             const uint min = uint.MinValue;
 
-            Assert.Equal(t1, s_true.ConvertFast(t1));
-            Assert.Equal(t0, s_false.ConvertFast(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2));
-            Assert.Equal(t3, s_false.ConvertFast(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2, t3));
-            Assert.Equal(t3, s_false.ConvertFast(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, s_true.ConvertFast(max, min));
-            Assert.Equal(max, s_false.ConvertFast(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
         [Fact(DisplayName = nameof(BoolToUInt64))]
@@ -97,17 +97,17 @@ namespace SourceCode.Clay.Tests
             const ulong max = ulong.MaxValue;
             const ulong min = ulong.MinValue;
 
-            Assert.Equal(t1, s_true.ConvertFast(t1));
-            Assert.Equal(t0, s_false.ConvertFast(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2));
-            Assert.Equal(t3, s_false.ConvertFast(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, s_true.ConvertFast(t2, t3));
-            Assert.Equal(t3, s_false.ConvertFast(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, s_true.ConvertFast(max, min));
-            Assert.Equal(max, s_false.ConvertFast(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
     }
