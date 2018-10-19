@@ -149,7 +149,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -183,7 +183,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -216,7 +216,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -249,7 +249,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(on);
+            ulong onn = AsByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -287,7 +287,7 @@ namespace System
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -311,7 +311,7 @@ namespace System
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = AsByte(on);
+            int onn = AsByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -335,7 +335,7 @@ namespace System
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -359,7 +359,7 @@ namespace System
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = AsByte(on);
+            int onn = AsByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -382,7 +382,7 @@ namespace System
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(on);
+            uint onn = AsByte(ref on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -405,7 +405,7 @@ namespace System
         {
             int mask = 1 << bitOffset;
 
-            int onn = AsByte(on);
+            int onn = AsByte(ref on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -428,7 +428,7 @@ namespace System
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(on);
+            ulong onn = AsByte(ref on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -451,7 +451,7 @@ namespace System
         {
             long mask = 1L << bitOffset;
 
-            long onn = AsByte(on);
+            long onn = AsByte(ref on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1962,6 +1962,22 @@ namespace System
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte AsByte(ref bool condition)
+        {
+            byte val = Unsafe.As<bool, byte>(ref condition); // 1|0
+
+            // Ensure the value is 1|0 only, despite any implementation drift above
+            Debug.Assert(val == 0 || val == 1);
+
+            return val; // 1|0
+        }
+
+        /// <summary>
+        /// Converts a boolean to a byte value without branching.
+        /// Returns 1 if True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
         {
             byte val = Unsafe.As<bool, byte>(ref condition); // 1|0
@@ -1980,7 +1996,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue)
-            => AsByte(condition) * trueValue; // N|0
+            => AsByte(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -1992,7 +2008,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = AsByte(condition); // 1|0
+            uint val = AsByte(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2008,7 +2024,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue)
-            => AsByte(condition) * trueValue; // N|0
+            => AsByte(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2020,7 +2036,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(bool condition, int trueValue, int falseValue)
         {
-            int val = AsByte(condition); // 1|0
+            int val = AsByte(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2036,7 +2052,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue)
-            => AsByte(condition) * trueValue; // N|0
+            => AsByte(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2048,7 +2064,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = AsByte(condition); // 1|0
+            ulong val = AsByte(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -2064,7 +2080,7 @@ namespace System
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue)
-            => AsByte(condition) * trueValue; // N|0
+            => AsByte(ref condition) * trueValue; // N|0
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2076,7 +2092,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue, long falseValue)
         {
-            long val = AsByte(condition); // 1|0
+            long val = AsByte(ref condition); // 1|0
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);

@@ -16,12 +16,12 @@ namespace SourceCode.Clay.Buffers.Bench
     /*
           Method |     Mean |     Error |    StdDev | Scaled |
     ------------ |---------:|----------:|----------:|-------:|
-          Branch | 3.787 ns | 0.0393 ns | 0.0328 ns |   1.48 | !
-          Actual | 3.126 ns | 0.0319 ns | 0.0299 ns |   1.22 |
-      UnsafeCode | 3.441 ns | 0.0428 ns | 0.0379 ns |   1.34 |
-        UnsafeAs | 2.565 ns | 0.0329 ns | 0.0292 ns |   1.00 | x
-     UnsafeAsRef | 2.328 ns | 0.0384 ns | 0.0340 ns |   0.91 | x
-     UnionStruct | 3.409 ns | 0.0482 ns | 0.0427 ns |   1.33 |
+          Branch | 3.923 ns | 0.0884 ns | 0.1322 ns |   1.50 | !
+          Actual | 3.288 ns | 0.0649 ns | 0.1218 ns |   1.25 | ~
+      UnsafeCode | 3.431 ns | 0.0358 ns | 0.0334 ns |   1.31 |
+        UnsafeAs | 2.629 ns | 0.1356 ns | 0.1392 ns |   1.00 | x
+     UnsafeAsRef | 2.329 ns | 0.0178 ns | 0.0149 ns |   0.89 | x
+     UnionStruct | 3.505 ns | 0.1408 ns | 0.1446 ns |   1.34 |
     */
 
     //[MemoryDiagnoser]
@@ -29,12 +29,10 @@ namespace SourceCode.Clay.Buffers.Bench
     {
         private const int _iterations = 2000;
         private const int N = ushort.MaxValue;
-
-#pragma warning disable IDE0044 // Add readonly modifier
+        
         // Prevent folding by using non-readonly non-constant
         private static volatile bool s_true = true;
         private static volatile bool s_false = false;
-#pragma warning restore IDE0044 // Add readonly modifier
 
         #region Branch
 

@@ -1292,6 +1292,13 @@
             </summary>
             <param name="value">The mask.</param>
         </member>
+        <member name="M:System.BitOps.AsByte(System.Boolean@)">
+            <summary>
+            Converts a boolean to a byte value without branching.
+            Returns 1 if True, else returns 0.
+            </summary>
+            <param name="condition">The value to convert.</param>
+        </member>
         <member name="M:System.BitOps.AsByte(System.Boolean)">
             <summary>
             Converts a boolean to a byte value without branching.
