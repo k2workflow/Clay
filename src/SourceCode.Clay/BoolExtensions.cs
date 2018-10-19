@@ -5,7 +5,6 @@
 
 #endregion
 
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -24,12 +23,16 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(this bool condition)
         {
-            byte val = new BoolToByte { Bool = condition }.Byte;
+            int val = new BoolToByte { Bool = condition }.Byte;
 
-            // Ensure the value is 1|0 only, despite any implementation drift above
-            Debug.Assert(val == 0 || val == 1);
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
 
-            return val; // 1|0
+            val = -val; // If non-zero, negation will set sign-bit
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
+
+            return (byte)val; // 1|0
         }
 
         // See benchmarks: Unsafe.As is fastest.
@@ -55,7 +58,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(this bool condition, uint trueValue)
-            => AsByte(condition) * trueValue;
+        {
+            uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return ~mask & trueValue;
+        }
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -67,12 +73,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint If(this bool condition, uint trueValue, uint falseValue)
         {
-            uint val = AsByte(condition);
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val;
+            uint mask = AsByte(condition) - 1u; // 0x00000000 | 0xFFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         /// <summary>
@@ -83,7 +85,7 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(this bool condition, int trueValue)
-            => AsByte(condition) * trueValue;
+            => unchecked((int)If(condition, (uint)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -94,14 +96,7 @@ namespace SourceCode.Clay
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int If(this bool condition, int trueValue, int falseValue)
-        {
-            int val = AsByte(condition);
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val;
-        }
+            => unchecked((int)If(condition, (uint)trueValue, (uint)falseValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -111,7 +106,10 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(this bool condition, ulong trueValue)
-            => AsByte(condition) * trueValue;
+        {
+            ulong mask = AsByte(condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
+            return ~mask & trueValue;
+        }
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -123,12 +121,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong If(this bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = AsByte(condition);
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val;
+            ulong mask = AsByte(condition) - 1ul; // 0x00000000 00000000 | 0xFFFFFFFF FFFFFFFF
+            return (mask & falseValue) | (~mask & trueValue);
         }
 
         /// <summary>
@@ -139,7 +133,7 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(this bool condition, long trueValue)
-            => AsByte(condition) * trueValue;
+            => unchecked((long)If(condition, (ulong)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -150,13 +144,6 @@ namespace SourceCode.Clay
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(this bool condition, long trueValue, long falseValue)
-        {
-            long val = AsByte(condition);
-
-            val = (val * trueValue)
-                + ((1 - val) * falseValue);
-
-            return val;
-        }
+            => unchecked((long)If(condition, (ulong)trueValue, (ulong)falseValue));
     }
 }
