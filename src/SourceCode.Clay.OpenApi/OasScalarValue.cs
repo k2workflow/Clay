@@ -135,7 +135,7 @@ namespace SourceCode.Clay.OpenApi
         public OasScalarValue(bool boolean)
         {
             _typeCode = (byte)TypeCode.Boolean;
-            _number = new Number(boolean.ConvertFast());
+            _number = new Number(boolean.AsByte());
             _string = null;
         }
 

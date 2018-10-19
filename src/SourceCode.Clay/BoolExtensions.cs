@@ -17,23 +17,23 @@ namespace SourceCode.Clay
     public static class BoolExtensions
     {
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to a <see cref="byte"/> value without branching.
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte ConvertFast(this bool condition)
+        public static byte AsByte(this bool condition)
         {
             byte val = new BoolToByte { Bool = condition }.Byte;
 
-            // Ensure the value is 1|0 only, despite any code drift above
+            // Ensure the value is 1|0 only, despite any implementation drift above
             Debug.Assert(val == 0 || val == 1);
 
             return val; // 1|0
         }
 
         // See benchmarks: Unsafe.As is fastest.
-        // Union and unsafe (which cannot be inlined) are faster.
+        // Union and unsafe (which cannot be inlined) are fast.
         // Idiomatic branching expression is slowest.
         // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
 
@@ -48,26 +48,26 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ConvertFast(this bool condition, uint trueValue)
-            => ConvertFast(condition) * trueValue;
+        public static uint If(this bool condition, uint trueValue)
+            => AsByte(condition) * trueValue;
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ConvertFast(this bool condition, uint trueValue, uint falseValue)
+        public static uint If(this bool condition, uint trueValue, uint falseValue)
         {
-            uint val = ConvertFast(condition);
+            uint val = AsByte(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -76,26 +76,26 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ConvertFast(this bool condition, int trueValue)
-            => ConvertFast(condition) * trueValue;
+        public static int If(this bool condition, int trueValue)
+            => AsByte(condition) * trueValue;
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ConvertFast(this bool condition, int trueValue, int falseValue)
+        public static int If(this bool condition, int trueValue, int falseValue)
         {
-            int val = ConvertFast(condition);
+            int val = AsByte(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -104,26 +104,26 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ConvertFast(this bool condition, ulong trueValue)
-            => ConvertFast(condition) * trueValue;
+        public static ulong If(this bool condition, ulong trueValue)
+            => AsByte(condition) * trueValue;
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong ConvertFast(this bool condition, ulong trueValue, ulong falseValue)
+        public static ulong If(this bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = ConvertFast(condition);
+            ulong val = AsByte(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
@@ -132,26 +132,26 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long ConvertFast(this bool condition, long trueValue)
-            => ConvertFast(condition) * trueValue;
+        public static long If(this bool condition, long trueValue)
+            => AsByte(condition) * trueValue;
 
         /// <summary>
-        /// Converts a boolean to an integer value, without branching.
+        /// Converts a boolean to an integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long ConvertFast(this bool condition, long trueValue, long falseValue)
+        public static long If(this bool condition, long trueValue, long falseValue)
         {
-            long val = ConvertFast(condition);
+            long val = AsByte(condition);
 
             val = (val * trueValue)
                 + ((1 - val) * falseValue);
