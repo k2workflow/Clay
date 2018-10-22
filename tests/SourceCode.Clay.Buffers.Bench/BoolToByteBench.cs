@@ -141,7 +141,14 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 val = *(byte*)&condition;
             }
-            NormalizeBool(ref val);
+
+            // Normalize bool's underlying value to 0|1
+            // https://github.com/dotnet/roslyn/issues/24652
+            {
+                val = -val; // Negation will set sign-bit iff non-zero
+                val >>= 31; // Send sign-bit to lsb
+                val &= 1; // Zero all other bits
+            }
 
             return (byte)val;
         }
@@ -192,7 +199,14 @@ namespace SourceCode.Clay.Buffers.Bench
         private static byte AsByteUnsafeAs(bool condition)
         {
             int val = Unsafe.As<bool, byte>(ref condition);
-            NormalizeBool(ref val);
+
+            // Normalize bool's underlying value to 0|1
+            // https://github.com/dotnet/roslyn/issues/24652
+            {
+                val = -val; // Negation will set sign-bit iff non-zero
+                val >>= 31; // Send sign-bit to lsb
+                val &= 1; // Zero all other bits
+            }
 
             return (byte)val;
         }
@@ -245,7 +259,14 @@ namespace SourceCode.Clay.Buffers.Bench
         private static byte AsByteUnsafeAsRef(ref bool condition)
         {
             int val = Unsafe.As<bool, byte>(ref condition);
-            NormalizeBool(ref val);
+
+            // Normalize bool's underlying value to 0|1
+            // https://github.com/dotnet/roslyn/issues/24652
+            {
+                val = -val; // Negation will set sign-bit iff non-zero
+                val >>= 31; // Send sign-bit to lsb
+                val &= 1; // Zero all other bits
+            }
 
             return (byte)val;
         }
@@ -305,7 +326,14 @@ namespace SourceCode.Clay.Buffers.Bench
             public static uint AsByte(bool condition)
             {
                 int val = new BoolToByte { Bool = condition }.Byte;
-                NormalizeBool(ref val);
+
+                // Normalize bool's underlying value to 0|1
+                // https://github.com/dotnet/roslyn/issues/24652
+                {
+                    val = -val; // Negation will set sign-bit iff non-zero
+                    val >>= 31; // Send sign-bit to lsb
+                    val &= 1; // Zero all other bits
+                }
 
                 return (byte)val;
             }
@@ -323,18 +351,6 @@ namespace SourceCode.Clay.Buffers.Bench
                 uint val = AsByte(condition);
                 return (val * trueValue) + (1 - val) * falseValue;
             }
-        }
-
-        #endregion
-
-        #region Helpers
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void NormalizeBool(ref int val)
-        {
-            val = -val; // If non-zero, negation will set sign-bit
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
         }
 
         #endregion

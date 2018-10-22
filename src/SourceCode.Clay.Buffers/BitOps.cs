@@ -1970,10 +1970,11 @@ namespace System
 
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
-
-            val = -val; // If non-zero, negation will set sign-bit
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
+            {
+                val = -val; // Negation will set sign-bit iff non-zero
+                val >>= 31; // Send sign-bit to lsb
+                val &= 1; // Zero all other bits
+            }
 
             return (byte)val; // 0|1
         }
@@ -1985,18 +1986,7 @@ namespace System
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
-        {
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-
-            // Normalize bool's underlying value to 0|1
-            // https://github.com/dotnet/roslyn/issues/24652
-
-            val = -val; // If non-zero, negation will set sign-bit
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
-
-            return (byte)val; // 0|1
-        }
+            => AsByte(ref condition);
 
         #endregion
 
@@ -2106,7 +2096,7 @@ namespace System
         internal static void CascadeTrailing(ref uint value)
         {
             // byte#                     4          3   2  1
-            //                   1000 0000  0000 0000  00 00
+            //                       1000 0000  0000 0000  00 00
             value |= value >> 01; // 1100 0000  0000 0000  00 00
             value |= value >> 02; // 1111 0000  0000 0000  00 00
             value |= value >> 04; // 1111 1111  0000 0000  00 00
@@ -2118,7 +2108,7 @@ namespace System
         internal static void CascadeTrailing(ref ulong value)
         {
             // byte#                     8          7   6  5   4  3   2  1
-            //                   1000 0000  0000 0000  00 00  00 00  00 00
+            //                       1000 0000  0000 0000  00 00  00 00  00 00
             value |= value >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
             value |= value >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
             value |= value >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
