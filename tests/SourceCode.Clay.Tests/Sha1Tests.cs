@@ -85,7 +85,7 @@ namespace SourceCode.Clay.Tests
         {
             var expected = default(Sha1);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Sha1((byte[])null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Sha1(null));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha1(new Span<byte>()));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha1(new Span<byte>(new byte[0])));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha1(new Span<byte>(new byte[1] { 0 })));
@@ -319,7 +319,7 @@ namespace SourceCode.Clay.Tests
         public static void When_copyto_with_null_buffer()
         {
             // Arrange
-            byte[] buffer = (byte[])null;
+            byte[] buffer = null;
             var sha1 = new Sha1();
 
             // Action
@@ -704,7 +704,7 @@ namespace SourceCode.Clay.Tests
 
             // null
             {
-                Assert.Throws<ArgumentNullException>(() => Sha1.Parse((string)null));
+                Assert.Throws<ArgumentNullException>(() => Sha1.Parse(null));
             }
 
             // Empty
