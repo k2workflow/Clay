@@ -148,7 +148,7 @@ namespace SourceCode.Clay.Buffers.Bench
             int val;
             unsafe
             {
-                val = *(byte*)&condition;
+                val = *(byte*)&condition; // CLR permits 0..255
             }
 
             // Normalize bool's underlying value to 0|1
@@ -210,7 +210,7 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAs(bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition);
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
 
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
@@ -273,7 +273,7 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAsRef(ref bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition);
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
 
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
@@ -343,7 +343,7 @@ namespace SourceCode.Clay.Buffers.Bench
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint AsByte(bool condition)
             {
-                int val = new BoolToByte { Bool = condition }.Byte;
+                int val = new BoolToByte { Bool = condition }.Byte; // CLR permits 0..255
 
                 // Normalize bool's underlying value to 0|1
                 // https://github.com/dotnet/roslyn/issues/24652
