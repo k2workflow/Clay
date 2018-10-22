@@ -13,14 +13,14 @@ using BenchmarkDotNet.Attributes;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-      Method |     Mean |     Error |    StdDev |   Median | Scaled |
------------- |---------:|----------:|----------:|---------:|-------:|
-      Branch | 4.449 ns | 0.0890 ns | 0.2297 ns | 4.367 ns |   0.98 | x
-      Actual | 4.510 ns | 0.0197 ns | 0.0164 ns | 4.504 ns |   0.99 | x
-  UnsafeCode | 5.645 ns | 0.0117 ns | 0.0091 ns | 5.645 ns |   1.24 |
-    UnsafeAs | 4.552 ns | 0.0186 ns | 0.0156 ns | 4.552 ns |   1.00 | x
- UnsafeAsRef | 2.529 ns | 0.0157 ns | 0.0131 ns | 2.522 ns |   0.56 | xx
- UnionStruct | 5.646 ns | 0.0155 ns | 0.0137 ns | 5.644 ns |   1.24 |
+      Method |     Mean |     Error |    StdDev | Scaled |
+------------ |---------:|----------:|----------:|-------:|
+      Branch | 4.756 ns | 0.0370 ns | 0.0309 ns |   1.18 | x
+      Actual | 4.764 ns | 0.0609 ns | 0.0569 ns |   1.18 | x
+  UnsafeCode | 5.243 ns | 0.0615 ns | 0.0575 ns |   1.30 |
+    UnsafeAs | 4.031 ns | 0.0641 ns | 0.0568 ns |   1.00 | xx
+ UnsafeAsRef | 2.524 ns | 0.0218 ns | 0.0204 ns |   0.63 | !
+ UnionStruct | 5.233 ns | 0.0515 ns | 0.0482 ns |   1.30 |
     */
 
     //[MemoryDiagnoser]
@@ -42,6 +42,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
                     sum += AsByteBranch(s_true);
@@ -88,6 +91,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
                     sum += BitOps.AsByte(s_true);
@@ -116,6 +122,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
                     sum += AsByteUnsafe(s_true);
@@ -178,6 +187,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
                     sum += AsByteUnsafeAs(s_true);
@@ -236,6 +248,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
 #pragma warning disable CS0420 // A reference to a volatile field will not be treated as volatile
@@ -296,6 +311,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
             for (int i = 0; i < _iterations; i++)
             {
+                byte tf = (byte)(i % 255 + 1);
+                s_true = Unsafe.As<byte, bool>(ref tf);
+
                 for (int n = 0; n <= N; n++)
                 {
                     sum += BoolToByte.AsByte(s_true);
