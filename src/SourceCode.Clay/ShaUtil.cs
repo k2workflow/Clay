@@ -103,6 +103,7 @@ namespace SourceCode.Clay
             return true;
         }
 
+        // https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/Buffers/Text/Utf8Formatter/FormattingHelpers.cs
         internal enum HexCasing : uint
         {
             Upper = 0,

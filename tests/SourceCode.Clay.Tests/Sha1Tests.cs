@@ -93,9 +93,12 @@ namespace SourceCode.Clay.Tests
             Assert.True(default == expected);
             Assert.False(default != expected);
             Assert.True(expected.Equals((object)expected));
-            Assert.Equal(new KeyValuePair<string, string>("", Sha1TestVectors.Zero), expected.Split(0));
-            Assert.Equal(new KeyValuePair<string, string>("00", Sha1TestVectors.Zero.Left(Sha1.HexLength - 2)), expected.Split(2));
-            Assert.Equal(new KeyValuePair<string, string>(Sha1TestVectors.Zero, ""), expected.Split(Sha1.HexLength));
+            Assert.Equal(new KeyValuePair<string, string>("", Sha1TestVectors.Zero), expected.Split(0, false));
+            Assert.Equal(new KeyValuePair<string, string>("", Sha1TestVectors.Zero), expected.Split(0, true));
+            Assert.Equal(new KeyValuePair<string, string>("00", Sha1TestVectors.Zero.Left(Sha1.HexLength - 2)), expected.Split(2, false));
+            Assert.Equal(new KeyValuePair<string, string>("00", Sha1TestVectors.Zero.Left(Sha1.HexLength - 2).ToUpperInvariant()), expected.Split(2, true));
+            Assert.Equal(new KeyValuePair<string, string>(Sha1TestVectors.Zero, ""), expected.Split(Sha1.HexLength, false));
+            Assert.Equal(new KeyValuePair<string, string>(Sha1TestVectors.Zero, ""), expected.Split(Sha1.HexLength, true));
 
             // Null string
             Assert.Throws<ArgumentNullException>(() => Sha1.Hash((string)null));
