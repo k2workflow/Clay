@@ -497,17 +497,17 @@ namespace SourceCode.Clay.Tests
                 Assert.Equal(expected, actual);
 
                 // Roundtrip formatted
-                actual = Sha1.Parse(sha1.ToString("D")).ToString();
+                actual = Sha1.Parse(sha1.ToString("d")).ToString();
                 Assert.Equal(expected, actual);
 
-                actual = Sha1.Parse(sha1.ToString("S")).ToString();
+                actual = Sha1.Parse(sha1.ToString("s")).ToString();
                 Assert.Equal(expected, actual);
 
                 // With hex specifier
-                actual = Sha1.Parse("0x" + sha1.ToString("D")).ToString();
+                actual = Sha1.Parse("0x" + sha1.ToString("d")).ToString();
                 Assert.Equal(expected, actual);
 
-                actual = Sha1.Parse("0x" + sha1.ToString("S")).ToString();
+                actual = Sha1.Parse("0x" + sha1.ToString("s")).ToString();
                 Assert.Equal(expected, actual);
 
                 // Get Byte[]
@@ -582,7 +582,7 @@ namespace SourceCode.Clay.Tests
                 Assert.Equal(expected_N, actual);
 
                 actual = sha1.ToString("N");
-                Assert.Equal(expected_N, actual);
+                Assert.Equal(expected_N.ToUpperInvariant(), actual);
 
                 actual = sha1.ToString("n");
                 Assert.Equal(expected_N, actual);
@@ -593,7 +593,7 @@ namespace SourceCode.Clay.Tests
                 const string expected_D = "a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d";
 
                 string actual = sha1.ToString("D");
-                Assert.Equal(expected_D, actual);
+                Assert.Equal(expected_D.ToUpperInvariant(), actual);
 
                 actual = sha1.ToString("d");
                 Assert.Equal(expected_D, actual);
@@ -604,7 +604,7 @@ namespace SourceCode.Clay.Tests
                 const string expected_S = "a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d";
 
                 string actual = sha1.ToString("S");
-                Assert.Equal(expected_S, actual);
+                Assert.Equal(expected_S.ToUpperInvariant(), actual);
 
                 actual = sha1.ToString("s");
                 Assert.Equal(expected_S, actual);

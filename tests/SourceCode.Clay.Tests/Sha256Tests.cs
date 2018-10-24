@@ -583,7 +583,7 @@ namespace SourceCode.Clay.Tests
                 Assert.Equal(expected_N, actual);
 
                 actual = sha256.ToString("N");
-                Assert.Equal(expected_N, actual);
+                Assert.Equal(expected_N.ToUpperInvariant(), actual);
 
                 actual = sha256.ToString("n");
                 Assert.Equal(expected_N, actual);
@@ -594,7 +594,7 @@ namespace SourceCode.Clay.Tests
                 const string expected_D = "cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0";
 
                 string actual = sha256.ToString("D");
-                Assert.Equal(expected_D, actual);
+                Assert.Equal(expected_D.ToUpperInvariant(), actual);
 
                 actual = sha256.ToString("d");
                 Assert.Equal(expected_D, actual);
@@ -605,7 +605,7 @@ namespace SourceCode.Clay.Tests
                 const string expected_S = "cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0";
 
                 string actual = sha256.ToString("S");
-                Assert.Equal(expected_S, actual);
+                Assert.Equal(expected_S.ToUpperInvariant(), actual);
 
                 actual = sha256.ToString("s");
                 Assert.Equal(expected_S, actual);

@@ -40,7 +40,7 @@ namespace SourceCode.Clay
         /// The number of hex characters required to represent a <see cref="Sha256"/> value.
         /// </summary>
         public const byte HexLength = ByteLength * 2;
-        
+
         private static readonly Sha256 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
@@ -216,16 +216,16 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha256"/> instance using the 'N' format.
+        /// Returns a string representation of the <see cref="Sha256"/> instance using the 'n' format.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => ToString("N");
+        public override string ToString() => ToString("n");
 
         /// <summary>
         /// Returns a string representation of the <see cref="Sha256"/> instance.
-        /// N: cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0,
-        /// D: cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0,
-        /// S: cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
+        /// n: cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0,
+        /// d: cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0,
+        /// s: cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
         /// </summary>
         /// <param name="format"></param>
         /// <returns></returns>
@@ -246,28 +246,16 @@ namespace SourceCode.Clay
                     switch (format[0])
                     {
                         // cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
-                        case 'n':
-                        case 'N':
-                            {
-                                string str = ShaUtil.ToString(sha);
-                                return str;
-                            }
+                        case 'n': return ShaUtil.ToString(sha, ShaUtil.HexCasing.Lower);
+                        case 'N': return ShaUtil.ToString(sha, ShaUtil.HexCasing.Upper);
 
                         // cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
-                        case 'd':
-                        case 'D':
-                            {
-                                string str = ShaUtil.ToString(sha, '-');
-                                return str;
-                            }
+                        case 'd': return ShaUtil.ToString(sha, '-', ShaUtil.HexCasing.Lower);
+                        case 'D': return ShaUtil.ToString(sha, '-', ShaUtil.HexCasing.Upper);
 
                         // cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
-                        case 's':
-                        case 'S':
-                            {
-                                string str = ShaUtil.ToString(sha, ' ');
-                                return str;
-                            }
+                        case 's': return ShaUtil.ToString(sha, ' ', ShaUtil.HexCasing.Lower);
+                        case 'S': return ShaUtil.ToString(sha, ' ', ShaUtil.HexCasing.Upper);
                     }
                 }
             }
@@ -276,20 +264,22 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts the <see cref="Sha256"/> instance to a string using the 'N' format,
+        /// Converts the <see cref="Sha256"/> instance to a string using the 'n' or 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
-        /// <returns></returns>
-        public KeyValuePair<string, string> Split(int prefixLength)
+        /// <param name="uppercase">If True, output uppercase, else output lowercase.</param>
+        public KeyValuePair<string, string> Split(int prefixLength, bool uppercase = false)
         {
+            ShaUtil.HexCasing casing = uppercase ? ShaUtil.HexCasing.Upper : ShaUtil.HexCasing.Lower;
+
             unsafe
             {
                 fixed (Block* ptr = &_bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
-                    KeyValuePair<string, string> kvp = ShaUtil.Split(sha, prefixLength);
+                    KeyValuePair<string, string> kvp = ShaUtil.Split(sha, prefixLength, casing);
                     return kvp;
                 }
             }
@@ -300,7 +290,6 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
         public static bool TryParse(ReadOnlySpan<char> hex, out Sha256 value)
         {
             value = default;

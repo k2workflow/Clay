@@ -24,8 +24,8 @@ namespace SourceCode.Clay
             11, 12, 13, 14, 15                      // [50-54]       = 98..102= 'b'..'f'
         };
 
-        // Each byte is two hexits (our convention is lowercase)
-        private const string HexChars = "0123456789abcdef";
+        // Each byte is two hexits
+        private const string HexChars = "0123456789ABCDEF";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool TryParseHexit(in char c, out byte b)
@@ -103,14 +103,24 @@ namespace SourceCode.Clay
             return true;
         }
 
+        internal enum HexCasing : uint
+        {
+            Upper = 0,
+
+            // '0'..'9' (48-57) already have 0x20 bit set, so OR 0x20 is a no-op.
+            // 'A'..'F' (65-90) doesn't have 0x20 bit set, so OR maps to 'a'-'f'.
+            Lower = 0x20u,
+        }
+
         /// <summary>
-        /// Converts the <see cref="Sha1"/> or <see cref="Sha256"/> instance to a string using the 'N' format,
+        /// Converts the <see cref="Sha1"/> or <see cref="Sha256"/> instance to a string using the 'n' or 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
         /// <param name="sha">The sha value.</param>
         /// <param name="prefixLength">The length of the first token.</param>
+        /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static KeyValuePair<string, string> Split(in ReadOnlySpan<byte> sha, int prefixLength)
+        internal static KeyValuePair<string, string> Split(in ReadOnlySpan<byte> sha, int prefixLength, HexCasing casing)
         {
             int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
@@ -124,10 +134,10 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
-                // Write to output starting with *highest* index so codegen can elide all but first bounds check
+                // Output *highest* index first so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos + 1] = HexChars[byt & 15]; // == b % 16
-                span[pos] = HexChars[byt >> 4]; // == b / 16
+                span[pos + 1] = (char)(HexChars[byt & 15] | (uint)casing); // == b % 16
+                span[pos] = (char)(HexChars[byt >> 4] | (uint)casing); // == b / 16
 
                 pos += 2;
             }
@@ -152,10 +162,12 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> or <see cref="Sha256"/> instance using the 'N' format.
+        /// Returns a string representation of the <see cref="Sha1"/> or <see cref="Sha256"/> instance using the 'n' or 'N' format.
         /// </summary>
+        /// <param name="sha"></param>
+        /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static string ToString(in ReadOnlySpan<byte> sha)
+        internal static string ToString(in ReadOnlySpan<byte> sha, HexCasing casing)
         {
             int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
@@ -168,10 +180,10 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
-                // Write to output starting with *highest* index so codegen can elide all but first bounds check
+                // Output *highest* index first so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos + 1] = HexChars[byt & 15]; // == b % 16
-                span[pos] = HexChars[byt >> 4]; // == b / 16
+                span[pos + 1] = (char)(HexChars[byt & 15] | (uint)casing); // == b % 16
+                span[pos] = (char)(HexChars[byt >> 4] | (uint)casing); // == b / 16
 
                 pos += 2;
             }
@@ -182,14 +194,15 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Returns a string representation of the <see cref="Sha1"/> or <see cref="Sha256"/> instance.
-        /// N: a9993e364706816aba3e25717850c26c9cd0d89d, cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
-        /// D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d, cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
-        /// S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d, cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
+        /// n: a9993e364706816aba3e25717850c26c9cd0d89d, cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0
+        /// d: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d, cdc76e5c-9914fb92-81a1c7e2-84d73e67-f1809a48-a497200e-046d39cc-c7112cd0
+        /// s: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d, cdc76e5c 9914fb92 81a1c7e2 84d73e67 f1809a48 a497200e 046d39cc c7112cd0
         /// </summary>
         /// <param name="sha"></param>
         /// <param name="separator"></param>
+        /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static string ToString(in ReadOnlySpan<byte> sha, in char separator)
+        internal static string ToString(in ReadOnlySpan<byte> sha, in char separator, HexCasing casing)
         {
             Debug.Assert(separator == '-' || separator == ' ');
 
@@ -206,10 +219,10 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits (convention is lowercase)
-                // Write to output starting with *highest* index so codegen can elide all but first bounds check
+                // Output *highest* index first so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos + 1] = HexChars[byt & 15]; // == b % 16
-                span[pos] = HexChars[byt >> 4]; // == b / 16
+                span[pos + 1] = (char)(HexChars[byt & 15] | (uint)casing); // == b % 16
+                span[pos] = (char)(HexChars[byt >> 4] | (uint)casing); // == b / 16
 
                 pos += 2;
 
