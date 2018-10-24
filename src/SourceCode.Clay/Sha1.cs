@@ -215,19 +215,18 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'N' format.
+        /// Returns a string representation of the <see cref="Sha1"/> instance using the 'n' format.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => ToString("N");
+        public override string ToString() => ToString("n");
 
         /// <summary>
         /// Returns a string representation of the <see cref="Sha1"/> instance.
-        /// N: a9993e364706816aba3e25717850c26c9cd0d89d,
-        /// D: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d,
-        /// S: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
+        /// n: a9993e364706816aba3e25717850c26c9cd0d89d,
+        /// d: a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d,
+        /// s: a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
         /// </summary>
         /// <param name="format"></param>
-        /// <returns></returns>
         public string ToString(string format)
         {
             if (string.IsNullOrWhiteSpace(format))
@@ -245,28 +244,16 @@ namespace SourceCode.Clay
                     switch (format[0])
                     {
                         // a9993e364706816aba3e25717850c26c9cd0d89d
-                        case 'n':
-                        case 'N':
-                            {
-                                string str = ShaUtil.ToString(sha);
-                                return str;
-                            }
+                        case 'n': return ShaUtil.ToString(sha, ShaUtil.HexCasing.Lower);
+                        case 'N': return ShaUtil.ToString(sha, ShaUtil.HexCasing.Upper);
 
                         // a9993e36-4706816a-ba3e2571-7850c26c-9cd0d89d
-                        case 'd':
-                        case 'D':
-                            {
-                                string str = ShaUtil.ToString(sha, '-');
-                                return str;
-                            }
+                        case 'd': return ShaUtil.ToString(sha, '-', ShaUtil.HexCasing.Lower);
+                        case 'D': return ShaUtil.ToString(sha, '-', ShaUtil.HexCasing.Upper);
 
                         // a9993e36 4706816a ba3e2571 7850c26c 9cd0d89d
-                        case 's':
-                        case 'S':
-                            {
-                                string str = ShaUtil.ToString(sha, ' ');
-                                return str;
-                            }
+                        case 's': return ShaUtil.ToString(sha, ' ', ShaUtil.HexCasing.Lower);
+                        case 'S': return ShaUtil.ToString(sha, ' ', ShaUtil.HexCasing.Upper);
                     }
                 }
             }
@@ -275,20 +262,22 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts the <see cref="Sha1"/> instance to a string using the 'N' format,
+        /// Converts the <see cref="Sha1"/> instance to a string using the 'n' or 'N' format,
         /// and returns the value split into two tokens.
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
-        /// <returns></returns>
-        public KeyValuePair<string, string> Split(in int prefixLength)
+        /// <param name="uppercase">If True, output uppercase, else output lowercase.</param>
+        public KeyValuePair<string, string> Split(in int prefixLength, bool uppercase = false)
         {
+            ShaUtil.HexCasing casing = uppercase ? ShaUtil.HexCasing.Upper : ShaUtil.HexCasing.Lower;
+
             unsafe
             {
                 fixed (Block* ptr = &_bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
-                    KeyValuePair<string, string> kvp = ShaUtil.Split(sha, prefixLength);
+                    KeyValuePair<string, string> kvp = ShaUtil.Split(sha, prefixLength, casing);
                     return kvp;
                 }
             }
