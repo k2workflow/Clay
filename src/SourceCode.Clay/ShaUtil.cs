@@ -124,9 +124,12 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
+                // Write to output starting with *highest* index so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos++] = HexChars[byt >> 4]; // == b / 16
-                span[pos++] = HexChars[byt & 15]; // == b % 16
+                span[pos + 1] = HexChars[byt & 15]; // == b % 16
+                span[pos] = HexChars[byt >> 4]; // == b / 16
+
+                pos += 2;
             }
 
             if (prefixLength >= hexLength)
@@ -165,9 +168,12 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits
+                // Write to output starting with *highest* index so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos++] = HexChars[byt >> 4]; // == b / 16
-                span[pos++] = HexChars[byt & 15]; // == b % 16
+                span[pos + 1] = HexChars[byt & 15]; // == b % 16
+                span[pos] = HexChars[byt >> 4]; // == b / 16
+
+                pos += 2;
             }
 
             string str = new string(span);
@@ -200,9 +206,12 @@ namespace SourceCode.Clay
             for (int i = 0; i < byteLength; i++) // 20|32
             {
                 // Each byte is two hexits (convention is lowercase)
+                // Write to output starting with *highest* index so codegen can elide all but first bounds check
                 byte byt = sha[i];
-                span[pos++] = HexChars[byt >> 4]; // == b / 16
-                span[pos++] = HexChars[byt & 15]; // == b % 16
+                span[pos + 1] = HexChars[byt & 15]; // == b % 16
+                span[pos] = HexChars[byt >> 4]; // == b / 16
+
+                pos += 2;
 
                 // Append a separator if required
                 if (pos == sep) // pos >= 2, sep = 0|N
