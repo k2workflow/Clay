@@ -5,241 +5,223 @@
 
 #endregion
 
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static class BoolExtensionsTests
     {
-#pragma warning disable IDE0044 // Add readonly modifier
-        // Prevent folding by using non-readonly non-constant
-        private static bool @true = true;
-        private static bool @false = false;
-#pragma warning restore IDE0044 // Add readonly modifier
+        // Prevent folding by using volatile non-readonly non-constant
+        private static volatile bool s_true = true;
+        private static volatile bool s_false = false;
 
-        [Fact(DisplayName = nameof(BoolToByte))]
-        public static void BoolToByte()
+        [Fact(DisplayName = nameof(AsByte))]
+        public static void AsByte()
+        {
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
+
+            for (int i = 0; i <= byte.MaxValue; i++)
+            {
+                int expected = i == 0 ? 0 : 1;
+
+                byte n = (byte)i;
+                bool tf = Unsafe.As<byte, bool>(ref n);
+                int actual = tf.AsByte();
+
+                Assert.Equal(expected, actual);
+            }
+        }
+
+        [Fact(DisplayName = nameof(If_Byte))]
+        public static void If_Byte()
         {
             const byte t0 = 0;
             const byte t1 = 1;
             const byte t2 = 2;
             const byte t3 = 3;
-            const byte max = byte.MaxValue;
             const byte min = byte.MinValue;
+            const byte max = byte.MaxValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(1, s_true.AsByte());
+            Assert.Equal(0, s_false.AsByte());
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
+
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Fact(DisplayName = nameof(ByteToBool))]
-        public static void ByteToBool()
+        [Fact(DisplayName = nameof(If_SByte))]
+        public static void If_SByte()
         {
-            for (uint i = 0; i <= byte.MaxValue; i++)
-            {
-                Assert.Equal(i != 0, i.Evaluate());
-            }
+            const sbyte t0 = 0;
+            const sbyte t1 = 1;
+            const sbyte t2 = 2;
+            const sbyte t3 = 3;
+            const sbyte min = sbyte.MinValue;
+            const sbyte max = sbyte.MaxValue;
+
+            Assert.Equal(1, s_true.AsByte());
+            Assert.Equal(0, s_false.AsByte());
+
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
+
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
+
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
+
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Fact(DisplayName = nameof(SByteToBool))]
-        public static void SByteToBool()
-        {
-            for (int i = sbyte.MinValue; i <= sbyte.MaxValue; i++)
-            {
-                Assert.Equal(i != 0, i.Evaluate());
-            }
-        }
-
-        [Fact(DisplayName = nameof(BoolToUInt16))]
-        public static void BoolToUInt16()
+        [Fact(DisplayName = nameof(If_UInt16))]
+        public static void If_UInt16()
         {
             const ushort t0 = 0;
             const ushort t1 = 1;
             const ushort t2 = 2;
             const ushort t3 = 3;
-            const ushort max = ushort.MaxValue;
             const ushort min = ushort.MinValue;
+            const ushort max = ushort.MaxValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Fact(DisplayName = nameof(UInt16ToBool))]
-        public static void UInt16ToBool()
+        [Fact(DisplayName = nameof(If_Int16))]
+        public static void If_Int16()
         {
-            for (uint i = 0; i <= ushort.MaxValue; i++)
-            {
-                Assert.Equal(i != 0, i.Evaluate());
-            }
+            const short t0 = 0;
+            const short t1 = 1;
+            const short t2 = 2;
+            const short t3 = 3;
+            const short min = short.MinValue;
+            const short max = short.MaxValue;
+
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
+
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
+
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
+
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Fact(DisplayName = nameof(Int16ToBool))]
-        public static void Int16ToBool()
-        {
-            for (int i = short.MinValue; i <= short.MaxValue; i++)
-            {
-                Assert.Equal(i != 0, i.Evaluate());
-            }
-        }
-
-        [Fact(DisplayName = nameof(BoolToUInt32))]
-        public static void BoolToUInt32()
+        [Fact(DisplayName = nameof(If_UInt32))]
+        public static void If_UInt32()
         {
             const uint t0 = 0;
             const uint t1 = 1;
             const uint t2 = 2;
             const uint t3 = 3;
-            const uint max = uint.MaxValue;
             const uint min = uint.MinValue;
+            const uint max = uint.MaxValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Theory(DisplayName = nameof(UInt32ToBool))]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(byte.MaxValue - 1)]
-        [InlineData(byte.MaxValue)]
-        [InlineData(byte.MaxValue + 1)]
-        [InlineData(ushort.MaxValue - 1)]
-        [InlineData(ushort.MaxValue)]
-        [InlineData(ushort.MaxValue + 1)]
-        [InlineData(uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue)]
-        public static void UInt32ToBool(uint value)
+        [Fact(DisplayName = nameof(If_Int32))]
+        public static void If_Int32()
         {
-            Assert.Equal(value != 0, value.Evaluate());
+            const int t0 = 0;
+            const int t1 = 1;
+            const int t2 = 2;
+            const int t3 = 3;
+            const int min = int.MinValue;
+            const int max = int.MaxValue;
+
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
+
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
+
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
+
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Theory(DisplayName = nameof(Int32ToBool))]
-        [InlineData(int.MinValue)]
-        [InlineData(int.MinValue + 1)]
-        [InlineData(short.MinValue - 1)]
-        [InlineData(short.MinValue)]
-        [InlineData(short.MinValue + 1)]
-        [InlineData(sbyte.MinValue - 1)]
-        [InlineData(sbyte.MinValue)]
-        [InlineData(sbyte.MinValue + 1)]
-        [InlineData(-2)]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(sbyte.MaxValue - 1)]
-        [InlineData(sbyte.MaxValue)]
-        [InlineData(sbyte.MaxValue + 1)]
-        [InlineData(short.MaxValue - 1)]
-        [InlineData(short.MaxValue)]
-        [InlineData(short.MaxValue + 1)]
-        [InlineData(int.MaxValue - 1)]
-        [InlineData(int.MaxValue)]
-        public static void Int32ToBool(int value)
-        {
-            Assert.Equal(value != 0, value.Evaluate());
-        }
-
-        [Fact(DisplayName = nameof(BoolToUInt64))]
-        public static void BoolToUInt64()
+        [Fact(DisplayName = nameof(If_UInt64))]
+        public static void If_UInt64()
         {
             const ulong t0 = 0;
             const ulong t1 = 1;
             const ulong t2 = 2;
             const ulong t3 = 3;
-            const ulong max = ulong.MaxValue;
             const ulong min = ulong.MinValue;
+            const ulong max = ulong.MaxValue;
 
-            Assert.Equal(t1, @true.Evaluate(t1));
-            Assert.Equal(t0, @false.Evaluate(t1));
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
 
-            Assert.Equal(t2, @true.Evaluate(t2));
-            Assert.Equal(t3, @false.Evaluate(t1, t3));
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
 
-            Assert.Equal(t2, @true.Evaluate(t2, t3));
-            Assert.Equal(t3, @false.Evaluate(t2, t3));
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
 
-            Assert.Equal(max, @true.Evaluate(max, min));
-            Assert.Equal(max, @false.Evaluate(min, max));
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
 
-        [Theory(DisplayName = nameof(UInt64ToBool))]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(byte.MaxValue - 1)]
-        [InlineData(byte.MaxValue)]
-        [InlineData(byte.MaxValue + 1)]
-        [InlineData(ushort.MaxValue - 1)]
-        [InlineData(ushort.MaxValue)]
-        [InlineData(ushort.MaxValue + 1)]
-        [InlineData(uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue)]
-        [InlineData((ulong)uint.MaxValue + 1)]
-        [InlineData(ulong.MaxValue - 1)]
-        [InlineData(ulong.MaxValue)]
-        public static void UInt64ToBool(ulong value)
+        [Fact(DisplayName = nameof(If_Int64))]
+        public static void If_Int64()
         {
-            Assert.Equal(value != 0, value.Evaluate());
-        }
+            const long t0 = 0;
+            const long t1 = 1;
+            const long t2 = 2;
+            const long t3 = 3;
+            const long min = long.MinValue;
+            const long max = long.MaxValue;
 
-        [Theory(DisplayName = nameof(Int64ToBool))]
-        [InlineData(long.MinValue)]
-        [InlineData(long.MinValue + 1)]
-        [InlineData((long)int.MinValue - 1)]
-        [InlineData(int.MinValue)]
-        [InlineData(int.MinValue + 1)]
-        [InlineData(short.MinValue - 1)]
-        [InlineData(short.MinValue)]
-        [InlineData(short.MinValue + 1)]
-        [InlineData(sbyte.MinValue - 1)]
-        [InlineData(sbyte.MinValue)]
-        [InlineData(sbyte.MinValue + 1)]
-        [InlineData(-2)]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(sbyte.MaxValue - 1)]
-        [InlineData(sbyte.MaxValue)]
-        [InlineData(sbyte.MaxValue + 1)]
-        [InlineData(short.MaxValue - 1)]
-        [InlineData(short.MaxValue)]
-        [InlineData(short.MaxValue + 1)]
-        [InlineData(int.MaxValue - 1)]
-        [InlineData(int.MaxValue)]
-        [InlineData((long)int.MaxValue + 1)]
-        [InlineData(long.MaxValue - 1)]
-        [InlineData(long.MaxValue)]
-        public static void Int64ToBool(long value)
-        {
-            Assert.Equal(value != 0, value.Evaluate());
+            Assert.Equal(t1, s_true.If(t1));
+            Assert.Equal(t0, s_false.If(t1));
+
+            Assert.Equal(t2, s_true.If(t2));
+            Assert.Equal(t3, s_false.If(t1, t3));
+
+            Assert.Equal(t2, s_true.If(t2, t3));
+            Assert.Equal(t3, s_false.If(t2, t3));
+
+            Assert.Equal(max, s_true.If(max, min));
+            Assert.Equal(max, s_false.If(min, max));
         }
     }
 }
