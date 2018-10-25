@@ -4,7 +4,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public virtual JSNodeType Type => JSNodeType.Property;
 
-        public Discriminated<JSLiteral, JSIdentifier> Key { get; set; }
+        public IJSIndexer Key { get; set; }
 
         public JSExpression Value { get; set; }
 
@@ -14,14 +14,14 @@ namespace SourceCode.Clay.Javascript.Ast
         {
         }
 
-        public JSProperty(JSPropertyKind kind, Discriminated<JSLiteral, JSIdentifier> key, JSExpression value)
+        public JSProperty(JSPropertyKind kind, IJSIndexer key, JSExpression value)
         {
             Kind = kind;
             Key = key;
             Value = value;
         }
 
-        public JSProperty(Discriminated<JSLiteral, JSIdentifier> key, JSExpression value)
+        public JSProperty(IJSIndexer key, JSExpression value)
             : this(JSPropertyKind.Initializer, key, value)
         {
         }

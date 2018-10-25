@@ -326,13 +326,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             if (node is null) throw new ArgumentNullException(nameof(node));
 
-            switch (node.Key)
-            {
-                case var d when d.IsItem1: await WriteNodeAsync(d.Item1).ConfigureAwait(false); break;
-                case var d when d.IsItem2: await WriteNodeAsync(d.Item2).ConfigureAwait(false); break;
-                default: await WriteLiteralAsync().ConfigureAwait(false); break;
-            }
-
+            await WriteNodeAsync(node.Key).ConfigureAwait(false);
             await WriteAsync(Minify ? ":" : ": ").ConfigureAwait(false);
             await WriteNodeAsync(node.Value).ConfigureAwait(false);
         }
@@ -475,21 +469,15 @@ namespace SourceCode.Clay.Javascript.Ast
             if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "for(" : "for (").ConfigureAwait(false);
 
-            switch (node.Left)
+            if (node.Left is JSVariableDeclaration declaration)
             {
-                case var d when d.IsItem1:
-                    await WriteNodeAsync(d.Item1.Kind).ConfigureAwait(false);
-                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
-                        await WriteNodeAsync(d.Item1.Declarations[0]).ConfigureAwait(false);
-                    break;
-
-                case var d when d.IsItem2:
-                    await WriteNodeAsync(d.Item2).ConfigureAwait(false);
-                    break;
-
-                default:
-                    await WriteLiteralAsync().ConfigureAwait(false);
-                    break;
+                await WriteNodeAsync(declaration.Kind).ConfigureAwait(false);
+                if (declaration.Declarations.Count > 0 && !(declaration.Declarations[0] is null))
+                    await WriteNodeAsync(declaration.Declarations[0]).ConfigureAwait(false);
+            }
+            else
+            {
+                await WriteNodeAsync(node.Left).ConfigureAwait(false);
             }
 
             await WriteAsync(" in ").ConfigureAwait(false);
@@ -531,16 +519,15 @@ namespace SourceCode.Clay.Javascript.Ast
             if (node is null) throw new ArgumentNullException(nameof(node));
             await WriteAsync(Minify ? "for(" : "for (").ConfigureAwait(false);
 
-            switch (node.Initializer)
+            if (node.Initializer is JSVariableDeclaration declaration)
             {
-                case var d when d.IsItem1:
-                    await WriteNodeAsync(d.Item1.Kind).ConfigureAwait(false);
-                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
-                        await WriteNodeAsync(d.Item1.Declarations[0]).ConfigureAwait(false);
-                    break;
-                case var d when d.IsItem2:
-                    await WriteNodeAsync(d.Item2);
-                    break;
+                await WriteNodeAsync(declaration.Kind).ConfigureAwait(false);
+                if (declaration.Declarations.Count > 0 && !(declaration.Declarations[0] is null))
+                    await WriteNodeAsync(declaration.Declarations[0]).ConfigureAwait(false);
+            }
+            else
+            {
+                await WriteNodeAsync(node.Initializer).ConfigureAwait(false);
             }
 
             await WriteAsync(Minify ? ";" : "; ").ConfigureAwait(false);

@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSIdentifier Identifier { get; set; }
 
-        public IList<IJSPattern> Parameters { get; }
+        public List<IJSPattern> Parameters { get; }
 
         IList<IJSPattern> IJSFunction.Parameters => Parameters;
 

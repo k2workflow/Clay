@@ -1,6 +1,6 @@
 namespace SourceCode.Clay.Javascript.Ast
 {
-    public abstract class JSExpression : IJSNode
+    public abstract class JSExpression : IJSNode, IJSInitializer
     {
         public abstract JSNodeType Type { get; }
 

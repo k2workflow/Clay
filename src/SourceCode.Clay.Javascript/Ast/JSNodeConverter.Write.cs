@@ -477,19 +477,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("ForInStatement");
 
             writer.WritePropertyName("left");
-
-            switch (node.Left)
-            {
-                case var d when d.IsItem1:
-                    WriteJson(writer, d.Item1, serializer);
-                    break;
-                case var d when d.IsItem2:
-                    WriteJson(writer, d.Item2, serializer);
-                    break;
-                default:
-                    WriteJson(writer, (JSExpression)null, serializer);
-                    break;
-            }
+            WriteJson(writer, node.Left, serializer);
 
             writer.WritePropertyName("right");
             WriteJson(writer, node.Right, serializer);
@@ -508,19 +496,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("ForStatement");
 
             writer.WritePropertyName("init");
-
-            switch (node.Initializer)
-            {
-                case var d when d.IsItem1:
-                    WriteJson(writer, d.Item1, serializer);
-                    break;
-                case var d when d.IsItem2:
-                    WriteJson(writer, d.Item2, serializer);
-                    break;
-                default:
-                    WriteJson(writer, (JSExpression)null, serializer);
-                    break;
-            }
+            WriteJson(writer, node.Initializer, serializer);
 
             writer.WritePropertyName("test");
             WriteJson(writer, node.Test, serializer);
@@ -778,18 +754,7 @@ namespace SourceCode.Clay.Javascript.Ast
             writer.WriteValue("Property");
 
             writer.WritePropertyName("key");
-            switch (node.Key)
-            {
-                case var d when d.IsItem1:
-                    WriteJson(writer, d.Item1, serializer);
-                    break;
-                case var d when d.IsItem2:
-                    WriteJson(writer, d.Item2, serializer);
-                    break;
-                default:
-                    WriteJson(writer, (JSExpression)null, serializer);
-                    break;
-            }
+            WriteJson(writer, node.Key, serializer);
 
             writer.WritePropertyName("value");
             WriteJson(writer, node.Value, serializer);

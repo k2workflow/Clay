@@ -8,7 +8,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.SequenceExpression;
 
-        public IList<JSExpression> Expressions { get; }
+        public List<JSExpression> Expressions { get; }
 
         public JSSequenceExpression()
         {

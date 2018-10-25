@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.ForStatement;
 
-        public Discriminated<JSVariableDeclaration, JSExpression> Initializer { get; set; }
+        public IJSInitializer Initializer { get; set; }
 
         public JSExpression Test { get; set; }
 
@@ -15,14 +15,14 @@ namespace SourceCode.Clay.Javascript.Ast
         public JSForStatement()
         { }
 
-        public JSForStatement(Discriminated<JSVariableDeclaration, JSExpression> initializer, JSExpression test, JSExpression update)
+        public JSForStatement(IJSInitializer initializer, JSExpression test, JSExpression update)
         {
             Initializer = initializer;
             Test = test;
             Update = update;
         }
 
-        public JSForStatement(Discriminated<JSVariableDeclaration, JSExpression> initializer, JSExpression test, JSExpression update, JSStatement body)
+        public JSForStatement(IJSInitializer initializer, JSExpression test, JSExpression update, JSStatement body)
             : base(body)
         {
             Initializer = initializer;

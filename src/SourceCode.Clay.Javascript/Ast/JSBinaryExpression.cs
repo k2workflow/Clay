@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Left { get; set; }
 
-        public IList<JSExpression> Right { get; }
+        public List<JSExpression> Right { get; }
 
         public JSBinaryExpression()
         {

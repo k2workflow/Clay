@@ -397,13 +397,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             if (node is null) throw new ArgumentNullException(nameof(node));
 
-            switch (node.Key)
-            {
-                case var d when d.IsItem1: WriteNode(d.Item1); break;
-                case var d when d.IsItem2: WriteNode(d.Item2); break;
-                default: WriteLiteral(); break;
-            }
-
+            WriteNode(node.Key);
             Write(Minify ? ":" : ": ");
             WriteNode(node.Value);
         }
@@ -546,21 +540,15 @@ namespace SourceCode.Clay.Javascript.Ast
             if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "for(" : "for (");
 
-            switch (node.Left)
+            if (node.Left is JSVariableDeclaration declaration)
             {
-                case var d when d.IsItem1:
-                    WriteNode(d.Item1.Kind);
-                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
-                        WriteNode(d.Item1.Declarations[0]);
-                    break;
-
-                case var d when d.IsItem2:
-                    WriteNode(d.Item2);
-                    break;
-
-                default:
-                    WriteLiteral();
-                    break;
+                WriteNode(declaration.Kind);
+                if (declaration.Declarations.Count > 0 && !(declaration.Declarations[0] is null))
+                    WriteNode(declaration.Declarations[0]);
+            }
+            else
+            {
+                WriteNode(node.Left);
             }
 
             Write(" in ");
@@ -602,16 +590,15 @@ namespace SourceCode.Clay.Javascript.Ast
             if (node is null) throw new ArgumentNullException(nameof(node));
             Write(Minify ? "for(" : "for (");
 
-            switch (node.Initializer)
+            if (node.Initializer is JSVariableDeclaration declaration)
             {
-                case var d when d.IsItem1:
-                    WriteNode(d.Item1.Kind);
-                    if (d.Item1.Declarations.Count > 0 && !(d.Item1.Declarations[0] is null))
-                        WriteNode(d.Item1.Declarations[0]);
-                    break;
-                case var d when d.IsItem2:
-                    WriteNode(d.Item2);
-                    break;
+                WriteNode(declaration.Kind);
+                if (declaration.Declarations.Count > 0 && !(declaration.Declarations[0] is null))
+                    WriteNode(declaration.Declarations[0]);
+            }
+            else
+            {
+                WriteNode(node.Initializer);
             }
 
             Write(Minify ? ";" : "; ");

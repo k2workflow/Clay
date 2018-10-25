@@ -1,6 +1,6 @@
 namespace SourceCode.Clay.Javascript.Ast
 {
-    public class JSLiteral : JSExpression
+    public class JSLiteral : JSExpression, IJSIndexer
     {
         public override JSNodeType Type => JSNodeType.Literal;
 
