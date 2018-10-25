@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Object { get; set; }
 
-        public IList<JSExpression> Indices { get; }
+        public List<JSExpression> Indices { get; }
 
         public bool IsComputed { get; set; }
 

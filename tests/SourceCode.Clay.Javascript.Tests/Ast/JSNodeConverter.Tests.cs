@@ -502,7 +502,8 @@ namespace SourceCode.Clay.Javascript.Ast
             };
 
             var forin = Read<JSForInStatement>(json);
-            Assert.Equal("a", Assert.IsType<JSIdentifier>(Assert.Single(forin.Left.Item1.Declarations).Identifier).Name);
+            var declaration = Assert.IsType<JSVariableDeclaration>(forin.Left);
+            Assert.Equal("a", Assert.IsType<JSIdentifier>(Assert.Single(declaration.Declarations).Identifier).Name);
             Assert.Equal("b", Assert.IsType<JSIdentifier>(forin.Right).Name);
             Assert.IsType<JSReturnStatement>(forin.Body);
 
@@ -527,7 +528,7 @@ namespace SourceCode.Clay.Javascript.Ast
             };
 
             forin = Read<JSForInStatement>(json);
-            Assert.Equal("a", Assert.IsType<JSIdentifier>(forin.Left.Item2).Name);
+            Assert.Equal("a", Assert.IsType<JSIdentifier>(forin.Left).Name);
             Assert.Equal("b", Assert.IsType<JSIdentifier>(forin.Right).Name);
             Assert.IsType<JSReturnStatement>(forin.Body);
         }
@@ -574,7 +575,8 @@ namespace SourceCode.Clay.Javascript.Ast
             };
 
             var @for = Read<JSForStatement>(json);
-            Assert.Equal("a", Assert.IsType<JSIdentifier>(Assert.Single(@for.Initializer.Item1.Declarations).Identifier).Name);
+            var declaration = Assert.IsType<JSVariableDeclaration>(@for.Initializer);
+            Assert.Equal("a", Assert.IsType<JSIdentifier>(Assert.Single(declaration.Declarations).Identifier).Name);
             Assert.Equal("b", Assert.IsType<JSIdentifier>(@for.Test).Name);
             Assert.Equal("c", Assert.IsType<JSIdentifier>(@for.Update).Name);
             Assert.IsType<JSReturnStatement>(@for.Body);
@@ -597,7 +599,7 @@ namespace SourceCode.Clay.Javascript.Ast
             };
 
             @for = Read<JSForStatement>(json);
-            Assert.Equal("a", Assert.IsType<JSIdentifier>(@for.Initializer.Item2).Name);
+            Assert.Equal("a", Assert.IsType<JSIdentifier>(@for.Initializer).Name);
             Assert.Null(@for.Test);
             Assert.Null(@for.Update);
             Assert.IsType<JSReturnStatement>(@for.Body);
@@ -616,7 +618,7 @@ namespace SourceCode.Clay.Javascript.Ast
             };
 
             @for = Read<JSForStatement>(json);
-            Assert.False(@for.Initializer.HasValue);
+            Assert.Null(@for.Initializer);
             Assert.Null(@for.Test);
             Assert.Null(@for.Update);
             Assert.IsType<JSReturnStatement>(@for.Body);
@@ -994,13 +996,13 @@ namespace SourceCode.Clay.Javascript.Ast
                 item =>
                 {
                     Assert.Equal(JSPropertyKind.Initializer, item.Kind);
-                    Assert.Equal("a", item.Key.Item2.Name);
+                    Assert.Equal("a", Assert.IsType<JSIdentifier>(item.Key).Name);
                     Assert.Equal("b", Assert.IsType<JSIdentifier>(item.Value).Name);
                 },
                 item =>
                 {
                     Assert.Equal(JSPropertyKind.Get, item.Kind);
-                    Assert.Equal("c", item.Key.Item2.Name);
+                    Assert.Equal("c", Assert.IsType<JSIdentifier>(item.Key).Name);
                     Assert.Equal("d", Assert.IsType<JSIdentifier>(item.Value).Name);
                 }
             );
@@ -1055,7 +1057,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             var property = Read<JSProperty>(json);
             Assert.Equal(JSPropertyKind.Initializer, property.Kind);
-            Assert.Equal("a", property.Key.Item2.Name);
+            Assert.Equal("a", Assert.IsType<JSIdentifier>(property.Key).Name);
             Assert.Equal("b", Assert.IsType<JSIdentifier>(property.Value).Name);
 
             json = new JObject()
@@ -1075,13 +1077,13 @@ namespace SourceCode.Clay.Javascript.Ast
             };
             property = Read<JSProperty>(json);
             Assert.Equal(JSPropertyKind.Get, property.Kind);
-            Assert.Equal(1, Assert.IsType<long>(property.Key.Item1.Value));
+            Assert.Equal(1, Assert.IsType<long>(Assert.IsType<JSLiteral>(property.Key).Value));
             Assert.Equal("b", Assert.IsType<JSIdentifier>(property.Value).Name);
 
             json["kind"] = "set";
             property = Read<JSProperty>(json);
             Assert.Equal(JSPropertyKind.Set, property.Kind);
-            Assert.Equal(1, Assert.IsType<long>(property.Key.Item1.Value));
+            Assert.Equal(1, Assert.IsType<long>(Assert.IsType<JSLiteral>(property.Key).Value));
             Assert.Equal("b", Assert.IsType<JSIdentifier>(property.Value).Name);
         }
 

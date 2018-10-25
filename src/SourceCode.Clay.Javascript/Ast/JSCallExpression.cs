@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Callee { get; set; }
 
-        public IList<JSExpression> Arguments { get; }
+        public List<JSExpression> Arguments { get; }
 
         public JSCallExpression()
         {

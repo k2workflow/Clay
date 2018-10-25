@@ -6,7 +6,9 @@ namespace SourceCode.Clay.Javascript.Ast
 {
     public abstract class JSBlockExpression : JSExpression, IJSBlock
     {
-        public IList<JSStatement> Body { get; }
+        public List<JSStatement> Body { get; }
+
+        IList<JSStatement> IJSBlock.Body => Body;
 
         protected JSBlockExpression()
         {

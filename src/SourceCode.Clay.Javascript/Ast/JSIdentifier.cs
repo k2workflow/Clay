@@ -1,6 +1,6 @@
 namespace SourceCode.Clay.Javascript.Ast
 {
-    public class JSIdentifier : JSExpression, IJSPattern
+    public class JSIdentifier : JSExpression, IJSPattern, IJSIndexer
     {
         public override JSNodeType Type => JSNodeType.Identifier;
 

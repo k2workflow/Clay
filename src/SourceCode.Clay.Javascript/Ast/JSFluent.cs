@@ -202,18 +202,18 @@ namespace SourceCode.Clay.Javascript.Ast
         #endregion
 
         #region ForIn
-        public static JSForInStatement JSForIn(Discriminated<JSVariableDeclaration, IJSPattern> left, Expression right, IEnumerable<Statement> statements)
+        public static JSForInStatement JSForIn(IJSPatternDeclaration left, Expression right, IEnumerable<Statement> statements)
             => new JSForInStatement(left, right) { statements };
 
-        public static JSForInStatement JSForIn(Discriminated<JSVariableDeclaration, IJSPattern> left, Expression right, params Statement[] statements)
+        public static JSForInStatement JSForIn(IJSPatternDeclaration left, Expression right, params Statement[] statements)
             => JSForIn(left, right, (IEnumerable<Statement>)statements);
         #endregion
 
         #region For
-        public static JSForStatement JSFor(Discriminated<JSVariableDeclaration, Expression> initializer, Expression test, Expression update, IEnumerable<Statement> statements)
+        public static JSForStatement JSFor(IJSInitializer initializer, Expression test, Expression update, IEnumerable<Statement> statements)
             => new JSForStatement(initializer, test, update) { statements };
 
-        public static JSForStatement JSFor(Discriminated<JSVariableDeclaration, Expression> initializer, Expression test, Expression update, params Statement[] statements)
+        public static JSForStatement JSFor(IJSInitializer initializer, Expression test, Expression update, params Statement[] statements)
             => JSFor(initializer, test, update, (IEnumerable<Statement>)statements);
         #endregion
 
@@ -335,23 +335,14 @@ namespace SourceCode.Clay.Javascript.Ast
         #endregion
 
         #region Property
-        public static JSProperty JSProperty(JSPropertyKind kind, Discriminated<JSLiteral, JSIdentifier> key, Expression value)
+        public static JSProperty JSProperty(JSPropertyKind kind, IJSIndexer key, Expression value)
             => new JSProperty(kind, key, value);
 
-        public static JSProperty JSProperty(Discriminated<JSLiteral, JSIdentifier> key, Expression value)
+        public static JSProperty JSProperty(this IJSIndexer key, Expression value)
             => new JSProperty(key, value);
 
-        public static JSProperty JSProperty(this JSLiteral key, JSPropertyKind kind, Expression value)
-            => JSProperty(kind, key, value);
-
-        public static JSProperty JSProperty(this JSIdentifier key, JSPropertyKind kind, Expression value)
-            => JSProperty(kind, key, value);
-
-        public static JSProperty JSProperty(this JSLiteral key, Expression value)
-            => JSProperty(new Discriminated<JSLiteral, JSIdentifier>(key), value);
-
-        public static JSProperty JSProperty(this JSIdentifier key, Expression value)
-            => JSProperty(new Discriminated<JSLiteral, JSIdentifier>(key), value);
+        public static JSProperty JSProperty(this IJSIndexer key, JSPropertyKind kind, Expression value)
+            => new JSProperty(kind, key, value);
         #endregion
 
         #region Return

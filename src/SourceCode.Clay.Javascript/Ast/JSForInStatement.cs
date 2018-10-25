@@ -6,20 +6,20 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.ForInStatement;
 
-        public Discriminated<JSVariableDeclaration, IJSPattern> Left { get; set; }
+        public IJSPatternDeclaration Left { get; set; }
 
         public JSExpression Right { get; set; }
 
         public JSForInStatement()
         { }
 
-        public JSForInStatement(Discriminated<JSVariableDeclaration, IJSPattern> left, JSExpression right)
+        public JSForInStatement(IJSPatternDeclaration left, JSExpression right)
         {
             Left = left;
             Right = right;
         }
 
-        public JSForInStatement(Discriminated<JSVariableDeclaration, IJSPattern> left, JSExpression right, JSStatement body)
+        public JSForInStatement(IJSPatternDeclaration left, JSExpression right, JSStatement body)
             : base(body)
         {
             Left = left;

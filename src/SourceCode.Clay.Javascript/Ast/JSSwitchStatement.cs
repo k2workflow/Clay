@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         public JSExpression Discriminant { get; set; }
 
-        public IList<JSSwitchCase> Cases { get; }
+        public List<JSSwitchCase> Cases { get; }
 
         public JSSwitchStatement()
         {

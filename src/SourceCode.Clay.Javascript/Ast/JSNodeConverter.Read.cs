@@ -420,30 +420,20 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("body", out JToken bodyToken) || !(bodyToken.Type == JTokenType.Object))
                 throw new InvalidOperationException("ForInStatement must have property body of type object.");
 
-            var left = !(existingValue?.Left.HasValue ?? false)
-                ? ReadJson(leftToken, null, serializer)
-                : existingValue.Left.IsItem1
-                    ? ReadJson(leftToken, existingValue.Left.Item1, serializer)
-                    : ReadJson(leftToken, existingValue.Left.Item2, serializer);
+            var left = ReadJson(leftToken, existingValue?.Left, serializer);
             var right = ReadJson(rightToken, existingValue?.Right, serializer);
             var body = ReadJson(bodyToken, existingValue?.Body, serializer);
 
+            if (!(left is IJSPatternDeclaration leftExpression))
+                throw new InvalidOperationException("ForInStatement must have property left of type pattern or variable declaration.");
             if (!(right is JSExpression rightExpression))
                 throw new InvalidOperationException("ForInStatement must have property right of type expression.");
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("ForInStatement must have property body of type statement.");
 
-            Discriminated<JSVariableDeclaration, IJSPattern> leftDiscriminator;
-            if (left is IJSPattern leftPattern)
-                leftDiscriminator = new Discriminated<JSVariableDeclaration, IJSPattern>(leftPattern);
-            else if (left is JSVariableDeclaration leftDecl)
-                leftDiscriminator = leftDecl;
-            else
-                throw new InvalidOperationException("ForInStatement must have property left of type variable declaration or pattern.");
-
             if (existingValue is null) existingValue = new JSForInStatement();
 
-            existingValue.Left = leftDiscriminator;
+            existingValue.Left = leftExpression;
             existingValue.Right = rightExpression;
             existingValue.Body = (JSStatement)body;
 
@@ -461,16 +451,13 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!@object.TryGetValue("body", out JToken bodyToken) || !(bodyToken.Type == JTokenType.Object))
                 throw new InvalidOperationException("ForStatement must have property body of type object.");
 
-            var init = !(existingValue?.Initializer.HasValue ?? false)
-                ? ReadJson(initToken, null, serializer)
-                : existingValue.Initializer.IsItem1
-                    ? ReadJson(initToken, existingValue.Initializer.Item1, serializer)
-                    : ReadJson(initToken, existingValue.Initializer.Item2, serializer);
-            
+            var init = ReadJson(initToken, existingValue?.Initializer, serializer);
             var test = ReadJson(testToken, existingValue?.Test, serializer);
             var update = ReadJson(updateToken, existingValue?.Update, serializer);
             var body = ReadJson(bodyToken, existingValue?.Body, serializer);
 
+            if (!(init is IJSInitializer) && !(init is null))
+                throw new InvalidOperationException("ForStatement must have property init of type expression, variable declaration or null.");
             if (!(test is JSExpression) && !(test is null))
                 throw new InvalidOperationException("ForStatement must have property test of type expression or null.");
             if (!(update is JSExpression) && !(update is null))
@@ -478,19 +465,9 @@ namespace SourceCode.Clay.Javascript.Ast
             if (!(body is null) && !(body is JSStatement))
                 throw new InvalidOperationException("ForStatement must have property body of type statement.");
 
-            Discriminated<JSVariableDeclaration, JSExpression> initDiscriminator;
-            if (init is JSExpression initExpression)
-                initDiscriminator = new Discriminated<JSVariableDeclaration, JSExpression>(initExpression);
-            else if (init is JSVariableDeclaration initDecl)
-                initDiscriminator = initDecl;
-            else if (init is null)
-                initDiscriminator = default;
-            else
-                throw new InvalidOperationException("ForStatement must have property init of type variable declaration, pattern or null.");
-
             if (existingValue is null) existingValue = new JSForStatement();
 
-            existingValue.Initializer = initDiscriminator;
+            existingValue.Initializer = (IJSInitializer)init;
             existingValue.Test = (JSExpression)test;
             existingValue.Update = (JSExpression)update;
             existingValue.Body = (JSStatement)body;
@@ -693,27 +670,17 @@ namespace SourceCode.Clay.Javascript.Ast
                 throw new InvalidOperationException("Property must have value property of type object.");
 
             JSPropertyKind kind = ConvertPropertyKind((string)kindToken);
-            var key = !(existingValue?.Key.HasValue ?? false)
-                ? ReadJson(keyToken, null, serializer)
-                : existingValue.Key.IsItem1
-                    ? ReadJson(keyToken, existingValue.Key.Item1, serializer)
-                    : ReadJson(keyToken, existingValue.Key.Item2, serializer);
+            var key = ReadJson(keyToken, existingValue?.Key, serializer);
             var value = ReadJson(valueToken, existingValue?.Value, serializer);
 
+            if (!(key is IJSIndexer keyIndexer))
+                throw new InvalidOperationException("Property must have key property of type literal or identifier.");
             if (!(value is JSExpression valueExpression))
                 throw new InvalidOperationException("Property must have value property of type expression.");
 
-            Discriminated<JSLiteral, JSIdentifier> keyDiscriminator;
-            if (key is JSLiteral keyLiteral)
-                keyDiscriminator = keyLiteral;
-            else if (key is JSIdentifier keyIdentifier)
-                keyDiscriminator = keyIdentifier;
-            else
-                throw new InvalidOperationException("Property must have property key of type literal or identifier.");
-
             if (existingValue is null) existingValue = new JSProperty();
 
-            existingValue.Key = keyDiscriminator;
+            existingValue.Key = keyIndexer;
             existingValue.Value = valueExpression;
             existingValue.Kind = kind;
 

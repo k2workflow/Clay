@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace SourceCode.Clay.Javascript.Ast
 {
-    public class JSVariableDeclaration : JSStatement, IEnumerable
+    public class JSVariableDeclaration : JSStatement, IEnumerable, IJSPatternDeclaration, IJSInitializer
     {
         public override JSNodeType Type => JSNodeType.VariableDeclaration;
 
-        public IList<JSVariableDeclarator> Declarations { get; }
+        public List<JSVariableDeclarator> Declarations { get; }
 
         public JSVariableDeclarationKind Kind { get; set; }
 

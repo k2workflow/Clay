@@ -8,7 +8,9 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public override JSNodeType Type => JSNodeType.BlockStatement;
 
-        public IList<JSStatement> Body { get; }
+        public List<JSStatement> Body { get; }
+
+        IList<JSStatement> IJSBlock.Body => Body;
 
         public JSBlockStatement()
         {

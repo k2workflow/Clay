@@ -1,6 +1,6 @@
-﻿namespace SourceCode.Clay.Javascript.Ast
+namespace SourceCode.Clay.Javascript.Ast
 {
-    public interface IJSPattern : IJSNode
+    public interface IJSPattern : IJSNode, IJSPatternDeclaration
     {
     }
 }

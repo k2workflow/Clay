@@ -424,7 +424,7 @@ namespace SourceCode.Clay.Javascript.Ast
         [Fact]
         public void JSWriter_Write_Property()
         {
-            JSProperty ast = JSProperty(JSLiteral("a"), JSLiteral(1));
+            JSProperty ast = JSLiteral("a").JSProperty(JSLiteral(1));
             Test(ast, "'a':1", "'a': 1");
 
             ast.Key = JSIdentifier("a");
