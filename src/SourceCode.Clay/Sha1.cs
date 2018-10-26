@@ -8,25 +8,19 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
-using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay
 {
     /// <summary>
     /// Represents a <see cref="Sha1"/> value.
     /// </summary>
-    /// <seealso cref="crypt.SHA1" />
+    /// <seealso cref="System.Security.Cryptography.SHA1" />
     /// <seealso cref="System.IEquatable{T}" />
     /// <seealso cref="System.IComparable{T}" />
     [DebuggerDisplay("{ToString(\"D\"),nq,ac}")]
     public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
     {
-        // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA1> t_sha1 = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
-
         /// <summary>
         /// The standard byte length of a <see cref="Sha1"/> value.
         /// </summary>
@@ -70,48 +64,6 @@ namespace SourceCode.Clay
                 }
             }
         }
-
-        /// <summary>
-        /// Hashes the specified bytes.
-        /// </summary>
-        /// <param name="span">The bytes to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha1 Hash(ReadOnlySpan<byte> span)
-            => Sha1Extensions.HashData(t_sha1.Value, span);
-
-        /// <summary>
-        /// Hashes the specified value using utf8 encoding.
-        /// </summary>
-        /// <param name="value">The string to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha1 Hash(string value)
-            => Sha1Extensions.HashData(t_sha1.Value, value);
-
-        /// <summary>
-        /// Hashes the specified bytes.
-        /// </summary>
-        /// <param name="bytes">The bytes to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha1 Hash(byte[] bytes)
-            => Sha1Extensions.HashData(t_sha1.Value, bytes);
-
-        /// <summary>
-        /// Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
-        /// </summary>
-        /// <param name="bytes">The bytes to hash.</param>
-        /// <param name="start">The offset.</param>
-        /// <param name="length">The count.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha1 Hash(byte[] bytes, int start, int length)
-            => Sha1Extensions.HashData(t_sha1.Value, bytes, start, length);
-
-        /// <summary>
-        /// Hashes the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha1 Hash(Stream stream)
-            => Sha1Extensions.HashData(t_sha1.Value, stream);
 
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.

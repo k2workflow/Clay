@@ -6,16 +6,18 @@
 #endregion
 
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Xunit;
+using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay.Tests
 {
     public static class Sha256Tests
-    {       
+    {
+        private static readonly crypt.SHA256 s_sha256 = crypt.SHA256.Create();
+
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_check_default))]
         public static void When_check_default()
@@ -35,47 +37,47 @@ namespace SourceCode.Clay.Tests
             var expected = Sha256.Parse(Sha256TestVectors.Empty);
 
             // Empty Array singleton
-            var actual = Sha256.Hash(Array.Empty<byte>());
+            Sha256 actual = s_sha256.HashData(Array.Empty<byte>());
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty Array
-            actual = Sha256.Hash(new byte[0]);
+            actual = s_sha256.HashData(new byte[0]);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty default ArraySegment
-            actual = Sha256.Hash(default(ArraySegment<byte>));
+            actual = s_sha256.HashData(default(ArraySegment<byte>));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty new ArraySegment
-            actual = Sha256.Hash(new ArraySegment<byte>(new byte[0], 0, 0));
+            actual = s_sha256.HashData(new ArraySegment<byte>(new byte[0], 0, 0));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty default Span
-            actual = Sha256.Hash(default(Span<byte>));
+            actual = s_sha256.HashData(default(Span<byte>));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty new Span
-            actual = Sha256.Hash(new Span<byte>(new byte[0], 0, 0));
+            actual = s_sha256.HashData(new Span<byte>(new byte[0], 0, 0));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty default ReadOnlySpan
-            actual = Sha256.Hash(default(ReadOnlySpan<byte>));
+            actual = s_sha256.HashData(default(ReadOnlySpan<byte>));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty new ReadOnlySpan
-            actual = Sha256.Hash(new ReadOnlySpan<byte>(new byte[0], 0, 0));
+            actual = s_sha256.HashData(new ReadOnlySpan<byte>(new byte[0], 0, 0));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Empty String
-            actual = Sha256.Hash(string.Empty);
+            actual = s_sha256.HashData(string.Empty);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
         }
@@ -86,7 +88,7 @@ namespace SourceCode.Clay.Tests
         {
             var expected = default(Sha256);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256((byte[])null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(null));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(new Span<byte>()));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(new Span<byte>(new byte[0])));
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(new Span<byte>(new byte[1] { 0 })));
@@ -102,15 +104,15 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(new KeyValuePair<string, string>(Sha256TestVectors.Zero, ""), expected.Split(Sha256.HexLength, true));
 
             // Null string
-            Assert.Throws<ArgumentNullException>(() => Sha256.Hash((string)null));
+            Assert.Throws<ArgumentNullException>(() => s_sha256.HashData((string)null));
 
             // Null bytes
-            Assert.Throws<ArgumentNullException>(() => Sha256.Hash((byte[])null));
+            Assert.Throws<ArgumentNullException>(() => s_sha256.HashData((byte[])null));
 
-            Assert.Throws<ArgumentNullException>(() => Sha256.Hash(null, 0, 0));
+            Assert.Throws<ArgumentNullException>(() => s_sha256.HashData(null, 0, 0));
 
             // Stream
-            Assert.Throws<ArgumentNullException>(() => Sha256.Hash((Stream)null));
+            Assert.Throws<ArgumentNullException>(() => s_sha256.HashData((Stream)null));
 
             // Roundtrip string
             var actual = Sha256.Parse(expected.ToString());
@@ -140,7 +142,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_Bytes))]
         public static void When_construct_sha256_from_Bytes()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(new byte[Sha256.ByteLength - 1])); // Too short
@@ -169,7 +171,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_ArraySegment))]
         public static void When_construct_sha256_from_ArraySegment()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             // Construct Byte[] with offset N
@@ -204,7 +206,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_Memory))]
         public static void When_construct_sha256_from_Memory()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             Assert.Throws<ArgumentOutOfRangeException>(() => new Sha256(Memory<byte>.Empty.Span)); // Empty
@@ -236,7 +238,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_ReadOnlyMemory))]
         public static void When_construct_sha256_from_ReadOnlyMemory()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             // Construct ReadOnlyMemory
@@ -269,22 +271,22 @@ namespace SourceCode.Clay.Tests
 
             // Construct MemoryStream
             var mem = new MemoryStream(buffer);
-            var expected = Sha256.Hash(buffer);
-            var actual = Sha256.Hash(mem);
+            Sha256 expected = s_sha256.HashData(buffer);
+            Sha256 actual = s_sha256.HashData(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Construct MemoryStream with offset 0
             mem = new MemoryStream(buffer, 0, buffer.Length);
-            expected = Sha256.Hash(buffer, 0, buffer.Length);
-            actual = Sha256.Hash(mem);
+            expected = s_sha256.HashData(buffer, 0, buffer.Length);
+            actual = s_sha256.HashData(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
             // Construct MemoryStream with offset N
             mem = new MemoryStream(buffer, 5, buffer.Length - 5);
-            expected = Sha256.Hash(buffer, 5, buffer.Length - 5);
-            actual = Sha256.Hash(mem);
+            expected = s_sha256.HashData(buffer, 5, buffer.Length - 5);
+            actual = s_sha256.HashData(mem);
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
         }
@@ -293,7 +295,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_Span))]
         public static void When_construct_sha256_from_Span()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             // Construct Span
@@ -323,7 +325,7 @@ namespace SourceCode.Clay.Tests
         public static void When_copyto_with_null_buffer()
         {
             // Arrange
-            byte[] buffer = (byte[])null;
+            byte[] buffer = null;
             var sha256 = new Sha256();
 
             // Action
@@ -334,7 +336,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_construct_sha256_from_ReadOnlySpan))]
         public static void When_construct_sha256_from_ReadOnlySpan()
         {
-            var expected = Sha256.Hash("abc");
+            Sha256 expected = s_sha256.HashData("abc");
             byte[] buffer = new byte[Sha256.ByteLength + 10];
 
             // Construct ReadOnlySpan
@@ -367,18 +369,18 @@ namespace SourceCode.Clay.Tests
             var sha256 = Sha256.Parse(expected);
             {
                 // String
-                string actual = Sha256.Hash(input).ToString();
+                string actual = s_sha256.HashData(input).ToString();
                 Assert.Equal(expected, actual);
                 Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(actual));
 
                 // Bytes
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
-                actual = Sha256.Hash(bytes).ToString();
+                actual = s_sha256.HashData(bytes).ToString();
                 Assert.Equal(expected, actual);
                 Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
-                actual = Sha256.Hash(bytes, 0, bytes.Length).ToString();
+                actual = s_sha256.HashData(bytes, 0, bytes.Length).ToString();
                 Assert.Equal(expected, actual);
                 Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
 
@@ -428,10 +430,10 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_create_sha256_from_empty_ArraySegment))]
         public static void When_create_sha256_from_empty_ArraySegment()
         {
-            var expected = Sha256.Hash(Array.Empty<byte>());
+            Sha256 expected = s_sha256.HashData(Array.Empty<byte>());
 
             // Empty segment
-            var actual = Sha256.Hash(default(ArraySegment<byte>));
+            Sha256 actual = s_sha256.HashData(default(ArraySegment<byte>));
             Assert.Equal(expected, actual);
             Assert.Equal(expected.GetHashCode(), actual.GetHashCode());
         }
@@ -447,7 +449,7 @@ namespace SourceCode.Clay.Tests
             {
                 string str = new string(char.MinValue, i);
                 byte[] byt = Encoding.UTF8.GetBytes(str);
-                var sha = Sha256.Hash(byt);
+                Sha256 sha = s_sha256.HashData(byt);
 
                 Assert.NotEqual(default, sha);
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(sha.ToString()));
@@ -473,24 +475,24 @@ namespace SourceCode.Clay.Tests
                 const string input = "";
 
                 // String
-                string actual = Sha256.Hash(input).ToString();
+                string actual = s_sha256.HashData(input).ToString();
                 Assert.Equal(expected, actual);
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(actual));
 
                 // Empty array
-                actual = Sha256.Hash(Array.Empty<byte>()).ToString();
+                actual = s_sha256.HashData(Array.Empty<byte>()).ToString();
                 Assert.Equal(expected, actual);
 
-                actual = Sha256.Hash(Array.Empty<byte>(), 0, 0).ToString();
+                actual = s_sha256.HashData(Array.Empty<byte>(), 0, 0).ToString();
                 Assert.Equal(expected, actual);
 
                 // Empty segment
-                actual = Sha256.Hash(new ArraySegment<byte>(Array.Empty<byte>())).ToString();
+                actual = s_sha256.HashData(new ArraySegment<byte>(Array.Empty<byte>())).ToString();
                 Assert.Equal(expected, actual);
 
                 // Bytes
                 byte[] bytes = Encoding.UTF8.GetBytes(input);
-                actual = Sha256.Hash(bytes).ToString();
+                actual = s_sha256.HashData(bytes).ToString();
                 Assert.Equal(expected, actual);
 
                 // Object
@@ -535,7 +537,7 @@ namespace SourceCode.Clay.Tests
             for (int i = 1; i < 200; i++)
             {
                 string str = new string(char.MinValue, i);
-                var sha256 = Sha256.Hash(str);
+                Sha256 sha256 = s_sha256.HashData(str);
 
                 Assert.NotEqual(default, sha256);
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(sha256.ToString()));
@@ -549,7 +551,7 @@ namespace SourceCode.Clay.Tests
             for (int i = 1; i < 200; i++)
             {
                 string str = new string(char.MaxValue, i);
-                var sha256 = Sha256.Hash(str);
+                Sha256 sha256 = s_sha256.HashData(str);
 
                 Assert.NotEqual(default, sha256);
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(sha256.ToString()));
@@ -564,7 +566,7 @@ namespace SourceCode.Clay.Tests
             for (int i = 1; i < 200; i++)
             {
                 str += TestConstants.SurrogatePair;
-                var sha256 = Sha256.Hash(str);
+                Sha256 sha256 = s_sha256.HashData(str);
 
                 Assert.NotEqual(default, sha256);
                 Assert.Equal(Sha256.HexLength, Encoding.UTF8.GetByteCount(sha256.ToString()));
@@ -708,7 +710,7 @@ namespace SourceCode.Clay.Tests
 
             // null
             {
-                Assert.Throws<ArgumentNullException>(() => Sha256.Parse((string)null));
+                Assert.Throws<ArgumentNullException>(() => Sha256.Parse(null));
             }
 
             // Empty
@@ -755,7 +757,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_compare_sha256))]
         public static void When_compare_sha256()
         {
-            var sha256 = Sha256.Hash("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
+            Sha256 sha256 = s_sha256.HashData("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
             Assert.True(default(Sha256) < sha256);
             Assert.True(sha256 > default(Sha256));
 
@@ -765,7 +767,7 @@ namespace SourceCode.Clay.Tests
             Assert.False(sha2 < sha256);
             Assert.False(sha2 > sha256);
 
-            var sha3 = Sha256.Hash("def"); // cb8379ac-2098aa16-5029e393-8a51da0b-cecfc008-fd6795f4-01178647-f96c5b34
+            Sha256 sha3 = s_sha256.HashData("def"); // cb8379ac-2098aa16-5029e393-8a51da0b-cecfc008-fd6795f4-01178647-f96c5b34
             Assert.True(sha256.CompareTo(sha2) == 0);
             Assert.True(sha256.CompareTo(sha3) != 0);
 
@@ -793,7 +795,7 @@ namespace SourceCode.Clay.Tests
         {
             const string whitespace = " \n  \t \r ";
 
-            var expected = Sha256.Hash("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
+            Sha256 expected = s_sha256.HashData("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
             string str = expected.ToString();
 
             // Leading whitespace
@@ -822,9 +824,9 @@ namespace SourceCode.Clay.Tests
         public static void When_sha256_equality()
         {
             var sha0 = default(Sha256);
-            var sha1 = Sha256.Hash("abc");
-            var sha2 = Sha256.Hash("abc");
-            var sha3 = Sha256.Hash("def");
+            Sha256 sha1 = s_sha256.HashData("abc");
+            Sha256 sha2 = s_sha256.HashData("abc");
+            Sha256 sha3 = s_sha256.HashData("def");
 
             Assert.True(sha1 == sha2);
             Assert.False(sha1 != sha2);
