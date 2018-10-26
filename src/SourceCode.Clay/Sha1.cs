@@ -75,6 +75,7 @@ namespace SourceCode.Clay
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(ReadOnlySpan<byte> span)
             => Sha1Extensions.HashData(t_sha1.Value, span);
 
@@ -82,7 +83,7 @@ namespace SourceCode.Clay
         /// Hashes the specified value using utf8 encoding.
         /// </summary>
         /// <param name="value">The string to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(string value)
             => Sha1Extensions.HashData(t_sha1.Value, value);
 
@@ -90,7 +91,7 @@ namespace SourceCode.Clay
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(byte[] bytes)
             => Sha1Extensions.HashData(t_sha1.Value, bytes);
 
@@ -100,7 +101,7 @@ namespace SourceCode.Clay
         /// <param name="bytes">The bytes to hash.</param>
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(byte[] bytes, int start, int length)
             => Sha1Extensions.HashData(t_sha1.Value, bytes, start, length);
 
@@ -108,7 +109,7 @@ namespace SourceCode.Clay
         /// Hashes the specified stream.
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(Stream stream)
             => Sha1Extensions.HashData(t_sha1.Value, stream);
 

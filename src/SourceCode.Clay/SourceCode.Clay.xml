@@ -999,37 +999,32 @@
             Hashes the specified bytes.
             </summary>
             <param name="span">The bytes to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha1.Hash(System.String)">
             <summary>
             Hashes the specified value using utf8 encoding.
             </summary>
             <param name="value">The string to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[])">
             <summary>
             Hashes the specified bytes.
             </summary>
             <param name="bytes">The bytes to hash.</param>
-            <returns></returns>
         </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[],System.Int32@,System.Int32@)">
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[],System.Int32,System.Int32)">
             <summary>
             Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
             </summary>
             <param name="bytes">The bytes to hash.</param>
             <param name="start">The offset.</param>
             <param name="length">The count.</param>
-            <returns></returns>
         </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.IO.Stream@)">
+        <member name="M:SourceCode.Clay.Sha1.Hash(System.IO.Stream)">
             <summary>
             Hashes the specified stream.
             </summary>
             <param name="stream">The stream to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha1.CopyTo(System.Span{System.Byte})">
             <summary>
@@ -1189,21 +1184,18 @@
             Hashes the specified bytes.
             </summary>
             <param name="span">The bytes to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha256.Hash(System.String)">
             <summary>
             Hashes the specified value using utf8 encoding.
             </summary>
             <param name="value">The string to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[])">
             <summary>
             Hashes the specified bytes.
             </summary>
             <param name="bytes">The bytes to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[],System.Int32,System.Int32)">
             <summary>
@@ -1212,14 +1204,12 @@
             <param name="bytes">The bytes to hash.</param>
             <param name="start">The offset.</param>
             <param name="length">The count.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha256.Hash(System.IO.Stream)">
             <summary>
             Hashes the specified stream.
             </summary>
             <param name="stream">The stream to hash.</param>
-            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.Sha256.CopyTo(System.Span{System.Byte})">
             <summary>
