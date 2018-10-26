@@ -974,7 +974,7 @@
             <summary>
             Represents a <see cref="T:SourceCode.Clay.Sha1"/> value.
             </summary>
-            <seealso cref="T:System.Security.Cryptography.SHA1" />
+            <seealso cref="!:crypt.SHA1" />
             <seealso cref="T:System.IEquatable`1" />
             <seealso cref="T:System.IComparable`1" />
         </member>
@@ -993,38 +993,6 @@
             Deserializes a <see cref="T:SourceCode.Clay.Sha1"/> value from the provided <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
             <param name="source">The buffer.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.ReadOnlySpan{System.Byte})">
-            <summary>
-            Hashes the specified bytes.
-            </summary>
-            <param name="span">The bytes to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.String)">
-            <summary>
-            Hashes the specified value using utf8 encoding.
-            </summary>
-            <param name="value">The string to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[])">
-            <summary>
-            Hashes the specified bytes.
-            </summary>
-            <param name="bytes">The bytes to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.Byte[],System.Int32,System.Int32)">
-            <summary>
-            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
-            </summary>
-            <param name="bytes">The bytes to hash.</param>
-            <param name="start">The offset.</param>
-            <param name="length">The count.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha1.Hash(System.IO.Stream)">
-            <summary>
-            Hashes the specified stream.
-            </summary>
-            <param name="stream">The stream to hash.</param>
         </member>
         <member name="M:SourceCode.Clay.Sha1.CopyTo(System.Span{System.Byte})">
             <summary>
@@ -1159,7 +1127,7 @@
             <summary>
             Represents a <see cref="T:SourceCode.Clay.Sha256"/> value.
             </summary>
-            <seealso cref="T:System.Security.Cryptography.SHA256" />
+            <seealso cref="!:crypt.SHA256" />
             <seealso cref="T:System.IEquatable`1" />
             <seealso cref="T:System.IComparable`1" />
         </member>
@@ -1178,38 +1146,6 @@
             Deserializes a <see cref="T:SourceCode.Clay.Sha256"/> value from the provided <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
             <param name="source">The buffer.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha256.Hash(System.ReadOnlySpan{System.Byte})">
-            <summary>
-            Hashes the specified bytes.
-            </summary>
-            <param name="span">The bytes to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha256.Hash(System.String)">
-            <summary>
-            Hashes the specified value using utf8 encoding.
-            </summary>
-            <param name="value">The string to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[])">
-            <summary>
-            Hashes the specified bytes.
-            </summary>
-            <param name="bytes">The bytes to hash.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha256.Hash(System.Byte[],System.Int32,System.Int32)">
-            <summary>
-            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
-            </summary>
-            <param name="bytes">The bytes to hash.</param>
-            <param name="start">The offset.</param>
-            <param name="length">The count.</param>
-        </member>
-        <member name="M:SourceCode.Clay.Sha256.Hash(System.IO.Stream)">
-            <summary>
-            Hashes the specified stream.
-            </summary>
-            <param name="stream">The stream to hash.</param>
         </member>
         <member name="M:SourceCode.Clay.Sha256.CopyTo(System.Span{System.Byte})">
             <summary>

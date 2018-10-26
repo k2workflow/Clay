@@ -8,26 +8,20 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
-using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay
 {
     /// <summary>
     /// Represents a <see cref="Sha256"/> value.
     /// </summary>
-    /// <seealso cref="crypt.SHA256" />
+    /// <seealso cref="System.Security.Cryptography.SHA256" />
     /// <seealso cref="System.IEquatable{T}" />
     /// <seealso cref="System.IComparable{T}" />
     [DebuggerDisplay("{ToString(\"D\"),nq,ac}")]
     [StructLayout(LayoutKind.Sequential, Size = ByteLength)]
     public readonly struct Sha256 : IEquatable<Sha256>, IComparable<Sha256>
     {
-        // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA256> t_sha256 = new ThreadLocal<crypt.SHA256>(crypt.SHA256.Create);
-
         /// <summary>
         /// The standard byte length of a <see cref="Sha256"/> value.
         /// </summary>
@@ -71,48 +65,6 @@ namespace SourceCode.Clay
                 }
             }
         }
-
-        /// <summary>
-        /// Hashes the specified bytes.
-        /// </summary>
-        /// <param name="span">The bytes to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha256 Hash(ReadOnlySpan<byte> span)
-            => Sha256Extensions.HashData(t_sha256.Value, span);
-
-        /// <summary>
-        /// Hashes the specified value using utf8 encoding.
-        /// </summary>
-        /// <param name="value">The string to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha256 Hash(string value)
-            => Sha256Extensions.HashData(t_sha256.Value, value);
-
-        /// <summary>
-        /// Hashes the specified bytes.
-        /// </summary>
-        /// <param name="bytes">The bytes to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha256 Hash(byte[] bytes)
-            => Sha256Extensions.HashData(t_sha256.Value, bytes);
-
-        /// <summary>
-        /// Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
-        /// </summary>
-        /// <param name="bytes">The bytes to hash.</param>
-        /// <param name="start">The offset.</param>
-        /// <param name="length">The count.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha256 Hash(byte[] bytes, int start, int length)
-            => Sha256Extensions.HashData(t_sha256.Value, bytes, start, length);
-
-        /// <summary>
-        /// Hashes the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream to hash.</param>
-        [Obsolete("Use extension methods", false)]
-        public static Sha256 Hash(Stream stream)
-            => Sha256Extensions.HashData(t_sha256.Value, stream);
 
         /// <summary>
         /// Copies the <see cref="Sha256"/> value to the provided buffer.
