@@ -94,7 +94,7 @@ namespace SourceCode.Clay.Json
         }
 
         /// <inheritdoc/>
-        bool IReadOnlyDictionary<string, JToken>.ContainsKey(string key) => ((IDictionary<string, JToken>)_json).ContainsKey(key);
+        bool IReadOnlyDictionary<string, JToken>.ContainsKey(string key) => _json.ContainsKey(key);
 
         /// <inheritdoc/>
         public bool TryGetValue(string key, out JToken value)

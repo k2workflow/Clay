@@ -10,12 +10,7 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.Security</AssemblyName>
     <RootNamespace>SourceCode.Clay.Security</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.Security.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.Security.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
