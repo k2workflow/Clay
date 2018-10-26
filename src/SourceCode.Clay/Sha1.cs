@@ -6,13 +6,10 @@
 #endregion
 
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using crypt = System.Security.Cryptography;
 
@@ -28,7 +25,7 @@ namespace SourceCode.Clay
     public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
     {
         // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA1> t_sha = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
+        private static readonly ThreadLocal<crypt.SHA1> t_sha1 = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
 
         /// <summary>
         /// The standard byte length of a <see cref="Sha1"/> value.
@@ -40,20 +37,18 @@ namespace SourceCode.Clay
         /// </summary>
         public const byte HexLength = ByteLength * 2;
 
-        private static readonly Sha1 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
-
         // We choose to use value types for primary storage so that we can live on the stack
         // TODO: In C# 7.4+ we can use 'readonly fixed byte'
 
-        private readonly Block _bytes;
-
         [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
-        private unsafe struct Block
+        private unsafe struct Block // Avoids making main struct unsafe
         {
 #pragma warning disable IDE0044 // Add readonly modifier (vs bug)
-            private fixed byte _bytes[ByteLength];
+            public fixed byte Bytes[ByteLength];
 #pragma warning restore IDE0044 // Add readonly modifier (vs bug)
         }
+
+        private readonly Block _block;
 
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
@@ -68,7 +63,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var dst = new Span<byte>(ptr, ByteLength);
                     src.CopyTo(dst);
@@ -80,58 +75,25 @@ namespace SourceCode.Clay
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(ReadOnlySpan<byte> span)
-        {
-            if (span.Length == 0) return s_empty;
-
-            Sha1 sha = HashImpl(span);
-            return sha;
-        }
+            => Sha1Extensions.HashData(t_sha1.Value, span);
 
         /// <summary>
         /// Hashes the specified value using utf8 encoding.
         /// </summary>
         /// <param name="value">The string to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(string value)
-        {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) return s_empty;
-
-            int maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
-
-            byte[] rented = ArrayPool<byte>.Shared.Rent(maxLen);
-            try
-            {
-                int count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
-
-                var span = new ReadOnlySpan<byte>(rented, 0, count);
-
-                Sha1 sha = HashImpl(span);
-                return sha;
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(rented);
-            }
-        }
+            => Sha1Extensions.HashData(t_sha1.Value, value);
 
         /// <summary>
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha1 Hash(byte[] bytes)
-        {
-            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
-            if (bytes.Length == 0) return s_empty;
-
-            var span = new ReadOnlySpan<byte>(bytes);
-
-            Sha1 sha = HashImpl(span);
-            return sha;
-        }
+            => Sha1Extensions.HashData(t_sha1.Value, bytes);
 
         /// <summary>
         /// Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
@@ -139,47 +101,17 @@ namespace SourceCode.Clay
         /// <param name="bytes">The bytes to hash.</param>
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
-        /// <returns></returns>
-        public static Sha1 Hash(byte[] bytes, in int start, in int length)
-        {
-            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
-
-            // Do this first to check validity of start/length
-            var span = new ReadOnlySpan<byte>(bytes, start, length);
-
-            if (length == 0) return s_empty;
-
-            Sha1 sha = HashImpl(span);
-            return sha;
-        }
+        [Obsolete("Use extension methods", false)]
+        public static Sha1 Hash(byte[] bytes, int start, int length)
+            => Sha1Extensions.HashData(t_sha1.Value, bytes, start, length);
 
         /// <summary>
         /// Hashes the specified stream.
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
-        /// <returns></returns>
-        public static Sha1 Hash(in Stream stream)
-        {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
-            // Note that length=0 should NOT short-circuit
-
-            byte[] hash = t_sha.Value.ComputeHash(stream);
-
-            var sha = new Sha1(hash);
-            return sha;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Sha1 HashImpl(ReadOnlySpan<byte> span)
-        {
-            // Do NOT short-circuit here; rely on call-sites to do so
-
-            Span<byte> hash = stackalloc byte[ByteLength];
-            t_sha.Value.TryComputeHash(span, hash, out _);
-
-            var sha = new Sha1(hash);
-            return sha;
-        }
+        [Obsolete("Use extension methods", false)]
+        public static Sha1 Hash(Stream stream)
+            => Sha1Extensions.HashData(t_sha1.Value, stream);
 
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
@@ -189,7 +121,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     src.CopyTo(destination);
@@ -206,7 +138,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     return src.TryCopyTo(destination);
@@ -237,7 +169,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -273,7 +205,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -369,31 +301,26 @@ namespace SourceCode.Clay
 
         public override int GetHashCode()
         {
-            var hash = new HashCode();
-
             unsafe
             {
-                fixed (Block* src = &_bytes)
+                fixed (byte* b = _block.Bytes)
                 {
-                    hash.Add(src[0]);
-                    hash.Add(src[4]);
-                    hash.Add(src[9]);
-                    hash.Add(src[14]);
-                    hash.Add(src[19]);
+                    int hc = HashCode.Combine(b[00], b[01], b[02], b[03], b[04], b[05], b[06], b[07]);
+                    hc = HashCode.Combine(hc, b[08], b[09], b[10], b[11], b[12], b[13], b[14]);
+                    hc = HashCode.Combine(hc, b[15], b[16], b[17], b[18], b[19]);
+
+                    return hc;
                 }
             }
-
-            int hc = hash.ToHashCode();
-            return hc;
         }
 
         public int CompareTo(Sha1 other)
         {
             unsafe
             {
-                fixed (Block* src = &_bytes)
+                fixed (Block* src = &_block)
                 {
-                    Block* dst = &other._bytes;
+                    Block* dst = &other._block;
 
                     int cmp = ShaUtil.NativeMethods.MemCompare((byte*)src, (byte*)dst, ByteLength);
                     return cmp;
