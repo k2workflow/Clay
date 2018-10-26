@@ -10,12 +10,7 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.Buffers</AssemblyName>
     <RootNamespace>SourceCode.Clay.Buffers</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.Buffers.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.Buffers.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
