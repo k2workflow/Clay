@@ -9,17 +9,16 @@ namespace SourceCode.Clay.Javascript.Ast
 {
     partial class JSFluent
     {
-        private static readonly Type TypeofString = typeof(string);
-        private static readonly Type TypeofObject = typeof(object);
-        private static readonly Type TypeofJSIdentifier = typeof(JSIdentifier);
-        private static readonly Type TypeofJSExpression = typeof(JSExpression);
-        private static readonly Type TypeofJSObjectExpression = typeof(JSObjectExpression);
-        private static readonly Type TypeofJSLiteral = typeof(JSLiteral);
-        private static readonly Type TypeofProperty = typeof(Discriminated<JSLiteral, JSIdentifier>);
-        private static readonly MethodInfo MethodOfJSObjectExpression_Property = TypeofJSObjectExpression.GetMethod(nameof(JSObjectExpression.Add), BindingFlags.Public | BindingFlags.Instance, null, new[] { TypeofProperty, TypeofJSExpression }, null);
-        private static readonly ConstructorInfo ConstructorOfProperty_Identifier = TypeofProperty.GetConstructor(new[] { TypeofJSIdentifier });
-        private static readonly ConstructorInfo ConstructorOfJSIdentifier = TypeofJSIdentifier.GetConstructor(new[] { TypeofString });
-        private static readonly ConstructorInfo ConstructorOfJSLiteral = TypeofJSLiteral.GetConstructor(new[] { TypeofObject });
+        private static readonly Type s_typeofString = typeof(string);
+        private static readonly Type s_typeofObject = typeof(object);
+        private static readonly Type s_typeofJSIdentifier = typeof(JSIdentifier);
+        private static readonly Type s_typeofJSExpression = typeof(JSExpression);
+        private static readonly Type s_typeofJSObjectExpression = typeof(JSObjectExpression);
+        private static readonly Type s_typeofJSLiteral = typeof(JSLiteral);
+        private static readonly Type s_typeofJSIndexer = typeof(IJSIndexer);
+        private static readonly MethodInfo s_methodOfJSObjectExpression_Property = s_typeofJSObjectExpression.GetMethod(nameof(JSObjectExpression.Add), BindingFlags.Public | BindingFlags.Instance, null, new[] { s_typeofJSIndexer, s_typeofJSExpression }, null);
+        private static readonly ConstructorInfo s_constructorOfJSIdentifier = s_typeofJSIdentifier.GetConstructor(new[] { s_typeofString });
+        private static readonly ConstructorInfo s_constructorOfJSLiteral = s_typeofJSLiteral.GetConstructor(new[] { s_typeofObject });
 
         private static readonly ConcurrentDictionary<RuntimeTypeHandle, Func<object, JSExpression>> _factories = new ConcurrentDictionary<RuntimeTypeHandle, Func<object, JSExpression>>();
         private static readonly Dictionary<RuntimeTypeHandle, Func<Type, Expression<Func<object, JSExpression>>>> _typeFactories = new Dictionary<RuntimeTypeHandle, Func<Type, Expression<Func<object, JSExpression>>>>()
@@ -56,7 +55,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
         private static Expression<Func<object, JSExpression>> CreateAnyExpression(Type propertyType)
         {
-            return TypeofJSExpression.IsAssignableFrom(propertyType)
+            return s_typeofJSExpression.IsAssignableFrom(propertyType)
                 ? CreateJSExpressionExpression(propertyType)
                 : _typeFactories.TryGetValue(propertyType.TypeHandle, out Func<Type, Expression<Func<object, JSExpression>>> factoryFactory)
                     ? factoryFactory(propertyType)
@@ -67,44 +66,43 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             if (type.GetCustomAttribute<CompilerGeneratedAttribute>(false) is null) return default;
 
-            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
+            ParameterExpression param = Expression.Parameter(s_typeofObject, "value");
             UnaryExpression convertedParam = Expression.Convert(param, type);
 
-            ParameterExpression variable = Expression.Variable(TypeofJSObjectExpression);
-            var result = (Expression)Expression.New(TypeofJSObjectExpression);
+            ParameterExpression variable = Expression.Variable(s_typeofJSObjectExpression);
+            var result = (Expression)Expression.New(s_typeofJSObjectExpression);
 
             PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             for (var i = 0; i < props.Length; i++)
             {
                 PropertyInfo prop = props[i];
                 Type propertyType = prop.PropertyType;
-                UnaryExpression accessor = Expression.Convert(Expression.Property(convertedParam, prop), TypeofObject);
-                UnaryExpression identifier = Expression.Convert(Expression.New(ConstructorOfJSIdentifier, Expression.Constant(prop.Name)), TypeofJSExpression);
-                NewExpression descrim = Expression.New(ConstructorOfProperty_Identifier, identifier);
+                UnaryExpression accessor = Expression.Convert(Expression.Property(convertedParam, prop), s_typeofObject);
+                UnaryExpression identifier = Expression.Convert(Expression.New(s_constructorOfJSIdentifier, Expression.Constant(prop.Name)), s_typeofJSIndexer);
 
                 Expression<Func<object, JSExpression>> factory = CreateAnyExpression(propertyType);
                 if (factory is null) return null;
 
                 InvocationExpression invoked = Expression.Invoke(factory, accessor);
-                result = Expression.Call(result, MethodOfJSObjectExpression_Property, descrim, invoked);
+                result = Expression.Call(result, s_methodOfJSObjectExpression_Property, identifier, invoked);
             }
 
-            result = Expression.Convert(result, TypeofJSExpression);
+            result = Expression.Convert(result, s_typeofJSExpression);
             return Expression.Lambda<Func<object, JSExpression>>(result, param);
         }
 
         private static Expression<Func<object, JSExpression>> CreateJSExpressionExpression(Type type)
         {
-            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
-            UnaryExpression result = Expression.Convert(param, TypeofJSExpression);
+            ParameterExpression param = Expression.Parameter(s_typeofObject, "value");
+            UnaryExpression result = Expression.Convert(param, s_typeofJSExpression);
             return Expression.Lambda<Func<object, JSExpression>>(result, param);
         }
 
         private static Expression<Func<object, JSExpression>> CreateJSLiteralExpression(Type type)
         {
-            ParameterExpression param = Expression.Parameter(TypeofObject, "value");
-            NewExpression constant = Expression.New(ConstructorOfJSLiteral, param);
-            UnaryExpression result = Expression.Convert(constant, TypeofJSExpression);
+            ParameterExpression param = Expression.Parameter(s_typeofObject, "value");
+            NewExpression constant = Expression.New(s_constructorOfJSLiteral, param);
+            UnaryExpression result = Expression.Convert(constant, s_typeofJSExpression);
             return Expression.Lambda<Func<object, JSExpression>>(result, param);
         }
     }

@@ -8,7 +8,9 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public abstract JSNodeType Type { get; }
 
-        public IList<JSStatement> Body { get; }
+        public List<JSStatement> Body { get; }
+
+        IList<JSStatement> IJSBlock.Body => Body;
 
         protected JSBlock()
         {
