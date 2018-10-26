@@ -129,7 +129,7 @@ namespace SourceCode.Clay.Data.SqlClient
             // Set impersonation context using EXECUTE AS
             try
             {
-                var user = impersonatedUsername;
+                string user = impersonatedUsername;
 
                 // We need to properly-quote the username in order to avoid injection attacks
                 const string sql = "SELECT QUOTENAME(@username, N'''') AS [username];";
@@ -137,7 +137,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 {
                     cmd.Parameters.AddWithValue("username", user);
 
-                    var o = cmd.ExecuteScalar();
+                    object o = cmd.ExecuteScalar();
 
                     // Check that the result is non-empty
                     if (o is null)
@@ -151,16 +151,16 @@ namespace SourceCode.Clay.Data.SqlClient
                 // If we successfully quoted the username, then execute the impersonation switch
                 // Remember to use the cookie option so we can deterministically undo the impersonation
                 // and put the connection back in the connection pool when we are done with it
-                var sql1 = $@"
+                string sql1 = $@"
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
                     SELECT @cookie;";
                 using (SqlCommand cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
                 {
                     // Do not use ExecuteNonQuery(), it doesn't like the COOKIE option
-                    var oc = cmd.ExecuteScalar();
+                    object oc = cmd.ExecuteScalar();
 
-                    var cookie = (byte[])oc;
+                    byte[] cookie = (byte[])oc;
                     return cookie;
                 }
             }
@@ -191,7 +191,7 @@ namespace SourceCode.Clay.Data.SqlClient
             // Set impersonation context using EXECUTE AS
             try
             {
-                var user = impersonatedUsername;
+                string user = impersonatedUsername;
 
                 // We need to properly-quote the username in order to avoid injection attacks
                 const string sql = "SELECT QUOTENAME(@username, N'''') AS [username];";
@@ -199,7 +199,7 @@ namespace SourceCode.Clay.Data.SqlClient
                 {
                     cmd.Parameters.AddWithValue("username", user);
 
-                    var o = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+                    object o = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
                     // Check that the result is non-empty
                     if (o is null)
@@ -213,16 +213,16 @@ namespace SourceCode.Clay.Data.SqlClient
                 // If we successfully quoted the username, then execute the impersonation switch
                 // Remember to use the cookie option so we can deterministically undo the impersonation
                 // and put the connection back in the connection pool when we are done with it
-                var sql1 = $@"
+                string sql1 = $@"
                     DECLARE @cookie VARBINARY(100);
                     EXECUTE AS LOGIN = {user} WITH COOKIE INTO @cookie;
                     SELECT @cookie;";
                 using (SqlCommand cmd = sqlCon.CreateCommand(sql1, CommandType.Text))
                 {
                     // Do not use ExecuteNonQuery(), it doesn't like the COOKIE option
-                    var oc = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+                    object oc = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
 
-                    var cookie = (byte[])oc;
+                    byte[] cookie = (byte[])oc;
                     return cookie;
                 }
             }
@@ -306,10 +306,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlCon">The sql connection.</param>
         public static bool IsAzureSql(this SqlConnection sqlCon)
-        {
-            if (sqlCon == null) return false;
-
-            return SqlConnectionStringBuilderExtensions.IsAzureSql(sqlCon.DataSource);
-        }
+            => sqlCon == null ? false : SqlConnectionStringBuilderExtensions.IsAzureSql(sqlCon.DataSource);
     }
 }

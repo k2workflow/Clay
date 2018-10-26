@@ -88,7 +88,10 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
 
                 // AzureDb only supports TCP:1433, though SqlClient wastes time trying to negotiate named pipes, etc
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
-                    sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource},1433";
+                    sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
+
+                if (!sqlCsb.DataSource.Contains(",", StringComparison.OrdinalIgnoreCase))
+                    sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
             }
 
             // Add connectivity robustness
@@ -109,11 +112,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         /// </summary>
         /// <param name="sqlCsb">The sql connection string builder instance.</param>
         public static bool IsAzureSql(this SqlConnectionStringBuilder sqlCsb)
-        {
-            if (sqlCsb == null) return false;
-
-            return IsAzureSql(sqlCsb.DataSource);
-        }
+            => sqlCsb == null ? false : IsAzureSql(sqlCsb.DataSource);
 
         #region Helpers
 

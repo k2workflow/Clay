@@ -137,6 +137,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     Assert.False(sqlCsb.Encrypt);
                     Assert.False(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
                     Assert.False(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                    Assert.False(sqlCsb.IsAzureSql());
                 }
             }
         }
@@ -167,6 +168,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     Assert.False(sqlCsb.Encrypt);
                     Assert.False(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
                     Assert.False(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                    Assert.False(sqlCsb.IsAzureSql());
                 }
             }
         }
@@ -180,8 +182,8 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 string[] tests = new[]
                 {
                     $"{svr}=a.database.windows.net",
-                    $"{svr}=a.database.windows.net,88",
-                    $@"{svr}=a.database.windows.net\foo,88",
+                    $"{svr}=a.database.windows.net,1433",
+                    $@"{svr}=a.database.windows.net\foo,1433",
                     $"{svr}=a.secure.windows.net",
                     $"{svr}=a.database.chinacloudapi.cn",
                     $"{svr}=a.database.usgovcloudapi.net",
@@ -194,8 +196,10 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
 
                     Assert.True(sqlCsb.Encrypt);
+                    Assert.False(sqlCsb.TrustServerCertificate);
                     Assert.StartsWith("tcp:", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
                     Assert.EndsWith(",1433", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
+                    Assert.True(sqlCsb.IsAzureSql());
                 }
             }
         }
