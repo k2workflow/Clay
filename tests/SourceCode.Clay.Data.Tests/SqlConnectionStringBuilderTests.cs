@@ -5,7 +5,6 @@
 
 #endregion
 
-using SourceCode.Clay.Data.SqlClient.Azure;
 using System;
 using System.Data.SqlClient;
 using Xunit;
@@ -14,8 +13,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
 {
     public static class SqlConnectionStringBuilderTests
     {
-        private const string dbToken = "database";
-        private static readonly string[] serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
+        private static readonly string[] s_serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
 
         [Trait("Type", "Unit")]
         [Fact(DisplayName = nameof(When_clear_inline_creds))]
@@ -40,9 +38,9 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
         public static void When_make_robust_local()
         {
-            foreach (var svr in serverTokens)
+            foreach (string svr in s_serverTokens)
             {
-                var tests = new[]
+                string[] tests = new[]
                 {
                     $"{svr} = a",
                     $"{svr} = A",
@@ -51,7 +49,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     $"{svr}=a.db"
                 };
 
-                foreach (var test in tests)
+                foreach (string test in tests)
                 {
                     var sqlCsb = new SqlConnectionStringBuilder(test);
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
@@ -67,26 +65,21 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Negative")]
         public static void When_make_robust_token_negative()
         {
-            foreach (var svr in serverTokens)
+            foreach (string svr in s_serverTokens)
             {
-                var tests = new[]
+                string[] tests = new[]
                 {
-                    $"{svr}=.{dbToken}",
-                    $"{svr}={dbToken}.",
-                    $"{svr}=.{dbToken}.",
-                    $"{svr}=a.{dbToken}",
-                    $"{svr}={dbToken}.b",
-                    $"{svr}=a.{dbToken}.",
-                    $"{svr}=.{dbToken}.b",
-                    $"{svr}=a.{dbToken}.b",
-                    $"{svr}=.{dbToken}.windows.net",
-                    $"{svr}=.{dbToken}.secure.windows.net",
-                    $"{svr}=.{dbToken}.chinacloudapi.cn",
-                    $"{svr}=.{dbToken}.usgovcloudapi.net",
-                    $"{svr}=.{dbToken}.cloudapi.de"
+                    $"{svr}=.database",
+                    $"{svr}=database.",
+                    $"{svr}=.database.",
+                    $"{svr}=a.database",
+                    $"{svr}=database.b",
+                    $"{svr}=a.database.",
+                    $"{svr}=.database.b",
+                    $"{svr}=a.database.b"
                 };
 
-                foreach (var test in tests)
+                foreach (string test in tests)
                 {
                     var sqlCsb = new SqlConnectionStringBuilder(test);
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
@@ -102,18 +95,20 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Positive")]
         public static void When_make_robust_token_positive()
         {
-            foreach (var svr in serverTokens)
+            foreach (string svr in s_serverTokens)
             {
-                var tests = new[]
+                string[] tests = new[]
                 {
-                    $"{svr}=a.{dbToken}.windows.net",
-                    $"{svr}=a.{dbToken}.secure.windows.net",
-                    $"{svr}=a.{dbToken}.chinacloudapi.cn",
-                    $"{svr}=a.{dbToken}.usgovcloudapi.net",
-                    $"{svr}=a.{dbToken}.cloudapi.de"
+                    $"{svr}=a.database.windows.net",
+                    $"{svr}=a.database.windows.net,88",
+                    $@"{svr}=a.database.windows.net\foo,88",
+                    $"{svr}=a.secure.windows.net",
+                    $"{svr}=a.database.chinacloudapi.cn",
+                    $"{svr}=a.database.usgovcloudapi.net",
+                    $"{svr}=a.database.cloudapi.de"
                 };
 
-                foreach (var test in tests)
+                foreach (string test in tests)
                 {
                     var sqlCsb = new SqlConnectionStringBuilder(test);
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
@@ -129,15 +124,15 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Force")]
         public static void When_make_robust_token_force()
         {
-            foreach (var svr in serverTokens)
+            foreach (string svr in s_serverTokens)
             {
-                var tests = new[]
+                string[] tests = new[]
                 {
                     $"{svr}=a",
-                    $"{svr}={dbToken}"
+                    $"{svr}=database"
                 };
 
-                foreach (var test in tests)
+                foreach (string test in tests)
                 {
                     var sqlCsb = new SqlConnectionStringBuilder(test + ";encrypt=true");
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
