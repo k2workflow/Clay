@@ -35,6 +35,86 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_set_application_name))]
+        public static void When_set_application_name()
+        {
+            var sqlCsb = new SqlConnectionStringBuilder
+            {
+                DataSource = ".",
+                InitialCatalog = "AdventureWorks"
+            };
+            sqlCsb = sqlCsb.WithApplicationName(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName(string.Empty);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName(" ");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName("a");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationName == "a");
+
+            sqlCsb = sqlCsb.WithApplicationName("b");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationName == "b");
+
+            sqlCsb = sqlCsb.WithApplicationName(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_set_application_intent))]
+        public static void When_set_application_intent()
+        {
+            var sqlCsb = new SqlConnectionStringBuilder
+            {
+                DataSource = ".",
+                InitialCatalog = "AdventureWorks"
+            };
+            sqlCsb = sqlCsb.WithApplicationIntent(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("ApplicationIntent", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationIntent(false);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadWrite);
+
+            sqlCsb = sqlCsb.WithApplicationIntent(true);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadOnly);
+
+            sqlCsb = sqlCsb.WithApplicationIntent(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("ApplicationIntent", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
         public static void When_make_robust_local()
         {
