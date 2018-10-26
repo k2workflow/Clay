@@ -6,13 +6,10 @@
 #endregion
 
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using crypt = System.Security.Cryptography;
 
@@ -40,8 +37,6 @@ namespace SourceCode.Clay
         /// The number of hex characters required to represent a <see cref="Sha256"/> value.
         /// </summary>
         public const byte HexLength = ByteLength * 2;
-
-        private static readonly Sha256 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // TODO: In C# 7.4+ we can use 'readonly fixed byte'
@@ -81,58 +76,25 @@ namespace SourceCode.Clay
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha256 Hash(ReadOnlySpan<byte> span)
-        {
-            if (span.Length == 0) return s_empty;
-
-            Sha256 sha = HashImpl(span);
-            return sha;
-        }
+            => Sha256Extensions.HashData(t_sha256.Value, span);
 
         /// <summary>
         /// Hashes the specified value using utf8 encoding.
         /// </summary>
         /// <param name="value">The string to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha256 Hash(string value)
-        {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) return s_empty;
-
-            int maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
-
-            byte[] rented = ArrayPool<byte>.Shared.Rent(maxLen);
-            try
-            {
-                int count = Encoding.UTF8.GetBytes(value, 0, value.Length, rented, 0);
-
-                var span = new ReadOnlySpan<byte>(rented, 0, count);
-
-                Sha256 sha = HashImpl(span);
-                return sha;
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(rented);
-            }
-        }
+            => Sha256Extensions.HashData(t_sha256.Value, value);
 
         /// <summary>
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="bytes">The bytes to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha256 Hash(byte[] bytes)
-        {
-            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
-            if (bytes.Length == 0) return s_empty;
-
-            var span = new ReadOnlySpan<byte>(bytes);
-
-            Sha256 sha = HashImpl(span);
-            return sha;
-        }
+            => Sha256Extensions.HashData(t_sha256.Value, bytes);
 
         /// <summary>
         /// Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
@@ -140,47 +102,17 @@ namespace SourceCode.Clay
         /// <param name="bytes">The bytes to hash.</param>
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha256 Hash(byte[] bytes, int start, int length)
-        {
-            if (bytes is null) throw new ArgumentNullException(nameof(bytes));
-
-            // Do this first to check validity of start/length
-            var span = new ReadOnlySpan<byte>(bytes, start, length);
-
-            if (length == 0) return s_empty;
-
-            Sha256 sha = HashImpl(span);
-            return sha;
-        }
+            => Sha256Extensions.HashData(t_sha256.Value, bytes, start, length);
 
         /// <summary>
         /// Hashes the specified stream.
         /// </summary>
         /// <param name="stream">The stream to hash.</param>
-        /// <returns></returns>
+        [Obsolete("Use extension methods", false)]
         public static Sha256 Hash(Stream stream)
-        {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
-            // Note that length=0 should NOT short-circuit
-
-            byte[] hash = t_sha256.Value.ComputeHash(stream);
-
-            var sha = new Sha256(hash);
-            return sha;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static Sha256 HashImpl(ReadOnlySpan<byte> span)
-        {
-            // Do NOT short-circuit here; rely on call-sites to do so
-
-            Span<byte> hash = stackalloc byte[ByteLength];
-            t_sha256.Value.TryComputeHash(span, hash, out _);
-
-            var sha = new Sha256(hash);
-            return sha;
-        }
+            => Sha256Extensions.HashData(t_sha256.Value, stream);
 
         /// <summary>
         /// Copies the <see cref="Sha256"/> value to the provided buffer.
