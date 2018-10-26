@@ -89,25 +89,25 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 DataSource = ".",
                 InitialCatalog = "AdventureWorks"
             };
-            sqlCsb = sqlCsb.WithApplicationIntent(null);
+            sqlCsb = sqlCsb.WithReadOnlyIntent(null);
 
             Assert.Equal(".", sqlCsb.DataSource);
             Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
             Assert.False(sqlCsb.ConnectionString.Contains("ApplicationIntent", StringComparison.OrdinalIgnoreCase));
 
-            sqlCsb = sqlCsb.WithApplicationIntent(false);
+            sqlCsb = sqlCsb.WithReadOnlyIntent(false);
 
             Assert.Equal(".", sqlCsb.DataSource);
             Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
             Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadWrite);
 
-            sqlCsb = sqlCsb.WithApplicationIntent(true);
+            sqlCsb = sqlCsb.WithReadOnlyIntent(true);
 
             Assert.Equal(".", sqlCsb.DataSource);
             Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
             Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadOnly);
 
-            sqlCsb = sqlCsb.WithApplicationIntent(null);
+            sqlCsb = sqlCsb.WithReadOnlyIntent(null);
 
             Assert.Equal(".", sqlCsb.DataSource);
             Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);

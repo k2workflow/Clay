@@ -37,7 +37,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         /// <param name="sqlCsb">The builder instance.</param>
         /// <param name="readOnly">If true, sets the intent to ReadOnly, else sets the intent to ReadWrite.
         /// Use null to remove the token from the builder entirely.</param>
-        public static SqlConnectionStringBuilder WithApplicationIntent(this SqlConnectionStringBuilder sqlCsb, bool? readOnly)
+        public static SqlConnectionStringBuilder WithReadOnlyIntent(this SqlConnectionStringBuilder sqlCsb, bool? readOnly)
         {
             if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
 

@@ -974,7 +974,7 @@
             <summary>
             Represents a <see cref="T:SourceCode.Clay.Sha1"/> value.
             </summary>
-            <seealso cref="!:crypt.SHA1" />
+            <seealso cref="T:System.Security.Cryptography.SHA1" />
             <seealso cref="T:System.IEquatable`1" />
             <seealso cref="T:System.IComparable`1" />
         </member>
@@ -1127,7 +1127,7 @@
             <summary>
             Represents a <see cref="T:SourceCode.Clay.Sha256"/> value.
             </summary>
-            <seealso cref="!:crypt.SHA256" />
+            <seealso cref="T:System.Security.Cryptography.SHA256" />
             <seealso cref="T:System.IEquatable`1" />
             <seealso cref="T:System.IComparable`1" />
         </member>
