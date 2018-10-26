@@ -35,6 +35,86 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_set_application_name))]
+        public static void When_set_application_name()
+        {
+            var sqlCsb = new SqlConnectionStringBuilder
+            {
+                DataSource = ".",
+                InitialCatalog = "AdventureWorks"
+            };
+            sqlCsb = sqlCsb.WithApplicationName(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName(string.Empty);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName(" ");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithApplicationName("a");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationName == "a");
+
+            sqlCsb = sqlCsb.WithApplicationName("b");
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationName == "b");
+
+            sqlCsb = sqlCsb.WithApplicationName(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("Application Name", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_set_application_intent))]
+        public static void When_set_application_intent()
+        {
+            var sqlCsb = new SqlConnectionStringBuilder
+            {
+                DataSource = ".",
+                InitialCatalog = "AdventureWorks"
+            };
+            sqlCsb = sqlCsb.WithReadOnlyIntent(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("ApplicationIntent", StringComparison.OrdinalIgnoreCase));
+
+            sqlCsb = sqlCsb.WithReadOnlyIntent(false);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadWrite);
+
+            sqlCsb = sqlCsb.WithReadOnlyIntent(true);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.True(sqlCsb.ApplicationIntent == ApplicationIntent.ReadOnly);
+
+            sqlCsb = sqlCsb.WithReadOnlyIntent(null);
+
+            Assert.Equal(".", sqlCsb.DataSource);
+            Assert.Equal("AdventureWorks", sqlCsb.InitialCatalog);
+            Assert.False(sqlCsb.ConnectionString.Contains("ApplicationIntent", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Trait("Type", "Unit")]
         [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
         public static void When_make_robust_local()
         {
@@ -57,6 +137,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     Assert.False(sqlCsb.Encrypt);
                     Assert.False(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
                     Assert.False(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                    Assert.False(sqlCsb.IsAzureSql());
                 }
             }
         }
@@ -87,6 +168,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     Assert.False(sqlCsb.Encrypt);
                     Assert.False(sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase));
                     Assert.False(sqlCsb.DataSource.EndsWith(",1433", StringComparison.OrdinalIgnoreCase));
+                    Assert.False(sqlCsb.IsAzureSql());
                 }
             }
         }
@@ -100,8 +182,8 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                 string[] tests = new[]
                 {
                     $"{svr}=a.database.windows.net",
-                    $"{svr}=a.database.windows.net,88",
-                    $@"{svr}=a.database.windows.net\foo,88",
+                    $"{svr}=a.database.windows.net,1433",
+                    $"{svr}=a.database.windows.net\\foo,1433",
                     $"{svr}=a.secure.windows.net",
                     $"{svr}=a.database.chinacloudapi.cn",
                     $"{svr}=a.database.usgovcloudapi.net",
@@ -114,8 +196,10 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     sqlCsb = sqlCsb.MakeRobust(SqlConnectionRetryOptions.Default);
 
                     Assert.True(sqlCsb.Encrypt);
+                    Assert.False(sqlCsb.TrustServerCertificate);
                     Assert.StartsWith("tcp:", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
                     Assert.EndsWith(",1433", sqlCsb.DataSource, StringComparison.OrdinalIgnoreCase);
+                    Assert.True(sqlCsb.IsAzureSql());
                 }
             }
         }

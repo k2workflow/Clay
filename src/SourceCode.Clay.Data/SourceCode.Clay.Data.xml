@@ -109,16 +109,31 @@
         </member>
         <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.ClearInlineCredentials(System.Data.SqlClient.SqlConnectionStringBuilder)">
             <summary>
-            Clear any inline credentials store in the builder. This is useful for logging.
+            Clear any inline credentials store in the builder.
+            Useful for eliding sensitive data when logging.
             </summary>
-            <param name="sqlCsb"></param>
-            <returns></returns>
+            <param name="sqlCsb">The sql connection string builder instance.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.WithApplicationIntent(System.Data.SqlClient.SqlConnectionStringBuilder,System.Nullable{System.Boolean})">
+            <summary>
+            Set the application intent to ReadOnly, ReadWrite or null.
+            </summary>
+            <param name="sqlCsb">The builder instance.</param>
+            <param name="readOnly">If true, sets the intent to ReadOnly, else sets the intent to ReadWrite.
+            Use null to remove the token from the builder entirely.</param>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.WithApplicationName(System.Data.SqlClient.SqlConnectionStringBuilder,System.String)">
+            <summary>
+            Sets the application name.
+            </summary>
+            <param name="sqlCsb">The sql connection string builder instance.</param>
+            <param name="name">The value to set. An empty or null value removes the token from the builder entirely.</param>
         </member>
         <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.MakeRobust(System.Data.SqlClient.SqlConnectionStringBuilder,SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions)">
             <summary>
             Add retry and timeout settings according to AzureDb best practices.
             </summary>
-            <param name="sqlCsb">The builder instance.</param>
+            <param name="sqlCsb">The sql connection string builder instance.</param>
             <param name="options">The options to set.</param>
             <returns></returns>
         </member>
@@ -126,7 +141,7 @@
             <summary>
             Returns true if the specified DataSource is on AzureDb, else returns false.
             </summary>
-            <param name="sqlCsb">The sql connection string builder.</param>
+            <param name="sqlCsb">The sql connection string builder instance.</param>
         </member>
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions">
             <summary>

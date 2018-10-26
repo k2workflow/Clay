@@ -17,10 +17,10 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
     public static class SqlConnectionStringBuilderExtensions
     {
         /// <summary>
-        /// Clear any inline credentials store in the builder. This is useful for logging.
+        /// Clear any inline credentials store in the builder.
+        /// Useful for eliding sensitive data when logging.
         /// </summary>
-        /// <param name="sqlCsb"></param>
-        /// <returns></returns>
+        /// <param name="sqlCsb">The sql connection string builder instance.</param>
         public static SqlConnectionStringBuilder ClearInlineCredentials(this SqlConnectionStringBuilder sqlCsb)
         {
             if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
@@ -32,9 +32,44 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         }
 
         /// <summary>
-        /// Add retry and timeout settings according to AzureDb best practices.
+        /// Set the application intent to ReadOnly, ReadWrite or null.
         /// </summary>
         /// <param name="sqlCsb">The builder instance.</param>
+        /// <param name="readOnly">If true, sets the intent to ReadOnly, else sets the intent to ReadWrite.
+        /// Use null to remove the token from the builder entirely.</param>
+        public static SqlConnectionStringBuilder WithReadOnlyIntent(this SqlConnectionStringBuilder sqlCsb, bool? readOnly)
+        {
+            if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
+
+            if (readOnly.HasValue)
+                sqlCsb.ApplicationIntent = readOnly.Value ? ApplicationIntent.ReadOnly : ApplicationIntent.ReadWrite;
+            else
+                sqlCsb.Remove("ApplicationIntent");
+
+            return sqlCsb;
+        }
+
+        /// <summary>
+        /// Sets the application name.
+        /// </summary>
+        /// <param name="sqlCsb">The sql connection string builder instance.</param>
+        /// <param name="name">The value to set. An empty or null value removes the token from the builder entirely.</param>
+        public static SqlConnectionStringBuilder WithApplicationName(this SqlConnectionStringBuilder sqlCsb, string name)
+        {
+            if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
+
+            if (string.IsNullOrWhiteSpace(name))
+                sqlCsb.Remove("Application Name");
+            else
+                sqlCsb.ApplicationName = name;
+
+            return sqlCsb;
+        }
+
+        /// <summary>
+        /// Add retry and timeout settings according to AzureDb best practices.
+        /// </summary>
+        /// <param name="sqlCsb">The sql connection string builder instance.</param>
         /// <param name="options">The options to set.</param>
         /// <returns></returns>
         public static SqlConnectionStringBuilder MakeRobust(this SqlConnectionStringBuilder sqlCsb, SqlConnectionRetryOptions options)
@@ -53,7 +88,10 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
 
                 // AzureDb only supports TCP:1433, though SqlClient wastes time trying to negotiate named pipes, etc
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
-                    sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource},1433";
+                    sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
+
+                if (!sqlCsb.DataSource.Contains(",", StringComparison.OrdinalIgnoreCase))
+                    sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
             }
 
             // Add connectivity robustness
@@ -72,13 +110,9 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         /// <summary>
         /// Returns true if the specified DataSource is on AzureDb, else returns false.
         /// </summary>
-        /// <param name="sqlCsb">The sql connection string builder.</param>
+        /// <param name="sqlCsb">The sql connection string builder instance.</param>
         public static bool IsAzureSql(this SqlConnectionStringBuilder sqlCsb)
-        {
-            if (sqlCsb == null) return false;
-
-            return IsAzureSql(sqlCsb.DataSource);
-        }
+            => sqlCsb == null ? false : IsAzureSql(sqlCsb.DataSource);
 
         #region Helpers
 
@@ -99,6 +133,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 
+            // TODO: No need to mutate, just search
             string ds = datasource;
 
             // Remove server port
