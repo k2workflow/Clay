@@ -4,20 +4,6 @@
         <name>SourceCode.Clay.Data</name>
     </assembly>
     <members>
-        <member name="T:SourceCode.Clay.Data.SqlClient.Azure.SqlConnectionStringBuilderAzureExtensions">
-            <summary>
-            Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/> instances.
-            </summary>
-            <seealso cref="T:System.Data.SqlClient.SqlConnectionStringBuilder"/>
-        </member>
-        <member name="M:SourceCode.Clay.Data.SqlClient.Azure.SqlConnectionStringBuilderAzureExtensions.MakeRobust(System.Data.SqlClient.SqlConnectionStringBuilder,SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions)">
-            <summary>
-            Add retry and timeout settings according to AzureDb best practices.
-            </summary>
-            <param name="sqlCsb">The builder instance.</param>
-            <param name="options">The options to set.</param>
-            <returns></returns>
-        </member>
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions">
             <summary>
             Represents extensions for <see cref="T:System.Data.SqlClient.SqlConnection"/> instances.
@@ -85,6 +71,12 @@
             <param name="sqlCon">The SqlConnection to use.</param>
             <param name="cookie">The impersonation cookie returned from the Open() method</param>
         </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionExtensions.IsAzureSql(System.Data.SqlClient.SqlConnection)">
+            <summary>
+            Returns true if the specified DataSource is on AzureDb, else returns false.
+            </summary>
+            <param name="sqlCon">The sql connection.</param>
+        </member>
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions">
             <summary>
             A property bag to hold various connection retry options.
@@ -121,6 +113,20 @@
             </summary>
             <param name="sqlCsb"></param>
             <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.MakeRobust(System.Data.SqlClient.SqlConnectionStringBuilder,SourceCode.Clay.Data.SqlClient.SqlConnectionRetryOptions)">
+            <summary>
+            Add retry and timeout settings according to AzureDb best practices.
+            </summary>
+            <param name="sqlCsb">The builder instance.</param>
+            <param name="options">The options to set.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.IsAzureSql(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Returns true if the specified DataSource is on AzureDb, else returns false.
+            </summary>
+            <param name="sqlCsb">The sql connection string builder.</param>
         </member>
         <member name="T:SourceCode.Clay.Data.SqlClient.SqlDataReaderExtensions">
             <summary>

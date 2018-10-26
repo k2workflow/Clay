@@ -89,6 +89,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         private static readonly string[] s_azureSqlServerEndpoints =
         {
             ".database.windows.net",
+            ".secure.windows.net", // TODO: Is this still valid
             ".database.cloudapi.de",
             ".database.usgovcloudapi.net",
             ".database.chinacloudapi.cn"
