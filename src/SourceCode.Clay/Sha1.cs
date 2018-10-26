@@ -40,7 +40,7 @@ namespace SourceCode.Clay
         /// </summary>
         public const byte HexLength = ByteLength * 2;
 
-        private static readonly Sha1 s_empty = HashImpl(ReadOnlySpan<byte>.Empty);
+        private static readonly Sha1 s_empty1 = HashImpl(ReadOnlySpan<byte>.Empty);
 
         // We choose to use value types for primary storage so that we can live on the stack
         // TODO: In C# 7.4+ we can use 'readonly fixed byte'
@@ -80,10 +80,9 @@ namespace SourceCode.Clay
         /// Hashes the specified bytes.
         /// </summary>
         /// <param name="span">The bytes to hash.</param>
-        /// <returns></returns>
         public static Sha1 Hash(ReadOnlySpan<byte> span)
         {
-            if (span.Length == 0) return s_empty;
+            if (span.Length == 0) return s_empty1;
 
             Sha1 sha = HashImpl(span);
             return sha;
@@ -97,7 +96,7 @@ namespace SourceCode.Clay
         public static Sha1 Hash(string value)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
-            if (value.Length == 0) return s_empty;
+            if (value.Length == 0) return s_empty1;
 
             int maxLen = Encoding.UTF8.GetMaxByteCount(value.Length); // Utf8 is 1-4 bpc
 
@@ -125,7 +124,7 @@ namespace SourceCode.Clay
         public static Sha1 Hash(byte[] bytes)
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
-            if (bytes.Length == 0) return s_empty;
+            if (bytes.Length == 0) return s_empty1;
 
             var span = new ReadOnlySpan<byte>(bytes);
 
@@ -144,10 +143,8 @@ namespace SourceCode.Clay
         {
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
 
-            // Do this first to check validity of start/length
-            var span = new ReadOnlySpan<byte>(bytes, start, length);
-
-            if (length == 0) return s_empty;
+            var span = new ReadOnlySpan<byte>(bytes, start, length); // Check validity of start/length
+            if (length == 0) return s_empty1;
 
             Sha1 sha = HashImpl(span);
             return sha;
@@ -161,7 +158,7 @@ namespace SourceCode.Clay
         public static Sha1 Hash(in Stream stream)
         {
             if (stream is null) throw new ArgumentNullException(nameof(stream));
-            // Note that length=0 should NOT short-circuit
+            // Note that length==0 should NOT short-circuit
 
             byte[] hash = t_sha1.Value.ComputeHash(stream);
 

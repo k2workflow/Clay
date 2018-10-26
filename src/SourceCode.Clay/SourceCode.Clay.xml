@@ -1118,6 +1118,48 @@
         <member name="M:SourceCode.Clay.Sha1Comparer.GetHashCode(SourceCode.Clay.Sha1)">
             <inheritdoc/>
         </member>
+        <member name="M:SourceCode.Clay.Sha1Extensions.HashData(System.Security.Cryptography.SHA1,System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="alg">The SHA1 instance to use.</param>
+            <param name="span">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Extensions.HashData(System.Security.Cryptography.SHA1,System.String)">
+            <summary>
+            Hashes the specified value using utf8 encoding.
+            </summary>
+            <param name="alg">The SHA1 instance to use.</param>
+            <param name="value">The string to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Extensions.HashData(System.Security.Cryptography.SHA1,System.Byte[])">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="alg">The SHA1 instance to use.</param>
+            <param name="bytes">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Extensions.HashData(System.Security.Cryptography.SHA1,System.Byte[],System.Int32@,System.Int32@)">
+            <summary>
+            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
+            </summary>
+            <param name="alg">The SHA1 instance to use.</param>
+            <param name="bytes">The bytes to hash.</param>
+            <param name="start">The offset.</param>
+            <param name="length">The count.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha1Extensions.HashData(System.Security.Cryptography.SHA1,System.IO.Stream@)">
+            <summary>
+            Hashes the specified stream.
+            </summary>
+            <param name="alg">The SHA1 instance to use.</param>
+            <param name="stream">The stream to hash.</param>
+            <returns></returns>
+        </member>
         <member name="T:SourceCode.Clay.Sha256">
             <summary>
             Represents a <see cref="T:SourceCode.Clay.Sha256"/> value.
@@ -1265,6 +1307,48 @@
         </member>
         <member name="M:SourceCode.Clay.Sha256Comparer.GetHashCode(SourceCode.Clay.Sha256)">
             <inheritdoc/>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Extensions.HashData(System.Security.Cryptography.SHA256,System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="alg">The SHA256 instance to use.</param>
+            <param name="span">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Extensions.HashData(System.Security.Cryptography.SHA256,System.String)">
+            <summary>
+            Hashes the specified value using utf8 encoding.
+            </summary>
+            <param name="alg">The SHA256 instance to use.</param>
+            <param name="value">The string to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Extensions.HashData(System.Security.Cryptography.SHA256,System.Byte[])">
+            <summary>
+            Hashes the specified bytes.
+            </summary>
+            <param name="alg">The SHA256 instance to use.</param>
+            <param name="bytes">The bytes to hash.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Extensions.HashData(System.Security.Cryptography.SHA256,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Hashes the specified <paramref name="bytes"/>, starting at the specified <paramref name="start"/> and <paramref name="length"/>.
+            </summary>
+            <param name="alg">The SHA256 instance to use.</param>
+            <param name="bytes">The bytes to hash.</param>
+            <param name="start">The offset.</param>
+            <param name="length">The count.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SourceCode.Clay.Sha256Extensions.HashData(System.Security.Cryptography.SHA256,System.IO.Stream)">
+            <summary>
+            Hashes the specified stream.
+            </summary>
+            <param name="alg">The SHA256 instance to use.</param>
+            <param name="stream">The stream to hash.</param>
+            <returns></returns>
         </member>
         <member name="M:SourceCode.Clay.ShaUtil.TryParse(System.ReadOnlySpan{System.Char}@,System.Span{System.Byte}@)">
             <summary>
