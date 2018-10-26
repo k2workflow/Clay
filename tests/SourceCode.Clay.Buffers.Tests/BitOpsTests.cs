@@ -779,7 +779,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateLeft_UInt))]
         public static void BitOps_RotateLeft_UInt()
         {
-            uint sut = 0b01010101_01010101_01010101_01010101;
+            uint sut = 0b01010101_01010101_01010101_01010101u;
             Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 1));
             Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateLeft(sut, 2));
             Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 3));
@@ -790,7 +790,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateLeft_ULong))]
         public static void BitOps_RotateLeft_ULong()
         {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 1));
             Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateLeft(sut, 2));
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 3));
@@ -823,7 +823,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateRight_UInt))]
         public static void BitOps_RotateRight_UInt()
         {
-            uint sut = 0b01010101_01010101_01010101_01010101;
+            uint sut = 0b01010101_01010101_01010101_01010101u;
             Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 1));
             Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateRight(sut, 2));
             Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 3));
@@ -834,7 +834,7 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateRight_ULong))]
         public static void BitOps_RotateRight_ULong()
         {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 1));
             Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateRight(sut, 2));
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 3));
