@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,7 +8,6 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.Javascript</AssemblyName>
     <RootNamespace>SourceCode.Clay.Javascript</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.Javascript.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,10 +19,6 @@
     <!-- CA1044	Fluent interface. -->
     <NoWarn>$(NoWarn);CA1716;CA1010;CA1033;CA2225;CA1044;CA1043</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.Javascript.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />

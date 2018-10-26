@@ -10,7 +10,6 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.OpenApi</AssemblyName>
     <RootNamespace>SourceCode.Clay.OpenApi</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.OpenApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,10 +19,6 @@
     <!-- CA1000 (Used for constant grouping) Do not declare static members on generic types	... -->
     <NoWarn>$(NoWarn)S4035;CA2225;CA1043;CA1000</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.OpenApi.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />

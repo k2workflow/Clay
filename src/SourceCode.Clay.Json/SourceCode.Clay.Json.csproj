@@ -10,12 +10,7 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.Json</AssemblyName>
     <RootNamespace>SourceCode.Clay.Json</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.Json.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.Json.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />

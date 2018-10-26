@@ -114,7 +114,7 @@
             </summary>
             <param name="sqlCsb">The sql connection string builder instance.</param>
         </member>
-        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.WithApplicationIntent(System.Data.SqlClient.SqlConnectionStringBuilder,System.Nullable{System.Boolean})">
+        <member name="M:SourceCode.Clay.Data.SqlClient.SqlConnectionStringBuilderExtensions.WithReadOnlyIntent(System.Data.SqlClient.SqlConnectionStringBuilder,System.Nullable{System.Boolean})">
             <summary>
             Set the application intent to ReadOnly, ReadWrite or null.
             </summary>

@@ -10,12 +10,7 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.IO</AssemblyName>
     <RootNamespace>SourceCode.Clay.IO</RootNamespace>
-    <DocumentationFile>SourceCode.Clay.IO.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="SourceCode.Clay.IO.xml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
