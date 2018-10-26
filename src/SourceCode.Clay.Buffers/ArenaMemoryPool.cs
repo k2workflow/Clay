@@ -11,10 +11,11 @@ using System.Collections.Generic;
 namespace SourceCode.Clay.Buffers
 {
     /// <summary>
-    /// A <see cref="MemoryPool{T}"/> specialized for us in a session context.
-    /// It should be used in short-lived, scoped scenarios and disposed as soon as possible.
+    /// A <see cref="MemoryPool{T}"/> specialized for use in an arena context.
+    /// It should be used in short-lived scoped scenarios and disposed of
+    /// as soon as possible.
     /// </summary>
-    public sealed class SessionMemoryPool<T> : MemoryPool<T>
+    public sealed class ArenaMemoryPool<T> : MemoryPool<T>
     {
         private readonly IList<IMemoryOwner<T>> _rentals;
 
@@ -22,7 +23,7 @@ namespace SourceCode.Clay.Buffers
 
         public int Count => _rentals.Count;
 
-        public SessionMemoryPool()
+        public ArenaMemoryPool()
         {
             _rentals = new List<IMemoryOwner<T>>();
         }
