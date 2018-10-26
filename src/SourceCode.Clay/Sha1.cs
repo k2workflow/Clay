@@ -28,7 +28,7 @@ namespace SourceCode.Clay
     public readonly struct Sha1 : IEquatable<Sha1>, IComparable<Sha1>
     {
         // Use a thread-local instance of the underlying crypto algorithm.
-        private static readonly ThreadLocal<crypt.SHA1> t_sha = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
+        private static readonly ThreadLocal<crypt.SHA1> t_sha1 = new ThreadLocal<crypt.SHA1>(crypt.SHA1.Create);
 
         /// <summary>
         /// The standard byte length of a <see cref="Sha1"/> value.
@@ -46,7 +46,7 @@ namespace SourceCode.Clay
         // TODO: In C# 7.4+ we can use 'readonly fixed byte'
 
         [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
-        private unsafe struct Block
+        private unsafe struct Block // Avoids making main struct unsafe
         {
 #pragma warning disable IDE0044 // Add readonly modifier (vs bug)
             public fixed byte Bytes[ByteLength];
@@ -163,7 +163,7 @@ namespace SourceCode.Clay
             if (stream is null) throw new ArgumentNullException(nameof(stream));
             // Note that length=0 should NOT short-circuit
 
-            byte[] hash = t_sha.Value.ComputeHash(stream);
+            byte[] hash = t_sha1.Value.ComputeHash(stream);
 
             var sha = new Sha1(hash);
             return sha;
@@ -175,7 +175,7 @@ namespace SourceCode.Clay
             // Do NOT short-circuit here; rely on call-sites to do so
 
             Span<byte> hash = stackalloc byte[ByteLength];
-            t_sha.Value.TryComputeHash(span, hash, out _);
+            t_sha1.Value.TryComputeHash(span, hash, out _);
 
             var sha = new Sha1(hash);
             return sha;
