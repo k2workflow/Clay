@@ -369,22 +369,17 @@ namespace SourceCode.Clay
 
         public override int GetHashCode()
         {
-            var hash = new HashCode();
-
             unsafe
             {
-                fixed (Block* src = &_bytes)
+                fixed (Block* b = &_bytes)
                 {
-                    hash.Add(src[0]);
-                    hash.Add(src[4]);
-                    hash.Add(src[9]);
-                    hash.Add(src[14]);
-                    hash.Add(src[19]);
+                    int hc = HashCode.Combine(b[00], b[01], b[02], b[03], b[04], b[05], b[06], b[07]);
+                    hc = HashCode.Combine(hc, b[08], b[09], b[10], b[11], b[12], b[13], b[14]);
+                    hc = HashCode.Combine(hc, b[15], b[16], b[17], b[18], b[19]);
+
+                    return hc;
                 }
             }
-
-            int hc = hash.ToHashCode();
-            return hc;
         }
 
         public int CompareTo(Sha1 other)
