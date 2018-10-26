@@ -10,7 +10,7 @@ namespace SourceCode.Clay
 {
     public static class Sha256Extensions
     {
-        private static readonly Sha256 s_empty256 = Sha256.Parse("E3B0C442-98FC1C14-9AFBF4C8-996FB924-27AE41E4-649B934C-A495991B-7852B855");
+        private static readonly Sha256 s_empty256 = Sha256.Parse("E3B0C442-98FC1C14-9AFBF4C8-996FB924-27AE41E4-649B934C-A495991B-7852B855"); // Well-known
 
         /// <summary>
         /// Hashes the specified bytes.

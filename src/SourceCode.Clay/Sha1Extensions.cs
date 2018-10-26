@@ -10,7 +10,7 @@ namespace SourceCode.Clay
 {
     public static class Sha1Extensions
     {
-        private static readonly Sha1 s_empty1 = Sha1.Parse("da39a3ee-5e6b4b0d-3255bfef-95601890-afd80709");
+        private static readonly Sha1 s_empty1 = Sha1.Parse("da39a3ee-5e6b4b0d-3255bfef-95601890-afd80709"); // Well-known
 
         /// <summary>
         /// Hashes the specified bytes.
