@@ -300,5 +300,16 @@ namespace SourceCode.Clay.Data.SqlClient
                 }
             }
         }
+
+        /// <summary>
+        /// Returns true if the specified DataSource is on AzureDb, else returns false.
+        /// </summary>
+        /// <param name="sqlCon">The sql connection.</param>
+        public static bool IsAzureSql(this SqlConnection sqlCon)
+        {
+            if (sqlCon == null) return false;
+
+            return SqlConnectionStringBuilderExtensions.IsAzureSql(sqlCon.DataSource);
+        }
     }
 }
