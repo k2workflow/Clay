@@ -815,5 +815,32 @@ namespace SourceCode.Clay.Tests
             Assert.False(Sha1.TryParse("1" + whitespace + str + whitespace, out _));
             Assert.False(Sha1.TryParse(whitespace + str + whitespace + "1", out _));
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_sha1_equality))]
+        public static void When_sha1_equality()
+        {
+            var sha0 = default(Sha1);
+            var sha1 = Sha1.Hash("abc");
+            var sha2 = Sha1.Hash("abc");
+            var sha3 = Sha1.Hash("def");
+
+            Assert.True(sha1 == sha2);
+            Assert.False(sha1 != sha2);
+            Assert.True(sha1.Equals((object)sha2));
+            Assert.False(sha1.Equals(new object()));
+
+            Assert.Equal(sha1, sha2);
+            Assert.Equal(sha1.GetHashCode(), sha2.GetHashCode());
+            Assert.Equal(sha1.ToString(), sha2.ToString());
+
+            Assert.NotEqual(sha0, sha1);
+            Assert.NotEqual(sha0.GetHashCode(), sha1.GetHashCode());
+            Assert.NotEqual(sha0.ToString(), sha1.ToString());
+
+            Assert.NotEqual(sha3, sha1);
+            Assert.NotEqual(sha3.GetHashCode(), sha1.GetHashCode());
+            Assert.NotEqual(sha3.ToString(), sha1.ToString());
+        }
     }
 }

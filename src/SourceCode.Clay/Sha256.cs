@@ -46,15 +46,15 @@ namespace SourceCode.Clay
         // We choose to use value types for primary storage so that we can live on the stack
         // TODO: In C# 7.4+ we can use 'readonly fixed byte'
 
-        private readonly Block _bytes;
-
         [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
         private unsafe struct Block
         {
 #pragma warning disable IDE0044 // Add readonly modifier
-            private fixed byte _bytes[ByteLength];
+            public fixed byte Bytes[ByteLength];
 #pragma warning restore IDE0044 // Add readonly modifier
         }
+
+        private readonly Block _block;
 
         /// <summary>
         /// Deserializes a <see cref="Sha256"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
@@ -69,7 +69,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var dst = new Span<byte>(ptr, ByteLength);
                     src.CopyTo(dst);
@@ -190,7 +190,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     src.CopyTo(destination);
@@ -207,7 +207,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var src = new ReadOnlySpan<byte>(ptr, ByteLength);
                     return src.TryCopyTo(destination);
@@ -239,7 +239,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -275,7 +275,7 @@ namespace SourceCode.Clay
 
             unsafe
             {
-                fixed (Block* ptr = &_bytes)
+                fixed (byte* ptr = _block.Bytes)
                 {
                     var sha = new ReadOnlySpan<byte>(ptr, ByteLength);
 
@@ -372,7 +372,7 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* b = &_bytes)
+                fixed (byte* b = _block.Bytes)
                 {
                     int hc = HashCode.Combine(b[00], b[01], b[02], b[03], b[04], b[05], b[06], b[07]);
                     hc = HashCode.Combine(hc, b[08], b[09], b[10], b[11], b[12], b[13], b[14]);
@@ -389,9 +389,9 @@ namespace SourceCode.Clay
         {
             unsafe
             {
-                fixed (Block* src = &_bytes)
+                fixed (Block* src = &_block)
                 {
-                    Block* dst = &other._bytes;
+                    Block* dst = &other._block;
 
                     int cmp = ShaUtil.NativeMethods.MemCompare((byte*)src, (byte*)dst, ByteLength);
                     return cmp;
