@@ -718,10 +718,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateLeft_UInt))]
         public static void BitOps_RotateLeft_UInt()
         {
-            uint sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
+            uint sut = 0b01010101_01010101_01010101_01010101u;
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 3));
             Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
         }
@@ -729,10 +729,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateLeft_ULong))]
         public static void BitOps_RotateLeft_ULong()
         {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateLeft(sut, 3));
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 3));
             Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
         }
@@ -762,10 +762,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateRight_UInt))]
         public static void BitOps_RotateRight_UInt()
         {
-            uint sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((uint)0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((uint)0b10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
+            uint sut = 0b01010101_01010101_01010101_01010101u;
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateRight(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 3));
             Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
         }
@@ -773,10 +773,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [Fact(DisplayName = nameof(BitOps_RotateRight_ULong))]
         public static void BitOps_RotateRight_ULong()
         {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((ulong)0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((ulong)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010, BitOps.RotateRight(sut, 3));
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateRight(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 3));
             Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
         }
