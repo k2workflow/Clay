@@ -14,21 +14,6 @@ namespace SourceCode.Clay.Json
     public static partial class JsonReaderExtensions
     {
         /// <summary>
-        /// Reads the current token value as a <see cref="string"/>.
-        /// Returns <see langword="null"/> if the Json value is null, or the string value is null.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <returns>The string value or null.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string AsString(this JsonReader jr)
-        {
-            if (jr.TokenType == JsonToken.Null)
-                return null;
-
-            return (string)jr.Value;
-        }
-
-        /// <summary>
         /// Reads the current token value as a string, then converts it to a <see cref="bool"/>.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>

@@ -104,7 +104,7 @@ namespace SourceCode.Clay.Json.Units
                 {
                     switch (n)
                     {
-                        case "a": actual = jr.AsString(); return true;
+                        case "a": actual = (string)jr.Value; return true;
                     }
 
                     return false;
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                IReadOnlyList<string> actual = jr.ReadArray(() => jr.AsString());
+                IReadOnlyList<string> actual = jr.ReadArray(() => (string)jr.Value);
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -142,7 +142,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                IEnumerable<string> actual = jr.EnumerateArray(() => jr.AsString());
+                IEnumerable<string> actual = jr.EnumerateArray(() => (string)jr.Value);
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -151,7 +151,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<string>();
-                jr.ReadArray(() => actual.Add(jr.AsString()));
+                jr.ReadArray(() => actual.Add((string)jr.Value));
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -228,9 +228,9 @@ namespace SourceCode.Clay.Json.Units
                 {
                     switch (n)
                     {
-                        case "name": name = jr.AsString(); return true;
-                        case "last": last = jr.AsString(); return true;
-                        case "middle": middle = jr.AsString(); return true;
+                        case "name": name = (string)jr.Value; return true;
+                        case "last": last = (string)jr.Value; return true;
+                        case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = jr.AsBool(); alive = jr.AsBoolNullable().Value; return true;
                         case "age": age = jr.AsInt32(); return true;
                         case "type1": type[0] = jr.AsEnum<System.Data.SqlDbType>(true); return true;
@@ -350,9 +350,9 @@ namespace SourceCode.Clay.Json.Units
                     {
                         switch (n)
                         {
-                            case "name": name = jr.AsString(); return true;
-                            case "last": last = jr.AsString(); return true;
-                            case "middle": middle = jr.AsString(); return true;
+                            case "name": name = (string)jr.Value; return true;
+                            case "last": last = (string)jr.Value; return true;
+                            case "middle": middle = (string)jr.Value; return true;
                             case "alive": alive = jr.AsBool(); return true;
 
                                 // Neglect to process 'age'
