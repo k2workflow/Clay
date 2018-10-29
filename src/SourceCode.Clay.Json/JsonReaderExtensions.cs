@@ -14,6 +14,21 @@ namespace SourceCode.Clay.Json
     public static partial class JsonReaderExtensions
     {
         /// <summary>
+        /// Reads the current token value as a <see cref="string"/>.
+        /// Returns <see langword="null"/> if the Json value is null, or the string value is null.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The string value or null.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string AsString(this JsonReader jr)
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return (string)jr.Value;
+        }
+
+        /// <summary>
         /// Reads the current token value as a string, then converts it to a <see cref="Enum"/>.
         /// </summary>
         /// <typeparam name="TEnum">The enum to convert to.</typeparam>
@@ -118,7 +133,12 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static sbyte? AsSByteNullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (sbyte?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsSByte(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as a <see cref="Byte"/>.
@@ -136,7 +156,12 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <returns>The integer value or null.</returns>
         public static byte? AsByteNullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (byte?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsByte(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as an <see cref="Int16"/>.
@@ -155,7 +180,12 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static short? AsInt16Nullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (short?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsInt16(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as a <see cref="UInt16"/>.
@@ -174,7 +204,12 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort? AsUInt16Nullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (ushort?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsUInt16(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as an <see cref="Int32"/>.
@@ -193,7 +228,12 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int? AsInt32Nullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (int?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsInt32(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as an <see cref="UInt32"/>.
@@ -212,7 +252,12 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint? AsUInt32Nullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (uint?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsUInt32(jr);
+        }
 
         /// <summary>
         /// Reads the current token value as an <see cref="Int64"/>.
@@ -231,6 +276,11 @@ namespace SourceCode.Clay.Json
         /// <returns>The integer value or null.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long? AsInt64Nullable(this JsonReader jr)
-            => jr.TokenType == JsonToken.Null ? null : (long?)(long)jr.Value;
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsInt64(jr);
+        }
     }
 }

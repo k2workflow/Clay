@@ -229,7 +229,7 @@ namespace SourceCode.Clay.Json.Units
                     switch (n)
                     {
                         case "name": name = (string)jr.Value; return true;
-                        case "last": last = (string)jr.Value; return true;
+                        case "last": last = jr.AsString(); return true;
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
                         case "age": age = jr.AsInt32(); return true;
