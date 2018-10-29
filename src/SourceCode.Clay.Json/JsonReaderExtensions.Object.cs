@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
-        [Obsolete("Use " + nameof(ReadObject) + " instead", false)]
+        [Obsolete("Use " + nameof(ReadObject) + "(jr, propertyHandler) instead", false)]
         public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
             ReadObject(jr, propertyHandler);
