@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Json
         /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
         /// <returns>The value.</returns>
-        [Obsolete("Use " + nameof(ProcessObject) + " instead", false)]
+        [Obsolete("Use " + nameof(ReadObject) + " instead", false)]
         public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
         {
             if (jr is null) throw new ArgumentNullException(nameof(jr));
@@ -81,8 +81,8 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
-        [Obsolete("Use " + nameof(ProcessObject) + " instead", false)]
-        public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
+        [Obsolete("Use " + nameof(ReadObject) + " instead", false)]
+        public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
             // Leverage shared logic, ignoring sentinel return <int> value
             ReadObject(jr, propertyHandler, Curry);
@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Json
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
-        public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler)
+        public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler)
         {
             if (jr is null) throw new ArgumentNullException(nameof(jr));
             if (propertyHandler is null) throw new ArgumentNullException(nameof(propertyHandler));
@@ -157,7 +157,7 @@ namespace SourceCode.Clay.Json
             int count = 0;
 
             // Leverage shared logic
-            ProcessObject(jr, CurryHandler);
+            ReadObject(jr, CurryHandler);
 
             return count;
 

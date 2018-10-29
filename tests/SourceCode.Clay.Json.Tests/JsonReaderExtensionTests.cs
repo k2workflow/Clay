@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = 0;
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     return false;
                 },
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actualCount = 0;
-                jr.ProcessArray(() => actualCount++);
+                jr.ReadArray(() => actualCount++);
                 Assert.Equal(0, actualCount);
             }
 
@@ -127,7 +127,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 string actual = null;
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     switch (n)
                     {
@@ -179,7 +179,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<string>();
-                jr.ProcessArray(() => actual.Add((string)jr.Value));
+                jr.ReadArray(() => actual.Add((string)jr.Value));
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -284,7 +284,7 @@ namespace SourceCode.Clay.Json.Units
                 var type = new System.Data.SqlDbType?[3];
                 Guid? guid = null;
 
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     switch (n)
                     {
@@ -353,7 +353,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<object>();
-                jr.ProcessArray(() => actual.Add(jr.Value));
+                jr.ReadArray(() => actual.Add(jr.Value));
                 Assert.Collection(actual, n => Assert.Equal("joe", n), n => Assert.Null(n), n => Assert.Equal(string.Empty, n), n => Assert.True((bool)n), n => Assert.Equal(99L, n));
             }
 
@@ -412,7 +412,7 @@ namespace SourceCode.Clay.Json.Units
 
                 Assert.Throws<JsonReaderException>
                 (
-                    () => jr.ProcessObject(n =>
+                    () => jr.ReadObject(n =>
                     {
                         switch (n)
                         {
