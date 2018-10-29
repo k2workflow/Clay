@@ -181,7 +181,14 @@ namespace SourceCode.Clay.Json.Units
             ""type3"": null,
             ""guid1"": """ + s_guid1.ToString() + @""",
             ""object"": { ""foo"": 123 },
-            ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ]
+            ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ],
+            ""byte"": " + byte.MaxValue.ToString() + @",
+            ""sbyte"": " + sbyte.MinValue.ToString() + @",
+            ""ushort"": " + ushort.MaxValue.ToString() + @",
+            ""short"": " + short.MinValue.ToString() + @",
+            ""uint"": " + uint.MaxValue.ToString() + @",
+            ""int"": " + int.MinValue.ToString() + @",
+            ""long"": " + long.MinValue.ToString() + @"
         }";
 
         private const string JsonArray = @"
@@ -209,6 +216,13 @@ namespace SourceCode.Clay.Json.Units
                 int age = -1;
                 var type = new System.Data.SqlDbType?[3];
                 Guid? guid = null;
+                byte u8 = 0;
+                sbyte s8 = 0;
+                ushort u16 = 0;
+                short s16 = 0;
+                uint u32 = 0;
+                int s32 = 0;
+                long s64 = 0;
 
                 jr.ReadObject(n =>
                 {
@@ -222,9 +236,20 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.AsEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
-                        case "guid1": guid = jr.AsGuid(); return true;
+                        case "guid1": guid = jr.AsGuid(); guid = jr.AsGuidNullable(); return true;
                         case "object": jr.SkipObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
+
+                        case "byte": u8 = jr.AsByte(); u8 = jr.AsByteNullable().Value; return true;
+                        case "sbyte": s8 = jr.AsSByte(); s8 = jr.AsSByteNullable().Value; return true;
+
+                        case "ushort": u16 = jr.AsUInt16(); u16 = jr.AsUInt16Nullable().Value; return true;
+                        case "short": s16 = jr.AsInt16(); s16 = jr.AsInt16Nullable().Value; return true;
+
+                        case "uint": u32 = jr.AsUInt32(); u32 = jr.AsUInt32Nullable().Value; return true;
+                        case "int": s32 = jr.AsInt32(); s32 = jr.AsInt32Nullable().Value; return true;
+
+                        case "long": s64 = jr.AsInt64(); s64 = jr.AsInt64Nullable().Value; return true;
                     }
 
                     return false;
@@ -242,6 +267,17 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
                 Assert.Equal(s_guid1, guid.Value);
+
+                Assert.Equal(byte.MaxValue, u8);
+                Assert.Equal(sbyte.MinValue, s8);
+
+                Assert.Equal(ushort.MaxValue, u16);
+                Assert.Equal(short.MinValue, s16);
+
+                Assert.Equal(uint.MaxValue, u32);
+                Assert.Equal(int.MinValue, s32);
+
+                Assert.Equal(long.MinValue, s64);
             }
 
             // Skip
@@ -251,7 +287,7 @@ namespace SourceCode.Clay.Json.Units
                 int actualCount = jr.SkipObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
-                Assert.Equal(11, actualCount);
+                Assert.Equal(18, actualCount);
             }
         }
 
