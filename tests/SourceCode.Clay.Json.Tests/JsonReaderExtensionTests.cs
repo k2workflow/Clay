@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = 0;
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     return false;
                 },
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actualCount = 0;
-                jr.ProcessArray(() => actualCount++);
+                jr.ReadArray(() => actualCount++);
                 Assert.Equal(0, actualCount);
             }
 
@@ -127,7 +127,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 string actual = null;
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     switch (n)
                     {
@@ -179,7 +179,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<string>();
-                jr.ProcessArray(() => actual.Add((string)jr.Value));
+                jr.ReadArray(() => actual.Add((string)jr.Value));
                 Assert.Equal(new string[] { null }, actual);
             }
 
@@ -194,9 +194,9 @@ namespace SourceCode.Clay.Json.Units
             }
         }
 
-        private static readonly Guid guid1 = new Guid("82a7f48d-3b50-4b1e-b82e-3ada8210c358");
+        private static readonly Guid s_guid1 = new Guid("82a7f48d-3b50-4b1e-b82e-3ada8210c358");
 
-        private static readonly string jsonObject = @"
+        private static readonly string s_jsonObject = @"
         {
             ""name"": ""joe"",
             ""last"": null,
@@ -207,12 +207,12 @@ namespace SourceCode.Clay.Json.Units
             ""type1"": ""tINyINt"",
             ""type2"": """",
             ""type3"": null,
-            ""guid1"": """ + guid1.ToString() + @""",
+            ""guid1"": """ + s_guid1.ToString() + @""",
             ""object"": { ""foo"": 123 },
             ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ]
         }";
 
-        private const string jsonArray = @"
+        private const string s_jsonArray = @"
         [
             ""joe"",
             null,
@@ -227,7 +227,7 @@ namespace SourceCode.Clay.Json.Units
         public static void When_read_simple_object()
         {
             // Read
-            using (var tr = new StringReader(jsonObject))
+            using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
@@ -268,11 +268,11 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
-                Assert.Equal(guid1, guid.Value);
+                Assert.Equal(s_guid1, guid.Value);
             }
 
             // Process
-            using (var tr = new StringReader(jsonObject))
+            using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
@@ -284,7 +284,7 @@ namespace SourceCode.Clay.Json.Units
                 var type = new System.Data.SqlDbType?[3];
                 Guid? guid = null;
 
-                jr.ProcessObject(n =>
+                jr.ReadObject(n =>
                 {
                     switch (n)
                     {
@@ -314,11 +314,11 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
-                Assert.Equal(guid1, guid.Value);
+                Assert.Equal(s_guid1, guid.Value);
             }
 
             // Skip
-            using (var tr = new StringReader(jsonObject))
+            using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
                 var actualCount = jr.SkipCountObject();
@@ -333,7 +333,7 @@ namespace SourceCode.Clay.Json.Units
         public static void When_read_simple_array()
         {
             // Read
-            using (var tr = new StringReader(jsonArray))
+            using (var tr = new StringReader(s_jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 IReadOnlyList<object> actual = jr.ReadArray(() => jr.Value);
@@ -341,7 +341,7 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Enumerate
-            using (var tr = new StringReader(jsonArray))
+            using (var tr = new StringReader(s_jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 IEnumerable<object> actual = jr.EnumerateArray(() => jr.Value);
@@ -349,16 +349,16 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Process
-            using (var tr = new StringReader(jsonArray))
+            using (var tr = new StringReader(s_jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<object>();
-                jr.ProcessArray(() => actual.Add(jr.Value));
+                jr.ReadArray(() => actual.Add(jr.Value));
                 Assert.Collection(actual, n => Assert.Equal("joe", n), n => Assert.Null(n), n => Assert.Equal(string.Empty, n), n => Assert.True((bool)n), n => Assert.Equal(99L, n));
             }
 
             // Skip
-            using (var tr = new StringReader(jsonArray))
+            using (var tr = new StringReader(s_jsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 var actualCount = jr.SkipCountArray();
@@ -373,7 +373,7 @@ namespace SourceCode.Clay.Json.Units
         public static void When_read_simple_object_negative()
         {
             // Read
-            using (var tr = new StringReader(jsonObject))
+            using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
@@ -402,7 +402,7 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Process
-            using (var tr = new StringReader(jsonObject))
+            using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
@@ -412,7 +412,7 @@ namespace SourceCode.Clay.Json.Units
 
                 Assert.Throws<JsonReaderException>
                 (
-                    () => jr.ProcessObject(n =>
+                    () => jr.ReadObject(n =>
                     {
                         switch (n)
                         {
