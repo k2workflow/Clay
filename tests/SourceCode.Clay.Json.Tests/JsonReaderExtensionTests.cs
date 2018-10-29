@@ -5,10 +5,10 @@
 
 #endregion
 
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Units
@@ -25,30 +25,21 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actual = jr.ReadObject(n => false, () => 0);
-
-                Assert.Equal(0, actual);
-            }
-
-            // Process
-            using (var tr = new StringReader(json))
-            using (var jr = new JsonTextReader(tr))
-            {
-                var actual = 0;
+                int actual = 0;
                 jr.ReadObject(n =>
                 {
+                    actual++;
                     return false;
-                },
-                () => actual++);
+                });
 
-                Assert.Equal(1, actual);
+                Assert.Equal(0, actual);
             }
 
             // Skip
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipCountObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(0, actualCount);
@@ -81,7 +72,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = 0;
+                int actualCount = 0;
                 jr.ReadArray(() => actualCount++);
                 Assert.Equal(0, actualCount);
             }
@@ -90,7 +81,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountArray();
+                int actualCount = jr.SkipCountArray();
 
                 Assert.True(jr.TokenType == JsonToken.EndArray);
                 Assert.Equal(0, actualCount);
@@ -108,25 +99,7 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 string actual = null;
-                var model = jr.ReadObject(n =>
-                {
-                    switch (n)
-                    {
-                        case "a": actual = (string)jr.Value; return true;
-                    }
 
-                    return false;
-                },
-                () => actual);
-
-                Assert.Null(model);
-            }
-
-            // Process
-            using (var tr = new StringReader(json))
-            using (var jr = new JsonTextReader(tr))
-            {
-                string actual = null;
                 jr.ReadObject(n =>
                 {
                     switch (n)
@@ -135,8 +108,7 @@ namespace SourceCode.Clay.Json.Units
                     }
 
                     return false;
-                },
-                () => actual = actual is null ? null : "oops");
+                });
 
                 Assert.Null(actual);
             }
@@ -145,7 +117,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipCountObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(1, actualCount);
@@ -187,7 +159,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountArray();
+                int actualCount = jr.SkipCountArray();
 
                 Assert.True(jr.TokenType == JsonToken.EndArray);
                 Assert.Equal(1, actualCount);
@@ -212,7 +184,7 @@ namespace SourceCode.Clay.Json.Units
             ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ]
         }";
 
-        private const string s_jsonArray = @"
+        private const string JsonArray = @"
         [
             ""joe"",
             null,
@@ -231,56 +203,10 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
-                var last = "smith";
-                var middle = "a";
-                var alive = false;
-                var age = -1L;
-                var type = new System.Data.SqlDbType?[3];
-                Guid? guid = null;
-
-                var text = jr.ReadObject(n =>
-                {
-                    switch (n)
-                    {
-                        case "name": name = (string)jr.Value; return true;
-                        case "last": last = (string)jr.Value; return true;
-                        case "middle": middle = (string)jr.Value; return true;
-                        case "alive": alive = (bool)jr.Value; return true;
-                        case "age": age = (long)jr.Value; return true;
-                        case "type1": type[0] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "type2": type[1] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "type3": type[2] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "guid1": guid = jr.ParseGuid(); return true;
-                        case "object": jr.SkipCountObject(); return true;
-                        case "array": jr.SkipCountArray(); return true;
-                    }
-
-                    return false;
-                },
-                () => $"{name} {age}");
-
-                Assert.Equal("joe 99", text);
-                Assert.Equal("joe", name);
-                Assert.Null(last);
-                Assert.Equal(string.Empty, middle);
-                Assert.True(alive);
-                Assert.Equal(99, age);
-                Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
-                Assert.Null(type[1]);
-                Assert.Null(type[2]);
-                Assert.Equal(s_guid1, guid.Value);
-            }
-
-            // Process
-            using (var tr = new StringReader(s_jsonObject))
-            using (var jr = new JsonTextReader(tr))
-            {
-                string name = null;
-                var last = "smith";
-                var middle = "a";
-                var alive = false;
-                var age = -1L;
-                string text = null;
+                string last = "smith";
+                string middle = "a";
+                bool alive = false;
+                int age = -1;
                 var type = new System.Data.SqlDbType?[3];
                 Guid? guid = null;
 
@@ -292,18 +218,19 @@ namespace SourceCode.Clay.Json.Units
                         case "last": last = (string)jr.Value; return true;
                         case "middle": middle = (string)jr.Value; return true;
                         case "alive": alive = (bool)jr.Value; return true;
-                        case "age": age = (long)jr.Value; return true;
-                        case "type1": type[0] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "type2": type[1] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "type3": type[2] = jr.ParseEnum<System.Data.SqlDbType>(true); return true;
-                        case "guid1": guid = jr.ParseGuidExact("D"); return true;
+                        case "age": age = jr.AsInt32(); return true;
+                        case "type1": type[0] = jr.AsEnum<System.Data.SqlDbType>(true); return true;
+                        case "type2": type[1] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
+                        case "type3": type[2] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
+                        case "guid1": guid = jr.AsGuid(); return true;
                         case "object": jr.SkipCountObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
                     }
 
                     return false;
-                },
-                () => text = $"{name} {age}");
+                });
+
+                string text = $"{name} {age}";
 
                 Assert.Equal("joe 99", text);
                 Assert.Equal("joe", name);
@@ -321,7 +248,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipCountObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(11, actualCount);
@@ -333,7 +260,7 @@ namespace SourceCode.Clay.Json.Units
         public static void When_read_simple_array()
         {
             // Read
-            using (var tr = new StringReader(s_jsonArray))
+            using (var tr = new StringReader(JsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 IReadOnlyList<object> actual = jr.ReadArray(() => jr.Value);
@@ -341,7 +268,7 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Enumerate
-            using (var tr = new StringReader(s_jsonArray))
+            using (var tr = new StringReader(JsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 IEnumerable<object> actual = jr.EnumerateArray(() => jr.Value);
@@ -349,7 +276,7 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Process
-            using (var tr = new StringReader(s_jsonArray))
+            using (var tr = new StringReader(JsonArray))
             using (var jr = new JsonTextReader(tr))
             {
                 var actual = new List<object>();
@@ -358,10 +285,10 @@ namespace SourceCode.Clay.Json.Units
             }
 
             // Skip
-            using (var tr = new StringReader(s_jsonArray))
+            using (var tr = new StringReader(JsonArray))
             using (var jr = new JsonTextReader(tr))
             {
-                var actualCount = jr.SkipCountArray();
+                int actualCount = jr.SkipCountArray();
 
                 Assert.True(jr.TokenType == JsonToken.EndArray);
                 Assert.Equal(5, actualCount);
@@ -377,9 +304,9 @@ namespace SourceCode.Clay.Json.Units
             using (var jr = new JsonTextReader(tr))
             {
                 string name = null;
-                var last = "smith";
-                var middle = "a";
-                var alive = false;
+                string last = "smith";
+                string middle = "a";
+                bool alive = false;
 
                 Assert.Throws<JsonReaderException>
                 (
@@ -396,37 +323,7 @@ namespace SourceCode.Clay.Json.Units
                         }
 
                         return false;
-                    },
-                    () => name)
-                );
-            }
-
-            // Process
-            using (var tr = new StringReader(s_jsonObject))
-            using (var jr = new JsonTextReader(tr))
-            {
-                string name = null;
-                var last = "smith";
-                var middle = "a";
-                var alive = false;
-
-                Assert.Throws<JsonReaderException>
-                (
-                    () => jr.ReadObject(n =>
-                    {
-                        switch (n)
-                        {
-                            case "name": name = (string)jr.Value; return true;
-                            case "last": last = (string)jr.Value; return true;
-                            case "middle": middle = (string)jr.Value; return true;
-                            case "alive": alive = (bool)jr.Value; return true;
-
-                                // Neglect to process 'age'
-                        }
-
-                        return false;
-                    },
-                    () => { })
+                    })
                 );
             }
         }

@@ -14,44 +14,6 @@ namespace SourceCode.Clay.Json
     partial class JsonReaderExtensions // .Object
     {
         /// <summary>
-        /// Reads the current token value as a Json object.
-        /// </summary>
-        /// <typeparam name="T">The type of item to return.</typeparam>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertyHandler">The property switch.</param>
-        /// <param name="objectFactory">The object factory.</param>
-        /// <returns>The value.</returns>
-        [Obsolete("Use " + nameof(ReadObject) + "(jr, propertyHandler) instead", false)]
-        public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
-        {
-            if (jr is null) throw new ArgumentNullException(nameof(jr));
-            if (propertyHandler is null) throw new ArgumentNullException(nameof(propertyHandler));
-
-            ReadObject(jr, propertyHandler);
-
-            if (objectFactory is null) return default;
-
-            T obj = objectFactory();
-            return obj;
-        }
-
-        /// <summary>
-        /// Processes the current token value as a Json object.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertyHandler">The property switch.</param>
-        /// <param name="objectFactory">The object factory.</param>
-        [Obsolete("Use " + nameof(ReadObject) + "(jr, propertyHandler) instead", false)]
-        public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
-        {
-            ReadObject(jr, propertyHandler);
-
-            if (objectFactory is null) return;
-
-            objectFactory();
-        }
-
-        /// <summary>
         /// Processes the current token value as a Json object.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
