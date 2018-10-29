@@ -29,6 +29,30 @@ namespace SourceCode.Clay.Json
         }
 
         /// <summary>
+        /// Reads the current token value as a string, then converts it to a <see cref="bool"/>.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The parsed boolean value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AsBool(this JsonReader jr)
+            => (bool)jr.Value;
+
+        /// <summary>
+        /// Reads the current token value as a string, then converts it to a nullable <see cref="bool"/>.
+        /// Returns <see langword="null"/> if the Json value is null, or the string value is null or empty.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The parsed boolean value or null.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool? AsBoolNullable(this JsonReader jr)
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            return AsBool(jr);
+        }
+
+        /// <summary>
         /// Reads the current token value as a string, then converts it to a <see cref="Enum"/>.
         /// </summary>
         /// <typeparam name="TEnum">The enum to convert to.</typeparam>
@@ -93,26 +117,6 @@ namespace SourceCode.Clay.Json
                 return null;
 
             var guid = Guid.Parse(str);
-            return guid;
-        }
-
-        /// <summary>
-        /// Reads the current token value as a string, then converts it to a nullable <see cref="Guid"/>.
-        /// Returns <see langword="null"/> if the Json value is null, or the string value is null or empty.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="format">Specifier indicating the exact format to use when interpreting the input.</param>
-        /// <returns>The parsed guid value or null.</returns>
-        public static Guid? AsGuidExact(this JsonReader jr, string format)
-        {
-            if (jr.TokenType == JsonToken.Null)
-                return null;
-
-            string str = (string)jr.Value;
-            if (str.Length == 0) // We already checked for null
-                return null;
-
-            var guid = Guid.ParseExact(str, format);
             return guid;
         }
 
