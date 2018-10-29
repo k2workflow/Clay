@@ -21,58 +21,18 @@ namespace SourceCode.Clay.Json
         /// <param name="propertyHandler">The property switch.</param>
         /// <param name="objectFactory">The object factory.</param>
         /// <returns>The value.</returns>
-        [Obsolete("Use " + nameof(ReadObject) + " instead", false)]
+        [Obsolete("Use " + nameof(ReadObject) + "(jr, propertyHandler) instead", false)]
         public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
         {
             if (jr is null) throw new ArgumentNullException(nameof(jr));
             if (propertyHandler is null) throw new ArgumentNullException(nameof(propertyHandler));
 
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
+            ReadObject(jr, propertyHandler);
 
-            // null
-            if (jr.TokenType == JsonToken.Null)
-                return default; // null for classes, default(T) for structs
+            if (objectFactory is null) return default;
 
-            // '{'
-            if (jr.TokenType == JsonToken.StartObject)
-                jr.Read();
-
-            while (true)
-            {
-                switch (jr.TokenType)
-                {
-                    // Property
-                    case JsonToken.PropertyName:
-                        {
-                            // Name
-                            string name = (string)jr.Value;
-                            jr.Read();
-
-                            // Value
-                            bool handled = propertyHandler(name);
-                            if (!handled)
-                                throw new JsonReaderException($"Json property {name} found but not processed");
-
-                            jr.Read();
-                        }
-                        continue;
-
-                    // Skip
-                    case JsonToken.Comment:
-                        jr.Read();
-                        continue;
-
-                    // '}'
-                    case JsonToken.EndObject:
-                        {
-                            if (objectFactory is null) return default;
-
-                            T obj = objectFactory();
-                            return obj;
-                        }
-                }
-            }
+            T obj = objectFactory();
+            return obj;
         }
 
         /// <summary>
@@ -84,15 +44,11 @@ namespace SourceCode.Clay.Json
         [Obsolete("Use " + nameof(ReadObject) + " instead", false)]
         public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
         {
-            // Leverage shared logic, ignoring sentinel return <int> value
-            ReadObject(jr, propertyHandler, Curry);
+            ReadObject(jr, propertyHandler);
 
-            // Curry delegate into local function
-            int Curry()
-            {
-                objectFactory?.Invoke();
-                return 0;
-            }
+            if (objectFactory is null) return;
+
+            objectFactory();
         }
 
         /// <summary>
@@ -156,7 +112,6 @@ namespace SourceCode.Clay.Json
         {
             int count = 0;
 
-            // Leverage shared logic
             ReadObject(jr, CurryHandler);
 
             return count;
