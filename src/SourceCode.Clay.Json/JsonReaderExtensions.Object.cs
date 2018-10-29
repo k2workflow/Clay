@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Json
                             // Value
                             bool handled = propertyHandler(name);
                             if (!handled)
-                                throw new JsonReaderException($"Json property {name} found but not processed");
+                                throw new JsonReaderException($"Json property {name} found but handler did not process it.");
 
                             jr.Read();
                         }
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json
         /// Processes the current token value as a Json object but ignores all values.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        public static int SkipCountObject(this JsonReader jr)
+        public static int SkipObject(this JsonReader jr)
         {
             int count = 0;
 

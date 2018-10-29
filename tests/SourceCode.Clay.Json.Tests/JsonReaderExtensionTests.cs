@@ -39,7 +39,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                int actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(0, actualCount);
@@ -117,7 +117,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(json))
             using (var jr = new JsonTextReader(tr))
             {
-                int actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(1, actualCount);
@@ -223,7 +223,7 @@ namespace SourceCode.Clay.Json.Units
                         case "type2": type[1] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
                         case "guid1": guid = jr.AsGuid(); return true;
-                        case "object": jr.SkipCountObject(); return true;
+                        case "object": jr.SkipObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
                     }
 
@@ -248,7 +248,7 @@ namespace SourceCode.Clay.Json.Units
             using (var tr = new StringReader(s_jsonObject))
             using (var jr = new JsonTextReader(tr))
             {
-                int actualCount = jr.SkipCountObject();
+                int actualCount = jr.SkipObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
                 Assert.Equal(11, actualCount);
