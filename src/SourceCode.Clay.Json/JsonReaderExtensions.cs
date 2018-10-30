@@ -44,6 +44,7 @@ namespace SourceCode.Clay.Json
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="ignoreCase">True to ignore case; False to regard case.</param>
         /// <returns>The parsed enum value or null.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static TEnum AsEnum<TEnum>(this JsonReader jr, bool ignoreCase)
             where TEnum : struct, Enum
         {
@@ -79,6 +80,7 @@ namespace SourceCode.Clay.Json
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <returns>The parsed guid value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Guid AsGuid(this JsonReader jr)
         {
             string str = (string)jr.Value;
@@ -103,6 +105,38 @@ namespace SourceCode.Clay.Json
 
             var guid = Guid.Parse(str);
             return guid;
+        }
+
+        /// <summary>
+        /// Reads the current token value as a string, then converts it to a <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The parsed uri value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Uri AsUri(this JsonReader jr, UriKind kind)
+        {
+            string str = (string)jr.Value;
+            var uri = new Uri(str, kind);
+            return uri;
+        }
+
+        /// <summary>
+        /// Reads the current token value as a string, then converts it to a nullable <see cref="Uri"/>.
+        /// Returns <see langword="null"/> if the Json value is null, or the string value is null or empty.
+        /// </summary>
+        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <returns>The parsed uri value or null.</returns>
+        public static Uri AsUriNullable(this JsonReader jr, UriKind kind)
+        {
+            if (jr.TokenType == JsonToken.Null)
+                return null;
+
+            string str = (string)jr.Value;
+            if (str.Length == 0) // We already checked for null
+                return null;
+
+            var uri = new Uri(str, kind);
+            return uri;
         }
 
         /// <summary>

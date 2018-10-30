@@ -166,7 +166,8 @@ namespace SourceCode.Clay.Json.Units
             }
         }
 
-        private static readonly Guid s_guid1 = new Guid("82a7f48d-3b50-4b1e-b82e-3ada8210c358");
+        private static readonly Guid s_guid = new Guid("82a7f48d-3b50-4b1e-b82e-3ada8210c358");
+        private static readonly Uri s_uri = new Uri("http://www.microsoft.com", UriKind.Absolute);
 
         private static readonly string s_jsonObject = @"
         {
@@ -179,7 +180,8 @@ namespace SourceCode.Clay.Json.Units
             ""type1"": ""tINyINt"",
             ""type2"": """",
             ""type3"": null,
-            ""guid1"": """ + s_guid1.ToString() + @""",
+            ""guid"": """ + s_guid.ToString() + @""",
+            ""uri"": """ + s_uri.ToString() + @""",
             ""object"": { ""foo"": 123 },
             ""array"": [ 123, ""abc"", null, { ""foo"": 123, ""bar"": [ false, ""a"", 123, null ] } ],
             ""byte"": " + byte.MaxValue.ToString() + @",
@@ -188,7 +190,7 @@ namespace SourceCode.Clay.Json.Units
             ""short"": " + short.MinValue.ToString() + @",
             ""uint"": " + uint.MaxValue.ToString() + @",
             ""int"": " + int.MinValue.ToString() + @",
-            ""long"": " + long.MinValue.ToString() + @"
+            ""long"": " + long.MinValue.ToString() + @",
         }";
 
         private const string JsonArray = @"
@@ -216,6 +218,7 @@ namespace SourceCode.Clay.Json.Units
                 int age = -1;
                 var type = new System.Data.SqlDbType?[3];
                 Guid? guid = null;
+                Uri uri = null;
                 byte u8 = 0;
                 sbyte s8 = 0;
                 ushort u16 = 0;
@@ -236,9 +239,11 @@ namespace SourceCode.Clay.Json.Units
                         case "type1": type[0] = jr.AsEnum<System.Data.SqlDbType>(true); return true;
                         case "type2": type[1] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
                         case "type3": type[2] = jr.AsEnumNullable<System.Data.SqlDbType>(true); return true;
-                        case "guid1": guid = jr.AsGuid(); guid = jr.AsGuidNullable(); return true;
                         case "object": jr.SkipObject(); return true;
                         case "array": jr.SkipCountArray(); return true;
+
+                        case "guid": guid = jr.AsGuid(); guid = jr.AsGuidNullable(); return true;
+                        case "uri": uri = jr.AsUri(UriKind.Absolute); uri = jr.AsUriNullable(UriKind.Absolute); return true;
 
                         case "byte": u8 = jr.AsByte(); u8 = jr.AsByteNullable().Value; return true;
                         case "sbyte": s8 = jr.AsSByte(); s8 = jr.AsSByteNullable().Value; return true;
@@ -266,7 +271,9 @@ namespace SourceCode.Clay.Json.Units
                 Assert.Equal(System.Data.SqlDbType.TinyInt, type[0]);
                 Assert.Null(type[1]);
                 Assert.Null(type[2]);
-                Assert.Equal(s_guid1, guid.Value);
+
+                Assert.Equal(s_guid, guid.Value);
+                Assert.Equal(s_uri.ToString(), uri?.ToString(), StringComparer.Ordinal);
 
                 Assert.Equal(byte.MaxValue, u8);
                 Assert.Equal(sbyte.MinValue, s8);
@@ -287,7 +294,7 @@ namespace SourceCode.Clay.Json.Units
                 int actualCount = jr.SkipObject();
 
                 Assert.True(jr.TokenType == JsonToken.EndObject);
-                Assert.Equal(18, actualCount);
+                Assert.Equal(19, actualCount);
             }
         }
 
@@ -355,7 +362,7 @@ namespace SourceCode.Clay.Json.Units
                             case "middle": middle = (string)jr.Value; return true;
                             case "alive": alive = jr.AsBool(); return true;
 
-                                // Neglect to process 'age'
+                                // Neglect to process all other properties
                         }
 
                         return false;
