@@ -29,5 +29,25 @@ namespace SourceCode.Clay.Tests
                 Assert.Equal(expected, actual);
             }
         }
+
+        [Trait("Type", "Unit")]
+        [Fact(DisplayName = nameof(When_fatal_exception))]
+        public static void When_fatal_exception()
+        {
+            Assert.True(new OutOfMemoryException().IsFatal());
+            Assert.False(new InsufficientMemoryException().IsFatal());
+
+            Assert.True(new AccessViolationException().IsFatal());
+            Assert.True(new System.Runtime.InteropServices.SEHException().IsFatal());
+            Assert.True(new StackOverflowException().IsFatal());
+
+            Assert.False(new TypeInitializationException("foo", new Exception()).IsFatal());
+            Assert.True(new TypeInitializationException("foo", new OutOfMemoryException()).IsFatal());
+
+            Assert.False(new System.Reflection.TargetInvocationException(new Exception()).IsFatal());
+            Assert.True(new System.Reflection.TargetInvocationException(new OutOfMemoryException()).IsFatal());
+
+            Assert.False(new System.Reflection.TargetInvocationException(new TypeInitializationException("foo", new InsufficientMemoryException())).IsFatal());
+        }
     }
 }

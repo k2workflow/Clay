@@ -1,54 +1,68 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SourceCode.Clay
 {
-    // Background: https://www.awsarchitectureblog.com/2015/03/backoff.html
+    /// <summary>
+    /// Implements a mechanism for transient error handling, whereby
+    /// the backoff timings should be randomized.
+    /// See background here: https://www.awsarchitectureblog.com/2015/03/backoff.html
+    /// </summary>
     public sealed class DecorrelatedJitter
     {
+        private static readonly Random s_random = new Random(); // Default ctor uses a time-based seed
         private readonly Random _random;
 
         public int RetryCount { get; }
         public TimeSpan MinDelay { get; }
         public TimeSpan MaxDelay { get; }
 
+        /// <summary>
+        /// Create a new instance of the <see cref="DecorrelatedJitter"/> class.
+        /// </summary>
+        /// <param name="retryCount">The number of retries to make (in addition to the original execution).</param>
+        /// <param name="minDelay">The minimum time delay between retries.</param>
+        /// <param name="maxDelay">The maximum time delay between retries.</param>
+        /// <param name="random">A custom <see cref="Random"/> instance to use, perhaps using a deterministic seed.
+        /// If not specified, will use a datetime-seeded instance</param>
         public DecorrelatedJitter(int retryCount, TimeSpan minDelay, TimeSpan maxDelay, Random random = null)
         {
             if (retryCount < 0) throw new ArgumentOutOfRangeException(nameof(retryCount));
             if (minDelay < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(minDelay));
             if (maxDelay < minDelay) throw new ArgumentOutOfRangeException(nameof(maxDelay));
 
-            _random = random ?? new Random((int)DateTime.Now.Ticks);
+            _random = random ?? s_random;
             RetryCount = retryCount;
             MinDelay = minDelay;
             MaxDelay = maxDelay;
         }
 
-        public IEnumerable<TimeSpan> Create() => new Impl(this);
-
-        private sealed class Impl : IEnumerable<TimeSpan>
+        /// <summary>
+        /// Create a series of random <see cref="TimeSpan"/> values in a Uniform distribution,
+        /// using the original AWS style of computing the values.
+        /// </summary>
+        /// <remarks>A new enumerator should be created for every execution.</remarks>
+        public IEnumerable<TimeSpan> Default()
         {
-            private readonly TimeSpan[] _delay;
+            double ms = MinDelay.TotalMilliseconds;
 
-            public Impl(DecorrelatedJitter jitter)
+            for (int i = 0; i < RetryCount; i++)
             {
-                _delay = new TimeSpan[jitter.RetryCount];
+                ms *= 3.0 * _random.NextDouble(); // [0, 3N)
+                ms = ms.Clamp(MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds); // [min, max]
 
-                var ms = jitter.MinDelay.TotalMilliseconds;
-                for (var i = 0; i < _delay.Length; i++)
-                {
-                    ms *= 3.0 * jitter._random.NextDouble(); // [0.0, 3.0)
-                    ms = Math.Max(jitter.MinDelay.TotalMilliseconds, ms); // [min, N]
-                    ms = Math.Min(jitter.MaxDelay.TotalMilliseconds, ms); // [min, max]
-
-                    _delay[i] = TimeSpan.FromMilliseconds(ms);
-                }
+                yield return TimeSpan.FromMilliseconds(ms);
             }
-
-            public IEnumerator<TimeSpan> GetEnumerator() => ((IEnumerable<TimeSpan>)_delay).GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator() => _delay.GetEnumerator();
         }
+
+        /// <summary>
+        /// Create a series of random <see cref="TimeSpan"/> values in a Normal distribution.
+        /// </summary>
+        /// <remarks>A new enumerator should be created for every execution.</remarks>
+        public IEnumerable<TimeSpan> Normal()
+            => _random
+            .ClampedNormals(RetryCount, MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds)
+            .Select(n => TimeSpan.FromMilliseconds(n));
     }
 }
