@@ -6,6 +6,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -77,7 +80,7 @@ namespace SourceCode.Clay
             {
                 Type @enum = typeof(TEnum);
 
-                var values = (ulong[])typeof(Enum)
+                ulong[] values = (ulong[])typeof(Enum)
                     .GetMethod("InternalGetValues", BindingFlags.Static | BindingFlags.NonPublic) // Also see InternalGetNames
                     .Invoke(null, new[] { typeof(TEnum) });
 
@@ -597,5 +600,37 @@ namespace SourceCode.Clay
         public static int Length<TEnum>()
             where TEnum : struct, Enum
             => ValueCache<TEnum>.Length();
+
+        private static readonly Dictionary<RuntimeTypeHandle, StringDictionary> s_enumDesc = new Dictionary<RuntimeTypeHandle, StringDictionary>();
+
+        public static string GetEnumDescription<TEnum>(this TEnum value)
+            where TEnum : struct, Enum
+        {
+            Type typ = typeof(TEnum);
+            if (!s_enumDesc.TryGetValue(typ.TypeHandle, out StringDictionary dict))
+            {
+                lock (((System.Collections.ICollection)s_enumDesc).SyncRoot)
+                {
+                    if (!s_enumDesc.TryGetValue(typ.TypeHandle, out dict))
+                    {
+                        dict = new StringDictionary();
+
+                        foreach (string name in Enum.GetNames(typ))
+                        {
+                            // Try to get [Description] attribute
+                            FieldInfo field = typ.GetField(name);
+                            DescriptionAttribute attr = field.GetCustomAttribute<DescriptionAttribute>(false);
+
+                            // Populate dictionary
+                            dict[name] = attr == null ? name : attr.Description;
+                        }
+
+                        s_enumDesc[typ.TypeHandle] = dict;
+                    }
+                }
+            }
+
+            return dict[value.ToString()];
+        }
     }
 }

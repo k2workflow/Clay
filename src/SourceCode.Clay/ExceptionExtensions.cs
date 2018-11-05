@@ -48,7 +48,7 @@ namespace SourceCode.Clay
                     return true;
                 }
 
-                if (!(ex is TypeInitializationException) && !(ex is System.Reflection.TargetInvocationException))
+                if (!(ex is TypeInitializationException || ex is System.Reflection.TargetInvocationException))
                 {
                     return false;
                 }
