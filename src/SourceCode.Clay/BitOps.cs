@@ -1998,7 +1998,7 @@ namespace SourceCode.Clay
         #region AsByte
 
         /// <summary>
-        /// Converts a boolean to a byte value without branching.
+        /// Converts a boolean to a normalized byte value without branching.
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2019,7 +2019,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to a byte value without branching.
+        /// Converts a boolean to a normalized byte value without branching.
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2032,7 +2032,7 @@ namespace SourceCode.Clay
         #region Iff
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to a specified integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2045,7 +2045,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to specified integer values without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2059,7 +2059,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to a integer value without branching.
+        /// Converts a boolean to a specified integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2069,7 +2069,7 @@ namespace SourceCode.Clay
             => unchecked((int)Iff(condition, (uint)trueValue));
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to specified integer values without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2080,7 +2080,7 @@ namespace SourceCode.Clay
             => unchecked((int)Iff(condition, (uint)trueValue, (uint)falseValue));
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to a specified integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2093,7 +2093,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to specified integer values without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2107,7 +2107,7 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to a specified integer value without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
@@ -2117,7 +2117,7 @@ namespace SourceCode.Clay
             => unchecked((long)Iff(condition, (ulong)trueValue));
 
         /// <summary>
-        /// Converts a boolean to an integer value without branching.
+        /// Converts a boolean to specified integer values without branching.
         /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>

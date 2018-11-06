@@ -12,6 +12,72 @@ namespace SourceCode.Clay.Tests
 {
     public static partial class BitOpsTests // .Primitive
     {
+        #region Samples
+
+        [Fact(DisplayName = nameof(BitOps_Samples))]
+        public static void BitOps_Samples()
+        {
+            // PopCount: Returns the population count (number of bits set) of a mask.
+            Assert.Equal(4, BitOps.PopCount(0x1001_0110u));
+
+            // RotateLeft/Right: Rotates the specified value left/right by the specified number of bits.
+            Assert.Equal(0b0100_0001u, BitOps.RotateLeft((byte)0b0010_1000u, 3));
+            Assert.Equal(0b1000_0000u, BitOps.RotateRight((byte)0b0010_0000u, 6));
+
+            // Leading/TrailingZeros: Count the number of leading/trailing zero bits in a mask.
+            Assert.Equal(2, BitOps.LeadingZeros((byte)0b0011_1000));
+            Assert.Equal(5, BitOps.TrailingZeros(0b1110_0000));
+
+            // Leading/TrailingOnes: Count the number of leading/trailing one bits in a mask.
+            Assert.Equal(2, BitOps.LeadingOnes((byte)0b1100_0000));
+            Assert.Equal(3, BitOps.TrailingOnes(0b0000_0111));
+
+            // ExtractBit: Reads whether the specified bit in a mask is set.
+            Assert.True(BitOps.ExtractBit((byte)0b0001_0000, 4));
+            Assert.False(BitOps.ExtractBit((byte)0b0001_0000, 7));
+
+            // InsertBit: Sets the specified bit in a mask and returns the new value.
+            byte dest = 0b0000_1001;
+            Assert.Equal(0b0010_1001, BitOps.InsertBit(dest, 5));
+
+            // InsertBit(ref): Sets the specified bit in a mask and returns whether it was originally set.
+            Assert.False(BitOps.InsertBit(ref dest, 5));
+            Assert.Equal(0b0010_1001, dest);
+
+            // ClearBit: Clears the specified bit in a mask and returns the new value.
+            dest = 0b0000_1001;
+            Assert.Equal(0b0000_0001, BitOps.ClearBit(dest, 3));
+            // ClearBit(ref): Clears the specified bit in a mask and returns whether it was originally set.
+            Assert.True(BitOps.ClearBit(ref dest, 3)); 
+            Assert.Equal(0b0000_0001, dest);
+
+            // ComplementBit: Complements the specified bit in a mask and returns the new value.
+            dest = 0b0000_1001;
+            Assert.Equal(0b0000_0001, BitOps.ComplementBit(dest, 3));
+            // ComplementBit(ref): Complements the specified bit in a mask and returns whether it was originally set.
+            Assert.True(BitOps.ComplementBit(ref dest, 3));
+            Assert.Equal(0b0000_0001, dest);
+
+            // WriteBit: Writes the specified bit in a mask and returns the new value. Does not branch.
+            dest = 0b0000_1001;
+            Assert.Equal(0b0000_0001, BitOps.WriteBit(dest, 3, on: false));
+            // WriteBit(ref): Writes the specified bit in a mask and returns whether it was originally set. Does not branch.
+            Assert.True(BitOps.WriteBit(ref dest, 3, on: false));
+            Assert.Equal(0b0000_0001, dest);
+
+            // AsByte: Converts a boolean to a normalized byte value without branching.
+            byte n = 3;
+            bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
+            Assert.False(!weirdBool);
+            Assert.Equal(1, BitOps.AsByte(weirdBool));
+
+            // Iff: Converts a boolean to a specified integer value without branching.
+            Assert.Equal(123, BitOps.Iff(true, 123)); // if then
+            Assert.Equal(456, BitOps.Iff(false, 123, 456)); // if then else
+        }
+
+        #endregion
+
         #region ExtractBit
 
         [Theory(DisplayName = nameof(BitOps_ExtractBit_byte))]
@@ -1505,9 +1571,10 @@ namespace SourceCode.Clay.Tests
                 int expected = i == 0 ? 0 : 1;
 
                 byte n = (byte)i;
-                bool tf = Unsafe.As<byte, bool>(ref n);
-                int actual = BitOps.AsByte(tf);
+                bool weirdBool = Unsafe.As<byte, bool>(ref n);
+                Assert.Equal(i == 0, !weirdBool);
 
+                int actual = BitOps.AsByte(weirdBool);
                 Assert.Equal(expected, actual);
             }
         }
