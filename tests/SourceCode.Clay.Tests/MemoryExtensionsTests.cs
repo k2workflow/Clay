@@ -16,11 +16,13 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(When_index_of_span))]
         public static void When_index_of_span()
         {
-            Assert.Equal(-1, Span<char>.Empty.IndexOf('a'));
-            Assert.Equal(-1, "A".AsSpan().IndexOf('B'));
+            Assert.Equal(-1, ReadOnlySpan<char>.Empty.IndexOf('a', 0));
+            Assert.Equal(-1, "A".AsSpan().IndexOf('B', 0));
+            Assert.Equal(-1, "A".AsSpan().IndexOf('A', 1));
 
-            Assert.Equal(0, "A".AsSpan().IndexOf('A'));
-            Assert.Equal(1, "BA".AsSpan().IndexOf('A'));
+            Assert.Equal(0, "A".AsSpan().IndexOf('A', 0));
+            Assert.Equal(1, "BA".AsSpan().IndexOf('A', 0));
+            Assert.Equal(1, "BA".AsSpan().IndexOf('A', 1));
         }
 
         [Trait("Type", "Unit")]
