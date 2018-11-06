@@ -2167,7 +2167,7 @@ namespace SourceCode.Clay
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void CascadeTrailing(ref uint value)
+        private static void CascadeTrailing(ref uint value)
         {
             // byte#                     4          3   2  1
             //                       1000 0000  0000 0000  00 00
@@ -2179,7 +2179,7 @@ namespace SourceCode.Clay
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void CascadeTrailing(ref ulong value)
+        private static void CascadeTrailing(ref ulong value)
         {
             // byte#                     8          7   6  5   4  3   2  1
             //                       1000 0000  0000 0000  00 00  00 00  00 00
