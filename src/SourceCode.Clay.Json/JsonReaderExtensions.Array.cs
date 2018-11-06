@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Json
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="itemFactory">The item factory.</param>
-        public static void ProcessArray(this JsonReader jr, Action itemFactory)
+        public static void ReadArray(this JsonReader jr, Action itemFactory)
         {
             if (jr is null) throw new ArgumentNullException(nameof(jr));
 
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Json
         {
             var list = new List<T>(0); // ctor allocates singleton T[0]
 
-            ProcessArray(jr, Curry);
+            ReadArray(jr, Curry);
 
             return list;
 
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Json
 
             var count = 0;
 
-            ProcessArray(jr, Curry);
+            ReadArray(jr, Curry);
 
             return count;
 

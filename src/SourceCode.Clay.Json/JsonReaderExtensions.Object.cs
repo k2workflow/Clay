@@ -5,23 +5,20 @@
 
 #endregion
 
-using Newtonsoft.Json;
 using System;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace SourceCode.Clay.Json
 {
     partial class JsonReaderExtensions // .Object
     {
         /// <summary>
-        /// Reads the current token value as a Json object.
+        /// Processes the current token value as a Json object.
         /// </summary>
-        /// <typeparam name="T">The type of item to return.</typeparam>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
         /// <param name="propertyHandler">The property switch.</param>
-        /// <param name="objectFactory">The object factory.</param>
-        /// <returns>The value.</returns>
-        public static T ReadObject<T>(this JsonReader jr, Func<string, bool> propertyHandler, Func<T> objectFactory)
+        public static void ReadObject(this JsonReader jr, Func<string, bool> propertyHandler)
         {
             if (jr is null) throw new ArgumentNullException(nameof(jr));
             if (propertyHandler is null) throw new ArgumentNullException(nameof(propertyHandler));
@@ -31,7 +28,7 @@ namespace SourceCode.Clay.Json
 
             // null
             if (jr.TokenType == JsonToken.Null)
-                return default; // null for classes, default(T) for structs
+                return;
 
             // '{'
             if (jr.TokenType == JsonToken.StartObject)
@@ -45,13 +42,13 @@ namespace SourceCode.Clay.Json
                     case JsonToken.PropertyName:
                         {
                             // Name
-                            var name = (string)jr.Value;
+                            string name = (string)jr.Value;
                             jr.Read();
 
                             // Value
-                            var handled = propertyHandler(name);
+                            bool handled = propertyHandler(name);
                             if (!handled)
-                                throw new JsonReaderException($"Json property {name} found but not processed");
+                                throw new JsonReaderException($"Json property {name} found but handler did not process it.");
 
                             jr.Read();
                         }
@@ -64,54 +61,20 @@ namespace SourceCode.Clay.Json
 
                     // '}'
                     case JsonToken.EndObject:
-                        {
-                            if (objectFactory is null) return default;
-
-                            T obj = objectFactory();
-                            return obj;
-                        }
+                        return;
                 }
             }
         }
 
         /// <summary>
-        /// Processes the current token value as a Json object.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertyHandler">The property switch.</param>
-        /// <param name="objectFactory">The object factory.</param>
-        public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler, Action objectFactory)
-        {
-            // Leverage shared logic, ignoring sentinel return <int> value
-            ReadObject(jr, propertyHandler, Curry);
-
-            // Curry delegate into local function
-            int Curry()
-            {
-                objectFactory?.Invoke();
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Processes the current token value as a Json object.
-        /// </summary>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        /// <param name="propertyHandler">The property switch.</param>
-        public static void ProcessObject(this JsonReader jr, Func<string, bool> propertyHandler)
-            // Leverage shared logic, ignoring sentinel return <int> value
-            => ReadObject(jr, propertyHandler, Curry0);
-
-        /// <summary>
         /// Processes the current token value as a Json object but ignores all values.
         /// </summary>
         /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
-        public static int SkipCountObject(this JsonReader jr)
+        public static int SkipObject(this JsonReader jr)
         {
-            var count = 0;
+            int count = 0;
 
-            // Leverage shared logic, ignoring sentinel return <int> value
-            ReadObject(jr, CurryHandler, Curry0);
+            ReadObject(jr, CurryHandler);
 
             return count;
 
@@ -131,8 +94,5 @@ namespace SourceCode.Clay.Json
                 return true;
             }
         }
-
-        // Curry delegate into static invariant
-        private static int Curry0() => 0;
     }
 }
