@@ -5,11 +5,10 @@
 
 #endregion
 
-using System;
 using System.Runtime.CompilerServices;
 using Xunit;
 
-namespace SourceCode.Clay.Buffers.Tests
+namespace SourceCode.Clay.Tests
 {
     public static partial class BitOpsTests // .Primitive
     {
@@ -1024,109 +1023,6 @@ namespace SourceCode.Clay.Buffers.Tests
             actual = BitOps.TrailingOnes(m);
             Assert.Equal(expected, actual);
         }
-
-        #endregion
-
-        #region FloorLog2
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_opt5))]
-        [InlineData(1, 0)]
-        [InlineData(2, 1)]
-        [InlineData(3, 1)]
-        [InlineData(4, 2)]
-        [InlineData(5, 2)]
-        public static void BitOps_FloorLog2_opt5(uint n, int expected)
-        {
-            // Test the optimization trick on the lower boundary (1-5)
-            int actual = BitOps.Log2Low(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_32u))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((uint)sbyte.MaxValue)]
-        [InlineData((uint)byte.MaxValue)]
-        [InlineData((uint)short.MaxValue)]
-        [InlineData((uint)ushort.MaxValue)]
-        [InlineData((uint)int.MaxValue - 1)]
-        [InlineData((uint)int.MaxValue)] // (1U << 31) - 1
-        [InlineData((uint)int.MaxValue + 1)] // 1U << 31
-        [InlineData((1U << 31) + 1)]
-        [InlineData(uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue)]
-        public static void BitOps_FloorLog2_32u(uint n)
-        {
-            int log = BitOps.Log2Low(n);
-
-            double lo = Math.Pow(2, log);
-            double hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_64u))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((ulong)sbyte.MaxValue)]
-        [InlineData((ulong)byte.MaxValue)]
-        [InlineData((ulong)short.MaxValue)]
-        [InlineData((ulong)ushort.MaxValue)]
-        [InlineData((ulong)int.MaxValue - 1)]
-        [InlineData((ulong)int.MaxValue)]
-        [InlineData((ulong)int.MaxValue + 1)]
-        [InlineData((ulong)uint.MaxValue - 1)]
-        [InlineData((ulong)uint.MaxValue)]
-        [InlineData((ulong)uint.MaxValue + 1)]
-        [InlineData((1UL << 63) - 1)]
-        [InlineData(1UL << 63)]
-        [InlineData((1UL << 63) + 1)]
-        [InlineData(ulong.MaxValue - 1)]
-        [InlineData(ulong.MaxValue)]
-        public static void BitOps_FloorLog2_64u(ulong n)
-        {
-            int log = BitOps.Log2Low(n);
-
-            double lo = Math.Pow(2, log);
-            double hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        //[Fact(DisplayName = nameof(BitOps_FloorLog2_Throws))]
-        //public static void BitOps_FloorLog2_Throws()
-        //{
-        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl(0)); // uint
-        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl((ulong)0));
-        //}
 
         #endregion
 

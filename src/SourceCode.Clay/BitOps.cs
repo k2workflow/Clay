@@ -1,3 +1,10 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -2083,57 +2090,6 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long If(bool condition, long trueValue, long falseValue)
             => unchecked((long)If(condition, (ulong)trueValue, (ulong)falseValue));
-
-        #endregion
-
-        #region Log2Low
-
-        /// <summary>
-        /// Computes the highest power of 2 lower than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Low(uint value)
-        {
-            // Perf: Do not use guard clauses; callers must be trusted
-            Debug.Assert(value > 0);
-
-            uint val = value;
-            CascadeTrailing(ref val);
-
-            uint ix = (val * DeBruijn32) >> 27;
-
-            byte log = s_deBruijn32[ix];
-            return log;
-        }
-
-        /// <summary>
-        /// Computes the highest power of 2 lower than the given value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static int Log2Low(ulong value)
-        {
-            // Perf: Do not use guard clauses; callers MUST be trusted
-            Debug.Assert(value > 0);
-
-            // We only have to count the low-32 or the high-32, depending on limits
-
-            // Assume we need only examine low-32
-            uint val = (uint)value;
-            byte inc = 0;
-
-            // If high-32 is non-zero
-            if (value > uint.MaxValue)
-            {
-                // Then we need only examine high-32 (and add 32 to the result)
-                val = (uint)(value >> 32); // Use high-32 instead
-                inc = 32;
-            }
-
-            // Examine 32
-            return inc + Log2Low(val);
-        }
 
         #endregion
 
