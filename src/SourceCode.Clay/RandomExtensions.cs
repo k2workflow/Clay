@@ -19,12 +19,12 @@ namespace SourceCode.Clay
     {
         /// <summary>
         /// Returns a sequence of random numbers.
-        /// Uses the Box-Muller transform to generate random numbers using a Normal (Guassian) distribution.
+        /// Uses the Box-Muller transform to generate random numbers from a Normal (Guassian) distribution.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> instance.</param>
         /// <param name="μ">Mu. The mean of the population.</param>
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
-        public static IEnumerable<double> GetNormals(this Random random, int count, double μ, double σ)
+        public static IEnumerable<double> GetNormalSample(this Random random, int count, double μ, double σ)
         {
             if (random == null) throw new ArgumentNullException(nameof(random));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
@@ -44,13 +44,13 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Fills the elements of a specified array of doubles with random numbers.
-        /// Uses the Box-Muller transform to generate random numbers using a Normal (Guassian) distribution.
+        /// Uses the Box-Muller transform to generate random numbers from a Normal (Guassian) distribution.
         /// The floor and ceiling of the resulting values are clamped using the specified <paramref name="min"/> and <paramref name="max"/>.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> instance.</param>
         /// <param name="min">The minimum of the population.</param>
         /// <param name="max">The maximum of the population.</param>
-        public static IEnumerable<double> ClampedNormals(this Random random, int count, double min, double max)
+        public static IEnumerable<double> ClampedNormalSample(this Random random, int count, double min, double max)
         {
             if (random == null) throw new ArgumentNullException(nameof(random));
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
@@ -77,7 +77,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Returns a pair of random numbers.
-        /// Uses the Box-Muller transform to generate random numbers using a Normal (Guassian) distribution.
+        /// Uses the Box-Muller transform to generate random numbers from a Normal (Guassian) distribution.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> instance.</param>
         /// <param name="μ">Mu. The mean of the population.</param>
@@ -116,7 +116,7 @@ namespace SourceCode.Clay
 
             double μ = min + half; // Mu = min + half-range
 
-            // About 99.7% of population is within +/- 3 standard deviations
+            // ~99.7% of population is within +/- 3 standard deviations
             const double sd = 3.0;
             double σ = half / sd; // Sigma = half-range / 3 == range / 6
 

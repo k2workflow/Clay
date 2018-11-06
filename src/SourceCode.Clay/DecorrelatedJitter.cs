@@ -7,7 +7,7 @@ namespace SourceCode.Clay
     /// <summary>
     /// Implements a mechanism for transient error handling, whereby
     /// the backoff timings should be randomized.
-    /// See background here: https://www.awsarchitectureblog.com/2015/03/backoff.html
+    /// See background here: https://www.awsarchitectureblog.com/2015/03/backoff.html.
     /// </summary>
     public sealed class DecorrelatedJitter
     {
@@ -39,8 +39,8 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Create a series of random <see cref="TimeSpan"/> values in a Uniform distribution,
-        /// using the original AWS style of computing the values.
+        /// Create a series of random <see cref="TimeSpan"/> values from a Uniform distribution.
+        /// Uses the original AWS style of computing the values.
         /// </summary>
         /// <remarks>A new enumerator should be created for every execution.</remarks>
         public IEnumerable<TimeSpan> Default()
@@ -57,12 +57,12 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Create a series of random <see cref="TimeSpan"/> values in a Normal distribution.
+        /// Create a series of random <see cref="TimeSpan"/> values from a Normal distribution.
         /// </summary>
         /// <remarks>A new enumerator should be created for every execution.</remarks>
         public IEnumerable<TimeSpan> Normal()
             => _random
-            .ClampedNormals(RetryCount, MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds)
+            .ClampedNormalSample(RetryCount, MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds)
             .Select(n => TimeSpan.FromMilliseconds(n));
     }
 }

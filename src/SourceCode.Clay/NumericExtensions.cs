@@ -26,7 +26,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Clamp(this byte value, byte min, byte max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             byte v = value;
             v = Math.Max(min, v); // Floor
@@ -45,7 +45,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static short Clamp(this short value, short min, short max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             short v = value;
             v = Math.Max(min, v); // Floor
@@ -64,7 +64,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Clamp(this int value, int min, int max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             int v = value;
             v = Math.Max(min, v); // Floor
@@ -83,7 +83,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long Clamp(this long value, long min, long max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             long v = value;
             v = Math.Max(min, v); // Floor
@@ -102,7 +102,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(this float value, float min, float max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             float v = value;
             v = Math.Max(min, v); // Floor
@@ -121,7 +121,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp(this double value, double min, double max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             double v = value;
             v = Math.Max(min, v); // Floor
@@ -140,7 +140,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static decimal Clamp(this decimal value, decimal min, decimal max)
         {
-            Debug.Assert(min < max);
+            Debug.Assert(min <= max);
 
             decimal v = value;
             v = Math.Max(min, v); // Floor
