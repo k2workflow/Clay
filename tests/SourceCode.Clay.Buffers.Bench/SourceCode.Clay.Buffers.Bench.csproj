@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" />
+    <ProjectReference Include="..\..\src\SourceCode.Clay\SourceCode.Clay.csproj" />
   </ItemGroup>
 
   <ItemGroup>
