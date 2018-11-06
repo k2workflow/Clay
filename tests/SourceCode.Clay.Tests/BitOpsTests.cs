@@ -854,18 +854,8 @@ namespace SourceCode.Clay.Tests
         [InlineData(byte.MaxValue, 8)]
         public static void BitOps_PopCount_byte(byte n, int expected)
         {
-            // Scalar
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Parity
-            Assert.Equal(expected % 2, BitOps.Parity(n));
-
-            // IsPowerOf2
-            if (n != 0)
-            {
-                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
-            }
         }
 
         //[Theory(DisplayName = nameof(BitOps_PopCount_sbyte))]
@@ -913,18 +903,8 @@ namespace SourceCode.Clay.Tests
         [InlineData(ushort.MaxValue, 16)]
         public static void BitOps_PopCount_ushort(ushort n, int expected)
         {
-            // Scalar
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Parity
-            Assert.Equal(expected % 2, BitOps.Parity(n));
-
-            // IsPowerOf2
-            if (n != 0)
-            {
-                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_uint))]
@@ -952,18 +932,8 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue, 32)]
         public static void BitOps_PopCount_uint(uint n, int expected)
         {
-            // Scalar
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Parity
-            Assert.Equal(expected % 2, BitOps.Parity(n));
-
-            // IsPowerOf2
-            if (n != 0)
-            {
-                Assert.Equal((n & -n) == n, BitOps.IsPowerOf2(n));
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_ulong))]
@@ -996,15 +966,6 @@ namespace SourceCode.Clay.Tests
             // Scalar
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
-
-            // Parity
-            Assert.Equal(expected % 2, BitOps.Parity(n));
-
-            // IsPowerOf2
-            if (n != 0)
-            {
-                Assert.Equal(unchecked(((long)n & -(long)n) == (long)n), BitOps.IsPowerOf2(n));
-            }
         }
 
         #endregion
