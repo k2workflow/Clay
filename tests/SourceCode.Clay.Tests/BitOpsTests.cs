@@ -1514,6 +1514,110 @@ namespace SourceCode.Clay.Tests
 
         #endregion
 
+        #region If
+
+        [Theory(DisplayName = nameof(BitOps_If_byte))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        public static void BitOps_If_byte(byte x, byte y)
+        {
+            Assert.Equal(BitOps.If(x == y, (byte)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (byte)(x + y), byte.MaxValue), x == y ? x + y : byte.MaxValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_sbyte))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -1)]
+        [InlineData(-1, 0)]
+        public static void BitOps_If_sbyte(sbyte x, sbyte y)
+        {
+            Assert.Equal(BitOps.If(x == y, (sbyte)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (sbyte)(x + y), sbyte.MinValue), x == y ? x + y : sbyte.MinValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_ushort))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        public static void BitOps_If_ushort(ushort x, ushort y)
+        {
+            Assert.Equal(BitOps.If(x == y, (ushort)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (ushort)(x + y), ushort.MaxValue), x == y ? x + y : ushort.MaxValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_short))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -1)]
+        [InlineData(-1, 0)]
+        public static void BitOps_If_short(short x, short y)
+        {
+            Assert.Equal(BitOps.If(x == y, (short)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (short)(x + y), short.MinValue), x == y ? x + y : short.MinValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_uint))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        public static void BitOps_If_uint(uint x, uint y)
+        {
+            Assert.Equal(BitOps.If(x == y, (uint)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (uint)(x + y), uint.MaxValue), x == y ? x + y : uint.MaxValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_int))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -1)]
+        [InlineData(-1, 0)]
+        public static void BitOps_If_int(int x, int y)
+        {
+            Assert.Equal(BitOps.If(x == y, (int)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (int)(x + y), int.MinValue), x == y ? x + y : int.MinValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_ulong))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        public static void BitOps_If_ulong(ulong x, ulong y)
+        {
+            Assert.Equal(BitOps.If(x == y, (ulong)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (ulong)(x + y), ulong.MaxValue), x == y ? x + y : ulong.MaxValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_If_long))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -1)]
+        [InlineData(-1, 0)]
+        public static void BitOps_If_long(long x, long y)
+        {
+            Assert.Equal(BitOps.If(x == y, (long)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.If(x == y, (long)(x + y), long.MinValue), x == y ? x + y : long.MinValue);
+        }
+
+        #endregion
+
         #region Helpers
 
         private static byte Reverse(byte value)
