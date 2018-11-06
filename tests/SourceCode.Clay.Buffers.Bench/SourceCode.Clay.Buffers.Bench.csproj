@@ -17,6 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="SpanBench.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SpanBench.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
     <PackageReference Include="BenchmarkDotNet" Version="0.11.2" />

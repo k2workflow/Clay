@@ -2090,6 +2090,128 @@ namespace System
 
         #endregion
 
+        #region Log2Low
+
+        /// <summary>
+        /// Computes the highest power of 2 lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Low(uint value)
+        {
+            // Perf: Do not use guard clauses; callers must be trusted
+            Debug.Assert(value > 0);
+
+            uint val = value;
+            CascadeTrailing(ref val);
+
+            uint ix = (val * DeBruijn32) >> 27;
+
+            byte log = s_deBruijn32[ix];
+            return log;
+        }
+
+        /// <summary>
+        /// Computes the highest power of 2 lower than the given value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static int Log2Low(ulong value)
+        {
+            // Perf: Do not use guard clauses; callers MUST be trusted
+            Debug.Assert(value > 0);
+
+            // We only have to count the low-32 or the high-32, depending on limits
+
+            // Assume we need only examine low-32
+            uint val = (uint)value;
+            byte inc = 0;
+
+            // If high-32 is non-zero
+            if (value > uint.MaxValue)
+            {
+                // Then we need only examine high-32 (and add 32 to the result)
+                val = (uint)(value >> 32); // Use high-32 instead
+                inc = 32;
+            }
+
+            // Examine 32
+            return inc + Log2Low(val);
+        }
+
+        #endregion
+
+        #region IsPowerOf2        
+
+        /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(uint value)
+            => (value != 0)
+            && // Note: && causes branch
+            (value & (value - 1)) == 0;
+
+        /// <summary>
+        /// Returns True if the value is a power of 2, else False.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPowerOf2(ulong value)
+            => (value != 0)
+            && // Note: && causes branch
+            (value & (value - 1)) == 0;
+
+        #endregion
+
+        #region Parity
+
+        /// <summary>
+        /// Returns 1 if the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(uint value)
+        {
+            uint val = value;
+
+            val ^= val >> 16;
+            val ^= val >> 08;
+            val ^= val >> 04;
+            val &= 15;
+
+            val = 0b_0110_1001_1001_0110u >> (int)val;
+            val &= 1;
+
+            return (int)val;
+        }
+
+        /// <summary>
+        /// Returns 1 if the bit count is odd, else 0.
+        /// Logically equivalent to PopCount mod 2.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Parity(ulong value)
+        {
+            ulong val = value;
+
+            val ^= val >> 32;
+            val ^= val >> 16;
+            val ^= val >> 08;
+            val ^= val >> 04;
+            val &= 15;
+
+            val = 0b_0110_1001_1001_0110u >> (int)val;
+            val &= 1;
+
+            return (int)val;
+        }
+
+        #endregion
+
         #region Helpers
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
