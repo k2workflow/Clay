@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Tests
     {
         #region ExtractBit
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_08u))]
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_byte))]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
@@ -23,9 +23,8 @@ namespace SourceCode.Clay.Tests
         [InlineData(1 << 7, int.MaxValue, true)] // % 8 = 7
         [InlineData(byte.MaxValue, 7, true)]
         [InlineData(byte.MaxValue, 8, true)]
-        public static void BitOps_ExtractBit_08u(byte n, int offset, bool expected)
+        public static void BitOps_ExtractBit_byte(byte n, int offset, bool expected)
         {
-            // Scalar
             bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
@@ -36,20 +35,40 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_16u))]
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_sbyte))]
+        [InlineData((sbyte)0b000, 0, false)]
+        [InlineData((sbyte)0b001, 0, true)]
+        [InlineData((sbyte)0b000, 1, false)]
+        [InlineData((sbyte)0b010, 1, true)]
+        [InlineData((sbyte)1, int.MinValue, true)] // % 8 = 0
+        [InlineData(unchecked((sbyte)(1 << 7)), int.MaxValue, true)] // % 8 = 7
+        [InlineData(sbyte.MaxValue, 7, false)]
+        [InlineData(sbyte.MaxValue, 8, true)]
+        [InlineData(sbyte.MinValue, 7, true)]
+        [InlineData(sbyte.MinValue, 8, false)]
+        public static void BitOps_ExtractBit_sbyte(sbyte n, int offset, bool expected)
+        {
+            bool actual = BitOps.ExtractBit(n, offset);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset + 8 * 2);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset - 8 * 2);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_ushort))]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
         [InlineData(1, int.MinValue, true)] // % 16 = 0
         [InlineData(1 << 15, int.MaxValue, true)] // % 16 = 15
-        [InlineData(byte.MaxValue, 7, true)]
-        [InlineData(byte.MaxValue, 8, false)]
         [InlineData(ushort.MaxValue, 15, true)]
         [InlineData(ushort.MaxValue, 16, true)]
-        public static void BitOps_ExtractBit_16u(ushort n, int offset, bool expected)
+        public static void BitOps_ExtractBit_ushort(ushort n, int offset, bool expected)
         {
-            // Scalar
             bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
@@ -60,22 +79,40 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_32u))]
-        [InlineData(0b000, 0, false)]
-        [InlineData(0b001, 0, true)]
-        [InlineData(0b000, 1, false)]
-        [InlineData(0b010, 1, true)]
-        [InlineData(1, int.MinValue, true)] // % 32 = 0
-        [InlineData(unchecked((uint)(1 << 31)), int.MaxValue, true)] // % 32 = 31
-        [InlineData(byte.MaxValue, 7, true)]
-        [InlineData(byte.MaxValue, 8, false)]
-        [InlineData(ushort.MaxValue, 15, true)]
-        [InlineData(ushort.MaxValue, 16, false)]
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_short))]
+        [InlineData((short)0b000, 0, false)]
+        [InlineData((short)0b001, 0, true)]
+        [InlineData((short)0b000, 1, false)]
+        [InlineData((short)0b010, 1, true)]
+        [InlineData((short)1, int.MinValue, true)] // % 16 = 0
+        [InlineData(unchecked((short)(1 << 15)), int.MaxValue, true)] // % 16 = 15
+        [InlineData(short.MaxValue, 15, false)]
+        [InlineData(short.MaxValue, 16, true)]
+        [InlineData(short.MinValue, 15, true)]
+        [InlineData(short.MinValue, 16, false)]
+        public static void BitOps_ExtractBit_short(short n, int offset, bool expected)
+        {
+            bool actual = BitOps.ExtractBit(n, offset);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset + 16 * 2);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset - 16 * 2);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_uint))]
+        [InlineData(0b000u, 0, false)]
+        [InlineData(0b001u, 0, true)]
+        [InlineData(0b000u, 1, false)]
+        [InlineData(0b010u, 1, true)]
+        [InlineData(1u, int.MinValue, true)] // % 32 = 0
+        [InlineData(1u << 31, int.MaxValue, true)] // % 32 = 31
         [InlineData(uint.MaxValue, 31, true)]
         [InlineData(uint.MaxValue, 32, true)]
-        public static void BitOps_ExtractBit_32u(uint n, int offset, bool expected)
+        public static void BitOps_ExtractBit_uint(uint n, int offset, bool expected)
         {
-            // Scalar
             bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
@@ -86,24 +123,63 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_64u))]
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_int))]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
         [InlineData(0b010, 1, true)]
-        [InlineData(1, int.MinValue, true)] // % 64 = 0
-        [InlineData(unchecked((ulong)(1 << 63)), int.MaxValue, true)] // % 64 = 63
-        [InlineData(byte.MaxValue, 7, true)]
-        [InlineData(byte.MaxValue, 8, false)]
-        [InlineData(ushort.MaxValue, 15, true)]
-        [InlineData(ushort.MaxValue, 16, false)]
-        [InlineData(uint.MaxValue, 31, true)]
-        [InlineData(uint.MaxValue, 32, false)]
+        [InlineData(1, int.MinValue, true)] // % 32 = 0
+        [InlineData(1 << 31, int.MaxValue, true)] // % 32 = 31
+        [InlineData(int.MaxValue, 31, false)]
+        [InlineData(int.MaxValue, 32, true)]
+        [InlineData(int.MinValue, 31, true)]
+        [InlineData(int.MinValue, 32, false)]
+        public static void BitOps_ExtractBit_int(int n, int offset, bool expected)
+        {
+            bool actual = BitOps.ExtractBit(n, offset);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset + 32 * 2);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset - 32 * 2);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_ulong))]
+        [InlineData(0b000ul, 0, false)]
+        [InlineData(0b001ul, 0, true)]
+        [InlineData(0b000ul, 1, false)]
+        [InlineData(0b010ul, 1, true)]
+        [InlineData(1ul, int.MinValue, true)] // % 64 = 0
+        [InlineData(1ul << 63, int.MaxValue, true)] // % 64 = 63
         [InlineData(ulong.MaxValue, 63, true)]
         [InlineData(ulong.MaxValue, 64, true)]
-        public static void BitOps_ExtractBit_64u(ulong n, int offset, bool expected)
+        public static void BitOps_ExtractBit_ulong(ulong n, int offset, bool expected)
         {
-            // Scalar
+            bool actual = BitOps.ExtractBit(n, offset);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset + 64 * 2);
+            Assert.Equal(expected, actual);
+
+            actual = BitOps.ExtractBit(n, offset - 64 * 2);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_ExtractBit_long))]
+        [InlineData(0b000L, 0, false)]
+        [InlineData(0b001L, 0, true)]
+        [InlineData(0b000L, 1, false)]
+        [InlineData(0b010L, 1, true)]
+        [InlineData(1L, int.MinValue, true)] // % 64 = 0
+        [InlineData(1L << 63, int.MaxValue, true)] // % 64 = 63
+        [InlineData(long.MaxValue, 63, false)]
+        [InlineData(long.MaxValue, 64, true)]
+        [InlineData(long.MinValue, 63, true)]
+        [InlineData(long.MinValue, 64, false)]
+        public static void BitOps_ExtractBit_long(long n, int offset, bool expected)
+        {
             bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
