@@ -835,7 +835,6 @@ namespace SourceCode.Clay.Tests
         #region PopCount
 
         [Theory(DisplayName = nameof(BitOps_PopCount_byte))]
-        [InlineData(0b000, 0)]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -850,39 +849,45 @@ namespace SourceCode.Clay.Tests
         [InlineData(0b110111, 5)]
         [InlineData(0b111111, 6)]
         [InlineData(0b1111110, 6)]
-        [InlineData(0b1111111, 7)]
-        [InlineData(byte.MaxValue, 8)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue >> 1, 7)] // 127
+        [InlineData(byte.MaxValue - 1, 7)] // 254
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(unchecked((byte)sbyte.MinValue), 1)] // 128
+        [InlineData(sbyte.MaxValue, 7)] // 127
         public static void BitOps_PopCount_byte(byte n, int expected)
         {
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
-        //[Theory(DisplayName = nameof(BitOps_PopCount_sbyte))]
-        //[InlineData(0b000, 0)]
-        //[InlineData(0b001, 1)]
-        //[InlineData(0b010, 1)]
-        //[InlineData(0b011, 2)]
-        //[InlineData(0b100, 1)]
-        //[InlineData(0b101, 2)]
-        //[InlineData(0b110, 2)]
-        //[InlineData(0b111, 3)]
-        //[InlineData(0b1101, 3)]
-        //[InlineData(0b1111, 4)]
-        //[InlineData(0b10111, 4)]
-        //[InlineData(0b11111, 5)]
-        //[InlineData(0b110111, 5)]
-        //[InlineData(0b111111, 6)]
-        //[InlineData(sbyte.MinValue, 1)]
-        //[InlineData(sbyte.MaxValue, 7)]
-        //public static void BitOps_PopCount_sbyte(sbyte n, int expected)
-        //{
-        //    int actual = BitOps.PopCount(n);
-        //    Assert.Equal(expected, actual);
-        //}
+        [Theory(DisplayName = nameof(BitOps_PopCount_sbyte))]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(unchecked((sbyte)byte.MaxValue), 8)] // 255
+        [InlineData(sbyte.MinValue, 1)] // -128
+        [InlineData(sbyte.MinValue >> 1, 2)] // -64
+        [InlineData(sbyte.MaxValue >> 1, 6)] // 63
+        [InlineData(sbyte.MaxValue - 1, 6)] // 126
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        public static void BitOps_PopCount_sbyte(sbyte n, int expected)
+        {
+            int actual = BitOps.PopCount(n);
+            Assert.Equal(expected, actual);
+        }
 
         [Theory(DisplayName = nameof(BitOps_PopCount_ushort))]
-        [InlineData(0b000, 0)]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -897,18 +902,21 @@ namespace SourceCode.Clay.Tests
         [InlineData(0b110111, 5)]
         [InlineData(0b111111, 6)]
         [InlineData(0b1111110, 6)]
-        [InlineData(0b1111111, 7)]
-        [InlineData(byte.MaxValue, 8)]
-        [InlineData(ushort.MaxValue >> 3, 16 - 3)]
-        [InlineData(ushort.MaxValue, 16)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(unchecked((ushort)sbyte.MinValue), 16 - 7)] // 65408
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(ushort.MaxValue >> 3, 16 - 3)] // 8191
+        [InlineData(ushort.MaxValue >> 1, 15)] // 32767
+        [InlineData(ushort.MaxValue - 1, 15)] // 65534
+        [InlineData(ushort.MaxValue, 16)] // 65535
         public static void BitOps_PopCount_ushort(ushort n, int expected)
         {
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_uint))]
-        [InlineData(0b000, 0)]
+        [Theory(DisplayName = nameof(BitOps_PopCount_short))]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -924,20 +932,90 @@ namespace SourceCode.Clay.Tests
         [InlineData(0b111111, 6)]
         [InlineData(0b1111110, 6)]
         [InlineData(0b1111111, 7)]
-        [InlineData(byte.MaxValue, 8)]
-        [InlineData(ushort.MaxValue >> 3, 16 - 3)]
-        [InlineData(ushort.MaxValue, 16)]
-        [InlineData(uint.MaxValue >> 5, 32 - 5)]
-        [InlineData(uint.MaxValue << 7, 32 - 7)]
-        [InlineData(uint.MaxValue, 32)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(sbyte.MinValue, 9)] // -128
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(short.MinValue, 1)] // -32768
+        [InlineData(short.MinValue >> 1, 2)] // -16384
+        [InlineData(short.MaxValue >> 1, 14)] // 16383
+        [InlineData(short.MaxValue >> 3, 15 - 3)] // 4095
+        [InlineData(short.MaxValue - 1, 14)] // 32766
+        [InlineData(short.MaxValue, 15)] // 32767
+        public static void BitOps_PopCount_short(short n, int expected)
+        {
+            int actual = BitOps.PopCount(n);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_PopCount_uint))]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(0b111111, 6)]
+        [InlineData(0b1111110, 6)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(unchecked((uint)sbyte.MinValue), 25)] // 4294967168
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(ushort.MaxValue >> 3, 16 - 3)] // 8191
+        [InlineData(ushort.MaxValue, 16)] // 65535
+        [InlineData(unchecked((uint)short.MinValue), 32- 15)] // 4294934528
+        [InlineData(short.MaxValue, 15)] // 32767
+        [InlineData(unchecked((uint)int.MinValue), 1)] // 2147483648
+        [InlineData(unchecked((uint)int.MaxValue), 31)] // 4294967168
+        [InlineData(uint.MaxValue >> 5, 32 - 5)] // 134217727
+        [InlineData(uint.MaxValue << 11, 32 - 11)] // 4294965248
+        [InlineData(uint.MaxValue, 32)] // 4294967295
         public static void BitOps_PopCount_uint(uint n, int expected)
         {
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
+        [Theory(DisplayName = nameof(BitOps_PopCount_int))]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(0b111111, 6)]
+        [InlineData(0b1111110, 6)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(sbyte.MinValue, 25)] // -128
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(ushort.MaxValue >> 3, 16 - 3)] // 8191
+        [InlineData(ushort.MaxValue, 16)] // 65535
+        [InlineData(short.MinValue, 17)] // -32768
+        [InlineData(short.MaxValue, 15)] // 32767
+        [InlineData(unchecked((int)uint.MaxValue), 32)] // -1
+        [InlineData(uint.MaxValue >> 5, 32 - 5)] // 134217727
+        [InlineData(unchecked((int)uint.MaxValue << 11), 32 - 11)] // -2048
+        [InlineData(int.MaxValue, 31)] // -1
+        public static void BitOps_PopCount_int(int n, int expected)
+        {
+            int actual = BitOps.PopCount(n);
+            Assert.Equal(expected, actual);
+        }
+
         [Theory(DisplayName = nameof(BitOps_PopCount_ulong))]
-        [InlineData(0b000, 0)]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -953,21 +1031,60 @@ namespace SourceCode.Clay.Tests
         [InlineData(0b111111, 6)]
         [InlineData(0b1111110, 6)]
         [InlineData(0b1111111, 7)]
-        [InlineData(byte.MaxValue, 8)]
-        [InlineData(ushort.MaxValue >> 3, 16 - 3)]
-        [InlineData(ushort.MaxValue, 16)]
-        [InlineData(uint.MaxValue >> 5, 32 - 5)]
-        [InlineData(uint.MaxValue, 32)]
-        [InlineData(ulong.MaxValue >> 9, 64 - 9)]
-        [InlineData(ulong.MaxValue << 11, 64 - 11)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(unchecked((ulong)sbyte.MinValue), 57)] // 18446744073709551488
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(ushort.MaxValue, 16)] // 65535
+        [InlineData(unchecked((ulong)short.MinValue), 49)] // 18446744073709518848
+        [InlineData(short.MaxValue, 15)] // 32767
+        [InlineData(unchecked((ulong)int.MinValue), 64 - 31)] // 18446744071562067968
+        [InlineData(int.MaxValue, 31)] // 2147483647
+        [InlineData(ulong.MaxValue >> 9, 64 - 9)] // 36028797018963967
+        [InlineData(ulong.MaxValue << 11, 64 - 11)] // 18446744073709549568
         [InlineData(ulong.MaxValue, 64)]
         public static void BitOps_PopCount_ulong(ulong n, int expected)
         {
-            // Scalar
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
+        [Theory(DisplayName = nameof(BitOps_PopCount_long))]
+        [InlineData(0b001, 1)]
+        [InlineData(0b010, 1)]
+        [InlineData(0b011, 2)]
+        [InlineData(0b100, 1)]
+        [InlineData(0b101, 2)]
+        [InlineData(0b110, 2)]
+        [InlineData(0b111, 3)]
+        [InlineData(0b1101, 3)]
+        [InlineData(0b1111, 4)]
+        [InlineData(0b10111, 4)]
+        [InlineData(0b11111, 5)]
+        [InlineData(0b110111, 5)]
+        [InlineData(0b111111, 6)]
+        [InlineData(0b1111110, 6)]
+        [InlineData(0b1111111, 7)]
+        [InlineData(byte.MinValue, 0)] // 0
+        [InlineData(byte.MaxValue, 8)] // 255
+        [InlineData(sbyte.MinValue, 57)] // -128
+        [InlineData(sbyte.MaxValue, 7)] // 127
+        [InlineData(ushort.MaxValue, 16)] // 65535
+        [InlineData(short.MinValue, 49)] // -32768
+        [InlineData(short.MaxValue, 15)] // 32767
+        [InlineData(int.MinValue, 33)] // -2147483648
+        [InlineData(int.MaxValue, 31)] // 2147483647
+        [InlineData(unchecked((long)ulong.MaxValue), 64)] // -1
+        [InlineData(long.MinValue, 1)]
+        [InlineData(long.MaxValue >> 9, 63 - 9)]
+        [InlineData(long.MaxValue << 11, 64 - 11)] // -2048
+        [InlineData(long.MaxValue, 63)]
+        public static void BitOps_PopCount_long(long n, int expected)
+        {
+            int actual = BitOps.PopCount(n);
+            Assert.Equal(expected, actual);
+        }
+    
         #endregion
 
         #region LeadTrail
