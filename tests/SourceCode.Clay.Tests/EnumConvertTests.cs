@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.ComponentModel;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
@@ -415,6 +416,22 @@ namespace SourceCode.Clay.Tests
         public static void EnumConvert_Cached_ValidEnum()
         {
             Assert.Equal(Enum.GetValues(typeof(ByteEnum)).Length, EnumConvert.Length<ByteEnum>());
+        }
+
+        private enum DecoratedEnum
+        {
+            [Description("foo1")]
+            Foo,
+
+            [Description("bar1")]
+            Bar
+        }
+
+        [Fact(DisplayName = nameof(EnumDescription_Get))]
+        public static void EnumDescription_Get()
+        {
+            Assert.Equal("foo1", DecoratedEnum.Foo.GetEnumDescription());
+            Assert.Equal("bar1", DecoratedEnum.Bar.GetEnumDescription());
         }
     }
 }
