@@ -1,14 +1,10 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-// TODO:Utilize when/if non-Experimental:
-//using System.Runtime.Intrinsics;
-//using System.Runtime.Intrinsics.X86;
-
 // Some of this inspired by the Stanford Bit Widdling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
 
-namespace System
+namespace SourceCode.Clay
 {
     /// <summary>
     /// Represents operations that work on single bits in a mask.
@@ -1777,7 +1773,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(byte value)
-            => Math.Min(8, TrailingZeros((uint)value)); // Delegate to intrinsic
+            => System.Math.Min(8, TrailingZeros((uint)value)); // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1795,7 +1791,7 @@ namespace System
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(ushort value)
-            => Math.Min(16, TrailingZeros((uint)value)); // Delegate to intrinsic
+            => System.Math.Min(16, TrailingZeros((uint)value)); // Delegate to intrinsic
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
