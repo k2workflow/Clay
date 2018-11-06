@@ -1517,103 +1517,179 @@ namespace SourceCode.Clay.Tests
         #region Iff
 
         [Theory(DisplayName = nameof(BitOps_Iff_byte))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        public static void BitOps_Iff_byte(byte x, byte y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_byte(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (long)(byte)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, (byte)(x + y), byte.MaxValue), x == y ? x + y : byte.MaxValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, byte.MinValue), condition ? byte.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, byte.MinValue), !condition ? byte.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, byte.MaxValue), condition ? byte.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, byte.MaxValue), !condition ? byte.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, byte.MinValue, byte.MaxValue), condition ? byte.MinValue : byte.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, byte.MinValue, byte.MaxValue), !condition ? byte.MinValue : byte.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, 123, byte.MaxValue), condition ? 123 : byte.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, 123, byte.MaxValue), !condition ? 123 : byte.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_sbyte))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(-1, -1)]
-        [InlineData(-1, 0)]
-        public static void BitOps_Iff_sbyte(sbyte x, sbyte y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_sbyte(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (long)(sbyte)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, (sbyte)(x + y), (long)sbyte.MinValue), x == y ? x + y : sbyte.MinValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, sbyte.MinValue), condition ? sbyte.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, sbyte.MinValue), !condition ? sbyte.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, sbyte.MaxValue), condition ? sbyte.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, sbyte.MaxValue), !condition ? sbyte.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, sbyte.MinValue, sbyte.MaxValue), condition ? sbyte.MinValue : sbyte.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, sbyte.MinValue, sbyte.MaxValue), !condition ? sbyte.MinValue : sbyte.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, -123, sbyte.MaxValue), condition ? -123 : sbyte.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, -123, sbyte.MaxValue), !condition ? -123 : sbyte.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        public static void BitOps_Iff_ushort(ushort x, ushort y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_ushort(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (long)(ushort)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, (ushort)(x + y), ushort.MaxValue), x == y ? x + y : ushort.MaxValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, ushort.MinValue), condition ? ushort.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, ushort.MinValue), !condition ? ushort.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, ushort.MaxValue), condition ? ushort.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, ushort.MaxValue), !condition ? ushort.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, ushort.MinValue, ushort.MaxValue), condition ? ushort.MinValue : ushort.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, ushort.MinValue, ushort.MaxValue), !condition ? ushort.MinValue : ushort.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, 123, ushort.MaxValue), condition ? 123 : ushort.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, 123, ushort.MaxValue), !condition ? 123 : ushort.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_short))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(-1, -1)]
-        [InlineData(-1, 0)]
-        public static void BitOps_Iff_short(short x, short y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_short(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (long)(short)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, (short)(x + y), (long)short.MinValue), x == y ? x + y : short.MinValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, short.MinValue), condition ? short.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, short.MinValue), !condition ? short.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, short.MaxValue), condition ? short.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, short.MaxValue), !condition ? short.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, short.MinValue, short.MaxValue), condition ? short.MinValue : short.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, short.MinValue, short.MaxValue), !condition ? short.MinValue : short.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, -123, short.MaxValue), condition ? -123 : short.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, -123, short.MaxValue), !condition ? -123 : short.MaxValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_uint))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        public static void BitOps_Iff_uint(uint x, uint y)
+        [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_uint(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (ulong)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, x + y, uint.MaxValue), x == y ? x + y : uint.MaxValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, uint.MinValue), condition ? uint.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, uint.MinValue), !condition ? uint.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, uint.MaxValue), condition ? uint.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, uint.MaxValue), !condition ? uint.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, uint.MinValue, uint.MaxValue), condition ? uint.MinValue : uint.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, uint.MinValue, uint.MaxValue), !condition ? uint.MinValue : uint.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, 123, uint.MaxValue), condition ? 123 : uint.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, 123, uint.MaxValue), !condition ? 123 : uint.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_int))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(-1, -1)]
-        [InlineData(-1, 0)]
-        public static void BitOps_Iff_int(int x, int y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_int(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, (long)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, x + y, (long)int.MinValue), x == y ? x + y : int.MinValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, int.MinValue), condition ? int.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, int.MinValue), !condition ? int.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, int.MaxValue), condition ? int.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, int.MaxValue), !condition ? int.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, int.MinValue, int.MaxValue), condition ? int.MinValue : int.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, int.MinValue, int.MaxValue), !condition ? int.MinValue : int.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, -123, int.MaxValue), condition ? -123 : int.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, -123, int.MaxValue), !condition ? -123 : int.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_ulong))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        public static void BitOps_Iff_ulong(ulong x, ulong y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_ulong(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, x + y), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, x + y, ulong.MaxValue), x == y ? x + y : ulong.MaxValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, ulong.MinValue), condition ? ulong.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, ulong.MinValue), !condition ? ulong.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, ulong.MaxValue), condition ? ulong.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, ulong.MaxValue), !condition ? ulong.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, ulong.MinValue, ulong.MaxValue), condition ? ulong.MinValue : ulong.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, ulong.MinValue, ulong.MaxValue), !condition ? ulong.MinValue : ulong.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, 123, ulong.MaxValue), condition ? 123 : ulong.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, 123, ulong.MaxValue), !condition ? 123 : ulong.MaxValue);
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_long))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(-1, -1)]
-        [InlineData(-1, 0)]
-        public static void BitOps_Iff_long(long x, long y)
+        [InlineData(true)]
+        [InlineData(false)]
+        public static void BitOps_Iff_long(bool condition)
         {
-            Assert.Equal(BitOps.Iff(x == y, x + y), x == y ? x + y : 0);
-            Assert.Equal(BitOps.Iff(x == y, x + y, long.MinValue), x == y ? x + y : long.MinValue);
+            // Iff (condition, true)
+
+            Assert.Equal(BitOps.Iff(condition, long.MinValue), condition ? long.MinValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, long.MinValue), !condition ? long.MinValue : 0);
+
+            Assert.Equal(BitOps.Iff(condition, long.MaxValue), condition ? long.MaxValue : 0);
+            Assert.Equal(BitOps.Iff(!condition, long.MaxValue), !condition ? long.MaxValue : 0);
+
+            // Iff (condition, true, false)
+
+            Assert.Equal(BitOps.Iff(condition, long.MinValue, long.MaxValue), condition ? long.MinValue : long.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, long.MinValue, long.MaxValue), !condition ? long.MinValue : long.MaxValue);
+
+            Assert.Equal(BitOps.Iff(condition, -123, long.MaxValue), condition ? -123 : long.MaxValue);
+            Assert.Equal(BitOps.Iff(!condition, -123, long.MaxValue), !condition ? -123 : long.MaxValue);
         }
 
         #endregion
