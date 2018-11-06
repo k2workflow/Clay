@@ -194,7 +194,7 @@ namespace SourceCode.Clay.Tests
 
         #region WriteBit
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_08u))]
+        [Theory(DisplayName = nameof(BitOps_WriteBit_byte))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -222,7 +222,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(byte.MaxValue, 7, false, true, byte.MaxValue >> 1)]
         [InlineData(byte.MaxValue, 7, true, true, byte.MaxValue)]
         [InlineData(byte.MaxValue, 8, false, true, byte.MaxValue - 1)]
-        public static void BitOps_WriteBit_08u(byte n, int offset, bool on, bool was, byte expected)
+        public static void BitOps_WriteBit_byte(byte n, int offset, bool on, bool was, byte expected)
         {
             // Scalar
             byte actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
@@ -259,7 +259,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_16u))]
+        [Theory(DisplayName = nameof(BitOps_WriteBit_ushort))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -293,7 +293,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(ushort.MaxValue, 15, false, true, ushort.MaxValue >> 1)]
         [InlineData(ushort.MaxValue, 15, true, true, ushort.MaxValue)]
         [InlineData(ushort.MaxValue, 16, false, true, ushort.MaxValue - 1)]
-        public static void BitOps_WriteBit_16u(ushort n, int offset, bool on, bool was, ushort expected)
+        public static void BitOps_WriteBit_ushort(ushort n, int offset, bool on, bool was, ushort expected)
         {
             // Scalar
             ushort actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
@@ -330,7 +330,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_32u))]
+        [Theory(DisplayName = nameof(BitOps_WriteBit_uint))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -370,7 +370,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue, 31, false, true, uint.MaxValue >> 1)]
         [InlineData(uint.MaxValue, 31, true, true, uint.MaxValue)]
         [InlineData(uint.MaxValue, 32, false, true, uint.MaxValue - 1)]
-        public static void BitOps_WriteBit_32u(uint n, int offset, bool on, bool was, uint expected)
+        public static void BitOps_WriteBit_uint(uint n, int offset, bool on, bool was, uint expected)
         {
             // Scalar
             uint actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
@@ -407,7 +407,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_64u))]
+        [Theory(DisplayName = nameof(BitOps_WriteBit_ulong))]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -451,7 +451,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(ulong.MaxValue, 63, false, true, ulong.MaxValue >> 1)]
         [InlineData(ulong.MaxValue, 63, true, true, ulong.MaxValue)]
         [InlineData(ulong.MaxValue, 64, false, true, ulong.MaxValue - 1)]
-        public static void BitOps_WriteBit_64u(ulong n, int offset, bool on, bool was, ulong expected)
+        public static void BitOps_WriteBit_ulong(ulong n, int offset, bool on, bool was, ulong expected)
         {
             // Scalar
             ulong actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
@@ -492,7 +492,7 @@ namespace SourceCode.Clay.Tests
 
         #region ComplementBit
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_08u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_byte))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -502,7 +502,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(byte.MaxValue, 0, byte.MaxValue - 1, true)]
         [InlineData(byte.MaxValue, 7, byte.MaxValue >> 1, true)]
         [InlineData(byte.MaxValue, 8, byte.MaxValue - 1, true)]
-        public static void BitOps_ComplementBit_08u(byte n, int offset, uint expected, bool was)
+        public static void BitOps_ComplementBit_byte(byte n, int offset, uint expected, bool was)
         {
             // Scalar
             byte actual = BitOps.ComplementBit(n, offset);
@@ -527,7 +527,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_16u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_ushort))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -540,7 +540,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(ushort.MaxValue, 0, ushort.MaxValue - 1, true)]
         [InlineData(ushort.MaxValue, 15, ushort.MaxValue >> 1, true)]
         [InlineData(ushort.MaxValue, 16, ushort.MaxValue - 1, true)]
-        public static void BitOps_ComplementBit_16u(ushort n, int offset, uint expected, bool was)
+        public static void BitOps_ComplementBit_ushort(ushort n, int offset, uint expected, bool was)
         {
             // Scalar
             ushort actual = BitOps.ComplementBit(n, offset);
@@ -565,7 +565,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_32u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_uint))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -581,7 +581,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue, 0, uint.MaxValue - 1, true)]
         [InlineData(uint.MaxValue, 31, uint.MaxValue >> 1, true)]
         [InlineData(uint.MaxValue, 32, uint.MaxValue - 1, true)]
-        public static void BitOps_ComplementBit_32u(uint n, int offset, uint expected, bool was)
+        public static void BitOps_ComplementBit_uint(uint n, int offset, uint expected, bool was)
         {
             // Scalar
             uint actual = BitOps.ComplementBit(n, offset);
@@ -606,7 +606,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_64u))]
+        [Theory(DisplayName = nameof(BitOps_ComplementBit_ulong))]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -625,7 +625,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(ulong.MaxValue, 0, ulong.MaxValue - 1, true)]
         [InlineData(ulong.MaxValue, 63, ulong.MaxValue >> 1, true)]
         [InlineData(ulong.MaxValue, 64, ulong.MaxValue - 1, true)]
-        public static void BitOps_ComplementBit_64u(ulong n, int offset, ulong expected, bool was)
+        public static void BitOps_ComplementBit_ulong(ulong n, int offset, ulong expected, bool was)
         {
             // Scalar
             ulong actual = BitOps.ComplementBit(n, offset);
@@ -1514,20 +1514,20 @@ namespace SourceCode.Clay.Tests
 
         #endregion
 
-        #region If
+        #region Iff
 
-        [Theory(DisplayName = nameof(BitOps_If_byte))]
+        [Theory(DisplayName = nameof(BitOps_Iff_byte))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
         [InlineData(1, 0)]
-        public static void BitOps_If_byte(byte x, byte y)
+        public static void BitOps_Iff_byte(byte x, byte y)
         {
-            Assert.Equal(BitOps.If(x == y, (byte)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (byte)(x + y), byte.MaxValue), x == y ? x + y : byte.MaxValue);
+            Assert.Equal(BitOps.Iff(x == y, (long)(byte)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, (byte)(x + y), byte.MaxValue), x == y ? x + y : byte.MaxValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_If_sbyte))]
+        [Theory(DisplayName = nameof(BitOps_Iff_sbyte))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
@@ -1535,49 +1535,24 @@ namespace SourceCode.Clay.Tests
         [InlineData(0, -1)]
         [InlineData(-1, -1)]
         [InlineData(-1, 0)]
-        public static void BitOps_If_sbyte(sbyte x, sbyte y)
+        public static void BitOps_Iff_sbyte(sbyte x, sbyte y)
         {
-            Assert.Equal(BitOps.If(x == y, (sbyte)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (sbyte)(x + y), sbyte.MinValue), x == y ? x + y : sbyte.MinValue);
+            Assert.Equal(BitOps.Iff(x == y, (long)(sbyte)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, (sbyte)(x + y), (long)sbyte.MinValue), x == y ? x + y : sbyte.MinValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_If_ushort))]
+        [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
         [InlineData(1, 0)]
-        public static void BitOps_If_ushort(ushort x, ushort y)
+        public static void BitOps_Iff_ushort(ushort x, ushort y)
         {
-            Assert.Equal(BitOps.If(x == y, (ushort)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (ushort)(x + y), ushort.MaxValue), x == y ? x + y : ushort.MaxValue);
+            Assert.Equal(BitOps.Iff(x == y, (long)(ushort)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, (ushort)(x + y), ushort.MaxValue), x == y ? x + y : ushort.MaxValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_If_short))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        [InlineData(0, -1)]
-        [InlineData(-1, -1)]
-        [InlineData(-1, 0)]
-        public static void BitOps_If_short(short x, short y)
-        {
-            Assert.Equal(BitOps.If(x == y, (short)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (short)(x + y), short.MinValue), x == y ? x + y : short.MinValue);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_If_uint))]
-        [InlineData(0, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        [InlineData(1, 0)]
-        public static void BitOps_If_uint(uint x, uint y)
-        {
-            Assert.Equal(BitOps.If(x == y, (uint)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (uint)(x + y), uint.MaxValue), x == y ? x + y : uint.MaxValue);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_If_int))]
+        [Theory(DisplayName = nameof(BitOps_Iff_short))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
@@ -1585,24 +1560,24 @@ namespace SourceCode.Clay.Tests
         [InlineData(0, -1)]
         [InlineData(-1, -1)]
         [InlineData(-1, 0)]
-        public static void BitOps_If_int(int x, int y)
+        public static void BitOps_Iff_short(short x, short y)
         {
-            Assert.Equal(BitOps.If(x == y, (int)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (int)(x + y), int.MinValue), x == y ? x + y : int.MinValue);
+            Assert.Equal(BitOps.Iff(x == y, (long)(short)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, (short)(x + y), (long)short.MinValue), x == y ? x + y : short.MinValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_If_ulong))]
+        [Theory(DisplayName = nameof(BitOps_Iff_uint))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
         [InlineData(1, 0)]
-        public static void BitOps_If_ulong(ulong x, ulong y)
+        public static void BitOps_Iff_uint(uint x, uint y)
         {
-            Assert.Equal(BitOps.If(x == y, (ulong)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (ulong)(x + y), ulong.MaxValue), x == y ? x + y : ulong.MaxValue);
+            Assert.Equal(BitOps.Iff(x == y, (ulong)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, x + y, uint.MaxValue), x == y ? x + y : uint.MaxValue);
         }
 
-        [Theory(DisplayName = nameof(BitOps_If_long))]
+        [Theory(DisplayName = nameof(BitOps_Iff_int))]
         [InlineData(0, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 1)]
@@ -1610,10 +1585,35 @@ namespace SourceCode.Clay.Tests
         [InlineData(0, -1)]
         [InlineData(-1, -1)]
         [InlineData(-1, 0)]
-        public static void BitOps_If_long(long x, long y)
+        public static void BitOps_Iff_int(int x, int y)
         {
-            Assert.Equal(BitOps.If(x == y, (long)(x + y)), x == y ? x + y : 0);
-            Assert.Equal(BitOps.If(x == y, (long)(x + y), long.MinValue), x == y ? x + y : long.MinValue);
+            Assert.Equal(BitOps.Iff(x == y, (long)(x + y)), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, x + y, (long)int.MinValue), x == y ? x + y : int.MinValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_Iff_ulong))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        public static void BitOps_Iff_ulong(ulong x, ulong y)
+        {
+            Assert.Equal(BitOps.Iff(x == y, x + y), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, x + y, ulong.MaxValue), x == y ? x + y : ulong.MaxValue);
+        }
+
+        [Theory(DisplayName = nameof(BitOps_Iff_long))]
+        [InlineData(0, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(1, 0)]
+        [InlineData(0, -1)]
+        [InlineData(-1, -1)]
+        [InlineData(-1, 0)]
+        public static void BitOps_Iff_long(long x, long y)
+        {
+            Assert.Equal(BitOps.Iff(x == y, x + y), x == y ? x + y : 0);
+            Assert.Equal(BitOps.Iff(x == y, x + y, long.MinValue), x == y ? x + y : long.MinValue);
         }
 
         #endregion

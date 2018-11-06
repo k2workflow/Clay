@@ -1545,7 +1545,7 @@ namespace SourceCode.Clay
             val >>= 24;
 
             return (int)val;
-        }        
+        }
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1702,7 +1702,7 @@ namespace SourceCode.Clay
             // h  32  0   h        h + (32 * 0)
             // h   b  0   h        h + (b * 0)
 
-            b = If(h == 32, b); // Only add b if h==32
+            b = Iff(h == 32, b); // Only add b if h==32
             return (int)(h + b);
         }
 
@@ -1912,7 +1912,7 @@ namespace SourceCode.Clay
             // h  32  1   32+h   32 + (h * 1)
             // h   b  0   b       b + (h * 0)
 
-            h = If(b == 32, h); // Only add h if b==32
+            h = Iff(b == 32, h); // Only add h if b==32
             return (int)(b + h);
         }
 
@@ -2029,7 +2029,7 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region If
+        #region Iff
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2038,7 +2038,7 @@ namespace SourceCode.Clay
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint If(bool condition, uint trueValue)
+        public static uint Iff(bool condition, uint trueValue)
         {
             uint val = AsByte(ref condition);
             return val * trueValue;
@@ -2052,7 +2052,7 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint If(bool condition, uint trueValue, uint falseValue)
+        public static uint Iff(bool condition, uint trueValue, uint falseValue)
         {
             uint val = AsByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
@@ -2065,8 +2065,8 @@ namespace SourceCode.Clay
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int If(bool condition, int trueValue)
-            => unchecked((int)If(condition, (uint)trueValue));
+        public static int Iff(bool condition, int trueValue)
+            => unchecked((int)Iff(condition, (uint)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2076,8 +2076,8 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int If(bool condition, int trueValue, int falseValue)
-            => unchecked((int)If(condition, (uint)trueValue, (uint)falseValue));
+        public static int Iff(bool condition, int trueValue, int falseValue)
+            => unchecked((int)Iff(condition, (uint)trueValue, (uint)falseValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2086,7 +2086,7 @@ namespace SourceCode.Clay
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong If(bool condition, ulong trueValue)
+        public static ulong Iff(bool condition, ulong trueValue)
         {
             ulong val = AsByte(ref condition);
             return val * trueValue;
@@ -2100,7 +2100,7 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ulong If(bool condition, ulong trueValue, ulong falseValue)
+        public static ulong Iff(bool condition, ulong trueValue, ulong falseValue)
         {
             ulong val = AsByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
@@ -2113,8 +2113,8 @@ namespace SourceCode.Clay
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long If(bool condition, long trueValue)
-            => unchecked((long)If(condition, (ulong)trueValue));
+        public static long Iff(bool condition, long trueValue)
+            => unchecked((long)Iff(condition, (ulong)trueValue));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.
@@ -2124,8 +2124,8 @@ namespace SourceCode.Clay
         /// <param name="trueValue">The value to return if True.</param>
         /// <param name="falseValue">The value to return if False.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long If(bool condition, long trueValue, long falseValue)
-            => unchecked((long)If(condition, (ulong)trueValue, (ulong)falseValue));
+        public static long Iff(bool condition, long trueValue, long falseValue)
+            => unchecked((long)Iff(condition, (ulong)trueValue, (ulong)falseValue));
 
         #endregion
 

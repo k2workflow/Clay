@@ -101,9 +101,9 @@ namespace SourceCode.Clay.Buffers.Bench
                     sum -= BitOps.AsByte(s_false);
                     sum--;
 
-                    sum += BitOps.If(s_true, 4u);
-                    sum -= BitOps.If(s_false, 3u);
-                    sum += BitOps.If(s_true, 3u, 2u);
+                    sum += BitOps.Iff(s_true, 4u);
+                    sum -= BitOps.Iff(s_false, 3u);
+                    sum += BitOps.Iff(s_true, 3u, 2u);
                     sum -= 7;
                 }
             }
