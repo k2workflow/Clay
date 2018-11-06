@@ -5,10 +5,10 @@
 
 #endregion
 
-using System;
+using System.Runtime.CompilerServices;
 using Xunit;
 
-namespace SourceCode.Clay.Buffers.Tests
+namespace SourceCode.Clay.Tests
 {
     public static partial class BitOpsTests // .Primitive
     {
@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ExtractBit_08u(byte n, int offset, bool expected)
         {
             // Scalar
-            var actual = BitOps.ExtractBit(n, offset);
+            bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ExtractBit(n, offset + 8 * 2);
@@ -34,15 +34,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             actual = BitOps.ExtractBit(n, offset - 8 * 2);
             Assert.Equal(expected, actual);
-
-            // Span
-            if (offset > 0)
-            {
-                Span<byte> span = stackalloc byte[4]; span[2] = n;
-                actual = BitOps.ExtractBit(span, (byte)(8 * 2 + offset));
-
-                Assert.Equal(offset >= 8 ? false : expected, actual);
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ExtractBit_16u))]
@@ -59,7 +50,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ExtractBit_16u(ushort n, int offset, bool expected)
         {
             // Scalar
-            var actual = BitOps.ExtractBit(n, offset);
+            bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ExtractBit(n, offset + 16 * 2);
@@ -67,14 +58,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             actual = BitOps.ExtractBit(n, offset - 16 * 2);
             Assert.Equal(expected, actual);
-
-            // Spanif (offset > 0)
-            {
-                Span<ushort> span = stackalloc ushort[4]; span[2] = n;
-
-                actual = BitOps.ExtractBit(span, (byte)(16 * 2 + offset));
-                Assert.Equal(offset >= 16 ? false : expected, actual);
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ExtractBit_32u))]
@@ -93,7 +76,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ExtractBit_32u(uint n, int offset, bool expected)
         {
             // Scalar
-            var actual = BitOps.ExtractBit(n, offset);
+            bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ExtractBit(n, offset + 32 * 2);
@@ -101,14 +84,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             actual = BitOps.ExtractBit(n, offset - 32 * 2);
             Assert.Equal(expected, actual);
-
-            // Spanif (offset > 0)
-            {
-                Span<uint> span = stackalloc uint[4]; span[2] = n;
-
-                actual = BitOps.ExtractBit(span, (byte)(32 * 2 + offset));
-                Assert.Equal(offset >= 32 ? false : expected, actual);
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ExtractBit_64u))]
@@ -129,7 +104,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ExtractBit_64u(ulong n, int offset, bool expected)
         {
             // Scalar
-            var actual = BitOps.ExtractBit(n, offset);
+            bool actual = BitOps.ExtractBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ExtractBit(n, offset + 64 * 2);
@@ -137,14 +112,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             actual = BitOps.ExtractBit(n, offset - 64 * 2);
             Assert.Equal(expected, actual);
-
-            // Spanif (offset > 0)
-            {
-                Span<ulong> span = stackalloc ulong[4]; span[2] = n;
-
-                actual = BitOps.ExtractBit(span, (byte)(64 * 2 + offset));
-                Assert.Equal(offset >= 64 ? false : expected, actual);
-            }
         }
 
         #endregion
@@ -182,7 +149,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_WriteBit_08u(byte n, int offset, bool on, bool was, byte expected)
         {
             // Scalar
-            var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
+            byte actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.WriteBit(n, offset, on);
@@ -213,20 +180,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
                 Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
                 Assert.Equal(expected, actual);
-            }
-
-            // Span
-            if (offset > 0)
-            {
-                Span<byte> span = stackalloc byte[4];
-
-                span[2] = n;
-                var tf = on ? BitOps.InsertBit(span, 8 * 2 + offset) : BitOps.ClearBit(span, 8 * 2 + offset);
-                Assert.Equal(offset >= 8 ? false : was, tf);
-
-                span[2] = n;
-                tf = BitOps.WriteBit(span, 8 * 2 + offset, on);
-                Assert.Equal(offset >= 8 ? false : was, tf);
             }
         }
 
@@ -267,7 +220,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_WriteBit_16u(ushort n, int offset, bool on, bool was, ushort expected)
         {
             // Scalar
-            var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
+            ushort actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.WriteBit(n, offset, on);
@@ -298,20 +251,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
                 Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
                 Assert.Equal(expected, actual);
-            }
-
-            // Span
-            if (offset > 0)
-            {
-                Span<ushort> span = stackalloc ushort[4];
-
-                span[2] = n;
-                var tf = on ? BitOps.InsertBit(span, 16 * 2 + offset) : BitOps.ClearBit(span, 16 * 2 + offset);
-                Assert.Equal(offset >= 16 ? false : was, tf);
-
-                span[2] = n;
-                tf = BitOps.WriteBit(span, 16 * 2 + offset, on);
-                Assert.Equal(offset >= 16 ? false : was, tf);
             }
         }
 
@@ -358,7 +297,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_WriteBit_32u(uint n, int offset, bool on, bool was, uint expected)
         {
             // Scalar
-            var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
+            uint actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.WriteBit(n, offset, on);
@@ -389,20 +328,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
                 Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
                 Assert.Equal(expected, actual);
-            }
-
-            // Span
-            if (offset > 0)
-            {
-                Span<uint> span = stackalloc uint[4];
-
-                span[2] = n;
-                var tf = on ? BitOps.InsertBit(span, 32 * 2 + offset) : BitOps.ClearBit(span, 32 * 2 + offset);
-                Assert.Equal(offset >= 32 ? false : was, tf);
-
-                span[2] = n;
-                tf = BitOps.WriteBit(span, 32 * 2 + offset, on);
-                Assert.Equal(offset >= 32 ? false : was, tf);
             }
         }
 
@@ -453,7 +378,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_WriteBit_64u(ulong n, int offset, bool on, bool was, ulong expected)
         {
             // Scalar
-            var actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
+            ulong actual = on ? BitOps.InsertBit(n, offset) : BitOps.ClearBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.WriteBit(n, offset, on);
@@ -485,20 +410,6 @@ namespace SourceCode.Clay.Buffers.Tests
                 Assert.Equal(was, BitOps.WriteBit(ref actual, offset, on));
                 Assert.Equal(expected, actual);
             }
-
-            // Span
-            if (offset > 0)
-            {
-                Span<ulong> span = stackalloc ulong[4];
-
-                span[2] = n;
-                var tf = on ? BitOps.InsertBit(span, 64 * 2 + offset) : BitOps.ClearBit(span, 64 * 2 + offset);
-                Assert.Equal(offset >= 64 ? false : was, tf);
-
-                span[2] = n;
-                tf = BitOps.WriteBit(span, 64 * 2 + offset, on);
-                Assert.Equal(offset >= 64 ? false : was, tf);
-            }
         }
 
         #endregion
@@ -518,7 +429,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ComplementBit_08u(byte n, int offset, uint expected, bool was)
         {
             // Scalar
-            var actual = BitOps.ComplementBit(n, offset);
+            byte actual = BitOps.ComplementBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ComplementBit(actual, offset);
@@ -538,13 +449,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Span
-            if (offset > 0)
-            {
-                Span<byte> span = stackalloc byte[4]; span[2] = n;
-                Assert.Equal(offset >= 8 ? false : was, BitOps.ComplementBit(span, (byte)(8 * 2 + offset)));
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ComplementBit_16u))]
@@ -563,7 +467,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ComplementBit_16u(ushort n, int offset, uint expected, bool was)
         {
             // Scalar
-            var actual = BitOps.ComplementBit(n, offset);
+            ushort actual = BitOps.ComplementBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ComplementBit(actual, offset);
@@ -583,12 +487,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Spanif (offset > 0)
-            {
-                Span<ushort> span = stackalloc ushort[4]; span[2] = n;
-                Assert.Equal(offset >= 16 ? false : was, BitOps.ComplementBit(span, (byte)(16 * 2 + offset)));
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ComplementBit_32u))]
@@ -610,7 +508,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ComplementBit_32u(uint n, int offset, uint expected, bool was)
         {
             // Scalar
-            var actual = BitOps.ComplementBit(n, offset);
+            uint actual = BitOps.ComplementBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ComplementBit(actual, offset);
@@ -630,13 +528,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Span
-            if (offset > 0)
-            {
-                Span<uint> span = stackalloc uint[4]; span[2] = n;
-                Assert.Equal(offset >= 32 ? false : was, BitOps.ComplementBit(span, (byte)(32 * 2 + offset)));
-            }
         }
 
         [Theory(DisplayName = nameof(BitOps_ComplementBit_64u))]
@@ -661,7 +552,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_ComplementBit_64u(ulong n, int offset, ulong expected, bool was)
         {
             // Scalar
-            var actual = BitOps.ComplementBit(n, offset);
+            ulong actual = BitOps.ComplementBit(n, offset);
             Assert.Equal(expected, actual);
 
             actual = BitOps.ComplementBit(actual, offset);
@@ -681,12 +572,6 @@ namespace SourceCode.Clay.Buffers.Tests
 
             Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-
-            // Spanif (offset > 0)
-            {
-                Span<ulong> span = stackalloc ulong[4]; span[2] = n;
-                Assert.Equal(offset >= 64 ? false : was, BitOps.ComplementBit(span, (byte)(64 * 2 + offset)));
-            }
         }
 
         #endregion
@@ -806,7 +691,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_PopCount_08u(byte n, int expected)
         {
             // Scalar
-            var actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
 
             // Parity
@@ -842,7 +727,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_PopCount_16u(ushort n, int expected)
         {
             // Scalar
-            var actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
 
             // Parity
@@ -881,7 +766,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_PopCount_32u(uint n, int expected)
         {
             // Scalar
-            var actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
 
             // Parity
@@ -922,7 +807,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void BitOps_PopCount_64u(ulong n, int expected)
         {
             // Scalar
-            var actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
 
             // Parity
@@ -960,10 +845,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((byte)0b_0001_0110u, 3)]
         public static void BitOps_LeadTrail_08u(byte n, int expected)
         {
-            var m = n;
+            byte m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingZeros(m);
+            int actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (byte)~n;
@@ -1007,10 +892,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData((ushort)0b_0001_0110u, 11)]
         public static void BitOps_LeadTrail_16u(ushort n, int expected)
         {
-            var m = n;
+            ushort m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingZeros(m);
+            int actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = (ushort)~n;
@@ -1059,10 +944,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110u, 3)]
         public static void BitOps_LeadTrail_32u(uint n, int expected)
         {
-            var m = n;
+            uint m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingZeros(m);
+            int actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~n;
@@ -1113,10 +998,10 @@ namespace SourceCode.Clay.Buffers.Tests
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110ul, 32 + 3)]
         public static void BitOps_LeadTrail_64u(ulong n, int expected)
         {
-            var m = n;
+            ulong m = n;
 
             // LeadingZeros
-            var actual = BitOps.LeadingZeros(m);
+            int actual = BitOps.LeadingZeros(m);
             Assert.Equal(expected, actual);
 
             m = ~m;
@@ -1141,106 +1026,25 @@ namespace SourceCode.Clay.Buffers.Tests
 
         #endregion
 
-        #region FloorLog2
+        #region AsByte
 
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_opt5))]
-        [InlineData(1, 0)]
-        [InlineData(2, 1)]
-        [InlineData(3, 1)]
-        [InlineData(4, 2)]
-        [InlineData(5, 2)]
-        public static void BitOps_FloorLog2_opt5(uint n, int expected)
+        [Fact(DisplayName = nameof(BitOps_AsByte))]
+        public static void BitOps_AsByte()
         {
-            // Test the optimization trick on the lower boundary (1-5)
-            var actual = BitOps.Log2Low(n);
-            Assert.Equal(expected, actual);
+            // CLR permits other values for True
+            // https://github.com/dotnet/roslyn/issues/24652
+
+            for (int i = 0; i <= byte.MaxValue; i++)
+            {
+                int expected = i == 0 ? 0 : 1;
+
+                byte n = (byte)i;
+                bool tf = Unsafe.As<byte, bool>(ref n);
+                int actual = BitOps.AsByte(tf);
+
+                Assert.Equal(expected, actual);
+            }
         }
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_32u))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((uint)sbyte.MaxValue)]
-        [InlineData((uint)byte.MaxValue)]
-        [InlineData((uint)short.MaxValue)]
-        [InlineData((uint)ushort.MaxValue)]
-        [InlineData((uint)int.MaxValue - 1)]
-        [InlineData((uint)int.MaxValue)] // (1U << 31) - 1
-        [InlineData((uint)int.MaxValue + 1)] // 1U << 31
-        [InlineData((1U << 31) + 1)]
-        [InlineData(uint.MaxValue - 1)]
-        [InlineData(uint.MaxValue)]
-        public static void BitOps_FloorLog2_32u(uint n)
-        {
-            var log = BitOps.Log2Low(n);
-
-            var lo = Math.Pow(2, log);
-            var hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        [Theory(DisplayName = nameof(BitOps_FloorLog2_64u))]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
-        [InlineData(8)]
-        [InlineData(9)]
-        [InlineData(14)]
-        [InlineData(15)]
-        [InlineData(16)]
-        [InlineData(17)]
-        [InlineData(1023)]
-        [InlineData(1024)]
-        [InlineData(1025)]
-        [InlineData((ulong)sbyte.MaxValue)]
-        [InlineData((ulong)byte.MaxValue)]
-        [InlineData((ulong)short.MaxValue)]
-        [InlineData((ulong)ushort.MaxValue)]
-        [InlineData((ulong)int.MaxValue - 1)]
-        [InlineData((ulong)int.MaxValue)]
-        [InlineData((ulong)int.MaxValue + 1)]
-        [InlineData((ulong)uint.MaxValue - 1)]
-        [InlineData((ulong)uint.MaxValue)]
-        [InlineData((ulong)uint.MaxValue + 1)]
-        [InlineData((1UL << 63) - 1)]
-        [InlineData(1UL << 63)]
-        [InlineData((1UL << 63) + 1)]
-        [InlineData(ulong.MaxValue - 1)]
-        [InlineData(ulong.MaxValue)]
-        public static void BitOps_FloorLog2_64u(ulong n)
-        {
-            var log = BitOps.Log2Low(n);
-
-            var lo = Math.Pow(2, log);
-            var hi = Math.Pow(2, log + 1);
-
-            Assert.InRange(n, lo, hi);
-        }
-
-        //[Fact(DisplayName = nameof(BitOps_FloorLog2_Throws))]
-        //public static void BitOps_FloorLog2_Throws()
-        //{
-        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl(0)); // uint
-        //    Assert.Throws<ArgumentOutOfRangeException>(() => BitOps.FloorLog2Impl((ulong)0));
-        //}
 
         #endregion
 
@@ -1248,9 +1052,9 @@ namespace SourceCode.Clay.Buffers.Tests
 
         private static byte Reverse(byte value)
         {
-            var result = (byte)0;
+            byte result = 0;
 
-            for (var i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 if ((value & (1u << i)) != 0)
                     result |= (byte)(1u << (7 - i));
@@ -1261,9 +1065,9 @@ namespace SourceCode.Clay.Buffers.Tests
 
         private static ushort Reverse(ushort value)
         {
-            var result = (ushort)0;
+            ushort result = 0;
 
-            for (var i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if ((value & (1u << i)) != 0)
                     result |= (ushort)(1u << (15 - i));
@@ -1274,9 +1078,9 @@ namespace SourceCode.Clay.Buffers.Tests
 
         private static uint Reverse(uint value)
         {
-            var result = 0u;
+            uint result = 0u;
 
-            for (var i = 0; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
                 if ((value & (1u << i)) != 0)
                     result |= (1u << (31 - i));
@@ -1287,9 +1091,9 @@ namespace SourceCode.Clay.Buffers.Tests
 
         private static ulong Reverse(ulong value)
         {
-            var result = 0ul;
+            ulong result = 0ul;
 
-            for (var i = 0; i < 64; i++)
+            for (int i = 0; i < 64; i++)
             {
                 if ((value & (1ul << i)) != 0)
                     result |= (1ul << (63 - i));

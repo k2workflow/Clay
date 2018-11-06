@@ -19,7 +19,7 @@ namespace SourceCode.Clay.Buffers
             if (comparison is null) throw new ArgumentNullException(nameof(comparison));
 
             // Short-circuit for small N
-            uint len = (uint)span.Length;
+            int len = span.Length;
             switch (len)
             {
                 // 0 or 1 members
@@ -41,11 +41,22 @@ namespace SourceCode.Clay.Buffers
             }
 
             // N > 3 due to previous checks
-            int limit = BitOps.Log2Low(len);
-
+            int limit = FloorLog2(len);
             limit <<= 1; // mul 2
 
             IntrospectiveSort(span, comparison, 0, span.Length - 1, limit);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int FloorLog2(int n)
+        {
+            int result = 0;
+            while (n >= 1)
+            {
+                result++;
+                n = n / 2;
+            }
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

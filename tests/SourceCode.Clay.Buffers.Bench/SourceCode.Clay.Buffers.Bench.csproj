@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <OutputType>exe</OutputType>
     <StartupObject>SourceCode.Clay.Buffers.Bench.Program</StartupObject>
@@ -17,6 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="SpanBench.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="SpanBench.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
     <PackageReference Include="BenchmarkDotNet" Version="0.11.2" />
@@ -26,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" />
+    <ProjectReference Include="..\..\src\SourceCode.Clay\SourceCode.Clay.csproj" />
   </ItemGroup>
 
   <ItemGroup>
