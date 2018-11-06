@@ -15,6 +15,30 @@ namespace SourceCode.Clay.Tests
     {
         private static readonly Random s_random = new Random(123456789); // Specific seed for determinism
 
+        [Fact(DisplayName = nameof(Jitter_seed_vs_non))]
+        public static void Jitter_seed_vs_non()
+        {
+            var minDelay = TimeSpan.FromMilliseconds(10);
+            var maxDelay = TimeSpan.FromMilliseconds(1500);
+
+            var jitter1 = new DecorrelatedJitter(1, minDelay, maxDelay, null);
+            var jitter2 = new DecorrelatedJitter(1, minDelay, maxDelay, s_random);
+
+            Assert.NotEqual(jitter1.Default().First(), jitter2.Default().First());
+        }
+
+        [Fact(DisplayName = nameof(Jitter_default_vs_normal))]
+        public static void Jitter_default_vs_normal()
+        {
+            var minDelay = TimeSpan.FromMilliseconds(10);
+            var maxDelay = TimeSpan.FromMilliseconds(1500);
+
+            var jitter1 = new DecorrelatedJitter(1, minDelay, maxDelay, new Random(123456789));
+            var jitter2 = new DecorrelatedJitter(1, minDelay, maxDelay, new Random(123456789));
+
+            Assert.NotEqual(jitter1.Default().First(), jitter2.Normal().First());
+        }
+
         [Fact(DisplayName = nameof(Jitter_check_default_range_small))]
         public static void Jitter_check_default_range_small()
         {
@@ -97,7 +121,7 @@ namespace SourceCode.Clay.Tests
             var minDelay = TimeSpan.FromMilliseconds(0);
             var maxDelay = TimeSpan.FromMilliseconds(0);
 
-            var jitter = new DecorrelatedJitter(100_000, minDelay, maxDelay, s_random);
+            var jitter = new DecorrelatedJitter(100_000, minDelay, maxDelay, null);
 
             // Default
             TimeSpan[] delays = jitter.Default().ToArray();
@@ -114,7 +138,7 @@ namespace SourceCode.Clay.Tests
             var minDelay = TimeSpan.FromMilliseconds(10);
             var maxDelay = TimeSpan.FromMilliseconds(1500);
 
-            var jitter = new DecorrelatedJitter(0, minDelay, maxDelay, s_random);
+            var jitter = new DecorrelatedJitter(0, minDelay, maxDelay, null);
 
             // Default
             TimeSpan[] delays = jitter.Default().ToArray();

@@ -14,21 +14,21 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(Clamp_Byte))]
         public static void Clamp_Byte()
         {
-            Assert.Equal((byte)0, (byte)0.Clamp(0, 0));
-            Assert.Equal((byte)0, (byte)0.Clamp(-1, 1));
+            Assert.Equal((byte)0, ((byte)0).Clamp(0, 0));
+            Assert.Equal((byte)1, ((byte)1).Clamp(0, 2));
 
-            Assert.Equal((byte)1, (byte)0.Clamp(1, 2));
-            Assert.Equal((byte)2, (byte)3.Clamp(1, 2));
+            Assert.Equal((byte)1, ((byte)0).Clamp(1, 2));
+            Assert.Equal((byte)2, ((byte)3).Clamp(1, 2));
         }
 
         [Fact(DisplayName = nameof(Clamp_Int16))]
         public static void Clamp_Int16()
         {
-            Assert.Equal((short)0, (short)0.Clamp(0, 0));
-            Assert.Equal((short)0, (short)0.Clamp(-1, 1));
+            Assert.Equal((short)0, ((short)0).Clamp(0, 0));
+            Assert.Equal((short)0, ((short)0).Clamp(-1, 1));
 
-            Assert.Equal((short)1, (short)0.Clamp(1, 2));
-            Assert.Equal((short)2, (short)3.Clamp(1, 2));
+            Assert.Equal((short)1, ((short)0).Clamp(1, 2));
+            Assert.Equal((short)2, ((short)3).Clamp(1, 2));
         }
 
         [Fact(DisplayName = nameof(Clamp_Int32))]
