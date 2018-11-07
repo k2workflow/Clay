@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Tests
             dest = 0b0000_1001;
             Assert.Equal(0b0000_0001, BitOps.ClearBit(dest, 3));
             // ClearBit(ref): Clears the specified bit in a mask and returns whether it was originally set.
-            Assert.True(BitOps.ClearBit(ref dest, 3)); 
+            Assert.True(BitOps.ClearBit(ref dest, 3));
             Assert.Equal(0b0000_0001, dest);
 
             // ComplementBit: Complements the specified bit in a mask and returns the new value.
@@ -66,10 +66,10 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0b0000_0001, dest);
 
             // AsByte: Converts a boolean to a normalized byte value without branching.
-            byte n = 3;
+            byte n = 3; // Build a bool that has an underlying value of 3
             bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
-            Assert.False(!weirdBool);
-            Assert.Equal(1, BitOps.AsByte(weirdBool));
+            Assert.True(weirdBool);
+            Assert.Equal(1, BitOps.AsByte(ref weirdBool)); // Normalize
 
             // Iff: Converts a boolean to a specified integer value without branching.
             Assert.Equal(123, BitOps.Iff(true, 123)); // if then
