@@ -75,15 +75,17 @@ namespace SourceCode.Clay
             }
         }
 
+        private static readonly double s_sqrt12 = Math.Sqrt(12.0);
+
         private static (double min, double max) DeriveMinMax(double μ, double σ)
         {
             // https://www.quora.com/What-is-the-standard-deviation-of-a-uniform-distribution-How-is-this-formula-determined
 
-            double bpa = μ * 2.0;
-            double bma = σ * Math.Sqrt(12.0);
+            double bpa = μ * 2.0; // b+a
+            double bma = σ * s_sqrt12; // b-a
 
-            double b = (bma + bpa) / 2.0;
-            double a = bpa - b;
+            double b = (bma + bpa) / 2.0; // (b+a + b-a) / 2 = 2b/2 = b
+            double a = bpa - b; // b+a - b = a
 
             return (a, b);
         }

@@ -21,7 +21,7 @@ namespace SourceCode.Clay
         public static UniformDistribution Uniform { get; } = UniformDistribution.FromRange(0, 1);
 
         /// <summary>
-        /// A default shared instance to use for Normal (Guass) distributions, in the range [0, 1).
+        /// A default shared instance to use for Normal (Gauss) distributions, in the range [0, 1).
         /// </summary>
         public static NormalDistribution Normal { get; } = NormalDistribution.FromRange(0, 1);
 
@@ -49,12 +49,12 @@ namespace SourceCode.Clay
         }
 
         /// <summary>
-        /// Returns the next random number.
+        /// Returns the next random number within the specified range and distribution.
         /// </summary>
         public abstract double NextDouble();
 
         /// <summary>
-        /// Returns a sequence of random numbers within the specified range.
+        /// Returns a sequence of random numbers within the specified range and distribution.
         /// </summary>
         /// <param name="count">The number of samples to generate.</param>
         public abstract IEnumerable<double> Sample(int count);
