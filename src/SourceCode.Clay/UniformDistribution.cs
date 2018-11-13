@@ -75,17 +75,26 @@ namespace SourceCode.Clay
             }
         }
 
-        private static readonly double s_sqrt12 = Math.Sqrt(12.0);
-
+        /// <summary>
+        /// Derives the min and max, given the mean and standard deviation.
+        /// </summary>
+        /// <param name="μ">Mu. The mean of the population.</param>
+        /// <param name="σ">Sigma. The standard deviation of the population.</param>
         private static (double min, double max) DeriveMinMax(double μ, double σ)
         {
             // https://www.quora.com/What-is-the-standard-deviation-of-a-uniform-distribution-How-is-this-formula-determined
+            //
+            // From the article:
+            // b+a = 2μ;
+            // b-a = σ√12;
+            //
+            // Subtracting: b+a - b-a = 2a == 2μ - σ√12. Thus a = μ - σ√12/2
+            // Adding:      b+a + b-a = 2b == 2μ + σ√12. Thus b = μ + σ√12/2
 
-            double bpa = μ * 2.0; // b+a
-            double bma = σ * s_sqrt12; // b-a
-
-            double b = (bma + bpa) / 2.0; // (b+a + b-a) / 2 = 2b/2 = b
-            double a = bpa - b; // b+a - b = a
+            const double sqrt12_2 = 3.4641016151377544 / 2d; // √12/2
+            double σ12_2 = σ * sqrt12_2; // σ√12/2
+            double a = μ - σ12_2; // μ - σ√12/2
+            double b = μ + σ12_2; // μ + σ√12/2
 
             return (a, b);
         }

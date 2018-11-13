@@ -159,17 +159,22 @@ namespace SourceCode.Clay
             return value;
         }
 
+        /// <summary>
+        /// Derives the mean and standard deviation, given the min and max.
+        /// </summary>
+        /// <param name="min">The minimum of the population.</param>
+        /// <param name="max">The maximum of the population.</param>
         private static (double μ, double σ) DeriveMuSigma(double min, double max)
         {
             Debug.Assert(min <= max);
 
             double range = max - min;
-            double half = range / 2.0;
+            double half = range / 2d;
 
             double μ = min + half; // Mu = min + half-range
 
             // ~99.7% of population is within +/- 3 standard deviations
-            const double sd = 3.0;
+            const double sd = 3d;
             double σ = half / sd; // Sigma = half-range / 3 == range / 6
 
             return (μ, σ);
