@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 namespace SourceCode.Clay
 {
     /// <summary>
-    /// A random number generator with a Normal (Guassian) distribution.
+    /// A random number generator with a Normal (Gaussian) distribution.
     /// Uses the Box-Muller transform to generate random numbers from a Uniform distribution.
     /// </summary>
     public sealed class NormalDistribution : RandomDistribution
@@ -115,7 +115,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Returns a pair of random numbers.
-        /// Uses the Box-Muller transform to generate random numbers from a Normal (Guassian) distribution.
+        /// Uses the Box-Muller transform to generate random numbers from a Normal (Gaussian) distribution.
         /// </summary>
         /// <param name="random">The <see cref="Random"/> instance.</param>
         /// <param name="μ">Mu. The mean of the population.</param>
@@ -134,10 +134,10 @@ namespace SourceCode.Clay
 
             sq = Math.Sqrt(-2.0 * Math.Log(sq) / sq);
 
-            r1 = r1 * sq; // Guassian value 1
+            r1 = r1 * sq; // Gaussian value 1
             r1 = _μ + r1 * _σ; // Stretch and move origin
 
-            r2 = r2 * sq; // Guassian value 2
+            r2 = r2 * sq; // Gaussian value 2
             r2 = _μ + r2 * _σ; // Stretch and move origin
 
             // Clamp
