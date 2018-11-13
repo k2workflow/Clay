@@ -18,6 +18,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void MemoryPool_byte_WrapSlice_start_noop()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;
+
             IMemoryOwner<byte> owner1 = pool.Rent(99);
             IMemoryOwner<byte> owner2 = owner1.WrapSlice(10);
             Assert.False(ReferenceEquals(owner1, owner2));
@@ -32,6 +33,7 @@ namespace SourceCode.Clay.Buffers.Tests
         public static void MemoryPool_byte_WrapSlice_start_length_noop()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;
+
             IMemoryOwner<byte> owner1 = pool.Rent(99);
             IMemoryOwner<byte> owner2 = owner1.WrapSlice(0, 10);
             Assert.False(ReferenceEquals(owner1, owner2));

@@ -128,7 +128,6 @@ namespace SourceCode.Clay
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
             int hexLength = byteLength * 2;
-
             Span<char> span = stackalloc char[hexLength];
 
             int pos = 0;
