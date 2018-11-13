@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay
 {
-    public abstract class RandomSource
+    public abstract class RandomDistribution
     {
         [ThreadStatic]
         private static readonly Random s_uniform = new Random();
@@ -18,18 +18,18 @@ namespace SourceCode.Clay
         /// <summary>
         /// A default shared instance to use for Uniform distributions, in the range [0, 1).
         /// </summary>
-        public static RandomUniform Uniform { get; } = new RandomUniform(0, 1);
+        public static UniformDistribution Uniform { get; } = new UniformDistribution(0, 1);
 
         /// <summary>
         /// A default shared instance to use for Normal (Guass) distributions, in the range [0, 1).
         /// </summary>
-        public static RandomNormal Normal { get; } = RandomNormal.FromRange(0, 1);
+        public static NormalDistribution Normal { get; } = NormalDistribution.FromRange(0, 1);
 
         private readonly Random _random;
         protected double Min { get; }
         protected double Max { get; }
 
-        protected RandomSource(double min, double max, Random random)
+        protected RandomDistribution(double min, double max, Random random)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
 

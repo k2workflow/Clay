@@ -16,7 +16,7 @@ namespace SourceCode.Clay
     /// A random number generator with a Normal (Guassian) distribution.
     /// Uses the Box-Muller transform to generate random numbers from a Uniform distribution.
     /// </summary>
-    public sealed class RandomNormal : RandomSource
+    public sealed class NormalDistribution : RandomDistribution
     {
         private readonly double _μ;
         private readonly double _σ;
@@ -26,7 +26,7 @@ namespace SourceCode.Clay
         private double _chamber;
         private bool _chambered;
 
-        private RandomNormal(double μ, double σ, double min, double max, Random random)
+        private NormalDistribution(double μ, double σ, double min, double max, Random random)
             : base(min, max, random)
         {
             _μ = μ;
@@ -34,7 +34,7 @@ namespace SourceCode.Clay
             _clamped = true;
         }
 
-        private RandomNormal(double μ, double σ, Random random)
+        private NormalDistribution(double μ, double σ, Random random)
             : base(0, 0, random)
         {
             _μ = μ;
@@ -49,13 +49,13 @@ namespace SourceCode.Clay
         /// <param name="max">The maximum of the population.</param>
         /// <param name="random">The Random instance to use as a source.
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public static RandomNormal FromRange(double min, double max, Random random = null)
+        public static NormalDistribution FromRange(double min, double max, Random random = null)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
 
             (double μ, double σ) = DeriveMuSigma(min, max);
 
-            return new RandomNormal(μ, σ, min, max, random);
+            return new NormalDistribution(μ, σ, min, max, random);
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace SourceCode.Clay
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
         /// <param name="random">The Random instance to use as a source.
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public static RandomNormal FromMuSigma(double μ, double σ, Random random = null)
+        public static NormalDistribution FromMuSigma(double μ, double σ, Random random = null)
         {
-            return new RandomNormal(μ, σ, random);
+            return new NormalDistribution(μ, σ, random);
         }
 
         /// <summary>

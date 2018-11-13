@@ -10,7 +10,7 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class DecorrelatedJitter
     {
-        private readonly RandomSource _random;
+        private readonly RandomDistribution _random;
 
         public int RetryCount { get; }
         public TimeSpan MinDelay { get; }
@@ -24,13 +24,13 @@ namespace SourceCode.Clay
         /// <param name="maxDelay">The maximum time delay between retries.</param>
         /// <param name="random">A custom <see cref="Random"/> instance to use, perhaps using a deterministic seed.
         /// If not specified, will use a datetime-seeded instance</param>
-        public DecorrelatedJitter(int retryCount, TimeSpan minDelay, TimeSpan maxDelay, RandomSource random = null)
+        public DecorrelatedJitter(int retryCount, TimeSpan minDelay, TimeSpan maxDelay, RandomDistribution random = null)
         {
             if (retryCount < 0) throw new ArgumentOutOfRangeException(nameof(retryCount));
             if (minDelay < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(minDelay));
             if (maxDelay < minDelay) throw new ArgumentOutOfRangeException(nameof(maxDelay));
 
-            _random = random ?? RandomSource.Uniform;
+            _random = random ?? RandomDistribution.Uniform;
             RetryCount = retryCount;
             MinDelay = minDelay;
             MaxDelay = maxDelay;

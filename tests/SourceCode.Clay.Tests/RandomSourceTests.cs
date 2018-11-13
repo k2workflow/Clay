@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = new RandomUniform(min, max, s_random);
+            var normal = new UniformDistribution(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = RandomNormal.FromRange(min, max, s_random);
+            var normal = NormalDistribution.FromRange(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = new RandomUniform(min, max, s_random);
+            var normal = new UniformDistribution(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = RandomNormal.FromRange(min, max, s_random);
+            var normal = NormalDistribution.FromRange(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -86,7 +86,7 @@ namespace SourceCode.Clay.Tests
             const double μ = 100; // Mean
             const double σ = 10; // Sigma
 
-            var normal = RandomNormal.FromMuSigma(μ, σ, s_random);
+            var normal = NormalDistribution.FromMuSigma(μ, σ, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             // ~99.7% of population is within +/- 3 standard deviations
@@ -112,7 +112,7 @@ namespace SourceCode.Clay.Tests
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
-            var normal = RandomNormal.FromMuSigma(μ, σ, s_random);
+            var normal = NormalDistribution.FromMuSigma(μ, σ, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == μ));

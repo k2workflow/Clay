@@ -13,7 +13,7 @@ namespace SourceCode.Clay
     /// <summary>
     /// A random number generator with a Uniform distribution.
     /// </summary>
-    public sealed class RandomUniform : RandomSource
+    public sealed class UniformDistribution : RandomDistribution
     {
         private readonly double _range;
 
@@ -24,7 +24,7 @@ namespace SourceCode.Clay
         /// <param name="max">The maximum of the population.</param>
         /// <param name="random">The Random instance to use as a source.
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public RandomUniform(double min, double max, Random random = null)
+        public UniformDistribution(double min, double max, Random random = null)
             : base(min, max, random)
         {
             _range = max - min;
@@ -35,7 +35,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="random">The Random instance to use as a source.
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public RandomUniform(Random random = null)
+        public UniformDistribution(Random random = null)
             : this(0, 1, random)
         { }
 
