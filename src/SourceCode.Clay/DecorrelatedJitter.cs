@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SourceCode.Clay
 {
@@ -11,8 +10,7 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class DecorrelatedJitter
     {
-        private static readonly Random s_random = new Random(); // Default ctor uses a time-based seed
-        private readonly Random _random;
+        private readonly RandomDistribution _random;
 
         public int RetryCount { get; }
         public TimeSpan MinDelay { get; }
@@ -26,43 +24,34 @@ namespace SourceCode.Clay
         /// <param name="maxDelay">The maximum time delay between retries.</param>
         /// <param name="random">A custom <see cref="Random"/> instance to use, perhaps using a deterministic seed.
         /// If not specified, will use a datetime-seeded instance</param>
-        public DecorrelatedJitter(int retryCount, TimeSpan minDelay, TimeSpan maxDelay, Random random = null)
+        public DecorrelatedJitter(int retryCount, TimeSpan minDelay, TimeSpan maxDelay, RandomDistribution random = null)
         {
             if (retryCount < 0) throw new ArgumentOutOfRangeException(nameof(retryCount));
             if (minDelay < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(minDelay));
             if (maxDelay < minDelay) throw new ArgumentOutOfRangeException(nameof(maxDelay));
 
-            _random = random ?? s_random;
+            _random = random ?? RandomDistribution.Uniform;
             RetryCount = retryCount;
             MinDelay = minDelay;
             MaxDelay = maxDelay;
         }
 
         /// <summary>
-        /// Create a series of random <see cref="TimeSpan"/> values from a Uniform distribution.
-        /// Uses the original AWS style of computing the values.
+        /// Create a sequence of random <see cref="TimeSpan"/> values.
         /// </summary>
         /// <remarks>A new enumerator should be created for every execution.</remarks>
-        public IEnumerable<TimeSpan> Default()
+        public IEnumerable<TimeSpan> Generate()
         {
-            double ms = MinDelay.TotalMilliseconds;
+            double range = MaxDelay.TotalMilliseconds - MinDelay.Milliseconds;
 
             for (int i = 0; i < RetryCount; i++)
             {
-                ms *= 3.0 * _random.NextDouble(); // [0, 3N)
-                ms = ms.Clamp(MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds); // [min, max]
+                var ms = range * _random.NextDouble(); // Range
+                ms += MinDelay.TotalMilliseconds; // Floor
+                ms = Math.Min(ms, MaxDelay.TotalMilliseconds); // Ceiling
 
                 yield return TimeSpan.FromMilliseconds(ms);
             }
         }
-
-        /// <summary>
-        /// Create a series of random <see cref="TimeSpan"/> values from a Normal distribution.
-        /// </summary>
-        /// <remarks>A new enumerator should be created for every execution.</remarks>
-        public IEnumerable<TimeSpan> Normal()
-            => _random
-            .ClampedNormalSample(RetryCount, MinDelay.TotalMilliseconds, MaxDelay.TotalMilliseconds)
-            .Select(n => TimeSpan.FromMilliseconds(n));
     }
 }
