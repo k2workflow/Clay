@@ -18,7 +18,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// A default shared instance to use for Uniform distributions, in the range [0, 1).
         /// </summary>
-        public static UniformDistribution Uniform { get; } = new UniformDistribution(0, 1);
+        public static UniformDistribution Uniform { get; } = UniformDistribution.FromRange(0, 1);
 
         /// <summary>
         /// A default shared instance to use for Normal (Guass) distributions, in the range [0, 1).

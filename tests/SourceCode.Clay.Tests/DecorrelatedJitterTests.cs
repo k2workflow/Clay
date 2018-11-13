@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Tests
     public static class DecorrelatedJitterTests
     {
         private static readonly Random s_random = new Random(123456789); // Specific seed for determinism
-        private static readonly UniformDistribution s_uniform = new UniformDistribution(s_random);
+        private static readonly UniformDistribution s_uniform = UniformDistribution.FromRange(0, 1, s_random);
         private static readonly NormalDistribution s_normal = NormalDistribution.FromRange(0, 1, s_random);
 
         [Fact(DisplayName = nameof(Jitter_seed_vs_non))]
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Tests
             var minDelay = TimeSpan.FromMilliseconds(10);
             var maxDelay = TimeSpan.FromMilliseconds(1500);
 
-            var jitter1 = new DecorrelatedJitter(1, minDelay, maxDelay, new UniformDistribution(new Random(123456789)));
+            var jitter1 = new DecorrelatedJitter(1, minDelay, maxDelay, UniformDistribution.FromRange(0, 1, new Random(123456789)));
             var jitter2 = new DecorrelatedJitter(1, minDelay, maxDelay, NormalDistribution.FromRange(0, 1, new Random(123456789)));
 
             Assert.NotEqual(jitter1.Generate().First(), jitter2.Generate().First());

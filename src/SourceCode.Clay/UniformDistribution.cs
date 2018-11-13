@@ -17,14 +17,7 @@ namespace SourceCode.Clay
     {
         private readonly double _range;
 
-        /// <summary>
-        /// Creates a new instance of the class.
-        /// </summary>
-        /// <param name="min">The minimum of the population.</param>
-        /// <param name="max">The maximum of the population.</param>
-        /// <param name="random">The Random instance to use as a source.
-        /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public UniformDistribution(double min, double max, Random random = null)
+        private UniformDistribution(double min, double max, Random random = null)
             : base(min, max, random)
         {
             _range = max - min;
@@ -33,11 +26,30 @@ namespace SourceCode.Clay
         /// <summary>
         /// Creates a new instance of the class.
         /// </summary>
+        /// <param name="min">The minimum of the population.</param>
+        /// <param name="max">The maximum of the population.</param>
         /// <param name="random">The Random instance to use as a source.
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
-        public UniformDistribution(Random random = null)
-            : this(0, 1, random)
-        { }
+        public static UniformDistribution FromRange(double min, double max, Random random = null)
+        {
+            if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
+
+            return new UniformDistribution(min, max, random);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the class.
+        /// </summary>
+        /// <param name="μ">Mu. The mean of the population.</param>
+        /// <param name="σ">Sigma. The standard deviation of the population.</param>
+        /// <param name="random">The Random instance to use as a source.
+        /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
+        public static UniformDistribution FromMuSigma(double μ, double σ, Random random = null)
+        {
+            (double min, double max) = DeriveMinMax(μ, σ);
+
+            return new UniformDistribution(min, max, random);
+        }
 
         /// <summary>
         /// Returns the next random number.
@@ -61,6 +73,19 @@ namespace SourceCode.Clay
             {
                 yield return NextDouble();
             }
+        }
+
+        private static (double min, double max) DeriveMinMax(double μ, double σ)
+        {
+            // https://www.quora.com/What-is-the-standard-deviation-of-a-uniform-distribution-How-is-this-formula-determined
+
+            double bpa = μ * 2.0;
+            double bma = σ * Math.Sqrt(12.0);
+
+            double b = (bma + bpa) / 2.0;
+            double a = bpa - b;
+
+            return (a, b);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = new UniformDistribution(min, max, s_random);
+            var normal = UniformDistribution.FromRange(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = new UniformDistribution(min, max, s_random);
+            var normal = UniformDistribution.FromRange(min, max, s_random);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -77,6 +77,32 @@ namespace SourceCode.Clay.Tests
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
+        }
+
+        [Fact(DisplayName = nameof(Random_derive_uniform))]
+        public static void Random_derive_uniform()
+        {
+            const int count = 100_000;
+            const double μ = 100; // Mean
+            const double σ = 10; // Sigma
+
+            var normal = UniformDistribution.FromMuSigma(μ, σ, s_random);
+            double[] values = normal.Sample(count).ToArray();
+
+            // ~99.7% of population is within +/- 3 standard deviations
+            const double sd = 3 * σ;
+            int cnt = values
+                .Where(n => n >= μ - sd && n <= μ + sd)
+                .Count();
+
+            Assert.True(cnt >= 0.990 * count); // 99,716
+
+            double min = values.Min();
+            double avg = values.Average();
+            double max = values.Max();
+
+            Assert.True(min < avg);
+            Assert.True(avg < max);
         }
 
         [Fact(DisplayName = nameof(Random_derive_normal))]
@@ -103,6 +129,19 @@ namespace SourceCode.Clay.Tests
 
             Assert.True(min < avg);
             Assert.True(avg < max);
+        }
+
+        [Fact(DisplayName = nameof(Random_derive_uniform_sigma_zero))]
+        public static void Random_derive_uniform_sigma_zero()
+        {
+            const int count = 150_000;
+            const double μ = 100; // Mean
+            const double σ = 0; // Sigma
+
+            var normal = UniformDistribution.FromMuSigma(μ, σ, s_random);
+            double[] values = normal.Sample(count).ToArray();
+
+            Assert.All(values, n => Assert.True(n == μ));
         }
 
         [Fact(DisplayName = nameof(Random_derive_normal_sigma_zero))]
