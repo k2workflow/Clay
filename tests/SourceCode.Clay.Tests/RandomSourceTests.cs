@@ -11,18 +11,19 @@ using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
-    public static class RandomExtensionsTests
+    public static class RandomSourceTests
     {
         private static readonly Random s_random = new Random(123456789); // Specific seed for determinism
 
-        [Fact(DisplayName = nameof(Random_clamped_normal))]
-        public static void Random_clamped_normal()
+        [Fact(DisplayName = nameof(Random_clamped_uniform))]
+        public static void Random_clamped_uniform()
         {
             const int count = 100_000;
             const double min = 10;
             const double max = 1500;
 
-            double[] values = s_random.ClampedNormalSample(count, min, max).ToArray();
+            var normal = new RandomUniform(min, max, s_random);
+            double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
 
@@ -33,6 +34,38 @@ namespace SourceCode.Clay.Tests
             Assert.True(groupCount >= 1000); // 1,479
         }
 
+        [Fact(DisplayName = nameof(Random_clamped_normal))]
+        public static void Random_clamped_normal()
+        {
+            const int count = 100_000;
+            const double min = 10;
+            const double max = 1500;
+
+            var normal = RandomNormal.FromRange(min, max, s_random);
+            double[] values = normal.Sample(count).ToArray();
+
+            Assert.All(values, n => Assert.True(n >= min && n <= max));
+
+            int groupCount = values
+                .GroupBy(n => n)
+                .Count();
+
+            Assert.True(groupCount >= 1000); // 1,479
+        }
+
+        [Fact(DisplayName = nameof(Random_clamped_uniform_range_zero))]
+        public static void Random_clamped_uniform_range_zero()
+        {
+            const int count = 150_000;
+            const double min = 10;
+            const double max = 10;
+
+            var normal = new RandomUniform(min, max, s_random);
+            double[] values = normal.Sample(count).ToArray();
+
+            Assert.All(values, n => Assert.True(n == min));
+        }
+
         [Fact(DisplayName = nameof(Random_clamped_normal_range_zero))]
         public static void Random_clamped_normal_range_zero()
         {
@@ -40,19 +73,21 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            double[] values = s_random.ClampedNormalSample(count, min, max).ToArray();
+            var normal = RandomNormal.FromRange(min, max, s_random);
+            double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
         }
 
-        [Fact(DisplayName = nameof(Random_get_normal))]
-        public static void Random_get_normal()
+        [Fact(DisplayName = nameof(Random_derive_normal))]
+        public static void Random_derive_normal()
         {
             const int count = 100_000;
             const double μ = 100; // Mean
             const double σ = 10; // Sigma
 
-            double[] values = s_random.GetNormalSample(count, μ, σ).ToArray();
+            var normal = RandomNormal.FromMuSigma(μ, σ, s_random);
+            double[] values = normal.Sample(count).ToArray();
 
             // ~99.7% of population is within +/- 3 standard deviations
             const double sd = 3 * σ;
@@ -70,14 +105,15 @@ namespace SourceCode.Clay.Tests
             Assert.True(avg < max);
         }
 
-        [Fact(DisplayName = nameof(Random_get_normal_sigma_zero))]
-        public static void Random_get_normal_sigma_zero()
+        [Fact(DisplayName = nameof(Random_derive_normal_sigma_zero))]
+        public static void Random_derive_normal_sigma_zero()
         {
             const int count = 150_000;
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
-            double[] values = s_random.GetNormalSample(count, μ, σ).ToArray();
+            var normal = RandomNormal.FromMuSigma(μ, σ, s_random);
+            double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == μ));
         }
