@@ -20,26 +20,16 @@ namespace SourceCode.Clay
     {
         private readonly double _μ;
         private readonly double _σ;
-        private readonly bool _clamped;
 
         private readonly object _lock = new object();
         private double _chamber;
         private bool _chambered;
 
-        private NormalDistribution(double μ, double σ, double min, double max, Random random)
-            : base(min, max, random)
+        private NormalDistribution(double μ, double σ, ClampInfo clamp, Random random)
+            : base(clamp, random)
         {
             _μ = μ;
             _σ = σ;
-            _clamped = true;
-        }
-
-        private NormalDistribution(double μ, double σ, Random random)
-            : base(0, 0, random)
-        {
-            _μ = μ;
-            _σ = σ;
-            _clamped = false;
         }
 
         /// <summary>
@@ -52,10 +42,11 @@ namespace SourceCode.Clay
         public static NormalDistribution FromRange(double min, double max, Random random = null)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
+            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
             (double μ, double σ) = DeriveMuSigma(min, max);
 
-            return new NormalDistribution(μ, σ, min, max, random);
+            return new NormalDistribution(μ, σ, new ClampInfo(min, max), random);
         }
 
         /// <summary>
@@ -67,7 +58,7 @@ namespace SourceCode.Clay
         /// If not specified, a shared thread-safe (thread-static) instance will be used.</param>
         public static NormalDistribution FromMuSigma(double μ, double σ, Random random = null)
         {
-            return new NormalDistribution(μ, σ, random);
+            return new NormalDistribution(μ, σ, null, random);
         }
 
         /// <summary>
@@ -100,6 +91,7 @@ namespace SourceCode.Clay
         public override IEnumerable<double> Sample(int count)
         {
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+
             if (count == 0)
                 yield break;
 
@@ -141,22 +133,13 @@ namespace SourceCode.Clay
             r2 = _μ + r2 * _σ; // Stretch and move origin
 
             // Clamp
-            if (_clamped)
+            if (Clamp != null)
             {
-                r1 = Clamp(r1);
-                r2 = Clamp(r2);
+                r1 = Clamp.Constrain(r1);
+                r2 = Clamp.Constrain(r2);
             }
 
             return (r1, r2);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private double Clamp(double value)
-        {
-            value = Math.Max(Min, value); // Floor
-            value = Math.Min(Max, value); // Ceiling
-
-            return value;
         }
 
         /// <summary>

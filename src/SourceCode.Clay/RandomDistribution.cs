@@ -7,14 +7,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay
 {
     public abstract class RandomDistribution
     {
-        [ThreadStatic]
-        private static readonly Random s_uniform = new Random();
-
         /// <summary>
         /// A default shared instance to use for Uniform distributions, in the range [0, 1).
         /// </summary>
@@ -25,17 +24,16 @@ namespace SourceCode.Clay
         /// </summary>
         public static NormalDistribution Normal { get; } = NormalDistribution.FromRange(0, 1);
 
+        // No need to be ThreadStatic - accessed with a lock
+        private static readonly Random s_random = new Random();
         private readonly Random _random;
-        protected double Min { get; }
-        protected double Max { get; }
 
-        protected RandomDistribution(double min, double max, Random random)
+        protected ClampInfo Clamp { get; }
+
+        protected RandomDistribution(ClampInfo clamp, Random random)
         {
-            if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
-
-            _random = random ?? s_uniform;
-            Min = min;
-            Max = max;
+            _random = random ?? s_random;
+            Clamp = clamp;
         }
 
         protected double SafeDouble()
@@ -58,5 +56,37 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="count">The number of samples to generate.</param>
         public abstract IEnumerable<double> Sample(int count);
+
+        #region Nested
+
+        protected sealed class ClampInfo
+        {
+            public double Min { get; }
+
+            public double Max { get; }
+
+            public double Range { get; }
+
+            public ClampInfo(double min, double max)
+            {
+                Debug.Assert(min <= max);
+                Debug.Assert(!double.IsInfinity(max - min));
+
+                Min = min;
+                Max = max;
+                Range = max - min;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public double Constrain(double value)
+            {
+                value = Math.Max(Min, value); // Floor
+                value = Math.Min(Max, value); // Ceiling
+
+                return value;
+            }
+        }
+
+        #endregion
     }
 }

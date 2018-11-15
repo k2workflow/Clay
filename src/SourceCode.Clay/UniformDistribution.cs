@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SourceCode.Clay
 {
@@ -15,12 +16,10 @@ namespace SourceCode.Clay
     /// </summary>
     public sealed class UniformDistribution : RandomDistribution
     {
-        private readonly double _range;
-
-        private UniformDistribution(double min, double max, Random random = null)
-            : base(min, max, random)
+        private UniformDistribution(ClampInfo clamp, Random random)
+            : base(clamp, random)
         {
-            _range = max - min;
+            Debug.Assert(clamp != null);
         }
 
         /// <summary>
@@ -33,8 +32,9 @@ namespace SourceCode.Clay
         public static UniformDistribution FromRange(double min, double max, Random random = null)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
+            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
-            return new UniformDistribution(min, max, random);
+            return new UniformDistribution(new ClampInfo(min, max), random);
         }
 
         /// <summary>
@@ -47,8 +47,9 @@ namespace SourceCode.Clay
         public static UniformDistribution FromMuSigma(double μ, double σ, Random random = null)
         {
             (double min, double max) = DeriveMinMax(μ, σ);
+            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
-            return new UniformDistribution(min, max, random);
+            return new UniformDistribution(new ClampInfo(min, max), random);
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace SourceCode.Clay
         /// </summary>
         public override double NextDouble()
         {
-            return Min + _range * SafeDouble();
+            return Clamp.Min + Clamp.Range * SafeDouble();
         }
 
         /// <summary>
