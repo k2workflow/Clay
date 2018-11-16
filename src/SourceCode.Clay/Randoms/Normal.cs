@@ -29,6 +29,7 @@ namespace SourceCode.Clay.Randoms
         private readonly double _μ;
         private readonly double _σ;
 
+        private readonly object _lock = new object();
         private double _chamber;
         private bool _chambered;
 
@@ -100,19 +101,17 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public double NextDouble()
         {
-            // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
-            // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
-            // It is safe to lock on _random since it is not exposed to outside use, so cannot be contended.
-            lock (_random)
+            // Do NOT lock on _random since this lock is on a different level.
+            lock (_lock)
             {
                 if (_chambered)
                 {
                     _chambered = false;
-                    return _chamber;
+                    return _chamber; // Would have needlessly locked on _random
                 }
 
                 double value;
-                (value, _chamber) = NextNormalPair();
+                (value, _chamber) = NextNormalPair(); // Internally locks on _random
 
                 _chambered = true;
                 return value;
@@ -169,7 +168,6 @@ namespace SourceCode.Clay.Randoms
             r2 = r2 * sq; // Gaussian value 2
             r2 = _μ + r2 * _σ; // Stretch and move origin
 
-            // Clamp
             if (_clamp != null)
             {
                 r1 = _clamp.Constrain(r1);
@@ -202,8 +200,7 @@ namespace SourceCode.Clay.Randoms
         /// <summary>
         /// Derives the mean and standard deviation, given the min and max.
         /// </summary>
-        /// <param name="min">The minimum of the population.</param>
-        /// <param name="max">The maximum of the population.</param>
+        /// <param name="clamp">The minimum and maximum of the population.</param>
         private static (double μ, double σ) DeriveMuSigma(Clamp clamp)
         {
             Debug.Assert(clamp != null);
