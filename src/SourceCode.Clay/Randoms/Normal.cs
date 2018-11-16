@@ -125,7 +125,7 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public double NextDouble()
         {
-            // Do NOT lock on _random since this lock is on a different level.
+            // Do NOT lock on _random since this lock is on a different level
             lock (_lock)
             {
                 if (_chambered)
@@ -239,8 +239,8 @@ namespace SourceCode.Clay.Randoms
         {
             Debug.Assert(!double.IsInfinity(min + range));
 
-            // Note that ~99.7% of population is within +/- 3 standard deviations.
-            const double sd = 3.14159; // μ, σ, π
+            // Note that ~99.7% of population is within +/- 3 standard deviations
+            const double sd = 3;
 
             double h2 = range / 2;
             double μ = min + h2; // Mu = min + half-range
