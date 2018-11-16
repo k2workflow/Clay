@@ -25,12 +25,12 @@ namespace SourceCode.Clay.Randoms
 
         private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
-        private readonly ClampInfo _clamp;
+        private readonly Clamp _clamp;
 
-        private Uniform(Random random, ClampInfo clamp)
+        private Uniform(Random random, Clamp clamp)
         {
             _random = random ?? s_random;
-            _clamp = clamp ?? ClampInfo.Default;
+            _clamp = clamp ?? Clamp.Default;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SourceCode.Clay.Randoms
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
-            return new Uniform(random, new ClampInfo(min, max));
+            return new Uniform(random, new Clamp(min, max));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SourceCode.Clay.Randoms
 
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(σ));
 
-            return new Uniform(random, new ClampInfo(min, max));
+            return new Uniform(random, new Clamp(min, max));
         }
 
         /// <summary>

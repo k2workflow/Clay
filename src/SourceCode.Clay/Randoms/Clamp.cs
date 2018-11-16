@@ -11,12 +11,12 @@ using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Randoms
 {
-    internal sealed class ClampInfo
+    internal sealed class Clamp
     {
         /// <summary>
         /// A clamp with range [0, 1].
         /// </summary>
-        public static ClampInfo Default { get; } = new ClampInfo();
+        public static Clamp Default { get; } = new Clamp();
 
         public double Min { get; }
 
@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Randoms
 
         public double Range { get; }
 
-        public ClampInfo(double min, double max)
+        public Clamp(double min, double max)
         {
             Debug.Assert(min <= max);
             Debug.Assert(!double.IsInfinity(max - min));
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Randoms
             Range = max - min;
         }
 
-        public ClampInfo()
+        public Clamp()
             : this(0, 1)
         { }
 

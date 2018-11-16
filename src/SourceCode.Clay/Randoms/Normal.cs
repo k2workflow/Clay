@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Randoms
         public static Normal Default { get; } = new Normal();
 
         private readonly Uniform _uniform;
-        private readonly ClampInfo _clamp;
+        private readonly Clamp _clamp;
         private readonly double _μ;
         private readonly double _σ;
 
@@ -34,19 +34,19 @@ namespace SourceCode.Clay.Randoms
         private double _chamber;
         private bool _chambered;
 
-        private Normal(double μ, double σ, ClampInfo clamp, Uniform uniform)
+        private Normal(double μ, double σ, Clamp clamp, Uniform uniform)
         {
             _uniform = uniform ?? Uniform.Shared;
-            _clamp = clamp ?? ClampInfo.Default;
+            _clamp = clamp ?? Clamp.Default;
 
             _μ = μ;
             _σ = σ;
         }
 
-        private Normal(Uniform uniform, ClampInfo clamp)
+        private Normal(Uniform uniform, Clamp clamp)
         {
             _uniform = uniform ?? Uniform.Shared;
-            _clamp = clamp ?? ClampInfo.Default;
+            _clamp = clamp ?? Clamp.Default;
 
             (_μ, _σ) = DeriveMuSigma(0, 1);
         }
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Randoms
 
             (double μ, double σ) = DeriveMuSigma(min, max);
 
-            return new Normal(μ, σ, new ClampInfo(min, max), uniform);
+            return new Normal(μ, σ, new Clamp(min, max), uniform);
         }
 
         /// <summary>
