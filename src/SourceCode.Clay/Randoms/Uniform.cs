@@ -99,8 +99,8 @@ namespace SourceCode.Clay.Randoms
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
-            // It is safe to lock on _random since it's not exposed
-            // to outside use, so it cannot be contended.
+            // We MUST lock on _random since it may be mapped to the shared instance.
+            // It is safe to do so since it is not exposed to outside use, so cannot be contended.
             lock (_random)
             {
                 return _random.NextDouble();

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
-    public static class RandomSourceTests
+    public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism
         private static readonly Random s_random = new Random(Seed); 

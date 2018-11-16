@@ -23,7 +23,7 @@ namespace SourceCode.Clay.Randoms
         /// <summary>
         /// A shared instance of <see cref="Normal"/>, in the range [0, 1), that is safe to use concurrently.
         /// </summary>
-        public static Normal Default { get; } = new Normal();
+        public static Normal Shared { get; } = new Normal();
 
         private readonly Uniform _uniform;
         private readonly Clamp _clamp;
@@ -104,6 +104,8 @@ namespace SourceCode.Clay.Randoms
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
+            // No need to lock on _uniform since it is already thread-safe, and doing so
+            // might cause undue contention should it be mapped to the shared instance.
             lock (_lock)
             {
                 if (_chambered)
