@@ -13,8 +13,7 @@ namespace SourceCode.Clay.Randoms
 {
     /// <summary>
     /// A random number generator with a Uniform distribution that is thread-safe.
-    /// Can be instantiated with a custom <see cref="Random"/> instance, for example to make
-    /// it behave in a deterministic manner.
+    /// Can be instantiated with a custom seed, to make it behave in a deterministic manner.
     /// </summary>
     public sealed class Uniform : IRandom
     {
@@ -23,31 +22,28 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public static Uniform Shared { get; } = new Uniform();
 
-        private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
         private readonly Clamp _clamp;
 
-        private Uniform(Random random, Clamp clamp)
+        private Uniform(Clamp clamp, int? seed)
         {
-            _random = random ?? s_random;
+            _random = seed == null ? new Random() : new Random(seed.Value);
             _clamp = clamp ?? Clamp.Default;
         }
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
-        /// <param name="random">The <see cref="Random"/> instance to use as a source.
-        /// If not specified, a shared thread-safe randomly-seeded instance will be used.</param>
-        public Uniform(Random random = null)
-            : this(random, null)
+        /// <param name="seed">The seed to initialize the random number generator with.</param>
+        public Uniform(int seed)
+            : this(null, seed)
         { }
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
-        /// <param name="seed">The seed to initialize the random number generator with.</param>
-        public Uniform(int seed)
-            : this(new Random(seed), null)
+        public Uniform()
+            : this(null, null)
         { }
 
         /// <summary>
@@ -55,14 +51,14 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="min">The minimum of the population.</param>
         /// <param name="max">The maximum of the population.</param>
-        /// <param name="random">The <see cref="Random"/> instance to use as a source.
-        /// If not specified, a shared thread-safe randomly-seeded instance will be used.</param>
-        public static Uniform FromRange(double min, double max, Random random = null)
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Uniform FromRange(double min, double max, int? seed = null)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
-            return new Uniform(random, new Clamp(min, max));
+            return new Uniform(new Clamp(min, max), seed);
         }
 
         /// <summary>
@@ -70,15 +66,15 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="μ">Mu. The mean of the population.</param>
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
-        /// <param name="random">The <see cref="Random"/> instance to use as a source.
-        /// If not specified, a shared thread-safe randomly-seeded instance will be used.</param>
-        public static Uniform FromMuSigma(double μ, double σ, Random random = null)
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Uniform FromMuSigma(double μ, double σ, int? seed = null)
         {
             (double min, double max) = DeriveMinMax(μ, σ);
 
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(σ));
 
-            return new Uniform(random, new Clamp(min, max));
+            return new Uniform(new Clamp(min, max), seed);
         }
 
         /// <summary>
@@ -92,15 +88,14 @@ namespace SourceCode.Clay.Randoms
         /// <summary>
         /// Returns a random floating-point number that is greater than or equal to 0.0,
         /// and less than 1.0.
-        /// This method uses locks in order to avoid issues with concurrent access.
+        /// This method uses locks in order to avoid issues with concurrent access on <see cref="Random"/>.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private double NextDoubleImpl()
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
-            // We MUST lock on _random since it may be mapped to the shared instance.
-            // It is safe to do so since it is not exposed to outside use, so cannot be contended.
+            // It is safe to lock on _random since it is not exposed to outside use, so cannot be contended.
             lock (_random)
             {
                 return _random.NextDouble();

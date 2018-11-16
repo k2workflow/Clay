@@ -14,8 +14,7 @@ namespace SourceCode.Clay.Randoms
 {
     /// <summary>
     /// A random number generator with a Normal (Gaussian) distribution that is thread-safe.
-    /// Can be instantiated with a custom <see cref="Uniform"/> instance, for example to make
-    /// it behave in a deterministic manner.
+    /// Can be instantiated with a custom seed, to make it behave in a deterministic manner.
     /// Uses the Box-Muller transform to generate random numbers from a Uniform distribution.
     /// </summary>
     public sealed class Normal : IRandom
@@ -25,27 +24,26 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public static Normal Shared { get; } = new Normal();
 
-        private readonly Uniform _uniform;
+        private readonly Random _random; // MUST be accessed within a lock
         private readonly Clamp _clamp;
         private readonly double _μ;
         private readonly double _σ;
 
-        private readonly object _lock = new object();
         private double _chamber;
         private bool _chambered;
 
-        private Normal(double μ, double σ, Clamp clamp, Uniform uniform)
+        private Normal(double μ, double σ, Clamp clamp, int? seed)
         {
-            _uniform = uniform ?? Uniform.Shared;
-            _clamp = clamp ?? Clamp.Default;
+            _random = seed == null ? new Random() : new Random(seed.Value);
+            _clamp = clamp;
 
             _μ = μ;
             _σ = σ;
         }
 
-        private Normal(Uniform uniform, Clamp clamp)
+        private Normal(Clamp clamp, int? seed)
         {
-            _uniform = uniform ?? Uniform.Shared;
+            _random = seed == null ? new Random() : new Random(seed.Value);
             _clamp = clamp ?? Clamp.Default;
 
             (_μ, _σ) = DeriveMuSigma(0, 1);
@@ -54,18 +52,16 @@ namespace SourceCode.Clay.Randoms
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
-        /// <param name="uniform">The <see cref="Uniform"/> instance to use as the Box-Muller source.
-        /// If not specified, a shared thread-safe, randomly-seeded instance will be used.</param>
-        public Normal(Uniform uniform = null)
-            : this(uniform, null)
+        /// <param name="seed">The seed to initialize the random number generator with.</param>
+        public Normal(int seed)
+            : this(null, seed)
         { }
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
-        /// <param name="seed">The seed to initialize the random number generator with.</param>
-        public Normal(int seed)
-            : this(new Uniform(seed), null)
+        public Normal()
+            : this(null, null)
         { }
 
         /// <summary>
@@ -73,16 +69,16 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="min">The minimum of the population.</param>
         /// <param name="max">The maximum of the population.</param>
-        /// <param name="uniform">The Random instance to use as the Box-Muller source.
-        /// If not specified, a shared thread-safe randomly-seeded instance will be used.</param>
-        public static Normal FromRange(double min, double max, Uniform uniform = null)
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Normal FromRange(double min, double max, int? seed = null)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
             (double μ, double σ) = DeriveMuSigma(min, max);
 
-            return new Normal(μ, σ, new Clamp(min, max), uniform);
+            return new Normal(μ, σ, new Clamp(min, max), seed);
         }
 
         /// <summary>
@@ -90,11 +86,11 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="μ">Mu. The mean of the population.</param>
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
-        /// <param name="uniform">The Random instance to use as the Box-Muller source.
-        /// If not specified, a shared thread-safe randomly-seeded instance will be used.</param>
-        public static Normal FromMuSigma(double μ, double σ, Uniform uniform = null)
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Normal FromMuSigma(double μ, double σ, int? seed = null)
         {
-            return new Normal(μ, σ, null, uniform);
+            return new Normal(μ, σ, null, seed);
         }
 
         /// <summary>
@@ -104,9 +100,8 @@ namespace SourceCode.Clay.Randoms
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
-            // No need to lock on _uniform since it is already thread-safe, and doing so
-            // might cause undue contention should it be mapped to the shared instance.
-            lock (_lock)
+            // It is safe to lock on _random since it is not exposed to outside use, so cannot be contended.
+            lock (_random)
             {
                 if (_chambered)
                 {
@@ -147,7 +142,7 @@ namespace SourceCode.Clay.Randoms
         /// Returns a pair of random numbers.
         /// Uses the Box-Muller transform to generate random numbers from a Normal (Gaussian) distribution.
         /// </summary>
-        /// <param name="random">The <see cref="_uniform"/> instance.</param>
+        /// <param name="random">The <see cref="_random"/> instance.</param>
         /// <param name="μ">Mu. The mean of the population.</param>
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,8 +152,9 @@ namespace SourceCode.Clay.Randoms
 
             do
             {
-                r1 = 2.0 * _uniform.NextDouble() - 1.0;
-                r2 = 2.0 * _uniform.NextDouble() - 1.0;
+                (r1, r2) = NextNormalPairImpl();
+                r1 = 2.0 * r1 - 1.0;
+                r2 = 2.0 * r2 - 1.0;
                 sq = r1 * r1 + r2 * r2;
             } while (sq == 0 || sq >= 1.0);
 
@@ -178,6 +174,26 @@ namespace SourceCode.Clay.Randoms
             }
 
             return (r1, r2);
+        }
+
+        /// <summary>
+        /// Returns a pair of random floating-point numbers that are greater than or equal to 0.0,
+        /// and less than 1.0.
+        /// This method uses locks in order to avoid issues with concurrent access on <see cref="Random"/>.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private (double, double) NextNormalPairImpl()
+        {
+            // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
+            // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
+            // It is safe to lock on _random since it is not exposed to outside use, so cannot be contended.
+            lock (_random)
+            {
+                double r1 = _random.NextDouble();
+                double r2 = _random.NextDouble();
+
+                return (r1, r2);
+            }
         }
 
         /// <summary>

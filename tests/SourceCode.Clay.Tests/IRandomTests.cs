@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = Uniform.FromRange(min, max, s_random);
+            var normal = Uniform.FromRange(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = Normal.FromRange(min, max, s_uniform);
+            var normal = Normal.FromRange(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -63,7 +63,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = Uniform.FromRange(min, max, s_random);
+            var normal = Uniform.FromRange(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = Normal.FromRange(min, max, s_uniform);
+            var normal = Normal.FromRange(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Tests
             const double μ = 100; // Mean
             const double σ = 10; // Sigma
 
-            var normal = Uniform.FromMuSigma(μ, σ, s_random);
+            var normal = Uniform.FromMuSigma(μ, σ, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             // ~99.7% of population is within +/- 3 standard deviations
@@ -115,7 +115,7 @@ namespace SourceCode.Clay.Tests
             const double μ = 100; // Mean
             const double σ = 10; // Sigma
 
-            var normal = Normal.FromMuSigma(μ, σ, s_uniform);
+            var normal = Normal.FromMuSigma(μ, σ, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             // ~99.7% of population is within +/- 3 standard deviations
@@ -137,11 +137,11 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(Random_derive_uniform_sigma_zero))]
         public static void Random_derive_uniform_sigma_zero()
         {
-            const int count = 150_000;
+            const int count = 50_000;
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
-            var normal = Uniform.FromMuSigma(μ, σ, s_random);
+            var normal = Uniform.FromMuSigma(μ, σ, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == μ));
@@ -150,11 +150,11 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(Random_derive_normal_sigma_zero))]
         public static void Random_derive_normal_sigma_zero()
         {
-            const int count = 150_000;
+            const int count = 50_000;
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
-            var normal = Normal.FromMuSigma(μ, σ, s_uniform);
+            var normal = Normal.FromMuSigma(μ, σ, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == μ));
