@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Randoms
 {
     /// <summary>
     /// A random number generator with a Normal (Gaussian) distribution that is thread-safe.
-    /// Can be instantiated with a custom seed, to make it behave in a deterministic manner.
+    /// Can be instantiated with a custom seed to make it behave in a deterministic manner.
     /// Uses the Box-Muller transform to generate random numbers from a Uniform distribution.
     /// </summary>
     public sealed class Normal : IRandom
@@ -141,8 +141,8 @@ namespace SourceCode.Clay.Randoms
         }
 
         /// <summary>
-        /// Returns a pair of random numbers.
-        /// Uses the Box-Muller transform to generate random numbers from a Normal (Gaussian) distribution.
+        /// Returns a pair of random numbers with a Normal distribution.
+        /// Uses the Box-Muller transform to generate random numbers from a Uniform distribution.
         /// </summary>
         /// <param name="random">The <see cref="_random"/> instance.</param>
         /// <param name="μ">Mu. The mean of the population.</param>
@@ -154,7 +154,8 @@ namespace SourceCode.Clay.Randoms
 
             do
             {
-                (r1, r2) = NextNormalPairImpl();
+                (r1, r2) = NextDoublePairLocked(); // Uniform values 1, 2
+
                 r1 = 2.0 * r1 - 1.0;
                 r2 = 2.0 * r2 - 1.0;
                 sq = r1 * r1 + r2 * r2;
@@ -184,7 +185,7 @@ namespace SourceCode.Clay.Randoms
         /// This method uses locks in order to avoid issues with concurrent access on <see cref="Random"/>.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private (double, double) NextNormalPairImpl()
+        private (double, double) NextDoublePairLocked()
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety

@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Randoms
 {
     /// <summary>
     /// A random number generator with a Uniform distribution that is thread-safe.
-    /// Can be instantiated with a custom seed, to make it behave in a deterministic manner.
+    /// Can be instantiated with a custom seed to make it behave in a deterministic manner.
     /// </summary>
     public sealed class Uniform : IRandom
     {
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public double NextDouble()
         {
-            return _clamp.Min + _clamp.Range * NextDoubleImpl();
+            return _clamp.Min + _clamp.Range * NextDoubleLocked();
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace SourceCode.Clay.Randoms
         /// This method uses locks in order to avoid issues with concurrent access on <see cref="Random"/>.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private double NextDoubleImpl()
+        private double NextDoubleLocked()
         {
             // https://stackoverflow.com/questions/25448070/getting-random-numbers-in-a-thread-safe-way/25448166#25448166
             // https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netframework-4.7.2#the-systemrandom-class-and-thread-safety
