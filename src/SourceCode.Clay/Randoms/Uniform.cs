@@ -23,6 +23,7 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public static Uniform Shared { get; } = new Uniform();
 
+        private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
         private readonly Clamp _clamp;
 
@@ -32,8 +33,8 @@ namespace SourceCode.Clay.Randoms
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Uniform(int seed)
         {
-            _random = new Random(seed);
             _clamp = Clamp.Clamp01;
+            _random = new Random(seed);
         }
 
         /// <summary>
@@ -41,8 +42,8 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public Uniform()
         {
-            _random = new Random();
             _clamp = Clamp.Clamp01;
+            _random = s_random;
         }
 
         // Used by factory methods only
@@ -50,8 +51,10 @@ namespace SourceCode.Clay.Randoms
         {
             Debug.Assert(clamp != null);
 
-            _random = seed == null ? new Random() : new Random(seed.Value);
             _clamp = clamp;
+            _random = seed == null
+                ? s_random // Do not use 'new Random()' here; concurrent instantiations may get the same seed
+                : new Random(seed.Value);
         }
 
         /// <summary>

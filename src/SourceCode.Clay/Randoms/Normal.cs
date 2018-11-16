@@ -24,6 +24,7 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public static Normal Shared { get; } = new Normal();
 
+        private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
         private readonly Clamp _clamp;
         private readonly double _μ;
@@ -39,8 +40,8 @@ namespace SourceCode.Clay.Randoms
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Normal(int seed)
         {
-            _random = new Random(seed);
             _clamp = Clamp.Clamp01;
+            _random = new Random(seed);
 
             (_μ, _σ) = DeriveMuSigma(_clamp);
         }
@@ -50,8 +51,8 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public Normal()
         {
-            _random = new Random();
             _clamp = Clamp.Clamp01;
+            _random = s_random; // Do not use 'new Random()' here; concurrent instantiations may get the same seed
 
             (_μ, _σ) = DeriveMuSigma(_clamp);
         }
@@ -59,8 +60,10 @@ namespace SourceCode.Clay.Randoms
         // Used by factory methods only
         private Normal(double μ, double σ, Clamp clamp, int? seed)
         {
-            _random = seed == null ? new Random() : new Random(seed.Value);
             _clamp = clamp; // Null clamp is valid (unconstrained normal distribution)
+            _random = seed == null
+                ? s_random // Do not use 'new Random()' here; concurrent instantiations may get the same seed
+                : new Random(seed.Value);
 
             _μ = μ;
             _σ = σ;
@@ -153,7 +156,7 @@ namespace SourceCode.Clay.Randoms
 
             do
             {
-                (r1, r2) = NextDoublePairLocked(); // Uniform values 1, 2
+                (r1, r2) = NextDoublePairLocked(); // Uniform value 1 & 2
 
                 r1 = 2.0 * r1 - 1.0;
                 r2 = 2.0 * r2 - 1.0;
@@ -201,17 +204,17 @@ namespace SourceCode.Clay.Randoms
         /// Derives the mean and standard deviation, given the min and max.
         /// </summary>
         /// <param name="clamp">The minimum and maximum of the population.</param>
+        /// </param>
         private static (double μ, double σ) DeriveMuSigma(Clamp clamp)
         {
             Debug.Assert(clamp != null);
 
-            double half = clamp.Range / 2d;
+            // Note that ~99.7% of population is within +/- 3 standard deviations.
+            const double sd = 3.14159; // μ, σ, π
 
+            double half = clamp.Range / 2;
             double μ = clamp.Min + half; // Mu = min + half-range
-
-            // ~99.7% of population is within +/- 3 standard deviations
-            const double sd = 3d;
-            double σ = half / sd; // Sigma = half-range / 3 == range / 6
+            double σ = half / sd; // Sigma = half-range / 3 (same as range / 6)
 
             return (μ, σ);
         }
