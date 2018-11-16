@@ -25,7 +25,8 @@ namespace SourceCode.Clay.Randoms
 
         private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
-        private readonly Clamp _clamp;
+
+        private readonly Func<double> _nextDouble;
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
@@ -33,8 +34,8 @@ namespace SourceCode.Clay.Randoms
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Uniform(int seed)
         {
-            _clamp = Clamp.Clamp01;
             _random = new Random(seed);
+            _nextDouble = NextDoubleLocked; // Curry [0, 1)
         }
 
         /// <summary>
@@ -42,19 +43,34 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public Uniform()
         {
-            _clamp = Clamp.Clamp01;
             _random = s_random;
+            _nextDouble = NextDoubleLocked; // Curry [0, 1)
         }
 
         // Used by factory methods only
-        private Uniform(Clamp clamp, int? seed)
+        private Uniform(double min, double range, int? seed)
         {
-            Debug.Assert(clamp != null);
+            Debug.Assert(!double.IsInfinity(min + range));
 
-            _clamp = clamp;
             _random = seed == null
                 ? s_random // Do not use 'new Random()' here; concurrent instantiations may get the same seed
                 : new Random(seed.Value);
+
+            _nextDouble = () => min + range * NextDoubleLocked(); // Curry [min, max)
+        }
+
+        /// <summary>
+        /// Creates a new instance of the class that generates numbers in the specified range.
+        /// </summary>
+        /// <param name="min">The minimum of the population.</param>
+        /// <param name="range">The range of values in the population.</param>
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Uniform FromRange(double min, double range, int? seed = null)
+        {
+            if (double.IsInfinity(min + range)) throw new ArgumentOutOfRangeException(nameof(range));
+
+            return new Uniform(min, range, seed);
         }
 
         /// <summary>
@@ -64,13 +80,8 @@ namespace SourceCode.Clay.Randoms
         /// <param name="max">The maximum of the population.</param>
         /// <param name="seed">The seed to initialize the random number generator with.
         /// If not specified, a randomly-seeded instance will be used.</param>
-        public static Uniform FromRange(double min, double max, int? seed = null)
-        {
-            if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
-            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
-
-            return new Uniform(new Clamp(min, max), seed);
-        }
+        public static Uniform Between(double min, double max, int? seed = null)
+            => FromRange(min, max - min, seed);
 
         /// <summary>
         /// Creates a new instance of the class that generates numbers in the specified range.
@@ -81,20 +92,16 @@ namespace SourceCode.Clay.Randoms
         /// If not specified, a randomly-seeded instance will be used.</param>
         public static Uniform FromMuSigma(double μ, double σ, int? seed = null)
         {
-            (double min, double max) = DeriveMinMax(μ, σ);
+            (double min, double range) = DeriveMinRange(μ, σ);
 
-            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(σ));
-
-            return new Uniform(new Clamp(min, max), seed);
+            return new Uniform(min, range, seed);
         }
 
         /// <summary>
         /// Returns the next random number within the specified range.
         /// </summary>
         public double NextDouble()
-        {
-            return _clamp.Min + _clamp.Range * NextDoubleLocked();
-        }
+            => _nextDouble(); // Curried
 
         /// <summary>
         /// Returns a random floating-point number that is greater than or equal to 0.0,
@@ -135,23 +142,22 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="μ">Mu. The mean of the population.</param>
         /// <param name="σ">Sigma. The standard deviation of the population.</param>
-        private static (double min, double max) DeriveMinMax(double μ, double σ)
+        private static (double min, double range) DeriveMinRange(double μ, double σ)
         {
             // https://www.quora.com/What-is-the-standard-deviation-of-a-uniform-distribution-How-is-this-formula-determined
             //
             // From the article:
-            // b+a = 2μ;
-            // b-a = σ√12;
+            // max+min = 2μ
+            // max-min = σ√12 (range)
             //
-            // Subtracting: b+a - b-a = 2a == 2μ - σ√12. Thus a = μ - σ√12/2
-            // Adding:      b+a + b-a = 2b == 2μ + σ√12. Thus b = μ + σ√12/2
+            // Subtracting: max+min - max-min = 2min == 2μ - σ√12. Thus min = μ - σ√12/2
+            // Adding:      max+min + max-min = 2max == 2μ + σ√12. Thus max = μ + σ√12/2
 
-            const double sqrt12_2 = 3.4641016151377544 / 2d; // √12/2
-            double σ12_2 = σ * sqrt12_2; // σ√12/2
-            double a = μ - σ12_2; // μ - σ√12/2
-            double b = μ + σ12_2; // μ + σ√12/2
+            const double sqrt12 = 3.4641016151377544; // √12
+            double σ12 = σ * sqrt12; // σ√12
+            double min = μ - σ12 / 2; // μ - σ√12/2
 
-            return (a, b);
+            return (min, σ12);
         }
     }
 }

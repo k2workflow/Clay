@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = Uniform.FromRange(min, max, Seed);
+            var normal = Uniform.Between(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 1500;
 
-            var normal = Normal.FromRange(min, max, Seed);
+            var normal = Normal.Between(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n >= min && n <= max));
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = Uniform.FromRange(min, max, Seed);
+            var normal = Uniform.Between(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));
@@ -77,7 +77,7 @@ namespace SourceCode.Clay.Tests
             const double min = 10;
             const double max = 10;
 
-            var normal = Normal.FromRange(min, max, Seed);
+            var normal = Normal.Between(min, max, Seed);
             double[] values = normal.Sample(count).ToArray();
 
             Assert.All(values, n => Assert.True(n == min));

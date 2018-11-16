@@ -26,9 +26,10 @@ namespace SourceCode.Clay.Randoms
 
         private static readonly Random s_random = new Random();
         private readonly Random _random; // MUST be accessed within a lock
-        private readonly Clamp _clamp;
+
         private readonly double _μ;
         private readonly double _σ;
+        private readonly Func<double, double> _clamp;
 
         private readonly object _lock = new object();
         private double _chamber;
@@ -40,10 +41,10 @@ namespace SourceCode.Clay.Randoms
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Normal(int seed)
         {
-            _clamp = Clamp.Clamp01;
             _random = new Random(seed);
+            _clamp = d => Clamp(0, 1, d); // Curry [0, 1)
 
-            (_μ, _σ) = DeriveMuSigma(_clamp);
+            (_μ, _σ) = DeriveMuSigma(0, 1);
         }
 
         /// <summary>
@@ -51,19 +52,33 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         public Normal()
         {
-            _clamp = Clamp.Clamp01;
             _random = s_random; // Do not use 'new Random()' here; concurrent instantiations may get the same seed
+            _clamp = d => Clamp(0, 1, d); // Curry [0, 1)
 
-            (_μ, _σ) = DeriveMuSigma(_clamp);
+            (_μ, _σ) = DeriveMuSigma(0, 1);
         }
 
         // Used by factory methods only
-        private Normal(double μ, double σ, Clamp clamp, int? seed)
+        private Normal(double μ, double σ, (double min, double range)? clamp, int? seed)
         {
-            _clamp = clamp; // Null clamp is valid (unconstrained normal distribution)
             _random = seed == null
                 ? s_random // Do not use 'new Random()' here; concurrent instantiations may get the same seed
                 : new Random(seed.Value);
+
+            _clamp = d => d; // Curry (-∞, ∞)
+            if (clamp != null)
+            {
+                (double min, double range) = clamp.Value;
+
+                _clamp = d => min; // Curry [min, min]
+                if (range != 0)
+                {
+                    double max = min + range;
+                    Debug.Assert(!double.IsInfinity(max));
+
+                    _clamp = d => Clamp(min, max, d); // Curry [min, max)
+                }
+            }
 
             _μ = μ;
             _σ = σ;
@@ -73,19 +88,27 @@ namespace SourceCode.Clay.Randoms
         /// Creates a new instance of the class that generates numbers in the specified range.
         /// </summary>
         /// <param name="min">The minimum of the population.</param>
+        /// <param name="range">The range of values in the population.</param>
+        /// <param name="seed">The seed to initialize the random number generator with.
+        /// If not specified, a randomly-seeded instance will be used.</param>
+        public static Normal FromRange(double min, double range, int? seed = null)
+        {
+            if (double.IsInfinity(min + range)) throw new ArgumentOutOfRangeException(nameof(range));
+
+            (double μ, double σ) = DeriveMuSigma(min, range);
+
+            return new Normal(μ, σ, (min, range), seed);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the class that generates numbers in the specified range.
+        /// </summary>
+        /// <param name="min">The minimum of the population.</param>
         /// <param name="max">The maximum of the population.</param>
         /// <param name="seed">The seed to initialize the random number generator with.
         /// If not specified, a randomly-seeded instance will be used.</param>
-        public static Normal FromRange(double min, double max, int? seed = null)
-        {
-            if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
-            if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
-
-            var clamp = new Clamp(min, max);
-            (double μ, double σ) = DeriveMuSigma(clamp);
-
-            return new Normal(μ, σ, clamp, seed);
-        }
+        public static Normal Between(double min, double max, int? seed = null)
+            => FromRange(min, max - min, seed);
 
         /// <summary>
         /// Creates a new instance of the class that generates numbers in the specified range.
@@ -95,9 +118,7 @@ namespace SourceCode.Clay.Randoms
         /// <param name="seed">The seed to initialize the random number generator with.
         /// If not specified, a randomly-seeded instance will be used.</param>
         public static Normal FromMuSigma(double μ, double σ, int? seed = null)
-        {
-            return new Normal(μ, σ, null, seed);
-        }
+            => new Normal(μ, σ, null, seed);
 
         /// <summary>
         /// Returns the next random number within the specified range.
@@ -171,13 +192,22 @@ namespace SourceCode.Clay.Randoms
             r2 = r2 * sq; // Gaussian value 2
             r2 = _μ + r2 * _σ; // Stretch and move origin
 
-            if (_clamp != null)
-            {
-                r1 = _clamp.Constrain(r1);
-                r2 = _clamp.Constrain(r2);
-            }
+            // Curried
+            r1 = _clamp(r1);
+            r2 = _clamp(r2);
 
             return (r1, r2);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static double Clamp(double min, double max, double value)
+        {
+            Debug.Assert(min <= max);
+
+            value = Math.Max(min, value); // Floor
+            value = Math.Min(max, value); // Ceiling
+
+            return value;
         }
 
         /// <summary>
@@ -205,16 +235,16 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="clamp">The minimum and maximum of the population.</param>
         /// </param>
-        private static (double μ, double σ) DeriveMuSigma(Clamp clamp)
+        private static (double μ, double σ) DeriveMuSigma(double min, double range)
         {
-            Debug.Assert(clamp != null);
+            Debug.Assert(!double.IsInfinity(min + range));
 
             // Note that ~99.7% of population is within +/- 3 standard deviations.
             const double sd = 3.14159; // μ, σ, π
 
-            double half = clamp.Range / 2;
-            double μ = clamp.Min + half; // Mu = min + half-range
-            double σ = half / sd; // Sigma = half-range / 3 (same as range / 6)
+            double h2 = range / 2;
+            double μ = min + h2; // Mu = min + half-range
+            double σ = h2 / sd; // Sigma = half-range / 3 (same as range / 6)
 
             return (μ, σ);
         }
