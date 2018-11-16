@@ -6,6 +6,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using SourceCode.Clay.Randoms;
 using Xunit;
@@ -15,7 +16,7 @@ namespace SourceCode.Clay.Tests
     public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism
-        private static readonly Random s_random = new Random(Seed); 
+        private static readonly Random s_random = new Random(Seed);
         private static readonly Uniform s_uniform = new Uniform(Seed);
 
         [Fact(DisplayName = nameof(Random_clamped_uniform))]
@@ -137,12 +138,12 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(Random_derive_uniform_sigma_zero))]
         public static void Random_derive_uniform_sigma_zero()
         {
-            const int count = 50_000;
+            const int count = 1_000;
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
             var normal = Uniform.FromMuSigma(μ, σ, Seed);
-            double[] values = normal.Sample(count).ToArray();
+            IEnumerable<double> values = normal.Sample(count);
 
             Assert.All(values, n => Assert.True(n == μ));
         }
@@ -150,12 +151,12 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(Random_derive_normal_sigma_zero))]
         public static void Random_derive_normal_sigma_zero()
         {
-            const int count = 50_000;
+            const int count = 1_000;
             const double μ = 100; // Mean
             const double σ = 0; // Sigma
 
             var normal = Normal.FromMuSigma(μ, σ, Seed);
-            double[] values = normal.Sample(count).ToArray();
+            IEnumerable<double> values = normal.Sample(count);
 
             Assert.All(values, n => Assert.True(n == μ));
         }

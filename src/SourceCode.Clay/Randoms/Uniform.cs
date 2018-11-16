@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Randoms
@@ -25,26 +26,33 @@ namespace SourceCode.Clay.Randoms
         private readonly Random _random; // MUST be accessed within a lock
         private readonly Clamp _clamp;
 
-        private Uniform(Clamp clamp, int? seed)
-        {
-            _random = seed == null ? new Random() : new Random(seed.Value);
-            _clamp = clamp ?? Clamp.Default;
-        }
-
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Uniform(int seed)
-            : this(null, seed)
-        { }
+        {
+            _random = new Random(seed);
+            _clamp = Clamp.Clamp01;
+        }
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
         public Uniform()
-            : this(null, null)
-        { }
+        {
+            _random = new Random();
+            _clamp = Clamp.Clamp01;
+        }
+
+        // Used by factory methods only
+        private Uniform(Clamp clamp, int? seed)
+        {
+            Debug.Assert(clamp != null);
+
+            _random = seed == null ? new Random() : new Random(seed.Value);
+            _clamp = clamp;
+        }
 
         /// <summary>
         /// Creates a new instance of the class that generates numbers in the specified range.

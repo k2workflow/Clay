@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Randoms
         /// <summary>
         /// A clamp with range [0, 1].
         /// </summary>
-        public static Clamp Default { get; } = new Clamp();
+        public static Clamp Clamp01 { get; } = new Clamp();
 
         public double Min { get; }
 

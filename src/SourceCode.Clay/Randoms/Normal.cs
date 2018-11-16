@@ -32,37 +32,38 @@ namespace SourceCode.Clay.Randoms
         private double _chamber;
         private bool _chambered;
 
-        private Normal(double μ, double σ, Clamp clamp, int? seed)
-        {
-            _random = seed == null ? new Random() : new Random(seed.Value);
-            _clamp = clamp;
-
-            _μ = μ;
-            _σ = σ;
-        }
-
-        private Normal(Clamp clamp, int? seed)
-        {
-            _random = seed == null ? new Random() : new Random(seed.Value);
-            _clamp = clamp ?? Clamp.Default;
-
-            (_μ, _σ) = DeriveMuSigma(0, 1);
-        }
-
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
         /// <param name="seed">The seed to initialize the random number generator with.</param>
         public Normal(int seed)
-            : this(null, seed)
-        { }
+        {
+            _random = new Random(seed);
+            _clamp = Clamp.Clamp01;
+
+            (_μ, _σ) = DeriveMuSigma(_clamp);
+        }
 
         /// <summary>
         /// Creates an instance of the class that generates numbers in the range [0, 1).
         /// </summary>
         public Normal()
-            : this(null, null)
-        { }
+        {
+            _random = new Random();
+            _clamp = Clamp.Clamp01;
+
+            (_μ, _σ) = DeriveMuSigma(_clamp);
+        }
+
+        // Used by factory methods only
+        private Normal(double μ, double σ, Clamp clamp, int? seed)
+        {
+            _random = seed == null ? new Random() : new Random(seed.Value);
+            _clamp = clamp; // Null clamp is valid (unconstrained normal distribution)
+
+            _μ = μ;
+            _σ = σ;
+        }
 
         /// <summary>
         /// Creates a new instance of the class that generates numbers in the specified range.
@@ -76,9 +77,10 @@ namespace SourceCode.Clay.Randoms
             if (min > max) throw new ArgumentOutOfRangeException(nameof(max));
             if (double.IsInfinity(max - min)) throw new ArgumentOutOfRangeException(nameof(max));
 
-            (double μ, double σ) = DeriveMuSigma(min, max);
+            var clamp = new Clamp(min, max);
+            (double μ, double σ) = DeriveMuSigma(clamp);
 
-            return new Normal(μ, σ, new Clamp(min, max), seed);
+            return new Normal(μ, σ, clamp, seed);
         }
 
         /// <summary>
@@ -201,14 +203,13 @@ namespace SourceCode.Clay.Randoms
         /// </summary>
         /// <param name="min">The minimum of the population.</param>
         /// <param name="max">The maximum of the population.</param>
-        private static (double μ, double σ) DeriveMuSigma(double min, double max)
+        private static (double μ, double σ) DeriveMuSigma(Clamp clamp)
         {
-            Debug.Assert(min <= max);
+            Debug.Assert(clamp != null);
 
-            double range = max - min;
-            double half = range / 2d;
+            double half = clamp.Range / 2d;
 
-            double μ = min + half; // Mu = min + half-range
+            double μ = clamp.Min + half; // Mu = min + half-range
 
             // ~99.7% of population is within +/- 3 standard deviations
             const double sd = 3d;
