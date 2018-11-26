@@ -26,8 +26,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.9.0" PrivateAssets="All" />
-    <PackageReference Include="BenchmarkDotNet" Version="0.11.2" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="2.10.0" PrivateAssets="All" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.11.3" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="xunit.analyzers" Version="0.10.0" />
   </ItemGroup>
