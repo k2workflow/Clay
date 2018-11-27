@@ -2002,18 +2002,20 @@ namespace SourceCode.Clay
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
-            {
-                val = -val; // Negation will set sign-bit iff non-zero
-                val >>= 31; // Send sign-bit to lsb
-                val &= 1; // Zero all other bits
-            }
+
+            int val = Unsafe.As<bool, byte>(ref condition);
+
+            val = -val; // Negation will set sign-bit iff non-zero
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
 
             return (byte)val; // 0|1
         }
@@ -2023,9 +2025,40 @@ namespace SourceCode.Clay
         /// Returns 1 if True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
             => AsByte(ref condition);
+
+        /// <summary>
+        /// Normalizes a boolean value without branching.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Normalize(ref bool condition)
+        {
+            byte byt = AsByte(ref condition);
+            condition = Unsafe.As<byte, bool>(ref byt);
+        }
+
+        /// <summary>
+        /// Normalizes a boolean value without branching.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Normalize(bool condition)
+        {
+            byte byt = AsByte(ref condition);
+            return Unsafe.As<byte, bool>(ref byt);
+        }
 
         #endregion
 
