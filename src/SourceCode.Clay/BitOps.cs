@@ -152,7 +152,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -186,7 +186,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -219,7 +219,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -252,7 +252,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(ref on);
+            ulong onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -290,7 +290,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -314,7 +314,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = AsByte(ref on);
+            int onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -338,7 +338,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -362,7 +362,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = AsByte(ref on);
+            int onn = AsNormalizedByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -385,7 +385,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(ref on);
+            uint onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -408,7 +408,7 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int onn = AsByte(ref on);
+            int onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -431,7 +431,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(ref on);
+            ulong onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -454,7 +454,7 @@ namespace SourceCode.Clay
         {
             long mask = 1L << bitOffset;
 
-            long onn = AsByte(ref on);
+            long onn = AsNormalizedByte(ref on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1654,7 +1654,7 @@ namespace SourceCode.Clay
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += AsByte(value == 0);
+            zeros += AsNormalizedByte(value == 0);
 
             return zeros;
         }
@@ -1692,8 +1692,8 @@ namespace SourceCode.Clay
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += AsByte((value >> 32) == 0);
-            b += AsByte(value == 0);
+            h += AsNormalizedByte((value >> 32) == 0);
+            b += AsNormalizedByte(value == 0);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -1995,7 +1995,26 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region AsByte
+        #region Normalize
+
+        /// <summary>
+        /// Converts a boolean to a byte value without branching.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte AsByte(ref bool condition)
+        {
+            int val = Unsafe.As<bool, byte>(ref condition);
+            return (byte)val;
+        }
+
+        /// <summary>
+        /// Converts a boolean to a byte value without branching.
+        /// </summary>
+        /// <param name="condition">The value to convert.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte AsByte(bool condition)
+            => AsByte(ref condition);
 
         /// <summary>
         /// Converts a boolean to a normalized byte value without branching.
@@ -2006,7 +2025,7 @@ namespace SourceCode.Clay
         /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte AsByte(ref bool condition)
+        public static byte AsNormalizedByte(ref bool condition)
         {
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
@@ -2029,8 +2048,8 @@ namespace SourceCode.Clay
         /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte AsByte(bool condition)
-            => AsByte(ref condition);
+        public static byte AsNormalizedByte(bool condition)
+            => AsNormalizedByte(ref condition);
 
         /// <summary>
         /// Normalizes a boolean value without branching.
@@ -2042,7 +2061,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(ref bool condition)
         {
-            byte byt = AsByte(ref condition);
+            byte byt = AsNormalizedByte(ref condition);
             condition = Unsafe.As<byte, bool>(ref byt);
         }
 
@@ -2056,7 +2075,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Normalize(bool condition)
         {
-            byte byt = AsByte(ref condition);
+            byte byt = AsNormalizedByte(ref condition);
             return Unsafe.As<byte, bool>(ref byt);
         }
 
@@ -2073,7 +2092,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue)
         {
-            uint val = AsByte(ref condition);
+            uint val = AsNormalizedByte(ref condition);
             return val * trueValue;
         }
 
@@ -2087,7 +2106,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = AsByte(ref condition);
+            uint val = AsNormalizedByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 
@@ -2121,7 +2140,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue)
         {
-            ulong val = AsByte(ref condition);
+            ulong val = AsNormalizedByte(ref condition);
             return val * trueValue;
         }
 
@@ -2135,7 +2154,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = AsByte(ref condition);
+            ulong val = AsNormalizedByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 

@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Tests
             byte n = 3; // Build a bool that has an underlying value of 3
             bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
             Assert.True(weirdBool);
-            Assert.Equal(1, BitOps.AsByte(ref weirdBool)); // Normalize
+            Assert.Equal(1, BitOps.AsNormalizedByte(ref weirdBool)); // Normalize
 
             // Iff: Converts a boolean to a specified integer value without branching.
             Assert.Equal(123, BitOps.Iff(true, 123)); // if then
@@ -1558,24 +1558,49 @@ namespace SourceCode.Clay.Tests
 
         #endregion
 
-        #region AsByte
+        #region Normalize
 
         [Fact(DisplayName = nameof(BitOps_AsByte))]
         public static void BitOps_AsByte()
         {
             // CLR permits other values for True
             // https://github.com/dotnet/roslyn/issues/24652
+            // https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
 
             for (int i = 0; i <= byte.MaxValue; i++)
             {
-                int expected = i == 0 ? 0 : 1;
+                var expectedBool = i != 0;
+                int expectedByte = expectedBool ? 1 : 0;
 
                 byte n = (byte)i;
                 bool weirdBool = Unsafe.As<byte, bool>(ref n);
-                Assert.Equal(i == 0, !weirdBool);
+                Assert.Equal(!expectedBool, !weirdBool);
 
-                int actual = BitOps.AsByte(weirdBool);
-                Assert.Equal(expected, actual);
+                // AsByte
+
+                byte asByte = BitOps.AsByte(weirdBool);
+                Assert.Equal(n, asByte);
+
+                asByte = BitOps.AsByte(ref weirdBool);
+                Assert.Equal(n, asByte);
+
+                // AsNormalizedByte
+
+                byte normalizedByte = BitOps.AsNormalizedByte(weirdBool);
+                Assert.Equal(expectedByte, normalizedByte);
+
+                normalizedByte = BitOps.AsNormalizedByte(ref weirdBool);
+                Assert.Equal(expectedByte, normalizedByte);
+
+                // Normalize
+
+                bool normalizedBool = BitOps.Normalize(weirdBool);
+                Assert.Equal(expectedBool, normalizedBool);
+                Assert.Equal(expectedByte, Unsafe.As<bool, byte>(ref normalizedBool));
+
+                BitOps.Normalize(ref weirdBool);
+                Assert.Equal(expectedBool, weirdBool);
+                Assert.Equal(expectedByte, Unsafe.As<bool, byte>(ref weirdBool));
             }
         }
 
