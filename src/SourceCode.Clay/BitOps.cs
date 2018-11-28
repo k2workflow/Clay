@@ -2030,6 +2030,11 @@ namespace SourceCode.Clay
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
 
+            // Would be great to use intrinsics here instead:
+            //   or al, al
+            //   cmovnz al, 1
+            // cmov isn't a branch and won't stall the pipeline.
+
             int val = Unsafe.As<bool, byte>(ref condition);
 
             val = -val; // Negation will set sign-bit iff non-zero

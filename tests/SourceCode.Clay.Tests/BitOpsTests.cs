@@ -1563,7 +1563,7 @@ namespace SourceCode.Clay.Tests
         [Fact(DisplayName = nameof(BitOps_AsByte))]
         public static void BitOps_AsByte()
         {
-            // CLR permits other values for True
+            // The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
             // https://github.com/dotnet/roslyn/issues/24652
             // https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
 
