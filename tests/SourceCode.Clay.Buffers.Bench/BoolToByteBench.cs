@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
@@ -96,9 +95,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BitOps.AsNormalizedByte(s_true);
+                    sum += BitOps.AsByte(s_true);
                     sum++;
-                    sum -= BitOps.AsNormalizedByte(s_false);
+                    sum -= BitOps.AsByte(s_false);
                     sum--;
 
                     sum += BitOps.Iff(s_true, 4u);
@@ -143,21 +142,15 @@ namespace SourceCode.Clay.Buffers.Bench
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte AsByteUnsafe(bool condition)
+        private static unsafe byte AsByteUnsafe(bool condition)
         {
-            int val;
-            unsafe
-            {
-                val = *(byte*)&condition; // CLR permits 0..255
-            }
-
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
-            {
-                val = -val; // Negation will set sign-bit iff non-zero
-                val >>= 31; // Send sign-bit to lsb
-                val &= 1; // Zero all other bits
-            }
+
+            int val = *(byte*)&condition;
+            val = -val; // Negation will set sign-bit iff non-zero
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
 
             return (byte)val;
         }
