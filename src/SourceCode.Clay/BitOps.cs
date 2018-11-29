@@ -2086,11 +2086,9 @@ namespace SourceCode.Clay
             //   cmovnz al, 1
             // cmov isn't a branch and won't stall the pipeline.
 
-            int val = value;
-
+            int val = value; // CLR permits 0..255
             val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)val; // 0|1
         }
@@ -2167,8 +2165,7 @@ namespace SourceCode.Clay
             int val = value;
 
             val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)(1 ^ val); // 0|1
         }

@@ -147,10 +147,9 @@ namespace SourceCode.Clay.Buffers.Bench
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
 
-            int val = *(byte*)&condition;
+            int val = *(byte*)&condition; // CLR permits 0..255
             val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)val;
         }
@@ -203,15 +202,12 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAs(bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
-            {
-                val = -val; // Negation will set sign-bit iff non-zero
-                val >>= 31; // Send sign-bit to lsb
-                val &= 1; // Zero all other bits
-            }
+
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
+            val = -val; // Negation will set sign-bit iff non-zero
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)val;
         }
@@ -266,15 +262,12 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAsRef(ref bool condition)
         {
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-
             // Normalize bool's underlying value to 0|1
             // https://github.com/dotnet/roslyn/issues/24652
-            {
-                val = -val; // Negation will set sign-bit iff non-zero
-                val >>= 31; // Send sign-bit to lsb
-                val &= 1; // Zero all other bits
-            }
+
+            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
+            val = -val; // Negation will set sign-bit iff non-zero
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)val;
         }
@@ -336,15 +329,12 @@ namespace SourceCode.Clay.Buffers.Bench
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static uint AsByte(bool condition)
             {
-                int val = new BoolToByte { Bool = condition }.Byte; // CLR permits 0..255
-
                 // Normalize bool's underlying value to 0|1
                 // https://github.com/dotnet/roslyn/issues/24652
-                {
-                    val = -val; // Negation will set sign-bit iff non-zero
-                    val >>= 31; // Send sign-bit to lsb
-                    val &= 1; // Zero all other bits
-                }
+
+                int val = new BoolToByte { Bool = condition }.Byte; // CLR permits 0..255
+                val = -val; // Negation will set sign-bit iff non-zero
+                val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
                 return (byte)val;
             }

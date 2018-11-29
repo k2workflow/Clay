@@ -29,8 +29,7 @@ namespace SourceCode.Clay
             // https://github.com/dotnet/roslyn/issues/24652
 
             val = -val; // If non-zero, negation will set sign-bit
-            val >>= 31; // Send sign-bit to lsb
-            val &= 1; // Zero all other bits
+            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
 
             return (byte)val; // 1|0
         }
