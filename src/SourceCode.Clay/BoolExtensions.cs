@@ -6,7 +6,6 @@
 #endregion
 
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
@@ -16,38 +15,12 @@ namespace SourceCode.Clay
     public static class BoolExtensions
     {
         /// <summary>
-        /// Converts a boolean to a <see cref="byte"/> value without branching.
-        /// Returns 1 if True, else returns 0.
+        /// Converts a boolean to a byte value without branching.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(this bool condition)
-        {
-            int val = new BoolToByte { Bool = condition }.Byte;
-
-            // CLR permits other values for True
-            // https://github.com/dotnet/roslyn/issues/24652
-
-            val = -val; // If non-zero, negation will set sign-bit
-            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
-
-            return (byte)val; // 1|0
-        }
-
-        // See benchmarks: Unsafe.As is fastest.
-        // Union and unsafe (which cannot be inlined) are fast.
-        // Idiomatic branching expression is slowest.
-        // Unsafe.As requires Nuget `System.Runtime.CompilerServices.Unsafe`.
-
-        [StructLayout(LayoutKind.Explicit, Size = 1, Pack = 1)]
-        private ref struct BoolToByte
-        {
-            [FieldOffset(0)]
-            public bool Bool;
-
-            [FieldOffset(0)]
-            public byte Byte;
-        }
+            => unchecked((byte)((uint)-Unsafe.As<bool, byte>(ref condition) >> 31));
 
         /// <summary>
         /// Converts a boolean to an integer value without branching.

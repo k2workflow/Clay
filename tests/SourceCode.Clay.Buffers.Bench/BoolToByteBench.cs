@@ -12,14 +12,14 @@ using BenchmarkDotNet.Attributes;
 namespace SourceCode.Clay.Buffers.Bench
 {
     /*
-      Method |     Mean |     Error |    StdDev | Scaled |
------------- |---------:|----------:|----------:|-------:|
-      Branch | 4.756 ns | 0.0370 ns | 0.0309 ns |   1.18 | x
-      Actual | 4.764 ns | 0.0609 ns | 0.0569 ns |   1.18 | x
-  UnsafeCode | 5.243 ns | 0.0615 ns | 0.0575 ns |   1.30 |
-    UnsafeAs | 4.031 ns | 0.0641 ns | 0.0568 ns |   1.00 | xx
- UnsafeAsRef | 2.524 ns | 0.0218 ns | 0.0204 ns |   0.63 | !
- UnionStruct | 5.233 ns | 0.0515 ns | 0.0482 ns |   1.30 |
+      Method |     Mean |     Error |    StdDev | Ratio |
+------------ |---------:|----------:|----------:|------:|
+      Branch | 4.495 ns | 0.0268 ns | 0.0251 ns |  1.17 | x
+      Actual | 4.447 ns | 0.0216 ns | 0.0202 ns |  1.15 | x
+  UnsafeCode | 4.915 ns | 0.0149 ns | 0.0139 ns |  1.28 |
+    UnsafeAs | 3.854 ns | 0.0457 ns | 0.0427 ns |  1.00 | xx
+ UnsafeAsRef | 2.493 ns | 0.0318 ns | 0.0282 ns |  0.65 | !
+ UnionStruct | 5.072 ns | 0.1177 ns | 0.1043 ns |  1.32 |
     */
 
     //[MemoryDiagnoser]
@@ -95,9 +95,9 @@ namespace SourceCode.Clay.Buffers.Bench
 
                 for (int n = 0; n <= N; n++)
                 {
-                    sum += BitOps.Any(s_true);
+                    sum += BitOps.AsByte(s_true);
                     sum++;
-                    sum -= BitOps.Any(s_false);
+                    sum -= BitOps.AsByte(s_false);
                     sum--;
 
                     sum += BitOps.Iff(s_true, 4u);
@@ -201,16 +201,7 @@ namespace SourceCode.Clay.Buffers.Bench
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAs(bool condition)
-        {
-            // Normalize bool's underlying value to 0|1
-            // https://github.com/dotnet/roslyn/issues/24652
-
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-            val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
-
-            return (byte)val;
-        }
+            => unchecked((byte)((uint)-Unsafe.As<bool, byte>(ref condition) >> 31));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint IfUnsafeAs(bool condition, uint trueValue)
@@ -261,16 +252,7 @@ namespace SourceCode.Clay.Buffers.Bench
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte AsByteUnsafeAsRef(ref bool condition)
-        {
-            // Normalize bool's underlying value to 0|1
-            // https://github.com/dotnet/roslyn/issues/24652
-
-            int val = Unsafe.As<bool, byte>(ref condition); // CLR permits 0..255
-            val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
-
-            return (byte)val;
-        }
+            => unchecked((byte)((uint)-Unsafe.As<bool, byte>(ref condition) >> 31));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint ToByteUnsafeAsRef(ref bool condition, uint trueValue)

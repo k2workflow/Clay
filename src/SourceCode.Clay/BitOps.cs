@@ -152,7 +152,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -186,7 +186,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -219,7 +219,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -252,7 +252,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Any(ref on);
+            ulong onn = AsByte(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -290,7 +290,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -314,7 +314,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = Any(ref on);
+            int onn = AsByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -338,7 +338,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -362,7 +362,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = Any(ref on);
+            int onn = AsByte(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -385,7 +385,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Any(ref on);
+            uint onn = AsByte(ref on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -408,7 +408,7 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int onn = Any(ref on);
+            int onn = AsByte(ref on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -431,7 +431,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Any(ref on);
+            ulong onn = AsByte(ref on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -454,7 +454,7 @@ namespace SourceCode.Clay
         {
             long mask = 1L << bitOffset;
 
-            long onn = Any(ref on);
+            long onn = AsByte(ref on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1998,20 +1998,28 @@ namespace SourceCode.Clay
         #region AsByte
 
         /// <summary>
-        /// Converts a boolean to a byte value without branching.
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
+        /// Does not incur branching.
         /// </summary>
-        /// <param name="condition">The value to convert.</param>
+        /// <param name="condition">The value to inspect.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
+            => unchecked((byte)((uint)-Unsafe.As<bool, byte>(ref condition) >> 31));
 
         /// <summary>
-        /// Converts a boolean to a byte value without branching.
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
+        /// Does not incur branching.
         /// </summary>
-        /// <param name="condition">The value to convert.</param>
+        /// <param name="condition">The value to inspect.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
+            => AsByte(ref condition);
 
         #endregion
 
@@ -2027,7 +2035,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(ref bool condition)
         {
-            byte val = Any(ref condition);
+            byte val = AsByte(ref condition);
             condition = Unsafe.As<byte, bool>(ref val);
         }
 
@@ -2041,7 +2049,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Normalize(bool condition)
         {
-            byte val = Any(ref condition);
+            byte val = AsByte(ref condition);
             return Unsafe.As<byte, bool>(ref val);
         }
 
@@ -2049,29 +2057,20 @@ namespace SourceCode.Clay
 
         #region Any
 
-        /// <summary>
-        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
-        /// Does not incur branching.
-        /// </summary>
-        /// <param name="condition">The value to inspect.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Any(ref bool condition)
-            => Any((ushort)Unsafe.As<bool, byte>(ref condition));
+        /*
+            Normalize bool's underlying value to 0|1
+            https://github.com/dotnet/roslyn/issues/24652
 
-        /// <summary>
-        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
-        /// Does not incur branching.
-        /// </summary>
-        /// <param name="condition">The value to inspect.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Any(bool condition)
-            => Any((ushort)Unsafe.As<bool, byte>(ref condition));
+            byte b;                 // Non-negative
+            int val = b;            // Widen byte to int so that negation is reliable
+            val = -val;             // Negation will set sign-bit iff non-zero
+            val = (uint)val >> 31;  // Send sign-bit to lsb (all other bits will be thus zero'd)
+
+            Would be great to use intrinsics here instead:
+                OR al, al
+                CMOVNZ al, 1
+            CMOV isn't a branch and won't stall the pipeline.
+        */
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2080,18 +2079,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(ushort value)
-        {
-            // Would be great to use intrinsics here instead:
-            //   or al, al
-            //   cmovnz al, 1
-            // cmov isn't a branch and won't stall the pipeline.
-
-            int val = value; // CLR permits 0..255
-            val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
-
-            return (byte)val; // 0|1
-        }
+            => unchecked((byte)((uint)-value >> 31));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2109,8 +2097,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(uint value)
-            // Fold into least significant ushort
-            => Any(unchecked((ushort)(value | value >> 16)));
+            => unchecked((byte)((ulong)-value >> 63));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2119,8 +2106,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(int value)
-            // Fold into least significant ushort
-            => Any(unchecked((ushort)(value | value >> 16)));
+            => Any(unchecked((uint)value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2129,8 +2115,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(ulong value)
-            // Fold into least significant uint
-            => Any(unchecked((uint)(value | value >> 32)));
+            // Fold into uint
+            => Any((uint)(value | value >> 32));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2139,8 +2125,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(long value)
-            // Fold into least significant uint
-            => Any(unchecked((uint)(value | value >> 32)));
+            => Any(unchecked((ulong)value));
 
         #endregion
 
@@ -2153,23 +2138,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ushort value)
-            => (byte)(1 ^ Any(value));
-
-        /*
-        {
-            // Would be great to use intrinsics here instead:
-            //   or al, al
-            //   cmovnz al, 1
-            // cmov isn't a branch and won't stall the pipeline.
-
-            int val = value;
-
-            val = -val; // Negation will set sign-bit iff non-zero
-            val >>= 31; // Send sign-bit to lsb (all other bits will be zero)
-
-            return (byte)(1 ^ val); // 0|1
-        }
-        */
+            => (byte)(1u ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2178,7 +2147,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(short value)
-            => NotAny(unchecked((ushort)value));
+            => (byte)(1u ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2187,8 +2156,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(uint value)
-            // Fold into least significant ushort
-            => NotAny(unchecked((ushort)(value | value >> 16)));
+            => (byte)(1u ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2197,8 +2165,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(int value)
-            // Fold into least significant ushort
-            => NotAny(unchecked((ushort)(value | value >> 16)));
+            => (byte)(1u ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2207,8 +2174,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ulong value)
-            // Fold into least significant uint
-            => NotAny(unchecked((uint)(value | value >> 32)));
+            => (byte)(1u ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2217,8 +2183,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(long value)
-            // Fold into least significant uint
-            => NotAny(unchecked((uint)(value | value >> 32)));
+            => (byte)(1u ^ Any(value));
 
         #endregion
 
@@ -2233,7 +2198,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue)
         {
-            uint val = Any(ref condition);
+            uint val = AsByte(ref condition);
             return val * trueValue;
         }
 
@@ -2247,7 +2212,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = Any(ref condition);
+            uint val = AsByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 
@@ -2281,7 +2246,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue)
         {
-            ulong val = Any(ref condition);
+            ulong val = AsByte(ref condition);
             return val * trueValue;
         }
 
@@ -2295,7 +2260,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = Any(ref condition);
+            ulong val = AsByte(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 
