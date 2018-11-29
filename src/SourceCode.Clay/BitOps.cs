@@ -52,7 +52,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(sbyte value, int bitOffset)
-            => unchecked(ExtractBit((byte)value, bitOffset));
+            => ExtractBit(unchecked((byte)value), bitOffset);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -79,7 +79,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(short value, int bitOffset)
-            => unchecked(ExtractBit((ushort)value, bitOffset));
+            => ExtractBit(unchecked((ushort)value), bitOffset);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -105,7 +105,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(int value, int bitOffset)
-            => unchecked(ExtractBit((uint)value, bitOffset));
+            => ExtractBit(unchecked((uint)value), bitOffset);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -131,7 +131,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(long value, int bitOffset)
-            => unchecked(ExtractBit((ulong)value, bitOffset));
+            => ExtractBit(unchecked((ulong)value), bitOffset);
 
         #endregion
 
@@ -152,7 +152,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -186,7 +186,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -219,7 +219,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -252,7 +252,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(ref on);
+            ulong onn = Any(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -290,7 +290,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -314,7 +314,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = AsByte(ref on);
+            int onn = Any(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -338,7 +338,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -362,7 +362,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = AsByte(ref on);
+            int onn = Any(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -385,7 +385,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = AsByte(ref on);
+            uint onn = Any(ref on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -408,7 +408,7 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int onn = AsByte(ref on);
+            int onn = Any(ref on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -431,7 +431,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = AsByte(ref on);
+            ulong onn = Any(ref on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -454,7 +454,7 @@ namespace SourceCode.Clay
         {
             long mask = 1L << bitOffset;
 
-            long onn = AsByte(ref on);
+            long onn = Any(ref on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -1503,7 +1503,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(sbyte value)
-            => unchecked(PopCount((uint)value & 0xFFu)); // Note masking
+            => PopCount(unchecked((uint)value & 0xFFu)); // Note masking
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1521,7 +1521,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(short value)
-            => unchecked(PopCount((uint)value & 0xFFFFu)); // Note masking
+            => PopCount(unchecked((uint)value & 0xFFFFu)); // Note masking
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1554,7 +1554,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(int value)
-            => unchecked(PopCount((uint)value));
+            => PopCount(unchecked((uint)value));
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1587,7 +1587,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int PopCount(long value)
-            => unchecked(PopCount((ulong)value));
+            => PopCount(unchecked((ulong)value));
 
         #endregion
 
@@ -1619,7 +1619,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(sbyte value)
-            => unchecked(LeadingZeros((byte)value));
+            => LeadingZeros(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1637,7 +1637,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(short value)
-            => unchecked(LeadingZeros((ushort)value));
+            => LeadingZeros(unchecked((ushort)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1648,13 +1648,13 @@ namespace SourceCode.Clay
         public static int LeadingZeros(uint value)
         {
             uint val = value;
-            CascadeTrailing(ref val);
+            FillTrailing(ref val);
 
             uint ix = (val * DeBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
 
             // Log(0) is undefined: Return 32.
-            zeros += IfZero(value);
+            zeros += NotAny(value);
 
             return zeros;
         }
@@ -1666,7 +1666,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(int value)
-            => unchecked(LeadingZeros((uint)value));
+            => LeadingZeros(unchecked((uint)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1677,7 +1677,7 @@ namespace SourceCode.Clay
         public static int LeadingZeros(ulong value)
         {
             ulong val = value;
-            CascadeTrailing(ref val);
+            FillTrailing(ref val);
 
             // Instead of using a 64-bit lookup table,
             // we use the existing 32-bit table twice.
@@ -1692,8 +1692,8 @@ namespace SourceCode.Clay
             uint b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
 
             // Log(0) is undefined: Return 32 + 32.
-            h += IfZero(value >> 32);
-            b += IfZero(value);
+            h += NotAny((uint)(value >> 32));
+            b += NotAny((uint)value);
 
             // Truth table
             // h   b  h32 actual   h + (b * m32 ? 1 : 0)
@@ -1713,7 +1713,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingZeros(long value)
-            => unchecked(LeadingZeros((ulong)value));
+            => LeadingZeros(unchecked((ulong)value));
 
         #endregion
 
@@ -1733,7 +1733,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(sbyte value)
-            => unchecked(LeadingOnes((byte)value));
+            => LeadingOnes(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1749,7 +1749,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(short value)
-            => unchecked(LeadingOnes((ushort)value));
+            => LeadingOnes(unchecked((ushort)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1765,7 +1765,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(int value)
-            => unchecked(LeadingOnes((uint)value));
+            => LeadingOnes(unchecked((uint)value));
 
         /// <summary>
         /// Count the number of leading one bits in a mask.
@@ -1781,7 +1781,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LeadingOnes(long value)
-            => unchecked(LeadingOnes((ulong)value));
+            => LeadingOnes(unchecked((ulong)value));
 
         #endregion
 
@@ -1825,7 +1825,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(sbyte value)
-            => unchecked(TrailingZeros((byte)value));
+            => TrailingZeros(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1843,7 +1843,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(short value)
-            => unchecked(TrailingZeros((ushort)value));
+            => TrailingZeros(unchecked((ushort)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1880,7 +1880,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(int value)
-            => unchecked(TrailingZeros((uint)value));
+            => TrailingZeros(unchecked((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1923,7 +1923,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingZeros(long value)
-            => unchecked(TrailingZeros((ulong)value));
+            => TrailingZeros(unchecked((ulong)value));
 
         #endregion
 
@@ -1943,7 +1943,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(sbyte value)
-            => unchecked(TrailingOnes((byte)value));
+            => TrailingOnes(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of trailing one bits in a mask.
@@ -1959,7 +1959,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(short value)
-            => unchecked(TrailingOnes((ushort)value));
+            => TrailingOnes(unchecked((ushort)value));
 
         /// <summary>
         /// Count the number of trailing one bits in a mask.
@@ -1975,7 +1975,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(int value)
-            => unchecked(TrailingOnes((uint)value));
+            => TrailingOnes(unchecked((uint)value));
 
         /// <summary>
         /// Count the number of trailing one bits in a mask.
@@ -1991,58 +1991,27 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TrailingOnes(long value)
-            => unchecked(TrailingOnes((ulong)value));
-
-        #endregion
-
-        #region AsRawByte
-
-        /// <summary>
-        /// Converts a boolean to a byte value without branching.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte AsRawByte(ref bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
-
-        /// <summary>
-        /// Converts a boolean to a byte value without branching.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte AsRawByte(bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
+            => TrailingOnes(unchecked((ulong)value));
 
         #endregion
 
         #region AsByte
 
         /// <summary>
-        /// Converts a boolean to a normalized byte value without branching.
-        /// Returns 1 if True, else returns 0.
+        /// Converts a boolean to a byte value without branching.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
-        {
-            ushort val = Unsafe.As<bool, byte>(ref condition);
-            return IfNonZero(val);
-        }
+            => Unsafe.As<bool, byte>(ref condition);
 
         /// <summary>
-        /// Converts a boolean to a normalized byte value without branching.
-        /// Returns 1 if True, else returns 0.
+        /// Converts a boolean to a byte value without branching.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
-            => AsByte(ref condition);
+            => Unsafe.As<bool, byte>(ref condition);
 
         #endregion
 
@@ -2058,8 +2027,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(ref bool condition)
         {
-            int val = AsByte(ref condition);
-            condition = Unsafe.As<int, bool>(ref val);
+            byte val = Any(ref condition);
+            condition = Unsafe.As<byte, bool>(ref val);
         }
 
         /// <summary>
@@ -2072,26 +2041,46 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Normalize(bool condition)
         {
-            bool val = condition;
-
-            Normalize(ref val);
-
-            return val;
+            byte val = Any(ref condition);
+            return Unsafe.As<byte, bool>(ref val);
         }
 
         #endregion
 
-        #region IfNonZero
+        #region Any
+
+        /// <summary>
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The value to inspect.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte Any(ref bool condition)
+            => Any((ushort)Unsafe.As<bool, byte>(ref condition));
+
+        /// <summary>
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The value to inspect.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte Any(bool condition)
+            => Any((ushort)Unsafe.As<bool, byte>(ref condition));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(ushort value)
+        public static byte Any(ushort value)
         {
-            // Normalize bool's underlying value to 0|1
-            // https://github.com/dotnet/roslyn/issues/24652
             // Would be great to use intrinsics here instead:
             //   or al, al
             //   cmovnz al, 1
@@ -2108,110 +2097,109 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(short value)
-            => IfNonZero(unchecked((ushort)value));
+        public static byte Any(short value)
+            => Any(unchecked((ushort)value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(uint value)
-        {
-            uint val = value;
-
-            // Fold over least significant short
-            val = val >> 16 | val;
-
-            return IfNonZero(unchecked((ushort)val));
-        }
+        public static byte Any(uint value)
+            // Fold into least significant ushort
+            => Any(unchecked((ushort)(value | value >> 16)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(int value)
-            => IfNonZero(unchecked((uint)value));
+        public static byte Any(int value)
+            => Any(unchecked((uint)value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(ulong value)
-        {
-            ulong val = value;
-
-            // Fold over least significant short
-            val = val >> 32 | val;
-            val = val >> 16 | val;
-
-            return IfNonZero(unchecked((ushort)val));
-        }
+        public static byte Any(ulong value)
+            // Fold into least significant uint
+            => Any(unchecked((uint)(value | value >> 32)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfNonZero(long value)
-            => IfNonZero(unchecked((ulong)value));
+        public static byte Any(long value)
+            // Fold into least significant uint
+            => Any(unchecked((uint)(value | value >> 32)));
 
         #endregion
 
-        #region IfZero
+        #region NotAny
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(ushort value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(ushort value)
+            => (byte)(1 - Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(short value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(short value)
+            => (byte)(1 - Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(uint value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(uint value)
+            => (byte)(1 - Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(int value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(int value)
+            => (byte)(1 - Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(ulong value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(ulong value)
+            => (byte)(1 - Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
+        /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IfZero(long value)
-            => (byte)(1 - IfNonZero(value));
+        public static byte NotAny(long value)
+            => (byte)(1 - Any(value));
 
         #endregion
 
@@ -2226,7 +2214,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue)
         {
-            uint val = AsByte(ref condition);
+            uint val = Any(ref condition);
             return val * trueValue;
         }
 
@@ -2240,7 +2228,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = AsByte(ref condition);
+            uint val = Any(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 
@@ -2274,7 +2262,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue)
         {
-            ulong val = AsByte(ref condition);
+            ulong val = Any(ref condition);
             return val * trueValue;
         }
 
@@ -2288,7 +2276,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = AsByte(ref condition);
+            ulong val = Any(ref condition);
             return (val * trueValue) + (1 - val) * falseValue;
         }
 
@@ -2317,10 +2305,14 @@ namespace SourceCode.Clay
 
         #region Helpers
 
+        /// <summary>
+        /// Fills the trailing zeros in a mask with ones.
+        /// </summary>
+        /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void CascadeTrailing(ref uint value)
+        private static void FillTrailing(ref uint value)
         {
-            // byte#                     4          3   2  1
+            // byte#                         4          3   2  1
             //                       1000 0000  0000 0000  00 00
             value |= value >> 01; // 1100 0000  0000 0000  00 00
             value |= value >> 02; // 1111 0000  0000 0000  00 00
@@ -2329,10 +2321,14 @@ namespace SourceCode.Clay
             value |= value >> 16; // 1111 1111  1111 1111  FF FF
         }
 
+        /// <summary>
+        /// Fills the trailing zeros in a mask with ones.
+        /// </summary>
+        /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void CascadeTrailing(ref ulong value)
+        private static void FillTrailing(ref ulong value)
         {
-            // byte#                     8          7   6  5   4  3   2  1
+            // byte#                         8          7   6  5   4  3   2  1
             //                       1000 0000  0000 0000  00 00  00 00  00 00
             value |= value >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
             value |= value >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
