@@ -2121,7 +2121,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(int value)
-            => Any(unchecked((uint)value));
+            // Fold into least significant ushort
+            => Any(unchecked((ushort)(value | value >> 16)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2154,7 +2155,20 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ushort value)
-            => (byte)(1 ^ Any(value));
+        {
+            // Would be great to use intrinsics here instead:
+            //   or al, al
+            //   cmovnz al, 1
+            // cmov isn't a branch and won't stall the pipeline.
+
+            int val = value;
+
+            val = -val; // Negation will set sign-bit iff non-zero
+            val >>= 31; // Send sign-bit to lsb
+            val &= 1; // Zero all other bits
+
+            return (byte)(1 ^ val); // 0|1
+        }
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2163,7 +2177,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(short value)
-            => (byte)(1 ^ Any(value));
+            => NotAny(unchecked((ushort)value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2172,7 +2186,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(uint value)
-            => (byte)(1 ^ Any(value));
+            // Fold into least significant ushort
+            => NotAny(unchecked((ushort)(value | value >> 16)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2181,7 +2196,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(int value)
-            => (byte)(1 ^ Any(value));
+            // Fold into least significant ushort
+            => NotAny(unchecked((ushort)(value | value >> 16)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2190,7 +2206,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ulong value)
-            => (byte)(1 ^ Any(value));
+            // Fold into least significant uint
+            => NotAny(unchecked((uint)(value | value >> 32)));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2199,7 +2216,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(long value)
-            => (byte)(1 ^ Any(value));
+            // Fold into least significant uint
+            => NotAny(unchecked((uint)(value | value >> 32)));
 
         #endregion
 
