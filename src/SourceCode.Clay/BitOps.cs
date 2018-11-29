@@ -2155,6 +2155,9 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ushort value)
+            => (byte)(1 ^ Any(value));
+
+        /*
         {
             // Would be great to use intrinsics here instead:
             //   or al, al
@@ -2169,6 +2172,7 @@ namespace SourceCode.Clay
 
             return (byte)(1 ^ val); // 0|1
         }
+        */
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
