@@ -2154,7 +2154,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ushort value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2163,7 +2163,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(short value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2172,7 +2172,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(uint value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2181,7 +2181,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(int value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2190,7 +2190,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(ulong value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2199,7 +2199,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NotAny(long value)
-            => (byte)(1 - Any(value));
+            => (byte)(1 ^ Any(value));
 
         #endregion
 
