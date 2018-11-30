@@ -2007,7 +2007,7 @@ namespace SourceCode.Clay
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(ref bool condition)
-            => unchecked((byte)((uint)-Unsafe.As<bool, byte>(ref condition) >> 31));
+            => Any(Unsafe.As<bool, byte>(ref condition));
 
         /// <summary>
         /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
@@ -2019,26 +2019,24 @@ namespace SourceCode.Clay
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte AsByte(bool condition)
-            => AsByte(ref condition);
+            => Any(Unsafe.As<bool, byte>(ref condition));
 
         #endregion
 
         #region Any
 
-        /*
-            Normalize bool's underlying value to 0|1
-            https://github.com/dotnet/roslyn/issues/24652
+        // Normalize bool's underlying value to 0|1
+        // https://github.com/dotnet/roslyn/issues/24652
 
-            byte b;                 // Non-negative
-            int val = b;            // Widen byte to int so that negation is reliable
-            val = -val;             // Negation will set sign-bit iff non-zero
-            val = (uint)val >> 31;  // Send sign-bit to lsb (all other bits will be thus zero'd)
+        // byte b;                 // Non-negative
+        // int val = b;            // Widen byte to int so that negation is reliable
+        // val = -val;             // Negation will set sign-bit iff non-zero
+        // val = (uint)val >> 31;  // Send sign-bit to lsb (all other bits will be thus zero'd)
 
-            Would be great to use intrinsics here instead:
-                OR al, al
-                CMOVNZ al, 1
-            CMOV isn't a branch and won't stall the pipeline.
-        */
+        // Would be great to use intrinsics here instead:
+        //     OR al, al
+        //     CMOVNZ al, 1
+        // CMOV isn't a branch and won't stall the pipeline.
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
