@@ -1583,16 +1583,6 @@ namespace SourceCode.Clay.Tests
 
                 normalizedByte = BitOps.AsByte(ref weirdBool);
                 Assert.Equal(expectedByte, normalizedByte);
-
-                // Normalize
-
-                bool normalizedBool = BitOps.Normalize(weirdBool);
-                Assert.Equal(expectedBool, normalizedBool);
-                Assert.Equal(expectedByte, Unsafe.As<bool, byte>(ref normalizedBool));
-
-                BitOps.Normalize(ref weirdBool);
-                Assert.Equal(expectedBool, weirdBool);
-                Assert.Equal(expectedByte, Unsafe.As<bool, byte>(ref weirdBool));
             }
         }
 

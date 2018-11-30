@@ -2023,38 +2023,6 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region Normalize
-
-        /// <summary>
-        /// Normalizes a boolean value without branching.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Normalize(ref bool condition)
-        {
-            byte val = AsByte(ref condition);
-            condition = Unsafe.As<byte, bool>(ref val);
-        }
-
-        /// <summary>
-        /// Normalizes a boolean value without branching.
-        /// </summary>
-        /// <param name="condition">The value to convert.</param>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Normalize(bool condition)
-        {
-            byte val = AsByte(ref condition);
-            return Unsafe.As<byte, bool>(ref val);
-        }
-
-        #endregion
-
         #region Any
 
         /*
@@ -2075,6 +2043,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2084,6 +2053,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2093,6 +2063,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2102,6 +2073,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2111,6 +2083,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2121,6 +2094,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVNZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2134,6 +2108,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2143,6 +2118,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2152,6 +2128,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2161,6 +2138,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2170,6 +2148,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -2179,6 +2158,7 @@ namespace SourceCode.Clay
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
+        /// Similar in behavior to the x86 instruction CMOVZ.
         /// </summary>
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
