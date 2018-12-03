@@ -8,7 +8,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-// Some of this inspired by the Stanford Bit Widdling Hacks by Sean Eron Anderson:
+// Some of this inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
 
 namespace SourceCode.Clay
@@ -1693,7 +1693,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte LeadingZeros(ulong value)
         {
-            // Instead of writing a 64-bit function, we use the 32-bit function twice.
+            // Instead of writing a 64-bit function,
+            // we use the 32-bit function twice.
 
             uint h, b;
             if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
@@ -1719,13 +1720,6 @@ namespace SourceCode.Clay
                 h += NotAny((uint)(value >> 32)); // value == 0 ? 1 : 0
                 b += NotAny((uint)value);
             }
-
-            // Truth table
-            // h   b  h32 actual   h + (b * m32 ? 1 : 0)
-            // 32 32  1   32+32   32 + (32 * 1)
-            // 32  b  1   32+b    32 + (b * 1)
-            // h  32  0   h        h + (32 * 0)
-            // h   b  0   h        h + (b * 0)
 
             // Keep b iff h==32
             uint mask = h & ~32u; // Zero 5th bit (32)
@@ -1943,13 +1937,6 @@ namespace SourceCode.Clay
 
             uint h = s_trail32u[hi];
             uint b = s_trail32u[bi]; // Use warm cache
-
-            // Truth table
-            // h   b  b32 actual  b + (h * b32 ? 1 : 0)
-            // 32 32  1   32+32  32 + (32 * 1)
-            // 32  b  0   b       b + (32 * 0)
-            // h  32  1   32+h   32 + (h * 1)
-            // h   b  0   b       b + (h * 0)
 
             // Keep h iff b==32
             uint mask = b & ~32u; // Zero 5th bit (32)
