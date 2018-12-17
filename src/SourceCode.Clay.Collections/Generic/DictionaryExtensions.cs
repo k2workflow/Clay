@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Collections.Generic
                 if (xCount != yCount) return false; // (n, m)
                 if (xCount == 0) return true; // (0, 0)
 
-                // IDictionary is more common
+                // IDictionary
                 if (xe is IDictionary<TKey, TValue> xd)
                 {
                     // For each key in the second dictionary...
@@ -57,21 +57,7 @@ namespace SourceCode.Clay.Collections.Generic
                 }
 
                 // IReadOnlyDictionary
-                // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-                if (xe is IReadOnlyDictionary<TKey, TValue> xrd)
-                {
-                    // For each key in the second dictionary...
-                    foreach (KeyValuePair<TKey, TValue> yi in ye)
-                    {
-                        // ...check if that same key exists in the first dictionary
-                        if (!xrd.TryGetValue(yi.Key, out TValue xVal)) return false; // Key: Uses the equality comparer from the first dictionary
-
-                        // And if so, whether the corresponding values match
-                        if (!cmpr.Equals(yi.Value, xVal)) return false; // Value: Uses the specified equality comparer
-                    }
-
-                    return true;
-                }
+                // Note: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
             }
 
             // Synthesize an IDictionary

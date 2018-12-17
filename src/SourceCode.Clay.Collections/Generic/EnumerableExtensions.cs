@@ -61,27 +61,7 @@ namespace SourceCode.Clay.Collections.Generic
                 }
 
                 // IReadOnlyList
-                // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-                else if (xe is IReadOnlyList<TSource> xrl)
-                {
-                    // IReadOnlyList is more likely
-                    // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-                    if (ye is IReadOnlyList<TSource> yrl)
-                    {
-                        for (var i = 0; i < xrl.Count; i++)
-                            if (!cmpr.Equals(xrl[i], yrl[i]))
-                                return false;
-
-                        return true;
-                    }
-
-                    // IList
-                    if (ye is IList<TSource> yl)
-                    {
-                        var eq = ListEqualsLedger(yl, xrl);
-                        return eq;
-                    }
-                }
+                // Note: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
             }
 
             // Else resort to an IEnumerable comparison

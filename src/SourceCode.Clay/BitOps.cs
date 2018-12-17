@@ -1665,7 +1665,7 @@ namespace SourceCode.Clay
             }
 
             uint val = value;
-            FillTrailing(ref val);
+            FoldTrailing(ref val);
 
             uint ix = (val * DeBruijn32) >> 27;
             int zeros = 31 - s_deBruijn32[ix];
@@ -1705,7 +1705,7 @@ namespace SourceCode.Clay
             else
             {
                 ulong val = value;
-                FillTrailing(ref val);
+                FoldTrailing(ref val);
 
                 uint hv = (uint)(val >> 32); // High-32
                 uint bv = (uint)val; // Low-32
@@ -2302,7 +2302,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FillTrailing(ref uint value)
+        private static void FoldTrailing(ref uint value)
         {
             // byte#                         4          3   2  1
             //                       1000 0000  0000 0000  00 00
@@ -2318,7 +2318,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FillTrailing(ref ulong value)
+        private static void FoldTrailing(ref ulong value)
         {
             // byte#                         8          7   6  5   4  3   2  1
             //                       1000 0000  0000 0000  00 00  00 00  00 00
