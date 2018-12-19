@@ -20,7 +20,7 @@ namespace SourceCode.Clay
     {
         #region ExtractBit
 
-        // For bitlength N, it is conventional to treat N as congruent modulo-N 
+        // For bitlength N, it is conventional to treat N as congruent modulo-N
         // under the shift operation.
         // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
         // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. So we use & not %.
@@ -983,7 +983,7 @@ namespace SourceCode.Clay
         // 01  01 | 10  11  00
         // 10  01 | 10  00  11
         // 11  01 | 10  01  10
-        //                      
+        //
         // 00  10 | 01  01  10
         // 01  10 | 01  00  11
         // 10  10 | 01  11  00
@@ -1531,10 +1531,10 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte PopCount(uint value)
         {
-            if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
-            {
-                return (byte)System.Runtime.Intrinsics.X86.Popcnt.PopCount(value);
-            }
+            //if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
+            //{
+            //    return (byte)System.Runtime.Intrinsics.X86.Popcnt.PopCount(value);
+            //}
 
             const uint c0 = 0x_5555_5555;
             const uint c1 = 0x_3333_3333;
@@ -1569,12 +1569,12 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte PopCount(ulong value)
         {
-            if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
-            {
-                int count = System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)value);
-                count += System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)(value >> 32));
-                return (byte)count;
-            }
+            //if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
+            //{
+            //    int count = System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)value);
+            //    count += System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)(value >> 32));
+            //    return (byte)count;
+            //}
 
             const ulong c0 = 0x_5555_5555_5555_5555;
             const ulong c1 = 0x_3333_3333_3333_3333;
@@ -1659,10 +1659,10 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte LeadingZeros(uint value)
         {
-            if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
-            {
-                return (byte)System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(value);
-            }
+            //if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
+            //{
+            //    return (byte)System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(value);
+            //}
 
             uint val = value;
             FoldTrailing(ref val);
@@ -1697,12 +1697,12 @@ namespace SourceCode.Clay
             // we use the 32-bit function twice.
 
             uint h, b;
-            if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
-            {
-                h = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)(value >> 32));
-                b = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)value);
-            }
-            else
+            //if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
+            //{
+            //    h = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)(value >> 32));
+            //    b = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)value);
+            //}
+            //else
             {
                 ulong val = value;
                 FoldTrailing(ref val);
@@ -1876,10 +1876,10 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeros(uint value)
         {
-            if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
-            {
-                return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
-            }
+            //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
+            //{
+            //    return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
+            //}
 
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...]
@@ -1918,10 +1918,10 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeros(ulong value)
         {
-            if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
-            {
-                return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
-            }
+            //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
+            //{
+            //    return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
+            //}
 
             // Instead of writing a 64-bit lookup table,
             // we use the existing 32-bit table twice.

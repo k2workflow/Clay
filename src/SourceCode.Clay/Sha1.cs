@@ -33,6 +33,7 @@ namespace SourceCode.Clay
 
         // We choose to use value types for primary storage so that we can live on the stack
         // TODO: In C#8 we can use 'readonly fixed byte'
+        // https://github.com/dotnet/csharplang/issues/1502
 
         [StructLayout(LayoutKind.Sequential, Pack = 1, Size = ByteLength)]
         private unsafe struct Block // Avoids making main struct unsafe
