@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Tests
             byte n = 3; // Build a bool that has an underlying value of 3
             bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
             Assert.True(weirdBool);
-            Assert.Equal(1, BitOps.Normalize(ref weirdBool)); // Normalize
+            Assert.Equal(1, BitOps.Iff(ref weirdBool)); // Normalize
 
             // Iff: Converts a boolean to a specified integer value without branching.
             Assert.Equal(123, BitOps.Iff(true, 123)); // if then
@@ -1586,10 +1586,10 @@ namespace SourceCode.Clay.Tests
 
                 // Normalize
 
-                byte normalizedByte = BitOps.Normalize(weirdBool);
+                byte normalizedByte = BitOps.Iff(weirdBool);
                 Assert.Equal(expectedByte, normalizedByte);
 
-                normalizedByte = BitOps.Normalize(ref weirdBool);
+                normalizedByte = BitOps.Iff(ref weirdBool);
                 Assert.Equal(expectedByte, normalizedByte);
             }
         }

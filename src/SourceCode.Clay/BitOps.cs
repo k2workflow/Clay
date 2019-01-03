@@ -152,7 +152,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= shft;
 
             return (byte)((value & ~mask) | onn);
@@ -186,7 +186,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= shft;
 
             return (ushort)((value & ~mask) | onn);
@@ -219,7 +219,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -252,7 +252,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Normalize(ref on);
+            ulong onn = Iff(ref on);
             onn <<= bitOffset;
 
             return (value & ~mask) | onn;
@@ -290,7 +290,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             uint mask = 1U << shft;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -314,7 +314,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 7;
             int mask = 1 << shft;
 
-            int onn = Normalize(ref on);
+            int onn = Iff(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -338,7 +338,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             uint mask = 1U << shft;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= shft;
 
             uint btw = value & mask;
@@ -362,7 +362,7 @@ namespace SourceCode.Clay
             int shft = bitOffset & 15;
             int mask = 1 << shft;
 
-            int onn = Normalize(ref on);
+            int onn = Iff(ref on);
             onn <<= shft;
 
             int btw = value & mask;
@@ -385,7 +385,7 @@ namespace SourceCode.Clay
         {
             uint mask = 1U << bitOffset;
 
-            uint onn = Normalize(ref on);
+            uint onn = Iff(ref on);
             onn <<= bitOffset;
 
             uint btw = value & mask;
@@ -408,7 +408,7 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int onn = Normalize(ref on);
+            int onn = Iff(ref on);
             onn <<= bitOffset;
 
             int btw = value & mask;
@@ -431,7 +431,7 @@ namespace SourceCode.Clay
         {
             ulong mask = 1UL << bitOffset;
 
-            ulong onn = Normalize(ref on);
+            ulong onn = Iff(ref on);
             onn <<= bitOffset;
 
             ulong btw = value & mask;
@@ -454,7 +454,7 @@ namespace SourceCode.Clay
         {
             long mask = 1L << bitOffset;
 
-            long onn = Normalize(ref on);
+            long onn = Iff(ref on);
             onn <<= bitOffset;
 
             long btw = value & mask;
@@ -2055,36 +2055,6 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region Normalize
-
-        /// <summary>
-        /// Normalizes the underlying <see cref="byte"/> value from a <see cref="bool"/>.
-        /// Does not incur branching.
-        /// </summary>
-        /// <param name="condition">The value to normalize.</param>
-        /// <returns>Returns 0 if <paramref name="condition"/> is False, else returns 1.</returns>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Normalize(ref bool condition)
-            => NonZero((ushort)AsByte(ref condition));
-
-        /// <summary>
-        /// Normalizes the underlying <see cref="byte"/> value from a <see cref="bool"/>.
-        /// Does not incur branching.
-        /// </summary>
-        /// <param name="condition">The value to normalize.</param>
-        /// <returns>Returns 1 if <paramref name="condition"/> is False, else returns 1.</returns>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte Normalize(bool condition)
-            => NonZero((ushort)AsByte(ref condition));
-
-        #endregion
-
         #region NonZero
 
         // Normalize bool's underlying value to 0|1
@@ -2235,27 +2205,42 @@ namespace SourceCode.Clay
         #region Iff
 
         /// <summary>
-        /// Converts a boolean to a specified integer value without branching.
-        /// Returns 1 if True, else returns 0.
+        /// Normalizes the underlying <see cref="byte"/> value from a <see cref="bool"/> without branching.
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
         /// </summary>
-        /// <param name="condition">The value to convert.</param>
+        /// <param name="condition">The value to normalize.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Iff(bool condition)
-            => Normalize(ref condition);
+        public static byte Iff(ref bool condition)
+            => NonZero((ushort)AsByte(ref condition));
+
+        /// <summary>
+        /// Normalizes the underlying <see cref="byte"/> value from a <see cref="bool"/> without branching.
+        /// Returns 1 if <paramref name="condition"/> is True, else returns 0.
+        /// </summary>
+        /// <param name="condition">The value to normalize.</param>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte Iff(bool condition)
+            => Iff(ref condition);
 
         /// <summary>
         /// Converts a boolean to a specified integer value without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue)
-            => Normalize(ref condition) * trueValue;
+            => Iff(ref condition) * trueValue;
 
         /// <summary>
         /// Converts a boolean to specified integer values without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
@@ -2263,13 +2248,13 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue, uint falseValue)
         {
-            uint val = Normalize(ref condition);
-            return (val * trueValue) + (1 ^ val) * falseValue;
+            uint val = Iff(ref condition);
+            return (val * trueValue) + (1u ^ val) * falseValue;
         }
 
         /// <summary>
         /// Converts a boolean to a specified integer value without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
@@ -2279,7 +2264,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts a boolean to specified integer values without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
@@ -2290,17 +2275,17 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts a boolean to a specified integer value without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue)
-            => Normalize(ref condition) * trueValue;
+            => Iff(ref condition) * trueValue;
 
         /// <summary>
         /// Converts a boolean to specified integer values without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
@@ -2308,13 +2293,13 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong Iff(bool condition, ulong trueValue, ulong falseValue)
         {
-            ulong val = Normalize(ref condition);
-            return (val * trueValue) + (1 ^ val) * falseValue;
+            ulong val = Iff(ref condition);
+            return (val * trueValue) + (1ul ^ val) * falseValue;
         }
 
         /// <summary>
         /// Converts a boolean to a specified integer value without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns 0.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns 0.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
@@ -2324,7 +2309,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Converts a boolean to specified integer values without branching.
-        /// Returns <paramref name="trueValue"/> if True, else returns <paramref name="falseValue"/>.
+        /// Returns <paramref name="trueValue"/> if <paramref name="condition"/> is True, else returns <paramref name="falseValue"/>.
         /// </summary>
         /// <param name="condition">The value to convert.</param>
         /// <param name="trueValue">The value to return if True.</param>
