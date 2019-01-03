@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Tests
             byte n = 3; // Build a bool that has an underlying value of 3
             bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
             Assert.True(weirdBool);
-            Assert.Equal(1, BitOps.AsByte(ref weirdBool)); // Normalize
+            Assert.Equal(1, BitOps.Normalize(ref weirdBool)); // Normalize
 
             // Iff: Converts a boolean to a specified integer value without branching.
             Assert.Equal(123, BitOps.Iff(true, 123)); // if then
@@ -1560,8 +1560,8 @@ namespace SourceCode.Clay.Tests
 
         #region Normalize
 
-        [Fact(DisplayName = nameof(BitOps_AsByte))]
-        public static void BitOps_AsByte()
+        [Fact(DisplayName = nameof(BitOps_Normalize))]
+        public static void BitOps_Normalize()
         {
             // The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
             // https://github.com/dotnet/roslyn/issues/24652
@@ -1578,10 +1578,18 @@ namespace SourceCode.Clay.Tests
 
                 // AsByte
 
-                byte normalizedByte = BitOps.AsByte(weirdBool);
+                byte byt = BitOps.AsByte(weirdBool);
+                Assert.Equal(n, byt);
+
+                byt = BitOps.AsByte(ref weirdBool);
+                Assert.Equal(n, byt);
+
+                // Normalize
+
+                byte normalizedByte = BitOps.Normalize(weirdBool);
                 Assert.Equal(expectedByte, normalizedByte);
 
-                normalizedByte = BitOps.AsByte(ref weirdBool);
+                normalizedByte = BitOps.Normalize(ref weirdBool);
                 Assert.Equal(expectedByte, normalizedByte);
             }
         }
@@ -1613,17 +1621,17 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(0, BitOps.Any(byte.MinValue));
-            Assert.Equal(1, BitOps.Any(byte.MinValue + 1));
-            Assert.Equal(1, BitOps.Any(byte.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(byte.MaxValue));
+            Assert.Equal(0, BitOps.NonZero(byte.MinValue));
+            Assert.Equal(1, BitOps.NonZero(byte.MinValue + 1));
+            Assert.Equal(1, BitOps.NonZero(byte.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(byte.MaxValue));
 
             // NotAny
 
-            Assert.Equal(1, BitOps.NotAny(byte.MinValue));
-            Assert.Equal(0, BitOps.NotAny(byte.MinValue + 1));
-            Assert.Equal(0, BitOps.NotAny(byte.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(byte.MaxValue));
+            Assert.Equal(1, BitOps.IsZero(byte.MinValue));
+            Assert.Equal(0, BitOps.IsZero(byte.MinValue + 1));
+            Assert.Equal(0, BitOps.IsZero(byte.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(byte.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_sbyte))]
@@ -1649,19 +1657,19 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(1, BitOps.Any(sbyte.MinValue));
-            Assert.Equal(1, BitOps.Any(sbyte.MinValue + 1));
-            Assert.Equal(0, BitOps.Any((sbyte)0));
-            Assert.Equal(1, BitOps.Any(sbyte.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(sbyte.MaxValue));
+            Assert.Equal(1, BitOps.NonZero(sbyte.MinValue));
+            Assert.Equal(1, BitOps.NonZero(sbyte.MinValue + 1));
+            Assert.Equal(0, BitOps.NonZero((sbyte)0));
+            Assert.Equal(1, BitOps.NonZero(sbyte.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(sbyte.MaxValue));
 
             // NotAny
 
-            Assert.Equal(0, BitOps.NotAny(sbyte.MinValue));
-            Assert.Equal(0, BitOps.NotAny(sbyte.MinValue + 1));
-            Assert.Equal(1, BitOps.NotAny((sbyte)0));
-            Assert.Equal(0, BitOps.NotAny(sbyte.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(sbyte.MaxValue));
+            Assert.Equal(0, BitOps.IsZero(sbyte.MinValue));
+            Assert.Equal(0, BitOps.IsZero(sbyte.MinValue + 1));
+            Assert.Equal(1, BitOps.IsZero((sbyte)0));
+            Assert.Equal(0, BitOps.IsZero(sbyte.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(sbyte.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
@@ -1687,17 +1695,17 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(0, BitOps.Any(ushort.MinValue));
-            Assert.Equal(1, BitOps.Any(ushort.MinValue + 1));
-            Assert.Equal(1, BitOps.Any(ushort.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(ushort.MaxValue));
+            Assert.Equal(0, BitOps.NonZero(ushort.MinValue));
+            Assert.Equal(1, BitOps.NonZero(ushort.MinValue + 1));
+            Assert.Equal(1, BitOps.NonZero(ushort.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(ushort.MaxValue));
 
             // NotAny
 
-            Assert.Equal(1, BitOps.NotAny(ushort.MinValue));
-            Assert.Equal(0, BitOps.NotAny(ushort.MinValue + 1));
-            Assert.Equal(0, BitOps.NotAny(ushort.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(ushort.MaxValue));
+            Assert.Equal(1, BitOps.IsZero(ushort.MinValue));
+            Assert.Equal(0, BitOps.IsZero(ushort.MinValue + 1));
+            Assert.Equal(0, BitOps.IsZero(ushort.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(ushort.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_short))]
@@ -1723,19 +1731,19 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(1, BitOps.Any(short.MinValue));
-            Assert.Equal(1, BitOps.Any(short.MinValue + 1));
-            Assert.Equal(0, BitOps.Any((short)0));
-            Assert.Equal(1, BitOps.Any(short.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(short.MaxValue));
+            Assert.Equal(1, BitOps.NonZero(short.MinValue));
+            Assert.Equal(1, BitOps.NonZero(short.MinValue + 1));
+            Assert.Equal(0, BitOps.NonZero((short)0));
+            Assert.Equal(1, BitOps.NonZero(short.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(short.MaxValue));
 
             // NotAny
 
-            Assert.Equal(0, BitOps.NotAny(short.MinValue));
-            Assert.Equal(0, BitOps.NotAny(short.MinValue + 1));
-            Assert.Equal(1, BitOps.NotAny((short)0));
-            Assert.Equal(0, BitOps.NotAny(short.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(short.MaxValue));
+            Assert.Equal(0, BitOps.IsZero(short.MinValue));
+            Assert.Equal(0, BitOps.IsZero(short.MinValue + 1));
+            Assert.Equal(1, BitOps.IsZero((short)0));
+            Assert.Equal(0, BitOps.IsZero(short.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(short.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
@@ -1761,17 +1769,17 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(0, BitOps.Any(uint.MinValue));
-            Assert.Equal(1, BitOps.Any(uint.MinValue + 1));
-            Assert.Equal(1, BitOps.Any(uint.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(uint.MaxValue));
+            Assert.Equal(0, BitOps.NonZero(uint.MinValue));
+            Assert.Equal(1, BitOps.NonZero(uint.MinValue + 1));
+            Assert.Equal(1, BitOps.NonZero(uint.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(uint.MaxValue));
 
             // NotAny
 
-            Assert.Equal(1, BitOps.NotAny(uint.MinValue));
-            Assert.Equal(0, BitOps.NotAny(uint.MinValue + 1));
-            Assert.Equal(0, BitOps.NotAny(uint.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(uint.MaxValue));
+            Assert.Equal(1, BitOps.IsZero(uint.MinValue));
+            Assert.Equal(0, BitOps.IsZero(uint.MinValue + 1));
+            Assert.Equal(0, BitOps.IsZero(uint.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(uint.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_int))]
@@ -1797,19 +1805,19 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(1, BitOps.Any(int.MinValue));
-            Assert.Equal(1, BitOps.Any(int.MinValue + 1));
-            Assert.Equal(0, BitOps.Any(0));
-            Assert.Equal(1, BitOps.Any(int.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(int.MaxValue));
+            Assert.Equal(1, BitOps.NonZero(int.MinValue));
+            Assert.Equal(1, BitOps.NonZero(int.MinValue + 1));
+            Assert.Equal(0, BitOps.NonZero(0));
+            Assert.Equal(1, BitOps.NonZero(int.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(int.MaxValue));
 
             // NotAny
 
-            Assert.Equal(0, BitOps.NotAny(int.MinValue));
-            Assert.Equal(0, BitOps.NotAny(int.MinValue + 1));
-            Assert.Equal(1, BitOps.NotAny(0));
-            Assert.Equal(0, BitOps.NotAny(int.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(int.MaxValue));
+            Assert.Equal(0, BitOps.IsZero(int.MinValue));
+            Assert.Equal(0, BitOps.IsZero(int.MinValue + 1));
+            Assert.Equal(1, BitOps.IsZero(0));
+            Assert.Equal(0, BitOps.IsZero(int.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(int.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_ulong))]
@@ -1835,17 +1843,17 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(0, BitOps.Any(ulong.MinValue));
-            Assert.Equal(1, BitOps.Any(ulong.MinValue + 1));
-            Assert.Equal(1, BitOps.Any(ulong.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(ulong.MaxValue));
+            Assert.Equal(0, BitOps.NonZero(ulong.MinValue));
+            Assert.Equal(1, BitOps.NonZero(ulong.MinValue + 1));
+            Assert.Equal(1, BitOps.NonZero(ulong.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(ulong.MaxValue));
 
             // NotAny
 
-            Assert.Equal(1, BitOps.NotAny(ulong.MinValue));
-            Assert.Equal(0, BitOps.NotAny(ulong.MinValue + 1));
-            Assert.Equal(0, BitOps.NotAny(ulong.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(ulong.MaxValue));
+            Assert.Equal(1, BitOps.IsZero(ulong.MinValue));
+            Assert.Equal(0, BitOps.IsZero(ulong.MinValue + 1));
+            Assert.Equal(0, BitOps.IsZero(ulong.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(ulong.MaxValue));
         }
 
         [Theory(DisplayName = nameof(BitOps_Iff_long))]
@@ -1871,19 +1879,19 @@ namespace SourceCode.Clay.Tests
 
             // Any
 
-            Assert.Equal(1, BitOps.Any(long.MinValue));
-            Assert.Equal(1, BitOps.Any(long.MinValue + 1));
-            Assert.Equal(0, BitOps.Any(0L));
-            Assert.Equal(1, BitOps.Any(long.MaxValue - 1));
-            Assert.Equal(1, BitOps.Any(long.MaxValue));
+            Assert.Equal(1, BitOps.NonZero(long.MinValue));
+            Assert.Equal(1, BitOps.NonZero(long.MinValue + 1));
+            Assert.Equal(0, BitOps.NonZero(0L));
+            Assert.Equal(1, BitOps.NonZero(long.MaxValue - 1));
+            Assert.Equal(1, BitOps.NonZero(long.MaxValue));
 
             // NotAny
 
-            Assert.Equal(0, BitOps.NotAny(long.MinValue));
-            Assert.Equal(0, BitOps.NotAny(long.MinValue + 1));
-            Assert.Equal(1, BitOps.NotAny(0L));
-            Assert.Equal(0, BitOps.NotAny(long.MaxValue - 1));
-            Assert.Equal(0, BitOps.NotAny(long.MaxValue));
+            Assert.Equal(0, BitOps.IsZero(long.MinValue));
+            Assert.Equal(0, BitOps.IsZero(long.MinValue + 1));
+            Assert.Equal(1, BitOps.IsZero(0L));
+            Assert.Equal(0, BitOps.IsZero(long.MaxValue - 1));
+            Assert.Equal(0, BitOps.IsZero(long.MaxValue));
         }
 
         #endregion
