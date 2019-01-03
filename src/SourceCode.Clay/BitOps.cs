@@ -2076,7 +2076,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(ushort value)
-            => unchecked((byte)((uint)-value >> 31));
+            // Negation will set sign-bit iff non-zero
+            => unchecked((byte)(((uint)-value) >> 31));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2096,7 +2097,8 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte Any(uint value)
-            => unchecked((byte)((ulong)-value >> 63));
+            // Negation will set sign-bit iff non-zero
+            => unchecked((byte)(((ulong)-value) >> 63));
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
