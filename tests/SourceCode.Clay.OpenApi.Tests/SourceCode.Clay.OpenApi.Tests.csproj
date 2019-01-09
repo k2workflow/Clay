@@ -19,8 +19,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceCode.Clay.OpenApi\SourceCode.Clay.OpenApi.csproj" />
-  </ItemGroup>
 </Project>
