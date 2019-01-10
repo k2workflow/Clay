@@ -109,7 +109,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Compares two strings using ordinal rules, with checks for null and reference equality.
-        /// A partner for the framework-provided <see cref="string.CompareOrdinal(string, string)"/> method.
+        /// Similar to the framework-provided <see cref="string.CompareOrdinal(string, string)"/> method.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
