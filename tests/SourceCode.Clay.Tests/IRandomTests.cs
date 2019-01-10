@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SourceCode.Clay.Randoms;
@@ -16,8 +15,6 @@ namespace SourceCode.Clay.Tests
     public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism
-        private static readonly Random s_random = new Random(Seed);
-        private static readonly Uniform s_uniform = new Uniform(Seed);
 
         [Fact(DisplayName = nameof(Random_clamped_uniform))]
         public static void Random_clamped_uniform()

@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Buffers
 {
-    public static class SpanExtensions
+    partial class MemoryExtensions // .Sort
     {
         private const int IntrosortSizeThreshold = 16;
 

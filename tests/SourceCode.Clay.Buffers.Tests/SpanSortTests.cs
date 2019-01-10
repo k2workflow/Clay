@@ -10,13 +10,13 @@ using Xunit;
 
 namespace SourceCode.Clay.Buffers.Tests
 {
-    public static class SortTests
+    public static class SpanSortTests
     {
         private static int IntComparison(byte a, byte b) => a.CompareTo(b);
 
         private static void HeapSortAndAssert(Span<byte> array)
         {
-            SpanExtensions.HeapSort(array, IntComparison, 0, array.Length - 1);
+            MemoryExtensions.HeapSort(array, IntComparison, 0, array.Length - 1);
             for (var i = 1; i < array.Length; i++)
             {
                 Assert.True(array[i - 1] <= array[i]);
