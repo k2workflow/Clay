@@ -5,8 +5,10 @@
 
 #endregion
 
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // Some of this inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
@@ -1605,7 +1607,11 @@ namespace SourceCode.Clay
 
         #region LeadingZeros
 
-        private static readonly byte[] s_deBruijn32 = new byte[32]
+        // Performance optimization:
+        // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
+        // https://github.com/dotnet/roslyn/pull/24621
+        // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
+        private static ReadOnlySpan<byte> LeadingZerosDeBruijn32 => new byte[32]
         {
             00, 09, 01, 10, 13, 21, 02, 29,
             11, 14, 16, 18, 22, 25, 03, 30,
@@ -1668,7 +1674,10 @@ namespace SourceCode.Clay
             FoldTrailing(ref val);
 
             uint ix = (val * DeBruijn32) >> 27;
-            int zeros = 31 - s_deBruijn32[ix];
+
+            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
+            ref byte s_LZ = ref MemoryMarshal.GetReference(LeadingZerosDeBruijn32);
+            int zeros = 31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)ix);
 
             // Log(0) is undefined: Return 32.
             zeros += IsZero(value);
@@ -1713,8 +1722,10 @@ namespace SourceCode.Clay
                 uint hi = (hv * DeBruijn32) >> 27;
                 uint bi = (bv * DeBruijn32) >> 27;
 
-                h = (uint)(31 - s_deBruijn32[hi]);
-                b = (uint)(31 - s_deBruijn32[bi]); // Use warm cache
+                // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
+                ref byte s_LZ = ref MemoryMarshal.GetReference(LeadingZerosDeBruijn32);
+                h = (uint)(31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)(int)hi));
+                b = (uint)(31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)(int)bi)); // Use warm cache
 
                 // Log(0) is undefined: Return 32 + 32.
                 h += IsZero((uint)(value >> 32)); // value == 0 ? 1 : 0
@@ -1812,25 +1823,36 @@ namespace SourceCode.Clay
 
         static BitOps()
         {
-            // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
-            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
-            const byte p = 37;
+            //    // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
+            //    // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
+            //    const byte p = 37;
 
-            s_trail32u[0] = 32; // Loop excludes [0]
+            //    s_trail32u[0] = 32; // Loop excludes [0]
 
-            long n = 1;
-            for (byte i = 1; i < p; i++)
-            {
-                int m = (int)(n % p); // Hash
-                byte z = (byte)(i - 1); // Trailing zeros
+            //    long n = 1;
+            //    for (byte i = 1; i < p; i++)
+            //    {
+            //        int m = (int)(n % p); // Hash
+            //        byte z = (byte)(i - 1); // Trailing zeros
 
-                s_trail32u[m] = z;
+            //        s_trail32u[m] = z;
 
-                n <<= 1; // mul 2
-            }
+            //        n <<= 1; // mul 2
+            //    }
         }
 
-        private static readonly byte[] s_trail32u = new byte[37];
+        // Performance optimization:
+        // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
+        // https://github.com/dotnet/roslyn/pull/24621
+        // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
+        private static ReadOnlySpan<byte> TrailingZerosUInt32 => new byte[37]
+        {
+            32, 00, 01, 26, 02, 23, 27, 32,
+            03, 16, 24, 30, 28, 11, 33, 13,
+            04, 07, 17, 35, 25, 22, 31, 15,
+            29, 10, 12, 06, 34, 21, 14, 09,
+            05, 20, 08, 19, 18
+        };
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1839,7 +1861,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeros(byte value)
-            => System.Math.Min((byte)8, TrailingZeros((uint)value));
+            => Math.Min((byte)8, TrailingZeros((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1857,7 +1879,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeros(ushort value)
-            => System.Math.Min((byte)16, TrailingZeros((uint)value));
+            => Math.Min((byte)16, TrailingZeros((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1884,7 +1906,6 @@ namespace SourceCode.Clay
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...]
             long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
-
             lsb %= 37; // mod 37
 
             // Benchmark: Lookup is 2x faster than Switch
@@ -1893,7 +1914,9 @@ namespace SourceCode.Clay
             // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
             // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
 
-            byte cnt = s_trail32u[lsb]; // eg 44 -> 2 (44==0010 1100 has 2 trailing zeros)
+            // long.MaxValue % 37 is always in range [0 - 36] so we use Unsafe.AddByteOffset to avoid bounds check
+            ref byte s_TZ = ref MemoryMarshal.GetReference(TrailingZerosUInt32);
+            byte cnt = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)lsb); // eg 44 -> 2 (44==0010 1100 has 2 trailing zeros)
 
             // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
             Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
@@ -1935,8 +1958,10 @@ namespace SourceCode.Clay
             hi %= 37; // mod 37
             bi %= 37;
 
-            uint h = s_trail32u[hi];
-            uint b = s_trail32u[bi]; // Use warm cache
+            // long.MaxValue % 37 is always in range [0 - 36] so we use Unsafe.AddByteOffset to avoid bounds check
+            ref byte s_TZ = ref MemoryMarshal.GetReference(TrailingZerosUInt32);
+            uint h = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)hi);
+            uint b = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)bi); // Use warm cache
 
             // Keep h iff b==32
             uint mask = b & ~32u; // Zero 5th bit (32)
