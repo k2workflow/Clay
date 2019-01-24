@@ -1607,7 +1607,7 @@ namespace SourceCode.Clay
 
         #region LeadingZeros
 
-        // Performance optimization:
+        // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
         // https://github.com/dotnet/roslyn/pull/24621
         // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
@@ -1823,25 +1823,21 @@ namespace SourceCode.Clay
 
         static BitOps()
         {
-            //    // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
-            //    // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
+            // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
+            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
             //    const byte p = 37;
-
             //    s_trail32u[0] = 32; // Loop excludes [0]
-
             //    long n = 1;
             //    for (byte i = 1; i < p; i++)
             //    {
             //        int m = (int)(n % p); // Hash
             //        byte z = (byte)(i - 1); // Trailing zeros
-
             //        s_trail32u[m] = z;
-
             //        n <<= 1; // mul 2
             //    }
         }
 
-        // Performance optimization:
+        // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
         // https://github.com/dotnet/roslyn/pull/24621
         // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
