@@ -18,19 +18,15 @@ namespace SourceCode.Clay.Tests
         public static void BitOps_Samples()
         {
             // PopCount: Returns the population count (number of bits set) of a mask.
-            Assert.Equal(4, BitOps.PopCount(0x1001_0110u));
+            Assert.Equal(4u, BitOps.PopCount(0x1001_0110u));
 
             // RotateLeft/Right: Rotates the specified value left/right by the specified number of bits.
             Assert.Equal(0b0100_0001u, BitOps.RotateLeft((byte)0b0010_1000u, 3));
             Assert.Equal(0b1000_0000u, BitOps.RotateRight((byte)0b0010_0000u, 6));
 
             // Leading/TrailingZeros: Count the number of leading/trailing zero bits in a mask.
-            Assert.Equal(2, BitOps.LeadingZeros((byte)0b0011_1000));
-            Assert.Equal(5, BitOps.TrailingZeros(0b1110_0000));
-
-            // Leading/TrailingOnes: Count the number of leading/trailing one bits in a mask.
-            Assert.Equal(2, BitOps.LeadingOnes((byte)0b1100_0000));
-            Assert.Equal(3, BitOps.TrailingOnes(0b0000_0111));
+            Assert.Equal(2u, BitOps.LeadingZeroCount((byte)0b0011_1000));
+            Assert.Equal(5u, BitOps.TrailingZeroCount(0b1110_0000));
 
             // ExtractBit: Reads whether the specified bit in a mask is set.
             Assert.True(BitOps.ExtractBit((byte)0b0001_0000, 4));
@@ -921,9 +917,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(byte.MaxValue, 8)] // 255
         [InlineData(unchecked((byte)sbyte.MinValue), 1)] // 128
         [InlineData(sbyte.MaxValue, 7)] // 127
-        public static void BitOps_PopCount_byte(byte n, int expected)
+        public static void BitOps_PopCount_byte(byte n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -947,9 +943,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(sbyte.MaxValue >> 1, 6)] // 63
         [InlineData(sbyte.MaxValue - 1, 6)] // 126
         [InlineData(sbyte.MaxValue, 7)] // 127
-        public static void BitOps_PopCount_sbyte(sbyte n, int expected)
+        public static void BitOps_PopCount_sbyte(sbyte n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -976,9 +972,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(ushort.MaxValue >> 1, 15)] // 32767
         [InlineData(ushort.MaxValue - 1, 15)] // 65534
         [InlineData(ushort.MaxValue, 16)] // 65535
-        public static void BitOps_PopCount_ushort(ushort n, int expected)
+        public static void BitOps_PopCount_ushort(ushort n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1008,9 +1004,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(short.MaxValue >> 3, 15 - 3)] // 4095
         [InlineData(short.MaxValue - 1, 14)] // 32766
         [InlineData(short.MaxValue, 15)] // 32767
-        public static void BitOps_PopCount_short(short n, int expected)
+        public static void BitOps_PopCount_short(short n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1042,9 +1038,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue >> 5, 32 - 5)] // 134217727
         [InlineData(uint.MaxValue << 11, 32 - 11)] // 4294965248
         [InlineData(uint.MaxValue, 32)] // 4294967295
-        public static void BitOps_PopCount_uint(uint n, int expected)
+        public static void BitOps_PopCount_uint(uint n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1075,9 +1071,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue >> 5, 32 - 5)] // 134217727
         [InlineData(unchecked((int)uint.MaxValue << 11), 32 - 11)] // -2048
         [InlineData(int.MaxValue, 31)] // -1
-        public static void BitOps_PopCount_int(int n, int expected)
+        public static void BitOps_PopCount_int(int n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1109,9 +1105,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(ulong.MaxValue >> 9, 64 - 9)] // 36028797018963967
         [InlineData(ulong.MaxValue << 11, 64 - 11)] // 18446744073709549568
         [InlineData(ulong.MaxValue, 64)]
-        public static void BitOps_PopCount_ulong(ulong n, int expected)
+        public static void BitOps_PopCount_ulong(ulong n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1145,11 +1141,70 @@ namespace SourceCode.Clay.Tests
         [InlineData(long.MaxValue >> 9, 63 - 9)]
         [InlineData(long.MaxValue << 11, 64 - 11)] // -2048
         [InlineData(long.MaxValue, 63)]
-        public static void BitOps_PopCount_long(long n, int expected)
+        public static void BitOps_PopCount_long(long n, uint expected)
         {
-            int actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
         }
+
+        #endregion
+
+        #region Log2
+
+        [Theory(DisplayName = nameof(BitOps_Log2_uint))]
+        [InlineData(0, 32)]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 2 - 1)]
+        [InlineData(4, 2)]
+        [InlineData(5, 3 - 1)]
+        [InlineData(6, 3 - 1)]
+        [InlineData(7, 3 - 1)]
+        [InlineData(8, 3)]
+        [InlineData(9, 4 - 1)]
+        [InlineData(byte.MaxValue, 8 - 1)]
+        [InlineData(ushort.MaxValue, 16 - 1)]
+        [InlineData(uint.MaxValue, 32 - 1)]
+        public static void BitOps_Log2_uint(uint n, uint expected)
+        {
+            uint actual = BitOps.Log2(n);
+            Assert.Equal(expected, actual);
+        }
+
+        //[Theory(DisplayName = nameof(BitOps_Log2_int))]
+        //public static void BitOps_Log2_int(int n, int expected)
+        //{
+        //    int actual = BitOps.Log2(n);
+        //    Assert.Equal(expected, actual);
+        //}
+
+        [Theory(DisplayName = nameof(BitOps_Log2_ulong))]
+        [InlineData(0, 32)]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 2 - 1)]
+        [InlineData(4, 2)]
+        [InlineData(5, 3 - 1)]
+        [InlineData(6, 3 - 1)]
+        [InlineData(7, 3 - 1)]
+        [InlineData(8, 3)]
+        [InlineData(9, 4 - 1)]
+        [InlineData(byte.MaxValue, 8 - 1)]
+        [InlineData(ushort.MaxValue, 16 - 1)]
+        [InlineData(uint.MaxValue, 32 - 1)]
+        [InlineData(ulong.MaxValue, 64 - 1)]
+        public static void BitOps_Log2_ulong(ulong n, uint expected)
+        {
+            uint actual = BitOps.Log2(n);
+            Assert.Equal(expected, actual);
+        }
+
+        //[Theory(DisplayName = nameof(BitOps_Log2_long))]
+        //public static void BitOps_Log2_long(long n, int expected)
+        //{
+        //    int actual = BitOps.Log2(n);
+        //    Assert.Equal(expected, actual);
+        //}
 
         #endregion
 
@@ -1174,31 +1229,19 @@ namespace SourceCode.Clay.Tests
         [InlineData((byte)0b1111101u, 1)]
         [InlineData(byte.MaxValue, 0)]
         [InlineData((byte)0b_0001_0110u, 3)]
-        public static void BitOps_LeadTrail_byte(byte n, int expected)
+        public static void BitOps_LeadTrail_byte(byte n, uint expected)
         {
             byte m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
-            m = (byte)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
+            // TrailingZeros
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (byte)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1222,31 +1265,19 @@ namespace SourceCode.Clay.Tests
         [InlineData(sbyte.MinValue, 0)]
         [InlineData(sbyte.MaxValue, 1)]
         [InlineData((sbyte)0b_0001_0110u, 3)]
-        public static void BitOps_LeadTrail_sbyte(sbyte n, int expected)
+        public static void BitOps_LeadTrail_sbyte(sbyte n, uint expected)
         {
             sbyte m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
-            m = (sbyte)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
+            // TrailingZeros
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (sbyte)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1269,31 +1300,19 @@ namespace SourceCode.Clay.Tests
         [InlineData((ushort)0b1111101u, 9)]
         [InlineData(ushort.MaxValue, 0)]
         [InlineData((ushort)0b_0001_0110u, 11)]
-        public static void BitOps_LeadTrail_ushort(ushort n, int expected)
+        public static void BitOps_LeadTrail_ushort(ushort n, uint expected)
         {
             ushort m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
-            m = (ushort)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
+            // TrailingZeros
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (ushort)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1316,31 +1335,19 @@ namespace SourceCode.Clay.Tests
         [InlineData((short)0b1111101u, 9)]
         [InlineData(short.MaxValue, 1)]
         [InlineData((short)0b_0001_0110u, 11)]
-        public static void BitOps_LeadTrail_short(short n, int expected)
+        public static void BitOps_LeadTrail_short(short n, uint expected)
         {
             short m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
-            m = (short)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
+            // TrailingZeros
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (short)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1368,31 +1375,19 @@ namespace SourceCode.Clay.Tests
         [InlineData(1u << 27, 32 - 1 - 27)]
         [InlineData(uint.MaxValue, 0)]
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110u, 3)]
-        public static void BitOps_LeadTrail_uint(uint n, int expected)
+        public static void BitOps_LeadTrail_uint(uint n, uint expected)
         {
             uint m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            // TrailingZeros
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1420,31 +1415,19 @@ namespace SourceCode.Clay.Tests
         [InlineData(1 << 27, 32 - 1 - 27)]
         [InlineData(int.MaxValue, 1)]
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110, 3)]
-        public static void BitOps_LeadTrail_int(int n, int expected)
+        public static void BitOps_LeadTrail_int(int n, uint expected)
         {
             int m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
-            m = ~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
+            // TrailingZeros
             m = Reverse(n);
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1474,31 +1457,19 @@ namespace SourceCode.Clay.Tests
         [InlineData(1ul << 57, 64 - 1 - 57)]
         [InlineData(ulong.MaxValue, 0)]
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110ul, 32 + 3)]
-        public static void BitOps_LeadTrail_ulong(ulong n, int expected)
+        public static void BitOps_LeadTrail_ulong(ulong n, uint expected)
         {
             ulong m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            // TrailingZeros
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 
@@ -1528,31 +1499,19 @@ namespace SourceCode.Clay.Tests
         [InlineData(1L << 57, 64 - 1 - 57)]
         [InlineData(long.MaxValue, 1)]
         [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110L, 32 + 3)]
-        public static void BitOps_LeadTrail_long(long n, int expected)
+        public static void BitOps_LeadTrail_long(long n, uint expected)
         {
             long m = n;
 
             // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
+            uint actual = BitOps.LeadingZeroCount(m);
             Assert.Equal(expected, actual);
 
             m = Reverse(n);
+            // TrailingZeros
             Assert.Equal(n, Reverse(m));
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
+            actual = BitOps.TrailingZeroCount(m);
             Assert.Equal(expected, actual);
         }
 

@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Buffers.Bench
             {
                 for (var n = 0; n <= N; n++)
                 {
-                    sum += (ulong)BitOps.TrailingZeros((byte)n);
+                    sum += (ulong)BitOps.TrailingZeroCount((byte)n);
                 }
             }
 

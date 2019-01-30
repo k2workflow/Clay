@@ -6,9 +6,7 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // Some of this inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
@@ -29,6 +27,7 @@ namespace SourceCode.Clay
         // Software & hardware intrinsics already do this for uint/ulong, but
         // we need to emulate for byte/ushort.
 
+        /*
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
@@ -44,6 +43,7 @@ namespace SourceCode.Clay
 
             return (value & mask) != 0;
         }
+        */
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -83,6 +83,7 @@ namespace SourceCode.Clay
         public static bool ExtractBit(short value, int bitOffset)
             => ExtractBit(unchecked((ushort)value), bitOffset);
 
+        /*
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
@@ -108,6 +109,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(int value, int bitOffset)
             => ExtractBit(unchecked((uint)value), bitOffset);
+        */
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -519,6 +521,7 @@ namespace SourceCode.Clay
         public static short ClearBit(short value, int bitOffset)
             => unchecked((short)ClearBit((ushort)value, bitOffset));
 
+        /*
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
@@ -542,6 +545,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ClearBit(int value, int bitOffset)
             => unchecked((int)ClearBit((uint)value, bitOffset));
+        */
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -571,6 +575,7 @@ namespace SourceCode.Clay
 
         #region ClearBit (Ref)
 
+        /*
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTR.
@@ -589,6 +594,7 @@ namespace SourceCode.Clay
 
             return btr != 0;
         }
+        */
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -665,6 +671,7 @@ namespace SourceCode.Clay
             return btr != 0;
         }
 
+        /*
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTR.
@@ -682,6 +689,7 @@ namespace SourceCode.Clay
 
             return btr != 0;
         }
+        */
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -773,6 +781,7 @@ namespace SourceCode.Clay
         public static short InsertBit(short value, int bitOffset)
             => unchecked((short)InsertBit((ushort)value, bitOffset));
 
+        /*
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
@@ -796,6 +805,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int InsertBit(int value, int bitOffset)
             => unchecked((int)InsertBit((uint)value, bitOffset));
+        */
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -825,6 +835,7 @@ namespace SourceCode.Clay
 
         #region InsertBit (Ref)
 
+        /*
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTS.
@@ -843,6 +854,7 @@ namespace SourceCode.Clay
 
             return bts != 0;
         }
+        */
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -921,6 +933,7 @@ namespace SourceCode.Clay
             return bts != 0;
         }
 
+        /*
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTS.
@@ -938,6 +951,7 @@ namespace SourceCode.Clay
 
             return bts != 0;
         }
+        */
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -1377,6 +1391,7 @@ namespace SourceCode.Clay
         public static short RotateRight(short value, int offset)
             => unchecked((short)RotateRight((ushort)value, offset));
 
+        /*
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROL.
@@ -1430,6 +1445,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int RotateRight(int value, int offset)
             => unchecked((int)RotateRight((uint)value, offset));
+        */
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
@@ -1495,7 +1511,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(byte value)
+        public static uint PopCount(byte value)
             => PopCount((uint)value);
 
         /// <summary>
@@ -1504,7 +1520,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(sbyte value)
+        public static uint PopCount(sbyte value)
             => PopCount(unchecked((byte)value));
 
         /// <summary>
@@ -1513,7 +1529,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(ushort value)
+        public static uint PopCount(ushort value)
             => PopCount((uint)value);
 
         /// <summary>
@@ -1522,9 +1538,10 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(short value)
+        public static uint PopCount(short value)
             => PopCount(unchecked((ushort)value));
 
+        /*
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
         /// Similar in behavior to the x86 instruction POPCNT.
@@ -1602,10 +1619,11 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte PopCount(long value)
             => PopCount(unchecked((ulong)value));
+        */
 
         #endregion
 
-        #region LeadingZeros
+        #region LeadingZeroCount
 
         // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
@@ -1627,8 +1645,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(byte value)
-            => (byte)(LeadingZeros((uint)value) - 24);
+        public static uint LeadingZeroCount(byte value)
+            => (byte)(LeadingZeroCount((uint)value) - 24);
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1636,8 +1654,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(sbyte value)
-            => LeadingZeros(unchecked((byte)value));
+        public static uint LeadingZeroCount(sbyte value)
+            => LeadingZeroCount(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1645,8 +1663,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(ushort value)
-            => (byte)(LeadingZeros((uint)value) - 16);
+        public static uint LeadingZeroCount(ushort value)
+            => (byte)(LeadingZeroCount((uint)value) - 16);
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1654,16 +1672,17 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(short value)
-            => LeadingZeros(unchecked((ushort)value));
+        public static uint LeadingZeroCount(short value)
+            => LeadingZeroCount(unchecked((ushort)value));
 
+        /*
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(uint value)
+        public static byte LeadingZeroCount(uint value)
         {
             //if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
             //{
@@ -1684,6 +1703,7 @@ namespace SourceCode.Clay
 
             return (byte)zeros;
         }
+        */
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1691,16 +1711,17 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(int value)
-            => LeadingZeros(unchecked((uint)value));
+        public static uint LeadingZeroCount(int value)
+            => LeadingZeroCount(unchecked((uint)value));
 
+        /*
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(ulong value)
+        public static byte LeadingZeroCount(ulong value)
         {
             // Instead of writing a 64-bit function,
             // we use the 32-bit function twice.
@@ -1739,6 +1760,7 @@ namespace SourceCode.Clay
 
             return (byte)(h + b);
         }
+        */
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1746,80 +1768,12 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeros(long value)
-            => LeadingZeros(unchecked((ulong)value));
+        public static uint LeadingZeroCount(long value)
+            => LeadingZeroCount(unchecked((ulong)value));
 
         #endregion
 
-        #region LeadingOnes
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(byte value)
-            => LeadingZeros((byte)~value);
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(sbyte value)
-            => LeadingOnes(unchecked((byte)value));
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(ushort value)
-            => LeadingZeros((ushort)~value);
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(short value)
-            => LeadingOnes(unchecked((ushort)value));
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(uint value)
-            => LeadingZeros(~value);
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(int value)
-            => LeadingOnes(unchecked((uint)value));
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(ulong value)
-            => LeadingZeros(~value);
-
-        /// <summary>
-        /// Count the number of leading one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingOnes(long value)
-            => LeadingOnes(unchecked((ulong)value));
-
-        #endregion
-
-        #region TrailingZeros
+        #region TrailingZeroCount
 
         static BitOps()
         {
@@ -1841,14 +1795,14 @@ namespace SourceCode.Clay
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
         // https://github.com/dotnet/roslyn/pull/24621
         // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
-        private static ReadOnlySpan<byte> TrailingZerosUInt32 => new byte[37]
-        {
-            32, 00, 01, 26, 02, 23, 27, 32,
-            03, 16, 24, 30, 28, 11, 33, 13,
-            04, 07, 17, 35, 25, 22, 31, 15,
-            29, 10, 12, 06, 34, 21, 14, 09,
-            05, 20, 08, 19, 18
-        };
+        //private static ReadOnlySpan<byte> TrailingZerosUInt32 => new byte[37]
+        //{
+        //    32, 00, 01, 26, 02, 23, 27, 32,
+        //    03, 16, 24, 30, 28, 11, 33, 13,
+        //    04, 07, 17, 35, 25, 22, 31, 15,
+        //    29, 10, 12, 06, 34, 21, 14, 09,
+        //    05, 20, 08, 19, 18
+        //};
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1856,8 +1810,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(byte value)
-            => Math.Min((byte)8, TrailingZeros((uint)value));
+        public static uint TrailingZeroCount(byte value)
+            => Math.Min(8, TrailingZeroCount((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1865,8 +1819,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(sbyte value)
-            => TrailingZeros(unchecked((byte)value));
+        public static uint TrailingZeroCount(sbyte value)
+            => TrailingZeroCount(unchecked((byte)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1874,8 +1828,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(ushort value)
-            => Math.Min((byte)16, TrailingZeros((uint)value));
+        public static uint TrailingZeroCount(ushort value)
+            => Math.Min(16, TrailingZeroCount((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1883,16 +1837,17 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(short value)
-            => TrailingZeros(unchecked((ushort)value));
+        public static uint TrailingZeroCount(short value)
+            => TrailingZeroCount(unchecked((ushort)value));
 
+        /*
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
         /// Similar in behavior to the x86 instruction TZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(uint value)
+        public static byte TrailingZeroCount(uint value)
         {
             //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
             //{
@@ -1926,8 +1881,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(int value)
-            => TrailingZeros(unchecked((uint)value));
+        public static byte TrailingZeroCount(int value)
+            => TrailingZeroCount(unchecked((uint)value));
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1935,7 +1890,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(ulong value)
+        public static byte TrailingZeroCount(ulong value)
         {
             //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
             //{
@@ -1973,76 +1928,9 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeros(long value)
-            => TrailingZeros(unchecked((ulong)value));
-
-        #endregion
-
-        #region TrailingOnes
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(byte value)
-            => TrailingZeros((byte)~value);
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(sbyte value)
-            => TrailingOnes(unchecked((byte)value));
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(ushort value)
-            => TrailingZeros((ushort)~value);
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(short value)
-            => TrailingOnes(unchecked((ushort)value));
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(uint value)
-            => TrailingZeros(~value);
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(int value)
-            => TrailingOnes(unchecked((uint)value));
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(ulong value)
-            => TrailingZeros(~value);
-
-        /// <summary>
-        /// Count the number of trailing one bits in a mask.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingOnes(long value)
-            => TrailingOnes(unchecked((ulong)value));
+        public static byte TrailingZeroCount(long value)
+            => TrailingZeroCount(unchecked((ulong)value));
+        */
 
         #endregion
 
@@ -2112,6 +2000,7 @@ namespace SourceCode.Clay
         public static byte NonZero(short value)
             => NonZero(unchecked((ushort)value));
 
+        /*
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
@@ -2122,6 +2011,7 @@ namespace SourceCode.Clay
         public static byte NonZero(uint value)
             // Negation will set sign-bit iff non-zero
             => unchecked((byte)(((ulong)-value) >> 63));
+        */
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2181,6 +2071,7 @@ namespace SourceCode.Clay
         public static byte IsZero(short value)
             => (byte)(1u ^ NonZero(value));
 
+        /*
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
@@ -2190,6 +2081,7 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte IsZero(uint value)
             => (byte)(1u ^ NonZero(value));
+        */
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
@@ -2343,12 +2235,13 @@ namespace SourceCode.Clay
 
         #region Helpers
 
+        /*
         /// <summary>
         /// Fills the trailing zeros in a mask with ones.
         /// </summary>
         /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FoldTrailing(ref uint value)
+        private static void FoldTrailingOnes(ref uint value)
         {
             // byte#                         4          3   2  1
             //                       1000 0000  0000 0000  00 00
@@ -2364,7 +2257,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to mutate.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FoldTrailing(ref ulong value)
+        private static void FoldTrailingOnes(ref ulong value)
         {
             // byte#                         8          7   6  5   4  3   2  1
             //                       1000 0000  0000 0000  00 00  00 00  00 00
@@ -2376,6 +2269,7 @@ namespace SourceCode.Clay
 
             value |= value >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
         }
+        */
 
         #endregion
     }
