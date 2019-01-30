@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -229,11 +228,14 @@ namespace SourceCode.Clay
         public static uint Log2(uint value)
         {
             // Log(0) is undefined. Return 32 for input 0, without branching:
-            //                                  0   1   2   n
-            uint log = Log2Impl(value); //      0   0   1   log
-            uint c32 = IsZero(value) * 32u; //  32  0   0   0
-            log *= NonZero(value); //           0   0   1   log
-            return c32 + log; //                32  0   1   log
+            //                              0   1   2   n
+            uint log = Log2Impl(value); //  0   0   1   log
+            byte not0 = NonZero(value); //  0   1   1   1
+            uint is0 = 1u ^ not0; //        1   0   0   0
+            uint c32 = is0 * 32u; //        32  0   0   0
+            log *= not0; //                 0   0   1   log
+
+            return c32 + log; //            32  0   1   log
         }
 
         /// <summary>
@@ -261,13 +263,13 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Log2(ulong value)
         {
-            // Log(0) is undefined. Return 64 for input 0, without branching:
-
             // We only have to count the low-32 or the high-32, depending on limits
 
             // Assume we need only examine low-32
             var val = (uint)value;
             byte inc = 0;
+
+            // TODO: Remove branching
 
             // If high-32 is non-zero
             if (value > uint.MaxValue)
@@ -320,23 +322,12 @@ namespace SourceCode.Clay
             //    return Lzcnt.LeadingZeroCount(value);
             //}
 
-            //FoldTrailing(ref value);
-            //uint ix = (value * DeBruijn32) >> 27;
-
-            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            //ref byte lz = ref MemoryMarshal.GetReference(LeadingZerosDeBruijn32);
-            //int count = Unsafe.AddByteOffset(ref lz, (IntPtr)ix);
-            //count = 31 - count;
-
-            // Log(0) is undefined: Return 32.
-            //count += IsZero(value);
-
-            //return (uint)count;
-
             //                                  00  01  02  2B
-            int count = (int)Log2Impl(value); //    32  00  01  31
+            int count = (int)Log2Impl(value); //32  00  01  31
             count = 31 - count; //              -1  31  30  00
-            count += IsZero(value); //          +1  +0  +0  +0
+            byte not0 = NonZero(value); //      0   1   1   1
+            int is0 = 1 ^ not0; //              1   0   0   0
+            count += is0; //                    +1  +0  +0  +0
 
             return (uint)count; //              32  31  30  00
         }
@@ -372,7 +363,9 @@ namespace SourceCode.Clay
 
             // Keep lo iff hi==32
             uint m = hi & ~32u; // Zero 5th bit of hi
-            lo *= IsZero(m); // lo *= (m == 0 ? 1 : 0)
+            byte not0 = NonZero(m); // not0 = m == 0 ? 0 : 1
+            uint is0 = 1u ^ not0; // is0 = m == 0 ? 1 : 0
+            lo *= is0; // lo *= (m == 0 ? 1 : 0)
 
             return hi + lo;
         }
@@ -385,7 +378,6 @@ namespace SourceCode.Clay
         #endregion
 
         #region TrailingZeroCount
-
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -411,30 +403,29 @@ namespace SourceCode.Clay
             //    return Bmi1.TrailingZeroCount(value);
             //}
 
-            /*
-            // Software fallback
-            // https://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightMultLookup
+            // TODO: Remove branching
+
+            if (value == 0)
+                return 32u;
+
             ref byte tz = ref MemoryMarshal.GetReference(TrailingCountMultiplyDeBruijn);
             long val = (value & -value) * 0x077C_B531u;
             uint offset = ((uint)val) >> 27;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            return Unsafe.AddByteOffset(ref tz, (IntPtr)offset);
+            uint count = Unsafe.AddByteOffset(ref tz, (IntPtr)offset);
+            return count;
+
+            /*
+            // Return 32 for input 0, without branching
+            //                              0   1   2   N
+            byte not0 = NonZero(value); //  0   1   1   1
+            uint is0 = 1u ^ not0; //        1   0   0   0
+            uint c32 = is0 * 32u; //        32  0   0   0
+            count *= not0; //               0   0   1   C
+
+            return c32 + count; //          32  0   1   C
             */
-
-            // The expression (n & -n) returns lsb(n).
-            // Only possible values are therefore [0,1,2,4,...]
-            long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
-            lsb %= 37; // mod 37
-
-            // long.MaxValue % 37 is always in range [0 - 36] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte tz = ref MemoryMarshal.GetReference(TrailingZeroCountUInt32);
-            byte cnt = Unsafe.AddByteOffset(ref tz, (IntPtr)(int)lsb); // eg 44 -> 2 (44==0010 1100 has 2 trailing zeros)
-
-            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
-
-            return cnt;
         }
 
         /// <summary>
@@ -468,7 +459,9 @@ namespace SourceCode.Clay
 
             // Keep hi iff lo==32
             uint m = lo & ~32u; // Zero 5th bit of lo
-            hi *= IsZero(m); // hi *= (m == 0 ? 1 : 0)
+            byte not0 = NonZero(m); // not0 = m == 0 ? 0 : 1
+            uint is0 = 1u ^ not0; // is0 = m == 0 ? 1 : 0
+            hi *= is0; // hi *= (m == 0 ? 1 : 0)
 
             return lo + hi;
         }
@@ -708,19 +701,6 @@ namespace SourceCode.Clay
             // Negation will set sign-bit iff non-zero
             => unchecked((byte)(((ulong)-value) >> 63));
 
-        // XOR is theoretically slightly cheaper than subtraction,
-        // due to no carry logic. But both 1 clock cycle regardless.
-
-        /// <summary>
-        /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
-        /// Does not incur branching.
-        /// Similar in behavior to the x86 instruction CMOVZ.
-        /// </summary>
-        /// <param name="value">The value to inspect.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static byte IsZero(uint value)
-            => (byte)(1u ^ NonZero(value));
-
         /// <summary>
         /// Returns the log of the specified value, base 2.
         /// Returns 0 for input value 0.
@@ -755,24 +735,6 @@ namespace SourceCode.Clay
             value |= value >> 04; // 1111 1111  0000 0000  00 00
             value |= value >> 08; // 1111 1111  1111 1111  00 00
             value |= value >> 16; // 1111 1111  1111 1111  FF FF
-        }
-
-        /// <summary>
-        /// Fills the trailing zeros in a mask with ones.
-        /// </summary>
-        /// <param name="value">The value to mutate.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FoldTrailingOnes(ref ulong value)
-        {
-            // byte#                         8          7   6  5   4  3   2  1
-            //                       1000 0000  0000 0000  00 00  00 00  00 00
-            value |= value >> 01; // 1100 0000  0000 0000  00 00  00 00  00 00
-            value |= value >> 02; // 1111 0000  0000 0000  00 00  00 00  00 00
-            value |= value >> 04; // 1111 1111  0000 0000  00 00  00 00  00 00
-            value |= value >> 08; // 1111 1111  1111 1111  00 00  00 00  00 00
-            value |= value >> 16; // 1111 1111  1111 1111  FF FF  00 00  00 00
-
-            value |= value >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
         }
 
         #endregion
