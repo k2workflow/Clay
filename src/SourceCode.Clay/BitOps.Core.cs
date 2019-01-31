@@ -205,7 +205,7 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region ILog2
+        #region Log2
 
         // TODO: May belong in System.Math, in which case may need to name it Log2Int or Log2Floor
         // to distinguish it from overloads accepting float/double
@@ -216,7 +216,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ILog2(uint value)
+        public static uint Log2(uint value)
         {
             // Log(0) is undefined. Return 32 for input 0, without branching.
             //                                  0   1   2   N
@@ -234,7 +234,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ILog2(ulong value)
+        public static uint Log2(ulong value)
         {
             // We only have to count the low-32 or the high-32, depending on limits
 
@@ -253,7 +253,7 @@ namespace SourceCode.Clay
             }
 
             // Use low-32
-            return inc + ILog2(val);
+            return inc + Log2(val);
         }
 
         /* Legacy implementations
@@ -282,7 +282,7 @@ namespace SourceCode.Clay
             //                                  0   1   2   N
             uint nz = Log2NonZero(ref value); //0   0   1   31
             uint is0 = 1u ^ nz; //              1   0   0   0
-            return 31 + is0 - value; //         32  31  30  0
+            return 31u + is0 - value; //        32  31  30  0
         }
 
         /// <summary>
