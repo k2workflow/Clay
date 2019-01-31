@@ -18,7 +18,7 @@ namespace SourceCode.Clay
         // https://github.com/dotnet/roslyn/pull/24621
         // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
 
-        private static ReadOnlySpan<byte> TrailingCountMultiplyDeBruijn => new byte[32]
+        private static ReadOnlySpan<byte> TrailingZeroCountDeBruijn => new byte[32]
         {
             00, 01, 28, 02, 29, 14, 24, 03,
             30, 22, 20, 15, 25, 17, 04, 08,
@@ -26,21 +26,12 @@ namespace SourceCode.Clay
             26, 12, 18, 06, 11, 05, 10, 09
         };
 
-        private static ReadOnlySpan<byte> DeBruijnLog2 => new byte[32]
+        private static ReadOnlySpan<byte> Log2DeBruijn => new byte[32]
         {
             00, 09, 01, 10, 13, 21, 02, 29,
             11, 14, 16, 18, 22, 25, 03, 30,
             08, 12, 20, 28, 15, 17, 24, 07,
             19, 27, 23, 06, 26, 05, 04, 31
-        };
-
-        private static ReadOnlySpan<byte> TrailingZeroCountUInt32 => new byte[37]
-        {
-            32, 00, 01, 26, 02, 23, 27, 32,
-            03, 16, 24, 30, 28, 11, 33, 13,
-            04, 07, 17, 35, 25, 22, 31, 15,
-            29, 10, 12, 06, 34, 21, 14, 09,
-            05, 20, 08, 19, 18
         };
 
         #region PopCount
@@ -370,24 +361,13 @@ namespace SourceCode.Clay
             if (value == 0)
                 return 32u;
 
-            ref byte tz = ref MemoryMarshal.GetReference(TrailingCountMultiplyDeBruijn);
-            long val = (value & -value) * 0x077C_B531u;
-            uint offset = ((uint)val) >> 27;
+            const uint deBruijn = 0x077C_B531u;
+            uint ix = (uint)((value & -value) * deBruijn) >> 27;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            uint count = Unsafe.AddByteOffset(ref tz, (IntPtr)offset);
+            ref byte tz = ref MemoryMarshal.GetReference(TrailingZeroCountDeBruijn);
+            uint count = Unsafe.AddByteOffset(ref tz, (IntPtr)ix);
             return count;
-
-            /*
-            // Return 32 for input 0, without branching
-            //                              0   1   2   N
-            byte not0 = NonZero(value); //  0   1   1   1
-            uint is0 = 1u ^ not0; //        1   0   0   0
-            uint c32 = is0 * 32u; //        32  0   0   0
-            count *= not0; //               0   0   1   C
-
-            return c32 + count; //          32  0   1   C
-            */
         }
 
         /// <summary>
@@ -680,7 +660,7 @@ namespace SourceCode.Clay
             uint ix = (value * deBruijn) >> 27;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte lz = ref MemoryMarshal.GetReference(DeBruijnLog2);
+            ref byte lz = ref MemoryMarshal.GetReference(Log2DeBruijn);
             value = Unsafe.AddByteOffset(ref lz, (IntPtr)ix);
 
             return nz;
