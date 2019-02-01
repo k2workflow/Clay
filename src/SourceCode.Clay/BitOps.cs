@@ -1932,7 +1932,6 @@ namespace SourceCode.Clay
         public static byte NonZero(short value)
             => NonZero((ushort)value);
 
-        /*
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
         /// Does not incur branching.
@@ -1943,7 +1942,6 @@ namespace SourceCode.Clay
         public static byte NonZero(uint value)
             // Negation will set sign-bit iff non-zero
             => unchecked((byte)(((ulong)-value) >> 63));
-        */
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
