@@ -54,7 +54,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(sbyte value, int bitOffset)
-            => ExtractBit(unchecked((byte)value), bitOffset);
+            => ExtractBit((byte)value, bitOffset);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -81,7 +81,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(short value, int bitOffset)
-            => ExtractBit(unchecked((ushort)value), bitOffset);
+            => ExtractBit((ushort)value, bitOffset);
 
         /*
         /// <summary>
@@ -108,7 +108,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(int value, int bitOffset)
-            => ExtractBit(unchecked((uint)value), bitOffset);
+            => ExtractBit((uint)value, bitOffset);
         */
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(long value, int bitOffset)
-            => ExtractBit(unchecked((ulong)value), bitOffset);
+            => ExtractBit((ulong)value, bitOffset);
 
         #endregion
 
@@ -1505,42 +1505,6 @@ namespace SourceCode.Clay
 
         #region PopCount
 
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint PopCount(byte value)
-            => PopCount((uint)value);
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint PopCount(sbyte value)
-            => PopCount(unchecked((byte)value));
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint PopCount(ushort value)
-            => PopCount((uint)value);
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint PopCount(short value)
-            => PopCount(unchecked((ushort)value));
-
         /*
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1578,7 +1542,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte PopCount(int value)
-            => PopCount(unchecked((uint)value));
+            => PopCount((uint)value);
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -1618,13 +1582,14 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte PopCount(long value)
-            => PopCount(unchecked((ulong)value));
+            => PopCount((ulong)value))
         */
 
         #endregion
 
         #region LeadingZeroCount
 
+        /*
         // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
         // https://github.com/dotnet/roslyn/pull/24621
@@ -1638,6 +1603,7 @@ namespace SourceCode.Clay
         };
 
         private const uint DeBruijn32 = 0x07C4_ACDDu;
+        */
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1712,7 +1678,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint LeadingZeroCount(int value)
-            => LeadingZeroCount(unchecked((uint)value));
+            => LeadingZeroCount((uint)value);
 
         /*
         /// <summary>
@@ -1769,14 +1735,14 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint LeadingZeroCount(long value)
-            => LeadingZeroCount(unchecked((ulong)value));
+            => LeadingZeroCount((ulong)value);
 
         #endregion
 
         #region TrailingZeroCount
 
-        static BitOps()
-        {
+        //static BitOps()
+        //{
             // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
             // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
             //    const byte p = 37;
@@ -1789,7 +1755,7 @@ namespace SourceCode.Clay
             //        s_trail32u[m] = z;
             //        n <<= 1; // mul 2
             //    }
-        }
+        //}
 
         // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
         // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
@@ -1804,41 +1770,7 @@ namespace SourceCode.Clay
         //    05, 20, 08, 19, 18
         //};
 
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint TrailingZeroCount(byte value)
-            => Math.Min(8, TrailingZeroCount((uint)value));
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint TrailingZeroCount(sbyte value)
-            => TrailingZeroCount(unchecked((byte)value));
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint TrailingZeroCount(ushort value)
-            => Math.Min(16, TrailingZeroCount((uint)value));
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint TrailingZeroCount(short value)
-            => TrailingZeroCount(unchecked((ushort)value));
+ 
 
         /*
         /// <summary>
@@ -1882,7 +1814,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeroCount(int value)
-            => TrailingZeroCount(unchecked((uint)value));
+            => TrailingZeroCount((uint)value);
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -1929,7 +1861,7 @@ namespace SourceCode.Clay
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte TrailingZeroCount(long value)
-            => TrailingZeroCount(unchecked((ulong)value));
+            => TrailingZeroCount((ulong)value);
         */
 
         #endregion
@@ -1998,7 +1930,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NonZero(short value)
-            => NonZero(unchecked((ushort)value));
+            => NonZero((ushort)value);
 
         /*
         /// <summary>
@@ -2021,7 +1953,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NonZero(int value)
-            => NonZero(unchecked((uint)value));
+            => NonZero((uint)value);
 
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is non-zero, else returns 0.
@@ -2042,7 +1974,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value to inspect.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte NonZero(long value)
-            => NonZero(unchecked((ulong)value));
+            => NonZero((ulong)value);
 
         #endregion
 

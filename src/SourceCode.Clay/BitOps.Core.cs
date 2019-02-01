@@ -6,7 +6,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Some routines inspired by the Stanford Bit Widdling Hacks by Sean Eron Anderson:
+// Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
 
 namespace SourceCode.Clay
@@ -14,11 +14,9 @@ namespace SourceCode.Clay
     partial class BitOps
     {
         // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
-        // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
         // https://github.com/dotnet/roslyn/pull/24621
-        // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
 
-        private static ReadOnlySpan<byte> TrailingZeroCountDeBruijn => new byte[32]
+        private static ReadOnlySpan<byte> s_TrailingZeroCountDeBruijn => new byte[32]
         {
             00, 01, 28, 02, 29, 14, 24, 03,
             30, 22, 20, 15, 25, 17, 04, 08,
@@ -26,7 +24,7 @@ namespace SourceCode.Clay
             26, 12, 18, 06, 11, 05, 10, 09
         };
 
-        private static ReadOnlySpan<byte> Log2DeBruijn => new byte[32]
+        private static ReadOnlySpan<byte> s_Log2DeBruijn => new byte[32]
         {
             00, 09, 01, 10, 13, 21, 02, 29,
             11, 14, 16, 18, 22, 25, 03, 30,
@@ -72,7 +70,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint PopCount(int value)
-            => PopCount(unchecked((uint)value));
+            => PopCount((uint)value);
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -119,7 +117,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint PopCount(long value)
-            => PopCount(unchecked((ulong)value));
+            => PopCount((ulong)value);
 
         /* Legacy implementations
         DONE https://raw.githubusercontent.com/dotnet/corefx/master/src/System.Reflection.Metadata/src/System/Reflection/Internal/Utilities/BitArithmetic.cs
@@ -339,7 +337,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint TrailingZeroCount(int value)
-            => TrailingZeroCount(unchecked((uint)value));
+            => TrailingZeroCount((uint)value);
 
         /// <summary>
         /// Count the number of trailing zero bits in a mask.
@@ -349,25 +347,27 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint TrailingZeroCount(uint value)
         {
-            // PR already merged: https://github.com/dotnet/coreclr/pull/22118
-
             //if (Bmi1.IsSupported)
             //{
+            //    // Note that TZCNT contract specifies 0->32
             //    return Bmi1.TrailingZeroCount(value);
             //}
 
-            // TODO: Remove branching
-
-            if (value == 0)
-                return 32u;
-
-            const uint deBruijn = 0x077C_B531u;
+            // Using deBruijn sequence, k=2, n=5 (2^5=32)
+            const uint deBruijn = 0b_0000_0111_0111_1100_1011_0101_0011_0001u; // 0x077CB531u
             uint ix = (uint)((value & -value) * deBruijn) >> 27;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte tz = ref MemoryMarshal.GetReference(TrailingZeroCountDeBruijn);
+            ref byte tz = ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn);
             uint count = Unsafe.AddByteOffset(ref tz, (IntPtr)ix);
-            return count;
+
+            // Above code has behavior 0->0, so special-case in order to match intrinsic path
+
+            // Branchless equivalent of: c32 = value == 0 ? 32 : 0
+            bool is0 = value == 0;
+            uint c32 = Unsafe.As<bool, byte>(ref is0) * 32u;
+
+            return c32 + count;
         }
 
         /// <summary>
@@ -415,7 +415,7 @@ namespace SourceCode.Clay
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint TrailingZeroCount(long value)
-            => TrailingZeroCount(unchecked((ulong)value));
+            => TrailingZeroCount((ulong)value);
 
         #endregion
 
@@ -469,7 +469,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(int value, int bitOffset)
-            => ExtractBit(unchecked((uint)value), bitOffset);
+            => ExtractBit((uint)value, bitOffset);
 
         /* Legacy implementations
         TBD https://raw.githubusercontent.com/dotnet/iot/93f2bd3f2a4d64528ca97a8da09fe0bfe42d648f/src/devices/Mcp23xxx/Mcp23xxx.cs
@@ -660,7 +660,7 @@ namespace SourceCode.Clay
             uint ix = (value * deBruijn) >> 27;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte lz = ref MemoryMarshal.GetReference(Log2DeBruijn);
+            ref byte lz = ref MemoryMarshal.GetReference(s_Log2DeBruijn);
             value = Unsafe.AddByteOffset(ref lz, (IntPtr)ix);
 
             return nz;

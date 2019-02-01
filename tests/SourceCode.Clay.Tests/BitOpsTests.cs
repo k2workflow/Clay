@@ -945,7 +945,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(sbyte.MaxValue, 7)] // 127
         public static void BitOps_PopCount_sbyte(sbyte n, uint expected)
         {
-            uint actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount((byte)n);
             Assert.Equal(expected, actual);
         }
 
@@ -1006,7 +1006,7 @@ namespace SourceCode.Clay.Tests
         [InlineData(short.MaxValue, 15)] // 32767
         public static void BitOps_PopCount_short(short n, uint expected)
         {
-            uint actual = BitOps.PopCount(n);
+            uint actual = BitOps.PopCount((ushort)n);
             Assert.Equal(expected, actual);
         }
 
@@ -1242,6 +1242,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, Reverse(m));
 
             actual = BitOps.TrailingZeroCount(m);
+            if (actual == 32u) actual = 8u; // 32 vs 8 bit
             Assert.Equal(expected, actual);
         }
 
@@ -1278,6 +1279,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, Reverse(m));
 
             actual = BitOps.TrailingZeroCount(m);
+            if (actual == 32u) actual = 8u; // 32 vs 8 bit
             Assert.Equal(expected, actual);
         }
 
@@ -1313,6 +1315,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, Reverse(m));
 
             actual = BitOps.TrailingZeroCount(m);
+            if (actual == 32u) actual = 16u; // 32 vs 16 bit
             Assert.Equal(expected, actual);
         }
 
@@ -1348,6 +1351,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, Reverse(m));
 
             actual = BitOps.TrailingZeroCount(m);
+            if (actual == 32u) actual = 16u; // 32 vs 16 bit
             Assert.Equal(expected, actual);
         }
 
