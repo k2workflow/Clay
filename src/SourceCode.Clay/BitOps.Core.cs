@@ -210,7 +210,7 @@ namespace SourceCode.Clay
 
         /// <summary>
         /// Returns the integer (floor) log of the specified value, base 2, without branching.
-        /// Note that by convention, input value 0 returns 32 since Log(0) is undefined.
+        /// Note that by convention, input value 0 returns 0 since Log(0) is undefined.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -220,18 +220,12 @@ namespace SourceCode.Clay
             //                                          0   1   2   31
             bool is0 = value == 0; //                   T   F   F   F
             uint iz = Unsafe.As<bool, byte>(ref is0); //1   0   0   0
-
-            uint log = Log2Impl(value); //              0   0   1   31
-            uint nz = iz ^ 1u; //                       0   1   1   1
-            log *= nz; //                               0   0   1   31
-
-            uint lim = iz * 32u; //                     32  0   0   0
-            return lim + log; //                        32  0   1   31
+            return Log2Impl(value); //                  0   0   1   31
         }
 
         /// <summary>
         /// Returns the integer (floor) log of the specified value, base 2, without branching.
-        /// Note that by convention, input value 0 returns 64 since Log(0) is undefined.
+        /// Note that by convention, input value 0 returns 0 since Log(0) is undefined.
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

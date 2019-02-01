@@ -1152,7 +1152,7 @@ namespace SourceCode.Clay.Tests
         #region Log2
 
         [Theory(DisplayName = nameof(BitOps_Log2_uint))]
-        [InlineData(0, 32)]
+        [InlineData(0, 0)]
         [InlineData(1, 0)]
         [InlineData(2, 1)]
         [InlineData(3, 2 - 1)]
@@ -1179,7 +1179,7 @@ namespace SourceCode.Clay.Tests
         //}
 
         [Theory(DisplayName = nameof(BitOps_Log2_ulong))]
-        [InlineData(0, 32)]
+        [InlineData(0, 0)]
         [InlineData(1, 0)]
         [InlineData(2, 1)]
         [InlineData(3, 2 - 1)]
