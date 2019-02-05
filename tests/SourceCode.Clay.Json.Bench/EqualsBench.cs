@@ -40,7 +40,7 @@ namespace SourceCode.Clay.Json.Bench
 
                 var equal = StringComparer.Ordinal.Equals(str1, str2);
 
-                total += (equal ? 1 : 0);
+                total += equal ? 1 : 0;
             }
 
             return total;
@@ -54,7 +54,7 @@ namespace SourceCode.Clay.Json.Bench
             {
                 var equal = JToken.EqualityComparer.Equals(_newton1, _newton2);
 
-                total += (equal ? 1 : 0);
+                total += equal ? 1 : 0;
             }
 
             return total;

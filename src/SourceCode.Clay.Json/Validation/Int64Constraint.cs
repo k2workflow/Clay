@@ -130,7 +130,7 @@ namespace SourceCode.Clay.Json.Validation
         {
             // Check Required
             if (!value.HasValue)
-                return !(Required); // null + optional = true, null + required = false
+                return !Required; // null + optional = true, null + required = false
 
             // Check Min
             if (Minimum.HasValue)

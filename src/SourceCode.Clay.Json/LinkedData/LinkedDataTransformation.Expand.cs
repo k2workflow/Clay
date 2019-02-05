@@ -360,7 +360,7 @@ namespace SourceCode.Clay.Json.LinkedData
                         JToken item = expandedArray[i];
                         if (item.Is(JTokenType.Null)) continue;
                         if (!(item is JObject o) ||
-                            (o.ContainsKey(LinkedDataKeywords.Value) || o.ContainsKey(LinkedDataKeywords.List)))
+                            o.ContainsKey(LinkedDataKeywords.Value) || o.ContainsKey(LinkedDataKeywords.List))
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
                         if (!reverseMap.TryGetValue(expandedProperty, out JToken reverseMapItemToken))
                             reverseMap.Add(expandedProperty, reverseMapItemToken = new JArray());
@@ -664,8 +664,8 @@ namespace SourceCode.Clay.Json.LinkedData
                             foreach (JToken item in (JArray)prop.Value)
                             {
                                 if (!(item is JObject o) ||
-                                    (o.ContainsKey(LinkedDataKeywords.Value) ||
-                                        o.ContainsKey(LinkedDataKeywords.List)))
+                                    o.ContainsKey(LinkedDataKeywords.Value) ||
+                                        o.ContainsKey(LinkedDataKeywords.List))
                                     throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
 
                                 if (!reverseMap.TryGetValue(prop.Key, out JToken items))
