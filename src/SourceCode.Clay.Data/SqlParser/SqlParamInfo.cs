@@ -42,7 +42,24 @@ namespace SourceCode.Clay.Data.SqlParser
             => obj is SqlParamInfo prm
             && Equals(prm);
 
-        public override int GetHashCode() => HashCode.Combine(IsNullable, Direction, HasDefault, IsReadOnly);
+        public override int GetHashCode()
+#if NETCOREAPP2_2
+            => HashCode.Combine(IsNullable, Direction, HasDefault, IsReadOnly);
+#else
+        {
+            int hc = 11;
+
+            unchecked
+            {
+                hc = hc * 7 + (IsNullable ? 3 : 0);
+                hc = hc * 7 + (int)Direction;
+                hc = hc * 7 + (HasDefault ? 5 : 0);
+                hc = hc * 7 + (IsReadOnly ? 7 : 0);
+            }
+
+            return hc;
+        }
+#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

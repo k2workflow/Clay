@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,7 +15,12 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static class SqlParamBlockParser
     {
-        private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty = ImmutableDictionary<string, SqlParamInfo>.Empty;
+        private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty =
+#if NETSTANDARD2_0
+            new Dictionary<string, SqlParamInfo>(0);
+#else
+            System.Collections.Immutable.ImmutableDictionary<string, SqlParamInfo>.Empty;
+#endif
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
