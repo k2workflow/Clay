@@ -16,10 +16,10 @@ namespace SourceCode.Clay.Data.SqlParser
     public static class SqlParamBlockParser
     {
         private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty =
-#if NETSTANDARD2_0
-            new Dictionary<string, SqlParamInfo>(0);
-#else
+#if !NETSTANDARD2_0
             System.Collections.Immutable.ImmutableDictionary<string, SqlParamInfo>.Empty;
+#else
+            new Dictionary<string, SqlParamInfo>(0);
 #endif
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql

@@ -47,7 +47,7 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                 var hash = new HashCode();
                 hash.Add(obj.Major);
                 hash.Add(obj.Minor);

@@ -158,7 +158,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     defined: defined);
                 // If the result is neither an absolute IRI nor a blank node identifier, i.e., it contains no colon
                 // (:), an invalid IRI mapping error has been detected and processing is aborted.
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                 if (!iriMapping.Contains(':', StringComparison.Ordinal))
 #else
                 if (!iriMapping.Contains(":"))
@@ -210,7 +210,7 @@ namespace SourceCode.Clay.Json.LinkedData
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidKeywordAlias);
             }
             // 14) Otherwise if the term contains a colon (:):
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             else if (term.Contains(':', StringComparison.Ordinal))
             {
                 var index = term.IndexOf(':', StringComparison.Ordinal); // TODO: Perf: Contains followed by IndexOf is wasteful

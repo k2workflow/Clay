@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         public bool Equals(SqlParamInfo other)
-            => (IsNullable, HasDefault, IsReadOnly, Direction) 
+            => (IsNullable, HasDefault, IsReadOnly, Direction)
             == (other.IsNullable, other.HasDefault, other.IsReadOnly, other.Direction);
 
         public override bool Equals(object obj)
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Data.SqlParser
             && Equals(prm);
 
         public override int GetHashCode()
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             => HashCode.Combine(IsNullable, Direction, HasDefault, IsReadOnly);
 #else
         {

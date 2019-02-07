@@ -99,7 +99,7 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 5) If value contains a colon (:), it is either an absolute IRI, a compact IRI, or a blank node
             //    identifier:
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             if (value.Contains(':', StringComparison.Ordinal))
             {
                 var index = value.IndexOf(':', StringComparison.Ordinal); // TODO: Perf: Contains followed by IndexOf is wasteful

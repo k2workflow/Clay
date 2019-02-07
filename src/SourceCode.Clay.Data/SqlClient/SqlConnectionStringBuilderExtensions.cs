@@ -90,10 +90,10 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
                     sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
 
-#if NETSTANDARD2_0
-                if (!sqlCsb.DataSource.Contains(","))
-#else
+#if !NETSTANDARD2_0
                 if (!sqlCsb.DataSource.Contains(",", StringComparison.OrdinalIgnoreCase))
+#else
+                if (!sqlCsb.DataSource.Contains(","))
 #endif
                     sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
             }
@@ -118,7 +118,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         public static bool IsAzureSql(this SqlConnectionStringBuilder sqlCsb)
             => sqlCsb == null ? false : IsAzureSql(sqlCsb.DataSource);
 
-#region Helpers
+        #region Helpers
 
         // See SqlClient section here: https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462
         // Original code here:
@@ -169,6 +169,6 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
             return false;
         }
 
-#endregion
+        #endregion
     }
 }

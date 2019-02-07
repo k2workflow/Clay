@@ -123,10 +123,10 @@ namespace SourceCode.Clay.Security
 
             // Else return the valid substring
             ch = ch.Slice(0, i);
-#if NETSTANDARD2_0
-            var clean = new string(ch.ToArray());
-#else
+#if !NETSTANDARD2_0
             var clean = new string(ch);
+#else
+            var clean = new string(ch.ToArray());
 #endif
             return clean;
         }

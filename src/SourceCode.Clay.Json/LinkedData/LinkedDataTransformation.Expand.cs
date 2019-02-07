@@ -219,7 +219,7 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 7.3) If expanded property is null or it neither contains a colon (:) nor it is
                 //      a keyword, drop key by continuing to the next key.
                 if (expandedProperty is null ||
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                     !expandedProperty.Contains(':', StringComparison.OrdinalIgnoreCase))
 #else
                     !expandedProperty.Contains(":"))

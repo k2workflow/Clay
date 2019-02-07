@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SourceCode.Clay.IO
 {
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
     public sealed class MemoryBufferStream : Stream
     {
         private readonly ReadOnlyMemory<byte> _memory;

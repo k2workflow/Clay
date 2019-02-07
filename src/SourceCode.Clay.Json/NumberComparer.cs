@@ -256,7 +256,7 @@ namespace SourceCode.Clay.Json
             {
                 // Double
                 if ((obj.Kind & NumberKinds.Real) > 0)
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                     return HashCode.Combine(obj.ValueTypeCode, obj._double);
 #else
                 {
@@ -272,7 +272,7 @@ namespace SourceCode.Clay.Json
 
                 // Decimal
                 if (obj.ValueTypeCode == TypeCode.Decimal)
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                     return HashCode.Combine(obj.ValueTypeCode, obj._decimal);
 #else
                 {
@@ -287,7 +287,7 @@ namespace SourceCode.Clay.Json
 #endif
 
                 // Int
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                 return HashCode.Combine(obj.ValueTypeCode, obj._uint64);
 #else
                 {

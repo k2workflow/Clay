@@ -196,7 +196,7 @@ namespace SourceCode.Clay
                 return false;
             }
 
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             var minorIndex = s.IndexOf('.', StringComparison.Ordinal);
 #else
             var minorIndex = s.IndexOf('.');

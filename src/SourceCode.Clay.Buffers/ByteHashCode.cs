@@ -64,10 +64,10 @@ namespace SourceCode.Clay.Buffers
     public struct ByteHashCode
     {
         private static readonly uint s_seed =
-#if NETSTANDARD2_0
-            41429;
-#else
+#if !NETSTANDARD2_0
             (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+#else
+            41429;
 #endif
         public static readonly int Empty = Combine(Array.Empty<byte>());
 

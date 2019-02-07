@@ -181,7 +181,7 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             => HashCode.Combine(Minimum ?? 0, Maximum ?? 0, RangeOptions, MultipleOf ?? 0, Required);
 #else
         {

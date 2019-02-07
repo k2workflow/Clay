@@ -49,7 +49,7 @@ namespace SourceCode.Clay.Json
             where TEnum : struct, Enum
         {
             string str = (string)jr.Value;
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             TEnum enm = Enum.Parse<TEnum>(str, ignoreCase);
 #else
             TEnum enm = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);
@@ -75,7 +75,7 @@ namespace SourceCode.Clay.Json
             if (str.Length == 0) // We already checked for null
                 return null;
 
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
             TEnum enm = Enum.Parse<TEnum>(str, ignoreCase);
 #else
             TEnum enm = (TEnum)Enum.Parse(typeof(TEnum), str, ignoreCase);

@@ -271,7 +271,7 @@ namespace SourceCode.Clay
             {
                 fixed (byte* b = _block.Bytes)
                 {
-#if NETCOREAPP2_2
+#if !NETSTANDARD2_0
                     int hc = HashCode.Combine(b[00], b[01], b[02], b[03], b[04], b[05], b[06], b[07]);
                     hc = HashCode.Combine(hc, b[08], b[09], b[10], b[11], b[12], b[13], b[14]);
                     hc = HashCode.Combine(hc, b[15], b[16], b[17], b[18], b[19], b[20], b[21]);
