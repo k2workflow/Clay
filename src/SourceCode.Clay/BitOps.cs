@@ -1505,105 +1505,18 @@ namespace SourceCode.Clay
 
         #region PopCount
 
-        /*
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(uint value)
-        {
-            //if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
-            //{
-            //    return (byte)System.Runtime.Intrinsics.X86.Popcnt.PopCount(value);
-            //}
-
-            const uint c0 = 0x_5555_5555;
-            const uint c1 = 0x_3333_3333;
-            const uint c2 = 0x_0F0F_0F0F;
-            const uint c3 = 0x_0101_0101;
-
-            uint val = value;
-
-            val -= (val >> 1) & c0;
-            val = (val & c1) + ((val >> 2) & c1);
-            val = (val + (val >> 4)) & c2;
-            val *= c3;
-            val >>= 24;
-
-            return (byte)val;
-        }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(int value)
-            => PopCount((uint)value);
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(ulong value)
-        {
-            //if (System.Runtime.Intrinsics.X86.Popcnt.IsSupported)
-            //{
-            //    int count = System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)value);
-            //    count += System.Runtime.Intrinsics.X86.Popcnt.PopCount((uint)(value >> 32));
-            //    return (byte)count;
-            //}
-
-            const ulong c0 = 0x_5555_5555_5555_5555;
-            const ulong c1 = 0x_3333_3333_3333_3333;
-            const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
-            const ulong c3 = 0x_0101_0101_0101_0101;
-
-            ulong val = value;
-
-            val -= (value >> 1) & c0;
-            val = (val & c1) + ((val >> 2) & c1);
-            val = (val + (val >> 4)) & c2;
-            val *= c3;
-            val >>= 56;
-
-            return (byte)val;
-        }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte PopCount(long value)
-            => PopCount((ulong)value))
-        */
-
         #endregion
 
         #region LeadingZeroCount
 
-        /*
-        // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
-        // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
-        // https://github.com/dotnet/roslyn/pull/24621
-        // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
-        private static ReadOnlySpan<byte> LeadingZerosDeBruijn32 => new byte[32]
-        {
-            00, 09, 01, 10, 13, 21, 02, 29,
-            11, 14, 16, 18, 22, 25, 03, 30,
-            08, 12, 20, 28, 15, 17, 24, 07,
-            19, 27, 23, 06, 26, 05, 04, 31
-        };
-
-        private const uint DeBruijn32 = 0x07C4_ACDDu;
-        */
+        /// <summary>
+        /// Count the number of leading zero bits in a mask.
+        /// Similar in behavior to the x86 instruction LZCNT.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LeadingZeroCount(byte value)
+            => LeadingZeroCount((uint)value) - 24;
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1611,16 +1524,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(byte value)
-            => (byte)(LeadingZeroCount((uint)value) - 24);
-
-        /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(sbyte value)
+        public static int LeadingZeroCount(sbyte value)
             => LeadingZeroCount(unchecked((byte)value));
 
         /// <summary>
@@ -1629,8 +1533,8 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(ushort value)
-            => (byte)(LeadingZeroCount((uint)value) - 16);
+        public static int LeadingZeroCount(ushort value)
+            => LeadingZeroCount((uint)value) - 16;
 
         /// <summary>
         /// Count the number of leading zero bits in a mask.
@@ -1638,231 +1542,30 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(short value)
+        public static int LeadingZeroCount(short value)
             => LeadingZeroCount(unchecked((ushort)value));
 
-        /*
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeroCount(uint value)
-        {
-            //if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
-            //{
-            //    return (byte)System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount(value);
-            //}
-
-            uint val = value;
-            FoldTrailing(ref val);
-
-            uint ix = (val * DeBruijn32) >> 27;
-
-            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte s_LZ = ref MemoryMarshal.GetReference(LeadingZerosDeBruijn32);
-            int zeros = 31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)ix);
-
-            // Log(0) is undefined: Return 32.
-            zeros += IsZero(value);
-
-            return (byte)zeros;
-        }
-        */
-
-        /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(int value)
+        public static int LeadingZeroCount(int value)
             => LeadingZeroCount((uint)value);
 
-        /*
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
         /// </summary>
         /// <param name="value">The mask.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte LeadingZeroCount(ulong value)
-        {
-            // Instead of writing a 64-bit function,
-            // we use the 32-bit function twice.
-
-            uint h, b;
-            //if (System.Runtime.Intrinsics.X86.Lzcnt.IsSupported)
-            //{
-            //    h = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)(value >> 32));
-            //    b = System.Runtime.Intrinsics.X86.Lzcnt.LeadingZeroCount((uint)value);
-            //}
-            //else
-            {
-                ulong val = value;
-                FoldTrailing(ref val);
-
-                uint hv = (uint)(val >> 32); // High-32
-                uint bv = (uint)val; // Low-32
-
-                uint hi = (hv * DeBruijn32) >> 27;
-                uint bi = (bv * DeBruijn32) >> 27;
-
-                // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-                ref byte s_LZ = ref MemoryMarshal.GetReference(LeadingZerosDeBruijn32);
-                h = (uint)(31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)(int)hi));
-                b = (uint)(31 - Unsafe.AddByteOffset(ref s_LZ, (IntPtr)(int)bi)); // Use warm cache
-
-                // Log(0) is undefined: Return 32 + 32.
-                h += IsZero((uint)(value >> 32)); // value == 0 ? 1 : 0
-                b += IsZero((uint)value);
-            }
-
-            // Keep b iff h==32
-            uint mask = h & ~32u; // Zero 5th bit (32)
-            mask = IsZero(mask);  // mask == 0 ? 1 : 0
-            b = mask * b;
-
-            return (byte)(h + b);
-        }
-        */
-
-        /// <summary>
-        /// Count the number of leading zero bits in a mask.
-        /// Similar in behavior to the x86 instruction LZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint LeadingZeroCount(long value)
+        public static int LeadingZeroCount(long value)
             => LeadingZeroCount((ulong)value);
 
         #endregion
 
         #region TrailingZeroCount
-
-        //static BitOps()
-        //{
-            // We want to map [0, 2^0, 2^1, 2^2, ..., 2^32] to the smallest contiguous range, ideally [0..32] since 33 is the range cardinality.
-            // Mod-37 is a simple perfect-hashing scheme over this range, where 37 is chosen as the smallest prime greater than 33.
-            //    const byte p = 37;
-            //    s_trail32u[0] = 32; // Loop excludes [0]
-            //    long n = 1;
-            //    for (byte i = 1; i < p; i++)
-            //    {
-            //        int m = (int)(n % p); // Hash
-            //        byte z = (byte)(i - 1); // Trailing zeros
-            //        s_trail32u[m] = z;
-            //        n <<= 1; // mul 2
-            //    }
-        //}
-
-        // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
-        // https://github.com/dotnet/coreclr/pull/22118#discussion_r249957516
-        // https://github.com/dotnet/roslyn/pull/24621
-        // https://github.com/benaadams/coreclr/blob/9ba65b563918c778c256f18e234be69174173f12/src/System.Private.CoreLib/shared/System/BitOps.cs
-        //private static ReadOnlySpan<byte> TrailingZerosUInt32 => new byte[37]
-        //{
-        //    32, 00, 01, 26, 02, 23, 27, 32,
-        //    03, 16, 24, 30, 28, 11, 33, 13,
-        //    04, 07, 17, 35, 25, 22, 31, 15,
-        //    29, 10, 12, 06, 34, 21, 14, 09,
-        //    05, 20, 08, 19, 18
-        //};
-
- 
-
-        /*
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeroCount(uint value)
-        {
-            //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
-            //{
-            //    return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
-            //}
-
-            // The expression (n & -n) returns lsb(n).
-            // Only possible values are therefore [0,1,2,4,...]
-            long lsb = value & -value; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
-            lsb %= 37; // mod 37
-
-            // Benchmark: Lookup is 2x faster than Switch
-            // Method |     Mean |     Error | StdDev    | Scaled |
-            //------- | ---------| ----------| ----------| -------|
-            // Lookup | 2.920 ns | 0.0893 ns | 0.2632 ns |   1.00 |
-            // Switch | 6.548 ns | 0.1301 ns | 0.2855 ns |   2.26 |
-
-            // long.MaxValue % 37 is always in range [0 - 36] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte s_TZ = ref MemoryMarshal.GetReference(TrailingZerosUInt32);
-            byte cnt = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)lsb); // eg 44 -> 2 (44==0010 1100 has 2 trailing zeros)
-
-            // NoOp: Hashing scheme has unused outputs (inputs 4,294,967,296 and higher do not fit a uint)
-            Debug.Assert(lsb != 7 && lsb != 14 && lsb != 19 && lsb != 28, $"{value} resulted in unexpected {typeof(uint)} hash {lsb}, with count {cnt}");
-
-            return cnt;
-        }
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeroCount(int value)
-            => TrailingZeroCount((uint)value);
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeroCount(ulong value)
-        {
-            //if (System.Runtime.Intrinsics.X86.Bmi1.IsSupported)
-            //{
-            //    return (byte)System.Runtime.Intrinsics.X86.Bmi1.TrailingZeroCount(value);
-            //}
-
-            // Instead of writing a 64-bit lookup table,
-            // we use the existing 32-bit table twice.
-
-            uint hv = (uint)(value >> 32); // High-32
-            uint bv = (uint)value; // Low-32
-
-            long hi = hv & -hv;
-            long bi = bv & -bv;
-
-            hi %= 37; // mod 37
-            bi %= 37;
-
-            // long.MaxValue % 37 is always in range [0 - 36] so we use Unsafe.AddByteOffset to avoid bounds check
-            ref byte s_TZ = ref MemoryMarshal.GetReference(TrailingZerosUInt32);
-            uint h = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)hi);
-            uint b = Unsafe.AddByteOffset(ref s_TZ, (IntPtr)(int)bi); // Use warm cache
-
-            // Keep h iff b==32
-            uint mask = b & ~32u; // Zero 5th bit (32)
-            mask = IsZero(mask);  // mask == 0 ? 1 : 0
-            h = mask * h;
-
-            return (byte)(b + h);
-        }
-
-        /// <summary>
-        /// Count the number of trailing zero bits in a mask.
-        /// Similar in behavior to the x86 instruction TZCNT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TrailingZeroCount(long value)
-            => TrailingZeroCount((ulong)value);
-        */
 
         #endregion
 
