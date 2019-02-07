@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay
@@ -13,21 +12,8 @@ namespace SourceCode.Clay
     /// <summary>
     /// Represents a way to compare different <see cref="SemanticVersion"/> values.
     /// </summary>
-    public abstract class SemanticVersionComparer : IEqualityComparer<SemanticVersion>, IComparer<SemanticVersion>
+    public abstract partial class SemanticVersionComparer : IEqualityComparer<SemanticVersion>, IComparer<SemanticVersion>
     {
-        /// <summary>
-        /// Gets a <see cref="SemanticVersionComparer"/> that compares all fields of a <see cref="SemanticVersion"/>
-        /// value.
-        /// </summary>
-        public static SemanticVersionComparer Strict { get; } = new StrictSemanticVersionComparer();
-
-        /// <summary>
-        /// Gets a <see cref="SemanticVersionComparer"/> that only compares the <see cref="SemanticVersion.Major"/>,
-        /// <see cref="SemanticVersion.Minor"/>, <see cref="SemanticVersion.Patch"/> and <see cref="SemanticVersion.PreRelease"/>
-        /// values.
-        /// </summary>
-        public static SemanticVersionComparer Standard { get; } = new StandardSemanticVersionComparer();
-
         private SemanticVersionComparer()
         { }
 
@@ -39,129 +25,5 @@ namespace SourceCode.Clay
 
         /// <inheritdoc/>
         public abstract int GetHashCode(SemanticVersion obj);
-
-        private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
-        {
-            public override int Compare(SemanticVersion x, SemanticVersion y)
-            {
-                var cmp = x.Major.CompareTo(y.Major);
-                if (cmp != 0) return cmp;
-
-                cmp = x.Minor.CompareTo(y.Minor);
-                if (cmp != 0) return cmp;
-
-                cmp = x.Patch.CompareTo(y.Patch);
-                if (cmp != 0) return cmp;
-
-                cmp = string.CompareOrdinal(x.PreRelease, y.PreRelease);
-                if (cmp != 0) return cmp;
-
-                cmp = string.CompareOrdinal(x.BuildMetadata, y.BuildMetadata);
-                return cmp;
-            }
-
-            public override bool Equals(SemanticVersion x, SemanticVersion y)
-            {
-                if (x.Major != y.Major) return false;
-                if (x.Minor != y.Minor) return false;
-                if (x.Patch != y.Patch) return false;
-                if (!StringComparer.Ordinal.Equals(x.PreRelease, y.PreRelease)) return false;
-                if (!StringComparer.Ordinal.Equals(x.BuildMetadata, y.BuildMetadata)) return false;
-
-                return true;
-            }
-
-            public override int GetHashCode(SemanticVersion obj)
-            {
-#if NETCOREAPP
-                var hash = new HashCode();
-                hash.Add(obj.Major);
-                hash.Add(obj.Minor);
-                hash.Add(obj.Patch);
-
-                if (!(obj.PreRelease is null))
-                {
-                    hash.Add(obj.PreRelease, StringComparer.Ordinal);
-                }
-
-                if (!(obj.BuildMetadata is null))
-                {
-                    hash.Add(obj.BuildMetadata, StringComparer.Ordinal);
-                }
-
-                var hc = hash.ToHashCode();
-#else
-                var hc = 11;
-
-                unchecked
-                {
-                    hc = hc * 7 + obj.Major.GetHashCode();
-                    hc = hc * 7 + obj.Minor.GetHashCode();
-                    hc = hc * 7 + obj.Patch.GetHashCode();
-                    hc = hc * 7 + (obj.PreRelease?.Length ?? 0);
-                    hc = hc * 7 + (obj.BuildMetadata?.Length ?? 0);
-                }
-#endif
-
-                return hc;
-            }
-        }
-
-        private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
-        {
-            public override int Compare(SemanticVersion x, SemanticVersion y)
-            {
-                var cmp = x.Major.CompareTo(y.Major);
-                if (cmp != 0) return cmp;
-
-                cmp = x.Minor.CompareTo(y.Minor);
-                if (cmp != 0) return cmp;
-
-                cmp = x.Patch.CompareTo(y.Patch);
-                if (cmp != 0) return cmp;
-
-                cmp = string.CompareOrdinal(x.PreRelease, y.PreRelease);
-                return cmp;
-            }
-
-            public override bool Equals(SemanticVersion x, SemanticVersion y)
-            {
-                if (x.Major != y.Major) return false;
-                if (x.Minor != y.Minor) return false;
-                if (x.Patch != y.Patch) return false;
-                if (!StringComparer.Ordinal.Equals(x.PreRelease, y.PreRelease)) return false;
-
-                return true;
-            }
-
-            public override int GetHashCode(SemanticVersion obj)
-            {
-#if NETCOREAPP
-                var hash = new HashCode();
-                hash.Add(obj.Major);
-                hash.Add(obj.Minor);
-                hash.Add(obj.Patch);
-
-                if (!(obj.PreRelease is null))
-                {
-                    hash.Add(obj.PreRelease, StringComparer.Ordinal);
-                }
-
-                var hc = hash.ToHashCode();
-#else
-                var hc = 11;
-
-                unchecked
-                {
-                    hc = hc * 7 + obj.Major.GetHashCode();
-                    hc = hc * 7 + obj.Minor.GetHashCode();
-                    hc = hc * 7 + obj.Patch.GetHashCode();
-                    hc = hc * 7 + (obj.PreRelease?.Length ?? 0);
-                }
-#endif
-
-                return hc;
-            }
-        }
     }
 }

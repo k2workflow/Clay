@@ -14,7 +14,7 @@ namespace SourceCode.Clay
     /// </summary>
     public static class DateTimeExtensions
     {
-#if NETCOREAPP
+#if NETCOREAPP2_2
         /// <summary>
         /// Gets the difference between the Unix epoch and the Windows epoch.
         /// </summary>

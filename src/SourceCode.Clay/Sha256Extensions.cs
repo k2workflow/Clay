@@ -120,7 +120,7 @@ namespace SourceCode.Clay
             Debug.Assert(alg != null);
 
             // Do NOT short-circuit here; rely on call-sites to do so
-#if NETCOREAPP
+#if NETCOREAPP2_2
             Span<byte> hash = stackalloc byte[Sha256.ByteLength];
             alg.TryComputeHash(span, hash, out _);
 #else

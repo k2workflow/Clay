@@ -97,7 +97,7 @@ namespace SourceCode.Clay
                 // If it's the LOW surrogate, we're replacing it regardless
             }
 
-#if NETCOREAPP
+#if NETCOREAPP2_2
             // Write directly into the string’s memory on the heap, thus avoiding any intermediate allocations
             string sb = string.Create(len, len - 1, (dst, last) => // Say string has len=4, => last=3
             {

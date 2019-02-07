@@ -144,7 +144,7 @@ namespace SourceCode.Clay
 
             if (prefixLength >= hexLength)
             {
-#if NETCOREAPP
+#if NETCOREAPP2_2
                 string pfx = new string(span);
 #else
                 string pfx = new string(span.ToArray());
@@ -154,7 +154,7 @@ namespace SourceCode.Clay
 
             if (prefixLength <= 0)
             {
-#if NETCOREAPP
+#if NETCOREAPP2_2
                 string ext = new string(span);
 #else
                 string ext = new string(span.ToArray());
@@ -165,7 +165,7 @@ namespace SourceCode.Clay
             Span<char> p = span.Slice(0, prefixLength);
             Span<char> e = span.Slice(prefixLength, hexLength - prefixLength);
 
-#if NETCOREAPP
+#if NETCOREAPP2_2
             string prefix = new string(p);
             string extra = new string(e);
 #else
@@ -203,7 +203,7 @@ namespace SourceCode.Clay
 
                 pos += 2;
             }
-#if NETCOREAPP
+#if NETCOREAPP2_2
             string str = new string(span);
 #else
             string str = new string(span.ToArray());
@@ -255,7 +255,7 @@ namespace SourceCode.Clay
                         sep = 0; // Prevent IndexOutOfRangeException
                 }
             }
-#if NETCOREAPP
+#if NETCOREAPP2_2
             string str = new string(span);
 #else
             string str = new string(span.ToArray());
