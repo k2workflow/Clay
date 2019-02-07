@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Buffers.Bench
         private const int _iterations = 2000;
         private const int N = ushort.MaxValue;
 
-        // Prevent folding by using volatile non-readonly non-constant
+        // Try prevent folding by using volatile non-readonly non-constant
         private static volatile bool s_true = true;
         private static volatile bool s_false = false;
 
