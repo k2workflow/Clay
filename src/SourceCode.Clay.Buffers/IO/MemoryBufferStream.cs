@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SourceCode.Clay.IO
 {
+#if NETCOREAPP2_2
     public sealed class MemoryBufferStream : Stream
     {
         private readonly ReadOnlyMemory<byte> _memory;
@@ -228,4 +229,5 @@ namespace SourceCode.Clay.IO
         public override void WriteByte(byte value)
             => throw CreateNotSupportedException();
     }
+#endif
 }

@@ -51,7 +51,6 @@ namespace SourceCode.Clay.Buffers
       - xxHash source repository : https://github.com/Cyan4973/xxHash
 
     */
-
 #pragma warning disable CA1815
 #pragma warning disable CA1066
 #pragma warning disable CA2231
@@ -64,8 +63,12 @@ namespace SourceCode.Clay.Buffers
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ByteHashCode
     {
-        private static readonly uint s_seed = (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-
+        private static readonly uint s_seed =
+#if NETSTANDARD2_0
+            41429;
+#else
+            (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+#endif
         public static readonly int Empty = Combine(Array.Empty<byte>());
 
         private const uint Prime1 = 2654435761U;
@@ -136,7 +139,16 @@ namespace SourceCode.Clay.Buffers
             var index = _length++;
             var position = (byte)(index % 16);
 
-            Span<byte> octets = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4));
+#if NETSTANDARD2_0
+            unsafe
+            {
+                fixed (uint* ptr = &_queue0)
+                {
+                    Span<uint> span = new Span<uint>(ptr, 4);
+#else
+            Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
+#endif
+            Span<byte> octets = MemoryMarshal.Cast<uint, byte>(span);
             octets[position] = value;
 
             if (position == 15)
@@ -155,6 +167,10 @@ namespace SourceCode.Clay.Buffers
                 _acc3 = Round(_acc3, _queue3);
                 _queue0 = _queue1 = _queue2 = _queue3 = 0;
             }
+#if NETSTANDARD2_0
+                }
+            }
+#endif
         }
 
         public int ToHashCode()
@@ -166,7 +182,16 @@ namespace SourceCode.Clay.Buffers
 
             acc += (uint)length;
 
-            Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(MemoryMarshal.CreateSpan(ref _queue0, 4))
+#if NETSTANDARD2_0
+            unsafe
+            {
+                fixed (uint* ptr = &_queue0)
+                {
+                    Span<uint> span = new Span<uint>(ptr, 4);
+#else
+            Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
+#endif
+            Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(span)
                 .Slice(0, (int)(length % 16));
             Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
 
@@ -185,6 +210,10 @@ namespace SourceCode.Clay.Buffers
 
             acc = MixFinal(acc);
             return (int)acc;
+#if NETSTANDARD2_0
+                }
+            }
+#endif
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
