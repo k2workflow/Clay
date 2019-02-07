@@ -120,10 +120,12 @@ namespace SourceCode.Clay
             Debug.Assert(alg != null);
 
             // Do NOT short-circuit here; rely on call-sites to do so
-
+#if NETCOREAPP
             Span<byte> hash = stackalloc byte[Sha1.ByteLength];
             alg.TryComputeHash(span, hash, out _);
-
+#else
+            var hash = alg.ComputeHash(span.ToArray());
+#endif
             var sha = new Sha1(hash);
             return sha;
         }

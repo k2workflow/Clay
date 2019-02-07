@@ -73,6 +73,7 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
+#if NETCOREAPP
                 var hash = new HashCode();
                 hash.Add(obj.Major);
                 hash.Add(obj.Minor);
@@ -89,6 +90,19 @@ namespace SourceCode.Clay
                 }
 
                 var hc = hash.ToHashCode();
+#else
+                var hc = 11;
+
+                unchecked
+                {
+                    hc = hc * 7 + obj.Major.GetHashCode();
+                    hc = hc * 7 + obj.Minor.GetHashCode();
+                    hc = hc * 7 + obj.Patch.GetHashCode();
+                    hc = hc * 7 + (obj.PreRelease?.Length ?? 0);
+                    hc = hc * 7 + (obj.BuildMetadata?.Length ?? 0);
+                }
+#endif
+
                 return hc;
             }
         }
@@ -122,6 +136,7 @@ namespace SourceCode.Clay
 
             public override int GetHashCode(SemanticVersion obj)
             {
+#if NETCOREAPP
                 var hash = new HashCode();
                 hash.Add(obj.Major);
                 hash.Add(obj.Minor);
@@ -133,6 +148,18 @@ namespace SourceCode.Clay
                 }
 
                 var hc = hash.ToHashCode();
+#else
+                var hc = 11;
+
+                unchecked
+                {
+                    hc = hc * 7 + obj.Major.GetHashCode();
+                    hc = hc * 7 + obj.Minor.GetHashCode();
+                    hc = hc * 7 + obj.Patch.GetHashCode();
+                    hc = hc * 7 + (obj.PreRelease?.Length ?? 0);
+                }
+#endif
+
                 return hc;
             }
         }

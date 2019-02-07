@@ -14,6 +14,7 @@ namespace SourceCode.Clay
     /// </summary>
     public static class DateTimeExtensions
     {
+#if NETCOREAPP
         /// <summary>
         /// Gets the difference between the Unix epoch and the Windows epoch.
         /// </summary>
@@ -46,7 +47,7 @@ namespace SourceCode.Clay
         /// <param name="posix">The Posix timestamp to convert.</param>
         /// <returns>The <see cref="DateTime"/>.</returns>
         public static DateTime FromPosixFileTimeUtc(long posix) => DateTime.FromFileTimeUtc(posix + UnixEpochDifference);
-
+#endif
         /// <summary>
         /// Rounds down the specified <see cref="DateTime"/> to the current minute.
         /// </summary>

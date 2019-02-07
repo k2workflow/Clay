@@ -66,6 +66,18 @@ namespace SourceCode.Clay
             }
         }
 
+#if !NETCOREAPP
+        /// <summary>
+        /// Deserializes a <see cref="Sha1"/> value from the provided array.
+        /// </summary>
+        /// <param name="source">The buffer.</param>
+        public Sha1(byte[] source)
+            : this(new ReadOnlySpan<byte>(source))
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+        }
+#endif
+
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
         /// </summary>
@@ -258,10 +270,39 @@ namespace SourceCode.Clay
             {
                 fixed (byte* b = _block.Bytes)
                 {
+#if NETCOREAPP
                     int hc = HashCode.Combine(b[00], b[01], b[02], b[03], b[04], b[05], b[06], b[07]);
                     hc = HashCode.Combine(hc, b[08], b[09], b[10], b[11], b[12], b[13], b[14]);
                     hc = HashCode.Combine(hc, b[15], b[16], b[17], b[18], b[19]);
+#else
+                    int hc = 11;
 
+                    unchecked
+                    {
+                        hc = hc * 7 + b[00];
+                        hc = hc * 7 + b[01];
+                        hc = hc * 7 + b[02];
+                        hc = hc * 7 + b[03];
+                        hc = hc * 7 + b[04];
+                        hc = hc * 7 + b[05];
+                        hc = hc * 7 + b[06];
+                        hc = hc * 7 + b[07];
+
+                        hc = hc * 7 + b[08];
+                        hc = hc * 7 + b[09];
+                        hc = hc * 7 + b[10];
+                        hc = hc * 7 + b[11];
+                        hc = hc * 7 + b[12];
+                        hc = hc * 7 + b[13];
+                        hc = hc * 7 + b[14];
+
+                        hc = hc * 7 + b[15];
+                        hc = hc * 7 + b[16];
+                        hc = hc * 7 + b[17];
+                        hc = hc * 7 + b[18];
+                        hc = hc * 7 + b[19];
+                    }
+#endif
                     return hc;
                 }
             }

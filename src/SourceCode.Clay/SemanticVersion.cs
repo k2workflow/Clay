@@ -196,7 +196,11 @@ namespace SourceCode.Clay
                 return false;
             }
 
+#if NETCOREAPP
             var minorIndex = s.IndexOf('.', StringComparison.Ordinal);
+#else
+            var minorIndex = s.IndexOf('.');
+#endif
             if (minorIndex <= 0 || minorIndex == s.Length - 1)
             {
                 result = default;

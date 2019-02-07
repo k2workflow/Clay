@@ -97,13 +97,16 @@ namespace SourceCode.Clay
                 // If it's the LOW surrogate, we're replacing it regardless
             }
 
+#if NETCOREAPP
             // Write directly into the string’s memory on the heap, thus avoiding any intermediate allocations
             string sb = string.Create(len, len - 1, (dst, last) => // Say string has len=4, => last=3
             {
                 str.AsSpan(0, last).CopyTo(dst); // Only copy first 3 chars: [0, 1, 2]
                 dst[last] = '…'; // Explicitly set 4th char: [3]
             });
-
+#else
+            string sb = str.Substring(0, len - 1) + '…';
+#endif
             return sb;
         }
 
