@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Common properties defined in Directory.Build.props -->
 
@@ -10,6 +10,12 @@
   <PropertyGroup>
     <AssemblyName>SourceCode.Clay.Data</AssemblyName>
     <RootNamespace>SourceCode.Clay.Data</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
   </PropertyGroup>
 
   <ItemGroup>
