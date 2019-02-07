@@ -34,7 +34,7 @@ namespace SourceCode.Clay.Security
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
             if (thumbprint.Length != Sha1Length) throw new FormatException($"Specified thumbprint should be {Sha1Length} characters long.");
             if (!IsValid(thumbprint[0]) || !IsValid(thumbprint[thumbprint.Length - 1])) throw new FormatException($"Invalid character(s) detected in thumbprint.");
-            
+
             var certStore = new X509Store(storeName, storeLocation);
             certStore.Open(OpenFlags.ReadOnly);
             try
@@ -105,7 +105,7 @@ namespace SourceCode.Clay.Security
             Span<char> ch = stackalloc char[Sha1Length];
 
             var i = 0;
-            for (var j = 0; j < thumbprint.Length 
+            for (var j = 0; j < thumbprint.Length
                 // We choose to ignore (vs throw) anything beyond the expected number of valid characters
                 && i < Sha1Length; j++)
             {
@@ -113,7 +113,7 @@ namespace SourceCode.Clay.Security
 
                 if (!IsValid(c))
                     continue;
-                
+
                 ch[i++] = c;
             }
 
@@ -123,8 +123,11 @@ namespace SourceCode.Clay.Security
 
             // Else return the valid substring
             ch = ch.Slice(0, i);
-
+#if !NETSTANDARD2_0
             var clean = new string(ch);
+#else
+            var clean = new string(ch.ToArray());
+#endif
             return clean;
         }
 

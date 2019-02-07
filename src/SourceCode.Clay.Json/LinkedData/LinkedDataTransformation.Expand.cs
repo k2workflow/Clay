@@ -5,11 +5,11 @@
 
 #endregion
 
-using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
@@ -190,8 +190,10 @@ namespace SourceCode.Clay.Json.LinkedData
 
             var result = new JObject();
             JToken resultToken = result;
-            foreach ((var key, JToken value) in element.OrderLexicographically())
+            foreach (KeyValuePair<string, JToken> kvp in element.OrderLexicographically())
             {
+                (string key, JToken value) = (kvp.Key, kvp.Value);
+
                 // 7.1) If key is @context, continue to the next key.
                 if (key == LinkedDataKeywords.Context) continue;
 
@@ -217,7 +219,11 @@ namespace SourceCode.Clay.Json.LinkedData
                 // 7.3) If expanded property is null or it neither contains a colon (:) nor it is
                 //      a keyword, drop key by continuing to the next key.
                 if (expandedProperty is null ||
+#if !NETSTANDARD2_0
                     !expandedProperty.Contains(':', StringComparison.OrdinalIgnoreCase))
+#else
+                    !expandedProperty.Contains(":"))
+#endif
                     continue;
 
                 JToken expandedValue = null;
@@ -237,11 +243,13 @@ namespace SourceCode.Clay.Json.LinkedData
 
                     // 7.5.2) For each key-value pair language-language value in value, ordered lexicographically by
                     //        language:
-                    foreach ((var lang, JToken langValue) in ((JObject)value).OrderLexicographically())
+                    foreach (KeyValuePair<string, JToken> kvp1 in ((JObject)value).OrderLexicographically())
                     {
-#                       pragma warning disable CA1308 // Normalize strings to uppercase
+                        (var lang, JToken langValue) = (kvp1.Key, kvp1.Value);
+
+#pragma warning disable CA1308 // Normalize strings to uppercase
                         var lowerLang = lang.ToLowerInvariant();
-#                       pragma warning restore CA1308 // Normalize strings to uppercase
+#pragma warning restore CA1308 // Normalize strings to uppercase
                         // 7.5.2.1) If language value is not an array set it to an array containing only language
                         //          value.
                         JArray langArray = langValue is JArray
@@ -275,8 +283,10 @@ namespace SourceCode.Clay.Json.LinkedData
                     expandedValue = expandedArray;
 
                     // 7.6.2) For each key-value pair index-index value in value, ordered lexicographically by index:
-                    foreach ((var index, JToken indexValue) in ((JObject)value).OrderLexicographically())
+                    foreach (KeyValuePair<string, JToken> kvp2 in ((JObject)value).OrderLexicographically())
                     {
+                        (var index, JToken indexValue) = (kvp2.Key, kvp2.Value);
+
                         // 7.6.2.1) If index value is not an array set it to an array containing only index value.
                         // 7.6.2.2) Initialize index value to the result of using this algorithm recursively, passing
                         //          active context, key as active property, and index value as element.
@@ -360,7 +370,7 @@ namespace SourceCode.Clay.Json.LinkedData
                         JToken item = expandedArray[i];
                         if (item.Is(JTokenType.Null)) continue;
                         if (!(item is JObject o) ||
-                            (o.ContainsKey(LinkedDataKeywords.Value) || o.ContainsKey(LinkedDataKeywords.List)))
+                            o.ContainsKey(LinkedDataKeywords.Value) || o.ContainsKey(LinkedDataKeywords.List))
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
                         if (!reverseMap.TryGetValue(expandedProperty, out JToken reverseMapItemToken))
                             reverseMap.Add(expandedProperty, reverseMapItemToken = new JArray());
@@ -542,9 +552,9 @@ namespace SourceCode.Clay.Json.LinkedData
                     if (!value.Is(JTokenType.String))
                         throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageTaggedString);
 
-#                   pragma warning disable CA1308 // Normalize strings to uppercase
+#pragma warning disable CA1308 // Normalize strings to uppercase
                     expandedValue = ((string)((JValue)value).Value).ToLowerInvariant();
-#                   pragma warning restore CA1308 // Normalize strings to uppercase
+#pragma warning restore CA1308 // Normalize strings to uppercase
                     break;
 
                 case LinkedDataKeywords.Index:
@@ -623,8 +633,10 @@ namespace SourceCode.Clay.Json.LinkedData
                             throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
 
                         count--;
-                        foreach ((var property, JToken item) in (JObject)reverseToken)
+                        foreach (KeyValuePair<string, JToken> kvp in (JObject)reverseToken)
                         {
+                            (var property, JToken item) = (kvp.Key, kvp.Value);
+
                             // 7.4.11.2.1) If result does not have a property member, create one and set its value to
                             //             an empty array.
                             if (!result.TryGetValue(property, out JToken propToken))
@@ -664,8 +676,8 @@ namespace SourceCode.Clay.Json.LinkedData
                             foreach (JToken item in (JArray)prop.Value)
                             {
                                 if (!(item is JObject o) ||
-                                    (o.ContainsKey(LinkedDataKeywords.Value) ||
-                                        o.ContainsKey(LinkedDataKeywords.List)))
+                                    o.ContainsKey(LinkedDataKeywords.Value) ||
+                                        o.ContainsKey(LinkedDataKeywords.List))
                                     throw new LinkedDataException(LinkedDataErrorCode.InvalidReversePropertyValue);
 
                                 if (!reverseMap.TryGetValue(prop.Key, out JToken items))

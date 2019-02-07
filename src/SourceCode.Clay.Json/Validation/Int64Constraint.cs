@@ -130,7 +130,7 @@ namespace SourceCode.Clay.Json.Validation
         {
             // Check Required
             if (!value.HasValue)
-                return !(Required); // null + optional = true, null + required = false
+                return !Required; // null + optional = true, null + required = false
 
             // Check Min
             if (Minimum.HasValue)
@@ -181,7 +181,23 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
+#if !NETSTANDARD2_0
             => HashCode.Combine(Minimum ?? 0, Maximum ?? 0, RangeOptions, MultipleOf ?? 0, Required);
+#else
+        {
+            long hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + Minimum ?? 0;
+                hc = hc * 7 + Maximum ?? 0;
+                hc = hc * 7 + (int)RangeOptions;
+                hc = hc * 7 + MultipleOf ?? 0;
+                hc = hc * 7 + (Required ? 1 : 0);
+
+                return (int)hc;
+            }
+        }
+#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

@@ -5,9 +5,9 @@
 
 #endregion
 
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.Json.LinkedData
             KeyValuePair<string, JToken> termPair,
             Dictionary<string, bool> defined)
         {
-            (string term, JToken value) = termPair;
+            (string term, JToken value) = (termPair.Key, termPair.Value);
             defined[term] = false;
 
             // 3) Since keywords cannot be overridden, term must not be a keyword. Otherwise, a keyword redefinition
@@ -158,7 +158,11 @@ namespace SourceCode.Clay.Json.LinkedData
                     defined: defined);
                 // If the result is neither an absolute IRI nor a blank node identifier, i.e., it contains no colon
                 // (:), an invalid IRI mapping error has been detected and processing is aborted.
+#if !NETSTANDARD2_0
                 if (!iriMapping.Contains(':', StringComparison.Ordinal))
+#else
+                if (!iriMapping.Contains(":"))
+#endif
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidIriMapping);
 
                 // 11.4) If value contains an @container member, set the container mapping of definition to its value
@@ -206,9 +210,15 @@ namespace SourceCode.Clay.Json.LinkedData
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidKeywordAlias);
             }
             // 14) Otherwise if the term contains a colon (:):
+#if !NETSTANDARD2_0
             else if (term.Contains(':', StringComparison.Ordinal))
             {
-                var index = term.IndexOf(':', StringComparison.Ordinal);
+                var index = term.IndexOf(':', StringComparison.Ordinal); // TODO: Perf: Contains followed by IndexOf is wasteful
+#else
+            else if (term.Contains(":"))
+            {
+                var index = term.IndexOf(":");
+#endif
                 var prefix = term.Substring(0, index);
 
                 // 14.1) If term is a compact IRI with a prefix that is a key in local context a dependency has been
@@ -261,9 +271,9 @@ namespace SourceCode.Clay.Json.LinkedData
                     options |= LinkedDataTermOptions.ClearLanguage;
                 else if (languageToken.Is(JTokenType.String))
                 {
-#                   pragma warning disable CA1308 // Normalize strings to uppercase
+#pragma warning disable CA1308 // Normalize strings to uppercase
                     language = ((string)languageToken).ToLowerInvariant();
-#                   pragma warning restore CA1308 // Normalize strings to uppercase
+#pragma warning restore CA1308 // Normalize strings to uppercase
                 }
                 else
                     throw new LinkedDataException(LinkedDataErrorCode.InvalidLanguageMapping);

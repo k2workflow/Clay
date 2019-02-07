@@ -1900,7 +1900,7 @@ namespace SourceCode.Clay.Tests
             for (int i = 0; i < 32; i++)
             {
                 if ((value & (1u << i)) != 0)
-                    result |= (1u << (31 - i));
+                    result |= 1u << (31 - i);
             }
 
             return result;
@@ -1916,7 +1916,7 @@ namespace SourceCode.Clay.Tests
             for (int i = 0; i < 64; i++)
             {
                 if ((value & (1ul << i)) != 0)
-                    result |= (1ul << (63 - i));
+                    result |= 1ul << (63 - i);
             }
 
             return result;

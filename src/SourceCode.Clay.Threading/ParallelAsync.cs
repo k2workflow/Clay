@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -124,13 +123,17 @@ namespace SourceCode.Clay.Threading
         /// <returns></returns>
         public static async ValueTask<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
         {
-            if (source is null) return ImmutableDictionary<TSource, TValue>.Empty;
+            if (source is null)
+#if !NETSTANDARD2_0
+                return System.Collections.Immutable.ImmutableDictionary<TSource, TValue>.Empty;
+#else
+                return new Dictionary<TSource, TValue>(0);
+#endif
             if (func is null) throw new ArgumentNullException(nameof(func));
 
             var dict = new ConcurrentDictionary<TSource, TValue>();
 
             ExecutionDataflowBlockOptions opt = Build(options);
-
             var block = new TransformBlock<TSource, KeyValuePair<TSource, TValue>>(func, opt);
 
             // Send

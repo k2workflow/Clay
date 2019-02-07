@@ -5,9 +5,9 @@
 
 #endregion
 
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace SourceCode.Clay.Json.LinkedData
 {
@@ -99,9 +99,15 @@ namespace SourceCode.Clay.Json.LinkedData
 
             // 5) If value contains a colon (:), it is either an absolute IRI, a compact IRI, or a blank node
             //    identifier:
+#if !NETSTANDARD2_0
             if (value.Contains(':', StringComparison.Ordinal))
             {
-                var index = value.IndexOf(':', StringComparison.Ordinal);
+                var index = value.IndexOf(':', StringComparison.Ordinal); // TODO: Perf: Contains followed by IndexOf is wasteful
+#else
+            if (value.Contains(":"))
+            {
+                var index = value.IndexOf(":");
+#endif
                 var prefix = value.Substring(0, index);
                 var suffix = value.Substring(index + 1);
 

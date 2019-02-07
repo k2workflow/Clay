@@ -144,18 +144,34 @@ namespace SourceCode.Clay
 
             if (prefixLength >= hexLength)
             {
+#if !NETSTANDARD2_0
                 string pfx = new string(span);
+#else
+                string pfx = new string(span.ToArray());
+#endif
                 return new KeyValuePair<string, string>(pfx, string.Empty);
             }
 
             if (prefixLength <= 0)
             {
+#if !NETSTANDARD2_0
                 string ext = new string(span);
+#else
+                string ext = new string(span.ToArray());
+#endif
                 return new KeyValuePair<string, string>(string.Empty, ext);
             }
 
-            string prefix = new string(span.Slice(0, prefixLength));
-            string extra = new string(span.Slice(prefixLength, hexLength - prefixLength));
+            Span<char> p = span.Slice(0, prefixLength);
+            Span<char> e = span.Slice(prefixLength, hexLength - prefixLength);
+
+#if !NETSTANDARD2_0
+            string prefix = new string(p);
+            string extra = new string(e);
+#else
+            string prefix = new string(p.ToArray());
+            string extra = new string(e.ToArray());
+#endif
 
             var kvp = new KeyValuePair<string, string>(prefix, extra);
             return kvp;
@@ -187,8 +203,11 @@ namespace SourceCode.Clay
 
                 pos += 2;
             }
-
+#if !NETSTANDARD2_0
             string str = new string(span);
+#else
+            string str = new string(span.ToArray());
+#endif
             return str;
         }
 
@@ -236,8 +255,11 @@ namespace SourceCode.Clay
                         sep = 0; // Prevent IndexOutOfRangeException
                 }
             }
-
+#if !NETSTANDARD2_0
             string str = new string(span);
+#else
+            string str = new string(span.ToArray());
+#endif
             return str;
         }
 
