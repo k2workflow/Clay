@@ -5,11 +5,11 @@
 
 #endregion
 
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace SourceCode.Clay.Json.Pointers
 {
@@ -320,7 +320,21 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
+#if NETCOREAPP2_2
             => _tokens is null ? 0 : HashCode.Combine(_tokens.Length, _tokens[0]);
+#else
+        {
+            if (_tokens is null) return 0;
+
+            int hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + _tokens.Length;
+                hc = hc * 7 + _tokens[0].GetHashCode();
+            }
+            return hc;
+        }
+#endif
 
         public static bool operator ==(JsonPointer x, JsonPointer y) => x.Equals(y);
 

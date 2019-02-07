@@ -157,13 +157,29 @@ namespace SourceCode.Clay.Json.Validation
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(DecimalConstraint other)
-            => (Minimum, Maximum, RangeOptions, MultipleOf, Required) 
+            => (Minimum, Maximum, RangeOptions, MultipleOf, Required)
             == (other.Minimum, other.Maximum, other.RangeOptions, other.MultipleOf, other.Required);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
+#if NETCOREAPP2_2
             => HashCode.Combine(Minimum ?? 0, Maximum ?? 0, RangeOptions, MultipleOf ?? 0, Required);
+#else
+        {
+            decimal hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + Minimum ?? 0;
+                hc = hc * 7 + Maximum ?? 0;
+                hc = hc * 7 + (int)RangeOptions;
+                hc = hc * 7 + MultipleOf ?? 0;
+                hc = hc * 7 + (Required ? 1 : 0);
+
+                return (int)hc;
+            }
+        }
+#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

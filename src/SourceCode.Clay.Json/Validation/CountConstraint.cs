@@ -94,13 +94,25 @@ namespace SourceCode.Clay.Json.Validation
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the <paramref name="other">other</paramref> parameter; otherwise, false.</returns>
         public bool Equals(CountConstraint other)
-            => (Minimum, Maximum) 
+            => (Minimum, Maximum)
             == (other.Minimum, other.Maximum);
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
+#if NETCOREAPP2_2
             => HashCode.Combine(Minimum, Maximum ?? 0);
+#else
+        {
+            int hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + (int)Minimum;
+                hc = hc * 7 + (int?)Maximum ?? 0;
+            }
+            return hc;
+        }
+#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

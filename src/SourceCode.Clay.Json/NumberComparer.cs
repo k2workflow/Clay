@@ -256,14 +256,50 @@ namespace SourceCode.Clay.Json
             {
                 // Double
                 if ((obj.Kind & NumberKinds.Real) > 0)
+#if NETCOREAPP2_2
                     return HashCode.Combine(obj.ValueTypeCode, obj._double);
+#else
+                {
+                    int hc = 11;
+                    unchecked
+                    {
+                        hc = hc * 7 + (int)obj.ValueTypeCode;
+                        hc = hc * 7 + obj._double.GetHashCode();
+                    }
+                    return hc;
+                }
+#endif
 
                 // Decimal
                 if (obj.ValueTypeCode == TypeCode.Decimal)
+#if NETCOREAPP2_2
                     return HashCode.Combine(obj.ValueTypeCode, obj._decimal);
+#else
+                {
+                    int hc = 11;
+                    unchecked
+                    {
+                        hc = hc * 7 + (int)obj.ValueTypeCode;
+                        hc = hc * 7 + obj._decimal.GetHashCode();
+                    }
+                    return hc;
+                }
+#endif
 
                 // Int
+#if NETCOREAPP2_2
                 return HashCode.Combine(obj.ValueTypeCode, obj._uint64);
+#else
+                {
+                    int hc = 11;
+                    unchecked
+                    {
+                        hc = hc * 7 + (int)obj.ValueTypeCode;
+                        hc = hc * 7 + obj._uint64.GetHashCode();
+                    }
+                    return hc;
+                }
+#endif
             }
         }
     }

@@ -223,7 +223,22 @@ namespace SourceCode.Clay.Json.Validation
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
-            => HashCode.Combine(Minimum ?? (default), Maximum ?? (default), RangeOptions, MultipleOf ?? (default), Required);
+#if NETCOREAPP2_2
+            => HashCode.Combine(Minimum ?? default, Maximum ?? default, RangeOptions, MultipleOf ?? default, Required);
+#else
+        {
+            int hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + Minimum?.GetHashCode() ?? default;
+                hc = hc * 7 + Maximum?.GetHashCode() ?? default;
+                hc = hc * 7 + (int)RangeOptions;
+                hc = hc * 7 + MultipleOf?.GetHashCode() ?? default;
+                hc = hc * 7 + (Required ? 1 : 0);
+            }
+            return hc;
+        }
+#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

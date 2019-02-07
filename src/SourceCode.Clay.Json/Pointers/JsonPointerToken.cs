@@ -61,7 +61,18 @@ namespace SourceCode.Clay.Json.Pointers
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
+#if NETCOREAPP2_2
             => HashCode.Combine(Value ?? string.Empty, StringComparer.Ordinal);
+#else
+        {
+            int hc = 11;
+            unchecked
+            {
+                hc = hc * 7 + Value?.GetHashCode() ?? 0;
+            }
+            return hc;
+        }
+#endif
 
         public static bool operator ==(JsonPointerToken x, JsonPointerToken y) => x.Equals(y);
 
