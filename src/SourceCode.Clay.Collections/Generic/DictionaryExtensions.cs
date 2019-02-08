@@ -61,13 +61,9 @@ namespace SourceCode.Clay.Collections.Generic
             }
 
             // Synthesize an IDictionary
-#if !NETSTANDARD2_0
-            var xdd = new Dictionary<TKey, TValue>(xe);
-#else
-            var xdd = new Dictionary<TKey, TValue>(xCount);
+            var xdd = new Dictionary<TKey, TValue>(xCount); // TODO: Key comparer
             foreach(KeyValuePair<TKey, TValue> kvp in xe)
                 xdd.Add(kvp.Key, kvp.Value);
-#endif
 
             // For each key in the second dictionary...
             foreach (KeyValuePair<TKey, TValue> yvp in ye)

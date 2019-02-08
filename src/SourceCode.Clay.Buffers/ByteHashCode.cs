@@ -67,7 +67,7 @@ namespace SourceCode.Clay.Buffers
 #if !NETSTANDARD2_0
             (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 #else
-            41429;
+            26_39_41429;
 #endif
         public static readonly int Empty = Combine(Array.Empty<byte>());
 

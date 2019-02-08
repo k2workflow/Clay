@@ -43,9 +43,6 @@ namespace SourceCode.Clay.Data.SqlParser
             && Equals(prm);
 
         public override int GetHashCode()
-#if !NETSTANDARD2_0
-            => HashCode.Combine(IsNullable, Direction, HasDefault, IsReadOnly);
-#else
         {
             int hc = 11;
 
@@ -59,7 +56,6 @@ namespace SourceCode.Clay.Data.SqlParser
 
             return hc;
         }
-#endif
 
         /// <summary>
         /// Determines if <paramref name="x"/> is a similar value to <paramref name="y"/>.

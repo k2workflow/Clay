@@ -197,7 +197,7 @@ namespace SourceCode.Clay.Threading.Tests
                 return Task.FromResult(new KeyValuePair<int, int>(n, n * 2));
             }
 
-            ValueTask<IReadOnlyDictionary<int, int>> actual = ParallelAsync.ForEachAsync(data, options, func);
+            Task<IReadOnlyDictionary<int, int>> actual = ParallelAsync.ForEachAsync(data, options, func);
 
             Assert.Collection(actual.Result, n => Assert.Equal(0, n.Value), n => Assert.Equal(2, n.Value), n => Assert.Equal(4, n.Value));
         }

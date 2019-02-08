@@ -90,11 +90,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
                     sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
 
-#if !NETSTANDARD2_0
-                if (!sqlCsb.DataSource.Contains(",", StringComparison.OrdinalIgnoreCase))
-#else
                 if (!sqlCsb.DataSource.Contains(","))
-#endif
                     sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
             }
 

@@ -128,8 +128,11 @@ namespace SourceCode.Clay
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
             int hexLength = byteLength * 2;
+#if !NETSTANDARD2_0
             Span<char> span = stackalloc char[hexLength];
-
+#else
+            var span = new char[hexLength];
+#endif
             int pos = 0;
             for (int i = 0; i < byteLength; i++) // 20|32
             {
@@ -144,35 +147,26 @@ namespace SourceCode.Clay
 
             if (prefixLength >= hexLength)
             {
-#if !NETSTANDARD2_0
                 string pfx = new string(span);
-#else
-                string pfx = new string(span.ToArray());
-#endif
                 return new KeyValuePair<string, string>(pfx, string.Empty);
             }
 
             if (prefixLength <= 0)
             {
-#if !NETSTANDARD2_0
                 string ext = new string(span);
-#else
-                string ext = new string(span.ToArray());
-#endif
                 return new KeyValuePair<string, string>(string.Empty, ext);
             }
 
+#if !NETSTANDARD2_0
             Span<char> p = span.Slice(0, prefixLength);
             Span<char> e = span.Slice(prefixLength, hexLength - prefixLength);
 
-#if !NETSTANDARD2_0
             string prefix = new string(p);
             string extra = new string(e);
 #else
-            string prefix = new string(p.ToArray());
-            string extra = new string(e.ToArray());
+            string prefix = new string(span, 0, prefixLength);
+            string extra = new string(span, prefixLength, hexLength - prefixLength);
 #endif
-
             var kvp = new KeyValuePair<string, string>(prefix, extra);
             return kvp;
         }
@@ -190,8 +184,11 @@ namespace SourceCode.Clay
 
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes)
             int hexLength = byteLength * 2; // 40|64
+#if !NETSTANDARD2_0
             Span<char> span = stackalloc char[hexLength];
-
+#else
+            var span = new char[hexLength];
+#endif
             int pos = 0;
             for (int i = 0; i < byteLength; i++) // 20|32
             {
@@ -203,11 +200,8 @@ namespace SourceCode.Clay
 
                 pos += 2;
             }
-#if !NETSTANDARD2_0
+
             string str = new string(span);
-#else
-            string str = new string(span.ToArray());
-#endif
             return str;
         }
 
@@ -231,8 +225,11 @@ namespace SourceCode.Clay
             // Text is treated as 5|8 groups of 8 chars (5|8 x 4 bytes) with 4|7 separators
             int hexLength = byteLength * 2; // 40|64
             int n = hexLength / 8; // 5|8
+#if !NETSTANDARD2_0
             Span<char> span = stackalloc char[hexLength + n - 1]; // + 4|7
-
+#else
+            var span = new char[hexLength + n - 1]; // + 4|7
+#endif
             int pos = 0;
             int sep = 8;
             for (int i = 0; i < byteLength; i++) // 20|32
@@ -255,11 +252,8 @@ namespace SourceCode.Clay
                         sep = 0; // Prevent IndexOutOfRangeException
                 }
             }
-#if !NETSTANDARD2_0
+
             string str = new string(span);
-#else
-            string str = new string(span.ToArray());
-#endif
             return str;
         }
 

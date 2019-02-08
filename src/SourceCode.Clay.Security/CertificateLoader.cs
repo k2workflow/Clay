@@ -101,8 +101,8 @@ namespace SourceCode.Clay.Security
             if (string.IsNullOrWhiteSpace(thumbprint))
                 return string.Empty;
 
-            // Since the expected length is reasonable we use stackalloc instead of StringBuilder
-            Span<char> ch = stackalloc char[Sha1Length];
+            // Since the expected length is reasonable we use char[] instead of StringBuilder
+            var ch = new char[Sha1Length];
 
             var i = 0;
             for (var j = 0; j < thumbprint.Length
@@ -122,12 +122,7 @@ namespace SourceCode.Clay.Security
                 return string.Empty;
 
             // Else return the valid substring
-            ch = ch.Slice(0, i);
-#if !NETSTANDARD2_0
-            var clean = new string(ch);
-#else
-            var clean = new string(ch.ToArray());
-#endif
+            var clean = new string(ch, 0, i);
             return clean;
         }
 

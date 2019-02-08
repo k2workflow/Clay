@@ -15,12 +15,7 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     public static class SqlParamBlockParser
     {
-        private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty =
-#if !NETSTANDARD2_0
-            System.Collections.Immutable.ImmutableDictionary<string, SqlParamInfo>.Empty;
-#else
-            new Dictionary<string, SqlParamInfo>(0);
-#endif
+        private static readonly IReadOnlyDictionary<string, SqlParamInfo> s_empty = new Dictionary<string, SqlParamInfo>(0);
 
         // https://docs.microsoft.com/en-us/sql/t-sql/statements/create-procedure-transact-sql
         public static IReadOnlyDictionary<string, SqlParamInfo> ParseProcedure(string sql)
@@ -29,8 +24,8 @@ namespace SourceCode.Clay.Data.SqlParser
                 return s_empty;
 
             // Tokenize
-            var tokens = SqlTokenizer.Tokenize(sql, true);
-            using (var tokenizer = tokens.GetEnumerator())
+            IReadOnlyCollection<SqlTokenInfo> tokens = SqlTokenizer.Tokenize(sql, true);
+            using (IEnumerator<SqlTokenInfo> tokenizer = tokens.GetEnumerator())
             {
                 var more = tokenizer.MoveNext();
                 if (!more)
@@ -112,8 +107,8 @@ namespace SourceCode.Clay.Data.SqlParser
                 return s_empty;
 
             // Tokenize
-            var tokens = SqlTokenizer.Tokenize(sql, true);
-            using (var tokenizer = tokens.GetEnumerator())
+            IReadOnlyCollection<SqlTokenInfo> tokens = SqlTokenizer.Tokenize(sql, true);
+            using (IEnumerator<SqlTokenInfo> tokenizer = tokens.GetEnumerator())
             {
                 var more = tokenizer.MoveNext();
                 if (!more)

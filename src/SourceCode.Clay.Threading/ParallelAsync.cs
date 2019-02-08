@@ -121,14 +121,11 @@ namespace SourceCode.Clay.Threading
         /// <param name="options">Options that control the loop execution.</param>
         /// <param name="func">The delegate that is invoked once per iteration.</param>
         /// <returns></returns>
-        public static async ValueTask<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
+        public static async Task<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
         {
             if (source is null)
-#if !NETSTANDARD2_0
-                return System.Collections.Immutable.ImmutableDictionary<TSource, TValue>.Empty;
-#else
                 return new Dictionary<TSource, TValue>(0);
-#endif
+
             if (func is null) throw new ArgumentNullException(nameof(func));
 
             var dict = new ConcurrentDictionary<TSource, TValue>();

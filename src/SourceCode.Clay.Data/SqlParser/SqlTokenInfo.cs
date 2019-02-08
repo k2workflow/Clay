@@ -58,14 +58,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-#if NETSTANDARD2_0
             int hc = Value?.GetHashCode() ?? 0;
-#else
-            var hash = new HashCode();
-            hash.Add(Value, StringComparer.Ordinal);
-
-            int hc = hash.ToHashCode();
-#endif
             return hc;
         }
 
