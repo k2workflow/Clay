@@ -124,7 +124,7 @@ namespace SourceCode.Clay.Threading
         public static async Task<IReadOnlyDictionary<TSource, TValue>> ForEachAsync<TSource, TValue>(IEnumerable<TSource> source, ParallelOptions options, Func<TSource, Task<KeyValuePair<TSource, TValue>>> func)
         {
             if (source is null)
-                return new Dictionary<TSource, TValue>(0);
+                return EmptyMap<TSource, TValue>.Empty;
 
             if (func is null) throw new ArgumentNullException(nameof(func));
 

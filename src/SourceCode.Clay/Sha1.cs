@@ -46,7 +46,7 @@ namespace SourceCode.Clay
         private readonly Block _block;
 
         /// <summary>
-        /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlyMemory{T}"/>.
+        /// Deserializes a <see cref="Sha1"/> value from the provided <see cref="ReadOnlySpan{T}"/>.
         /// </summary>
         /// <param name="source">The buffer.</param>
         public Sha1(ReadOnlySpan<byte> source)
@@ -66,7 +66,6 @@ namespace SourceCode.Clay
             }
         }
 
-#if NETSTANDARD2_0
         /// <summary>
         /// Deserializes a <see cref="Sha1"/> value from the provided array.
         /// </summary>
@@ -76,7 +75,6 @@ namespace SourceCode.Clay
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
         }
-#endif
 
         /// <summary>
         /// Copies the <see cref="Sha1"/> value to the provided buffer.
