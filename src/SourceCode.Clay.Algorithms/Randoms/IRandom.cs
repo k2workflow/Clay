@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SourceCode.Clay.Randoms
+namespace SourceCode.Clay.Algorithms.Randoms
 {
     public interface IRandom
     {

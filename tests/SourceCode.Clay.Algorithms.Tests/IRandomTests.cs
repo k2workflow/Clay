@@ -7,10 +7,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using SourceCode.Clay.Randoms;
+using SourceCode.Clay.Algorithms.Randoms;
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Algorithms.Tests
 {
     public static class IRandomTests
     {

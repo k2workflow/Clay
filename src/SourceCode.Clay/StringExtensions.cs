@@ -25,12 +25,14 @@ namespace SourceCode.Clay
         public static string Left(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
-            if (length <= 0) return string.Empty;
-            if (length == 1) return char.ToString(str[0]);
+            if (length <= 1)
+            {
+                if (length == 1) return char.ToString(str[0]);
+                return string.Empty;
+            }
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            string s = str.Substring(0, length);
-            return s;
+            return str.Substring(0, length);
         }
 
         /// <summary>
@@ -43,12 +45,14 @@ namespace SourceCode.Clay
         public static string Right(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
-            if (length <= 0) return string.Empty;
-            if (length == 1) return char.ToString(str[str.Length - 1]);
+            if (length <= 1)
+            {
+                if (length == 1) return char.ToString(str[str.Length - 1]);
+                return string.Empty;
+            }
 
             // Per existing Substring behavior, we don't respect surrogate pairs
-            string s = str.Substring(str.Length - length);
-            return s;
+            return str.Substring(str.Length - length);
         }
 
         /// <summary>
@@ -75,14 +79,13 @@ namespace SourceCode.Clay
 
             // Expect non-surrogates by default
             int len = totalWidth;
-            int len_1 = len - 1;
 
             // High | Low (default on x86/x64)
             if (BitConverter.IsLittleEndian)
             {
                 // If target is the LOW surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsLowSurrogate(str[len_1]))
-                    len = len_1;
+                if (char.IsLowSurrogate(str[len - 1]))
+                    len--;
 
                 // If it's the HIGH surrogate, we're replacing it regardless
             }
@@ -91,8 +94,8 @@ namespace SourceCode.Clay
             else
             {
                 // If target is the HIGH surrogate, replace both (returning a shorter-by-1-than-expected result)
-                if (char.IsHighSurrogate(str[len_1]))
-                    len = len_1;
+                if (char.IsHighSurrogate(str[len - 1]))
+                    len--;
 
                 // If it's the LOW surrogate, we're replacing it regardless
             }
@@ -147,15 +150,10 @@ namespace SourceCode.Clay
             if (len < 0)
                 return str;
 
-            bool found = str.StartsWith(prefix, comparisonType);
-            if (!found)
+            if (!str.StartsWith(prefix, comparisonType))
                 return str;
 
-            if (len == 0)
-                return string.Empty;
-
-            string val = str.Substring(prefix.Length, len);
-            return val;
+            return str.Substring(prefix.Length, len);
         }
 
         /// <summary>
@@ -184,15 +182,10 @@ namespace SourceCode.Clay
             if (len < 0)
                 return str;
 
-            bool found = str.EndsWith(suffix, comparisonType);
-            if (!found)
+            if (!str.EndsWith(suffix, comparisonType))
                 return str;
 
-            if (len == 0)
-                return string.Empty;
-
-            string val = str.Substring(0, len);
-            return val;
+            return str.Substring(0, len);
         }
     }
 }

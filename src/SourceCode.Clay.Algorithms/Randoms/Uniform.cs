@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay.Randoms
+namespace SourceCode.Clay.Algorithms.Randoms
 {
     /// <summary>
     /// A random number generator with a Uniform distribution that is thread-safe.
