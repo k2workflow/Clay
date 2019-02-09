@@ -215,7 +215,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Log2(uint value)
+        public static int Log2(uint value)
         {
             value = FoldTrailingOnes(value);
 
@@ -232,13 +232,13 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Log2(ulong value)
+        public static int Log2(ulong value)
         {
             uint hi = (uint)(value >> 32);
 
             if (hi != 0)
             {
-                return 32u + Log2(hi);
+                return 32 + Log2(hi);
             }
 
             return Log2((uint)value);

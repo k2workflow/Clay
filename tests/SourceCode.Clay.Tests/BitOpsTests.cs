@@ -1165,9 +1165,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(byte.MaxValue, 8 - 1)]
         [InlineData(ushort.MaxValue, 16 - 1)]
         [InlineData(uint.MaxValue, 32 - 1)]
-        public static void BitOps_Log2_uint(uint n, uint expected)
+        public static void BitOps_Log2_uint(uint n, int expected)
         {
-            uint actual = BitOps.Log2(n);
+            int actual = BitOps.Log2(n);
             Assert.Equal(expected, actual);
         }
 
@@ -1193,9 +1193,9 @@ namespace SourceCode.Clay.Tests
         [InlineData(ushort.MaxValue, 16 - 1)]
         [InlineData(uint.MaxValue, 32 - 1)]
         [InlineData(ulong.MaxValue, 64 - 1)]
-        public static void BitOps_Log2_ulong(ulong n, uint expected)
+        public static void BitOps_Log2_ulong(ulong n, int expected)
         {
-            uint actual = BitOps.Log2(n);
+            int actual = BitOps.Log2(n);
             Assert.Equal(expected, actual);
         }
 
