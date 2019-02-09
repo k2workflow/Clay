@@ -1565,10 +1565,6 @@ namespace SourceCode.Clay
 
         #endregion
 
-        #region TrailingZeroCount
-
-        #endregion
-
         #region AsByte
 
         /// <summary>
