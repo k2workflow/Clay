@@ -220,20 +220,13 @@ namespace SourceCode.Clay
             //    return (int)Popcnt.PopCount(value);
             //}
 
-            const uint c0 = 0x_5555_5555;
-            const uint c1 = 0x_3333_3333;
-            const uint c2 = 0x_0F0F_0F0F;
-            const uint c3 = 0x_0101_0101;
+            value -= (value >> 1) & 0x_5555_5555;
+            value = (value & 0x_3333_3333) + ((value >> 2) & 0x_3333_3333);
+            value = (value + (value >> 4)) & 0x_0F0F_0F0F;
+            value *= 0x_0101_0101;
+            value >>= 24;
 
-            uint count = value;
-
-            count -= (count >> 1) & c0;
-            count = (count & c1) + ((count >> 2) & c1);
-            count = (count + (count >> 4)) & c2;
-            count *= c3;
-            count >>= 24;
-
-            return (int)count;
+            return (int)value;
         }
 
         /// <summary>
@@ -267,20 +260,13 @@ namespace SourceCode.Clay
             //    return hi + lo;
             //}
 
-            const ulong c0 = 0x_5555_5555_5555_5555;
-            const ulong c1 = 0x_3333_3333_3333_3333;
-            const ulong c2 = 0x_0F0F_0F0F_0F0F_0F0F;
-            const ulong c3 = 0x_0101_0101_0101_0101;
+            value -= (value >> 1) & 0x_5555_5555_5555_5555;
+            value = (value & 0x_3333_3333_3333_3333) + ((value >> 2) & 0x_3333_3333_3333_3333);
+            value = (value + (value >> 4)) & 0x_0F0F_0F0F_0F0F_0F0F;
+            value *= 0x_0101_0101_0101_0101;
+            value >>= 56;
 
-            ulong count = value;
-
-            count -= (value >> 1) & c0;
-            count = (count & c1) + ((count >> 2) & c1);
-            count = (count + (count >> 4)) & c2;
-            count *= c3;
-            count >>= 56;
-
-            return (int)count;
+            return (int)value;
         }
 
         /// <summary>
