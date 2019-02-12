@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Tests
     {
         #region Samples
 
-        [Fact(DisplayName = nameof(BitOps_Samples))]
+        [Fact]
         public static void BitOps_Samples()
         {
             // PopCount: Returns the population count (number of bits set) of a mask.
@@ -25,12 +25,8 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0b1000_0000u, BitOps.RotateRight((byte)0b0010_0000u, 6));
 
             // Leading/TrailingZeros: Count the number of leading/trailing zero bits in a mask.
-            Assert.Equal(2, BitOps.LeadingZeros((byte)0b0011_1000));
-            Assert.Equal(5, BitOps.TrailingZeros(0b1110_0000));
-
-            // Leading/TrailingOnes: Count the number of leading/trailing one bits in a mask.
-            Assert.Equal(2, BitOps.LeadingOnes((byte)0b1100_0000));
-            Assert.Equal(3, BitOps.TrailingOnes(0b0000_0111));
+            Assert.Equal(2, BitOps.LeadingZeroCount((byte)0b0011_1000));
+            Assert.Equal(5, BitOps.TrailingZeroCount(0b1110_0000));
 
             // ExtractBit: Reads whether the specified bit in a mask is set.
             Assert.True(BitOps.ExtractBit((byte)0b0001_0000, 4));
@@ -80,7 +76,7 @@ namespace SourceCode.Clay.Tests
 
         #region ExtractBit
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_byte))]
+        [Theory]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
@@ -101,7 +97,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_sbyte))]
+        [Theory]
         [InlineData((sbyte)0b000, 0, false)]
         [InlineData((sbyte)0b001, 0, true)]
         [InlineData((sbyte)0b000, 1, false)]
@@ -124,7 +120,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_ushort))]
+        [Theory]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
@@ -145,7 +141,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_short))]
+        [Theory]
         [InlineData((short)0b000, 0, false)]
         [InlineData((short)0b001, 0, true)]
         [InlineData((short)0b000, 1, false)]
@@ -168,7 +164,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_uint))]
+        [Theory]
         [InlineData(0b000u, 0, false)]
         [InlineData(0b001u, 0, true)]
         [InlineData(0b000u, 1, false)]
@@ -189,7 +185,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_int))]
+        [Theory]
         [InlineData(0b000, 0, false)]
         [InlineData(0b001, 0, true)]
         [InlineData(0b000, 1, false)]
@@ -212,7 +208,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_ulong))]
+        [Theory]
         [InlineData(0b000ul, 0, false)]
         [InlineData(0b001ul, 0, true)]
         [InlineData(0b000ul, 1, false)]
@@ -233,7 +229,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ExtractBit_long))]
+        [Theory]
         [InlineData(0b000L, 0, false)]
         [InlineData(0b001L, 0, true)]
         [InlineData(0b000L, 1, false)]
@@ -260,7 +256,7 @@ namespace SourceCode.Clay.Tests
 
         #region WriteBit
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_byte))]
+        [Theory]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -325,7 +321,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_ushort))]
+        [Theory]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -396,7 +392,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_uint))]
+        [Theory]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -473,7 +469,7 @@ namespace SourceCode.Clay.Tests
             }
         }
 
-        [Theory(DisplayName = nameof(BitOps_WriteBit_ulong))]
+        [Theory]
         [InlineData(0b000, 0, false, false, 0b000)] // 0
         [InlineData(0b000, 0, true, false, 0b001)]
         [InlineData(0b000, 1, false, false, 0b000)]
@@ -558,7 +554,7 @@ namespace SourceCode.Clay.Tests
 
         #region ComplementBit
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_byte))]
+        [Theory]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -593,7 +589,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_ushort))]
+        [Theory]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -631,7 +627,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_uint))]
+        [Theory]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -672,7 +668,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(n, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_ComplementBit_ulong))]
+        [Theory]
         [InlineData(0b000, 0, 0b001, false)]
         [InlineData(0b001, 0, 0b000, true)]
         [InlineData(0b000, 1, 0b010, false)]
@@ -718,189 +714,240 @@ namespace SourceCode.Clay.Tests
 
         #endregion
 
-        #region Rotate
+        #region TrailingZeroCount
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_Byte))]
-        public static void BitOps_RotateLeft_Byte()
+        [Theory]
+        [InlineData(0u, 32)]
+        [InlineData(0b1u, 0)]
+        [InlineData(0b10u, 1)]
+        [InlineData(0b100u, 2)]
+        [InlineData(0b1000u, 3)]
+        [InlineData(0b10000u, 4)]
+        [InlineData(0b100000u, 5)]
+        [InlineData(0b1000000u, 6)]
+        [InlineData((uint)byte.MaxValue << 24, 24)]
+        [InlineData((uint)byte.MaxValue << 22, 22)]
+        [InlineData((uint)ushort.MaxValue << 16, 16)]
+        [InlineData((uint)ushort.MaxValue << 19, 19)]
+        [InlineData(uint.MaxValue << 5, 5)]
+        [InlineData(3u << 27, 27)]
+        [InlineData(uint.MaxValue, 0)]
+        public static void BitOps_TrailingZeroCount_uint(uint n, int expected)
         {
-            byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((byte)0b01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
+            int actual = BitOps.TrailingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_SByte))]
-        public static void BitOps_RotateLeft_SByte()
+        [Theory]
+        [InlineData(0, 32)]
+        [InlineData(0b1, 0)]
+        [InlineData(0b10, 1)]
+        [InlineData(0b100, 2)]
+        [InlineData(0b1000, 3)]
+        [InlineData(0b10000, 4)]
+        [InlineData(0b100000, 5)]
+        [InlineData(0b1000000, 6)]
+        [InlineData(byte.MaxValue << 24, 24)]
+        [InlineData(byte.MaxValue << 22, 22)]
+        [InlineData(ushort.MaxValue << 16, 16)]
+        [InlineData(ushort.MaxValue << 19, 19)]
+        [InlineData(int.MaxValue << 5, 5)]
+        [InlineData(3 << 27, 27)]
+        [InlineData(int.MaxValue, 0)]
+        public static void BitOps_TrailingZeroCount_int(int n, int expected)
         {
-            sbyte sut = 0b01010101;
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
+            int actual = BitOps.TrailingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_UShort))]
-        public static void BitOps_RotateLeft_UShort()
+        [Theory]
+        [InlineData(0ul, 64)]
+        [InlineData(0b1ul, 0)]
+        [InlineData(0b10ul, 1)]
+        [InlineData(0b100ul, 2)]
+        [InlineData(0b1000ul, 3)]
+        [InlineData(0b10000ul, 4)]
+        [InlineData(0b100000ul, 5)]
+        [InlineData(0b1000000ul, 6)]
+        [InlineData((ulong)byte.MaxValue << 40, 40)]
+        [InlineData((ulong)byte.MaxValue << 57, 57)]
+        [InlineData((ulong)ushort.MaxValue << 31, 31)]
+        [InlineData((ulong)ushort.MaxValue << 15, 15)]
+        [InlineData(ulong.MaxValue << 5, 5)]
+        [InlineData(3ul << 59, 59)]
+        [InlineData(5ul << 63, 63)]
+        [InlineData(ulong.MaxValue, 0)]
+        public static void BitOps_TrailingZeroCount_ulong(ulong n, int expected)
         {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
+            int actual = BitOps.TrailingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_Short))]
-        public static void BitOps_RotateLeft_Short()
+        [Theory]
+        [InlineData(0L, 64)]
+        [InlineData(0b1L, 0)]
+        [InlineData(0b10L, 1)]
+        [InlineData(0b100L, 2)]
+        [InlineData(0b1000L, 3)]
+        [InlineData(0b10000L, 4)]
+        [InlineData(0b100000L, 5)]
+        [InlineData(0b1000000L, 6)]
+        [InlineData((long)byte.MaxValue << 40, 40)]
+        [InlineData((long)byte.MaxValue << 57, 57)]
+        [InlineData((long)ushort.MaxValue << 31, 31)]
+        [InlineData((long)ushort.MaxValue << 15, 15)]
+        [InlineData(long.MaxValue << 5, 5)]
+        [InlineData(3L << 59, 59)]
+        [InlineData(5L << 63, 63)]
+        [InlineData(long.MaxValue, 0)]
+        public static void BitOps_TrailingZeroCount_long(long n, int expected)
         {
-            short sut = 0b01010101_01010101;
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
+            int actual = BitOps.TrailingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_UInt))]
-        public static void BitOps_RotateLeft_UInt()
+        #endregion
+
+        #region LeadingZeroCount
+
+        [Theory]
+        [InlineData(0u, 32)]
+        [InlineData(0b1u, 31)]
+        [InlineData(0b10u, 30)]
+        [InlineData(0b100u, 29)]
+        [InlineData(0b1000u, 28)]
+        [InlineData(0b10000u, 27)]
+        [InlineData(0b100000u, 26)]
+        [InlineData(0b1000000u, 25)]
+        [InlineData(byte.MaxValue << 17, 32 - 8 - 17)]
+        [InlineData(byte.MaxValue << 9, 32 - 8 - 9)]
+        [InlineData(ushort.MaxValue << 11, 32 - 16 - 11)]
+        [InlineData(ushort.MaxValue << 2, 32 - 16 - 2)]
+        [InlineData(5 << 7, 32 - 3 - 7)]
+        [InlineData(uint.MaxValue, 0)]
+        public static void BitOps_LeadingZeroCount_uint(uint n, int expected)
         {
-            uint sut = 0b01010101_01010101_01010101_01010101u;
-            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
+            int actual = BitOps.LeadingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_Int))]
-        public static void BitOps_RotateLeft_Int()
+        [Theory]
+        [InlineData(0, 32)]
+        [InlineData(0b1, 31)]
+        [InlineData(0b10, 30)]
+        [InlineData(0b100, 29)]
+        [InlineData(0b1000, 28)]
+        [InlineData(0b10000, 27)]
+        [InlineData(0b100000, 26)]
+        [InlineData(0b1000000, 25)]
+        [InlineData(byte.MaxValue << 17, 32 - 8 - 17)]
+        [InlineData(byte.MaxValue << 9, 32 - 8 - 9)]
+        [InlineData(ushort.MaxValue << 11, 32 - 16 - 11)]
+        [InlineData(ushort.MaxValue << 2, 32 - 16 - 2)]
+        [InlineData(5 << 7, 32 - 3 - 7)]
+        [InlineData(int.MinValue, 0)]
+        [InlineData(int.MaxValue, 1)]
+        public static void BitOps_LeadingZeroCount_int(int n, int expected)
         {
-            int sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
+            int actual = BitOps.LeadingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_ULong))]
-        public static void BitOps_RotateLeft_ULong()
+        [Theory]
+        [InlineData(0ul, 64)]
+        [InlineData(0b1ul, 63)]
+        [InlineData(0b10ul, 62)]
+        [InlineData(0b100ul, 61)]
+        [InlineData(0b1000ul, 60)]
+        [InlineData(0b10000ul, 59)]
+        [InlineData(0b100000ul, 58)]
+        [InlineData(0b1000000ul, 57)]
+        [InlineData((ulong)byte.MaxValue << 41, 64 - 8 - 41)]
+        [InlineData((ulong)byte.MaxValue << 53, 64 - 8 - 53)]
+        [InlineData((ulong)ushort.MaxValue << 31, 64 - 16 - 31)]
+        [InlineData((ulong)ushort.MaxValue << 15, 64 - 16 - 15)]
+        [InlineData(ulong.MaxValue >> 5, 5)]
+        [InlineData(1ul << 63, 0)]
+        [InlineData(1ul << 62, 1)]
+        [InlineData(ulong.MaxValue, 0)]
+        public static void BitOps_LeadingZeroCount_ulong(ulong n, int expected)
         {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
-            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
+            int actual = BitOps.LeadingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateLeft_Long))]
-        public static void BitOps_RotateLeft_Long()
+        [Theory]
+        [InlineData(0L, 64)]
+        [InlineData(0b1L, 63)]
+        [InlineData(0b10L, 62)]
+        [InlineData(0b100L, 61)]
+        [InlineData(0b1000L, 60)]
+        [InlineData(0b10000L, 59)]
+        [InlineData(0b100000L, 58)]
+        [InlineData(0b1000000L, 57)]
+        [InlineData((long)byte.MaxValue << 41, 64 - 8 - 41)]
+        [InlineData((long)byte.MaxValue << 53, 64 - 8 - 53)]
+        [InlineData((long)ushort.MaxValue << 31, 64 - 16 - 31)]
+        [InlineData((long)ushort.MaxValue << 15, 64 - 16 - 15)]
+        [InlineData(1L << 62, 1)]
+        [InlineData(long.MinValue, 0)]
+        [InlineData(long.MaxValue, 1)]
+        public static void BitOps_LeadingZeroCount_long(long n, int expected)
         {
-            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
+            int actual = BitOps.LeadingZeroCount(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateRight_Byte))]
-        public static void BitOps_RotateRight_Byte()
+        #endregion
+
+        #region Log2
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 2 - 1)]
+        [InlineData(4, 2)]
+        [InlineData(5, 3 - 1)]
+        [InlineData(6, 3 - 1)]
+        [InlineData(7, 3 - 1)]
+        [InlineData(8, 3)]
+        [InlineData(9, 4 - 1)]
+        [InlineData(byte.MaxValue, 8 - 1)]
+        [InlineData(ushort.MaxValue, 16 - 1)]
+        [InlineData(uint.MaxValue, 32 - 1)]
+        public static void BitOps_Log2_uint(uint n, int expected)
         {
-            byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((byte)0b01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
+            int actual = BitOps.Log2(n);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact(DisplayName = nameof(BitOps_RotateRight_SByte))]
-        public static void BitOps_RotateRight_SByte()
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(2, 1)]
+        [InlineData(3, 2 - 1)]
+        [InlineData(4, 2)]
+        [InlineData(5, 3 - 1)]
+        [InlineData(6, 3 - 1)]
+        [InlineData(7, 3 - 1)]
+        [InlineData(8, 3)]
+        [InlineData(9, 4 - 1)]
+        [InlineData(byte.MaxValue, 8 - 1)]
+        [InlineData(ushort.MaxValue, 16 - 1)]
+        [InlineData(uint.MaxValue, 32 - 1)]
+        [InlineData(ulong.MaxValue, 64 - 1)]
+        public static void BitOps_Log2_ulong(ulong n, int expected)
         {
-            sbyte sut = 0b01010101;
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_UShort))]
-        public static void BitOps_RotateRight_UShort()
-        {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_Short))]
-        public static void BitOps_RotateRight_Short()
-        {
-            short sut = 0b01010101_01010101;
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_UInt))]
-        public static void BitOps_RotateRight_UInt()
-        {
-            uint sut = 0b01010101_01010101_01010101_01010101u;
-            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateRight(sut, 2));
-            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_Int))]
-        public static void BitOps_RotateRight_Int()
-        {
-            int sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_ULong))]
-        public static void BitOps_RotateRight_ULong()
-        {
-            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
-            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateRight(sut, 2));
-            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
-        }
-
-        [Fact(DisplayName = nameof(BitOps_RotateRight_Long))]
-        public static void BitOps_RotateRight_Long()
-        {
-            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
+            int actual = BitOps.Log2(n);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
 
         #region PopCount
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_byte))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -927,7 +974,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_sbyte))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -949,11 +996,11 @@ namespace SourceCode.Clay.Tests
         [InlineData(sbyte.MaxValue, 7)] // 127
         public static void BitOps_PopCount_sbyte(sbyte n, int expected)
         {
-            int actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount((byte)n);
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_ushort))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -982,7 +1029,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_short))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -1010,11 +1057,11 @@ namespace SourceCode.Clay.Tests
         [InlineData(short.MaxValue, 15)] // 32767
         public static void BitOps_PopCount_short(short n, int expected)
         {
-            int actual = BitOps.PopCount(n);
+            int actual = BitOps.PopCount((ushort)n);
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_uint))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -1048,7 +1095,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_int))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -1081,7 +1128,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_ulong))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -1115,7 +1162,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory(DisplayName = nameof(BitOps_PopCount_long))]
+        [Theory]
         [InlineData(0b001, 1)]
         [InlineData(0b010, 1)]
         [InlineData(0b011, 2)]
@@ -1153,414 +1200,189 @@ namespace SourceCode.Clay.Tests
 
         #endregion
 
-        #region LeadTrail
+        #region Rotate
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_byte))]
-        [InlineData((byte)0b000u, 8)]
-        [InlineData((byte)0b001u, 7)]
-        [InlineData((byte)0b010u, 6)]
-        [InlineData((byte)0b011u, 6)]
-        [InlineData((byte)0b100u, 5)]
-        [InlineData((byte)0b101u, 5)]
-        [InlineData((byte)0b110u, 5)]
-        [InlineData((byte)0b111u, 5)]
-        [InlineData((byte)0b1101u, 4)]
-        [InlineData((byte)0b1111u, 4)]
-        [InlineData((byte)0b10111u, 3)]
-        [InlineData((byte)0b11111u, 3)]
-        [InlineData((byte)0b110111u, 2)]
-        [InlineData((byte)0b111011u, 2)]
-        [InlineData((byte)0b1111010u, 1)]
-        [InlineData((byte)0b1111101u, 1)]
-        [InlineData(byte.MaxValue, 0)]
-        [InlineData((byte)0b_0001_0110u, 3)]
-        public static void BitOps_LeadTrail_byte(byte n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_Byte()
         {
-            byte m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (byte)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (byte)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            byte sut = 0b01010101;
+            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((byte)0b01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_sbyte))]
-        [InlineData((sbyte)0b000u, 8)]
-        [InlineData((sbyte)0b001u, 7)]
-        [InlineData((sbyte)0b010u, 6)]
-        [InlineData((sbyte)0b011u, 6)]
-        [InlineData((sbyte)0b100u, 5)]
-        [InlineData((sbyte)0b101u, 5)]
-        [InlineData((sbyte)0b110u, 5)]
-        [InlineData((sbyte)0b111u, 5)]
-        [InlineData((sbyte)0b1101u, 4)]
-        [InlineData((sbyte)0b1111u, 4)]
-        [InlineData((sbyte)0b10111u, 3)]
-        [InlineData((sbyte)0b11111u, 3)]
-        [InlineData((sbyte)0b110111u, 2)]
-        [InlineData((sbyte)0b111011u, 2)]
-        [InlineData((sbyte)0b1111010u, 1)]
-        [InlineData((sbyte)0b1111101u, 1)]
-        [InlineData(sbyte.MinValue, 0)]
-        [InlineData(sbyte.MaxValue, 1)]
-        [InlineData((sbyte)0b_0001_0110u, 3)]
-        public static void BitOps_LeadTrail_sbyte(sbyte n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_SByte()
         {
-            sbyte m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (sbyte)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (sbyte)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            sbyte sut = 0b01010101;
+            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 1));
+            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateLeft(sut, 2));
+            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_ushort))]
-        [InlineData((ushort)0b000u, 16)]
-        [InlineData((ushort)0b001u, 15)]
-        [InlineData((ushort)0b010u, 14)]
-        [InlineData((ushort)0b011u, 14)]
-        [InlineData((ushort)0b100u, 13)]
-        [InlineData((ushort)0b101u, 13)]
-        [InlineData((ushort)0b110u, 13)]
-        [InlineData((ushort)0b111u, 13)]
-        [InlineData((ushort)0b1101u, 12)]
-        [InlineData((ushort)0b1111u, 12)]
-        [InlineData((ushort)0b10111u, 11)]
-        [InlineData((ushort)0b11111u, 11)]
-        [InlineData((ushort)0b110111u, 10)]
-        [InlineData((ushort)0b111011u, 10)]
-        [InlineData((ushort)0b1111010u, 9)]
-        [InlineData((ushort)0b1111101u, 9)]
-        [InlineData(ushort.MaxValue, 0)]
-        [InlineData((ushort)0b_0001_0110u, 11)]
-        public static void BitOps_LeadTrail_ushort(ushort n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_UShort()
         {
-            ushort m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (ushort)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (ushort)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            ushort sut = 0b01010101_01010101;
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_short))]
-        [InlineData((short)0b000u, 16)]
-        [InlineData((short)0b001u, 15)]
-        [InlineData((short)0b010u, 14)]
-        [InlineData((short)0b011u, 14)]
-        [InlineData((short)0b100u, 13)]
-        [InlineData((short)0b101u, 13)]
-        [InlineData((short)0b110u, 13)]
-        [InlineData((short)0b111u, 13)]
-        [InlineData((short)0b1101u, 12)]
-        [InlineData((short)0b1111u, 12)]
-        [InlineData((short)0b10111u, 11)]
-        [InlineData((short)0b11111u, 11)]
-        [InlineData((short)0b110111u, 10)]
-        [InlineData((short)0b111011u, 10)]
-        [InlineData((short)0b1111010u, 9)]
-        [InlineData((short)0b1111101u, 9)]
-        [InlineData(short.MaxValue, 1)]
-        [InlineData((short)0b_0001_0110u, 11)]
-        public static void BitOps_LeadTrail_short(short n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_Short()
         {
-            short m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (short)~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = (short)~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            short sut = 0b01010101_01010101;
+            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 1));
+            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateLeft(sut, 2));
+            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_uint))]
-        [InlineData(0b000u, 32)]
-        [InlineData(0b001u, 31)]
-        [InlineData(0b010u, 30)]
-        [InlineData(0b011u, 30)]
-        [InlineData(0b100u, 29)]
-        [InlineData(0b101u, 29)]
-        [InlineData(0b110u, 29)]
-        [InlineData(0b111u, 29)]
-        [InlineData(0b1101u, 28)]
-        [InlineData(0b1111u, 28)]
-        [InlineData(0b10111u, 27)]
-        [InlineData(0b11111u, 27)]
-        [InlineData(0b110111u, 26)]
-        [InlineData(0b111011u, 26)]
-        [InlineData(0b1111010u, 25)]
-        [InlineData(0b1111101u, 25)]
-        [InlineData((uint)byte.MaxValue, 32 - 8)]
-        [InlineData((uint)(ushort.MaxValue >> 3), 32 - 16 + 3)]
-        [InlineData((uint)ushort.MaxValue, 32 - 16)]
-        [InlineData((uint.MaxValue >> 5), 5)]
-        [InlineData(1u << 27, 32 - 1 - 27)]
-        [InlineData(uint.MaxValue, 0)]
-        [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110u, 3)]
-        public static void BitOps_LeadTrail_uint(uint n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_UInt()
         {
-            uint m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            uint sut = 0b01010101_01010101_01010101_01010101u;
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_int))]
-        [InlineData(0b000, 32)]
-        [InlineData(0b001, 31)]
-        [InlineData(0b010, 30)]
-        [InlineData(0b011, 30)]
-        [InlineData(0b100, 29)]
-        [InlineData(0b101, 29)]
-        [InlineData(0b110, 29)]
-        [InlineData(0b111, 29)]
-        [InlineData(0b1101, 28)]
-        [InlineData(0b1111, 28)]
-        [InlineData(0b10111, 27)]
-        [InlineData(0b11111, 27)]
-        [InlineData(0b110111, 26)]
-        [InlineData(0b111011, 26)]
-        [InlineData(0b1111010, 25)]
-        [InlineData(0b1111101, 25)]
-        [InlineData((int)byte.MaxValue, 32 - 8)]
-        [InlineData((int)(ushort.MaxValue >> 3), 32 - 16 + 3)]
-        [InlineData((int)ushort.MaxValue, 32 - 16)]
-        [InlineData(int.MaxValue >> 5, 6)]
-        [InlineData(1 << 27, 32 - 1 - 27)]
-        [InlineData(int.MaxValue, 1)]
-        [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110, 3)]
-        public static void BitOps_LeadTrail_int(int n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_Int()
         {
-            int m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~n;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            int sut = 0b01010101_01010101_01010101_01010101;
+            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_ulong))]
-        [InlineData(0b000ul, 64)]
-        [InlineData(0b001ul, 63)]
-        [InlineData(0b010ul, 62)]
-        [InlineData(0b011ul, 62)]
-        [InlineData(0b100ul, 61)]
-        [InlineData(0b101ul, 61)]
-        [InlineData(0b110ul, 61)]
-        [InlineData(0b111ul, 61)]
-        [InlineData(0b1101ul, 60)]
-        [InlineData(0b1111ul, 60)]
-        [InlineData(0b10111ul, 59)]
-        [InlineData(0b11111ul, 59)]
-        [InlineData(0b110111ul, 58)]
-        [InlineData(0b111011ul, 58)]
-        [InlineData(0b1111010ul, 57)]
-        [InlineData(0b1111101ul, 57)]
-        [InlineData((ulong)byte.MaxValue, 64 - 8)]
-        [InlineData((ulong)(ushort.MaxValue >> 3), 64 - 16 + 3)]
-        [InlineData((ulong)ushort.MaxValue, 64 - 16)]
-        [InlineData((ulong)(uint.MaxValue >> 5), 32 + 5)]
-        [InlineData((ulong)uint.MaxValue, 32)]
-        [InlineData(ulong.MaxValue >> 9, 9)]
-        [InlineData(1ul << 57, 64 - 1 - 57)]
-        [InlineData(ulong.MaxValue, 0)]
-        [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110ul, 32 + 3)]
-        public static void BitOps_LeadTrail_ulong(ulong n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_ULong()
         {
-            ulong m = n;
-
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
-
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
-
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
-
-            m = ~m;
-
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
         }
 
-        [Theory(DisplayName = nameof(BitOps_LeadTrail_long))]
-        [InlineData(0b000L, 64)]
-        [InlineData(0b001L, 63)]
-        [InlineData(0b010L, 62)]
-        [InlineData(0b011L, 62)]
-        [InlineData(0b100L, 61)]
-        [InlineData(0b101L, 61)]
-        [InlineData(0b110L, 61)]
-        [InlineData(0b111L, 61)]
-        [InlineData(0b1101L, 60)]
-        [InlineData(0b1111L, 60)]
-        [InlineData(0b10111L, 59)]
-        [InlineData(0b11111L, 59)]
-        [InlineData(0b110111L, 58)]
-        [InlineData(0b111011L, 58)]
-        [InlineData(0b1111010L, 57)]
-        [InlineData(0b1111101L, 57)]
-        [InlineData((long)byte.MaxValue, 64 - 8)]
-        [InlineData((long)(ushort.MaxValue >> 3), 64 - 16 + 3)]
-        [InlineData((long)ushort.MaxValue, 64 - 16)]
-        [InlineData((long)(uint.MaxValue >> 5), 32 + 5)]
-        [InlineData((long)uint.MaxValue, 32)]
-        [InlineData(long.MaxValue >> 9, 10)]
-        [InlineData(1L << 57, 64 - 1 - 57)]
-        [InlineData(long.MaxValue, 1)]
-        [InlineData(0b_0001_0111_1111_1111_1111_1111_1111_1110L, 32 + 3)]
-        public static void BitOps_LeadTrail_long(long n, int expected)
+        [Fact]
+        public static void BitOps_RotateLeft_Long()
         {
-            long m = n;
+            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
+            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
+            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
+            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
+        }
 
-            // LeadingZeros
-            int actual = BitOps.LeadingZeros(m);
-            Assert.Equal(expected, actual);
+        [Fact]
+        public static void BitOps_RotateRight_Byte()
+        {
+            byte sut = 0b01010101;
+            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((byte)0b01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
+        }
 
-            m = ~m;
+        [Fact]
+        public static void BitOps_RotateRight_SByte()
+        {
+            sbyte sut = 0b01010101;
+            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 1));
+            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateRight(sut, 2));
+            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
+        }
 
-            // LeadingOnes
-            actual = BitOps.LeadingOnes(m);
-            Assert.Equal(expected, actual);
+        [Fact]
+        public static void BitOps_RotateRight_UShort()
+        {
+            ushort sut = 0b01010101_01010101;
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
+            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
+        }
 
-            m = Reverse(n);
-            Assert.Equal(n, Reverse(m));
+        [Fact]
+        public static void BitOps_RotateRight_Short()
+        {
+            short sut = 0b01010101_01010101;
+            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 1));
+            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateRight(sut, 2));
+            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
+        }
 
-            // TrailingZeros
-            actual = BitOps.TrailingZeros(m);
-            Assert.Equal(expected, actual);
+        [Fact]
+        public static void BitOps_RotateRight_UInt()
+        {
+            uint sut = 0b01010101_01010101_01010101_01010101u;
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101u, BitOps.RotateRight(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010u, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
+        }
 
-            m = ~m;
+        [Fact]
+        public static void BitOps_RotateRight_Int()
+        {
+            int sut = 0b01010101_01010101_01010101_01010101;
+            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
+        }
 
-            // TrailingOnes
-            actual = BitOps.TrailingOnes(m);
-            Assert.Equal(expected, actual);
+        [Fact]
+        public static void BitOps_RotateRight_ULong()
+        {
+            ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateRight(sut, 2));
+            Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
+        }
+
+        [Fact]
+        public static void BitOps_RotateRight_Long()
+        {
+            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
+            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
+            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
+            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
+            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
+            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
         }
 
         #endregion
 
         #region Normalize
 
-        [Fact(DisplayName = nameof(BitOps_Normalize))]
+        [Fact]
         public static void BitOps_Normalize()
         {
             // The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
@@ -1598,7 +1420,7 @@ namespace SourceCode.Clay.Tests
 
         #region Iff
 
-        [Theory(DisplayName = nameof(BitOps_Iff_byte))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_byte(bool condition)
@@ -1634,7 +1456,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(byte.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_sbyte))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_sbyte(bool condition)
@@ -1672,7 +1494,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(sbyte.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_ushort(bool condition)
@@ -1708,7 +1530,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(ushort.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_short))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_short(bool condition)
@@ -1746,7 +1568,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(short.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_ushort))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_uint(bool condition)
@@ -1782,7 +1604,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(uint.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_int))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_int(bool condition)
@@ -1820,7 +1642,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(int.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_ulong))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_ulong(bool condition)
@@ -1856,7 +1678,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0, BitOps.IsZero(ulong.MaxValue));
         }
 
-        [Theory(DisplayName = nameof(BitOps_Iff_long))]
+        [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public static void BitOps_Iff_long(bool condition)
