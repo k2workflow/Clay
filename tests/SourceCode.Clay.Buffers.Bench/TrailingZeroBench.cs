@@ -88,25 +88,21 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint TrailingZeroCountGuard(uint value)
         {
-            if (value == 0u)
-                return 32u;
+            // Software fallback has behavior 0->0, so special-case to match intrinsic path 0->32
+            if (value == 0)
+                return 32;
 
-            // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0000_0111_0111_1100_1011_0101_0011_0001
-            uint ix = (uint)((value & -value) * 0x077CB531u) >> 27;
-
-            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            uint count = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn), (IntPtr)ix);
-            return count;
+            return Unsafe.AddByteOffset(
+                ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
+                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint TrailingZeroCountBranch(uint value)
         {
-            // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0000_0111_0111_1100_1011_0101_0011_0001
-            uint ix = (uint)((value & -value) * 0x077CB531u) >> 27;
-
-            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            uint count = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn), (IntPtr)ix);
+            uint count = Unsafe.AddByteOffset(
+               ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
+                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27));
 
             // Above code has behavior 0->0, so special-case in order to match intrinsic path
 
@@ -118,11 +114,9 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint TrailingZeroCountUnsafe(uint value)
         {
-            // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0000_0111_0111_1100_1011_0101_0011_0001
-            uint ix = (uint)((value & -value) * 0x077CB531u) >> 27;
-
-            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
-            uint count = Unsafe.AddByteOffset(ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn), (IntPtr)ix);
+            uint count = Unsafe.AddByteOffset(
+               ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
+                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27));
 
             // Above code has behavior 0->0, so special-case in order to match intrinsic path
 
@@ -131,6 +125,40 @@ namespace SourceCode.Clay.Buffers.Bench
             uint c32 = Unsafe.As<bool, byte>(ref is0) * 32u; // 0|1 x 32
 
             return c32 + count;
+        }
+
+        private static ReadOnlySpan<byte> s_Log2DeBruijn => new byte[32]
+        {
+            00, 09, 01, 10, 13, 21, 02, 29,
+            11, 14, 16, 18, 22, 25, 03, 30,
+            08, 12, 20, 28, 15, 17, 24, 07,
+            19, 27, 23, 06, 26, 05, 04, 31
+        };
+
+        public static int Log2SoftwareFallback(uint value)
+        {
+            value |= value >> 01;
+            value |= value >> 02;
+            value |= value >> 04;
+            value |= value >> 08;
+            value |= value >> 16;
+
+            // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
+            return Unsafe.AddByteOffset(
+                // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_1100_0100_1010_1100_1101_1101u
+                ref MemoryMarshal.GetReference(s_Log2DeBruijn),
+                // long -> IntPtr cast on 32-bit platforms is expensive - it does overflow checks that are not needed here
+                (IntPtr)(int)((value * 0x07C4ACDDu) >> 27));
+        }
+
+        public static int PopCount(uint val)
+        {
+            val = val - ((val >> 1) & 0x_55555555u);
+            val = (val & 0x_33333333u) + ((val >> 2) & 0x_33333333u);
+            val = (val + (val >> 4)) & 0x_0F0F0F0Fu;
+            val = (val * 0x_01010101u) >> 24;
+
+            return (int)val;
         }
     }
 }

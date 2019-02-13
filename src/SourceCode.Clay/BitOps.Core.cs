@@ -65,8 +65,8 @@ namespace SourceCode.Clay
             return Unsafe.AddByteOffset(
                 // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_0111_1100_1011_0101_0011_0001u
                 ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
-                // long -> IntPtr cast on 32-bit platforms is expensive - it does overflow checks that are not needed here
-                (IntPtr)(int)(((uint)((value & -value) * 0x077CB531u)) >> 27));
+                // uint|long -> IntPtr cast on 32-bit platforms does expensive overflow checks not needed here
+                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27)); // Multiple casts generate optimal MSIL
         }
 
         /// <summary>
@@ -162,10 +162,13 @@ namespace SourceCode.Clay
         /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Log2(uint value)
         {
-            value = FoldTrailingOnes(value);
+            value |= value >> 01;
+            value |= value >> 02;
+            value |= value >> 04;
+            value |= value >> 08;
+            value |= value >> 16;
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
             return Unsafe.AddByteOffset(
@@ -210,23 +213,19 @@ namespace SourceCode.Clay
             //    return (int)Popcnt.PopCount(value);
             //}
 
-            value -= (value >> 1) & 0x_5555_5555;
-            value = (value & 0x_3333_3333) + ((value >> 2) & 0x_3333_3333);
-            value = (value + (value >> 4)) & 0x_0F0F_0F0F;
-            value *= 0x_0101_0101;
-            value >>= 24;
+            return SoftwareFallback(value);
 
-            return (int)value;
+            int SoftwareFallback(uint val)
+            {
+                val = val - ((val >> 1) & 0x_55555555u);
+                val = (val & 0x_33333333u) + ((val >> 2) & 0x_33333333u);
+                val = (val + (val >> 4)) & 0x_0F0F0F0Fu;
+                val = val * 0x_01010101u;
+                val = val >> 24;
+
+                return (int)val;
+            }
         }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(int value)
-            => PopCount((uint)value);
 
         /// <summary>
         /// Returns the population count (number of bits set) of a mask.
@@ -243,30 +242,26 @@ namespace SourceCode.Clay
             //        return (int)Popcnt.X64.PopCount(value);
             //    }
 
-            //    // Use the 32-bit function twice
-            //    int hi = (int)Popcnt.PopCount((uint)(value >> 32));
-            //    int lo = (int)Popcnt.PopCount((uint)value);
-
-            //    return hi + lo;
+            //    return (int)(Popcnt.PopCount((uint)value)
+            //        + Popcnt.PopCount((uint)(value >> 32)));
             //}
 
-            value -= (value >> 1) & 0x_5555_5555_5555_5555;
-            value = (value & 0x_3333_3333_3333_3333) + ((value >> 2) & 0x_3333_3333_3333_3333);
-            value = (value + (value >> 4)) & 0x_0F0F_0F0F_0F0F_0F0F;
-            value *= 0x_0101_0101_0101_0101;
-            value >>= 56;
+            //return PopCount((uint)value)
+            //    + PopCount((uint)(value >> 32));
 
-            return (int)value;
+            return SoftwareFallback(value);
+
+            int SoftwareFallback(ulong val)
+            {
+                val = val - ((val >> 1) & 0x_55555555_55555555ul);
+                val = (val & 0x_33333333_33333333ul) + ((val >> 2) & 0x_33333333_33333333ul);
+                val = (val + (val >> 4)) & 0x_0F0F0F0F_0F0F0F0Ful;
+                val = val * 0x_01010101_01010101ul;
+                val = val >> 56;
+
+                return (int)val;
+            }
         }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(long value)
-            => PopCount((ulong)value);
 
         #endregion
 
@@ -515,30 +510,6 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int InsertBit(int value, int bitOffset)
             => unchecked((int)InsertBit((uint)value, bitOffset));
-
-        #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Fills the trailing zeros in a mask with ones.
-        /// For example, 00010010 becomes 00011111.
-        /// Does not incur branching.
-        /// </summary>
-        /// <param name="value">The value to mutate.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint FoldTrailingOnes(uint value)
-        {
-            // byte#                         4          3   2  1
-            //                       1000 0000  0000 0000  00 00
-            value |= value >> 01; // 1100 0000  0000 0000  00 00
-            value |= value >> 02; // 1111 0000  0000 0000  00 00
-            value |= value >> 04; // 1111 1111  0000 0000  00 00
-            value |= value >> 08; // 1111 1111  1111 1111  00 00
-            value |= value >> 16; // 1111 1111  1111 1111  FF FF
-
-            return value;
-        }
 
         #endregion
     }

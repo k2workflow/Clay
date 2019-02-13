@@ -1268,6 +1268,24 @@ namespace SourceCode.Clay
 
         #region PopCount
 
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(int value)
+            => PopCount((uint)value);
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(long value)
+            => PopCount((ulong)value);
+
         #endregion
 
         #region LeadingZeroCount
