@@ -5,7 +5,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.CompilerServices;
 
 // Some of this inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
@@ -26,24 +25,6 @@ namespace SourceCode.Clay
         // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. So we use & not %.
         // Software & hardware intrinsics already do this for uint/ulong, but
         // we need to emulate for byte/ushort.
-
-        /*
-        /// <summary>
-        /// Reads whether the specified bit in a mask is set.
-        /// Similar in behavior to the x86 instruction BT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(byte value, int bitOffset)
-        {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
-
-            return (value & mask) != 0;
-        }
-        */
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -82,34 +63,6 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(short value, int bitOffset)
             => ExtractBit((ushort)value, bitOffset);
-
-        /*
-        /// <summary>
-        /// Reads whether the specified bit in a mask is set.
-        /// Similar in behavior to the x86 instruction BT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(uint value, int bitOffset)
-        {
-            uint mask = 1U << bitOffset;
-
-            return (value & mask) != 0;
-        }
-
-        /// <summary>
-        /// Reads whether the specified bit in a mask is set.
-        /// Similar in behavior to the x86 instruction BT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(int value, int bitOffset)
-            => ExtractBit((uint)value, bitOffset);
-        */
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -521,32 +474,6 @@ namespace SourceCode.Clay
         public static short ClearBit(short value, int bitOffset)
             => unchecked((short)ClearBit((ushort)value, bitOffset));
 
-        /*
-        /// <summary>
-        /// Clears the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ClearBit(uint value, int bitOffset)
-        {
-            uint mask = 1U << bitOffset;
-
-            return value & ~mask;
-        }
-
-        /// <summary>
-        /// Clears the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ClearBit(int value, int bitOffset)
-            => unchecked((int)ClearBit((uint)value, bitOffset));
-        */
-
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
@@ -574,27 +501,6 @@ namespace SourceCode.Clay
         #endregion
 
         #region ClearBit (Ref)
-
-        /*
-        /// <summary>
-        /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref byte value, int bitOffset)
-        {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
-
-            uint btr = value & mask;
-            value = (byte)(value & ~mask);
-
-            return btr != 0;
-        }
-        */
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -670,26 +576,6 @@ namespace SourceCode.Clay
 
             return btr != 0;
         }
-
-        /*
-        /// <summary>
-        /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref int value, int bitOffset)
-        {
-            int mask = 1 << bitOffset;
-
-            int btr = value & mask;
-            value = value & ~mask;
-
-            return btr != 0;
-        }
-        */
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -781,32 +667,6 @@ namespace SourceCode.Clay
         public static short InsertBit(short value, int bitOffset)
             => unchecked((short)InsertBit((ushort)value, bitOffset));
 
-        /*
-        /// <summary>
-        /// Sets the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint InsertBit(uint value, int bitOffset)
-        {
-            uint mask = 1U << bitOffset;
-
-            return value | mask;
-        }
-
-        /// <summary>
-        /// Sets the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int InsertBit(int value, int bitOffset)
-            => unchecked((int)InsertBit((uint)value, bitOffset));
-        */
-
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
@@ -834,27 +694,6 @@ namespace SourceCode.Clay
         #endregion
 
         #region InsertBit (Ref)
-
-        /*
-        /// <summary>
-        /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTS.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref byte value, int bitOffset)
-        {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
-
-            uint bts = value & mask;
-            value = (byte)(value | mask);
-
-            return bts != 0;
-        }
-        */
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -932,26 +771,6 @@ namespace SourceCode.Clay
 
             return bts != 0;
         }
-
-        /*
-        /// <summary>
-        /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTS.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref int value, int bitOffset)
-        {
-            int mask = 1 << bitOffset;
-
-            int bts = value & mask;
-            value = value | mask;
-
-            return bts != 0;
-        }
-        */
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -1391,62 +1210,6 @@ namespace SourceCode.Clay
         public static short RotateRight(short value, int offset)
             => unchecked((short)RotateRight((ushort)value, offset));
 
-        /*
-        /// <summary>
-        /// Rotates the specified value left by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROL.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateLeft(uint value, int offset)
-        {
-            uint val = (value << offset) | (value >> (32 - offset));
-            return val;
-        }
-
-        /// <summary>
-        /// Rotates the specified value left by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROL.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int RotateLeft(int value, int offset)
-            => unchecked((int)RotateLeft((uint)value, offset));
-
-        /// <summary>
-        /// Rotates the specified value right by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROR.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateRight(uint value, int offset)
-        {
-            uint val = (value >> offset) | (value << (32 - offset));
-            return val;
-        }
-
-        /// <summary>
-        /// Rotates the specified value right by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROR.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int RotateRight(int value, int offset)
-            => unchecked((int)RotateRight((uint)value, offset));
-        */
-
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
         /// Similar in behavior to the x86 instruction ROL.
@@ -1700,18 +1463,6 @@ namespace SourceCode.Clay
         public static byte IsZero(short value)
             => (byte)(1u ^ NonZero(value));
 
-        /*
-        /// <summary>
-        /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
-        /// Does not incur branching.
-        /// Similar in behavior to the x86 instruction CMOVZ.
-        /// </summary>
-        /// <param name="value">The value to inspect.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte IsZero(uint value)
-            => (byte)(1u ^ NonZero(value));
-        */
-
         /// <summary>
         /// Returns 1 if <paramref name="value"/> is zero, else returns 0.
         /// Does not incur branching.
@@ -1864,23 +1615,6 @@ namespace SourceCode.Clay
 
         #region Helpers
 
-        /*
-        /// <summary>
-        /// Fills the trailing zeros in a mask with ones.
-        /// </summary>
-        /// <param name="value">The value to mutate.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void FoldTrailingOnes(ref uint value)
-        {
-            // byte#                         4          3   2  1
-            //                       1000 0000  0000 0000  00 00
-            value |= value >> 01; // 1100 0000  0000 0000  00 00
-            value |= value >> 02; // 1111 0000  0000 0000  00 00
-            value |= value >> 04; // 1111 1111  0000 0000  00 00
-            value |= value >> 08; // 1111 1111  1111 1111  00 00
-            value |= value >> 16; // 1111 1111  1111 1111  FF FF
-        }
-
         /// <summary>
         /// Fills the trailing zeros in a mask with ones.
         /// </summary>
@@ -1898,7 +1632,6 @@ namespace SourceCode.Clay
 
             value |= value >> 32; // 1111 1111  1111 1111  FF FF  FF FF  FF FF
         }
-        */
 
         #endregion
     }
