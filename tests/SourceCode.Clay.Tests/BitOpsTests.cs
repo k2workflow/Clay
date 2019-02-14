@@ -60,16 +60,6 @@ namespace SourceCode.Clay.Tests
             // WriteBit(ref): Writes the specified bit in a mask and returns whether it was originally set. Does not branch.
             Assert.True(BitOps.WriteBit(ref dest, 3, on: false));
             Assert.Equal(0b0000_0001, dest);
-
-            // AsByte: Converts a boolean to a normalized byte value without branching.
-            byte n = 3; // Build a bool that has an underlying value of 3
-            bool weirdBool = Unsafe.As<byte, bool>(ref n); // Via interop or whatever
-            Assert.True(weirdBool);
-            Assert.Equal(1, BitOps.Iff(ref weirdBool)); // Normalize
-
-            // Iff: Converts a boolean to a specified integer value without branching.
-            Assert.Equal(123, BitOps.Iff(true, 123)); // if then
-            Assert.Equal(456, BitOps.Iff(false, 123, 456)); // if then else
         }
 
         #endregion
@@ -832,28 +822,6 @@ namespace SourceCode.Clay.Tests
         }
 
         [Theory]
-        [InlineData(0, 32)]
-        [InlineData(0b1, 31)]
-        [InlineData(0b10, 30)]
-        [InlineData(0b100, 29)]
-        [InlineData(0b1000, 28)]
-        [InlineData(0b10000, 27)]
-        [InlineData(0b100000, 26)]
-        [InlineData(0b1000000, 25)]
-        [InlineData(byte.MaxValue << 17, 32 - 8 - 17)]
-        [InlineData(byte.MaxValue << 9, 32 - 8 - 9)]
-        [InlineData(ushort.MaxValue << 11, 32 - 16 - 11)]
-        [InlineData(ushort.MaxValue << 2, 32 - 16 - 2)]
-        [InlineData(5 << 7, 32 - 3 - 7)]
-        [InlineData(int.MinValue, 0)]
-        [InlineData(int.MaxValue, 1)]
-        public static void BitOps_LeadingZeroCount_int(int n, int expected)
-        {
-            int actual = BitOps.LeadingZeroCount(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
         [InlineData(0ul, 64)]
         [InlineData(0b1ul, 63)]
         [InlineData(0b10ul, 62)]
@@ -871,28 +839,6 @@ namespace SourceCode.Clay.Tests
         [InlineData(1ul << 62, 1)]
         [InlineData(ulong.MaxValue, 0)]
         public static void BitOps_LeadingZeroCount_ulong(ulong n, int expected)
-        {
-            int actual = BitOps.LeadingZeroCount(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0L, 64)]
-        [InlineData(0b1L, 63)]
-        [InlineData(0b10L, 62)]
-        [InlineData(0b100L, 61)]
-        [InlineData(0b1000L, 60)]
-        [InlineData(0b10000L, 59)]
-        [InlineData(0b100000L, 58)]
-        [InlineData(0b1000000L, 57)]
-        [InlineData((long)byte.MaxValue << 41, 64 - 8 - 41)]
-        [InlineData((long)byte.MaxValue << 53, 64 - 8 - 53)]
-        [InlineData((long)ushort.MaxValue << 31, 64 - 16 - 31)]
-        [InlineData((long)ushort.MaxValue << 15, 64 - 16 - 15)]
-        [InlineData(1L << 62, 1)]
-        [InlineData(long.MinValue, 0)]
-        [InlineData(long.MaxValue, 1)]
-        public static void BitOps_LeadingZeroCount_long(long n, int expected)
         {
             int actual = BitOps.LeadingZeroCount(n);
             Assert.Equal(expected, actual);
@@ -963,120 +909,6 @@ namespace SourceCode.Clay.Tests
         [InlineData(0b111111, 6)]
         [InlineData(0b1111110, 6)]
         [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(byte.MaxValue >> 1, 7)] // 127
-        [InlineData(byte.MaxValue - 1, 7)] // 254
-        [InlineData(byte.MaxValue, 8)] // 255
-        [InlineData(unchecked((byte)sbyte.MinValue), 1)] // 128
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        public static void BitOps_PopCount_byte(byte n, int expected)
-        {
-            int actual = BitOps.PopCount(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(unchecked((sbyte)byte.MaxValue), 8)] // 255
-        [InlineData(sbyte.MinValue, 1)] // -128
-        [InlineData(sbyte.MinValue >> 1, 2)] // -64
-        [InlineData(sbyte.MaxValue >> 1, 6)] // 63
-        [InlineData(sbyte.MaxValue - 1, 6)] // 126
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        public static void BitOps_PopCount_sbyte(sbyte n, int expected)
-        {
-            int actual = BitOps.PopCount((byte)n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(0b111111, 6)]
-        [InlineData(0b1111110, 6)]
-        [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(byte.MaxValue, 8)] // 255
-        [InlineData(unchecked((ushort)sbyte.MinValue), 16 - 7)] // 65408
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        [InlineData(ushort.MaxValue >> 3, 16 - 3)] // 8191
-        [InlineData(ushort.MaxValue >> 1, 15)] // 32767
-        [InlineData(ushort.MaxValue - 1, 15)] // 65534
-        [InlineData(ushort.MaxValue, 16)] // 65535
-        public static void BitOps_PopCount_ushort(ushort n, int expected)
-        {
-            int actual = BitOps.PopCount(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(0b111111, 6)]
-        [InlineData(0b1111110, 6)]
-        [InlineData(0b1111111, 7)]
-        [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(byte.MaxValue, 8)] // 255
-        [InlineData(sbyte.MinValue, 9)] // -128
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        [InlineData(short.MinValue, 1)] // -32768
-        [InlineData(short.MinValue >> 1, 2)] // -16384
-        [InlineData(short.MaxValue >> 1, 14)] // 16383
-        [InlineData(short.MaxValue >> 3, 15 - 3)] // 4095
-        [InlineData(short.MaxValue - 1, 14)] // 32766
-        [InlineData(short.MaxValue, 15)] // 32767
-        public static void BitOps_PopCount_short(short n, int expected)
-        {
-            int actual = BitOps.PopCount((ushort)n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(0b111111, 6)]
-        [InlineData(0b1111110, 6)]
-        [InlineData(byte.MinValue, 0)] // 0
         [InlineData(byte.MaxValue, 8)] // 255
         [InlineData(unchecked((uint)sbyte.MinValue), 25)] // 4294967168
         [InlineData(sbyte.MaxValue, 7)] // 127
@@ -1090,39 +922,6 @@ namespace SourceCode.Clay.Tests
         [InlineData(uint.MaxValue << 11, 32 - 11)] // 4294965248
         [InlineData(uint.MaxValue, 32)] // 4294967295
         public static void BitOps_PopCount_uint(uint n, int expected)
-        {
-            int actual = BitOps.PopCount(n);
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(0b111111, 6)]
-        [InlineData(0b1111110, 6)]
-        [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(byte.MaxValue, 8)] // 255
-        [InlineData(sbyte.MinValue, 25)] // -128
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        [InlineData(ushort.MaxValue >> 3, 16 - 3)] // 8191
-        [InlineData(ushort.MaxValue, 16)] // 65535
-        [InlineData(short.MinValue, 17)] // -32768
-        [InlineData(short.MaxValue, 15)] // 32767
-        [InlineData(unchecked((int)uint.MaxValue), 32)] // -1
-        [InlineData(uint.MaxValue >> 5, 32 - 5)] // 134217727
-        [InlineData(unchecked((int)uint.MaxValue << 11), 32 - 11)] // -2048
-        [InlineData(int.MaxValue, 31)] // -1
-        public static void BitOps_PopCount_int(int n, int expected)
         {
             int actual = BitOps.PopCount(n);
             Assert.Equal(expected, actual);
@@ -1162,42 +961,6 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
-        [InlineData(0b001, 1)]
-        [InlineData(0b010, 1)]
-        [InlineData(0b011, 2)]
-        [InlineData(0b100, 1)]
-        [InlineData(0b101, 2)]
-        [InlineData(0b110, 2)]
-        [InlineData(0b111, 3)]
-        [InlineData(0b1101, 3)]
-        [InlineData(0b1111, 4)]
-        [InlineData(0b10111, 4)]
-        [InlineData(0b11111, 5)]
-        [InlineData(0b110111, 5)]
-        [InlineData(0b111111, 6)]
-        [InlineData(0b1111110, 6)]
-        [InlineData(0b1111111, 7)]
-        [InlineData(byte.MinValue, 0)] // 0
-        [InlineData(byte.MaxValue, 8)] // 255
-        [InlineData(sbyte.MinValue, 57)] // -128
-        [InlineData(sbyte.MaxValue, 7)] // 127
-        [InlineData(ushort.MaxValue, 16)] // 65535
-        [InlineData(short.MinValue, 49)] // -32768
-        [InlineData(short.MaxValue, 15)] // 32767
-        [InlineData(int.MinValue, 33)] // -2147483648
-        [InlineData(int.MaxValue, 31)] // 2147483647
-        [InlineData(unchecked((long)ulong.MaxValue), 64)] // -1
-        [InlineData(long.MinValue, 1)]
-        [InlineData(long.MaxValue >> 9, 63 - 9)]
-        [InlineData(long.MaxValue << 11, 64 - 11)] // -2048
-        [InlineData(long.MaxValue, 63)]
-        public static void BitOps_PopCount_long(long n, int expected)
-        {
-            int actual = BitOps.PopCount(n);
-            Assert.Equal(expected, actual);
-        }
-
         #endregion
 
         #region Rotate
@@ -1214,34 +977,12 @@ namespace SourceCode.Clay.Tests
         }
 
         [Fact]
-        public static void BitOps_RotateLeft_SByte()
-        {
-            sbyte sut = 0b01010101;
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
-        }
-
-        [Fact]
         public static void BitOps_RotateLeft_UShort()
         {
             ushort sut = 0b01010101_01010101;
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
             Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
-        }
-
-        [Fact]
-        public static void BitOps_RotateLeft_Short()
-        {
-            short sut = 0b01010101_01010101;
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateLeft(sut, 3));
             Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
         }
@@ -1258,34 +999,12 @@ namespace SourceCode.Clay.Tests
         }
 
         [Fact]
-        public static void BitOps_RotateLeft_Int()
-        {
-            int sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 31), BitOps.RotateLeft(sut, int.MaxValue)); // % 32 = 31
-        }
-
-        [Fact]
         public static void BitOps_RotateLeft_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 1));
             Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul, BitOps.RotateLeft(sut, 2));
             Assert.Equal(0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010ul, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
-        }
-
-        [Fact]
-        public static void BitOps_RotateLeft_Long()
-        {
-            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateLeft(sut, 3));
             Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 64 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateLeft(sut, int.MaxValue)); // % 64 = 63
         }
@@ -1302,34 +1021,12 @@ namespace SourceCode.Clay.Tests
         }
 
         [Fact]
-        public static void BitOps_RotateRight_SByte()
-        {
-            sbyte sut = 0b01010101;
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(unchecked((sbyte)0b01010101), BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((sbyte)0b10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
-        }
-
-        [Fact]
         public static void BitOps_RotateRight_UShort()
         {
             ushort sut = 0b01010101_01010101;
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
             Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
             Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
-        }
-
-        [Fact]
-        public static void BitOps_RotateRight_Short()
-        {
-            short sut = 0b01010101_01010101;
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(unchecked((short)0b01010101_01010101), BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((short)0b10101010_10101010), BitOps.RotateRight(sut, 3));
             Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
             Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
         }
@@ -1346,17 +1043,6 @@ namespace SourceCode.Clay.Tests
         }
 
         [Fact]
-        public static void BitOps_RotateRight_Int()
-        {
-            int sut = 0b01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((int)0b10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 32 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 32 = 15
-        }
-
-        [Fact]
         public static void BitOps_RotateRight_ULong()
         {
             ulong sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101ul;
@@ -1367,23 +1053,12 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
         }
 
-        [Fact]
-        public static void BitOps_RotateRight_Long()
-        {
-            long sut = 0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101;
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 1));
-            Assert.Equal(0b01010101_01010101_01010101_01010101_01010101_01010101_01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal(unchecked((long)0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_10101010), BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 64 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 63), BitOps.RotateRight(sut, int.MaxValue)); // % 64 = 63
-        }
-
         #endregion
 
-        #region Normalize
+        #region AsByte
 
         [Fact]
-        public static void BitOps_Normalize()
+        public static void BitOps_AsByte()
         {
             // The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
             // https://github.com/dotnet/roslyn/issues/24652
@@ -1405,315 +1080,7 @@ namespace SourceCode.Clay.Tests
 
                 byt = BitOps.AsByte(ref weirdBool);
                 Assert.Equal(n, byt);
-
-                // Normalize
-
-                byte normalizedByte = BitOps.Iff(weirdBool);
-                Assert.Equal(expectedByte, normalizedByte);
-
-                normalizedByte = BitOps.Iff(ref weirdBool);
-                Assert.Equal(expectedByte, normalizedByte);
             }
-        }
-
-        #endregion
-
-        #region Iff
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_byte(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, byte.MinValue), condition ? byte.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, byte.MinValue), !condition ? byte.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, byte.MaxValue), condition ? byte.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, byte.MaxValue), !condition ? byte.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, byte.MinValue, byte.MaxValue), condition ? byte.MinValue : byte.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, byte.MinValue, byte.MaxValue), !condition ? byte.MinValue : byte.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, 123, byte.MaxValue), condition ? 123 : byte.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, 123, byte.MaxValue), !condition ? 123 : byte.MaxValue);
-
-            // Any
-
-            Assert.Equal(0, BitOps.NonZero(byte.MinValue));
-            Assert.Equal(1, BitOps.NonZero(byte.MinValue + 1));
-            Assert.Equal(1, BitOps.NonZero(byte.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(byte.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(1, BitOps.IsZero(byte.MinValue));
-            Assert.Equal(0, BitOps.IsZero(byte.MinValue + 1));
-            Assert.Equal(0, BitOps.IsZero(byte.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(byte.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_sbyte(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, sbyte.MinValue), condition ? sbyte.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, sbyte.MinValue), !condition ? sbyte.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, sbyte.MaxValue), condition ? sbyte.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, sbyte.MaxValue), !condition ? sbyte.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, sbyte.MinValue, sbyte.MaxValue), condition ? sbyte.MinValue : sbyte.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, sbyte.MinValue, sbyte.MaxValue), !condition ? sbyte.MinValue : sbyte.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, -123, sbyte.MaxValue), condition ? -123 : sbyte.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, -123, sbyte.MaxValue), !condition ? -123 : sbyte.MaxValue);
-
-            // Any
-
-            Assert.Equal(1, BitOps.NonZero(sbyte.MinValue));
-            Assert.Equal(1, BitOps.NonZero(sbyte.MinValue + 1));
-            Assert.Equal(0, BitOps.NonZero((sbyte)0));
-            Assert.Equal(1, BitOps.NonZero(sbyte.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(sbyte.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(0, BitOps.IsZero(sbyte.MinValue));
-            Assert.Equal(0, BitOps.IsZero(sbyte.MinValue + 1));
-            Assert.Equal(1, BitOps.IsZero((sbyte)0));
-            Assert.Equal(0, BitOps.IsZero(sbyte.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(sbyte.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_ushort(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, ushort.MinValue), condition ? ushort.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, ushort.MinValue), !condition ? ushort.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, ushort.MaxValue), condition ? ushort.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, ushort.MaxValue), !condition ? ushort.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, ushort.MinValue, ushort.MaxValue), condition ? ushort.MinValue : ushort.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, ushort.MinValue, ushort.MaxValue), !condition ? ushort.MinValue : ushort.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, 123, ushort.MaxValue), condition ? 123 : ushort.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, 123, ushort.MaxValue), !condition ? 123 : ushort.MaxValue);
-
-            // Any
-
-            Assert.Equal(0, BitOps.NonZero(ushort.MinValue));
-            Assert.Equal(1, BitOps.NonZero(ushort.MinValue + 1));
-            Assert.Equal(1, BitOps.NonZero(ushort.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(ushort.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(1, BitOps.IsZero(ushort.MinValue));
-            Assert.Equal(0, BitOps.IsZero(ushort.MinValue + 1));
-            Assert.Equal(0, BitOps.IsZero(ushort.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(ushort.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_short(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, short.MinValue), condition ? short.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, short.MinValue), !condition ? short.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, short.MaxValue), condition ? short.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, short.MaxValue), !condition ? short.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, short.MinValue, short.MaxValue), condition ? short.MinValue : short.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, short.MinValue, short.MaxValue), !condition ? short.MinValue : short.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, -123, short.MaxValue), condition ? -123 : short.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, -123, short.MaxValue), !condition ? -123 : short.MaxValue);
-
-            // Any
-
-            Assert.Equal(1, BitOps.NonZero(short.MinValue));
-            Assert.Equal(1, BitOps.NonZero(short.MinValue + 1));
-            Assert.Equal(0, BitOps.NonZero((short)0));
-            Assert.Equal(1, BitOps.NonZero(short.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(short.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(0, BitOps.IsZero(short.MinValue));
-            Assert.Equal(0, BitOps.IsZero(short.MinValue + 1));
-            Assert.Equal(1, BitOps.IsZero((short)0));
-            Assert.Equal(0, BitOps.IsZero(short.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(short.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_uint(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, uint.MinValue), condition ? uint.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, uint.MinValue), !condition ? uint.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, uint.MaxValue), condition ? uint.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, uint.MaxValue), !condition ? uint.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, uint.MinValue, uint.MaxValue), condition ? uint.MinValue : uint.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, uint.MinValue, uint.MaxValue), !condition ? uint.MinValue : uint.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, 123, uint.MaxValue), condition ? 123 : uint.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, 123, uint.MaxValue), !condition ? 123 : uint.MaxValue);
-
-            // Any
-
-            Assert.Equal(0, BitOps.NonZero(uint.MinValue));
-            Assert.Equal(1, BitOps.NonZero(uint.MinValue + 1));
-            Assert.Equal(1, BitOps.NonZero(uint.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(uint.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(1, BitOps.IsZero(uint.MinValue));
-            Assert.Equal(0, BitOps.IsZero(uint.MinValue + 1));
-            Assert.Equal(0, BitOps.IsZero(uint.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(uint.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_int(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, int.MinValue), condition ? int.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, int.MinValue), !condition ? int.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, int.MaxValue), condition ? int.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, int.MaxValue), !condition ? int.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, int.MinValue, int.MaxValue), condition ? int.MinValue : int.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, int.MinValue, int.MaxValue), !condition ? int.MinValue : int.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, -123, int.MaxValue), condition ? -123 : int.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, -123, int.MaxValue), !condition ? -123 : int.MaxValue);
-
-            // Any
-
-            Assert.Equal(1, BitOps.NonZero(int.MinValue));
-            Assert.Equal(1, BitOps.NonZero(int.MinValue + 1));
-            Assert.Equal(0, BitOps.NonZero(0));
-            Assert.Equal(1, BitOps.NonZero(int.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(int.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(0, BitOps.IsZero(int.MinValue));
-            Assert.Equal(0, BitOps.IsZero(int.MinValue + 1));
-            Assert.Equal(1, BitOps.IsZero(0));
-            Assert.Equal(0, BitOps.IsZero(int.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(int.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_ulong(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, ulong.MinValue), condition ? ulong.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, ulong.MinValue), !condition ? ulong.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, ulong.MaxValue), condition ? ulong.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, ulong.MaxValue), !condition ? ulong.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, ulong.MinValue, ulong.MaxValue), condition ? ulong.MinValue : ulong.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, ulong.MinValue, ulong.MaxValue), !condition ? ulong.MinValue : ulong.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, 123, ulong.MaxValue), condition ? 123 : ulong.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, 123, ulong.MaxValue), !condition ? 123 : ulong.MaxValue);
-
-            // Any
-
-            Assert.Equal(0, BitOps.NonZero(ulong.MinValue));
-            Assert.Equal(1, BitOps.NonZero(ulong.MinValue + 1));
-            Assert.Equal(1, BitOps.NonZero(ulong.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(ulong.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(1, BitOps.IsZero(ulong.MinValue));
-            Assert.Equal(0, BitOps.IsZero(ulong.MinValue + 1));
-            Assert.Equal(0, BitOps.IsZero(ulong.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(ulong.MaxValue));
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public static void BitOps_Iff_long(bool condition)
-        {
-            // Iff (condition, true)
-
-            Assert.Equal(BitOps.Iff(condition, long.MinValue), condition ? long.MinValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, long.MinValue), !condition ? long.MinValue : 0);
-
-            Assert.Equal(BitOps.Iff(condition, long.MaxValue), condition ? long.MaxValue : 0);
-            Assert.Equal(BitOps.Iff(!condition, long.MaxValue), !condition ? long.MaxValue : 0);
-
-            // Iff (condition, true, false)
-
-            Assert.Equal(BitOps.Iff(condition, long.MinValue, long.MaxValue), condition ? long.MinValue : long.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, long.MinValue, long.MaxValue), !condition ? long.MinValue : long.MaxValue);
-
-            Assert.Equal(BitOps.Iff(condition, -123, long.MaxValue), condition ? -123 : long.MaxValue);
-            Assert.Equal(BitOps.Iff(!condition, -123, long.MaxValue), !condition ? -123 : long.MaxValue);
-
-            // Any
-
-            Assert.Equal(1, BitOps.NonZero(long.MinValue));
-            Assert.Equal(1, BitOps.NonZero(long.MinValue + 1));
-            Assert.Equal(0, BitOps.NonZero(0L));
-            Assert.Equal(1, BitOps.NonZero(long.MaxValue - 1));
-            Assert.Equal(1, BitOps.NonZero(long.MaxValue));
-
-            // NotAny
-
-            Assert.Equal(0, BitOps.IsZero(long.MinValue));
-            Assert.Equal(0, BitOps.IsZero(long.MinValue + 1));
-            Assert.Equal(1, BitOps.IsZero(0L));
-            Assert.Equal(0, BitOps.IsZero(long.MaxValue - 1));
-            Assert.Equal(0, BitOps.IsZero(long.MaxValue));
         }
 
         #endregion

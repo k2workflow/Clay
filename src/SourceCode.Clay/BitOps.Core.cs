@@ -13,7 +13,7 @@ namespace SourceCode.Clay
 {
     partial class BitOps
     {
-        // Magic C# optimization that directly wraps the data section of the dll (a bit like string constants)
+        // C# no-alloc optimization that directly wraps the data section of the dll (similar to string constants)
         // https://github.com/dotnet/roslyn/pull/24621
 
         private static ReadOnlySpan<byte> s_TrailingZeroCountDeBruijn => new byte[32]
@@ -31,8 +31,6 @@ namespace SourceCode.Clay
             08, 12, 20, 28, 15, 17, 24, 07,
             19, 27, 23, 06, 26, 05, 04, 31
         };
-
-        #region TrailingZeroCount
 
         /// <summary>
         /// Count the number of trailing zero bits in an integer value.
@@ -59,14 +57,16 @@ namespace SourceCode.Clay
 
             // Software fallback has behavior 0->0, so special-case to match intrinsic path 0->32
             if (value == 0)
+            {
                 return 32;
+            }
 
             // uint.MaxValue >> 27 is always in range [0 - 31] so we use Unsafe.AddByteOffset to avoid bounds check
             return Unsafe.AddByteOffset(
                 // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_0111_1100_1011_0101_0011_0001u
                 ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
-                // uint|long -> IntPtr cast on 32-bit platforms does expensive overflow checks not needed here
-                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27)); // Multiple casts generate optimal MSIL
+                // long -> IntPtr cast on 32-bit platforms is expensive - it does overflow checks not needed here
+                (IntPtr)(int)(((uint)((value & -value) * 0x077CB531u)) >> 27)); // shift over long also expensive on 32-bit
         }
 
         /// <summary>
@@ -102,10 +102,6 @@ namespace SourceCode.Clay
             return TrailingZeroCount(lo);
         }
 
-        #endregion
-
-        #region LeadingZeroCount
-
         /// <summary>
         /// Count the number of leading zero bits in a mask.
         /// Similar in behavior to the x86 instruction LZCNT.
@@ -122,9 +118,11 @@ namespace SourceCode.Clay
 
             // Software fallback has behavior 0->0, so special-case to match intrinsic path 0->32
             if (value == 0)
+            {
                 return 32;
+            }
 
-            return (int)(31u - Log2(value));
+            return 31 - Log2(value);
         }
 
         /// <summary>
@@ -144,17 +142,43 @@ namespace SourceCode.Clay
             uint hi = (uint)(value >> 32);
 
             if (hi == 0)
+            {
                 return 32 + LeadingZeroCount((uint)value);
+            }
 
             return LeadingZeroCount(hi);
         }
 
-        #endregion
+        /// <summary>
+        /// Returns the integer (floor) log of the specified value, base 2.
+        /// Note that by convention, input value 0 returns 0 since Log(0) is undefined.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Log2(uint value)
+        {
+            // value    lzcnt   actual  expected
+            // ..0000   32      0        0 (by convention, guard clause)
+            // ..0001   31      31-31    0
+            // ..0010   30      31-30    1
+            // 0010..    2      31-2    29
+            // 0100..    1      31-1    30
+            // 1000..    0      31-0    31
+            //if (Lzcnt.IsSupported)
+            //{
+            //    // Enforce conventional contract 0->0 (since Log(0) is undefined)
+            //    if (value == 0)
+            //    {
+            //        return 0;
+            //    }
 
-        #region Log2
+            //    // Note that LZCNT contract specifies 0->32
+            //    return 31 - (int)Lzcnt.LeadingZeroCount(value);
+            //}
 
-        // TODO: May belong in System.Math, in which case may need to name it Log2Int or Log2Floor
-        // to distinguish it from overloads accepting float/double
+            // Already has contract 0->0, without branching
+            return Log2SoftwareFallback(value);
+        }
 
         /// <summary>
         /// Returns the integer (floor) log of the specified value, base 2.
@@ -162,8 +186,10 @@ namespace SourceCode.Clay
         /// Does not incur branching.
         /// </summary>
         /// <param name="value">The value.</param>
-        public static int Log2(uint value)
+        private static int Log2SoftwareFallback(uint value)
         {
+            // No AggressiveInlining due to large method size
+
             value |= value >> 01;
             value |= value >> 02;
             value |= value >> 04;
@@ -174,7 +200,7 @@ namespace SourceCode.Clay
             return Unsafe.AddByteOffset(
                 // Using deBruijn sequence, k=2, n=5 (2^5=32) : 0b_0000_0111_1100_0100_1010_1100_1101_1101u
                 ref MemoryMarshal.GetReference(s_Log2DeBruijn),
-                // long -> IntPtr cast on 32-bit platforms is expensive - it does overflow checks that are not needed here
+                // long -> IntPtr cast on 32-bit platforms is expensive - it does overflow checks not needed here
                 (IntPtr)(int)((value * 0x07C4ACDDu) >> 27));
         }
 
@@ -186,120 +212,27 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Log2(ulong value)
         {
-            uint hi = (uint)(value >> 32);
-
-            if (hi != 0)
-            {
-                return 32 + Log2(hi);
-            }
-
-            return Log2((uint)value);
-        }
-
-        #endregion
-
-        #region PopCount
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(uint value)
-        {
-            //if (Popcnt.IsSupported)
+            //if (Lzcnt.X64.IsSupported)
             //{
-            //    return (int)Popcnt.PopCount(value);
-            //}
-
-            return SoftwareFallback(value);
-
-            int SoftwareFallback(uint val)
-            {
-                val = val - ((val >> 1) & 0x_55555555u);
-                val = (val & 0x_33333333u) + ((val >> 2) & 0x_33333333u);
-                val = (val + (val >> 4)) & 0x_0F0F0F0Fu;
-                val = val * 0x_01010101u;
-                val = val >> 24;
-
-                return (int)val;
-            }
-        }
-
-        /// <summary>
-        /// Returns the population count (number of bits set) of a mask.
-        /// Similar in behavior to the x86 instruction POPCNT.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int PopCount(ulong value)
-        {
-            //if (Popcnt.IsSupported)
-            //{
-            //    if (Popcnt.X64.IsSupported)
+            //    // Enforce conventional contract 0->0 (since Log(0) is undefined)
+            //    if (value == 0)
             //    {
-            //        return (int)Popcnt.X64.PopCount(value);
+            //        return 0;
             //    }
 
-            //    return (int)(Popcnt.PopCount((uint)value)
-            //        + Popcnt.PopCount((uint)(value >> 32)));
+            //    // Note that LZCNT contract specifies 0->64
+            //    return 63 - (int)Lzcnt.X64.LeadingZeroCount(value);
             //}
 
-            //return PopCount((uint)value)
-            //    + PopCount((uint)(value >> 32));
+            uint hi = (uint)(value >> 32);
 
-            return SoftwareFallback(value);
-
-            int SoftwareFallback(ulong val)
+            if (hi == 0)
             {
-                val = val - ((val >> 1) & 0x_55555555_55555555ul);
-                val = (val & 0x_33333333_33333333ul) + ((val >> 2) & 0x_33333333_33333333ul);
-                val = (val + (val >> 4)) & 0x_0F0F0F0F_0F0F0F0Ful;
-                val = val * 0x_01010101_01010101ul;
-                val = val >> 56;
-
-                return (int)val;
+                return Log2((uint)value);
             }
+
+            return 32 + Log2(hi);
         }
-
-        #endregion
-
-        #region RotateRight
-
-        // Will compile to instrinsics if pattern complies (uint/ulong):
-        // https://github.com/dotnet/coreclr/pull/1830
-
-        /// <summary>
-        /// Rotates the specified value right by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROR.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint RotateRight(uint value, int offset)
-            => (value >> offset) | (value << (32 - offset));
-
-        /// <summary>
-        /// Rotates the specified value right by the specified number of bits.
-        /// Similar in behavior to the x86 instruction ROR.
-        /// </summary>
-        /// <param name="value">The value to rotate.</param>
-        /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        /// <returns>The rotated value.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int RotateRight(int value, int offset)
-            => unchecked((int)RotateRight((uint)value, offset));
-
-        #endregion
-
-        #region RotateLeft
-
-        // Will compile to instrinsics if pattern complies (uint/ulong):
-        // https://github.com/dotnet/coreclr/pull/1830
 
         /// <summary>
         /// Rotates the specified value left by the specified number of bits.
@@ -319,22 +252,100 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="value">The value to rotate.</param>
         /// <param name="offset">The number of bits to rotate by.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <returns>The rotated value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int RotateLeft(int value, int offset)
-            => unchecked((int)RotateLeft((uint)value, offset));
+        public static ulong RotateLeft(ulong value, int offset)
+            => (value << offset) | (value >> (64 - offset));
 
-        #endregion
+        /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint RotateRight(uint value, int offset)
+            => (value >> offset) | (value << (32 - offset));
 
-        #region ExtractBit
+        /// <summary>
+        /// Rotates the specified value right by the specified number of bits.
+        /// Similar in behavior to the x86 instruction ROR.
+        /// </summary>
+        /// <param name="value">The value to rotate.</param>
+        /// <param name="offset">The number of bits to rotate by.
+        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
+        /// <returns>The rotated value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ulong RotateRight(ulong value, int offset)
+            => (value >> offset) | (value << (64 - offset));
 
-        // For bitlength N, it is conventional to treat N as congruent modulo-N
-        // under the shift operation.
-        // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
-        // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. So we use & not %.
-        // Software & hardware intrinsics already do this for uint/ulong, but
-        // we need to emulate for byte/ushort.
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(uint value)
+        {
+            //if (Popcnt.IsSupported)
+            //{
+            //    return (int)Popcnt.PopCount(value);
+            //}
+
+            return SoftwareFallback(value);
+
+            int SoftwareFallback(uint v)
+            {
+                const uint c1 = 0x_55555555u;
+                const uint c2 = 0x_33333333u;
+                const uint c3 = 0x_0F0F0F0Fu;
+                const uint c4 = 0x_01010101u;
+
+                v = v - ((v >> 1) & c1);
+                v = (v & c2) + ((v >> 2) & c2);
+                v = (((v + (v >> 4)) & c3) * c4) >> 24;
+
+                return (int)v;
+            }
+        }
+
+        /// <summary>
+        /// Returns the population count (number of bits set) of a mask.
+        /// Similar in behavior to the x86 instruction POPCNT.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int PopCount(ulong value)
+        {
+            //if (Popcnt.X64.IsSupported)
+            //{
+            //    return (int)Popcnt.X64.PopCount(value);
+            //}
+
+#if BIT32
+            return PopCount((uint)value) // lo
+                + PopCount((uint)(value >> 32)); // hi
+#else
+            return SoftwareFallback(value);
+
+            int SoftwareFallback(ulong v)
+            {
+                const ulong c1 = 0x_55555555_55555555ul;
+                const ulong c2 = 0x_33333333_33333333ul;
+                const ulong c3 = 0x_0F0F0F0F_0F0F0F0Ful;
+                const ulong c4 = 0x_01010101_01010101ul;
+
+                v = v - ((v >> 1) & c1);
+                v = (v & c2) + ((v >> 2) & c2);
+                v = (((v + (v >> 4)) & c3) * c4) >> 56;
+
+                return (int)v;
+            }
+#endif
+        }
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -345,12 +356,11 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(byte value, int bitOffset)
-        {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
-
-            return (value & mask) != 0;
-        }
+            // For bit-length N, it is conventional to treat N as congruent modulo-N under the shift operation.
+            // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
+            // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. 
+            // So we use & not %.
+            => ExtractBit((uint)value, bitOffset & 7);
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -361,12 +371,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(uint value, int bitOffset)
-        {
-            // TODO: Not sure if there is a suitable (exposed) intrinsic for this
-            uint mask = 1U << bitOffset;
-
-            return (value & mask) != 0;
-        }
+            => (value & (1u << bitOffset)) != 0;
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -377,11 +382,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(int value, int bitOffset)
-            => ExtractBit((uint)value, bitOffset);
-
-        #endregion
-
-        #region ClearBit
+            => (value & (1 << bitOffset)) != 0;
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -391,15 +392,32 @@ namespace SourceCode.Clay
         /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref byte value, int bitOffset) // TODO: offset should maybe be uint
+        public static bool ClearBit(ref byte value, int bitOffset)
         {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
+            uint mask = 1u << (bitOffset & 7);
 
-            uint btr = value & mask;
+            bool btr = (value & mask) != 0;
             value = (byte)(value & ~mask);
 
-            return btr != 0;
+            return btr;
+        }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTR.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ClearBit(ref uint value, int bitOffset)
+        {
+            uint mask = 1u << bitOffset;
+
+            bool btr = (value & mask) != 0;
+            value &= ~mask;
+
+            return btr;
         }
 
         /// <summary>
@@ -414,11 +432,21 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int btr = value & mask;
-            value = value & ~mask;
+            bool btr = (value & mask) != 0;
+            value &= ~mask;
 
-            return btr != 0;
+            return btr;
         }
+
+        /// <summary>
+        /// Clears the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to clear.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte ClearBit(byte value, int bitOffset)
+            => (byte)ClearBit((uint)value, bitOffset & 7);
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -428,12 +456,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ClearBit(uint value, int bitOffset)
-        {
-            // TODO: Not sure if there is a suitable (exposed) intrinsic for this
-            uint mask = 1U << bitOffset;
-
-            return value & ~mask;
-        }
+            => value & ~(1u << bitOffset);
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -443,11 +466,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ClearBit(int value, int bitOffset)
-            => unchecked((int)ClearBit((uint)value, bitOffset));
-
-        #endregion
-
-        #region InsertBit
+            => value & ~(1 << bitOffset);
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -459,13 +478,30 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsertBit(ref byte value, int bitOffset) // TODO: offset should maybe be uint
         {
-            int shft = bitOffset & 7;
-            uint mask = 1U << shft;
+            uint mask = 1u << (bitOffset & 7);
 
-            uint bts = value & mask;
+            bool bts = (value & mask) != 0;
             value = (byte)(value | mask);
 
-            return bts != 0;
+            return bts;
+        }
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instruction BTS.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsertBit(ref uint value, int bitOffset)
+        {
+            uint mask = 1u << bitOffset;
+
+            bool bts = (value & mask) != 0;
+            value |= mask;
+
+            return bts;
         }
 
         /// <summary>
@@ -480,25 +516,10 @@ namespace SourceCode.Clay
         {
             int mask = 1 << bitOffset;
 
-            int bts = value & mask;
-            value = value | mask;
+            bool bts = (value & mask) != 0;
+            value |= mask;
 
-            return bts != 0;
-        }
-
-        /// <summary>
-        /// Sets the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint InsertBit(uint value, int bitOffset)
-        {
-            // TODO: Not sure if there is a suitable (exposed) intrinsic for this
-            uint mask = 1U << bitOffset;
-
-            return value | mask;
+            return bts;
         }
 
         /// <summary>
@@ -508,9 +529,27 @@ namespace SourceCode.Clay
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int InsertBit(int value, int bitOffset)
-            => unchecked((int)InsertBit((uint)value, bitOffset));
+        public static byte InsertBit(byte value, int bitOffset)
+            => (byte)InsertBit((uint)value, bitOffset & 7);
 
-        #endregion
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint InsertBit(uint value, int bitOffset)
+            => value | (1u << bitOffset);
+
+        /// <summary>
+        /// Sets the specified bit in a mask and returns the new value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int InsertBit(int value, int bitOffset)
+            => value | (1 << bitOffset);
     }
 }
