@@ -81,37 +81,6 @@ namespace SourceCode.Clay.Buffers.Bench
 
         #endregion
 
-        #region Actual
-
-        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static ulong Actual()
-        {
-            ulong sum = 0;
-
-            for (int i = 0; i < _iterations; i++)
-            {
-                byte tf = (byte)(i % 255 + 1);
-                s_true = Unsafe.As<byte, bool>(ref tf);
-
-                for (int n = 0; n <= N; n++)
-                {
-                    sum += BitOps.AsByte(s_true);
-                    sum++;
-                    sum -= BitOps.AsByte(s_false);
-                    sum--;
-
-                    sum += BitOps.Iff(s_true, 4u);
-                    sum -= BitOps.Iff(s_false, 3u);
-                    sum += BitOps.Iff(s_true, 3u, 2u);
-                    sum -= 7;
-                }
-            }
-
-            return sum;
-        }
-
-        #endregion
-
         #region UnsafeCode
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
