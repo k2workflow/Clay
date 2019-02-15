@@ -249,7 +249,7 @@ namespace SourceCode.Clay.Javascript.Ast
         {
             if (!@object.TryGetValue("body", out JToken bodyToken) || !(bodyToken is JArray bodyArray))
                 throw new InvalidOperationException("Block must have body property of type array.");
-            
+
             if (existingValue is null) existingValue = new JSBlockStatement();
 
             ReadArray(bodyArray, existingValue.Body, serializer);
@@ -686,7 +686,7 @@ namespace SourceCode.Clay.Javascript.Ast
 
             return existingValue;
         }
-        
+
         protected virtual JSPropertyKind ConvertPropertyKind(string @operator)
         {
             switch (@operator)
@@ -735,7 +735,7 @@ namespace SourceCode.Clay.Javascript.Ast
                 throw new InvalidOperationException("SwitchCase must have consequent property of type array.");
 
             var test = ReadJson(testToken, existingValue?.Test, serializer);
-            
+
             if (!(test is null) && !(test is JSExpression))
                 throw new InvalidOperationException("SwitchCase must have test property of type expression or null.");
 

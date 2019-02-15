@@ -148,25 +148,25 @@ namespace SourceCode.Clay.Buffers
 #else
             Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
 #endif
-            Span<byte> octets = MemoryMarshal.Cast<uint, byte>(span);
-            octets[position] = value;
+                    Span<byte> octets = MemoryMarshal.Cast<uint, byte>(span);
+                    octets[position] = value;
 
-            if (position == 15)
-            {
-                if (index == 15)
-                {
-                    _acc0 = s_seed + Prime1 + Prime2;
-                    _acc1 = s_seed + Prime2;
-                    _acc2 = s_seed;
-                    _acc3 = s_seed - Prime1;
-                }
+                    if (position == 15)
+                    {
+                        if (index == 15)
+                        {
+                            _acc0 = s_seed + Prime1 + Prime2;
+                            _acc1 = s_seed + Prime2;
+                            _acc2 = s_seed;
+                            _acc3 = s_seed - Prime1;
+                        }
 
-                _acc0 = Round(_acc0, _queue0);
-                _acc1 = Round(_acc1, _queue1);
-                _acc2 = Round(_acc2, _queue2);
-                _acc3 = Round(_acc3, _queue3);
-                _queue0 = _queue1 = _queue2 = _queue3 = 0;
-            }
+                        _acc0 = Round(_acc0, _queue0);
+                        _acc1 = Round(_acc1, _queue1);
+                        _acc2 = Round(_acc2, _queue2);
+                        _acc3 = Round(_acc3, _queue3);
+                        _queue0 = _queue1 = _queue2 = _queue3 = 0;
+                    }
 #if NETSTANDARD2_0
                 }
             }
@@ -191,25 +191,25 @@ namespace SourceCode.Clay.Buffers
 #else
             Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
 #endif
-            Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(span)
-                .Slice(0, (int)(length % 16));
-            Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
+                    Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(span)
+                        .Slice(0, (int)(length % 16));
+                    Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
 
-            while (ints.Length > 0)
-            {
-                acc = RemainderRound(acc, ints[0]);
-                ints = ints.Slice(1);
-                remainder = remainder.Slice(sizeof(uint));
-            }
+                    while (ints.Length > 0)
+                    {
+                        acc = RemainderRound(acc, ints[0]);
+                        ints = ints.Slice(1);
+                        remainder = remainder.Slice(sizeof(uint));
+                    }
 
-            while (remainder.Length > 0)
-            {
-                acc = RemainderRound(acc, remainder[0]);
-                remainder = remainder.Slice(1);
-            }
+                    while (remainder.Length > 0)
+                    {
+                        acc = RemainderRound(acc, remainder[0]);
+                        remainder = remainder.Slice(1);
+                    }
 
-            acc = MixFinal(acc);
-            return (int)acc;
+                    acc = MixFinal(acc);
+                    return (int)acc;
 #if NETSTANDARD2_0
                 }
             }

@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace SourceCode.Clay.Collections.Generic
 {
@@ -146,7 +145,7 @@ namespace SourceCode.Clay.Collections.Generic
 
             // Local functions
 
-            TItem ValueExtractor(TItem item) => item; 
+            TItem ValueExtractor(TItem item) => item;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
 {
     public sealed class LinkedDataTestOptions : LinkedDataOptions
     {
-        private readonly Dictionary<string, JToken> _contexts = 
+        private readonly Dictionary<string, JToken> _contexts =
             new Dictionary<string, JToken>(StringComparer.OrdinalIgnoreCase);
 
         public LinkedDataTestOptions(string @base = null)
@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
         {
         }
 
-        private LinkedDataTestOptions(string @base = null, LinkedDataContext expandContext = default) 
+        private LinkedDataTestOptions(string @base = null, LinkedDataContext expandContext = default)
             : base(@base, expandContext)
         {
         }

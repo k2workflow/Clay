@@ -1360,7 +1360,7 @@ namespace SourceCode.Clay.Javascript.Ast
                     ["type"] = "Literal",
                     ["value"] = 1
                 }
-            }; 
+            };
 
             var unary = Read<JSUnaryExpression>(json);
             Assert.Equal(1, Assert.IsType<long>(Assert.IsType<JSLiteral>(unary.Expression).Value));

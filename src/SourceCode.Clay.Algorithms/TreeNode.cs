@@ -174,7 +174,7 @@ namespace SourceCode.Clay.Algorithms
 
                 hashCode = hashCode * -1521134295 + Hierarchy.Count;
             }
-            
+
             return hashCode;
         }
 
@@ -184,7 +184,7 @@ namespace SourceCode.Clay.Algorithms
         /// <param name="node1">The first tree node to compare.</param>
         /// <param name="node2">The second tree node to compare.</param>
         /// <returns>A value indicating whether the tree nodes are equal.</returns>
-        public static bool operator ==(TreeNode<T> node1, TreeNode<T> node2) 
+        public static bool operator ==(TreeNode<T> node1, TreeNode<T> node2)
             => node1.Equals(node2);
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace SourceCode.Clay.Algorithms
         /// <param name="node1">The first tree node to compare.</param>
         /// <param name="node2">The second tree node to compare.</param>
         /// <returns>A value indicating whether the tree nodes are not equal.</returns>
-        public static bool operator !=(TreeNode<T> node1, TreeNode<T> node2) 
+        public static bool operator !=(TreeNode<T> node1, TreeNode<T> node2)
             => !(node1 == node2);
     }
 }

@@ -5,14 +5,12 @@
 
 #endregion
 
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SourceCode.Clay.Json.LinkedData;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Tests.LinkedData
@@ -42,7 +40,7 @@ namespace SourceCode.Clay.Json.Tests.LinkedData
 
             public override string ToString() => Identifier;
         }
-        
+
         [Theory(DisplayName = nameof(LinkedDataTransformation_Expand))]
         [MemberData(nameof(Expand))]
         public static async Task LinkedDataTransformation_Expand(LinkedDataTestCase testCase)

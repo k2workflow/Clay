@@ -91,7 +91,7 @@ namespace SourceCode.Clay.Algorithms
         /// <param name="edge1">The first edge to compare.</param>
         /// <param name="edge2">The second edge to compare.</param>
         /// <returns>A value indicating whether the edges are equal.</returns>
-        public static bool operator ==(Edge<T> edge1, Edge<T> edge2) 
+        public static bool operator ==(Edge<T> edge1, Edge<T> edge2)
             => edge1.Equals(edge2);
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SourceCode.Clay.Algorithms
         /// <param name="edge1">The first edge to compare.</param>
         /// <param name="edge2">The second edge to compare.</param>
         /// <returns>A value indicating whether the edges are not equal.</returns>
-        public static bool operator !=(Edge<T> edge1, Edge<T> edge2) 
+        public static bool operator !=(Edge<T> edge1, Edge<T> edge2)
             => !(edge1 == edge2);
     }
 }

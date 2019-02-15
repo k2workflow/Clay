@@ -8,12 +8,12 @@ namespace SourceCode.Clay.Javascript.Ast
     {
         public bool Minify { get; set; }
 
-        public JSWriter(TextWriter writer) 
+        public JSWriter(TextWriter writer)
             : base(writer)
         {
         }
 
-        public JSWriter(TextWriter writer, string tabString) 
+        public JSWriter(TextWriter writer, string tabString)
             : base(writer, tabString)
         {
         }
