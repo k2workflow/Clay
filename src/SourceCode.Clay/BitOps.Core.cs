@@ -718,12 +718,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ComplementBit(byte value, int bitOffset)
-        {
-            uint mask = 1u << (bitOffset & 7);
-
-            mask = ~(~mask ^ value);
-            return (byte)mask;
-        }
+            => (byte)~(~(1u << (bitOffset & 7)) ^ value);
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
@@ -733,12 +728,7 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ComplementBit(uint value, int bitOffset)
-        {
-            uint mask = 1u << bitOffset;
-
-            mask = ~(~mask ^ value);
-            return mask;
-        }
+            => ~(~(1u << bitOffset) ^ value);
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
@@ -748,6 +738,6 @@ namespace SourceCode.Clay
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ComplementBit(int value, int bitOffset)
-            => unchecked((int)ComplementBit((uint)value, bitOffset));
+            => ~(~(1 << bitOffset) ^ value);
     }
 }
