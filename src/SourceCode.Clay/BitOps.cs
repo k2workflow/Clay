@@ -97,9 +97,9 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort WriteBit(ushort value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 15;
-            uint onn = on ? 1u << shft : 0;
-            return (ushort)((value & ~(1u << shft)) | onn);
+            uint mask = 1u << (bitOffset & 15);
+            uint onn = on ? mask : 0; // TODO: Lose the branch
+            return (ushort)((value & ~mask) | onn);
         }
 
         /// <summary>
@@ -127,8 +127,9 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong WriteBit(ulong value, int bitOffset, bool on)
         {
-            ulong onn = on ? 1ul << bitOffset : 0;
-            return (value & ~(1ul << bitOffset)) | onn;
+            ulong mask = 1ul << bitOffset;
+            ulong onn = on ? mask : 0; // TODO: Lose the branch
+            return (value & ~mask) | onn;
         }
 
         /// <summary>
@@ -159,9 +160,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref sbyte value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 7;
-            int mask = 1 << shft;
-            int onn = on ? 1 << shft : 0;
+            int mask = 1 << (bitOffset & 7);
+            int onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (sbyte)((value & ~mask) | onn);
@@ -180,9 +180,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref ushort value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 15;
-            uint mask = 1u << shft;
-            uint onn = on ? 1u << shft : 0;
+            uint mask = 1u << (bitOffset & 15);
+            uint onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (ushort)((value & ~mask) | onn);
@@ -201,9 +200,8 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref short value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 15;
-            int mask = 1 << shft;
-            int onn = on ? 1 << shft : 0;
+            int mask = 1 << (bitOffset & 15);
+            int onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (short)((value & ~mask) | onn);
@@ -223,7 +221,7 @@ namespace SourceCode.Clay
         public static bool WriteBit(ref ulong value, int bitOffset, bool on)
         {
             ulong mask = 1ul << bitOffset;
-            ulong onn = on ? 1ul << bitOffset : 0;
+            ulong onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (value & ~mask) | onn;
@@ -243,7 +241,7 @@ namespace SourceCode.Clay
         public static bool WriteBit(ref long value, int bitOffset, bool on)
         {
             long mask = 1L << bitOffset;
-            long onn = on ? 1L << bitOffset : 0;
+            long onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (value & ~mask) | onn;

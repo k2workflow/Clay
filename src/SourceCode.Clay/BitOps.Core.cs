@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -122,7 +123,7 @@ namespace SourceCode.Clay
                 return 32;
             }
 
-            return 31 - Log2(value);
+            return 31 - Log2SoftwareFallback(value);
         }
 
         /// <summary>
@@ -395,12 +396,17 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool WriteBit(ref byte value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 7;
-            uint mask = 1u << shft;
-            uint onn = on ? 1u << shft : 0;
-
+            uint mask = 1u << (bitOffset & 7);
             bool btw = (value & mask) != 0;
-            value = (byte)((value & ~mask) | onn);
+
+            //uint onn = on ? mask : 0;
+            //value = (byte)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                value = (byte)(value | mask);
+            else
+                value = (byte)(value & ~mask);
 
             return btw;
         }
@@ -417,10 +423,20 @@ namespace SourceCode.Clay
         public static bool WriteBit(ref uint value, int bitOffset, bool on)
         {
             uint mask = 1u << bitOffset;
-            uint onn = on ? 1u << bitOffset : 0;
-
             bool btw = (value & mask) != 0;
-            value = (value & ~mask) | onn;
+
+            //uint onn = on ? mask : 0;
+            //value = (value & ~mask) | onn;
+
+            //uint onn = Unsafe.As<bool, byte>(ref on);
+            //Debug.Assert(onn == 0 || onn == 1);
+            //onn <<= bitOffset;
+
+            // TODO: Lose the branch
+            if (on)
+                value = value | mask;
+            else
+                value = value & ~mask;
 
             return btw;
         }
@@ -437,10 +453,16 @@ namespace SourceCode.Clay
         public static bool WriteBit(ref int value, int bitOffset, bool on)
         {
             int mask = 1 << bitOffset;
-            int onn = on ? 1 << bitOffset : 0;
-
             bool btw = (value & mask) != 0;
-            value = (value & ~mask) | onn;
+
+            // int onn = on ? mask : 0;
+            // value = (value & ~mask) | onn;
+
+            // TODO: Lose the branch
+            if (on)
+                value = value | mask;
+            else
+                value = value & ~mask;
 
             return btw;
         }
@@ -456,9 +478,16 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte WriteBit(byte value, int bitOffset, bool on)
         {
-            int shft = bitOffset & 7;
-            uint onn = on ? 1u << shft : 0;
-            return (byte)((value & ~(1u << shft)) | onn);
+            uint mask = 1u << (bitOffset & 7);
+
+            // uint onn = on ? mask : 0;
+            // return (byte)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                return (byte)(value | mask);
+
+            return (byte)(value & ~mask);
         }
 
         /// <summary>
@@ -472,8 +501,16 @@ namespace SourceCode.Clay
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint WriteBit(uint value, int bitOffset, bool on)
         {
-            uint onn = on ? 1u << bitOffset : 0;
-            return (value & ~(1u << bitOffset)) | onn;
+            uint mask = 1u << bitOffset;
+
+            // uint onn = on ? mask : 0;
+            // return (value & ~mask) | onn;
+
+            // TODO: Lose the branch
+            if (on)
+                return value | mask;
+
+            return value & ~mask;
         }
 
         /// <summary>
@@ -499,8 +536,8 @@ namespace SourceCode.Clay
         public static bool ClearBit(ref byte value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 7);
-
             bool btr = (value & mask) != 0;
+
             value = (byte)(value & ~mask);
 
             return btr;
@@ -517,8 +554,8 @@ namespace SourceCode.Clay
         public static bool ClearBit(ref uint value, int bitOffset)
         {
             uint mask = 1u << bitOffset;
-
             bool btr = (value & mask) != 0;
+
             value &= ~mask;
 
             return btr;
@@ -535,8 +572,8 @@ namespace SourceCode.Clay
         public static bool ClearBit(ref int value, int bitOffset)
         {
             int mask = 1 << bitOffset;
-
             bool btr = (value & mask) != 0;
+
             value &= ~mask;
 
             return btr;
@@ -583,8 +620,8 @@ namespace SourceCode.Clay
         public static bool InsertBit(ref byte value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 7);
-
             bool bts = (value & mask) != 0;
+
             value = (byte)(value | mask);
 
             return bts;
@@ -601,8 +638,8 @@ namespace SourceCode.Clay
         public static bool InsertBit(ref uint value, int bitOffset)
         {
             uint mask = 1u << bitOffset;
-
             bool bts = (value & mask) != 0;
+
             value |= mask;
 
             return bts;
@@ -619,8 +656,8 @@ namespace SourceCode.Clay
         public static bool InsertBit(ref int value, int bitOffset)
         {
             int mask = 1 << bitOffset;
-
             bool bts = (value & mask) != 0;
+
             value |= mask;
 
             return bts;
@@ -667,8 +704,8 @@ namespace SourceCode.Clay
         public static bool ComplementBit(ref byte value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 7);
-
             bool btc = (value & mask) != 0;
+
             value = (byte)~(~mask ^ value);
 
             return btc;
@@ -685,8 +722,8 @@ namespace SourceCode.Clay
         public static bool ComplementBit(ref uint value, int bitOffset)
         {
             uint mask = 1u << bitOffset;
-
             bool btc = (value & mask) != 0;
+
             value = ~(~mask ^ value);
 
             return btc;
@@ -703,8 +740,8 @@ namespace SourceCode.Clay
         public static bool ComplementBit(ref int value, int bitOffset)
         {
             int mask = 1 << bitOffset;
-
             bool btc = (value & mask) != 0;
+
             value = ~(~mask ^ value);
 
             return btc;
