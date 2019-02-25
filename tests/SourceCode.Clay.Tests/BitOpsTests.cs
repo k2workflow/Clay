@@ -7,7 +7,6 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
@@ -126,30 +125,6 @@ namespace SourceCode.Clay.Tests
             0, 1, 10, 100, 1000, 10000,
             100000, 1000000, 10000000, 100000000, 1000000000, 0
         };
-
-        [Fact]
-        public static void Foo()
-        {
-            for (uint value = 0; value <= uint.MaxValue; value++)
-            {
-                uint log10ceil = Unsafe.AddByteOffset(
-                    ref MemoryMarshal.GetReference(s_Log10Ceiling32),
-                    (IntPtr)BitOps.LeadingZeroCount(value));
-
-                uint pow10;
-                unsafe
-                {
-                    fixed (uint* u = s_Pow10Ceiling32)
-                    {
-                        pow10 = u[log10ceil];
-                    }
-                }
-
-                //exp10ceil = s_Exp10Ceiling32[log10ceil];
-                int d = (int)(value - pow10 >> 31);
-                var result = log10ceil - d;
-            }
-        }
 
         [Theory]
         [InlineData(0b000, 0, false)]
