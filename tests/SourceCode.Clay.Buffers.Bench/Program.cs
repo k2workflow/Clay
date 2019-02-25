@@ -21,7 +21,12 @@ namespace SourceCode.Clay.Buffers.Bench
             //Summary summary = BenchmarkRunner.Run<TrailingZeroBench>();
             //Summary summary = BenchmarkRunner.Run<LocateFirstBench>();
             //Summary summary = BenchmarkRunner.Run<PopCountBench>();
-            Summary summary = BenchmarkRunner.Run<Log2Bench>();
+            //Summary summary = BenchmarkRunner.Run<Log2Bench>();
+            //Summary summary = BenchmarkRunner.Run<DigitBench>();
+            Summary summary = BenchmarkRunner.Run<TrimBench>();
+            //new TrimBench().SingleViaNone();
+            //new TrimBench().SingleViaIn();
+            //new TrimBench().SingleViaRef();
             //Summary summary = BenchmarkRunner.Run<MinBench>();
             //Summary summary = BenchmarkRunner.Run<SpanBench>();
 

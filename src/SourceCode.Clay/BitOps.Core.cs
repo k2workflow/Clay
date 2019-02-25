@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -12,6 +11,14 @@ using System.Runtime.InteropServices;
 
 namespace SourceCode.Clay
 {
+    // This code is a sandbox proxy (logical fork) for the original sources here:
+    // https://github.com/dotnet/coreclr/blob/master/src/System.Private.CoreLib/shared/System/BitOps.cs
+    // It is being used to unit-test, experiment, and benchmark PRs in that codebase.
+    // Specifically, it eliminates any H/W intrinsics in order to unit the software fallbacks,
+    // so it is GUARANTEED to be SLOWER than the original.
+    // The api surface is not intended to be stable, hence the ALPHA version designation.
+    // Use at your own risk.
+
     partial class BitOps
     {
         // C# no-alloc optimization that directly wraps the data section of the dll (similar to string constants)
@@ -359,7 +366,7 @@ namespace SourceCode.Clay
         public static bool ExtractBit(byte value, int bitOffset)
             // For bit-length N, it is conventional to treat N as congruent modulo-N under the shift operation.
             // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
-            // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18. 
+            // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18.
             // So we use & not %.
             => ExtractBit((uint)value, bitOffset & 7);
 

@@ -5,7 +5,9 @@
 
 #endregion
 
+using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
@@ -25,7 +27,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(0b1000_0000u, BitOps.RotateRight((byte)0b0010_0000u, 6));
 
             // Leading/TrailingZeros: Count the number of leading/trailing zero bits in a mask.
-            Assert.Equal(2, BitOps.LeadingZeroCount((byte)0b0011_1000));
+            Assert.Equal(2, BitOps.LeadingZeroCount(0b0011_1000));
             Assert.Equal(5, BitOps.TrailingZeroCount(0b1110_0000));
 
             // ExtractBit: Reads whether the specified bit in a mask is set.
@@ -108,6 +110,45 @@ namespace SourceCode.Clay.Tests
 
             actual = BitOps.ExtractBit(n, offset - 8 * 2);
             Assert.Equal(expected, actual);
+        }
+
+        private static ReadOnlySpan<byte> s_Log10Ceiling32 => new byte[33]
+        {
+            11, 10, 10, 09, 09, 09, 08, 08,
+            08, 07, 07, 07, 07, 06, 06, 06,
+            05, 05, 05, 04, 04, 04, 04, 03,
+            03, 03, 02, 02, 02, 01, 01, 01,
+            02
+        };
+
+        private static readonly uint[] s_Pow10Ceiling32 = new uint[12]
+        {
+            0, 1, 10, 100, 1000, 10000,
+            100000, 1000000, 10000000, 100000000, 1000000000, 0
+        };
+
+        [Fact]
+        public static void Foo()
+        {
+            for (uint value = 0; value <= uint.MaxValue; value++)
+            {
+                uint log10ceil = Unsafe.AddByteOffset(
+                    ref MemoryMarshal.GetReference(s_Log10Ceiling32),
+                    (IntPtr)BitOps.LeadingZeroCount(value));
+
+                uint pow10;
+                unsafe
+                {
+                    fixed (uint* u = s_Pow10Ceiling32)
+                    {
+                        pow10 = u[log10ceil];
+                    }
+                }
+
+                //exp10ceil = s_Exp10Ceiling32[log10ceil];
+                int d = (int)(value - pow10 >> 31);
+                var result = log10ceil - d;
+            }
         }
 
         [Theory]
