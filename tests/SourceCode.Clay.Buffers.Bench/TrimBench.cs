@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 
 namespace SourceCode.Clay.Buffers.Bench
@@ -16,17 +17,21 @@ namespace SourceCode.Clay.Buffers.Bench
     */
 
     //[MemoryDiagnoser]
+    //[RankColumn]
+    //[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
     public class TrimBench
     {
         private const int _iterations = 100000;
         private const int N = 1;
 
-        public Memory<byte> Data = new byte[]
+        public byte[] Data = new byte[]
         {
             10, 10, 10, 10, 10, 9, 10, 8,
             123, 231, 124, 241, 125, 251, 126, 162,
             9, 10, 7, 10, 8, 10, 10, 10
         };
+
+        // Passing style
 
         //[Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
         //public long SingleViaNone()
@@ -70,65 +75,152 @@ namespace SourceCode.Clay.Buffers.Bench
         //    return sum;
         //}
 
+        // Guard clauses
+
+        //[Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        //public long SingleNoGuard()
+        //{
+        //    long sum = 0;
+
+        //    Span<byte> span = Data.Span;
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += TrimNoGuard<byte>(span, Array.Empty<byte>()).Length;
+        //        sum += TrimNoGuard<byte>(span, new byte[] { 10 }).Length;
+        //        sum += TrimNoGuard<byte>(span, new byte[] { 10, 9, 8 }).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long SingleViaSwitch()
+        //{
+        //    long sum = 0;
+
+        //    Span<byte> span = Data.Span;
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += TrimViaSwitch<byte>(span, Array.Empty<byte>()).Length;
+        //        sum += TrimViaSwitch<byte>(span, new byte[] { 10 }).Length;
+        //        sum += TrimViaSwitch<byte>(span, new byte[] { 10, 9, 8 }).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long SingleViaIf()
+        //{
+        //    long sum = 0;
+
+        //    Span<byte> span = Data.Span;
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += TrimViaIf<byte>(span, Array.Empty<byte>()).Length;
+        //        sum += TrimViaIf<byte>(span, new byte[] { 10 }).Length;
+        //        sum += TrimViaIf<byte>(span, new byte[] { 10, 9, 8 }).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long SingleViaNestedIf()
+        //{
+        //    long sum = 0;
+
+        //    Span<byte> span = Data.Span;
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += TrimViaNestedIf<byte>(span, Array.Empty<byte>()).Length;
+        //        sum += TrimViaNestedIf<byte>(span, new byte[] { 10 }).Length;
+        //        sum += TrimViaNestedIf<byte>(span, new byte[] { 10, 9, 8 }).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        // Marshall
+
+        //[Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        //public long TrimRoM()
+        //{
+        //    long sum = 0;
+
+        //    var rom = new ReadOnlyMemory<byte>(Data);
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += Trim<byte>(rom, 10).Length;
+        //        sum += Trim<byte>(rom, 9).Length;
+        //        sum += Trim<byte>(rom, 8).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long TrimMemory()
+        //{
+        //    long sum = 0;
+
+        //    var mem = new Memory<byte>(Data);
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += Trim<byte>(mem, 10).Length;
+        //        sum += Trim<byte>(mem, 9).Length;
+        //        sum += Trim<byte>(mem, 8).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long TrimMemoryMarshall()
+        //{
+        //    long sum = 0;
+
+        //    var mem = new Memory<byte>(Data);
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += TrimMarshal<byte>(mem, 10).Length;
+        //        sum += TrimMarshal<byte>(mem, 9).Length;
+        //        sum += TrimMarshal<byte>(mem, 8).Length;
+        //    }
+
+        //    return sum;
+        //}
+
+
+        // IndexOfAny
+
         [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
-        public long SingleNoGuard()
+        public long ViaSequential()
         {
             long sum = 0;
 
-            Span<byte> span = Data.Span;
+            var span = new ReadOnlySpan<byte>(Data);
             for (uint n = 0; n < N; n++)
             {
-                sum += TrimNoGuard<byte>(span, Array.Empty<byte>()).Length;
-                sum += TrimNoGuard<byte>(span, new byte[] { 10 }).Length;
-                sum += TrimNoGuard<byte>(span, new byte[] { 10, 9, 8 }).Length;
+                sum += Trim(span, Array.Empty<byte>()).Length;
+                sum += Trim(span, new byte[] { 10 }).Length;
+                sum += Trim(span, new byte[] { 10, 9, 8 }).Length;
             }
 
             return sum;
         }
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public long SingleViaSwitch()
+        public long ViaIndexOfAny()
         {
             long sum = 0;
 
-            Span<byte> span = Data.Span;
+            var span = new ReadOnlySpan<byte>(Data);
             for (uint n = 0; n < N; n++)
             {
-                sum += TrimViaSwitch<byte>(span, Array.Empty<byte>()).Length;
-                sum += TrimViaSwitch<byte>(span, new byte[] { 10 }).Length;
-                sum += TrimViaSwitch<byte>(span, new byte[] { 10, 9, 8 }).Length;
-            }
-
-            return sum;
-        }
-
-        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public long SingleViaIf()
-        {
-            long sum = 0;
-
-            Span<byte> span = Data.Span;
-            for (uint n = 0; n < N; n++)
-            {
-                sum += TrimViaIf<byte>(span, Array.Empty<byte>()).Length;
-                sum += TrimViaIf<byte>(span, new byte[] { 10 }).Length;
-                sum += TrimViaIf<byte>(span, new byte[] { 10, 9, 8 }).Length;
-            }
-
-            return sum;
-        }
-
-        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public long SingleViaNestedIf()
-        {
-            long sum = 0;
-
-            Span<byte> span = Data.Span;
-            for (uint n = 0; n < N; n++)
-            {
-                sum += TrimViaNestedIf<byte>(span, Array.Empty<byte>()).Length;
-                sum += TrimViaNestedIf<byte>(span, new byte[] { 10 }).Length;
-                sum += TrimViaNestedIf<byte>(span, new byte[] { 10, 9, 8 }).Length;
+                sum += TrimIndexOfAny(span, Array.Empty<byte>()).Length;
+                sum += TrimIndexOfAny(span, new byte[] { 10 }).Length;
+                sum += TrimIndexOfAny(span, new byte[] { 10, 9, 8 }).Length;
             }
 
             return sum;
@@ -140,11 +232,11 @@ namespace SourceCode.Clay.Buffers.Bench
         /// Removes all leading and trailing occurrences of a specified element.
         /// </summary>
         /// <param name="trimElement">The specified element to look for and remove.</param>
-        public static ReadOnlySpan<T> TrimViaNone<T>(ReadOnlySpan<T> span, T trimElement)
+        public static ReadOnlySpan<T> Trim<T>(ReadOnlySpan<T> span, T trimElement)
             where T : IEquatable<T>
         {
-            int start = ClampViaNoneStart(span, trimElement);
-            int length = ClampViaNoneEnd(span, start, trimElement);
+            int start = ClampStart(span, trimElement);
+            int length = ClampEnd(span, start, trimElement);
             return span.Slice(start, length);
         }
 
@@ -152,10 +244,10 @@ namespace SourceCode.Clay.Buffers.Bench
         /// Removes all leading occurrences of a specified element.
         /// </summary>
         /// <param name="trimElement">The specified element to look for and remove.</param>
-        public static ReadOnlySpan<T> TrimViaNoneStart<T>(ReadOnlySpan<T> span, T trimElement)
+        public static ReadOnlySpan<T> TrimStart<T>(ReadOnlySpan<T> span, T trimElement)
             where T : IEquatable<T>
         {
-            int start = ClampViaNoneStart(span, trimElement);
+            int start = ClampStart(span, trimElement);
             return span.Slice(start);
         }
 
@@ -163,10 +255,65 @@ namespace SourceCode.Clay.Buffers.Bench
         /// Removes all trailing occurrences of a specified element.
         /// </summary>
         /// <param name="trimElement">The specified element to look for and remove.</param>
-        public static ReadOnlySpan<T> TrimViaNoneEnd<T>(ReadOnlySpan<T> span, T trimElement)
+        public static ReadOnlySpan<T> TrimEnd<T>(ReadOnlySpan<T> span, T trimElement)
             where T : IEquatable<T>
         {
-            int length = ClampViaNoneEnd(span, 0, trimElement);
+            int length = ClampEnd(span, 0, trimElement);
+            return span.Slice(0, length);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a set of elements specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        /// <remarks>If <paramref name="trimElements"/> is empty, the span is returned unaltered.</remarks>
+        public static ReadOnlySpan<T> Trim<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            if (trimElements.Length <= 1) // Optimize for N > 1
+            {
+                return trimElements.Length == 0 ? span : Trim(span, trimElements[0]);
+            }
+
+            int start = ClampStart(span, trimElements);
+            int length = ClampEnd(span, start, trimElements);
+            return span.Slice(start, length);
+        }
+
+        /// <summary>
+        /// Removes all leading occurrences of a set of elements specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        /// <remarks>If <paramref name="trimElements"/> is empty, the span is returned unaltered.</remarks>
+        public static ReadOnlySpan<T> TrimStart<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            if (trimElements.Length <= 1) // Optimize for N > 1
+            {
+                return trimElements.Length == 0 ? span : TrimStart(span, trimElements[0]);
+            }
+
+            int start = ClampStart(span, trimElements);
+            return span.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing occurrences of a set of elements specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        /// <remarks>If <paramref name="trimElements"/> is empty, the span is returned unaltered.</remarks>
+        public static ReadOnlySpan<T> TrimEnd<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            if (trimElements.Length <= 1) // Optimize for N > 1
+            {
+                return trimElements.Length == 0 ? span : TrimEnd(span, trimElements[0]);
+            }
+
+            int length = ClampEnd(span, 0, trimElements);
             return span.Slice(0, length);
         }
 
@@ -175,7 +322,7 @@ namespace SourceCode.Clay.Buffers.Bench
         /// </summary>
         /// <param name="span">The source span from which the element is removed.</param>
         /// <param name="trimElement">The specified element to look for and remove.</param>
-        private static int ClampViaNoneStart<T>(ReadOnlySpan<T> span, T trimElement)
+        private static int ClampStart<T>(ReadOnlySpan<T> span, T trimElement)
             where T : IEquatable<T>
         {
             int start = 0;
@@ -206,7 +353,7 @@ namespace SourceCode.Clay.Buffers.Bench
         /// <param name="span">The source span from which the element is removed.</param>
         /// <param name="start">The start index from which to being searching.</param>
         /// <param name="trimElement">The specified element to look for and remove.</param>
-        private static int ClampViaNoneEnd<T>(ReadOnlySpan<T> span, int start, T trimElement)
+        private static int ClampEnd<T>(ReadOnlySpan<T> span, int start, T trimElement)
             where T : IEquatable<T>
         {
             // start==len==0, start<len, start==len after ClampStart trims all
@@ -232,6 +379,75 @@ namespace SourceCode.Clay.Buffers.Bench
             }
 
             return end - start + 1;
+        }
+
+        /// <summary>
+        /// Delimits all leading occurrences of a specified element.
+        /// </summary>
+        /// <param name="span">The source span from which the element is removed.</param>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        private static int ClampStart<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            int start = 0;
+
+            for (; start < span.Length; start++)
+            {
+                if (!SequentialContains(trimElements, span[start]))
+                    break;
+            }
+
+            return start;
+        }
+
+        /// <summary>
+        /// Delimits all trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="span">The source span from which the element is removed.</param>
+        /// <param name="start">The start index from which to being searching.</param>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        private static int ClampEnd<T>(ReadOnlySpan<T> span, int start, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            // Initially, start==len==0. If ClampStart trims all, start==len
+            Debug.Assert((uint)start <= span.Length);
+
+            int end = span.Length - 1;
+
+            for (; end >= start; end--)
+            {
+                if (!SequentialContains(trimElements, span[end]))
+                    break;
+            }
+
+            return end - start + 1;
+        }
+
+        /// <summary>
+        /// Scans for a specified item in the provided collection, returning true if found, else false.
+        /// Optimized for a small number of elements.
+        /// </summary>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        /// <param name="item">The item to try find.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static bool SequentialContains<T>(ReadOnlySpan<T> trimElements, T item)
+            where T : IEquatable<T>
+        {
+            // Non-vectorized scan optimized for small N
+            for (int i = 0; i < trimElements.Length; i++)
+            {
+                if (trimElements[i] == null)
+                {
+                    if (item == null)
+                        return true;
+                }
+                else if (trimElements[i].Equals(item))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -482,75 +698,6 @@ namespace SourceCode.Clay.Buffers.Bench
             return span.Slice(0, length);
         }
 
-        /// <summary>
-        /// Delimits all leading occurrences of a specified element.
-        /// </summary>
-        /// <param name="span">The source span from which the element is removed.</param>
-        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
-        private static int ClampStart<T>(in ReadOnlySpan<T> span, in ReadOnlySpan<T> trimElements)
-            where T : IEquatable<T>
-        {
-            int start = 0;
-
-            for (; start < span.Length; start++)
-            {
-                if (!SequentialContains(trimElements, span[start]))
-                    break;
-            }
-
-            return start;
-        }
-
-        /// <summary>
-        /// Delimits all trailing occurrences of a specified element.
-        /// </summary>
-        /// <param name="span">The source span from which the element is removed.</param>
-        /// <param name="start">The start index from which to being searching.</param>
-        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
-        private static int ClampEnd<T>(in ReadOnlySpan<T> span, int start, in ReadOnlySpan<T> trimElements)
-            where T : IEquatable<T>
-        {
-            // start==len==0, start<len, start==len after ClampStart trims all
-            Debug.Assert((uint)start < span.Length);
-
-            int end = span.Length - 1;
-
-            for (; end >= start; end--)
-            {
-                if (!SequentialContains(trimElements, span[start]))
-                    break;
-            }
-
-            return end - start + 1;
-        }
-
-        /// <summary>
-        /// Scans for a specified item in the provided collection, returning true if found, else false.
-        /// Optimized for a small number of elements.
-        /// </summary>
-        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
-        /// <param name="item">The item to try find.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool SequentialContains<T>(in ReadOnlySpan<T> trimElements, in T item)
-            where T : IEquatable<T>
-        {
-            // Non-vectorized scan is optimized for a small number of elements
-            for (int i = 0; i < trimElements.Length; i++)
-            {
-                if (trimElements[i] == null)
-                {
-                    if (item == null)
-                        return true;
-                }
-                else if (trimElements[i].Equals(item))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         #endregion
 
         #region Multiple via switch
@@ -738,6 +885,173 @@ namespace SourceCode.Clay.Buffers.Bench
 
             int length = ClampEnd(span, 0, trimElements);
             return span.Slice(0, length);
+        }
+
+        #endregion
+
+        #region Marshall
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static ReadOnlyMemory<T> Trim<T>(ReadOnlyMemory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            ReadOnlySpan<T> span = memory.Span;
+            int start = ClampStart(span, trimElement);
+            int length = ClampEnd(span, start, trimElement);
+            return memory.Slice(start, length);
+        }
+
+        /// <summary>
+        /// Removes all leading occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static ReadOnlyMemory<T> TrimStart<T>(ReadOnlyMemory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            int start = ClampStart(memory.Span, trimElement);
+            return memory.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static ReadOnlyMemory<T> TrimEnd<T>(ReadOnlyMemory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            int length = ClampEnd(memory.Span, 0, trimElement);
+            return memory.Slice(0, length);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> Trim<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            ReadOnlySpan<T> span = memory.Span;
+            int start = ClampStart(span, trimElement);
+            int length = ClampEnd(span, start, trimElement);
+            return memory.Slice(start, length);
+        }
+
+        /// <summary>
+        /// Removes all leading occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> TrimStart<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            int start = ClampStart(memory.Span, trimElement);
+            return memory.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> TrimEnd<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+        {
+            int length = ClampEnd(memory.Span, 0, trimElement);
+            return memory.Slice(0, length);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> TrimMarshal<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+            => MemoryMarshal.AsMemory(Trim((ReadOnlyMemory<T>)memory, trimElement));
+
+        /// <summary>
+        /// Removes all leading occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> TrimMarshalStart<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+            => MemoryMarshal.AsMemory(Trim((ReadOnlyMemory<T>)memory, trimElement));
+
+        /// <summary>
+        /// Removes all trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="trimElement">The specified element to look for and remove.</param>
+        public static Memory<T> TrimMarshalEnd<T>(Memory<T> memory, T trimElement)
+            where T : IEquatable<T>
+            => MemoryMarshal.AsMemory(Trim((ReadOnlyMemory<T>)memory, trimElement));
+
+        #endregion
+
+        #region IndexOfAny
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a set of elements specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        /// <remarks>If <paramref name="trimElements"/> is empty, the span is returned unaltered.</remarks>
+        public static ReadOnlySpan<T> TrimIndexOfAny<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            if (trimElements.Length <= 1) // Optimize for N > 1
+            {
+                return trimElements.Length == 0 ? span : Trim(span, trimElements[0]);
+            }
+
+            int start = ClampStartIndexOfAny(span, trimElements);
+            int length = ClampEndIndexOfAny(span, start, trimElements);
+            return span.Slice(start, length);
+        }
+
+        /// <summary>
+        /// Delimits all leading occurrences of a specified element.
+        /// </summary>
+        /// <param name="span">The source span from which the element is removed.</param>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        private static int ClampStartIndexOfAny<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            int start = 0;
+
+            for (; start < span.Length; start++)
+            {
+                if (span.Slice(start, 1).IndexOfAny(trimElements) < 0)
+                    break;
+                //if (!SequentialContains(trimElements, span[start]))
+                //    break;
+            }
+
+            return start;
+        }
+
+        /// <summary>
+        /// Delimits all trailing occurrences of a specified element.
+        /// </summary>
+        /// <param name="span">The source span from which the element is removed.</param>
+        /// <param name="start">The start index from which to being searching.</param>
+        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
+        private static int ClampEndIndexOfAny<T>(ReadOnlySpan<T> span, int start, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            // Initially, start==len==0. If ClampStart trims all, start==len
+            Debug.Assert((uint)start <= span.Length);
+
+            int end = span.Length - 1;
+
+            for (; end >= start; end--)
+            {
+                if (span.Slice(start, 1).IndexOfAny(trimElements) < 0)
+                    break;
+                //if (!SequentialContains(trimElements, span[end]))
+                //    break;
+            }
+
+            return end - start + 1;
         }
 
         #endregion
