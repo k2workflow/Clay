@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 
-namespace SourceCode.Clay.Buffers.Bench
+namespace SourceCode.Clay.Numerics.Bench
 {
     /*
     */

@@ -2,7 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Numerics
 {
     public static partial class BitOps
     {

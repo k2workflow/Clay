@@ -7,7 +7,7 @@
 
 using System;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Runtime
 {
     /// <summary>
     /// Represents the different levels of <see cref="SemanticVersion"/> compatability.

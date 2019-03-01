@@ -8,7 +8,7 @@
 using System.Runtime.CompilerServices;
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Numerics.Tests
 {
     public static partial class BitOpsTests
     {

@@ -8,7 +8,7 @@
 using System;
 using System.Globalization;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Runtime
 {
     /// <summary>
     /// Represents a semantic version that conforms to the <a href="http://semver.org/spec/v2.0.0.html">v2.0.0 specification</a>.

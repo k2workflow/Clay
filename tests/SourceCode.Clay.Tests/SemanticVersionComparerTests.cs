@@ -7,7 +7,7 @@
 
 using Xunit;
 
-namespace SourceCode.Clay.Tests
+namespace SourceCode.Clay.Runtime.Tests
 {
     public static class SemanticVersionComparerTests
     {

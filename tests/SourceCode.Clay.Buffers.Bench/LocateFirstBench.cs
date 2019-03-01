@@ -5,12 +5,10 @@
 
 #endregion
 
-using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 
-namespace SourceCode.Clay.Buffers.Bench
+namespace SourceCode.Clay.Numerics.Bench
 {
     /*
     */
@@ -71,7 +69,7 @@ namespace SourceCode.Clay.Buffers.Bench
             //else
             {
                 // Flag least significant power of two bit
-                var powerOfTwoFlag = value ^ (value - 1);
+                ulong powerOfTwoFlag = value ^ (value - 1);
                 // Shift all powers of two into the high byte and extract
                 return (int)((powerOfTwoFlag * XorPowerOfTwoToHighByte) >> 57);
             }

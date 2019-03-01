@@ -5,10 +5,9 @@
 
 #endregion
 
-using BenchmarkDotNet.Attributes;
-using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using BenchmarkDotNet.Attributes;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
@@ -21,11 +20,11 @@ namespace SourceCode.Clay.Buffers.Bench
         [Benchmark(Baseline = false, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Switch()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = 0; n <= N; n++)
                 {
                     sum += (ulong)TrailingZerosSwitch((byte)n);
                 }
@@ -37,13 +36,13 @@ namespace SourceCode.Clay.Buffers.Bench
         [Benchmark(Baseline = true, OperationsPerInvoke = (int)(_iterations * N))]
         public static ulong Lookup()
         {
-            var sum = 0ul;
+            ulong sum = 0ul;
 
-            for (var i = 0; i < _iterations; i++)
+            for (int i = 0; i < _iterations; i++)
             {
-                for (var n = 0; n <= N; n++)
+                for (int n = 0; n <= N; n++)
                 {
-                    sum += (ulong)BitOps.TrailingZeroCount((byte)n);
+                    sum += (ulong)Numerics.BitOps.TrailingZeroCount((byte)n);
                 }
             }
 
@@ -53,11 +52,11 @@ namespace SourceCode.Clay.Buffers.Bench
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int TrailingZerosSwitch(byte value)
         {
-            var val = value;
+            byte val = value;
 
             // The expression (n & -n) returns lsb(n).
             // Only possible values are therefore [0,1,2,4,...,128]
-            var lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
+            int lsb = val & -val; // eg 44==0010 1100 -> (44 & -44) -> 4. 4==0100, which is the lsb of 44.
 
             // We want to map [0...128] to the smallest contiguous range, ideally [0..9] since 9 is the range cardinality.
             // Mod-11 is a simple perfect-hashing scheme over this range, where 11 is chosen as the closest prime greater than 9.

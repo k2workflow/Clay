@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 // Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Numerics
 {
     // This code is a sandbox proxy (logical fork) for the original sources here:
     // https://github.com/dotnet/coreclr/blob/master/src/System.Private.CoreLib/shared/System/BitOps.cs

@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Runtime
 {
     /// <summary>
     /// Represents a way to compare different <see cref="SemanticVersion"/> values.

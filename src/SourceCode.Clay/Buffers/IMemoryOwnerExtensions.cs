@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="owner">The original instance.</param>
         /// <param name="start">The starting offset of the slice.</param>
         /// <param name="length">The length of the slice.</param>
-        public static IMemoryOwner<T> WrapSlice<T>(this IMemoryOwner<T> owner, int start, int length)
+        public static IMemoryOwner<T> Slice<T>(this IMemoryOwner<T> owner, int start, int length)
         {
             if (owner == null) throw new ArgumentNullException(nameof(owner));
 
@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="owner">The original instance.</param>
         /// <param name="start">The starting offset of the slice.</param>
-        public static IMemoryOwner<T> WrapSlice<T>(this IMemoryOwner<T> owner, int start)
+        public static IMemoryOwner<T> Slice<T>(this IMemoryOwner<T> owner, int start)
         {
             if (owner == null) throw new ArgumentNullException(nameof(owner));
 
@@ -59,7 +59,7 @@ namespace SourceCode.Clay.Buffers
             return new SliceOwner<T>(owner, start);
         }
 
-        private struct SliceOwner<T> : IMemoryOwner<T>
+        private sealed class SliceOwner<T> : IMemoryOwner<T>
         {
             private IMemoryOwner<T> _owner;
             public Memory<T> Memory { get; private set; }

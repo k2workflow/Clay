@@ -7,18 +7,17 @@
 
 using System;
 
-namespace SourceCode.Clay
+namespace SourceCode.Clay.Runtime
 {
     partial class SemanticVersionComparer
     {
         /// <summary>
-        /// Gets a <see cref="SemanticVersionComparer"/> that only compares the <see cref="SemanticVersion.Major"/>,
-        /// <see cref="SemanticVersion.Minor"/>, <see cref="SemanticVersion.Patch"/> and <see cref="SemanticVersion.PreRelease"/>
-        /// values.
+        /// Gets a <see cref="SemanticVersionComparer"/> that compares all fields of a <see cref="SemanticVersion"/>
+        /// value.
         /// </summary>
-        public static SemanticVersionComparer Standard { get; } = new StandardSemanticVersionComparer();
+        public static SemanticVersionComparer Strict { get; } = new StrictSemanticVersionComparer();
 
-        private sealed class StandardSemanticVersionComparer : SemanticVersionComparer
+        private sealed class StrictSemanticVersionComparer : SemanticVersionComparer
         {
             public override int Compare(SemanticVersion x, SemanticVersion y)
             {
@@ -32,6 +31,9 @@ namespace SourceCode.Clay
                 if (cmp != 0) return cmp;
 
                 cmp = string.CompareOrdinal(x.PreRelease, y.PreRelease);
+                if (cmp != 0) return cmp;
+
+                cmp = string.CompareOrdinal(x.BuildMetadata, y.BuildMetadata);
                 return cmp;
             }
 
@@ -41,6 +43,7 @@ namespace SourceCode.Clay
                 if (x.Minor != y.Minor) return false;
                 if (x.Patch != y.Patch) return false;
                 if (!StringComparer.Ordinal.Equals(x.PreRelease, y.PreRelease)) return false;
+                if (!StringComparer.Ordinal.Equals(x.BuildMetadata, y.BuildMetadata)) return false;
 
                 return true;
             }
@@ -58,6 +61,11 @@ namespace SourceCode.Clay
                     hash.Add(obj.PreRelease, StringComparer.Ordinal);
                 }
 
+                if (!(obj.BuildMetadata is null))
+                {
+                    hash.Add(obj.BuildMetadata, StringComparer.Ordinal);
+                }
+
                 var hc = hash.ToHashCode();
 #else
                 int hc = 11;
@@ -68,6 +76,7 @@ namespace SourceCode.Clay
                     hc = hc * 7 + obj.Minor.GetHashCode();
                     hc = hc * 7 + obj.Patch.GetHashCode();
                     hc = hc * 7 + (obj.PreRelease?.Length ?? 0);
+                    hc = hc * 7 + (obj.BuildMetadata?.Length ?? 0);
                 }
 #endif
 
