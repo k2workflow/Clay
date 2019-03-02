@@ -5,44 +5,49 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Generic
 {
-    public sealed class EmptyMap<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
+    /// <summary>
+    /// Represents an empty <see cref="IReadOnlyDictionary{TKey, TValue}"/> instance.
+    /// </summary>
+    public sealed class EmptyMap
     {
-        public static readonly EmptyMap<TKey, TValue> Empty = new EmptyMap<TKey, TValue>();
+        public static IReadOnlyDictionary<TKey, TValue> Empty<TKey, TValue>() => new EmptyMapImpl<TKey, TValue>();
 
-        public TValue this[TKey key] => throw new KeyNotFoundException();
-
-        public IEnumerable<TKey> Keys => Array.Empty<TKey>();
-
-        public IEnumerable<TValue> Values => Array.Empty<TValue>();
-
-        public int Count => 0;
-
-        private EmptyMap()
-        { }
-
-        public bool ContainsKey(TKey key)
-            => false;
-
-        public bool TryGetValue(TKey key, out TValue value)
+        private sealed class EmptyMapImpl<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
         {
-            value = default;
-            return false;
-        }
+            public TValue this[TKey key] => throw new KeyNotFoundException();
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-        {
-            yield break;
-        }
+            public IEnumerable<TKey> Keys => System.Linq.Enumerable.Empty<TKey>();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            yield break;
+            public IEnumerable<TValue> Values => System.Linq.Enumerable.Empty<TValue>();
+
+            public int Count => 0;
+
+            public EmptyMapImpl()
+            { }
+
+            public bool ContainsKey(TKey key)
+                => false;
+
+            public bool TryGetValue(TKey key, out TValue value)
+            {
+                value = default;
+                return false;
+            }
+
+            public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+            {
+                yield break;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                yield break;
+            }
         }
     }
 }

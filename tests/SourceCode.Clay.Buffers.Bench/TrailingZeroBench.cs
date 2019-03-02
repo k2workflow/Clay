@@ -9,6 +9,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
+using SourceCode.Clay.Numerics;
 
 namespace SourceCode.Clay.Buffers.Bench
 {
@@ -27,7 +28,7 @@ namespace SourceCode.Clay.Buffers.Bench
         private const int N = ushort.MaxValue;
 
         [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
-        public static ulong Guard()
+        public ulong Guard()
         {
             ulong sum = 0;
 
@@ -43,25 +44,25 @@ namespace SourceCode.Clay.Buffers.Bench
             return sum;
         }
 
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public ulong Branch()
+        //{
+        //    ulong sum = 0;
+
+        //    for (int i = 0; i < _iterations; i++)
+        //    {
+        //        for (int n = 0; n <= N; n++)
+        //        {
+        //            uint value = (uint)(uint.MaxValue / (_iterations + 1.0) / (n + 1.0));
+        //            sum += TrailingZeroCountBranch(value);
+        //        }
+        //    }
+
+        //    return sum;
+        //}
+
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static ulong Branch()
-        {
-            ulong sum = 0;
-
-            for (int i = 0; i < _iterations; i++)
-            {
-                for (int n = 0; n <= N; n++)
-                {
-                    uint value = (uint)(uint.MaxValue / (_iterations + 1.0) / (n + 1.0));
-                    sum += TrailingZeroCountBranch(value);
-                }
-            }
-
-            return sum;
-        }
-
-        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public static ulong UnsafeImpl()
+        public ulong UnsafeImpl()
         {
             ulong sum = 0;
 
@@ -71,6 +72,23 @@ namespace SourceCode.Clay.Buffers.Bench
                 {
                     uint value = (uint)(uint.MaxValue / (_iterations + 1.0) / (n + 1.0));
                     sum += TrailingZeroCountUnsafe(value);
+                }
+            }
+
+            return sum;
+        }
+
+        [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        public ulong CmovImpl()
+        {
+            ulong sum = 0;
+
+            for (int i = 0; i < _iterations; i++)
+            {
+                for (int n = 0; n <= N; n++)
+                {
+                    uint value = (uint)(uint.MaxValue / (_iterations + 1.0) / (n + 1.0));
+                    sum += TrailingZeroCountCmov(value);
                 }
             }
 
@@ -127,6 +145,19 @@ namespace SourceCode.Clay.Buffers.Bench
             return c32 + count;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static uint TrailingZeroCountCmov(uint value)
+        {
+            uint count = Unsafe.AddByteOffset(
+                ref MemoryMarshal.GetReference(s_TrailingZeroCountDeBruijn),
+                (IntPtr)(int)(((value & (uint)-(int)value) * 0x077CB531u) >> 27));
+
+            // Above code has behavior 0->0, so special-case in order to match intrinsic path
+
+            // Branchless equivalent of: c32 = value == 0 ? 32 : 0
+            return count + BitOps.Iff(value == 0u, 32);
+        }
+
         private static ReadOnlySpan<byte> s_Log2DeBruijn => new byte[32]
         {
             00, 09, 01, 10, 13, 21, 02, 29,
@@ -153,7 +184,7 @@ namespace SourceCode.Clay.Buffers.Bench
 
         public static int PopCount(uint val)
         {
-            val = val - ((val >> 1) & 0x_55555555u);
+            val -= ((val >> 1) & 0x_55555555u);
             val = (val & 0x_33333333u) + ((val >> 2) & 0x_33333333u);
             val = (val + (val >> 4)) & 0x_0F0F0F0Fu;
             val = (val * 0x_01010101u) >> 24;

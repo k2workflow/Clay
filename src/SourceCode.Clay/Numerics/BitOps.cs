@@ -1,5 +1,6 @@
 // See the license, notes and warnings in the associated partial class.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Numerics
@@ -837,5 +838,39 @@ namespace SourceCode.Clay.Numerics
             => Unsafe.As<bool, byte>(ref condition);
 
         #endregion
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Iff(bool condition, uint trueValue, uint falseValue)
+        {
+            /*
+             * https://github.com/dotnet/coreclr/issues/18712#issuecomment-401407743
+            ANDN can be used for branchless select operation in absence of CMOV with the following sequence:
+            eval cc
+            SETcc sel + zero-extend
+            NEG sel
+            AND r1, sel
+            ANDN r2, sel
+            OR r1, r2
+            Not the fastest solution, still saves 1 NOT op and potentially 1 reg wrt to just ANDs
+            This can be expanded to branchless min and max
+            */
+
+            // Branchless equivalent of (eg): value == 0 ? 32 : 0
+            uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
+            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
+
+            uint tv = trueValue & sel;
+            uint fv = /*Bmi1.IsSupported ? Bmi1.AndNot(falseValue, sel) :*/ falseValue & ~sel;
+            return tv | fv;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Iff(bool condition, uint trueValue)
+        {
+            uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
+            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
+
+            return trueValue & sel;
+        }
     }
 }

@@ -4,13 +4,505 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
     public static partial class SpanTests
     {
+        [Theory]
+        [InlineData("  Hello  ", new char[] { ' ' }, "Hello")]
+        [InlineData(".  Hello  ..", new char[] { '.' }, "  Hello  ")]
+        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, "Hello")]
+        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "Hello")]
+        [InlineData("  Hello  ", null, "Hello")]
+        [InlineData("  Hello  ", new char[0], "Hello")]
+        [InlineData("      \t      ", null, "")]
+        [InlineData("", null, "")]
+        [InlineData("      ", new char[] { ' ' }, "")]
+        [InlineData("aaaaa", new char[] { 'a' }, "")]
+        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
+        public static void Trim(string s, char[] trimChars, string expected)
+        {
+            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
+            {
+                Assert.Equal(expected, s.Trim());
+                Assert.Equal(expected, s.AsSpan().Trim().ToString()); // ReadOnlySpan
+                Assert.Equal(expected, new Span<char>(s.ToCharArray()).Trim().ToString());
+                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).Trim().ToString());
+                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).Trim().ToString());
+            }
+
+            if (trimChars?.Length == 1)
+            {
+                Assert.Equal(expected, s.Trim(trimChars[0]));
+                Assert.Equal(expected, s.AsSpan().Trim(trimChars[0]).ToString());
+            }
+
+            Assert.Equal(expected, s.Trim(trimChars));
+            Assert.Equal(expected, s.AsSpan().Trim(trimChars).ToString());
+        }
+
+        [Theory]
+        [InlineData("  Hello  ", new char[] { ' ' }, "  Hello")]
+        [InlineData(".  Hello  ..", new char[] { '.' }, ".  Hello  ")]
+        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, ".  Hello")]
+        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "123abcHello")]
+        [InlineData("  Hello  ", null, "  Hello")]
+        [InlineData("  Hello  ", new char[0], "  Hello")]
+        [InlineData("      \t      ", null, "")]
+        [InlineData("", null, "")]
+        [InlineData("      ", new char[] { ' ' }, "")]
+        [InlineData("aaaaa", new char[] { 'a' }, "")]
+        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
+        public static void TrimEnd(string s, char[] trimChars, string expected)
+        {
+            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
+            {
+                Assert.Equal(expected, s.TrimEnd());
+                Assert.Equal(expected, s.AsSpan().TrimEnd().ToString()); // ReadOnlySpan
+                Assert.Equal(expected, new Span<char>(s.ToCharArray()).TrimEnd().ToString());
+                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).TrimEnd().ToString());
+                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).TrimEnd().ToString());
+            }
+
+            if (trimChars?.Length == 1)
+            {
+                Assert.Equal(expected, s.TrimEnd(trimChars[0]));
+                Assert.Equal(expected, s.AsSpan().TrimEnd(trimChars[0]).ToString());
+            }
+
+            Assert.Equal(expected, s.TrimEnd(trimChars));
+            Assert.Equal(expected, s.AsSpan().TrimEnd(trimChars).ToString());
+        }
+
+        [Theory]
+        [InlineData("  Hello  ", new char[] { ' ' }, "Hello  ")]
+        [InlineData(".  Hello  ..", new char[] { '.' }, "  Hello  ..")]
+        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, "Hello  ..")]
+        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "Hello123abc")]
+        [InlineData("  Hello  ", null, "Hello  ")]
+        [InlineData("  Hello  ", new char[0], "Hello  ")]
+        [InlineData("      \t      ", null, "")]
+        [InlineData("", null, "")]
+        [InlineData("      ", new char[] { ' ' }, "")]
+        [InlineData("aaaaa", new char[] { 'a' }, "")]
+        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
+        public static void TrimStart(string s, char[] trimChars, string expected)
+        {
+            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
+            {
+                Assert.Equal(expected, s.TrimStart());
+                Assert.Equal(expected, s.AsSpan().TrimStart().ToString()); // ReadOnlySpan
+                Assert.Equal(expected, new Span<char>(s.ToCharArray()).TrimStart().ToString());
+                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).TrimStart().ToString());
+                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).TrimStart().ToString());
+            }
+
+            if (trimChars?.Length == 1)
+            {
+                Assert.Equal(expected, s.TrimStart(trimChars[0]));
+                Assert.Equal(expected, s.AsSpan().TrimStart(trimChars[0]).ToString());
+            }
+
+            Assert.Equal(expected, s.TrimStart(trimChars));
+            Assert.Equal(expected, s.AsSpan().TrimStart(trimChars).ToString());
+        }
+
+        [Fact]
+        public static void ZeroLengthTrim()
+        {
+            string s1 = string.Empty;
+            Assert.True(s1.SequenceEqual(s1.Trim()));
+            Assert.True(s1.SequenceEqual(s1.TrimStart()));
+            Assert.True(s1.SequenceEqual(s1.TrimEnd()));
+
+            ReadOnlySpan<char> span = s1.AsSpan();
+            Assert.True(span.SequenceEqual(span.Trim()));
+            Assert.True(span.SequenceEqual(span.TrimStart()));
+            Assert.True(span.SequenceEqual(span.TrimEnd()));
+
+            var span1 = new Span<char>(s1.ToCharArray());
+            Assert.True(span1.SequenceEqual(span1.Trim()));
+            Assert.True(span1.SequenceEqual(span1.TrimStart()));
+            Assert.True(span1.SequenceEqual(span1.TrimEnd()));
+
+            var mem = new Memory<char>(s1.ToCharArray());
+            Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
+            Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
+            Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
+
+            var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+            Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
+            Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
+            Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
+        }
+
+        [Fact]
+        public static void NoWhiteSpaceTrim()
+        {
+            for (int length = 0; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+
+                string s1 = new string(a);
+                Assert.True(s1.SequenceEqual(s1.Trim()));
+                Assert.True(s1.SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.SequenceEqual(span.Trim()));
+                Assert.True(span.SequenceEqual(span.TrimStart()));
+                Assert.True(span.SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.SequenceEqual(span1.Trim()));
+                Assert.True(span1.SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+        [Fact]
+        public static void OnlyWhiteSpaceTrim()
+        {
+            for (int length = 0; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = ' ';
+                }
+
+                string s1 = new string(a);
+                Assert.True(string.Empty.SequenceEqual(s1.Trim()));
+                Assert.True(string.Empty.SequenceEqual(s1.TrimStart()));
+                Assert.True(string.Empty.SequenceEqual(s1.TrimEnd()));
+
+                var span = new ReadOnlySpan<char>(a);
+                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.Trim()));
+                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.TrimStart()));
+                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(Span<char>.Empty.SequenceEqual(span1.Trim()));
+                Assert.True(Span<char>.Empty.SequenceEqual(span1.TrimStart()));
+                Assert.True(Span<char>.Empty.SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+        [Fact]
+        public static void WhiteSpaceAtStartTrim()
+        {
+            for (int length = 2; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+                a[0] = ' ';
+
+                string s1 = new string(a);
+                Assert.True(s1.Substring(1).SequenceEqual(s1.Trim()));
+                Assert.True(s1.Substring(1).SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.Slice(1).SequenceEqual(span.Trim()));
+                Assert.True(span.Slice(1).SequenceEqual(span.TrimStart()));
+                Assert.True(span.SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.Slice(1).SequenceEqual(span1.Trim()));
+                Assert.True(span1.Slice(1).SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+
+        [Fact]
+        public static void WhiteSpaceAtEndTrim()
+        {
+            for (int length = 2; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+                a[length - 1] = ' ';
+
+                string s1 = new string(a);
+                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.Trim()));
+                Assert.True(s1.SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.Trim()));
+                Assert.True(span.SequenceEqual(span.TrimStart()));
+                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.Trim()));
+                Assert.True(span1.SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+        [Fact]
+        public static void WhiteSpaceAtStartAndEndTrim()
+        {
+            for (int length = 3; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+                a[0] = ' ';
+                a[length - 1] = ' ';
+
+                string s1 = new string(a);
+                Assert.True(s1.Substring(1, length - 2).SequenceEqual(s1.Trim()));
+                Assert.True(s1.Substring(1).SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.Slice(1, length - 2).SequenceEqual(span.Trim()));
+                Assert.True(span.Slice(1).SequenceEqual(span.TrimStart()));
+                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.Slice(1, length - 2).SequenceEqual(span1.Trim()));
+                Assert.True(span1.Slice(1).SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Slice(1, length - 2).Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+        [Fact]
+        public static void WhiteSpaceInMiddleTrim()
+        {
+            for (int length = 3; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+                a[1] = ' ';
+
+                string s1 = new string(a);
+                Assert.True(s1.SequenceEqual(s1.Trim()));
+                Assert.True(s1.SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.SequenceEqual(span.Trim()));
+                Assert.True(span.SequenceEqual(span.TrimStart()));
+                Assert.True(span.SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.SequenceEqual(span1.Trim()));
+                Assert.True(span1.SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
+        [Fact]
+        public static void TrimWhiteSpaceMultipleTimes()
+        {
+            for (int length = 3; length < 32; length++)
+            {
+                char[] a = new char[length];
+                for (int i = 0; i < length; i++)
+                {
+                    a[i] = 'a';
+                }
+                a[0] = ' ';
+                a[length - 1] = ' ';
+
+                string s1 = new string(a);
+                string trimResultString = s1.Trim();
+                string trimStartResultString = s1.TrimStart();
+                string trimEndResultString = s1.TrimEnd();
+                Assert.True(s1.Substring(1, length - 2).SequenceEqual(trimResultString));
+                Assert.True(s1.Substring(1).SequenceEqual(trimStartResultString));
+                Assert.True(s1.Substring(0, length - 1).SequenceEqual(trimEndResultString));
+
+                // 2nd attempt should do nothing
+                Assert.True(trimResultString.SequenceEqual(trimResultString.Trim()));
+                Assert.True(trimStartResultString.SequenceEqual(trimStartResultString.TrimStart()));
+                Assert.True(trimEndResultString.SequenceEqual(trimEndResultString.TrimEnd()));
+
+                // ReadOnlySpan
+                {
+                    ReadOnlySpan<char> span = s1.AsSpan();
+                    ReadOnlySpan<char> trimResult = span.Trim();
+                    ReadOnlySpan<char> trimStartResult = span.TrimStart();
+                    ReadOnlySpan<char> trimEndResult = span.TrimEnd();
+                    Assert.True(span.Slice(1, length - 2).SequenceEqual(trimResult));
+                    Assert.True(span.Slice(1).SequenceEqual(trimStartResult));
+                    Assert.True(span.Slice(0, length - 1).SequenceEqual(trimEndResult));
+
+                    // 2nd attempt should do nothing
+                    Assert.True(trimResult.SequenceEqual(trimResult.Trim()));
+                    Assert.True(trimStartResult.SequenceEqual(trimStartResult.TrimStart()));
+                    Assert.True(trimEndResult.SequenceEqual(trimEndResult.TrimEnd()));
+                }
+
+                // Span
+                {
+                    var span = new Span<char>(s1.ToCharArray());
+                    Span<char> trimResult = span.Trim();
+                    Span<char> trimStartResult = span.TrimStart();
+                    Span<char> trimEndResult = span.TrimEnd();
+                    Assert.True(span.Slice(1, length - 2).SequenceEqual(trimResult));
+                    Assert.True(span.Slice(1).SequenceEqual(trimStartResult));
+                    Assert.True(span.Slice(0, length - 1).SequenceEqual(trimEndResult));
+
+                    // 2nd attempt should do nothing
+                    Assert.True(trimResult.SequenceEqual(trimResult.Trim()));
+                    Assert.True(trimStartResult.SequenceEqual(trimStartResult.TrimStart()));
+                    Assert.True(trimEndResult.SequenceEqual(trimEndResult.TrimEnd()));
+                }
+
+                // Memory
+                {
+                    var mem = new Memory<char>(s1.ToCharArray());
+                    Memory<char> trimResult = mem.Trim();
+                    Memory<char> trimStartResult = mem.TrimStart();
+                    Memory<char> trimEndResult = mem.TrimEnd();
+                    Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(trimResult.Span));
+                    Assert.True(mem.Slice(1).Span.SequenceEqual(trimStartResult.Span));
+                    Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(trimEndResult.Span));
+
+                    // 2nd attempt should do nothing
+                    Assert.True(trimResult.Span.SequenceEqual(trimResult.Trim().Span));
+                    Assert.True(trimStartResult.Span.SequenceEqual(trimStartResult.TrimStart().Span));
+                    Assert.True(trimEndResult.Span.SequenceEqual(trimEndResult.TrimEnd().Span));
+                }
+
+                // ReadOnlyMemory
+                {
+                    var mem = new ReadOnlyMemory<char>(s1.ToCharArray());
+                    ReadOnlyMemory<char> trimResult = mem.Trim();
+                    ReadOnlyMemory<char> trimStartResult = mem.TrimStart();
+                    ReadOnlyMemory<char> trimEndResult = mem.TrimEnd();
+                    Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(trimResult.Span));
+                    Assert.True(mem.Slice(1).Span.SequenceEqual(trimStartResult.Span));
+                    Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(trimEndResult.Span));
+
+                    // 2nd attempt should do nothing
+                    Assert.True(trimResult.Span.SequenceEqual(trimResult.Trim().Span));
+                    Assert.True(trimStartResult.Span.SequenceEqual(trimStartResult.TrimStart().Span));
+                    Assert.True(trimEndResult.Span.SequenceEqual(trimEndResult.TrimEnd().Span));
+                }
+            }
+        }
+
+        [Fact]
+        public static void MakeSureNoTrimChecksGoOutOfRange()
+        {
+            for (int length = 3; length < 64; length++)
+            {
+                char[] first = new char[length];
+                first[0] = ' ';
+                first[length - 1] = ' ';
+
+                string s1 = new string(first, 1, length - 2);
+                Assert.True(s1.SequenceEqual(s1.Trim()));
+                Assert.True(s1.SequenceEqual(s1.TrimStart()));
+                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
+
+                ReadOnlySpan<char> span = s1.AsSpan();
+                Assert.True(span.SequenceEqual(span.Trim()));
+                Assert.True(span.SequenceEqual(span.TrimStart()));
+                Assert.True(span.SequenceEqual(span.TrimEnd()));
+
+                var span1 = new Span<char>(s1.ToCharArray());
+                Assert.True(span1.SequenceEqual(span1.Trim()));
+                Assert.True(span1.SequenceEqual(span1.TrimStart()));
+                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
+
+                var mem = new Memory<char>(s1.ToCharArray());
+                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
+                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
+
+                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
+                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
+                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
+            }
+        }
+
         [Theory]
         [InlineData(new int[] { 1 }, 1, new int[] { })]
         [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
@@ -1561,7 +2053,7 @@ namespace SourceCode.Clay.Tests
 
             for (; start < span.Length; start++)
             {
-                if (!SequentialContains(trimElements, span[start]))
+                if (!Contains(trimElements, span[start]))
                     break;
             }
 
@@ -1584,38 +2076,429 @@ namespace SourceCode.Clay.Tests
 
             for (; end >= start; end--)
             {
-                if (!SequentialContains(trimElements, span[end]))
+                if (!Contains(trimElements, span[end]))
                     break;
             }
 
             return end - start + 1;
         }
 
-        /// <summary>
-        /// Scans for a specified item in the provided collection, returning true if found, else false.
-        /// Optimized for a small number of elements.
-        /// </summary>
-        /// <param name="trimElements">The span which contains the set of elements to remove.</param>
-        /// <param name="item">The item to try find.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool SequentialContains<T>(ReadOnlySpan<T> trimElements, T item)
+        private static bool Contains<T>(ReadOnlySpan<T> span, T value)
             where T : IEquatable<T>
         {
-            // Non-vectorized scan optimized for small N
-            for (int i = 0; i < trimElements.Length; i++)
+            return Contains(ref MemoryMarshal.GetReference(span), value, span.Length);
+        }
+
+        private unsafe static bool Contains<T>(ref T searchSpace, T value, int length)
+            where T : IEquatable<T>
+        {
+            Debug.Assert(length >= 0);
+
+            var index = (IntPtr)0; // Use IntPtr for arithmetic to avoid unnecessary 64->32->64 truncations
+
+            if (default(T) != null || value != null)
             {
-                if (trimElements[i] == null)
+                while (length >= 8)
                 {
-                    if (item == null)
-                        return true;
+                    length -= 8;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index + 0)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 1)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 2)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 3)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 4)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 5)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 6)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 7)))
+                    {
+                        goto Found;
+                    }
+
+                    index += 8;
                 }
-                else if (trimElements[i].Equals(item))
+
+                if (length >= 4)
                 {
-                    return true;
+                    length -= 4;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index + 0)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 1)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 2)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 3)))
+                    {
+                        goto Found;
+                    }
+
+                    index += 4;
+                }
+
+                while (length > 0)
+                {
+                    length -= 1;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index)))
+                        goto Found;
+
+                    index += 1;
+                }
+            }
+            else
+            {
+                byte* len = (byte*)length;
+                for (index = (IntPtr)0; index.ToPointer() < len; index += 1)
+                {
+                    if (Unsafe.Add(ref searchSpace, index) == null)
+                    {
+                        goto Found;
+                    }
                 }
             }
 
             return false;
+
+Found:
+            return true;
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing white-space characters from the memory.
+        /// </summary>
+        public static Memory<char> Trim(this Memory<char> memory)
+        {
+            Span<char> span = memory.Span;
+
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            int end = span.Length - 1;
+            for (; end >= start; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return memory.Slice(start, end - start + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading white-space characters from the memory.
+        /// </summary>
+        public static Memory<char> TrimStart(this Memory<char> memory)
+        {
+            Span<char> span = memory.Span;
+
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            return memory.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing white-space characters from the memory.
+        /// </summary>
+        public static Memory<char> TrimEnd(this Memory<char> memory)
+        {
+            Span<char> span = memory.Span;
+
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return memory.Slice(0, end + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing white-space characters from the memory.
+        /// </summary>
+        public static ReadOnlyMemory<char> Trim(this ReadOnlyMemory<char> memory)
+        {
+            ReadOnlySpan<char> span = memory.Span;
+
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            int end = span.Length - 1;
+            for (; end >= start; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return memory.Slice(start, end - start + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading white-space characters from the memory.
+        /// </summary>
+        public static ReadOnlyMemory<char> TrimStart(this ReadOnlyMemory<char> memory)
+        {
+            ReadOnlySpan<char> span = memory.Span;
+
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            return memory.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing white-space characters from the memory.
+        /// </summary>
+        public static ReadOnlyMemory<char> TrimEnd(this ReadOnlyMemory<char> memory)
+        {
+            ReadOnlySpan<char> span = memory.Span;
+
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return memory.Slice(0, end + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing white-space characters from the span.
+        /// </summary>
+        public static ReadOnlySpan<char> Trim(this ReadOnlySpan<char> span)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+            int end = span.Length - 1;
+            for (; end >= start; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+            return span.Slice(start, end - start + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading white-space characters from the span.
+        /// </summary>
+        public static ReadOnlySpan<char> TrimStart(this ReadOnlySpan<char> span)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+            return span.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing white-space characters from the span.
+        /// </summary>
+        public static ReadOnlySpan<char> TrimEnd(this ReadOnlySpan<char> span)
+        {
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+            return span.Slice(0, end + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a specified character.
+        /// </summary>
+        /// <param name="span">The source span from which the character is removed.</param>
+        /// <param name="trimChar">The specified character to look for and remove.</param>
+        public static ReadOnlySpan<char> Trim(this ReadOnlySpan<char> span, char trimChar)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (span[start] != trimChar)
+                    break;
+            }
+            int end = span.Length - 1;
+            for (; end >= start; end--)
+            {
+                if (span[end] != trimChar)
+                    break;
+            }
+            return span.Slice(start, end - start + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading occurrences of a specified character.
+        /// </summary>
+        /// <param name="span">The source span from which the character is removed.</param>
+        /// <param name="trimChar">The specified character to look for and remove.</param>
+        public static ReadOnlySpan<char> TrimStart(this ReadOnlySpan<char> span, char trimChar)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (span[start] != trimChar)
+                    break;
+            }
+            return span.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing occurrences of a specified character.
+        /// </summary>
+        /// <param name="span">The source span from which the character is removed.</param>
+        /// <param name="trimChar">The specified character to look for and remove.</param>
+        public static ReadOnlySpan<char> TrimEnd(this ReadOnlySpan<char> span, char trimChar)
+        {
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                if (span[end] != trimChar)
+                    break;
+            }
+            return span.Slice(0, end + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing occurrences of a set of characters specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="span">The source span from which the characters are removed.</param>
+        /// <param name="trimChars">The span which contains the set of characters to remove.</param>
+        /// <remarks>If <paramref name="trimChars"/> is empty, white-space characters are removed instead.</remarks>
+        public static ReadOnlySpan<char> Trim(this ReadOnlySpan<char> span, ReadOnlySpan<char> trimChars)
+        {
+            return span.TrimStart(trimChars).TrimEnd(trimChars);
+        }
+
+        /// <summary>
+        /// Removes all leading occurrences of a set of characters specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="span">The source span from which the characters are removed.</param>
+        /// <param name="trimChars">The span which contains the set of characters to remove.</param>
+        /// <remarks>If <paramref name="trimChars"/> is empty, white-space characters are removed instead.</remarks>
+        public static ReadOnlySpan<char> TrimStart(this ReadOnlySpan<char> span, ReadOnlySpan<char> trimChars)
+        {
+            if (trimChars.IsEmpty)
+            {
+                return span.TrimStart();
+            }
+
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                for (int i = 0; i < trimChars.Length; i++)
+                {
+                    if (span[start] == trimChars[i])
+                        goto Next;
+                }
+                break;
+Next:
+                ;
+            }
+            return span.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing occurrences of a set of characters specified
+        /// in a readonly span from the span.
+        /// </summary>
+        /// <param name="span">The source span from which the characters are removed.</param>
+        /// <param name="trimChars">The span which contains the set of characters to remove.</param>
+        /// <remarks>If <paramref name="trimChars"/> is empty, white-space characters are removed instead.</remarks>
+        public static ReadOnlySpan<char> TrimEnd(this ReadOnlySpan<char> span, ReadOnlySpan<char> trimChars)
+        {
+            if (trimChars.IsEmpty)
+            {
+                return span.TrimEnd();
+            }
+
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                for (int i = 0; i < trimChars.Length; i++)
+                {
+                    if (span[end] == trimChars[i])
+                        goto Next;
+                }
+                break;
+Next:
+                ;
+            }
+            return span.Slice(0, end + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading and trailing white-space characters from the span.
+        /// </summary>
+        public static Span<char> Trim(this Span<char> span)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            int end = span.Length - 1;
+            for (; end >= start; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return span.Slice(start, end - start + 1);
+        }
+
+        /// <summary>
+        /// Removes all leading white-space characters from the span.
+        /// </summary>
+        public static Span<char> TrimStart(this Span<char> span)
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!char.IsWhiteSpace(span[start]))
+                    break;
+            }
+
+            return span.Slice(start);
+        }
+
+        /// <summary>
+        /// Removes all trailing white-space characters from the span.
+        /// </summary>
+        public static Span<char> TrimEnd(this Span<char> span)
+        {
+            int end = span.Length - 1;
+            for (; end >= 0; end--)
+            {
+                if (!char.IsWhiteSpace(span[end]))
+                    break;
+            }
+
+            return span.Slice(0, end + 1);
         }
     }
 }

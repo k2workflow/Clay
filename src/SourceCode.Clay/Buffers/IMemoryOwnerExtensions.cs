@@ -17,6 +17,9 @@ namespace SourceCode.Clay.Buffers
     // See [Memory<T> API documentation and samples](https://gist.github.com/GrabYourPitchforks/8efb15abbd90bc5b128f64981766e834)
     // See [Question: IMemoryOwner decorator & lifetime management](https://github.com/dotnet/corefx/issues/33372)
 
+    /// <summary>
+    /// Represents <see cref="IMemoryOwner{T}"/> extensions.
+    /// </summary>
     public static class IMemoryOwnerExtensions
     {
         /// <summary>
@@ -76,8 +79,6 @@ namespace SourceCode.Clay.Buffers
                 Memory = _owner.Memory.Slice(start);
             }
 
-            #region IDisposable
-
             public void Dispose()
             {
                 if (_owner != null)
@@ -88,8 +89,6 @@ namespace SourceCode.Clay.Buffers
 
                 Memory = default;
             }
-
-            #endregion
         }
     }
 }
