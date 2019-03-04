@@ -18,17 +18,6 @@ namespace SourceCode.Clay.Numerics.Tests
         [Fact]
         public static void BitOps_Samples()
         {
-            // PopCount: Returns the population count (number of bits set) of a mask.
-            Assert.Equal(4, BitOps.PopCount(0x1001_0110u));
-
-            // RotateLeft/Right: Rotates the specified value left/right by the specified number of bits.
-            Assert.Equal(0b0100_0001u, BitOps.RotateLeft((byte)0b0010_1000u, 3));
-            Assert.Equal(0b1000_0000u, BitOps.RotateRight((byte)0b0010_0000u, 6));
-
-            // Leading/TrailingZeros: Count the number of leading/trailing zero bits in a mask.
-            Assert.Equal(2, BitOps.LeadingZeroCount(0b0011_1000));
-            Assert.Equal(5, BitOps.TrailingZeroCount(0b1110_0000));
-
             // ExtractBit: Reads whether the specified bit in a mask is set.
             Assert.True(BitOps.ExtractBit((byte)0b0001_0000, 4));
             Assert.False(BitOps.ExtractBit((byte)0b0001_0000, 7));
@@ -716,54 +705,6 @@ namespace SourceCode.Clay.Numerics.Tests
 
             Assert.Equal(BitOps.ComplementBit(ref actual, offset), !was);
             Assert.Equal(n, actual);
-        }
-
-        #endregion
-
-        #region Rotate
-
-        [Fact]
-        public static void BitOps_RotateLeft_byte()
-        {
-            byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((byte)0b01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((byte)0b10101010, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateLeft(sut, int.MaxValue)); // % 8 = 7
-        }
-
-        [Fact]
-        public static void BitOps_RotateLeft_ushort()
-        {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateLeft(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateLeft(sut, 3));
-            Assert.Equal(sut, BitOps.RotateLeft(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateLeft(sut, int.MaxValue)); // % 16 = 15
-        }
-
-        [Fact]
-        public static void BitOps_RotateRight_byte()
-        {
-            byte sut = 0b01010101;
-            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((byte)0b01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((byte)0b10101010, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 8 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 7), BitOps.RotateRight(sut, int.MaxValue)); // % 8 = 7
-        }
-
-        [Fact]
-        public static void BitOps_RotateRight_ushort()
-        {
-            ushort sut = 0b01010101_01010101;
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 1));
-            Assert.Equal((ushort)0b01010101_01010101, BitOps.RotateRight(sut, 2));
-            Assert.Equal((ushort)0b10101010_10101010, BitOps.RotateRight(sut, 3));
-            Assert.Equal(sut, BitOps.RotateRight(sut, int.MinValue)); // % 16 = 0
-            Assert.Equal(BitOps.RotateLeft(sut, 15), BitOps.RotateRight(sut, int.MaxValue)); // % 16 = 15
         }
 
         #endregion
