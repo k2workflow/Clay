@@ -350,6 +350,7 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
             var trim = (Foo)null;
+
             var expected = new Foo[] { null, null, 1, 2 };
 
             Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
@@ -370,6 +371,7 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
+
             var expected = new Foo[] { null, 1, 2, 3 };
 
             Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
@@ -390,6 +392,7 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
             var trim = (Foo)null;
+
             var expected = new Foo[] { 1, 2 };
 
             Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
@@ -410,6 +413,7 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
+
             var expected = new Foo[] { 3 };
 
             Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
