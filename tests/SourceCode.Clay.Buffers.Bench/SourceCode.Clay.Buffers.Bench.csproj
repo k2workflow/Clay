@@ -17,11 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="DigitBench.cs" />
+    <Compile Remove="LocateFirstBench.cs" />
     <Compile Remove="SpanBench.cs" />
+    <Compile Remove="SwitchBench.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="DigitBench.cs" />
+    <None Include="LocateFirstBench.cs" />
     <None Include="SpanBench.cs" />
+    <None Include="SwitchBench.cs" />
   </ItemGroup>
 
   <ItemGroup>

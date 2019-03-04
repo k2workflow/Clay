@@ -3,892 +3,18 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Xunit;
 
 namespace SourceCode.Clay.Tests
 {
-    public static partial class SpanTests
-    {
-        [Theory]
-        [InlineData("  Hello  ", new char[] { ' ' }, "Hello")]
-        [InlineData(".  Hello  ..", new char[] { '.' }, "  Hello  ")]
-        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, "Hello")]
-        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "Hello")]
-        [InlineData("  Hello  ", null, "Hello")]
-        [InlineData("  Hello  ", new char[0], "Hello")]
-        [InlineData("      \t      ", null, "")]
-        [InlineData("", null, "")]
-        [InlineData("      ", new char[] { ' ' }, "")]
-        [InlineData("aaaaa", new char[] { 'a' }, "")]
-        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
-        public static void Trim(string s, char[] trimChars, string expected)
-        {
-            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
-            {
-                Assert.Equal(expected, s.Trim());
-                Assert.Equal(expected, s.AsSpan().Trim().ToString()); // ReadOnlySpan
-                Assert.Equal(expected, new Span<char>(s.ToCharArray()).Trim().ToString());
-                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).Trim().ToString());
-                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).Trim().ToString());
-            }
-
-            if (trimChars?.Length == 1)
-            {
-                Assert.Equal(expected, s.Trim(trimChars[0]));
-                Assert.Equal(expected, s.AsSpan().Trim(trimChars[0]).ToString());
-            }
-
-            Assert.Equal(expected, s.Trim(trimChars));
-            Assert.Equal(expected, s.AsSpan().Trim(trimChars).ToString());
-        }
-
-        [Theory]
-        [InlineData("  Hello  ", new char[] { ' ' }, "  Hello")]
-        [InlineData(".  Hello  ..", new char[] { '.' }, ".  Hello  ")]
-        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, ".  Hello")]
-        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "123abcHello")]
-        [InlineData("  Hello  ", null, "  Hello")]
-        [InlineData("  Hello  ", new char[0], "  Hello")]
-        [InlineData("      \t      ", null, "")]
-        [InlineData("", null, "")]
-        [InlineData("      ", new char[] { ' ' }, "")]
-        [InlineData("aaaaa", new char[] { 'a' }, "")]
-        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
-        public static void TrimEnd(string s, char[] trimChars, string expected)
-        {
-            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
-            {
-                Assert.Equal(expected, s.TrimEnd());
-                Assert.Equal(expected, s.AsSpan().TrimEnd().ToString()); // ReadOnlySpan
-                Assert.Equal(expected, new Span<char>(s.ToCharArray()).TrimEnd().ToString());
-                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).TrimEnd().ToString());
-                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).TrimEnd().ToString());
-            }
-
-            if (trimChars?.Length == 1)
-            {
-                Assert.Equal(expected, s.TrimEnd(trimChars[0]));
-                Assert.Equal(expected, s.AsSpan().TrimEnd(trimChars[0]).ToString());
-            }
-
-            Assert.Equal(expected, s.TrimEnd(trimChars));
-            Assert.Equal(expected, s.AsSpan().TrimEnd(trimChars).ToString());
-        }
-
-        [Theory]
-        [InlineData("  Hello  ", new char[] { ' ' }, "Hello  ")]
-        [InlineData(".  Hello  ..", new char[] { '.' }, "  Hello  ..")]
-        [InlineData(".  Hello  ..", new char[] { '.', ' ' }, "Hello  ..")]
-        [InlineData("123abcHello123abc", new char[] { '1', '2', '3', 'a', 'b', 'c' }, "Hello123abc")]
-        [InlineData("  Hello  ", null, "Hello  ")]
-        [InlineData("  Hello  ", new char[0], "Hello  ")]
-        [InlineData("      \t      ", null, "")]
-        [InlineData("", null, "")]
-        [InlineData("      ", new char[] { ' ' }, "")]
-        [InlineData("aaaaa", new char[] { 'a' }, "")]
-        [InlineData("abaabaa", new char[] { 'b', 'a' }, "")]
-        public static void TrimStart(string s, char[] trimChars, string expected)
-        {
-            if (trimChars == null || trimChars.Length == 0 || (trimChars.Length == 1 && trimChars[0] == ' '))
-            {
-                Assert.Equal(expected, s.TrimStart());
-                Assert.Equal(expected, s.AsSpan().TrimStart().ToString()); // ReadOnlySpan
-                Assert.Equal(expected, new Span<char>(s.ToCharArray()).TrimStart().ToString());
-                Assert.Equal(expected, new Memory<char>(s.ToCharArray()).TrimStart().ToString());
-                Assert.Equal(expected, new ReadOnlyMemory<char>(s.ToCharArray()).TrimStart().ToString());
-            }
-
-            if (trimChars?.Length == 1)
-            {
-                Assert.Equal(expected, s.TrimStart(trimChars[0]));
-                Assert.Equal(expected, s.AsSpan().TrimStart(trimChars[0]).ToString());
-            }
-
-            Assert.Equal(expected, s.TrimStart(trimChars));
-            Assert.Equal(expected, s.AsSpan().TrimStart(trimChars).ToString());
-        }
-
-        [Fact]
-        public static void ZeroLengthTrim()
-        {
-            string s1 = string.Empty;
-            Assert.True(s1.SequenceEqual(s1.Trim()));
-            Assert.True(s1.SequenceEqual(s1.TrimStart()));
-            Assert.True(s1.SequenceEqual(s1.TrimEnd()));
-
-            ReadOnlySpan<char> span = s1.AsSpan();
-            Assert.True(span.SequenceEqual(span.Trim()));
-            Assert.True(span.SequenceEqual(span.TrimStart()));
-            Assert.True(span.SequenceEqual(span.TrimEnd()));
-
-            var span1 = new Span<char>(s1.ToCharArray());
-            Assert.True(span1.SequenceEqual(span1.Trim()));
-            Assert.True(span1.SequenceEqual(span1.TrimStart()));
-            Assert.True(span1.SequenceEqual(span1.TrimEnd()));
-
-            var mem = new Memory<char>(s1.ToCharArray());
-            Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
-            Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
-            Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
-
-            var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-            Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
-            Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
-            Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
-        }
-
-        [Fact]
-        public static void NoWhiteSpaceTrim()
-        {
-            for (int length = 0; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-
-                string s1 = new string(a);
-                Assert.True(s1.SequenceEqual(s1.Trim()));
-                Assert.True(s1.SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.SequenceEqual(span.Trim()));
-                Assert.True(span.SequenceEqual(span.TrimStart()));
-                Assert.True(span.SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.SequenceEqual(span1.Trim()));
-                Assert.True(span1.SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Fact]
-        public static void OnlyWhiteSpaceTrim()
-        {
-            for (int length = 0; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = ' ';
-                }
-
-                string s1 = new string(a);
-                Assert.True(string.Empty.SequenceEqual(s1.Trim()));
-                Assert.True(string.Empty.SequenceEqual(s1.TrimStart()));
-                Assert.True(string.Empty.SequenceEqual(s1.TrimEnd()));
-
-                var span = new ReadOnlySpan<char>(a);
-                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.Trim()));
-                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.TrimStart()));
-                Assert.True(ReadOnlySpan<char>.Empty.SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(Span<char>.Empty.SequenceEqual(span1.Trim()));
-                Assert.True(Span<char>.Empty.SequenceEqual(span1.TrimStart()));
-                Assert.True(Span<char>.Empty.SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(Memory<char>.Empty.Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(ReadOnlyMemory<char>.Empty.Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Fact]
-        public static void WhiteSpaceAtStartTrim()
-        {
-            for (int length = 2; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-                a[0] = ' ';
-
-                string s1 = new string(a);
-                Assert.True(s1.Substring(1).SequenceEqual(s1.Trim()));
-                Assert.True(s1.Substring(1).SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.Slice(1).SequenceEqual(span.Trim()));
-                Assert.True(span.Slice(1).SequenceEqual(span.TrimStart()));
-                Assert.True(span.SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.Slice(1).SequenceEqual(span1.Trim()));
-                Assert.True(span1.Slice(1).SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-
-        [Fact]
-        public static void WhiteSpaceAtEndTrim()
-        {
-            for (int length = 2; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-                a[length - 1] = ' ';
-
-                string s1 = new string(a);
-                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.Trim()));
-                Assert.True(s1.SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.Trim()));
-                Assert.True(span.SequenceEqual(span.TrimStart()));
-                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.Trim()));
-                Assert.True(span1.SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Fact]
-        public static void WhiteSpaceAtStartAndEndTrim()
-        {
-            for (int length = 3; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-                a[0] = ' ';
-                a[length - 1] = ' ';
-
-                string s1 = new string(a);
-                Assert.True(s1.Substring(1, length - 2).SequenceEqual(s1.Trim()));
-                Assert.True(s1.Substring(1).SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.Substring(0, length - 1).SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.Slice(1, length - 2).SequenceEqual(span.Trim()));
-                Assert.True(span.Slice(1).SequenceEqual(span.TrimStart()));
-                Assert.True(span.Slice(0, length - 1).SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.Slice(1, length - 2).SequenceEqual(span1.Trim()));
-                Assert.True(span1.Slice(1).SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.Slice(0, length - 1).SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Slice(1).Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Slice(1, length - 2).Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Slice(1).Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Slice(0, length - 1).Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Fact]
-        public static void WhiteSpaceInMiddleTrim()
-        {
-            for (int length = 3; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-                a[1] = ' ';
-
-                string s1 = new string(a);
-                Assert.True(s1.SequenceEqual(s1.Trim()));
-                Assert.True(s1.SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.SequenceEqual(span.Trim()));
-                Assert.True(span.SequenceEqual(span.TrimStart()));
-                Assert.True(span.SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.SequenceEqual(span1.Trim()));
-                Assert.True(span1.SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Fact]
-        public static void TrimWhiteSpaceMultipleTimes()
-        {
-            for (int length = 3; length < 32; length++)
-            {
-                char[] a = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    a[i] = 'a';
-                }
-                a[0] = ' ';
-                a[length - 1] = ' ';
-
-                string s1 = new string(a);
-                string trimResultString = s1.Trim();
-                string trimStartResultString = s1.TrimStart();
-                string trimEndResultString = s1.TrimEnd();
-                Assert.True(s1.Substring(1, length - 2).SequenceEqual(trimResultString));
-                Assert.True(s1.Substring(1).SequenceEqual(trimStartResultString));
-                Assert.True(s1.Substring(0, length - 1).SequenceEqual(trimEndResultString));
-
-                // 2nd attempt should do nothing
-                Assert.True(trimResultString.SequenceEqual(trimResultString.Trim()));
-                Assert.True(trimStartResultString.SequenceEqual(trimStartResultString.TrimStart()));
-                Assert.True(trimEndResultString.SequenceEqual(trimEndResultString.TrimEnd()));
-
-                // ReadOnlySpan
-                {
-                    ReadOnlySpan<char> span = s1.AsSpan();
-                    ReadOnlySpan<char> trimResult = span.Trim();
-                    ReadOnlySpan<char> trimStartResult = span.TrimStart();
-                    ReadOnlySpan<char> trimEndResult = span.TrimEnd();
-                    Assert.True(span.Slice(1, length - 2).SequenceEqual(trimResult));
-                    Assert.True(span.Slice(1).SequenceEqual(trimStartResult));
-                    Assert.True(span.Slice(0, length - 1).SequenceEqual(trimEndResult));
-
-                    // 2nd attempt should do nothing
-                    Assert.True(trimResult.SequenceEqual(trimResult.Trim()));
-                    Assert.True(trimStartResult.SequenceEqual(trimStartResult.TrimStart()));
-                    Assert.True(trimEndResult.SequenceEqual(trimEndResult.TrimEnd()));
-                }
-
-                // Span
-                {
-                    var span = new Span<char>(s1.ToCharArray());
-                    Span<char> trimResult = span.Trim();
-                    Span<char> trimStartResult = span.TrimStart();
-                    Span<char> trimEndResult = span.TrimEnd();
-                    Assert.True(span.Slice(1, length - 2).SequenceEqual(trimResult));
-                    Assert.True(span.Slice(1).SequenceEqual(trimStartResult));
-                    Assert.True(span.Slice(0, length - 1).SequenceEqual(trimEndResult));
-
-                    // 2nd attempt should do nothing
-                    Assert.True(trimResult.SequenceEqual(trimResult.Trim()));
-                    Assert.True(trimStartResult.SequenceEqual(trimStartResult.TrimStart()));
-                    Assert.True(trimEndResult.SequenceEqual(trimEndResult.TrimEnd()));
-                }
-
-                // Memory
-                {
-                    var mem = new Memory<char>(s1.ToCharArray());
-                    Memory<char> trimResult = mem.Trim();
-                    Memory<char> trimStartResult = mem.TrimStart();
-                    Memory<char> trimEndResult = mem.TrimEnd();
-                    Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(trimResult.Span));
-                    Assert.True(mem.Slice(1).Span.SequenceEqual(trimStartResult.Span));
-                    Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(trimEndResult.Span));
-
-                    // 2nd attempt should do nothing
-                    Assert.True(trimResult.Span.SequenceEqual(trimResult.Trim().Span));
-                    Assert.True(trimStartResult.Span.SequenceEqual(trimStartResult.TrimStart().Span));
-                    Assert.True(trimEndResult.Span.SequenceEqual(trimEndResult.TrimEnd().Span));
-                }
-
-                // ReadOnlyMemory
-                {
-                    var mem = new ReadOnlyMemory<char>(s1.ToCharArray());
-                    ReadOnlyMemory<char> trimResult = mem.Trim();
-                    ReadOnlyMemory<char> trimStartResult = mem.TrimStart();
-                    ReadOnlyMemory<char> trimEndResult = mem.TrimEnd();
-                    Assert.True(mem.Slice(1, length - 2).Span.SequenceEqual(trimResult.Span));
-                    Assert.True(mem.Slice(1).Span.SequenceEqual(trimStartResult.Span));
-                    Assert.True(mem.Slice(0, length - 1).Span.SequenceEqual(trimEndResult.Span));
-
-                    // 2nd attempt should do nothing
-                    Assert.True(trimResult.Span.SequenceEqual(trimResult.Trim().Span));
-                    Assert.True(trimStartResult.Span.SequenceEqual(trimStartResult.TrimStart().Span));
-                    Assert.True(trimEndResult.Span.SequenceEqual(trimEndResult.TrimEnd().Span));
-                }
-            }
-        }
-
-        [Fact]
-        public static void MakeSureNoTrimChecksGoOutOfRange()
-        {
-            for (int length = 3; length < 64; length++)
-            {
-                char[] first = new char[length];
-                first[0] = ' ';
-                first[length - 1] = ' ';
-
-                string s1 = new string(first, 1, length - 2);
-                Assert.True(s1.SequenceEqual(s1.Trim()));
-                Assert.True(s1.SequenceEqual(s1.TrimStart()));
-                Assert.True(s1.SequenceEqual(s1.TrimEnd()));
-
-                ReadOnlySpan<char> span = s1.AsSpan();
-                Assert.True(span.SequenceEqual(span.Trim()));
-                Assert.True(span.SequenceEqual(span.TrimStart()));
-                Assert.True(span.SequenceEqual(span.TrimEnd()));
-
-                var span1 = new Span<char>(s1.ToCharArray());
-                Assert.True(span1.SequenceEqual(span1.Trim()));
-                Assert.True(span1.SequenceEqual(span1.TrimStart()));
-                Assert.True(span1.SequenceEqual(span1.TrimEnd()));
-
-                var mem = new Memory<char>(s1.ToCharArray());
-                Assert.True(mem.Span.SequenceEqual(mem.Trim().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimStart().Span));
-                Assert.True(mem.Span.SequenceEqual(mem.TrimEnd().Span));
-
-                var rom = new ReadOnlyMemory<char>(s1.ToCharArray());
-                Assert.True(rom.Span.SequenceEqual(rom.Trim().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimStart().Span));
-                Assert.True(rom.Span.SequenceEqual(rom.TrimEnd().Span));
-            }
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 2, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 3, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Single(int[] values, int trim, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Single(int[] values, int trim, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_Trim_Single(int[] values, int trim, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 2 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 3 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Multi(int[] values, int[] trims, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).TrimStart(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Multi(int[] values, int[] trims, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).TrimEnd(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_Trim_Multi(int[] values, int[] trims, int[] expected)
-        {
-            Span<int> span = new Span<int>(values).Trim(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        private sealed class Foo : IEquatable<Foo>
-        {
-            public int Value { get; set; }
-
-            public bool Equals(Foo other)
-            {
-                if (this == null && other == null)
-                    return true;
-                if (other == null)
-                    return false;
-                return Value == other.Value;
-            }
-
-            public static implicit operator Foo(int value) => new Foo { Value = value };
-            public static implicit operator int? (Foo foo) => foo?.Value;
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2, null, null };
-
-            Span<Foo> span = new Span<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3, null, 2, 1, null };
-
-            Span<Foo> span = new Span<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { null, null, 1, 2 };
-
-            Span<Foo> span = new Span<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { null, 1, 2, 3 };
-
-            Span<Foo> span = new Span<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2 };
-
-            Span<Foo> span = new Span<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3 };
-
-            Span<Foo> span = new Span<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-        }
-    }
-
-    public static partial class ReadOnlySpanTests
-    {
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 2, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 3, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_Trim_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 2 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 3 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Multi(int[] values, int[] trims, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimStart(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Multi(int[] values, int[] trims, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimEnd(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_Trim_Multi(int[] values, int[] trims, int[] expected)
-        {
-            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).Trim(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        private sealed class Foo : IEquatable<Foo>
-        {
-            public int Value { get; set; }
-
-            public bool Equals(Foo other)
-            {
-                if (this == null && other == null)
-                    return true;
-                if (other == null)
-                    return false;
-                return Value == other.Value;
-            }
-
-            public static implicit operator Foo(int value) => new Foo { Value = value };
-            public static implicit operator int? (Foo foo) => foo?.Value;
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2, null, null };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3, null, 2, 1, null };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { null, null, 1, 2 };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { null, 1, 2, 3 };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2 };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3 };
-
-            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-    }
-
     public static partial class MemoryTests
     {
         [Theory]
+        [InlineData(new int[] { }, 1, new int[] { })]
         [InlineData(new int[] { 1 }, 1, new int[] { })]
         [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2, 1 })]
@@ -901,9 +27,20 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+
+            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
         [Theory]
+        [InlineData(new int[] { }, 1, new int[] { })]
         [InlineData(new int[] { 1 }, 1, new int[] { })]
         [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 1, 2 })]
@@ -916,9 +53,19 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
         [Theory]
+        [InlineData(new int[] { }, 1, new int[] { })]
         [InlineData(new int[] { 1 }, 1, new int[] { })]
         [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2 })]
@@ -932,9 +79,20 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).Trim(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).Trim(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).Trim(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
         [Theory]
+        [InlineData(new int[] { }, new int[] { 1 }, new int[] { })]
+        [InlineData(new int[] { 1 }, new int[] { }, new int[] { 1 })]
         [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
         [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
@@ -950,9 +108,20 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).TrimStart(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimStart(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).TrimStart(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimStart(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
         [Theory]
+        [InlineData(new int[] { }, new int[] { 1 }, new int[] { })]
+        [InlineData(new int[] { 1 }, new int[] { }, new int[] { 1 })]
         [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
         [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
@@ -968,9 +137,20 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).TrimEnd(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
         [Theory]
+        [InlineData(new int[] { }, new int[] { 1 }, new int[] { })]
+        [InlineData(new int[] { 1 }, new int[] { }, new int[] { 1 })]
         [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
         [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
         [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2 })]
@@ -986,201 +166,18 @@ namespace SourceCode.Clay.Tests
         {
             Memory<int> memory = new Memory<int>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
 
-        private sealed class Foo : IEquatable<Foo>
-        {
-            public int Value { get; set; }
-
-            public bool Equals(Foo other)
-            {
-                if (this == null && other == null)
-                    return true;
-                if (other == null)
-                    return false;
-                return Value == other.Value;
-            }
-
-            public static implicit operator Foo(int value) => new Foo { Value = value };
-            public static implicit operator int? (Foo foo) => foo?.Value;
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2, null, null };
-
-            Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3, null, 2, 1, null };
-
-            Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { null, null, 1, 2 };
-
-            Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { null, 1, 2, 3 };
-
-            Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Single_Null()
-        {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
-            var expected = new Foo[] { 1, 2 };
-
-            Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-
-        [Fact]
-        public static void MemoryExtensions_Trim_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3 };
-
-            Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-        }
-    }
-
-    public static partial class ReadOnlyMemoryTests
-    {
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 2, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 3, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimStart(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimEnd(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_Trim_Single(int[] values, int trim, int[] expected)
-        {
-            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 2 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 3 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Multi(int[] values, int[] trims, int[] expected)
-        {
-            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimStart(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Multi(int[] values, int[] trims, int[] expected)
-        {
-            ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimEnd(trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_Trim_Multi(int[] values, int[] trims, int[] expected)
-        {
             ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            Span<int> span = new Span<int>(values).Trim(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ReadOnlySpan<int> ros = new ReadOnlySpan<int>(values).Trim(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
-        private sealed class Foo : IEquatable<Foo>
+        public sealed class Foo : IEquatable<Foo>
         {
             public int Value { get; set; }
 
@@ -1197,272 +194,115 @@ namespace SourceCode.Clay.Tests
             public static implicit operator int? (Foo foo) => foo?.Value;
         }
 
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Single_Null()
+        public static IEnumerable<object[]> IdempotentValues => new object[][]
         {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
+            new object[1] { new Foo[] { } },
+            new object[1] { new Foo[] { null, 1, 2, 3, null, 2, 1, null } }
+        };
 
-            var expected = new Foo[] { 1, 2, null, null };
+        [Theory]
+        [MemberData(nameof(IdempotentValues))]
+        public static void MemoryExtensions_TrimStart_Idempotent(Foo[] values)
+        {
+            Foo[] expected = values;
+
+            Foo[] trim = null;
+
+            Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
             ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
 
-        [Fact]
-        public static void MemoryExtensions_TrimStart_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
+            Span<Foo> span = new Span<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            var expected = new Foo[] { 3, null, 2, 1, null };
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
 
-            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimStart(trim);
+            trim = new Foo[] { };
+
+            memory = new Memory<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            rom = new ReadOnlyMemory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            span = new Span<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Single_Null()
+        [Theory]
+        [MemberData(nameof(IdempotentValues))]
+        public static void MemoryExtensions_TrimEnd_Idempotent(Foo[] values)
         {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
+            Foo[] expected = values;
 
-            var expected = new Foo[] { null, null, 1, 2 };
+            Foo[] trim = null;
+
+            Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
             ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
 
-        [Fact]
-        public static void MemoryExtensions_TrimEnd_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
+            Span<Foo> span = new Span<Foo>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            var expected = new Foo[] { null, 1, 2, 3 };
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
 
-            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trim);
+            var trims = new Foo[] { };
+
+            memory = new Memory<Foo>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
+
+            rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
+
+            span = new Span<Foo>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
+
+            ros = new ReadOnlySpan<Foo>(values).TrimEnd(trims);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
-        [Fact]
-        public static void MemoryExtensions_Trim_Single_Null()
+        [Theory]
+        [MemberData(nameof(IdempotentValues))]
+        public static void MemoryExtensions_Trim_Idempotent(Foo[] values)
         {
-            var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
+            Foo[] expected = values;
 
-            var expected = new Foo[] { 1, 2 };
+            Foo[] trim = null;
+
+            Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
+            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
             ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
 
-        [Fact]
-        public static void MemoryExtensions_Trim_Multi_Null()
-        {
-            var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
-            var trim = new Foo[] { null, 1, 2 };
-
-            var expected = new Foo[] { 3 };
-
-            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).Trim(trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-        }
-    }
-
-    public static class MemoryExtensionsTests
-    {
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 1, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 2, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, 3, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Single(int[] values, int trim, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.TrimStart(new Memory<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.TrimStart(new ReadOnlyMemory<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-
-            // Span
-            Span<int> span = MemoryExtensions.TrimStart(new Span<int>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.TrimStart(new ReadOnlySpan<int>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
 
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Single(int[] values, int trim, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.TrimEnd(new Memory<int>(values), trim);
+            var trims = new Foo[] { };
+
+            memory = new Memory<Foo>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.TrimEnd(new ReadOnlyMemory<int>(values), trim);
+            rom = new ReadOnlyMemory<Foo>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<int> span = MemoryExtensions.TrimEnd(new Span<int>(values), trim);
+            span = new Span<Foo>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.TrimEnd(new ReadOnlySpan<int>(values), trim);
+            ros = new ReadOnlySpan<Foo>(values).Trim(trims);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, 1, new int[] { })]
-        [InlineData(new int[] { 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 2, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, 3, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, 1, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, 1, new int[] { })]
-        public static void MemoryExtensions_Trim_Single(int[] values, int trim, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.Trim(new Memory<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.Trim(new ReadOnlyMemory<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-
-            // Span
-            Span<int> span = MemoryExtensions.Trim(new Span<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.Trim(new ReadOnlySpan<int>(values), trim);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1 }, new int[] { 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 2 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 3 }, new int[] { 1, 1, 2, 1 })]
-        [InlineData(new int[] { 1, 1, 2, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 2, 3 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 1, 1, 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimStart_Multi(int[] values, int[] trims, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.TrimStart(new Memory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.TrimStart(new ReadOnlyMemory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-
-            // Span
-            Span<int> span = MemoryExtensions.TrimStart(new Span<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.TrimStart(new ReadOnlySpan<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 1, 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_TrimEnd_Multi(int[] values, int[] trims, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.TrimEnd(new Memory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.TrimEnd(new ReadOnlyMemory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-
-            // Span
-            Span<int> span = MemoryExtensions.TrimEnd(new Span<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.TrimEnd(new ReadOnlySpan<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        [Theory]
-        [InlineData(new int[] { 1 }, new int[] { 1 }, new int[] { })]
-        [InlineData(new int[] { 2 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 2 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 3 }, new int[] { 1, 2, 1, 1 })]
-        [InlineData(new int[] { 1, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2 }, new int[] { 3 })]
-        [InlineData(new int[] { 2, 1, 3, 2, 1, 1 }, new int[] { 1, 2, 4 }, new int[] { 3 })]
-        [InlineData(new int[] { 1, 2, 1, 1, 1 }, new int[] { 1 }, new int[] { 2 })]
-        [InlineData(new int[] { 1, 1, 1, 1 }, new int[] { 1 }, new int[] { })]
-        public static void MemoryExtensions_Trim_Multi(int[] values, int[] trims, int[] expected)
-        {
-            // Memory
-            Memory<int> memory = MemoryExtensions.Trim(new Memory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
-
-            // RoM
-            ReadOnlyMemory<int> rom = MemoryExtensions.Trim(new ReadOnlyMemory<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
-
-            // Span
-            Span<int> span = MemoryExtensions.Trim(new Span<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
-
-            // RoS
-            ReadOnlySpan<int> ros = MemoryExtensions.Trim(new ReadOnlySpan<int>(values), trims);
-            Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
-        }
-
-        private sealed class Foo : IEquatable<Foo>
-        {
-            public int Value { get; set; }
-
-            public bool Equals(Foo other)
-            {
-                if (this == null && other == null) return true;
-                if (other == null) return false;
-                return Value == other.Value;
-            }
-
-            public static implicit operator Foo(int value) => new Foo { Value = value };
-            public static implicit operator int? (Foo foo) => foo?.Value;
         }
 
         [Fact]
@@ -1473,20 +313,16 @@ namespace SourceCode.Clay.Tests
 
             var expected = new Foo[] { 1, 2, null, null };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.TrimStart(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.TrimStart(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.TrimStart(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.TrimStart(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -1498,20 +334,16 @@ namespace SourceCode.Clay.Tests
 
             var expected = new Foo[] { 3, null, 2, 1, null };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.TrimStart(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.TrimStart(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.TrimStart(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.TrimStart(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -1520,22 +352,19 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
             var trim = (Foo)null;
+
             var expected = new Foo[] { null, null, 1, 2 };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.TrimEnd(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.TrimEnd(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.TrimEnd(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.TrimEnd(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -1544,22 +373,19 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
+
             var expected = new Foo[] { null, 1, 2, 3 };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.TrimEnd(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.TrimEnd(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.TrimEnd(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.TrimEnd(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -1568,22 +394,19 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
             var trim = (Foo)null;
+
             var expected = new Foo[] { 1, 2 };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.Trim(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.Trim(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.Trim(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.Trim(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -1592,22 +415,19 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
+
             var expected = new Foo[] { 3 };
 
-            // Memory
-            Memory<Foo> memory = MemoryExtensions.Trim(new Memory<Foo>(values), trim);
+            Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            // RoM
-            ReadOnlyMemory<Foo> rom = MemoryExtensions.Trim(new ReadOnlyMemory<Foo>(values), trim);
+            ReadOnlyMemory<Foo> rom = new ReadOnlyMemory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            // Span
-            Span<Foo> span = MemoryExtensions.Trim(new Span<Foo>(values), trim);
+            Span<Foo> span = new Span<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            // RoS
-            ReadOnlySpan<Foo> ros = MemoryExtensions.Trim(new ReadOnlySpan<Foo>(values), trim);
+            ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
     }
