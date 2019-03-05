@@ -28,7 +28,6 @@ namespace SourceCode.Clay.Tests
             Memory<int> memory = new Memory<int>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-
             ReadOnlyMemory<int> rom = new ReadOnlyMemory<int>(values).TrimStart(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
@@ -255,18 +254,18 @@ namespace SourceCode.Clay.Tests
             ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
 
-            var trims = new Foo[] { };
+            trim = new Foo[] { };
 
-            memory = new Memory<Foo>(values).TrimEnd(trims);
+            memory = new Memory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trims);
+            rom = new ReadOnlyMemory<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            span = new Span<Foo>(values).TrimEnd(trims);
+            span = new Span<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            ros = new ReadOnlySpan<Foo>(values).TrimEnd(trims);
+            ros = new ReadOnlySpan<Foo>(values).TrimEnd(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -290,18 +289,18 @@ namespace SourceCode.Clay.Tests
             ReadOnlySpan<Foo> ros = new ReadOnlySpan<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
 
-            var trims = new Foo[] { };
+            trim = new Foo[] { };
 
-            memory = new Memory<Foo>(values).Trim(trims);
+            memory = new Memory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, memory.ToArray()));
 
-            rom = new ReadOnlyMemory<Foo>(values).Trim(trims);
+            rom = new ReadOnlyMemory<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, rom.ToArray()));
 
-            span = new Span<Foo>(values).Trim(trims);
+            span = new Span<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, span.ToArray()));
 
-            ros = new ReadOnlySpan<Foo>(values).Trim(trims);
+            ros = new ReadOnlySpan<Foo>(values).Trim(trim);
             Assert.True(System.Linq.Enumerable.SequenceEqual(expected, ros.ToArray()));
         }
 
@@ -309,7 +308,7 @@ namespace SourceCode.Clay.Tests
         public static void MemoryExtensions_TrimStart_Single_Null()
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
+            Foo trim = null;
             var expected = new Foo[] { 1, 2, null, null };
 
             Memory<Foo> memory = new Memory<Foo>(values).TrimStart(trim);
@@ -349,8 +348,7 @@ namespace SourceCode.Clay.Tests
         public static void MemoryExtensions_TrimEnd_Single_Null()
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
+            Foo trim = null;
             var expected = new Foo[] { null, null, 1, 2 };
 
             Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
@@ -371,7 +369,6 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
-
             var expected = new Foo[] { null, 1, 2, 3 };
 
             Memory<Foo> memory = new Memory<Foo>(values).TrimEnd(trim);
@@ -391,8 +388,7 @@ namespace SourceCode.Clay.Tests
         public static void MemoryExtensions_Trim_Single_Null()
         {
             var values = new Foo[] { null, null, 1, 2, null, null };
-            var trim = (Foo)null;
-
+            Foo trim = null;
             var expected = new Foo[] { 1, 2 };
 
             Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
@@ -413,7 +409,6 @@ namespace SourceCode.Clay.Tests
         {
             var values = new Foo[] { null, 1, 2, 3, null, 2, 1, null };
             var trim = new Foo[] { null, 1, 2 };
-
             var expected = new Foo[] { 3 };
 
             Memory<Foo> memory = new Memory<Foo>(values).Trim(trim);
