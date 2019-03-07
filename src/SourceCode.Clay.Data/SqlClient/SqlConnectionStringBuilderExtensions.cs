@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
                     sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
 
-                if (!sqlCsb.DataSource.Contains(","))
+                if (!sqlCsb.DataSource.Contains(",", StringComparison.Ordinal))
                     sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
             }
 
@@ -114,16 +114,13 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         public static bool IsAzureSql(this SqlConnectionStringBuilder sqlCsb)
             => sqlCsb == null ? false : IsAzureSql(sqlCsb.DataSource);
 
-        #region Helpers
-
         // See SqlClient section here: https://msdn.microsoft.com/en-us/library/ms171868(v=vs.110).aspx#v462
         // Original code here:
-        // https://github.com/dotnet/corefx/blob/a74bf4200926c47c11ba0383e2bddeaa59227266/src/System.Data.SqlClient/src/System/Data/Common/AdapterUtil.SqlClient.cs
+        // https://github.com/dotnet/corefx/blob/master/src/System.Data.SqlClient/src/System/Data/Common/AdapterUtil.SqlClient.cs#L748-L752
 
         private static readonly string[] s_azureSqlServerEndpoints =
         {
             ".database.windows.net",
-            ".secure.windows.net", // TODO: Is this still valid
             ".database.cloudapi.de",
             ".database.usgovcloudapi.net",
             ".database.chinacloudapi.cn"
@@ -164,7 +161,5 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
 
             return false;
         }
-
-        #endregion
     }
 }

@@ -16,6 +16,13 @@ namespace SourceCode.Clay.Data.SqlParser
 
         public string Value { get; }
 
+        internal SqlTokenInfo(SqlTokenKind kind, char value)
+        {
+            Kind = kind;
+            ReadOnlySpan<char> ca = stackalloc char[1] { value };
+            Value = new string(ca);
+        }
+
         internal SqlTokenInfo(SqlTokenKind kind, string value)
         {
             Kind = kind;
@@ -28,16 +35,10 @@ namespace SourceCode.Clay.Data.SqlParser
             Value = value?.ToString();
         }
 
-        internal SqlTokenInfo(SqlTokenKind kind, params char[] value)
+        internal SqlTokenInfo(SqlTokenKind kind, ReadOnlySpan<char> value)
         {
             Kind = kind;
-            Value = value is null ? null : new string(value);
-        }
-
-        internal SqlTokenInfo(SqlTokenKind kind, char[] value, int offset, int count)
-        {
-            Kind = kind;
-            Value = new string(value, offset, count);
+            Value = new string(value);
         }
 
         /// <summary>Indicates whether this instance and a specified object are equal.</summary>
@@ -58,7 +59,7 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            int hc = Value?.GetHashCode() ?? 0;
+            int hc = Value?.GetHashCode(StringComparison.Ordinal) ?? 0;
             return hc;
         }
 

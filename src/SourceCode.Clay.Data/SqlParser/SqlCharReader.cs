@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Data.SqlParser
 {
     internal sealed class SqlCharReader : IDisposable
     {
-        private readonly Stack<ArraySegment<char>> _undo = new Stack<ArraySegment<char>>();
+        private readonly Stack<IMemoryOwner<char>> _undo = new Stack<IMemoryOwner<char>>();
         private readonly TextReader _reader;
         private readonly bool _ownsReader;
 
@@ -39,9 +39,8 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="buffer">The buffer to fill.</param>
         /// <param name="minimumCount">The minimum number of characters required.</param>
         /// <param name="count">The number of characters filled. This may be more (or less, if the source is empty) than requested.</param>
-        public void FillLength(char[] buffer, int minimumCount, out int count)
+        public void FillLength(Span<char> buffer, int minimumCount, out int count)
         {
-            Debug.Assert(!(buffer is null));
             Debug.Assert(minimumCount >= 0);
             Debug.Assert(minimumCount <= buffer.Length);
 
@@ -51,7 +50,7 @@ namespace SourceCode.Clay.Data.SqlParser
             var offset = 0;
             while (true)
             {
-                FillRemaining(buffer, offset, out var len);
+                FillRemaining(buffer.Slice(offset), out var len);
 
                 count += len;
                 offset += len;
@@ -66,45 +65,40 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="buffer">The buffer to fill.</param>
         /// <param name="offset">The offset in the buffer from where to start filling.</param>
         /// <param name="count">The number of characters filled. This may or may not fill the rest of buffer depending on whether the source is empty.</param>
-        public void FillRemaining(char[] buffer, int offset, out int count)
+        public void FillRemaining(Span<char> buffer, out int count)
         {
-            Debug.Assert(!(buffer is null));
-            Debug.Assert(offset >= 0);
-            Debug.Assert(offset < buffer.Length);
-
             count = 0;
             if (buffer.Length == 0) return;
 
-            var desiredCount = buffer.Length - offset;
+            var desiredCount = buffer.Length;
             if (desiredCount == 0) return;
 
             // If anything in undo stack
             if (_undo.Count > 0)
             {
-                // Pop top undo
-                ArraySegment<char> pop = _undo.Pop();
-
-                // If it's longer than what we require
-                count = pop.Count;
-                if (pop.Count > desiredCount)
+                using (IMemoryOwner<char> pop = _undo.Pop())
                 {
-                    count = desiredCount;
+                    Span<char> span = pop.Memory.Span;
 
-                    // Push back the difference to the stack
-                    var n = pop.Count - desiredCount;
-                    Undo(pop.Array, desiredCount, n);
+                    // If it's longer than what we require
+                    count = span.Length;
+                    if (span.Length > desiredCount)
+                    {
+                        count = desiredCount;
+
+                        // Push back the difference to the stack
+                        var n = span.Length - desiredCount;
+                        Undo(span.Slice(desiredCount, n));
+                    }
+
+                    // Copy requested data to output buffer
+                    span.Slice(0, count).CopyTo(buffer);
                 }
-
-                // Copy requested data to output buffer
-                Array.Copy(pop.Array, 0, buffer, offset, count);
-
-                // Return the rental
-                ArrayPool<char>.Shared.Return(pop.Array);
             }
             else
             {
                 // Else read directly from input
-                count = _reader.Read(buffer, offset, desiredCount);
+                count = _reader.Read(buffer.Slice(0, desiredCount));
             }
         }
 
@@ -114,21 +108,45 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="length"></param>
-        public void Undo(char[] buffer, int offset, int length)
+        public void Undo(ReadOnlySpan<char> buffer)
         {
-            if (length == 0) return;
+            if (buffer.Length == 0) return;
 
-            Debug.Assert(!(buffer is null));
-            Debug.Assert(buffer.Length > 0);
-            Debug.Assert(offset >= 0);
-            Debug.Assert(length >= 0);
-            Debug.Assert(offset + length <= buffer.Length);
+            IMemoryOwner<char> owner = MemoryPool<char>.Shared.Rent(buffer.Length); // Rent
+            owner = new SliceOwner<char>(owner, 0, buffer.Length); // Clamp
 
-            var rented = ArrayPool<char>.Shared.Rent(length); // Rental may be longer than requested...
-            Array.Copy(buffer, offset, rented, 0, length);
+            buffer.CopyTo(owner.Memory.Span);
 
-            var seg = new ArraySegment<char>(rented, 0, length); // ...so delineate it
-            _undo.Push(seg);
+            _undo.Push(owner);
+        }
+
+        private sealed class SliceOwner<T> : IMemoryOwner<T>
+        {
+            private IMemoryOwner<T> _owner;
+            public Memory<T> Memory { get; private set; }
+
+            public SliceOwner(IMemoryOwner<T> owner, int start, int length)
+            {
+                _owner = owner;
+                Memory = _owner.Memory.Slice(start, length);
+            }
+
+            public SliceOwner(IMemoryOwner<T> owner, int start)
+            {
+                _owner = owner;
+                Memory = _owner.Memory.Slice(start);
+            }
+
+            public void Dispose()
+            {
+                if (_owner != null)
+                {
+                    _owner.Dispose();
+                    _owner = null;
+                }
+
+                Memory = default;
+            }
         }
 
         private bool _disposed;
@@ -137,10 +155,13 @@ namespace SourceCode.Clay.Data.SqlParser
         {
             if (!_disposed)
             {
-                if (disposing
-                    && _ownsReader)
+                if (disposing)
                 {
-                    _reader.Dispose();
+                    if (_ownsReader)
+                        _reader.Dispose();
+
+                    foreach (IMemoryOwner<char> undo in _undo)
+                        undo.Dispose();
                 }
 
                 _disposed = true;
