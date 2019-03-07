@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
@@ -107,9 +105,9 @@ namespace SourceCode.Clay.Numerics
 
             // TODO: Lose the branch
             if (on)
-                value = value | mask;
+                value |= mask;
             else
-                value = value & ~mask;
+                value &= ~mask;
 
             return btw;
         }
@@ -133,9 +131,9 @@ namespace SourceCode.Clay.Numerics
 
             // TODO: Lose the branch
             if (on)
-                value = value | mask;
+                value |= mask;
             else
-                value = value & ~mask;
+                value &= ~mask;
 
             return btw;
         }

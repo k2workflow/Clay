@@ -19,31 +19,31 @@ namespace SourceCode.Clay.Security.Tests
         {
             // Null
             SecureString actual = null;
-            Assert.Null(actual.ToUnsecureString());
+            Assert.Null(actual.ToClearText());
 
             // Empty
             actual = new SecureString();
             actual.MakeReadOnly();
-            Assert.Equal(string.Empty, actual.ToUnsecureString());
+            Assert.Equal(string.Empty, actual.ToClearText());
 
             // Single
             actual = new SecureString();
             actual.AppendChar((char)0);
             actual.MakeReadOnly();
-            Assert.Equal(string.Empty, actual.ToUnsecureString());
+            Assert.Equal(string.Empty, actual.ToClearText());
 
             // Single
             actual = new SecureString();
             actual.AppendChar('h');
             actual.MakeReadOnly();
-            Assert.Equal("h", actual.ToUnsecureString());
+            Assert.Equal("h", actual.ToClearText());
 
             // Surrogate
             actual = new SecureString();
             actual.AppendChar(TestConstants.SurrogatePair[0]);
             actual.AppendChar(TestConstants.SurrogatePair[1]);
             actual.MakeReadOnly();
-            Assert.Equal(TestConstants.SurrogatePair, actual.ToUnsecureString());
+            Assert.Equal(TestConstants.SurrogatePair, actual.ToClearText());
 
             // Short
             actual = new SecureString();
@@ -53,14 +53,14 @@ namespace SourceCode.Clay.Security.Tests
             actual.AppendChar('L');
             actual.AppendChar('0');
             actual.MakeReadOnly();
-            Assert.Equal("helL0", actual.ToUnsecureString());
+            Assert.Equal("helL0", actual.ToClearText());
 
             // Large
             actual = new SecureString();
             for (var i = 0; i < TestConstants.LongStr.Length; i++)
                 actual.AppendChar(TestConstants.LongStr[i]);
             actual.MakeReadOnly();
-            Assert.Equal(TestConstants.LongStr, actual.ToUnsecureString());
+            Assert.Equal(TestConstants.LongStr, actual.ToClearText());
         }
 
         [Trait("Type", "Unit")]
@@ -75,37 +75,37 @@ namespace SourceCode.Clay.Security.Tests
             actual = string.Empty;
             var ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(string.Empty, ss.ToUnsecureString());
+            Assert.Equal(string.Empty, ss.ToClearText());
 
             // Single
             actual = new string(new char[] { (char)0 });
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(string.Empty, ss.ToUnsecureString());
+            Assert.Equal(string.Empty, ss.ToClearText());
 
             // Single
             actual = "h";
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal("h", ss.ToUnsecureString());
+            Assert.Equal("h", ss.ToClearText());
 
             // Surrogate
             actual = TestConstants.SurrogatePair;
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(TestConstants.SurrogatePair, ss.ToUnsecureString());
+            Assert.Equal(TestConstants.SurrogatePair, ss.ToClearText());
 
             // Short
             actual = "helL0";
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal("helL0", ss.ToUnsecureString());
+            Assert.Equal("helL0", ss.ToClearText());
 
             // Large
             actual = TestConstants.LongStr;
             ss = actual.ToSecureString();
             Assert.True(ss.IsReadOnly());
-            Assert.Equal(TestConstants.LongStr, ss.ToUnsecureString());
+            Assert.Equal(TestConstants.LongStr, ss.ToClearText());
         }
     }
 }

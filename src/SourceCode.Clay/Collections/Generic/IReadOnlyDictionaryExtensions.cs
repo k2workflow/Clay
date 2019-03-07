@@ -7,7 +7,7 @@ namespace SourceCode.Clay.Collections.Generic
     /// </summary>
     public static class IReadOnlyDictionaryExtensions
     {
-        public static IReadOnlyDictionary<TKey, TValue> OrEmptyIfNull<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source) =>
-           source ?? EmptyMap.Empty<TKey, TValue>();
+        public static IReadOnlyDictionary<TKey, TValue> OrEmptyIfNull<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source)
+            => source ?? EmptyMap.Empty<TKey, TValue>();
     }
 }

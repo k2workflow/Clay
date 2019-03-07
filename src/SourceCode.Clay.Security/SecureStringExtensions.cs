@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Security
         /// </summary>
         /// <param name="ss"></param>
         /// <returns></returns>
-        public static string ToUnsecureString(this SecureString ss)
+        public static string ToClearText(this SecureString ss)
         {
             if (ss is null) return null;
 

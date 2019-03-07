@@ -370,7 +370,7 @@ namespace SourceCode.Clay.Numerics
             ulong mask = 1ul << bitOffset;
 
             bool btr = (value & mask) != 0;
-            value = value & ~mask;
+            value &= ~mask;
 
             return btr;
         }
@@ -388,7 +388,7 @@ namespace SourceCode.Clay.Numerics
             long mask = 1L << bitOffset;
 
             bool btr = (value & mask) != 0;
-            value = value & ~mask;
+            value &= ~mask;
 
             return btr;
         }
@@ -520,7 +520,7 @@ namespace SourceCode.Clay.Numerics
             ulong mask = 1ul << bitOffset;
 
             bool bts = (value & mask) != 0;
-            value = value | mask;
+            value |= mask;
 
             return bts;
         }
@@ -538,7 +538,7 @@ namespace SourceCode.Clay.Numerics
             long mask = 1L << bitOffset;
 
             bool bts = (value & mask) != 0;
-            value = value | mask;
+            value |= mask;
 
             return bts;
         }

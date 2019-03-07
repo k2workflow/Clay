@@ -5,10 +5,9 @@
 
 #endregion
 
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using SourceCode.Clay.Collections.Generic;
 using System.Collections.Generic;
+using BenchmarkDotNet.Attributes;
+using SourceCode.Clay.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Bench
 {
