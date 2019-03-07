@@ -113,7 +113,7 @@ namespace SourceCode.Clay.Data.SqlParser
             if (buffer.Length == 0) return;
 
             IMemoryOwner<char> owner = MemoryPool<char>.Shared.Rent(buffer.Length); // Rent
-            owner = new SliceOwner<char>(owner, 0, buffer.Length); // Clamp
+            owner = new SliceOwner<char>(owner, buffer.Length); // Clamp
 
             buffer.CopyTo(owner.Memory.Span);
 
@@ -125,16 +125,10 @@ namespace SourceCode.Clay.Data.SqlParser
             private IMemoryOwner<T> _owner;
             public Memory<T> Memory { get; private set; }
 
-            public SliceOwner(IMemoryOwner<T> owner, int start, int length)
+            public SliceOwner(IMemoryOwner<T> owner, int length)
             {
                 _owner = owner;
-                Memory = _owner.Memory.Slice(start, length);
-            }
-
-            public SliceOwner(IMemoryOwner<T> owner, int start)
-            {
-                _owner = owner;
-                Memory = _owner.Memory.Slice(start);
+                Memory = _owner.Memory.Slice(0, length);
             }
 
             public void Dispose()

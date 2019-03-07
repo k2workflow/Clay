@@ -23,6 +23,23 @@ namespace SourceCode.Clay.Buffers
     public static class IMemoryOwnerExtensions
     {
         /// <summary>
+        /// Rent a buffer from a pool with an exact length.
+        /// </summary>
+        /// <param name="pool">The <see cref="MemoryPool{T}"/> instance.</param>
+        /// <param name="exactBufferSize">The exact size of the buffer.</param>
+        public static IMemoryOwner<T> RentExact<T>(this MemoryPool<T> pool, int exactBufferSize)
+        {
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+
+            IMemoryOwner<T> rented = pool.Rent(exactBufferSize);
+
+            if (exactBufferSize == rented.Memory.Length)
+                return rented;
+
+            return new SliceOwner<T>(rented, 0, exactBufferSize);
+        }
+
+        /// <summary>
         /// Wrap an existing <see cref="IMemoryOwner{T}"/> instance in a lightweight manner, but allow
         /// the <see cref="IMemoryOwner{T}.Memory"/> member to have a different length.
         /// </summary>

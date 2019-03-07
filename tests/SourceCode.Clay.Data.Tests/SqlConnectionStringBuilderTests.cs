@@ -184,7 +184,6 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
                     $"{svr}=a.database.windows.net",
                     $"{svr}=a.database.windows.net,1433",
                     $"{svr}=a.database.windows.net\\foo,1433",
-                    $"{svr}=a.secure.windows.net",
                     $"{svr}=a.database.chinacloudapi.cn",
                     $"{svr}=a.database.usgovcloudapi.net",
                     $"{svr}=a.database.cloudapi.de"
