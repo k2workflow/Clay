@@ -361,35 +361,5 @@ namespace SourceCode.Clay.Net.Http.Tests
             string result = compiled(values);
             Assert.Equal("?f=Value", result);
         }
-
-        //[Fact]
-        //public static void TemplateCompiler_Compile_Placeholder()
-        //{
-        //    var values = new Values()
-        //    {
-        //        Field = 100,
-        //        Property = Guid.NewGuid(),
-        //        Collection = new[]
-        //        {
-        //            "Test1",
-        //            "Test2"
-        //        },
-        //        Normal = NormalEnum.Second,
-        //        Flags = FlagsEnum.First | FlagsEnum.Second
-        //    };
-
-        //    var template = RawUriTemplate.Parse(
-        //        "/test/{Field}?some={Property}&nf={NotFormattable}&str={Str}&f={Formattable}" +
-        //        "&c={Collection[]}" +
-        //        "&firstNormal={Normal.First}" +
-        //        "&firstSecond={Normal.Second=second}" +
-        //        "&first={Flags.First}" +
-        //        "&second={Flags.Second=sec}");
-        //    Func<Values, string> compiled = TemplateCompiler.Compile<Values>(template);
-        //    string result = compiled(values);
-        //    Assert.Equal(Invariant(
-        //        $"/test/100?some={values.Property}&nf=Foo%21&str=&f=&c=Test1&c=Test2"),
-        //        result);
-        //}
     }
 }
