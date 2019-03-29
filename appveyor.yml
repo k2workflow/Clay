@@ -44,7 +44,7 @@ test_script:
 - >-
     OpenCover.Console.exe
     -target:"dotnet.exe"
-    -targetargs:"test SourceCode.Clay.Tests.sln -c %CONFIGURATION% --no-build"
+    -targetargs:"test SourceCode.Clay.Tests.sln -c %CONFIGURATION% --no-build --blame"
     -filter:"+[*]* -[*.Tests]*"
     -output:"%APPVEYOR_BUILD_FOLDER%\coverage.xml"
     -excludebyattribute:*.ExcludeFromCodeCoverage*
