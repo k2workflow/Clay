@@ -13,10 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Tests", "tests\SourceCode.Clay.Buffers.Tests\SourceCode.Clay.Buffers.Tests.csproj", "{6745404E-CC66-4226-A28D-6E2C16357863}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Text", "src\SourceCode.Clay.Text\SourceCode.Clay.Text.csproj", "{19DA033D-DCDE-4961-96BE-9A0CCE533541}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Text.Tests", "tests\SourceCode.Clay.Text.Tests\SourceCode.Clay.Text.Tests.csproj", "{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections", "src\SourceCode.Clay.Collections\SourceCode.Clay.Collections.csproj", "{DAA43329-D360-44FC-A093-B84E72A6A856}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Collections.Tests", "tests\SourceCode.Clay.Collections.Tests\SourceCode.Clay.Collections.Tests.csproj", "{7E20382C-A1AE-4D67-AE08-F26E4B54D472}"
@@ -67,9 +63,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Algorithms.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Buffers.Bench", "tests\SourceCode.Clay.Buffers.Bench\SourceCode.Clay.Buffers.Bench.csproj", "{7F4C3CD6-C310-408B-B3C6-68D6774998EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Net", "src\SourceCode.Clay.Net\SourceCode.Clay.Net.csproj", "{1ECD089A-B378-4457-B2C7-90D2D1B5C838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Net", "src\SourceCode.Clay.Net\SourceCode.Clay.Net.csproj", "{1ECD089A-B378-4457-B2C7-90D2D1B5C838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceCode.Clay.Net.Tests", "tests\SourceCode.Clay.Net.Tests\SourceCode.Clay.Net.Tests.csproj", "{97F77A4A-A1E7-4448-A329-2EFB0194D429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Net.Tests", "tests\SourceCode.Clay.Net.Tests\SourceCode.Clay.Net.Tests.csproj", "{97F77A4A-A1E7-4448-A329-2EFB0194D429}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,14 +89,6 @@ Global
 		{6745404E-CC66-4226-A28D-6E2C16357863}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6745404E-CC66-4226-A28D-6E2C16357863}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6745404E-CC66-4226-A28D-6E2C16357863}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19DA033D-DCDE-4961-96BE-9A0CCE533541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19DA033D-DCDE-4961-96BE-9A0CCE533541}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19DA033D-DCDE-4961-96BE-9A0CCE533541}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19DA033D-DCDE-4961-96BE-9A0CCE533541}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAA43329-D360-44FC-A093-B84E72A6A856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAA43329-D360-44FC-A093-B84E72A6A856}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAA43329-D360-44FC-A093-B84E72A6A856}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -196,7 +184,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4B6223A6-3156-486B-808B-6B18AAADBF63} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{6745404E-CC66-4226-A28D-6E2C16357863} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
-		{73A1EB52-BBB7-44F7-A947-9513E5A2D4CF} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{7E20382C-A1AE-4D67-AE08-F26E4B54D472} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{D602DE90-7BB2-491A-98D4-22A9E45E6869} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{83089EA0-510E-43A4-B316-FADC3C1D4C67} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}

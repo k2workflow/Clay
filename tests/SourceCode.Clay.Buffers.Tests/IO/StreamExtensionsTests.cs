@@ -24,13 +24,7 @@ namespace SourceCode.Clay.IO.Tests
 
             using (var specimen = new MemoryStream())
             {
-                specimen.Write(memory);
-                Assert.Equal((IEnumerable<byte>)buffer, specimen.ToArray());
-            }
-
-            using (var specimen = new MemoryStream())
-            {
-                specimen.Write(memory, 13);
+                specimen.Write(memory.Span);
                 Assert.Equal((IEnumerable<byte>)buffer, specimen.ToArray());
             }
         }
@@ -44,12 +38,6 @@ namespace SourceCode.Clay.IO.Tests
             using (var specimen = new MemoryStream())
             {
                 await specimen.WriteAsync(memory);
-                Assert.Equal((IEnumerable<byte>)buffer, specimen.ToArray());
-            }
-
-            using (var specimen = new MemoryStream())
-            {
-                await specimen.WriteAsync(memory, 13);
                 Assert.Equal((IEnumerable<byte>)buffer, specimen.ToArray());
             }
         }
