@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace SourceCode.Clay.Net.Http
@@ -7,6 +8,7 @@ namespace SourceCode.Clay.Net.Http
     internal readonly struct RawUriTemplate
     {
         private const string InvalidTokenError = "The URI template contains an invalid token.";
+        private const int TokenHeuristic = 8;
 
         private const char TokenStart = '{';
         private const char TokenEnd = '}';
@@ -18,9 +20,31 @@ namespace SourceCode.Clay.Net.Http
 
         public IReadOnlyList<UriToken> Path { get; }
         public IReadOnlyList<UriQuery> Query { get; }
+        public int LengthEstimate { get; }
+        public ConstantExpression LengthEstimateConstant { get; }
 
         private RawUriTemplate(IReadOnlyList<UriToken> path, IReadOnlyList<UriQuery> query)
-            => (Path, Query) = (path, query);
+        {
+            Path = path;
+            Query = query;
+            LengthEstimate = TokenHeuristic;
+
+            for (var i = 0; i < path.Count; i++)
+                LengthEstimate += path[i].Type == UriTokenType.Literal ? path[i].Default?.Length ?? TokenHeuristic : TokenHeuristic;
+
+            for (var i = 0; i < query.Count; i++)
+            {
+                UriQuery q = query[i];
+
+                LengthEstimate += 2; // & =
+                for (var j = 0; j < q.Name.Count; j++)
+                    LengthEstimate += q.Name[j].Type == UriTokenType.Literal ? q.Name[j].Default?.Length ?? TokenHeuristic : TokenHeuristic;
+                for (var j = 0; j < q.Value.Count; j++)
+                    LengthEstimate += q.Value[j].Type == UriTokenType.Literal ? q.Value[j].Default?.Length ?? TokenHeuristic : TokenHeuristic;
+            }
+
+            LengthEstimateConstant = Expression.Constant(LengthEstimate);
+        }
 
         public static RawUriTemplate Parse(string template)
         {

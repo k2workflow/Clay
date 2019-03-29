@@ -33,5 +33,20 @@ namespace SourceCode.Clay.Net.Http.Tests
         {
             Assert.Throws<ArgumentNullException>(() => new UrlTemplate(null));
         }
+
+        [Fact]
+        public static void UriTemplate_Sample()
+        {
+            UrlTemplate template = "/api/v1/{EnvironmentID:N}/{LabelName}/{Domain}/{ID:x8}";
+            var uri = template.ToString(new
+            {
+                Domain = "K2WORKFLOW",
+                EnvironmentId = new Guid("77f171c3-a345-4590-a8df-09ff4170db40"),
+                ID = 1,
+                LabelName = "K2/"
+            });
+
+            Assert.Equal("/api/v1/77f171c3a3454590a8df09ff4170db40/K2%2F/K2WORKFLOW/00000001", uri);
+        }
     }
 }
