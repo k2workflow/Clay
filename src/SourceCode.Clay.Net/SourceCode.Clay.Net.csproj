@@ -8,4 +8,13 @@
     <PackageReference Include="System.Memory" Version="4.5.2" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Net</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Tools and extensions for working with HTTP.</Description>
+    <PackageTags>clay utility extension http httpclient</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+  </PropertyGroup>
+
 </Project>
