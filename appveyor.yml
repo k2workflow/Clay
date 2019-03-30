@@ -70,5 +70,4 @@ deploy:
   api_key:
     secure: eLA5VxAgbDGm8/Nuncr8zzbSrVMejwcp4xQ62aPhsnl8HS6cou+WzYRqyS1c2nLQ
   on:
-    branch: master
     deployable: true
