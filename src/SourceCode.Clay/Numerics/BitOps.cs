@@ -503,8 +503,8 @@ namespace SourceCode.Clay.Numerics
         /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sbyte ComplementBit(sbyte value, int bitOffset)
-            => unchecked((sbyte)ComplementBit((byte)value, bitOffset));
+        public static byte ComplementBit(byte value, int bitOffset)
+            => (byte)~(~(1u << (bitOffset & 7)) ^ value);
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
@@ -526,10 +526,10 @@ namespace SourceCode.Clay.Numerics
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to complement.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static short ComplementBit(short value, int bitOffset)
-            => unchecked((short)ComplementBit((ushort)value, bitOffset));
+        public static uint ComplementBit(uint value, int bitOffset)
+            => ~(~(1u << bitOffset) ^ value);
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
@@ -546,16 +546,6 @@ namespace SourceCode.Clay.Numerics
             return mask;
         }
 
-        /// <summary>
-        /// Complements the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to complement.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long ComplementBit(long value, int bitOffset)
-            => unchecked((long)ComplementBit((ulong)value, bitOffset));
-
         #endregion
 
         #region ComplementBit (Ref)
@@ -568,12 +558,12 @@ namespace SourceCode.Clay.Numerics
         /// <param name="bitOffset">The ordinal position of the bit to complement.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref sbyte value, int bitOffset)
+        public static bool ComplementBit(ref byte value, int bitOffset)
         {
-            int mask = 1 << (bitOffset & 7);
-
+            uint mask = 1u << (bitOffset & 7);
             bool btc = (value & mask) != 0;
-            value = (sbyte)~(~mask ^ value);
+
+            value = (byte)~(~mask ^ value);
 
             return btc;
         }
@@ -602,14 +592,14 @@ namespace SourceCode.Clay.Numerics
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to complement.
-        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref short value, int bitOffset)
+        public static bool ComplementBit(ref uint value, int bitOffset)
         {
-            int mask = 1 << (bitOffset & 15);
-
+            uint mask = 1u << bitOffset;
             bool btc = (value & mask) != 0;
-            value = (short)~(~mask ^ value);
+
+            value = ~(~mask ^ value);
 
             return btc;
         }
@@ -625,24 +615,6 @@ namespace SourceCode.Clay.Numerics
         public static bool ComplementBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
-            bool btc = (value & mask) != 0;
-            value = ~(~mask ^ value);
-
-            return btc;
-        }
-
-        /// <summary>
-        /// Complements the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTC.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to complement.
-        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ComplementBit(ref long value, int bitOffset)
-        {
-            long mask = 1L << bitOffset;
 
             bool btc = (value & mask) != 0;
             value = ~(~mask ^ value);
