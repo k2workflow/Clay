@@ -21,8 +21,8 @@ namespace SourceCode.Clay.Buffers.Bench
     //[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
     public class TrimBench
     {
-        private const int _iterations = 100000;
-        private const int N = 5;
+        private const int _iterations = 10_000;
+        private const int N = 100;
 
         public byte[] Data = new byte[]
         {
@@ -244,106 +244,143 @@ namespace SourceCode.Clay.Buffers.Bench
 
         // ClampEnd local function
 
-        [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
-        public long ClampEndLocal()
-        {
-            long sum = 0;
+        //[Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        //public long ClampEndLocal()
+        //{
+        //    long sum = 0;
 
-            var span = new ReadOnlySpan<byte>(Data);
-            for (uint n = 0; n < N; n++)
-            {
-                sum += ClampEndLocal<byte>(span, 1, 10);
-                sum += ClampEndLocal<byte>(span, 1, 9);
-                sum += ClampEndLocal<byte>(span, 1, 8);
-            }
+        //    var span = new ReadOnlySpan<byte>(Data);
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += ClampEndLocal<byte>(span, 1, 10);
+        //        sum += ClampEndLocal<byte>(span, 1, 9);
+        //        sum += ClampEndLocal<byte>(span, 1, 8);
+        //    }
 
-            return sum;
-        }
+        //    return sum;
+        //}
+
+        //[Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
+        //public long ClampEndDefault()
+        //{
+        //    long sum = 0;
+
+        //    var span = new ReadOnlySpan<byte>(Data);
+        //    for (uint n = 0; n < N; n++)
+        //    {
+        //        sum += ClampEndDefault<byte>(span, 1, 10);
+        //        sum += ClampEndDefault<byte>(span, 1, 9);
+        //        sum += ClampEndDefault<byte>(span, 1, 8);
+        //    }
+
+        //    return sum;
+        //}
+
+        //private static int ClampEndLocal<T>(ReadOnlySpan<T> span, int start, T trimElement)
+        //    where T : IEquatable<T>
+        //{
+        //    // Initially, start==len==0. If ClampStart trims all, start==len
+        //    Debug.Assert((uint)start <= span.Length);
+
+        //    int end = span.Length - 1;
+
+        //    if (trimElement != null)
+        //    {
+        //        for (; end >= start; end--)
+        //        {
+        //            if (!trimElement.Equals(span[end]))
+        //            {
+        //                break;
+        //            }
+        //        }
+
+        //        return end - start + 1;
+        //    }
+
+        //    return ClampNull(span, start, end);
+
+        //    int ClampNull(ReadOnlySpan<T> span1, int start1, int end1)
+        //    {
+        //        for (; end1 >= start1; end1--)
+        //        {
+        //            if (span1[end1] != null)
+        //            {
+        //                break;
+        //            }
+        //        }
+
+        //        return end1 - start1 + 1;
+        //    }
+        //}
+
+        //private static int ClampEndDefault<T>(ReadOnlySpan<T> span, int start, T trimElement)
+        //    where T : IEquatable<T>
+        //{
+        //    // Initially, start==len==0. If ClampStart trims all, start==len
+        //    Debug.Assert((uint)start <= span.Length);
+
+        //    int end = span.Length - 1;
+
+        //    if (trimElement != null)
+        //    {
+        //        for (; end >= start; end--)
+        //        {
+        //            if (!trimElement.Equals(span[end]))
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (; end >= start; end--)
+        //        {
+        //            if (span[end] != null)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+
+        //    return end - start + 1;
+        //}
+
+        #region Switch
+
 
         [Benchmark(Baseline = false, OperationsPerInvoke = _iterations * N)]
-        public long ClampEndDefault()
+        public long ClampSwitch()
         {
             long sum = 0;
 
             var span = new ReadOnlySpan<byte>(Data);
-            for (uint n = 0; n < N; n++)
+            for (int n = 0; n < N; n++)
             {
-                sum += ClampEndDefault<byte>(span, 1, 10);
-                sum += ClampEndDefault<byte>(span, 1, 9);
-                sum += ClampEndDefault<byte>(span, 1, 8);
+                ReadOnlySpan<byte> trims = new ReadOnlySpan<byte>(new byte[] { 10, 9, 8 }).Slice(0, n % 4);
+
+                sum += span.TrimStartSwitch(trims).Length;
             }
 
             return sum;
         }
 
-        private static int ClampEndLocal<T>(ReadOnlySpan<T> span, int start, T trimElement)
-            where T : IEquatable<T>
+        [Benchmark(Baseline = true, OperationsPerInvoke = _iterations * N)]
+        public long ClampIf()
         {
-            // Initially, start==len==0. If ClampStart trims all, start==len
-            Debug.Assert((uint)start <= span.Length);
+            long sum = 0;
 
-            int end = span.Length - 1;
-
-            if (trimElement != null)
+            var span = new ReadOnlySpan<byte>(Data);
+            for (int n = 0; n < N; n++)
             {
-                for (; end >= start; end--)
-                {
-                    if (!trimElement.Equals(span[end]))
-                    {
-                        break;
-                    }
-                }
+                ReadOnlySpan<byte> trims = new ReadOnlySpan<byte>(new byte[] { 10, 9, 8 }).Slice(0, n % 4);
 
-                return end - start + 1;
+                sum += span.TrimStartIf(trims).Length;
             }
 
-            return ClampNull(span, start, end);
-
-            int ClampNull(ReadOnlySpan<T> span1, int start1, int end1)
-            {
-                for (; end1 >= start1; end1--)
-                {
-                    if (span1[end1] != null)
-                    {
-                        break;
-                    }
-                }
-
-                return end1 - start1 + 1;
-            }
+            return sum;
         }
 
-        private static int ClampEndDefault<T>(ReadOnlySpan<T> span, int start, T trimElement)
-            where T : IEquatable<T>
-        {
-            // Initially, start==len==0. If ClampStart trims all, start==len
-            Debug.Assert((uint)start <= span.Length);
-
-            int end = span.Length - 1;
-
-            if (trimElement != null)
-            {
-                for (; end >= start; end--)
-                {
-                    if (!trimElement.Equals(span[end]))
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (; end >= start; end--)
-                {
-                    if (span[end] != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return end - start + 1;
-        }
+        #endregion
 
         #region Via None
 
@@ -1325,5 +1362,161 @@ Found:
         }
 
         #endregion
+    }
+
+    internal static class SwitchMemory
+    {
+        public static ReadOnlySpan<T> TrimStartIf<T>(this ReadOnlySpan<T> memory, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            if (trimElements.Length > 1)
+            {
+                return memory.Slice(ClampStart(memory, trimElements));
+            }
+
+            if (trimElements.Length == 1)
+            {
+                return TrimStart(memory, trimElements[0]);
+            }
+
+            return memory;
+        }
+
+        public static ReadOnlySpan<T> TrimStartSwitch<T>(this ReadOnlySpan<T> memory, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            switch (trimElements.Length)
+            {
+                case 0: return memory;
+                case 1: return TrimStart(memory, trimElements[0]);
+                default: return memory.Slice(ClampStart(memory, trimElements));
+            }
+        }
+
+        private static int ClampStart<T>(ReadOnlySpan<T> span, ReadOnlySpan<T> trimElements)
+            where T : IEquatable<T>
+        {
+            int start = 0;
+            for (; start < span.Length; start++)
+            {
+                if (!trimElements.Contains(span[start]))
+                {
+                    break;
+                }
+            }
+
+            return start;
+        }
+
+        public static ReadOnlySpan<T> TrimStart<T>(this ReadOnlySpan<T> memory, T trimElement)
+            where T : IEquatable<T>
+            => memory.Slice(ClampStart(memory, trimElement));
+
+        private static int ClampStart<T>(ReadOnlySpan<T> span, T trimElement)
+            where T : IEquatable<T>
+        {
+            int start = 0;
+
+            if (trimElement != null)
+            {
+                for (; start < span.Length; start++)
+                {
+                    if (!trimElement.Equals(span[start]))
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (; start < span.Length; start++)
+                {
+                    if (span[start] != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return start;
+        }
+
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains<T>(this ReadOnlySpan<T> span, T value)
+            where T : IEquatable<T>
+        {
+            return Contains(ref MemoryMarshal.GetReference(span), value, span.Length);
+        }
+
+        private unsafe static bool Contains<T>(ref T searchSpace, T value, int length)
+            where T : IEquatable<T>
+        {
+            Debug.Assert(length >= 0);
+
+            var index = (IntPtr)0; // Use IntPtr for arithmetic to avoid unnecessary 64->32->64 truncations
+
+            if (default(T) != null || value != null)
+            {
+                while (length >= 8)
+                {
+                    length -= 8;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index + 0)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 1)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 2)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 3)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 4)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 5)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 6)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 7)))
+                    {
+                        goto Found;
+                    }
+
+                    index += 8;
+                }
+
+                if (length >= 4)
+                {
+                    length -= 4;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index + 0)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 1)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 2)) ||
+                        value.Equals(Unsafe.Add(ref searchSpace, index + 3)))
+                    {
+                        goto Found;
+                    }
+
+                    index += 4;
+                }
+
+                while (length > 0)
+                {
+                    length -= 1;
+
+                    if (value.Equals(Unsafe.Add(ref searchSpace, index)))
+                        goto Found;
+
+                    index += 1;
+                }
+            }
+            else
+            {
+                byte* len = (byte*)length;
+                for (index = (IntPtr)0; index.ToPointer() < len; index += 1)
+                {
+                    if (Unsafe.Add(ref searchSpace, index) == null)
+                    {
+                        goto Found;
+                    }
+                }
+            }
+
+            return false;
+
+Found:
+            return true;
+        }
     }
 }
