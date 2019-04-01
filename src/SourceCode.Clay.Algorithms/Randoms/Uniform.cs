@@ -129,11 +129,16 @@ namespace SourceCode.Clay.Algorithms.Randoms
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
 
             if (count == 0)
-                yield break;
+                return Array.Empty<double>();
 
-            for (int i = 0; i < count; i++)
+            return Enumerate(count);
+
+            IEnumerable<double> Enumerate(int cnt)
             {
-                yield return NextDouble();
+                for (int i = 0; i < cnt; i++)
+                {
+                    yield return NextDouble();
+                }
             }
         }
 

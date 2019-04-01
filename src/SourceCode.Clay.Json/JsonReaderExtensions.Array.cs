@@ -5,10 +5,10 @@
 
 #endregion
 
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace SourceCode.Clay.Json
 {
@@ -88,47 +88,52 @@ namespace SourceCode.Clay.Json
         /// Reads the current token value as a Json <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the array.</typeparam>
-        /// <param name="jr">The <see cref="JsonReader"/> instance.</param>
+        /// <param name="jsonReader">The <see cref="JsonReader"/> instance.</param>
         /// <param name="itemFactory">The item factory.</param>
         /// <returns>The value.</returns>
-        public static IEnumerable<T> EnumerateArray<T>(this JsonReader jr, Func<T> itemFactory)
+        public static IEnumerable<T> EnumerateArray<T>(this JsonReader jsonReader, Func<T> itemFactory)
         {
-            if (jr is null) throw new ArgumentNullException(nameof(jr));
+            if (jsonReader is null) throw new ArgumentNullException(nameof(jsonReader));
             if (itemFactory is null) throw new ArgumentNullException(nameof(itemFactory));
 
-            if (jr.TokenType == JsonToken.None)
-                jr.Read();
+            if (jsonReader.TokenType == JsonToken.None)
+                jsonReader.Read();
 
             // null
-            if (jr.TokenType == JsonToken.Null)
-                yield break;
+            if (jsonReader.TokenType == JsonToken.Null)
+                return Array.Empty<T>();
 
-            // '['
-            if (jr.TokenType == JsonToken.StartArray)
-                jr.Read();
+            return Enumerate(jsonReader, itemFactory);
 
-            while (true)
+            IEnumerable<T> Enumerate(JsonReader r, Func<T> factory)
             {
-                switch (jr.TokenType)
+                // '['
+                if (r.TokenType == JsonToken.StartArray)
+                    r.Read();
+
+                while (true)
                 {
-                    // Item
-                    default:
-                        {
-                            T item = itemFactory();
+                    switch (r.TokenType)
+                    {
+                        // Item
+                        default:
+                            {
+                                T item = factory();
 
-                            jr.Read();
-                            yield return item;
-                        }
-                        continue;
+                                r.Read();
+                                yield return item;
+                            }
+                            continue;
 
-                    // Skip
-                    case JsonToken.Comment:
-                        jr.Read();
-                        continue;
+                        // Skip
+                        case JsonToken.Comment:
+                            r.Read();
+                            continue;
 
-                    // ']'
-                    case JsonToken.EndArray:
-                        yield break;
+                        // ']'
+                        case JsonToken.EndArray:
+                            yield break;
+                    }
                 }
             }
         }

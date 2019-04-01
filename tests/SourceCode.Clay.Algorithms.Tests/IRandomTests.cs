@@ -5,6 +5,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SourceCode.Clay.Algorithms.Randoms;
@@ -15,6 +16,17 @@ namespace SourceCode.Clay.Algorithms.Tests
     public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism
+
+        [Fact]
+        public static void Random_sample_throws_if_count_less_than_zero()
+        {
+            const double min = 10;
+            const double max = 1500;
+
+            var normal = Uniform.Between(min, max, Seed);
+            Assert.Throws<ArgumentOutOfRangeException>(() => normal.Sample(-1));
+        }
+
 
         [Fact(DisplayName = nameof(Random_clamped_uniform))]
         public static void Random_clamped_uniform()

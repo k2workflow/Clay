@@ -61,7 +61,9 @@ namespace SourceCode.Clay.Json.LinkedData
                 }
 
                 foreach (LinkedDataTerm result in Parse(activeContext, localContext, item, defined))
+                {
                     yield return result;
+                }
             }
         }
 
