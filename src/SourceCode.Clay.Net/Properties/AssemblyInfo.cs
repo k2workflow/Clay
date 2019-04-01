@@ -5,13 +5,4 @@
 
 #endregion
 
-using System.Runtime.CompilerServices;
-using Xunit;
-
-namespace SourceCode.Clay.Numerics.Tests
-{
-    public static partial class BitOpsTests
-    {
-
-    }
-}
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Net.Tests")]
