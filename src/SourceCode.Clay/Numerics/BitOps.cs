@@ -367,12 +367,12 @@ namespace SourceCode.Clay.Numerics
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sbyte InsertBit(sbyte value, int bitOffset)
-            => unchecked((sbyte)InsertBit((byte)value, bitOffset));
+        public static byte InsertBit(byte value, int bitOffset)
+            => (byte)InsertBit((uint)value, bitOffset & 7);
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -387,12 +387,12 @@ namespace SourceCode.Clay.Numerics
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static short InsertBit(short value, int bitOffset)
-            => unchecked((short)InsertBit((ushort)value, bitOffset));
+        public static uint InsertBit(uint value, int bitOffset)
+            => value | (1u << bitOffset);
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -404,16 +404,6 @@ namespace SourceCode.Clay.Numerics
         public static ulong InsertBit(ulong value, int bitOffset)
             => value | (1ul << bitOffset);
 
-        /// <summary>
-        /// Sets the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long InsertBit(long value, int bitOffset)
-            => unchecked((long)InsertBit((ulong)value, bitOffset));
-
         #endregion
 
         #region InsertBit (Ref)
@@ -422,17 +412,16 @@ namespace SourceCode.Clay.Numerics
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref sbyte value, int bitOffset)
+        public static bool InsertBit(ref byte value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 7);
+            bool bts = (value & mask) != 0;
 
-            uint val = (uint)value;
-            bool bts = (val & mask) != 0;
-            value = (sbyte)(val | mask);
+            value = (byte)(value | mask);
 
             return bts;
         }
@@ -459,17 +448,16 @@ namespace SourceCode.Clay.Numerics
         /// Sets the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTS.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref short value, int bitOffset)
+        public static bool InsertBit(ref uint value, int bitOffset)
         {
-            uint mask = 1u << (bitOffset & 15);
+            uint mask = 1u << bitOffset;
+            bool bts = (value & mask) != 0;
 
-            uint val = (uint)value;
-            bool bts = (val & mask) != 0;
-            value = (short)(val | mask);
+            value |= mask;
 
             return bts;
         }
@@ -485,24 +473,6 @@ namespace SourceCode.Clay.Numerics
         public static bool InsertBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
-            bool bts = (value & mask) != 0;
-            value |= mask;
-
-            return bts;
-        }
-
-        /// <summary>
-        /// Sets the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTS.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InsertBit(ref long value, int bitOffset)
-        {
-            long mask = 1L << bitOffset;
 
             bool bts = (value & mask) != 0;
             value |= mask;
