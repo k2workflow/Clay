@@ -61,17 +61,27 @@ namespace SourceCode.Clay.Numerics
         #region WriteBit (Scalar)
 
         /// <summary>
-        /// Writes the specified bit in a mask and returns the new value.
+        /// Conditionally writes the specified bit in a mask and returns the new value.
         /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sbyte WriteBit(sbyte value, int bitOffset, bool on)
-            => unchecked((sbyte)WriteBit((byte)value, bitOffset, on));
+        public static byte WriteBit(byte value, int bitOffset, bool on)
+        {
+            uint mask = 1u << (bitOffset & 7);
+
+            // uint onn = on ? mask : 0;
+            // return (byte)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                return (byte)(value | mask);
+
+            return (byte)(value & ~mask);
+        }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
@@ -91,17 +101,27 @@ namespace SourceCode.Clay.Numerics
         }
 
         /// <summary>
-        /// Writes the specified bit in a mask and returns the new value.
+        /// Conditionally writes the specified bit in a mask and returns the new value.
         /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// Executes without branching.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static short WriteBit(short value, int bitOffset, bool on)
-            => unchecked((short)WriteBit((ushort)value, bitOffset, on));
+        public static uint WriteBit(uint value, int bitOffset, bool on)
+        {
+            uint mask = 1u << bitOffset;
+
+            // uint onn = on ? mask : 0;
+            // return (value & ~mask) | onn;
+
+            // TODO: Lose the branch
+            if (on)
+                return value | mask;
+
+            return value & ~mask;
+        }
 
         /// <summary>
         /// Writes the specified bit in a mask and returns the new value.
@@ -120,19 +140,6 @@ namespace SourceCode.Clay.Numerics
             return (value & ~mask) | onn;
         }
 
-        /// <summary>
-        /// Writes the specified bit in a mask and returns the new value.
-        /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// Executes without branching.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long WriteBit(long value, int bitOffset, bool on)
-            => unchecked((long)WriteBit((ulong)value, bitOffset, on));
-
         #endregion
 
         #region WriteBit (Ref)
@@ -146,13 +153,49 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref sbyte value, int bitOffset, bool on)
+        public static bool WriteBit(ref byte value, int bitOffset, bool on)
         {
-            int mask = 1 << (bitOffset & 7);
-            int onn = on ? mask : 0; // TODO: Lose the branch
-
+            uint mask = 1u << (bitOffset & 7);
             bool btw = (value & mask) != 0;
-            value = (sbyte)((value & ~mask) | onn);
+
+            //uint onn = on ? mask : 0;
+            //value = (byte)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                value = (byte)(value | mask);
+            else
+                value = (byte)(value & ~mask);
+
+            return btw;
+        }
+
+        /// <summary>
+        /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref uint value, int bitOffset, bool on)
+        {
+            uint mask = 1u << bitOffset;
+            bool btw = (value & mask) != 0;
+
+            //uint onn = on ? mask : 0;
+            //value = (value & ~mask) | onn;
+
+            //uint onn = Unsafe.As<bool, byte>(ref on);
+            //Debug.Assert(onn == 0 || onn == 1);
+            //onn <<= bitOffset;
+
+            // TODO: Lose the branch
+            if (on)
+                value |= mask;
+            else
+                value &= ~mask;
 
             return btw;
         }
@@ -183,26 +226,6 @@ namespace SourceCode.Clay.Numerics
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref short value, int bitOffset, bool on)
-        {
-            int mask = 1 << (bitOffset & 15);
-            int onn = on ? mask : 0; // TODO: Lose the branch
-
-            bool btw = (value & mask) != 0;
-            value = (short)((value & ~mask) | onn);
-
-            return btw;
-        }
-
-        /// <summary>
-        /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -210,26 +233,6 @@ namespace SourceCode.Clay.Numerics
         {
             ulong mask = 1ul << bitOffset;
             ulong onn = on ? mask : 0; // TODO: Lose the branch
-
-            bool btw = (value & mask) != 0;
-            value = (value & ~mask) | onn;
-
-            return btw;
-        }
-
-        /// <summary>
-        /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref long value, int bitOffset, bool on)
-        {
-            long mask = 1L << bitOffset;
-            long onn = on ? mask : 0; // TODO: Lose the branch
 
             bool btw = (value & mask) != 0;
             value = (value & ~mask) | onn;
