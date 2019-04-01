@@ -13,14 +13,17 @@ namespace SourceCode.Clay.Numerics
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to read.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(sbyte value, int bitOffset)
-            => ExtractBit((byte)value, bitOffset);
+        public static bool ExtractBit(byte value, int bitOffset)
+            // For bit-length N, it is conventional to treat N as congruent modulo-N under the shift operation.
+            // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
+            // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18.
+            // So we use & not %.
+            => ExtractBit((uint)value, bitOffset & 7);
 
-        /// <summary>
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
@@ -35,12 +38,12 @@ namespace SourceCode.Clay.Numerics
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to read.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(short value, int bitOffset)
-            => ExtractBit((ushort)value, bitOffset);
+        public static bool ExtractBit(uint value, int bitOffset)
+            => (value & (1u << bitOffset)) != 0;
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -52,17 +55,6 @@ namespace SourceCode.Clay.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ulong value, int bitOffset)
             => (value & (1ul << bitOffset)) != 0;
-
-        /// <summary>
-        /// Reads whether the specified bit in a mask is set.
-        /// Similar in behavior to the x86 instruction BT.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to read.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ExtractBit(long value, int bitOffset)
-            => ExtractBit((ulong)value, bitOffset);
 
         #endregion
 
