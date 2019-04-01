@@ -1,11 +1,16 @@
-// See the license, notes and warnings in the associated partial class.
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SourceCode.Clay.Numerics
 {
-    public static partial class BitOps
+    public static class BitOps
     {
         #region ExtractBit
 
@@ -624,7 +629,18 @@ namespace SourceCode.Clay.Numerics
 
         #endregion
 
-        #region AsByte
+        /// <summary>
+        /// Casts the underlying <see cref="byte"/> value from a <see cref="bool"/> without normalization.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The value to cast.</param>
+        /// <returns>Returns 0 if <paramref name="condition"/> is False, else returns a non-zero number per the remarks.</returns>
+        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
+        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte AsByte(bool condition)
+            => Unsafe.As<bool, byte>(ref condition);
 
         /// <summary>
         /// Casts the underlying <see cref="byte"/> value from a <see cref="bool"/> without normalization.
@@ -640,36 +656,59 @@ namespace SourceCode.Clay.Numerics
             => Unsafe.As<bool, byte>(ref condition);
 
         /// <summary>
-        /// Casts the underlying <see cref="byte"/> value from a <see cref="bool"/> without normalization.
+        /// Checks a <paramref name="condition"/> and returns <paramref name="trueValue"/> if it is true.
+        /// Else returns 0.
         /// Does not incur branching.
         /// </summary>
-        /// <param name="condition">The value to cast.</param>
-        /// <returns>Returns 0 if <paramref name="condition"/> is False, else returns a non-zero number per the remarks.</returns>
-        /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
-        /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
-        /// </remarks>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="trueValue">The value to return if the <paramref name="condition"/> is true.</param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte AsByte(bool condition)
-            => Unsafe.As<bool, byte>(ref condition);
+        public static uint Iff(bool condition, uint trueValue)
+            => Iff(ref condition, trueValue);
 
-        #endregion
+        /// <summary>
+        /// Checks a <paramref name="condition"/> and returns <paramref name="trueValue"/> if it is true.
+        /// Else returns 0.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="trueValue">The value to return if the <paramref name="condition"/> is true.</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Iff(ref bool condition, uint trueValue)
+        {
+            uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
+            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
 
+            return trueValue & sel;
+        }
+
+        /// <summary>
+        /// Checks a <paramref name="condition"/> and returns <paramref name="trueValue"/> if it is true.
+        /// Else returns <paramref name="falseValue"/>.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="trueValue">The value to return if the <paramref name="condition"/> is true.</param>
+        /// <param name="falseValue">The value to return if the <paramref name="condition"/> is false.</param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(bool condition, uint trueValue, uint falseValue)
-        {
-            /*
-             * https://github.com/dotnet/coreclr/issues/18712#issuecomment-401407743
-            ANDN can be used for branchless select operation in absence of CMOV with the following sequence:
-            eval cc
-            SETcc sel + zero-extend
-            NEG sel
-            AND r1, sel
-            ANDN r2, sel
-            OR r1, r2
-            Not the fastest solution, still saves 1 NOT op and potentially 1 reg wrt to just ANDs
-            This can be expanded to branchless min and max
-            */
+            => Iff(ref condition, trueValue, falseValue);
 
+        /// <summary>
+        /// Checks a <paramref name="condition"/> and returns <paramref name="trueValue"/> if it is true.
+        /// Else returns <paramref name="falseValue"/>.
+        /// Does not incur branching.
+        /// </summary>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="trueValue">The value to return if the <paramref name="condition"/> is true.</param>
+        /// <param name="falseValue">The value to return if the <paramref name="condition"/> is false.</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint Iff(ref bool condition, uint trueValue, uint falseValue)
+        {
             // Branchless equivalent of (eg): value == 0 ? 32 : 0
             uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
             Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
@@ -677,15 +716,6 @@ namespace SourceCode.Clay.Numerics
             uint tv = trueValue & sel;
             uint fv = /*Bmi1.IsSupported ? Bmi1.AndNot(falseValue, sel) :*/ falseValue & ~sel;
             return tv | fv;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint Iff(bool condition, uint trueValue)
-        {
-            uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
-            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
-
-            return trueValue & sel;
         }
     }
 }

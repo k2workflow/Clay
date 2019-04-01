@@ -10,7 +10,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Numerics.Tests
 {
-    partial class BitOpsTests
+    public static class BitOpsTests
     {
         #region ExtractBit
 
@@ -560,8 +560,6 @@ namespace SourceCode.Clay.Numerics.Tests
 
         #endregion
 
-        #region AsByte
-
         [Fact]
         public static void BitOps_AsByte()
         {
@@ -587,8 +585,6 @@ namespace SourceCode.Clay.Numerics.Tests
                 Assert.Equal(n, byt);
             }
         }
-
-        #endregion
 
         #region Helpers
 
