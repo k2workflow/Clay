@@ -176,6 +176,26 @@ namespace SourceCode.Clay.Numerics
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool WriteBit(ref ushort value, int bitOffset, bool on)
+        {
+            uint mask = 1u << (bitOffset & 15);
+            uint onn = on ? mask : 0; // TODO: Lose the branch
+
+            bool btw = (value & mask) != 0;
+            value = (ushort)((value & ~mask) | onn);
+
+            return btw;
+        }
+
+        /// <summary>
+        /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
+        /// Similar in behavior to the x86 instructions BTS and BTR.
+        /// </summary>
+        /// <param name="value">The mask.</param>
+        /// <param name="bitOffset">The ordinal position of the bit to write.
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -196,26 +216,6 @@ namespace SourceCode.Clay.Numerics
                 value |= mask;
             else
                 value &= ~mask;
-
-            return btw;
-        }
-
-        /// <summary>
-        /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instructions BTS and BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
-        /// <param name="on">True to set the bit to 1, or false to set it to 0.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool WriteBit(ref ushort value, int bitOffset, bool on)
-        {
-            uint mask = 1u << (bitOffset & 15);
-            uint onn = on ? mask : 0; // TODO: Lose the branch
-
-            bool btw = (value & mask) != 0;
-            value = (ushort)((value & ~mask) | onn);
 
             return btw;
         }
@@ -247,12 +247,12 @@ namespace SourceCode.Clay.Numerics
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sbyte ClearBit(sbyte value, int bitOffset)
-            => unchecked((sbyte)ClearBit((byte)value, bitOffset));
+        public static byte ClearBit(byte value, int bitOffset)
+            => (byte)ClearBit((uint)value, bitOffset & 7);
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -267,12 +267,12 @@ namespace SourceCode.Clay.Numerics
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static short ClearBit(short value, int bitOffset)
-            => unchecked((short)ClearBit((ushort)value, bitOffset));
+        public static uint ClearBit(uint value, int bitOffset)
+            => value & ~(1u << bitOffset);
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -284,16 +284,6 @@ namespace SourceCode.Clay.Numerics
         public static ulong ClearBit(ulong value, int bitOffset)
             => value & ~(1ul << bitOffset);
 
-        /// <summary>
-        /// Clears the specified bit in a mask and returns the new value.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long ClearBit(long value, int bitOffset)
-            => unchecked((long)ClearBit((ulong)value, bitOffset));
-
         #endregion
 
         #region ClearBit (Ref)
@@ -302,16 +292,16 @@ namespace SourceCode.Clay.Numerics
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref sbyte value, int bitOffset)
+        public static bool ClearBit(ref byte value, int bitOffset)
         {
-            int mask = 1 << (bitOffset & 7);
-
+            uint mask = 1u << (bitOffset & 7);
             bool btr = (value & mask) != 0;
-            value = (sbyte)(value & ~mask);
+
+            value = (byte)(value & ~mask);
 
             return btr;
         }
@@ -338,16 +328,16 @@ namespace SourceCode.Clay.Numerics
         /// Clears the specified bit in a mask and returns whether it was originally set.
         /// Similar in behavior to the x86 instruction BTR.
         /// </summary>
-        /// <param name="value">The mask.</param>
+        /// <param name="value">The value.</param>
         /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
+        /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref short value, int bitOffset)
+        public static bool ClearBit(ref uint value, int bitOffset)
         {
-            int mask = 1 << (bitOffset & 15);
-
+            uint mask = 1u << bitOffset;
             bool btr = (value & mask) != 0;
-            value = (short)(value & ~mask);
+
+            value &= ~mask;
 
             return btr;
         }
@@ -363,24 +353,6 @@ namespace SourceCode.Clay.Numerics
         public static bool ClearBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
-            bool btr = (value & mask) != 0;
-            value &= ~mask;
-
-            return btr;
-        }
-
-        /// <summary>
-        /// Clears the specified bit in a mask and returns whether it was originally set.
-        /// Similar in behavior to the x86 instruction BTR.
-        /// </summary>
-        /// <param name="value">The mask.</param>
-        /// <param name="bitOffset">The ordinal position of the bit to clear.
-        /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool ClearBit(ref long value, int bitOffset)
-        {
-            long mask = 1L << bitOffset;
 
             bool btr = (value & mask) != 0;
             value &= ~mask;
