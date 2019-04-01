@@ -8,8 +8,18 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
+// Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
+// http://graphics.stanford.edu/~seander/bithacks.html
+// Also see related DotNetCore work:
+// https://raw.githubusercontent.com/dotnet/coreclr/master/src/System.Private.CoreLib/shared/System/Numerics/BitOperations.cs
+
 namespace SourceCode.Clay.Numerics
 {
+    /// <summary>
+    /// Utility methods for intrinsic bit-twiddling operations.
+    /// The methods use hardware intrinsics when available on the underlying platform,
+    /// otherwise they use optimized software fallbacks.
+    /// </summary>
     public static class BitOps
     {
         #region ExtractBit
@@ -63,7 +73,7 @@ namespace SourceCode.Clay.Numerics
 
         #endregion
 
-        #region WriteBit (Scalar)
+        #region WriteBit
 
         /// <summary>
         /// Conditionally writes the specified bit in a mask and returns the new value.
@@ -144,10 +154,6 @@ namespace SourceCode.Clay.Numerics
             ulong onn = on ? mask : 0; // TODO: Lose the branch
             return (value & ~mask) | onn;
         }
-
-        #endregion
-
-        #region WriteBit (Ref)
 
         /// <summary>
         /// Conditionally writes the specified bit in a mask and returns whether it was originally set.
@@ -247,7 +253,7 @@ namespace SourceCode.Clay.Numerics
 
         #endregion
 
-        #region ClearBit (Scalar)
+        #region ClearBit
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -288,10 +294,6 @@ namespace SourceCode.Clay.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ClearBit(ulong value, int bitOffset)
             => value & ~(1ul << bitOffset);
-
-        #endregion
-
-        #region ClearBit (Ref)
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -367,7 +369,7 @@ namespace SourceCode.Clay.Numerics
 
         #endregion
 
-        #region InsertBit (Scalar)
+        #region InsertBit
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -408,10 +410,6 @@ namespace SourceCode.Clay.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong InsertBit(ulong value, int bitOffset)
             => value | (1ul << bitOffset);
-
-        #endregion
-
-        #region InsertBit (Ref)
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -487,7 +485,7 @@ namespace SourceCode.Clay.Numerics
 
         #endregion
 
-        #region ComplementBit (Scalar)
+        #region ComplementBit
 
         // Truth table (1)
         // v   m  | ~m  ^v  ~
@@ -550,10 +548,6 @@ namespace SourceCode.Clay.Numerics
             mask = ~(~mask ^ value);
             return mask;
         }
-
-        #endregion
-
-        #region ComplementBit (Ref)
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
