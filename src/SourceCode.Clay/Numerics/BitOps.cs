@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 
 // Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
+
 // Also see related DotNetCore work:
 // https://raw.githubusercontent.com/dotnet/coreclr/master/src/System.Private.CoreLib/shared/System/Numerics/BitOperations.cs
 
@@ -33,11 +34,14 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(byte value, int bitOffset)
-            // For bit-length N, it is conventional to treat N as congruent modulo-N under the shift operation.
-            // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
-            // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18.
-            // So we use & not %.
-            => ExtractBit((uint)value, bitOffset & 7);
+        // For bit-length N, it is conventional to treat N as congruent modulo-N under the shift operation.
+        // So for uint, 1 << 33 == 1 << 1, and likewise 1 << -46 == 1 << +18.
+        // Note -46 % 32 == -14. But -46 & 31 (0011_1111) == +18.
+        // So we use & not %.
+        {
+            uint mask = 1u << (bitOffset & 7);
+            return (value & mask) != 0;
+        }
 
         /// Reads whether the specified bit in a mask is set.
         /// Similar in behavior to the x86 instruction BT.
@@ -47,7 +51,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ushort value, int bitOffset)
-            => (value & (1u << (bitOffset & 15))) != 0;
+        {
+            uint mask = 1u << (bitOffset & 15);
+            return (value & mask) != 0;
+        }
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -58,7 +65,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(uint value, int bitOffset)
-            => (value & (1u << bitOffset)) != 0;
+        {
+            uint mask = 1u << bitOffset;
+            return (value & mask) != 0;
+        }
 
         /// <summary>
         /// Reads whether the specified bit in a mask is set.
@@ -69,7 +79,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..63] is treated as congruent mod 63.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool ExtractBit(ulong value, int bitOffset)
-            => (value & (1ul << bitOffset)) != 0;
+        {
+            ulong mask = 1ul << bitOffset;
+            return (value & mask) != 0;
+        }
 
         #endregion
 
@@ -87,9 +100,6 @@ namespace SourceCode.Clay.Numerics
         public static byte WriteBit(byte value, int bitOffset, bool on)
         {
             uint mask = 1u << (bitOffset & 7);
-
-            // uint onn = on ? mask : 0;
-            // return (byte)((value & ~mask) | onn);
 
             // TODO: Lose the branch
             if (on)
@@ -111,8 +121,12 @@ namespace SourceCode.Clay.Numerics
         public static ushort WriteBit(ushort value, int bitOffset, bool on)
         {
             uint mask = 1u << (bitOffset & 15);
-            uint onn = on ? mask : 0; // TODO: Lose the branch
-            return (ushort)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                return (ushort)(value | mask);
+
+            return (ushort)(value & ~mask);
         }
 
         /// <summary>
@@ -127,9 +141,6 @@ namespace SourceCode.Clay.Numerics
         public static uint WriteBit(uint value, int bitOffset, bool on)
         {
             uint mask = 1u << bitOffset;
-
-            // uint onn = on ? mask : 0;
-            // return (value & ~mask) | onn;
 
             // TODO: Lose the branch
             if (on)
@@ -151,8 +162,12 @@ namespace SourceCode.Clay.Numerics
         public static ulong WriteBit(ulong value, int bitOffset, bool on)
         {
             ulong mask = 1ul << bitOffset;
-            ulong onn = on ? mask : 0; // TODO: Lose the branch
-            return (value & ~mask) | onn;
+
+            // TODO: Lose the branch
+            if (on)
+                return value | mask;
+
+            return value & ~mask;
         }
 
         /// <summary>
@@ -168,9 +183,6 @@ namespace SourceCode.Clay.Numerics
         {
             uint mask = 1u << (bitOffset & 7);
             bool btw = (value & mask) != 0;
-
-            //uint onn = on ? mask : 0;
-            //value = (byte)((value & ~mask) | onn);
 
             // TODO: Lose the branch
             if (on)
@@ -193,10 +205,13 @@ namespace SourceCode.Clay.Numerics
         public static bool WriteBit(ref ushort value, int bitOffset, bool on)
         {
             uint mask = 1u << (bitOffset & 15);
-            uint onn = on ? mask : 0; // TODO: Lose the branch
-
             bool btw = (value & mask) != 0;
-            value = (ushort)((value & ~mask) | onn);
+
+            // TODO: Lose the branch
+            if (on)
+                value = (ushort)(value | mask);
+            else
+                value = (ushort)(value & ~mask);
 
             return btw;
         }
@@ -214,13 +229,6 @@ namespace SourceCode.Clay.Numerics
         {
             uint mask = 1u << bitOffset;
             bool btw = (value & mask) != 0;
-
-            //uint onn = on ? mask : 0;
-            //value = (value & ~mask) | onn;
-
-            //uint onn = Unsafe.As<bool, byte>(ref on);
-            //Debug.Assert(onn == 0 || onn == 1);
-            //onn <<= bitOffset;
 
             // TODO: Lose the branch
             if (on)
@@ -243,10 +251,13 @@ namespace SourceCode.Clay.Numerics
         public static bool WriteBit(ref ulong value, int bitOffset, bool on)
         {
             ulong mask = 1ul << bitOffset;
-            ulong onn = on ? mask : 0; // TODO: Lose the branch
-
             bool btw = (value & mask) != 0;
-            value = (value & ~mask) | onn;
+
+            // TODO: Lose the branch
+            if (on)
+                value |= mask;
+            else
+                value &= ~mask;
 
             return btw;
         }
@@ -263,7 +274,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ClearBit(byte value, int bitOffset)
-            => (byte)ClearBit((uint)value, bitOffset & 7);
+        {
+            uint mask = 1u << (bitOffset & 7);
+            return (byte)(value & ~mask);
+        }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -273,7 +287,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort ClearBit(ushort value, int bitOffset)
-            => (ushort)(value & ~(1u << (bitOffset & 15)));
+        {
+            uint mask = 1u << (bitOffset & 15);
+            return (ushort)(value & ~mask);
+        }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -283,7 +300,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ClearBit(uint value, int bitOffset)
-            => value & ~(1u << bitOffset);
+        {
+            uint mask = 1u << bitOffset;
+            return value & ~mask;
+        }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns the new value.
@@ -293,7 +313,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ClearBit(ulong value, int bitOffset)
-            => value & ~(1ul << bitOffset);
+        {
+            ulong mask = 1ul << bitOffset;
+            return value & ~mask;
+        }
 
         /// <summary>
         /// Clears the specified bit in a mask and returns whether it was originally set.
@@ -324,8 +347,8 @@ namespace SourceCode.Clay.Numerics
         public static bool ClearBit(ref ushort value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 15);
-
             bool btr = (value & mask) != 0;
+
             value = (ushort)(value & ~mask);
 
             return btr;
@@ -360,8 +383,8 @@ namespace SourceCode.Clay.Numerics
         public static bool ClearBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
             bool btr = (value & mask) != 0;
+
             value &= ~mask;
 
             return btr;
@@ -379,17 +402,23 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte InsertBit(byte value, int bitOffset)
-            => (byte)InsertBit((uint)value, bitOffset & 7);
+        {
+            uint mask = 1u << (bitOffset & 7);
+            return (byte)(value | mask);
+        }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
         /// </summary>
         /// <param name="value">The mask.</param>
         /// <param name="bitOffset">The ordinal position of the bit to write.
-        /// Any value outside the range [0..15] is treated as congruent mod 32.</param>
+        /// Any value outside the range [0..15] is treated as congruent mod 16.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort InsertBit(ushort value, int bitOffset)
-            => (ushort)(value | (1u << (bitOffset & 15)));
+        {
+            uint mask = 1u << (bitOffset & 15);
+            return (ushort)(value | mask);
+        }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -399,7 +428,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint InsertBit(uint value, int bitOffset)
-            => value | (1u << bitOffset);
+        {
+            uint mask = 1u << bitOffset;
+            return value | mask;
+        }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns the new value.
@@ -409,7 +441,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..63] is treated as congruent mod 64.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong InsertBit(ulong value, int bitOffset)
-            => value | (1ul << bitOffset);
+        {
+            ulong mask = 1ul << bitOffset;
+            return value | mask;
+        }
 
         /// <summary>
         /// Sets the specified bit in a mask and returns whether it was originally set.
@@ -440,8 +475,8 @@ namespace SourceCode.Clay.Numerics
         public static bool InsertBit(ref ushort value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 15);
-
             bool bts = (value & mask) != 0;
+
             value = (ushort)(value | mask);
 
             return bts;
@@ -476,8 +511,8 @@ namespace SourceCode.Clay.Numerics
         public static bool InsertBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
             bool bts = (value & mask) != 0;
+
             value |= mask;
 
             return bts;
@@ -507,7 +542,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..7] is treated as congruent mod 8.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ComplementBit(byte value, int bitOffset)
-            => (byte)~(~(1u << (bitOffset & 7)) ^ value);
+        {
+            uint mask = 1u << (bitOffset & 7);
+            return (byte)~(~mask ^ value);
+        }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns the new value.
@@ -519,9 +557,7 @@ namespace SourceCode.Clay.Numerics
         public static ushort ComplementBit(ushort value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 15);
-
-            mask = ~(~mask ^ value);
-            return (ushort)mask;
+            return (ushort)~(~mask ^ value);
         }
 
         /// <summary>
@@ -532,7 +568,10 @@ namespace SourceCode.Clay.Numerics
         /// Any value outside the range [0..31] is treated as congruent mod 32.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint ComplementBit(uint value, int bitOffset)
-            => ~(~(1u << bitOffset) ^ value);
+        {
+            uint mask = 1u << bitOffset;
+            return ~(~mask ^ value);
+        }
 
         /// <summary>
         /// Complements the specified bit in a mask and returns whether it was originally set.
@@ -544,9 +583,7 @@ namespace SourceCode.Clay.Numerics
         public static ulong ComplementBit(ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
-            mask = ~(~mask ^ value);
-            return mask;
+            return ~(~mask ^ value);
         }
 
         /// <summary>
@@ -578,8 +615,8 @@ namespace SourceCode.Clay.Numerics
         public static bool ComplementBit(ref ushort value, int bitOffset)
         {
             uint mask = 1u << (bitOffset & 15);
-
             bool btc = (value & mask) != 0;
+
             value = (ushort)~(~mask ^ value);
 
             return btc;
@@ -614,8 +651,8 @@ namespace SourceCode.Clay.Numerics
         public static bool ComplementBit(ref ulong value, int bitOffset)
         {
             ulong mask = 1ul << bitOffset;
-
             bool btc = (value & mask) != 0;
+
             value = ~(~mask ^ value);
 
             return btc;
