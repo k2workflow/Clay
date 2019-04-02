@@ -5,4 +5,4 @@
 
 #endregion
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Net.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SourceCode.Clay.Correlation.Tests")]
