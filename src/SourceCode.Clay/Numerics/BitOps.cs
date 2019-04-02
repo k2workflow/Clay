@@ -665,7 +665,7 @@ namespace SourceCode.Clay.Numerics
         /// Does not incur branching.
         /// </summary>
         /// <param name="condition">The value to cast.</param>
-        /// <returns>Returns 0 if <paramref name="condition"/> is False, else returns a non-zero number per the remarks.</returns>
+        /// <returns>Returns 0 if <paramref name="condition"/> is false, else returns a non-zero number per the remarks.</returns>
         /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
         /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
         /// </remarks>
@@ -678,7 +678,7 @@ namespace SourceCode.Clay.Numerics
         /// Does not incur branching.
         /// </summary>
         /// <param name="condition">The value to cast.</param>
-        /// <returns>Returns 0 if <paramref name="condition"/> is False, else returns a non-zero number per the remarks.</returns>
+        /// <returns>Returns 0 if <paramref name="condition"/> is false, else returns a non-zero number per the remarks.</returns>
         /// <remarks>The ECMA 335 CLI specification permits a "true" boolean value to be represented by any nonzero value.
         /// See https://github.com/dotnet/roslyn/blob/master/docs/compilers/Boolean%20Representation.md
         /// </remarks>

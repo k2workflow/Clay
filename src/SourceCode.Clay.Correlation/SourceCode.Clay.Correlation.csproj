@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Correlation</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Tools and extensions for working with correlation identifiers.</Description>
+    <PackageTags>clay utility extension correlation</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+  </PropertyGroup>
+
+</Project>
