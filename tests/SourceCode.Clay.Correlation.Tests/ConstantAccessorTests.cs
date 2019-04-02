@@ -10,7 +10,7 @@ namespace SourceCode.Clay.Correlation.Tests
         [InlineData("")]
         [InlineData(" ")]
         [InlineData("a")]
-        public static void ConstantAccessor_returns_input(string expected)
+        public static void ConstantAccessor_returns_string_input(string expected)
         {
             // Arrange
             var accessor = new ConstantAccessor(expected);
