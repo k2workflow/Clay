@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Correlation
         /// <summary>
         /// Creates a <see cref="ICorrelationIdAccessor"/> instance using a constant value.
         /// </summary>
-        /// <param name="correlationId">The constant value to use as the correlationId value.</param>
+        /// <param name="correlationId">The constant <see cref="string"/> value to use as the correlation identifier.</param>
         [DebuggerStepThrough]
         public static ICorrelationIdAccessor From(string correlationId)
             => new ConstantAccessor(correlationId);
@@ -21,7 +21,7 @@ namespace SourceCode.Clay.Correlation
         /// <summary>
         /// Creates a <see cref="ICorrelationIdAccessor"/> instance using a constant value.
         /// </summary>
-        /// <param name="correlationId">The constant value to use as the correlationId value.</param>
+        /// <param name="correlationId">The constant <see cref="Guid"/> value to use as the correlation identifier.</param>
         [DebuggerStepThrough]
         public static ICorrelationIdAccessor From(Guid correlationId)
             => new ConstantAccessor(correlationId.ToString("D", CultureInfo.InvariantCulture));
