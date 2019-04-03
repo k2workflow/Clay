@@ -6,7 +6,7 @@ namespace SourceCode.Clay.Net
     internal readonly struct UriToken
     {
         public string Name { get; }
-        
+
         public string SubName { get; }
 
         public string Default { get; }
@@ -46,4 +46,4 @@ namespace SourceCode.Clay.Net
             FormatConstant = Expression.Constant(Format, typeof(string));
         }
     }
-} 
+}

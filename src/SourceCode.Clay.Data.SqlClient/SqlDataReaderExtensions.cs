@@ -22,7 +22,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
-        /// <returns></returns>
         public static byte[] GetSqlBytes(this SqlDataReader sqlDr, string name)
         {
             if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
@@ -42,7 +41,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
         /// <typeparam name="TEnum">The type of enum.</typeparam>
-        /// <returns></returns>
         public static TEnum? GetSqlEnum<TEnum>(this SqlDataReader sqlDr, string name)
            where TEnum : struct, IComparable, IFormattable, IConvertible // We cannot directly constrain by Enum, so approximate by constraining on Enum's implementation
         {
@@ -64,7 +62,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
-        /// <returns></returns>
         public static string GetSqlXml(this SqlDataReader sqlDr, string name)
         {
             if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));
@@ -85,7 +82,6 @@ namespace SourceCode.Clay.Data.SqlClient
         /// </summary>
         /// <param name="sqlDr">The data reader.</param>
         /// <param name="name">The column name.</param>
-        /// <returns></returns>
         public static XDocument GetSqlXDocument(this SqlDataReader sqlDr, string name)
         {
             if (sqlDr is null) throw new ArgumentNullException(nameof(sqlDr));

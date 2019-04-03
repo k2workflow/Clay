@@ -21,7 +21,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="xe">Input 1</param>
         /// <param name="ye">Input 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
         public static bool NullableSetEqual<TSource>(this IEnumerable<TSource> xe, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer = null)
         {
             if (xe is null) return ye is null; // (null, null) or (null, y)

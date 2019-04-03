@@ -21,7 +21,6 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static string Left(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
@@ -41,7 +40,6 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static string Right(this string str, in int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
@@ -119,7 +117,6 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool EqualsOrdinal(this string x, string y)
             => StringComparer.Ordinal.Equals(x, y);

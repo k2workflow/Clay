@@ -71,7 +71,6 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         /// </summary>
         /// <param name="sqlCsb">The sql connection string builder instance.</param>
         /// <param name="options">The options to set.</param>
-        /// <returns></returns>
         public static SqlConnectionStringBuilder MakeRobust(this SqlConnectionStringBuilder sqlCsb, SqlConnectionRetryOptions options)
         {
             if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));

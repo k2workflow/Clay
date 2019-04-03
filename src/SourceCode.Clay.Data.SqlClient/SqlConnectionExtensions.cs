@@ -24,16 +24,17 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
         /// <param name="commandType">The type of command.</param>
-        /// <returns></returns>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType)
         {
             if (sqlCon is null) throw new ArgumentNullException(nameof(sqlCon));
             if (string.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException(nameof(commandText));
 
+#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
             var cmd = new SqlCommand(commandText, sqlCon)
             {
                 CommandType = commandType
             };
+#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
 
             return cmd;
         }
@@ -44,15 +45,26 @@ namespace SourceCode.Clay.Data.SqlClient
         /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
         /// <param name="commandText">The sql command text to use.</param>
         /// <param name="commandType">The type of command.</param>
-        /// <param name="timeoutSeconds">The command timeout.</param>
-        /// <returns></returns>
+        /// <param name="timeoutSeconds">The command timeout in seconds.</param>
         public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, int timeoutSeconds)
         {
+            if (timeoutSeconds < 0) throw new ArgumentOutOfRangeException(nameof(timeoutSeconds)); // 0 means infinite timeout in SqlCommand
+
             SqlCommand cmd = CreateCommand(sqlCon, commandText, commandType);
             cmd.CommandTimeout = timeoutSeconds;
 
             return cmd;
         }
+
+        /// <summary>
+        /// Create a <see cref="SqlCommand"/> using the provided parameters.
+        /// </summary>
+        /// <param name="sqlCon">The <see cref="SqlConnection"/> to use.</param>
+        /// <param name="commandText">The sql command text to use.</param>
+        /// <param name="commandType">The type of command.</param>
+        /// <param name="timeout">The command timeout.</param>
+        public static SqlCommand CreateCommand(this SqlConnection sqlCon, string commandText, CommandType commandType, TimeSpan timeout)
+            => CreateCommand(sqlCon, commandText, commandType, (int)timeout.TotalSeconds);
 
         /// <summary>
         /// Reopens the specified <see cref="SqlConnection"/>.
@@ -65,19 +77,12 @@ namespace SourceCode.Clay.Data.SqlClient
             switch (sqlCon.State)
             {
                 case ConnectionState.Broken:
-                    {
-                        sqlCon.Close();
-                        sqlCon.Open();
-                        return;
-                    }
+                    sqlCon.Close();
+                    goto case ConnectionState.Closed;
 
                 case ConnectionState.Closed:
-                    {
-                        sqlCon.Open();
-                        return;
-                    }
-
-                default: return;
+                    sqlCon.Open();
+                    return;
             }
         }
 
@@ -92,19 +97,11 @@ namespace SourceCode.Clay.Data.SqlClient
             switch (sqlCon.State)
             {
                 case ConnectionState.Broken:
-                    {
-                        sqlCon.Close();
-                        await sqlCon.OpenAsync().ConfigureAwait(false);
-                        return;
-                    }
+                    sqlCon.Close();
+                    goto case ConnectionState.Closed;
 
                 case ConnectionState.Closed:
-                    {
-                        await sqlCon.OpenAsync().ConfigureAwait(false);
-                        return;
-                    }
-
-                default:
+                    await sqlCon.OpenAsync().ConfigureAwait(false);
                     return;
             }
         }

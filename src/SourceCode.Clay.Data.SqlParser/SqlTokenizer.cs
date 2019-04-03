@@ -17,11 +17,10 @@ namespace SourceCode.Clay.Data.SqlParser
     public static class SqlTokenizer
     {
         /// <summary>
-        ///
+        /// Tokenizes the provided sql statement.
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="sql">The tsql statement to tokenize.</param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(string sql, bool skipSundry)
         {
             if (sql is null) throw new ArgumentNullException(nameof(sql));
@@ -34,11 +33,10 @@ namespace SourceCode.Clay.Data.SqlParser
         }
 
         /// <summary>
-        ///
+        /// Tokenizes the provided sql statement.
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">A reader providing the tsql statement to tokenize.</param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         public static IReadOnlyCollection<SqlTokenInfo> Tokenize(TextReader reader, bool skipSundry)
         {
             if (reader is null) throw new ArgumentNullException(nameof(reader));
@@ -50,6 +48,10 @@ namespace SourceCode.Clay.Data.SqlParser
             }
         }
 
+        /// <summary>
+        /// Encodes an identifier using tsql [square-delimited-name] convention.
+        /// </summary>
+        /// <param name="identifier">The identifier to encode.</param>
         public static string EncodeNameSquare(string identifier)
         {
             if (string.IsNullOrEmpty(identifier)) return identifier;
@@ -72,6 +74,10 @@ namespace SourceCode.Clay.Data.SqlParser
             return quoted;
         }
 
+        /// <summary>
+        /// Encodes an identifier using tsql "quoted-name" convention.
+        /// </summary>
+        /// <param name="identifier">The identifier to encode.</param>
         public static string EncodeNameQuotes(string identifier)
         {
             if (string.IsNullOrEmpty(identifier)) return identifier;
@@ -94,17 +100,21 @@ namespace SourceCode.Clay.Data.SqlParser
             return quoted;
         }
 
+        /// <summary>
+        /// Encodes an identifier using tsql naming conventions.
+        /// </summary>
+        /// <param name="identifier">The identifier to encode.</param>
+        /// <param name="useQuotes">If true, uses "quotes" else uses [square] delimiters.</param>
         public static string EncodeName(string identifier, bool useQuotes)
             => useQuotes ?
             EncodeNameQuotes(identifier) :
             EncodeNameSquare(identifier);
 
         /// <summary>
-        ///
+        /// Tokenizes the provided sql statement.
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         private static IReadOnlyCollection<SqlTokenInfo> Tokenize(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(!(reader is null));
@@ -267,7 +277,6 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="peekLength"></param>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         private static SqlTokenInfo ReadWhitespace(ReadOnlySpan<char> peekBuffer, int peekLength, SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(peekBuffer.Length >= 1);
@@ -518,7 +527,6 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="peekBuffer"></param>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         private static SqlTokenInfo ReadBlockComment(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(!(reader is null));
@@ -576,7 +584,6 @@ namespace SourceCode.Clay.Data.SqlParser
         /// <param name="peekBuffer"></param>
         /// <param name="reader"></param>
         /// <param name="skipSundry">Do not emit sundry tokens (such as comments and whitespace) in the output.</param>
-        /// <returns></returns>
         private static SqlTokenInfo ReadLineComment(SqlCharReader reader, bool skipSundry)
         {
             Debug.Assert(!(reader is null));

@@ -22,7 +22,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="xe">Input 1</param>
         /// <param name="ye">Input 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
         public static bool NullableSequenceEqual<TSource>(this IEnumerable<TSource> xe, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer = null)
         {
             if (xe is null) return ye is null; // (null, null) or (null, y)
@@ -98,7 +97,6 @@ namespace SourceCode.Clay.Collections.Generic
         /// <param name="ye">Input 2</param>
         /// <param name="xCount">The Count of members in input 1.</param>
         /// <param name="yCount">The Count of members in input 2.</param>
-        /// <returns></returns>
         internal static bool BothAreCollections<TSource>(IEnumerable<TSource> xe, IEnumerable<TSource> ye, out int xCount, out int yCount)
         {
             // Try get item counts
