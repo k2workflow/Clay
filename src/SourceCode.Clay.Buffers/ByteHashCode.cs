@@ -61,7 +61,7 @@ namespace SourceCode.Clay.Buffers
     /// Calculates a HashCode of a sequence of bytes.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct ByteHashCode
+    internal struct ByteHashCode
     {
         private static readonly uint s_seed =
 #if !NETSTANDARD2_0

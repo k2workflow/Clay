@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SourceCode.Clay.Buffers\SourceCode.Clay.Buffers.csproj" />
     <ProjectReference Include="..\..\src\SourceCode.Clay.IO\SourceCode.Clay.IO.csproj" />
   </ItemGroup>
   
