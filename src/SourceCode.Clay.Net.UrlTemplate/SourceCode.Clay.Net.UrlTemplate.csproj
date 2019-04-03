@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+    <PackageReference Include="System.Memory" Version="4.5.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Net</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Tools and extensions for working with HTTP.</Description>
+    <PackageTags>clay utility extension http httpclient</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+    <RootNamespace>SourceCode.Clay.Net</RootNamespace>
+  </PropertyGroup>
+
+</Project>

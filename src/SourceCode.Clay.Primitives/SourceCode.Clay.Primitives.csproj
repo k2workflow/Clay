@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>SourceCode.Clay</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+    <PackageReference Include="System.Memory" Version="4.5.2" Condition="'$(TargetFramework)'=='netstandard2.0'" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.Primitives</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Tools and extensions for working with HTTP.</Description>
+    <PackageTags>clay utility extension</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+    <RootNamespace>SourceCode.Clay.Net</RootNamespace>
+  </PropertyGroup>
+
+</Project>
