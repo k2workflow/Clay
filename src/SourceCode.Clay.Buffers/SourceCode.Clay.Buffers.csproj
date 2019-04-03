@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Common properties defined in Directory.Build.props -->
 
@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>SourceCode.Clay.Buffers</AssemblyName>
     <RootNamespace>SourceCode.Clay.Buffers</RootNamespace>
   </PropertyGroup>
 

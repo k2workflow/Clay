@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>SourceCode.Clay.IO</AssemblyName>
     <RootNamespace>SourceCode.Clay.IO</RootNamespace>
   </PropertyGroup>
 
