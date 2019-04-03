@@ -15,8 +15,7 @@ namespace SourceCode.Clay.Correlation.Internal
 
         public LambdaAccessor(Func<string> getter)
         {
-            Debug.Assert(getter != null);
-            _getter = getter;
+            _getter = getter ?? throw new ArgumentNullException(nameof(getter));
         }
     }
 }
