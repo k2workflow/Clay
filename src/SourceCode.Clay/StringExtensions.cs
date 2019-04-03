@@ -21,7 +21,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
-        public static string Left(this string str, in int length)
+        public static string Left(this string str, int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 1)
@@ -40,7 +40,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="length">The length.</param>
-        public static string Right(this string str, in int length)
+        public static string Right(this string str, int length)
         {
             if (string.IsNullOrEmpty(str) || length >= str.Length) return str;
             if (length <= 1)
@@ -64,7 +64,7 @@ namespace SourceCode.Clay
         /// <param name="str">The string.</param>
         /// <param name="totalWidth">The total width.</param>
         /// <returns>The elided string.</returns>
-        public static string Elide(this string str, in int totalWidth)
+        public static string Elide(this string str, int totalWidth)
         {
             // No need to elide if string is already within the required size
             if (str is null || totalWidth <= 2 || str.Length <= totalWidth)

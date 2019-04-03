@@ -125,7 +125,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
             ".database.chinacloudapi.cn"
         };
 
-        internal static bool IsAzureSql(in string datasource)
+        internal static bool IsAzureSql(string datasource)
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 

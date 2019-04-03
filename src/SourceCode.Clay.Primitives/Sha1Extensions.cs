@@ -83,7 +83,7 @@ namespace SourceCode.Clay
         /// <param name="start">The offset.</param>
         /// <param name="length">The count.</param>
         /// <returns></returns>
-        public static Sha1 HashData(this crypt.SHA1 alg, byte[] bytes, in int start, in int length)
+        public static Sha1 HashData(this crypt.SHA1 alg, byte[] bytes, int start, int length)
         {
             if (alg == null) throw new ArgumentNullException(nameof(alg));
             if (bytes is null) throw new ArgumentNullException(nameof(bytes));
@@ -101,7 +101,7 @@ namespace SourceCode.Clay
         /// <param name="alg">The SHA1 instance to use.</param>
         /// <param name="stream">The stream to hash.</param>
         /// <returns></returns>
-        public static Sha1 HashData(this crypt.SHA1 alg, in Stream stream)
+        public static Sha1 HashData(this crypt.SHA1 alg, Stream stream)
         {
             if (alg == null) throw new ArgumentNullException(nameof(alg));
             if (stream is null) throw new ArgumentNullException(nameof(stream));
