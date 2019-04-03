@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageId>SourceCode.Clay.Data.SqlParser</PackageId>
+    <PackageId>SourceCode.Clay.DistributedId</PackageId>
     <Authors>SourceCode</Authors>
     <Description>Tools and extensions for working with data.</Description>
     <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
