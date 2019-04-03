@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>SourceCode.Clay.Security</AssemblyName>
     <RootNamespace>SourceCode.Clay.Security</RootNamespace>
   </PropertyGroup>
 

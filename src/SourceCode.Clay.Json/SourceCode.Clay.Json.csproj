@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>SourceCode.Clay.Json</AssemblyName>
     <RootNamespace>SourceCode.Clay.Json</RootNamespace>
   </PropertyGroup>
 

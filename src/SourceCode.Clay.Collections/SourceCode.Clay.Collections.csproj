@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>SourceCode.Clay.Collections</AssemblyName>
     <RootNamespace>SourceCode.Clay.Collections</RootNamespace>
   </PropertyGroup>
 
