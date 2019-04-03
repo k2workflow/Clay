@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// </summary>
         /// <param name="token">The <see cref="JsonPointerToken"/> instance to append.</param>
         /// <returns></returns>
-        public JsonPointer Add(in JsonPointerToken token)
+        public JsonPointer Add(JsonPointerToken token)
         {
             var array = new JsonPointerToken[Count + 1];
 
@@ -102,7 +102,7 @@ namespace SourceCode.Clay.Json.Pointers
         /// </summary>
         /// <param name="pointer">The <see cref="JsonPointerToken"/> instances to append.</param>
         /// <returns></returns>
-        public JsonPointer Merge(in JsonPointer pointer)
+        public JsonPointer Merge(JsonPointer pointer)
         {
             if (pointer.Count == 0)
                 return this;

@@ -71,7 +71,6 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         /// </summary>
         /// <param name="sqlCsb">The sql connection string builder instance.</param>
         /// <param name="options">The options to set.</param>
-        /// <returns></returns>
         public static SqlConnectionStringBuilder MakeRobust(this SqlConnectionStringBuilder sqlCsb, SqlConnectionRetryOptions options)
         {
             if (sqlCsb is null) throw new ArgumentNullException(nameof(sqlCsb));
@@ -126,7 +125,7 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
             ".database.chinacloudapi.cn"
         };
 
-        internal static bool IsAzureSql(in string datasource)
+        internal static bool IsAzureSql(string datasource)
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 

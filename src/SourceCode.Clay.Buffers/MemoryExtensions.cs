@@ -21,7 +21,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static ReadOnlySpan<T> Left<T>(this ReadOnlySpan<T> span, int length)
         {
             if (span.Length == 0 || length <= 0) return default;
@@ -37,7 +36,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="memory">The memory.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static ReadOnlyMemory<T> Left<T>(this ReadOnlyMemory<T> memory, int length)
         {
             if (memory.Length == 0 || length <= 0) return default;
@@ -53,7 +51,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="span">The span.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static ReadOnlySpan<T> Right<T>(this ReadOnlySpan<T> span, int length)
         {
             if (span.Length == 0 || length <= 0) return default;
@@ -69,7 +66,6 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="memory">The memory.</param>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
         public static ReadOnlyMemory<T> Right<T>(this ReadOnlyMemory<T> memory, int length)
         {
             if (memory.Length == 0 || length <= 0) return default;
@@ -85,7 +81,6 @@ namespace SourceCode.Clay.Buffers
         /// <param name="span">The span.</param>
         /// <param name="char">The character to find.</param>
         /// <param name="startIndex">The index to start searching from.</param>
-        /// <returns></returns>
         public static int IndexOf(this ReadOnlySpan<char> span, char @char, int startIndex)
         {
             if (span.Length == 0) return -1;
@@ -107,8 +102,7 @@ namespace SourceCode.Clay.Buffers
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        /// <returns></returns>
-        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y, in IEqualityComparer<TSource> comparer)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y, IEqualityComparer<TSource> comparer)
         {
             if (x.Length != y.Length) return false; // (n, m)
             if (x.Length == 0) return true; // (0, 0)
@@ -133,8 +127,7 @@ namespace SourceCode.Clay.Buffers
         /// <typeparam name="TSource">The type of items.</typeparam>
         /// <param name="x">Memory 1</param>
         /// <param name="y">Memory 2</param>
-        /// <returns></returns>
-        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, in ReadOnlyMemory<TSource> y)
+        public static bool MemoryEquals<TSource>(this ReadOnlyMemory<TSource> x, ReadOnlyMemory<TSource> y)
             => MemoryEquals(x, y, null);
     }
 }

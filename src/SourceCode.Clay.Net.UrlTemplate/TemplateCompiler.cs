@@ -89,7 +89,7 @@ namespace SourceCode.Clay.Net
         private static readonly ParameterExpression QueryBuilder = Expression.Variable(TypeofUrlBuilder, "q");
         private static readonly ConstantExpression Null = Expression.Constant(null);
         #endregion
-#pragma warning restore IDE1006 // Naming Styles 
+#pragma warning restore IDE1006 // Naming Styles
 
         private const string QueryStart = "?";
         private const string QueryAssign = "=";

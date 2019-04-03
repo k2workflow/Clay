@@ -28,7 +28,7 @@ namespace SourceCode.Clay
         private const string HexChars = "0123456789ABCDEF";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool TryParseHexit(in char c, out byte b)
+        private static bool TryParseHexit(char c, out byte b)
         {
             b = 0;
 
@@ -48,7 +48,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="hex">The hexadecimal.</param>
         /// <param name="sha">The buffer to populate with the Sha value.</param>
-        internal static bool TryParse(in ReadOnlySpan<char> hex, in Span<byte> sha)
+        internal static bool TryParse(ReadOnlySpan<char> hex, Span<byte> sha)
         {
             int byteLength = sha.Length;
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
@@ -121,7 +121,7 @@ namespace SourceCode.Clay
         /// <param name="prefixLength">The length of the first token.</param>
         /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static KeyValuePair<string, string> Split(in ReadOnlySpan<byte> sha, int prefixLength, HexCasing casing)
+        internal static KeyValuePair<string, string> Split(ReadOnlySpan<byte> sha, int prefixLength, HexCasing casing)
         {
             int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
@@ -177,7 +177,7 @@ namespace SourceCode.Clay
         /// <param name="sha"></param>
         /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static string ToString(in ReadOnlySpan<byte> sha, HexCasing casing)
+        internal static string ToString(ReadOnlySpan<byte> sha, HexCasing casing)
         {
             int byteLength = sha.Length; // 20|32
             Debug.Assert(byteLength == Sha1.ByteLength || byteLength == Sha256.ByteLength);
@@ -215,7 +215,7 @@ namespace SourceCode.Clay
         /// <param name="separator"></param>
         /// <param name="casing">The ASCII casing to use.</param>
         /// <returns></returns>
-        internal static string ToString(in ReadOnlySpan<byte> sha, in char separator, HexCasing casing)
+        internal static string ToString(ReadOnlySpan<byte> sha, char separator, HexCasing casing)
         {
             Debug.Assert(separator == '-' || separator == ' ');
 

@@ -8,11 +8,11 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
+// See related DotNetCore work by same author:
+// https://raw.githubusercontent.com/dotnet/coreclr/master/src/System.Private.CoreLib/shared/System/Numerics/BitOperations.cs
+
 // Some routines inspired by the Stanford Bit Twiddling Hacks by Sean Eron Anderson:
 // http://graphics.stanford.edu/~seander/bithacks.html
-
-// Also see related DotNetCore work:
-// https://raw.githubusercontent.com/dotnet/coreclr/master/src/System.Private.CoreLib/shared/System/Numerics/BitOperations.cs
 
 namespace SourceCode.Clay.Numerics
 {

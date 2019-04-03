@@ -74,8 +74,7 @@ namespace SourceCode.Clay.Buffers
         /// </summary>
         /// <param name="x">Span 1</param>
         /// <param name="y">Span 2</param>
-        /// <returns></returns>
-        public static int CompareSpan(in ReadOnlySpan<byte> x, in ReadOnlySpan<byte> y)
+        public static int CompareSpan(ReadOnlySpan<byte> x, ReadOnlySpan<byte> y)
         {
             // From https://github.com/dotnet/corefx/blob/master/src/System.Memory/src/System/ReadOnlySpan.cs
             // public static bool operator ==

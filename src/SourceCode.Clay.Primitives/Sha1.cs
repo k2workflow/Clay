@@ -162,7 +162,7 @@ namespace SourceCode.Clay
         /// </summary>
         /// <param name="prefixLength">The length of the first token.</param>
         /// <param name="uppercase">If True, output uppercase, else output lowercase.</param>
-        public KeyValuePair<string, string> Split(in int prefixLength, bool uppercase = false)
+        public KeyValuePair<string, string> Split(int prefixLength, bool uppercase = false)
         {
             ShaUtil.HexCasing casing = uppercase ? ShaUtil.HexCasing.Upper : ShaUtil.HexCasing.Lower;
 
@@ -320,16 +320,16 @@ namespace SourceCode.Clay
             }
         }
 
-        public static bool operator ==(in Sha1 x, in Sha1 y) => x.Equals(y);
+        public static bool operator ==(Sha1 x, Sha1 y) => x.Equals(y);
 
-        public static bool operator !=(in Sha1 x, in Sha1 y) => !(x == y);
+        public static bool operator !=(Sha1 x, Sha1 y) => !(x == y);
 
-        public static bool operator >=(in Sha1 x, in Sha1 y) => x.CompareTo(y) >= 0;
+        public static bool operator >=(Sha1 x, Sha1 y) => x.CompareTo(y) >= 0;
 
-        public static bool operator >(in Sha1 x, in Sha1 y) => x.CompareTo(y) > 0;
+        public static bool operator >(Sha1 x, Sha1 y) => x.CompareTo(y) > 0;
 
-        public static bool operator <=(in Sha1 x, in Sha1 y) => x.CompareTo(y) <= 0;
+        public static bool operator <=(Sha1 x, Sha1 y) => x.CompareTo(y) <= 0;
 
-        public static bool operator <(in Sha1 x, in Sha1 y) => x.CompareTo(y) < 0;
+        public static bool operator <(Sha1 x, Sha1 y) => x.CompareTo(y) < 0;
     }
 }
