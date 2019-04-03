@@ -12,7 +12,7 @@ namespace SourceCode.Clay.Collections.Generic
     /// <summary>
     /// Represents extensions for <see cref="ISet{T}"/>.
     /// </summary>
-    public static class SetExtensions
+    internal static class SetExtensions
     {
         /// <summary>
         /// Performs an efficient item-by-item comparison of two enumerables, using a custom <see cref="IEqualityComparer{T}"/>.

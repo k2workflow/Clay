@@ -440,7 +440,7 @@ namespace SourceCode.Clay.Tests
         {
             ReadOnlySpan<T> span = memory.Span;
             int start = ClampStart(span, trimElement);
-            int length = ClampEnd(span, start + 1, trimElement);
+            int length = ClampEnd(span, start, trimElement);
             return memory.Slice(start, length);
         }
 
@@ -472,7 +472,7 @@ namespace SourceCode.Clay.Tests
         {
             ReadOnlySpan<T> span = memory.Span;
             int start = ClampStart(span, trimElement);
-            int length = ClampEnd(span, start + 1, trimElement);
+            int length = ClampEnd(span, start, trimElement);
             return memory.Slice(start, length);
         }
 
@@ -503,7 +503,7 @@ namespace SourceCode.Clay.Tests
             where T : IEquatable<T>
         {
             int start = ClampStart(span, trimElement);
-            int length = ClampEnd(span, start + 1, trimElement);
+            int length = ClampEnd(span, start, trimElement);
             return span.Slice(start, length);
         }
 
@@ -534,7 +534,7 @@ namespace SourceCode.Clay.Tests
             where T : IEquatable<T>
         {
             int start = ClampStart(span, trimElement);
-            int length = ClampEnd(span, start + 1, trimElement);
+            int length = ClampEnd(span, start, trimElement);
             return span.Slice(start, length);
         }
 
@@ -642,7 +642,7 @@ namespace SourceCode.Clay.Tests
             {
                 ReadOnlySpan<T> span = memory.Span;
                 int start = ClampStart(span, trimElements);
-                int length = ClampEnd(span, start + 1, trimElements);
+                int length = ClampEnd(span, start, trimElements);
                 return memory.Slice(start, length);
             }
 
@@ -714,7 +714,7 @@ namespace SourceCode.Clay.Tests
             {
                 ReadOnlySpan<T> span = memory.Span;
                 int start = ClampStart(span, trimElements);
-                int length = ClampEnd(span, start + 1, trimElements);
+                int length = ClampEnd(span, start, trimElements);
                 return memory.Slice(start, length);
             }
 
@@ -786,7 +786,7 @@ namespace SourceCode.Clay.Tests
             if (trimElements.Length > 1)
             {
                 int start = ClampStart(span, trimElements);
-                int length = ClampEnd(span, start + 1, trimElements);
+                int length = ClampEnd(span, start, trimElements);
                 return span.Slice(start, length);
             }
 
@@ -857,7 +857,7 @@ namespace SourceCode.Clay.Tests
             if (trimElements.Length > 1)
             {
                 int start = ClampStart(span, trimElements);
-                int length = ClampEnd(span, start + 1, trimElements);
+                int length = ClampEnd(span, start, trimElements);
                 return span.Slice(start, length);
             }
 

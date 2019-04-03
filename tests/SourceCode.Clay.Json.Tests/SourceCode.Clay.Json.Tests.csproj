@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Common properties defined in Directory.Build.props -->
 
@@ -7,14 +7,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="LinkedData\Cases\*.jsonld" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="LinkedData\Cases\*.jsonld" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
