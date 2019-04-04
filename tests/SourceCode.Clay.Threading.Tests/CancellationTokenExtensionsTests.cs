@@ -11,13 +11,18 @@ namespace SourceCode.Clay.Threading.Tests
         {
             // Arrange
             CancellationToken ct = CancellationToken.None;
-            var timeout = TimeSpan.FromSeconds(1);
+            var timeout = TimeSpan.FromSeconds(2);
 
             // Act
-            CancellationTokenSource cts = ct.WithTimeout(timeout);
+            using (CancellationTokenSource cts = ct.WithTimeout(timeout))
+            {
+                // Assert
+                Assert.NotEqual(CancellationToken.None, cts.Token);
 
-            // Assert
-            Assert.NotEqual(CancellationToken.None, cts.Token);
+                Assert.False(cts.Token.IsCancellationRequested);
+                cts.Token.WaitHandle.WaitOne();
+                Assert.True(cts.Token.IsCancellationRequested);
+            }
         }
 
         [Fact]
@@ -28,10 +33,12 @@ namespace SourceCode.Clay.Threading.Tests
             TimeSpan timeout = Timeout.InfiniteTimeSpan;
 
             // Act
-            CancellationTokenSource cts = ct.WithTimeout(timeout);
-
-            // Assert
-            Assert.NotEqual(CancellationToken.None, cts.Token);
+            using (CancellationTokenSource cts = ct.WithTimeout(timeout))
+            {
+                // Assert
+                Assert.NotEqual(CancellationToken.None, cts.Token);
+                Assert.False(cts.Token.IsCancellationRequested);
+            }
         }
 
         [Fact]
@@ -39,13 +46,16 @@ namespace SourceCode.Clay.Threading.Tests
         {
             // Arrange
             var ct = new CancellationToken();
-            var timeout = TimeSpan.FromSeconds(5);
+            var timeout = TimeSpan.FromSeconds(2);
 
             // Act
-            CancellationTokenSource cts = ct.WithTimeout(timeout);
-
-            // Assert
-            Assert.Equal(ct, cts.Token);
+            using (CancellationTokenSource cts = ct.WithTimeout(timeout))
+            {
+                // Assert
+                Assert.False(cts.Token.IsCancellationRequested);
+                cts.Token.WaitHandle.WaitOne();
+                Assert.True(cts.Token.IsCancellationRequested);
+            }
         }
     }
 }
