@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>SourceCode.Clay.Threading.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,12 +15,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceCode.Clay.Primitives\SourceCode.Clay.Primitives.csproj" />
-    <ProjectReference Include="..\..\src\SourceCode.Clay\SourceCode.Clay.csproj" />
+    <ProjectReference Include="..\..\src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" />
   </ItemGroup>
 
 </Project>

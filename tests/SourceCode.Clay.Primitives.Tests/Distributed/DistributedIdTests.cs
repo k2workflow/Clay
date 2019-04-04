@@ -1,8 +1,15 @@
+#region License
+
+// Copyright (c) K2 Workflow (SourceCode Technology Holdings Inc.). All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+#endregion
+
 using Xunit;
 
-namespace SourceCode.Clay.Distributed
+namespace SourceCode.Clay.Distributed.Tests
 {
-    public class DistributedIdTests
+    public sealed class DistributedIdTests
     {
 #pragma warning disable CS1718 // Comparison made to same variable
         [Fact]

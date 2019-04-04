@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>SourceCode.Clay.Distributed</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,10 +10,10 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageId>SourceCode.Clay.DistributedId</PackageId>
+    <PackageId>SourceCode.Clay.WaitAndRetry</PackageId>
     <Authors>SourceCode</Authors>
-    <Description>Tools and extensions for working with data.</Description>
-    <PackageTags>clay utility extension sql connection tsql parser</PackageTags>
+    <Description>Tools and extensions for working with retry strategies.</Description>
+    <PackageTags>clay utility extension backoff wait retry transient error handling</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
   </PropertyGroup>
