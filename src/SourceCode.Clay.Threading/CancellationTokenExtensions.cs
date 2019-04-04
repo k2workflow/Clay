@@ -22,11 +22,10 @@ namespace SourceCode.Clay.Threading
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> to add a timeout to.</param>
         public static CancellationTokenSource WithTimeout(this CancellationToken cancellationToken, TimeSpan timeout)
         {
+            if (timeout == Timeout.InfiniteTimeSpan) throw new ArgumentOutOfRangeException(nameof(timeout));
+
             if (cancellationToken == CancellationToken.None)
                 return new CancellationTokenSource(timeout);
-
-            if (timeout == Timeout.InfiniteTimeSpan)
-                return new CancellationTokenSource();
 
             var cts = CancellationTokenSource
                 .CreateLinkedTokenSource(cancellationToken);

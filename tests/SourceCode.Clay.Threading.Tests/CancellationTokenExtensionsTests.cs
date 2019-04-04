@@ -33,12 +33,10 @@ namespace SourceCode.Clay.Threading.Tests
             TimeSpan timeout = Timeout.InfiniteTimeSpan;
 
             // Act
-            using (CancellationTokenSource cts = ct.WithTimeout(timeout))
-            {
-                // Assert
-                Assert.NotEqual(CancellationToken.None, cts.Token);
-                Assert.False(cts.Token.IsCancellationRequested);
-            }
+            Action act = () => ct.WithTimeout(timeout);
+
+            // Assert
+            Assert.Throws<ArgumentOutOfRangeException>(act);
         }
 
         [Fact]
