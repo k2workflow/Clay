@@ -15,8 +15,8 @@
   <PropertyGroup>
     <PackageId>SourceCode.Clay.Primitives</PackageId>
     <Authors>SourceCode</Authors>
-    <Description>Tools and extensions for working with HTTP.</Description>
-    <PackageTags>clay utility extension</PackageTags>
+    <Description>Tools and extensions for working with primitives such as Sha1, DistributedId and BitOps.</Description>
+    <PackageTags>clay utility extension sha1 cas distributedid snowflake bitoperations shift rotate bt bts btc btr</PackageTags>
     <Version>1.0.0-local</Version>
     <PackageVersion>1.0.0-local</PackageVersion>
     <RootNamespace>SourceCode.Clay.Net</RootNamespace>
