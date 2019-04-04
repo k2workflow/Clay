@@ -64,7 +64,7 @@ namespace SourceCode.Clay.WaitAndRetry
 
             if (a == b) return a;
 
-            return a + (b - a) * NextDouble();
+            return a + ((b - a) * NextDouble());
         }
     }
 }
