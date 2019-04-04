@@ -21,7 +21,7 @@ namespace SourceCode.Clay.WaitAndRetry
         /// <param name="factor">The exponent to multiply each subsequent duration by.</param>
         /// <param name="retryCount">The maximum number of retries to use, in addition to the original call.</param>
         /// <param name="fastFirst">Whether the first retry will be immediate or not.</param>
-        public static IEnumerable<TimeSpan> ExponentialBackoff(TimeSpan initialDelay, int retryCount, double factor = 2.0, bool fastFirst = false)
+        public static IEnumerable<TimeSpan> Exponential(TimeSpan initialDelay, int retryCount, double factor = 2.0, bool fastFirst = false)
         {
             if (initialDelay < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(initialDelay), initialDelay, "should be >= 0ms");
             if (retryCount < 0) throw new ArgumentOutOfRangeException(nameof(retryCount), retryCount, "should be >= 0");

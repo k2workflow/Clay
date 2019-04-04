@@ -9,7 +9,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Distributed.Tests
 {
-    public class DistributedIdTests
+    public sealed class DistributedIdTests
     {
 #pragma warning disable CS1718 // Comparison made to same variable
         [Fact]

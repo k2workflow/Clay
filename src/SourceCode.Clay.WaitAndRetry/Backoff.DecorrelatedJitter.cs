@@ -23,7 +23,7 @@ namespace SourceCode.Clay.WaitAndRetry
         /// <param name="fastFirst">Whether the first retry will be immediate or not.</param>
         /// <param name="seed">An optional <see cref="Random"/> seed to use.
         /// If not specified, will use a shared instance with a random seed, per Microsoft recommendation for maximum randomness.</param>
-        public static IEnumerable<TimeSpan> DecorrelatedJitterBackoff(TimeSpan minDelay, TimeSpan maxDelay, int retryCount, bool fastFirst = false, int? seed = null)
+        public static IEnumerable<TimeSpan> DecorrelatedJitter(TimeSpan minDelay, TimeSpan maxDelay, int retryCount, bool fastFirst = false, int? seed = null)
         {
             if (minDelay < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(minDelay), minDelay, "should be >= 0ms");
             if (maxDelay < minDelay) throw new ArgumentOutOfRangeException(nameof(maxDelay), maxDelay, $"should be >= {minDelay}");

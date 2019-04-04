@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.WaitAndRetry.Tests
 {
-    public sealed class DecorrelatedJitterBackoffSpecs
+    public sealed class DecorrelatedJitterBackoffTests
     {
         [Fact]
         public void Backoff_WithMinDelayLessThanZero_ThrowsException()
@@ -18,7 +18,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 1;
 
             // Act
-            Action act = () => Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            Action act = () => Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 1;
 
             // Act
-            Action act = () => Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            Action act = () => Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -54,7 +54,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 1;
 
             // Act
-            Action act = () => Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            Action act = () => Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -72,7 +72,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 1;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             result.Should().NotBeNull();
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 1;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             result.Should().NotBeNull();
@@ -123,7 +123,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const int seed = 100;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitterBackoff(minDelay, maxDelay, retryCount, fastFirst, seed);
+            IEnumerable<TimeSpan> result = Backoff.DecorrelatedJitter(minDelay, maxDelay, retryCount, fastFirst, seed);
 
             // Assert
             result.Should().NotBeNull();

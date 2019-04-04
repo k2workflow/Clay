@@ -3,7 +3,7 @@ using Xunit;
 
 namespace SourceCode.Clay.WaitAndRetry.Tests
 {
-    public sealed class ConcurrentRandomSpecs
+    public sealed class ConcurrentRandomTests
     {
         [Fact]
         public void GetRandomNumber_ThatIsGreaterThan100AndLessThan1000_RandomNumberReturned()

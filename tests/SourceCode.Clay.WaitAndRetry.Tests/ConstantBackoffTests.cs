@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.WaitAndRetry.Tests
 {
-    public sealed class ConstantBackoffSpecs
+    public sealed class ConstantBackoffTests
     {
         [Fact]
         public void Backoff_WithDelayLessThanZero_ThrowsException()
@@ -16,7 +16,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            Action act = () => Backoff.ConstantBackoff(delay, retryCount, fastFirst);
+            Action act = () => Backoff.Constant(delay, retryCount, fastFirst);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -32,7 +32,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            Action act = () => Backoff.ConstantBackoff(delay, retryCount, fastFirst);
+            Action act = () => Backoff.Constant(delay, retryCount, fastFirst);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.ConstantBackoff(delay, retryCount, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Constant(delay, retryCount, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = true;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.ConstantBackoff(delay, retryCount, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Constant(delay, retryCount, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
@@ -94,7 +94,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.ConstantBackoff(delay, retryCount, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Constant(delay, retryCount, fastFirst);
 
             // Assert
             result.Should().NotBeNull();

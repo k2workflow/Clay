@@ -12,7 +12,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Distributed.Tests
 {
-    public class DistributedIdFactoryTests
+    public sealed class DistributedIdFactoryTests
     {
         [Fact]
         public void DistributedIdFactory_Properties()

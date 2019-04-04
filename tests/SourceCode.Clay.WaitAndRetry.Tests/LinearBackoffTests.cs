@@ -5,7 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.WaitAndRetry.Tests
 {
-    public sealed class LinearBackoffSpecs
+    public sealed class LinearBackoffTests
     {
         [Fact]
         public void Backoff_WithInitialDelayLessThanZero_ThrowsException()
@@ -17,7 +17,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            Action act = () => Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            Action act = () => Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -34,7 +34,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            Action act = () => Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            Action act = () => Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -51,7 +51,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            Action act = () => Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            Action act = () => Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             act.Should().Throw<ArgumentOutOfRangeException>()
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = true;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
@@ -138,7 +138,7 @@ namespace SourceCode.Clay.WaitAndRetry.Tests
             const bool fastFirst = false;
 
             // Act
-            IEnumerable<TimeSpan> result = Backoff.LinearBackoff(initialDelay, retryCount, factor, fastFirst);
+            IEnumerable<TimeSpan> result = Backoff.Linear(initialDelay, retryCount, factor, fastFirst);
 
             // Assert
             result.Should().NotBeNull();
