@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>SourceCode.Clay.Distributed.Tests</RootNamespace>
+    <RootNamespace>SourceCode.Clay.Threading.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SourceCode.Clay.DistributedId\SourceCode.Clay.DistributedId.csproj" />
+    <ProjectReference Include="..\..\src\SourceCode.Clay.Threading\SourceCode.Clay.Threading.csproj" />
   </ItemGroup>
 
 </Project>
