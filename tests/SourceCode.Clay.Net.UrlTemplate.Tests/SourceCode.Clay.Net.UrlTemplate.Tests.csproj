@@ -8,7 +8,7 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>SourceCode.Clay.Net.Tests</RootNamespace>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="OpenCover" Version="4.7.922" />
@@ -19,7 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\SourceCode.Clay.Net.UrlTemplate\SourceCode.Clay.Net.UrlTemplate.csproj" />
   </ItemGroup>
