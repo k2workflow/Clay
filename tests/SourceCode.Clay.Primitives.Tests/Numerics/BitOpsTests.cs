@@ -571,7 +571,6 @@ namespace SourceCode.Clay.Numerics.Tests
             for (int i = 0; i <= byte.MaxValue; i++)
             {
                 bool expectedBool = i != 0;
-                int expectedByte = expectedBool ? 1 : 0;
 
                 byte n = (byte)i;
                 bool weirdBool = Unsafe.As<byte, bool>(ref n);
@@ -585,6 +584,25 @@ namespace SourceCode.Clay.Numerics.Tests
                 byt = BitOps.AsByte(ref weirdBool);
                 Assert.Equal(n, byt);
             }
+        }
+
+        private static bool s_false = false;
+        private static bool s_true = true;
+
+        [Fact]
+        public static void BitOps_Iff()
+        {
+            Assert.Equal(0u, BitOps.Iff(s_false, 1u));
+            Assert.Equal(0u, BitOps.Iff(ref s_false, 1u));
+
+            Assert.Equal(1u, BitOps.Iff(s_true, 1u));
+            Assert.Equal(1u, BitOps.Iff(ref s_true, 1u));
+
+            Assert.Equal(2u, BitOps.Iff(s_false, 1u, 2u));
+            Assert.Equal(2u, BitOps.Iff(ref s_false, 1u, 2u));
+
+            Assert.Equal(2u, BitOps.Iff(s_true, 2u, 1u));
+            Assert.Equal(2u, BitOps.Iff(ref s_true, 2u, 1u));
         }
 
         #region Helpers
