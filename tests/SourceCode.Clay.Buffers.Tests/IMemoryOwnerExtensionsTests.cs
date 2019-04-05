@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class IMemoryOwnerExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start_noop))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start_noop()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start_length_noop))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start_length_noop()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start_guards))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start_guards()
         {
             Assert.Throws<ArgumentNullException>(() => IMemoryOwnerExtensions.Slice<byte>(null, 0));
@@ -61,7 +61,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start_length_guards))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start_length_guards()
         {
             Assert.Throws<ArgumentNullException>(() => IMemoryOwnerExtensions.Slice<byte>(null, 0, 0));
@@ -78,7 +78,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;
@@ -94,7 +94,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryPool_byte_WrapSlice_start_length))]
+        [Fact]
         public static void MemoryPool_byte_WrapSlice_start_length()
         {
             MemoryPool<byte> pool = MemoryPool<byte>.Shared;

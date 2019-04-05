@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Json.Units
     public static class JsonReaderExtensionTests
     {
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_read_empty_object))]
+        [Theory]
         [InlineData("{}")]
         [InlineData(" {\t\n   \t} \r\n")]
         public static void When_read_empty_object(string json)
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_read_empty_array))]
+        [Theory]
         [InlineData("[]")]
         [InlineData(" [\t\n   \t] \r\n")]
         public static void When_read_empty_array(string json)
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_read_null_object))]
+        [Theory]
         [InlineData("{ \"a\": null }")]
         [InlineData("{ \t\n \"a\": \t\n null \t\n\t } \r\n")]
         public static void When_read_null_object(string json)
@@ -126,7 +126,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_read_null_array))]
+        [Theory]
         [InlineData("[ null ]")]
         [InlineData("[ \t\n null \t\n\t ] \r\n")]
         public static void When_read_null_array(string json)
@@ -205,7 +205,7 @@ namespace SourceCode.Clay.Json.Units
         ]";
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_read_simple_object))]
+        [Fact]
         public static void When_read_simple_object()
         {
             // Read
@@ -300,7 +300,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_read_simple_array))]
+        [Fact]
         public static void When_read_simple_array()
         {
             // Read
@@ -340,7 +340,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_read_simple_object_negative))]
+        [Fact]
         public static void When_read_simple_object_negative()
         {
             // Read

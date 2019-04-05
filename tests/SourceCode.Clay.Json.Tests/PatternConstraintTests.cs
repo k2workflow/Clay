@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Json.Units
     public static class PatternConstraintTests
     {
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Simple_Optional_PatternConstraint))]
+        [Theory]
         [InlineData("a", true)]
         [InlineData("A", true)]
         [InlineData("b", false)]
@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Simple_Required_PatternConstraint))]
+        [Theory]
         [InlineData("a", true)]
         [InlineData("A", true)]
         [InlineData("b", false)]

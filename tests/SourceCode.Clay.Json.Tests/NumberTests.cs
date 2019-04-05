@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Json.Tests
             InlineData(nameof(Double), 10.0, NumberKinds.Real | NumberKinds.Signed, false),
             InlineData(nameof(Decimal), 10.0, NumberKinds.Decimal | NumberKinds.Signed, false)
         ]
-        [Theory(DisplayName = nameof(Number_ContructGet))]
+        [Theory]
         public static void Number_ContructGet(string description, object expected, NumberKinds kind, bool isZero)
         {
             // InlineData does not like decimal literals (eg 10.0m)
@@ -62,7 +62,7 @@ namespace SourceCode.Clay.Json.Tests
             InlineData(nameof(Double), 10.0),
             InlineData(nameof(Decimal), 10.0)
         ]
-        [Theory(DisplayName = nameof(Number_ToString))]
+        [Theory]
         public static void Number_ToString(string description, object expected)
         {
             // InlineData does not like decimal literals (eg 10.0m)
@@ -206,7 +206,7 @@ namespace SourceCode.Clay.Json.Tests
             InlineData(nameof(Decimal), nameof(Double), 10.0, 100.0, 10.0, 100.0),
             InlineData(nameof(Decimal), nameof(Decimal), 10.0, 100.0, 10.0, 100.0),
         ]
-        [Theory(DisplayName = nameof(Number_Compare))]
+        [Theory]
         public static void Number_Compare(string a, string b, object aLow, object aHigh, object bLow, object bHigh)
         {
             // InlineData does not like decimal literals (eg 10.0m)
@@ -375,7 +375,7 @@ namespace SourceCode.Clay.Json.Tests
             InlineData(nameof(Decimal), nameof(Double)),
             InlineData(nameof(Decimal), nameof(Decimal)),
         ]
-        [Theory(DisplayName = nameof(Number_Compare_Overflow))]
+        [Theory]
         public static void Number_Compare_Overflow(string a, string b)
         {
             var aT = Type.GetType($"System.{a}");

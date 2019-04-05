@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Buffers.Tests
     public static class MemoryExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_index_of_span))]
+        [Fact]
         public static void When_index_of_span()
         {
             Assert.Equal(-1, ReadOnlySpan<char>.Empty.IndexOf('a', 0));
@@ -26,7 +26,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_left_memory))]
+        [Fact]
         public static void When_left_memory()
         {
             // Empty
@@ -93,7 +93,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_right_memory))]
+        [Fact]
         public static void When_right_memory()
         {
             // Empty
@@ -160,7 +160,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_left_span))]
+        [Fact]
         public static void When_left_span()
         {
             // Empty
@@ -227,7 +227,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_right_span))]
+        [Fact]
         public static void When_right_span()
         {
             // Empty
@@ -294,7 +294,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_both_null))]
+        [Fact]
         public static void MemoryEquals_both_null()
         {
             var equal = ReadOnlyMemory<string>.Empty.MemoryEquals(Memory<string>.Empty, StringComparer.Ordinal);
@@ -302,7 +302,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_both_empty))]
+        [Fact]
         public static void MemoryEquals_both_empty()
         {
             var list1 = new ReadOnlyMemory<string>(Array.Empty<string>());
@@ -313,7 +313,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_both_one))]
+        [Fact]
         public static void MemoryEquals_both_one()
         {
             var list1 = new ReadOnlyMemory<string>(new string[] { "hi" });
@@ -331,7 +331,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_one_null))]
+        [Fact]
         public static void MemoryEquals_one_null()
         {
             var list = new ReadOnlyMemory<string>(TestData.List);
@@ -340,7 +340,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_different_count))]
+        [Fact]
         public static void MemoryEquals_different_count()
         {
             var list = new ReadOnlyMemory<string>(TestData.List);
@@ -356,7 +356,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_IsEqual))]
+        [Fact]
         public static void MemoryEquals_IsEqual()
         {
             var list = new ReadOnlyMemory<string>(TestData.List);
@@ -373,7 +373,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_NotEqual))]
+        [Fact]
         public static void MemoryEquals_NotEqual()
         {
             var list = new ReadOnlyMemory<string>(TestData.List);
@@ -390,7 +390,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(MemoryEquals_duplicates))]
+        [Fact]
         public static void MemoryEquals_duplicates()
         {
             var list = new ReadOnlyMemory<string>(TestData.List);

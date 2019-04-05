@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Buffers.Tests
 {
     public static class ByteHashCodeTests
     {
-        [Fact(DisplayName = nameof(ByteHashCode_ToHashCode))]
+        [Fact]
         public static void ByteHashCode_ToHashCode()
         {
             byte[] arr = new byte[128];
@@ -38,7 +38,7 @@ namespace SourceCode.Clay.Buffers.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(ByteHashCode_HashCode_Identity))]
+        [Fact]
         public static void ByteHashCode_HashCode_Identity()
         {
             byte[] arr = new byte[128];

@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Security.Tests
     public static class SecureStringExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_convert_securestring))]
+        [Fact]
         public static void When_convert_securestring()
         {
             // Null
@@ -65,7 +65,7 @@ namespace SourceCode.Clay.Security.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_convert_string))]
+        [Fact]
         public static void When_convert_string()
         {
             // Null

@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Json.Units
     public static class Int64ConstraintTests
     {
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Empty_Int64Constraint))]
+        [Theory]
         [InlineData(-15, true)]
         [InlineData(-10, true)] // Inclusive
         [InlineData(6, true)]
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_InclusiveValue_Infinity_Int64Constraint))]
+        [Theory]
         [InlineData(-15, false)]
         [InlineData(-10, true)] // Inclusive
         [InlineData(6, true)]
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_ExclusiveValue_Infinity_Int64Constraint))]
+        [Theory]
         [InlineData(-15, false)]
         [InlineData(-10, false)] // Exclusive
         [InlineData(6, true)]
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_Int64Constraint))]
+        [Theory]
         [InlineData(-15, true)]
         [InlineData(10, true)] // Inclusive
         [InlineData(15, false)]
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_ExclusiveValue_Int64Constraint))]
+        [Theory]
         [InlineData(-15, true)]
         [InlineData(10, false)] // Exclusive
         [InlineData(15, false)]
@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_InclusiveValue_Int64Constraint))]
+        [Theory]
         [InlineData(-15, false)]
         [InlineData(-10, true)] // Inclusive
         [InlineData(-5, true)]
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_ExclusiveValue_Int64Constraint))]
+        [Theory]
         [InlineData(-15, false)]
         [InlineData(-10, false)] // Exclusive
         [InlineData(-5, true)]

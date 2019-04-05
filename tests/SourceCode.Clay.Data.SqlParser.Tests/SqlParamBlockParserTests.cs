@@ -106,7 +106,7 @@ AS RETURN
             END;";
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_bad_comment))]
+        [Fact]
         public static void Tokenize_bad_comment()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
@@ -115,7 +115,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_escaped_names))]
+        [Fact]
         public static void Tokenize_escaped_names()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
@@ -124,7 +124,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        [Fact]
         public static void Tokenize_messy_proc_2_params()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcWithParen);
@@ -151,7 +151,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_real_function_2_params))]
+        [Fact]
         public static void Tokenize_real_function_2_params()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlRealFunction);
@@ -178,7 +178,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        [Fact]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcNoParen);

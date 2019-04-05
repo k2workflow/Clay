@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
     public static class SqlTransactionExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_command_from_transaction))]
+        [Fact]
         public static void When_create_command_from_transaction()
         {
             var tsql = "SELECT * FROM [Customer].[Address];";

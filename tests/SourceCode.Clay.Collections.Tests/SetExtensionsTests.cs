@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Collections.Tests
     public static class SetExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_both_null))]
+        [Fact]
         public static void SetEquals_both_null()
         {
             var equal = ((HashSet<string>)null).NullableSetEqual(null);
@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_both_empty))]
+        [Fact]
         public static void SetEquals_both_empty()
         {
             var set1 = new HashSet<string>();
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_both_one))]
+        [Fact]
         public static void SetEquals_both_one()
         {
             var set1 = new HashSet<string> { "hi" };
@@ -50,7 +50,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_one_null))]
+        [Fact]
         public static void SetEquals_one_null()
         {
             var equal = TestData.Set.NullableSetEqual(null);
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_different_count))]
+        [Fact]
         public static void SetEquals_different_count()
         {
             var set2 = new HashSet<string>(TestData.Set);
@@ -69,7 +69,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_is_equal))]
+        [Fact]
         public static void SetEquals_is_equal()
         {
             var set2 = new HashSet<string>(TestData.Set);
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_not_equal))]
+        [Fact]
         public static void SetEquals_not_equal()
         {
             var set2 = new HashSet<string>(TestData.Set)
@@ -92,7 +92,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_not_equal_1))]
+        [Fact]
         public static void SetEquals_not_equal_1()
         {
             var set = new[]
@@ -111,7 +111,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_is_equal_1))]
+        [Fact]
         public static void SetEquals_is_equal_1()
         {
             var list2 = new[]
@@ -136,7 +136,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SetEquals_is_equal_duplicates))]
+        [Fact]
         public static void SetEquals_is_equal_duplicates()
         {
             var equal = ((ICollection<string>)TestData.Dupe1).NullableSetEqual(TestData.Dupe2, StringComparer.Ordinal);

@@ -710,7 +710,7 @@ namespace SourceCode.Clay.Numerics
         public static uint Iff(ref bool condition, uint trueValue)
         {
             uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
-            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
+            Debug.Assert(sel == 0xFFFF_FFFF || sel == 0); // CLR permits other values for bool
 
             return trueValue & sel;
         }
@@ -742,7 +742,7 @@ namespace SourceCode.Clay.Numerics
         {
             // Branchless equivalent of (eg): value == 0 ? 32 : 0
             uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
-            Debug.Assert(sel == 0 || sel == 1); // CLR permits other values for bool
+            Debug.Assert(sel == 0xFFFF_FFFF || sel == 0); // CLR permits other values for bool
 
             uint tv = trueValue & sel;
             uint fv = /*Bmi1.IsSupported ? Bmi1.AndNot(falseValue, sel) :*/ falseValue & ~sel;
