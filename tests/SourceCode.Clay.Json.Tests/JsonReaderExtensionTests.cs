@@ -13,6 +13,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Json.Units
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class JsonReaderExtensionTests
     {
         [Trait("Type", "Unit")]

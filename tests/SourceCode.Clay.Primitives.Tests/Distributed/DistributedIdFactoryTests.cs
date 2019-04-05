@@ -12,6 +12,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Distributed.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class DistributedIdFactoryTests
     {
         [Fact]

@@ -13,6 +13,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Algorithms.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism

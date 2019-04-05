@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Collections.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal static class TestData
     {
         public static readonly string[] List =

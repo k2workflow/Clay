@@ -7,6 +7,7 @@
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal static class TestConstants
     {
         public const string SurrogatePair = "\uD869\uDE01";

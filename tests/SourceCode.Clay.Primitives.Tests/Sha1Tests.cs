@@ -14,6 +14,7 @@ using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class Sha1Tests
     {
         private static readonly crypt.SHA1 s_sha1 = crypt.SHA1.Create();

@@ -11,6 +11,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Security.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class CertificateTests
     {
         private static readonly X509Certificate2 s_existingCertificate;

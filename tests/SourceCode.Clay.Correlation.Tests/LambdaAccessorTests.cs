@@ -5,6 +5,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Correlation.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class LambdaAccessorTests
     {
         [Theory]

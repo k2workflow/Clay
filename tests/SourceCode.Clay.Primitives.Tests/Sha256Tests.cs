@@ -14,6 +14,7 @@ using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class Sha256Tests
     {
         private static readonly crypt.SHA256 s_sha256 = crypt.SHA256.Create();

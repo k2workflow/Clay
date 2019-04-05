@@ -11,6 +11,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Data.SqlClient.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SqlConnectionStringBuilderTests
     {
         private static readonly string[] s_serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };

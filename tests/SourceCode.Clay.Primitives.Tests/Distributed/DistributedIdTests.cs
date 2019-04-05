@@ -9,6 +9,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Distributed.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class DistributedIdTests
     {
 #pragma warning disable CS1718 // Comparison made to same variable

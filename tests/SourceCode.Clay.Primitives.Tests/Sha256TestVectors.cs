@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal sealed class Sha256TestVectors : IEnumerable<object[]>
     {
         public const string Zero = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -18,7 +19,7 @@ namespace SourceCode.Clay.Tests
         private static readonly IList<object[]> s_data = new object[5][]
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
-            
+
             // Test Vector 1
             new object[]{ string.Empty, Empty },
 

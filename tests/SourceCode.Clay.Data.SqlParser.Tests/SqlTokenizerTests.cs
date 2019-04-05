@@ -10,6 +10,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Data.SqlClient.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SqlTokenizerTests
     {
         [Trait("Type", "Unit")]

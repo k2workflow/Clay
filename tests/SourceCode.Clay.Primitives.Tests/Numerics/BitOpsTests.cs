@@ -10,6 +10,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Numerics.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class BitOpsTests
     {
         #region ExtractBit

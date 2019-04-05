@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal sealed class Sha1TestVectors : IEnumerable<object[]>
     {
         public const string Zero = "0000000000000000000000000000000000000000";

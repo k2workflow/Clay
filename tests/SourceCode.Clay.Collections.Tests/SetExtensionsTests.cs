@@ -5,13 +5,14 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SetExtensionsTests
     {
         [Trait("Type", "Unit")]

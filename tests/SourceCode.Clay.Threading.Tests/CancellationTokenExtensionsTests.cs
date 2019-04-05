@@ -4,6 +4,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Threading.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class CancellationTokenExtensionsTests
     {
         [Fact]
