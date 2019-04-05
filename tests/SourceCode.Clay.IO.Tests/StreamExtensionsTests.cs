@@ -15,7 +15,7 @@ namespace SourceCode.Clay.IO.Tests
 {
     public static class StreamExtensionsTests
     {
-        [Fact(DisplayName = nameof(StreamExtensions_Write))]
+        [Fact]
         public static void StreamExtensions_Write()
         {
             ArraySegment<byte> buffer = MemoryBufferStreamTests.GenerateSegment(0, 64, 1);
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(StreamExtensions_WriteAsync))]
+        [Fact]
         public static async Task StreamExtensions_WriteAsync()
         {
             ArraySegment<byte> buffer = MemoryBufferStreamTests.GenerateSegment(0, 64, 1);

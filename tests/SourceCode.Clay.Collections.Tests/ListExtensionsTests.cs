@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Collections.Tests
     public static class ListExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_null))]
+        [Fact]
         public static void ListEquals_both_null()
         {
             var equal = ((IList<string>)TestData.Null).NullableSequenceEqual(null, StringComparer.Ordinal);
@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_empty))]
+        [Fact]
         public static void ListEquals_both_empty()
         {
             var list1 = Array.Empty<string>();
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_both_one))]
+        [Fact]
         public static void ListEquals_both_one()
         {
             var list1 = new string[] { "hi" };
@@ -68,7 +68,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_one_null))]
+        [Fact]
         public static void ListEquals_one_null()
         {
             var equal = ((IList<string>)TestData.List).NullableSequenceEqual(null, StringComparer.Ordinal);
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_different_count))]
+        [Fact]
         public static void ListEquals_different_count()
         {
             var list2 = new[]
@@ -97,7 +97,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_is_equal))]
+        [Fact]
         public static void ListEquals_is_equal()
         {
             var list2 = new[]
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_not_equal_1))]
+        [Fact]
         public static void ListEquals_not_equal_1()
         {
             var list2 = new[]
@@ -135,7 +135,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_not_equal_2))]
+        [Fact]
         public static void ListEquals_not_equal_2()
         {
             var list2 = new[]
@@ -154,7 +154,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(ListEquals_duplicates))]
+        [Fact]
         public static void ListEquals_duplicates()
         {
             var list2 = new[]

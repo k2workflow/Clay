@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Json.Units
     public static class NumberConstraintTests
     {
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_Empty_NumberConstraint))]
+        [Theory]
         [InlineData(0.49, true)]
         [InlineData(0.5, true)] // Inclusive
         [InlineData(0.51, true)]
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_InclusiveValue_Infinity_NumberConstraint))]
+        [Theory]
         [InlineData(0.49, false)]
         [InlineData(0.5, true)] // Inclusive
         [InlineData(0.51, true)]
@@ -43,7 +43,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_ExclusiveValue_Infinity_NumberConstraint))]
+        [Theory]
         [InlineData(0.49, false)]
         [InlineData(0.5, false)] // Exclusive
         [InlineData(0.51, true)]
@@ -58,7 +58,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_Infinity_InclusiveValue_NumberConstraint))]
+        [Theory]
         [InlineData(10, true)]
         [InlineData(10.1, true)] // Inclusive
         [InlineData(10.2, false)]
@@ -73,7 +73,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_Infinity_ExclusiveValue_NumberConstraint))]
+        [Theory]
         [InlineData(10, true)]
         [InlineData(10.1, false)] // Exclusive
         [InlineData(10.2, false)]
@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_InclusiveValue_NumberConstraint))]
+        [Theory]
         [InlineData(-10.2, false)]
         [InlineData(-10.1, true)] // Inclusive
         [InlineData(-10, true)]
@@ -106,7 +106,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(OpenApi_Test_ExclusiveValue_NumberConstraint))]
+        [Theory]
         [InlineData(-10.2, false)]
         [InlineData(-10.1, false)] // Exclusive
         [InlineData(-10, true)]
@@ -124,7 +124,8 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(OpenApi_Test_Decimal_NumberConstraint))]
+        [Fact]
+
         public static void OpenApi_Test_Decimal_NumberConstraint()
         {
             // [-214748.3648, +214748.3647]

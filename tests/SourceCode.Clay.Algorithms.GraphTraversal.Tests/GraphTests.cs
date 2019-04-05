@@ -39,7 +39,7 @@ namespace SourceCode.Clay.Algorithms.GraphTraversal.Tests
             Assert.Empty(actual);
         }
 
-        [Fact(DisplayName = nameof(Graph_ToRepresentativeForest_Scenario1))]
+        [Fact]
         public static void Graph_ToRepresentativeForest_Scenario1()
         {
             /*
@@ -139,7 +139,7 @@ namespace SourceCode.Clay.Algorithms.GraphTraversal.Tests
             AssertSetEqual(expectedTrees, actualTrees);
         }
 
-        [Fact(DisplayName = nameof(Graph_Tarjan_Scenario1))]
+        [Fact]
         public static void Graph_Tarjan_Scenario1()
         {
             /*

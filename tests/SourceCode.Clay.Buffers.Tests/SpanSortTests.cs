@@ -32,31 +32,31 @@ namespace SourceCode.Clay.Buffers.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_Empty))]
+        [Fact]
         public static void SpanExtensions_Sort_Empty()
         {
             SortAndAssert(default);
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_1))]
+        [Fact]
         public static void SpanExtensions_Sort_1()
         {
             SortAndAssert(new byte[1] { 1 });
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_2))]
+        [Fact]
         public static void SpanExtensions_Sort_2()
         {
             SortAndAssert(new byte[2] { 2, 1 });
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_3))]
+        [Fact]
         public static void SpanExtensions_Sort_3()
         {
             SortAndAssert(new byte[3] { 3, 1, 2 });
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_Sorted))]
+        [Fact]
         public static void SpanExtensions_Sort_Sorted()
         {
             var arr = new byte[]
@@ -66,7 +66,7 @@ namespace SourceCode.Clay.Buffers.Tests
             SortAndAssert(arr);
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_Reversed))]
+        [Fact]
         public static void SpanExtensions_Sort_Reversed()
         {
             var arr = new byte[]
@@ -76,7 +76,7 @@ namespace SourceCode.Clay.Buffers.Tests
             SortAndAssert(arr);
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_Sort_Big))]
+        [Fact]
         public static void SpanExtensions_Sort_Big()
         {
             var arr = new byte[10000];
@@ -85,7 +85,7 @@ namespace SourceCode.Clay.Buffers.Tests
             SortAndAssert(arr);
         }
 
-        [Fact(DisplayName = nameof(SpanExtensions_HeapSort_Big))]
+        [Fact]
         public static void SpanExtensions_HeapSort_Big()
         {
             var arr = new byte[10000];

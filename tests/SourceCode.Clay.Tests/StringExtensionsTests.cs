@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Tests
     public static class StringExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_left_string))]
+        [Fact]
         public static void When_left_string()
         {
             // Null
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_right_string))]
+        [Fact]
         public static void When_right_string()
         {
             // Null
@@ -167,7 +167,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_elide_string_null))]
+        [Fact]
         public static void When_elide_string_null()
         {
             for (var totalWidth = -1; totalWidth < 10; totalWidth++)
@@ -179,7 +179,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_elide_string_empty))]
+        [Fact]
         public static void When_elide_string_empty()
         {
             for (var totalWidth = -1; totalWidth < 10; totalWidth++)
@@ -191,7 +191,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_elide_string_boundary))]
+        [Theory]
         // Narrow-1
         [InlineData("A", -1, 1)]
         [InlineData("A", 0, 1)]
@@ -242,7 +242,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_String_EqualsOrdinal))]
+        [Theory]
         [InlineData(null, null, true)]
         [InlineData(null, "", false)]
         [InlineData(null, "a", false)]
@@ -266,7 +266,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_String_RemoveStart))]
+        [Theory]
         [InlineData(null, null, null)]
         [InlineData(null, "", null)]
         [InlineData("", null, "")]
@@ -294,7 +294,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_String_RemoveEnd))]
+        [Theory]
         [InlineData(null, null, null)]
         [InlineData(null, "", null)]
         [InlineData("", null, "")]

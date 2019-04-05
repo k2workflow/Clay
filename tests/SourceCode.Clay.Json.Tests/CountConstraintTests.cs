@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Json.Units
     public static class CountConstraintTests
     {
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Empty_CountConstraint))]
+        [Theory]
         [InlineData(-1, false)] // < 0
         [InlineData(0, true)]
         [InlineData(1, true)]
@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_InclusiveValue_Infinity_CountConstraint))]
+        [Theory]
         [InlineData(-1, false)]
         [InlineData(0, true)]
         [InlineData(1, true)]
@@ -41,7 +41,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Infinity_InclusiveValue_CountConstraint))]
+        [Theory]
         [InlineData(10, true)]
         [InlineData(11, true)]
         [InlineData(12, false)]
@@ -55,7 +55,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_InclusiveValue_CountConstraint))]
+        [Theory]
         [InlineData(-11, false)]
         [InlineData(3, true)]
         [InlineData(10, true)]
@@ -70,7 +70,7 @@ namespace SourceCode.Clay.Json.Units
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(Test_Exact_CountConstraint))]
+        [Theory]
         [InlineData(-11, false)]
         [InlineData(3, false)]
         [InlineData(10, true)]

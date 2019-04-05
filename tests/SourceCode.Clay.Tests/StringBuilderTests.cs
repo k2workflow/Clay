@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Text.Tests
     public static class StringBuilderTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 1 arg")]
+        [Fact]
         public static void When_append_format_line_1()
         {
             var actual = new StringBuilder("A").AppendFormatLine("-{0}-", 123);
@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Text.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 2 args")]
+        [Fact]
         public static void When_append_format_line_2()
         {
             var actual = new StringBuilder("A").AppendFormatLine("-{0}-{1}-", 123, false);
@@ -35,7 +35,7 @@ namespace SourceCode.Clay.Text.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 3 args")]
+        [Fact]
         public static void When_append_format_line_3()
         {
             var actual = new StringBuilder("A").AppendFormatLine("-{0}-{1}-{2}-", 123, false, "X");
@@ -46,7 +46,7 @@ namespace SourceCode.Clay.Text.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "StringBuilderExtensions AppendFormatLine 4 args")]
+        [Fact]
         public static void When_append_format_line_N()
         {
             var actual = new StringBuilder("A").AppendFormatLine("-{0}-{1}-{2}-{3}-", 123, false, "X", 'z');

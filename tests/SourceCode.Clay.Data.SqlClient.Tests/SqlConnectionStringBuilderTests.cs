@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         private static readonly string[] s_serverTokens = { "DATA SOURCE", "data source", "SERVER", "server" };
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_clear_inline_creds))]
+        [Fact]
         public static void When_clear_inline_creds()
         {
             var sqlCsb = new SqlConnectionStringBuilder
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_set_application_name))]
+        [Fact]
         public static void When_set_application_name()
         {
             var sqlCsb = new SqlConnectionStringBuilder
@@ -82,7 +82,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_set_application_intent))]
+        [Fact]
         public static void When_set_application_intent()
         {
             var sqlCsb = new SqlConnectionStringBuilder
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Local")]
+        [Fact]
         public static void When_make_robust_local()
         {
             foreach (string svr in s_serverTokens)
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Negative")]
+        [Fact]
         public static void When_make_robust_token_negative()
         {
             foreach (string svr in s_serverTokens)
@@ -175,7 +175,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Positive")]
+        [Fact]
         public static void When_make_robust_token_positive()
         {
             foreach (string svr in s_serverTokens)
@@ -205,7 +205,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = "SqlConnectionStringBuilderExtensions MakeRobust Force")]
+        [Fact]
         public static void When_make_robust_token_force()
         {
             foreach (string svr in s_serverTokens)
