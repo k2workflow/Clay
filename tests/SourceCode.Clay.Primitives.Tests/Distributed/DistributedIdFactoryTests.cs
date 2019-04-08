@@ -17,10 +17,18 @@ namespace SourceCode.Clay.Distributed.Tests
         [Fact]
         public void DistributedIdFactory_Properties()
         {
-            DateTime epoch = DateTime.Now;
+            DateTime epoch = DateTime.UtcNow.AddSeconds(-1);
             var factory = new DistributedIdFactory(epoch, 123);
             Assert.Equal(epoch.ToUniversalTime(), factory.Epoch);
             Assert.Equal(123, factory.MachineId);
+        }
+
+        [Fact]
+        public void DistributedIdFactory_Create_AfterTime()
+        {
+            var factory = new DistributedIdFactory(DateTime.UtcNow, 123);
+            Thread.Sleep(1000);
+            factory.Create();
         }
 
         [Fact]
@@ -29,7 +37,7 @@ namespace SourceCode.Clay.Distributed.Tests
             const int threadCount = 10;
             const int iterations = 10000;
 
-            var factory = new DistributedIdFactory(DateTime.Now, 0);
+            var factory = new DistributedIdFactory(DateTime.UtcNow.AddSeconds(-1), 0);
             var threads = new Thread[threadCount];
             var bigHs = new HashSet<DistributedId>(threadCount * iterations);
             Exception ex = null;
@@ -71,8 +79,8 @@ namespace SourceCode.Clay.Distributed.Tests
         [Fact]
         public void DistributedIdFactory_Create_Exhaust()
         {
-            DateTime old = DateTime.Now.AddYears(-400);
-            var factory = new DistributedIdFactory(old, 0);
+            var offset = 0b1111_1111_1111_1111_1111_1111_1111_1111_1111_1111ul + 5000;
+            var factory = new DistributedIdFactory(offset, 0);
             InvalidOperationException e = Assert.Throws<InvalidOperationException>(() => factory.Create());
             Assert.Equal("All distributed identifiers have been exhausted for the epoch.", e.Message);
         }
@@ -80,7 +88,19 @@ namespace SourceCode.Clay.Distributed.Tests
         [Fact]
         public void DistributedIdFactory_Create_InvalidMachineID()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DistributedIdFactory(DateTime.Now, 16384));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DistributedIdFactory(DateTime.UtcNow, 16384));
+        }
+
+        [Fact]
+        public void DistributedIdFactory_Create_InvalidEpoch()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DistributedIdFactory(DateTime.Now, 0));
+        }
+
+        [Fact]
+        public void DistributedIdFactory_Create_FutureEpoch()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DistributedIdFactory(DateTime.UtcNow.AddSeconds(10), 0));
         }
     }
 }
