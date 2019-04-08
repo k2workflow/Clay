@@ -76,18 +76,18 @@ namespace SourceCode.Clay.Buffers
         }
 
         /// <summary>
-        /// Returns the index of the first location of the specified <paramref name="char"/>, starting from the given <paramref name="startIndex"/>.
+        /// Returns the index of the first location of the specified <paramref name="item"/>, starting from the given <paramref name="startIndex"/>.
         /// </summary>
         /// <param name="span">The span.</param>
-        /// <param name="char">The character to find.</param>
+        /// <param name="item">The character to find.</param>
         /// <param name="startIndex">The index to start searching from.</param>
-        public static int IndexOf(this ReadOnlySpan<char> span, char @char, int startIndex)
+        public static int IndexOf(this ReadOnlySpan<char> span, char item, int startIndex)
         {
             if (span.Length == 0) return -1;
 
             ReadOnlySpan<char> slice = span.Slice(startIndex);
 
-            var index = slice.IndexOf(@char);
+            var index = slice.IndexOf(item);
             if (index == -1)
                 return -1;
 

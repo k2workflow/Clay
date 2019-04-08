@@ -63,19 +63,20 @@ namespace SourceCode.Clay.Buffers
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct ByteHashCode
     {
-        private static readonly uint s_seed =
 #if !NETSTANDARD2_0
+        private static readonly uint s_seed =
             (uint)typeof(HashCode).GetField(nameof(s_seed), BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 #else
-            26_39_41429;
+        private const uint s_seed =
+            26_39_41429u;
 #endif
         public static readonly int Empty = Combine(Array.Empty<byte>());
 
-        private const uint Prime1 = 2654435761U;
-        private const uint Prime2 = 2246822519U;
-        private const uint Prime3 = 3266489917U;
-        private const uint Prime4 = 668265263U;
-        private const uint Prime5 = 374761393U;
+        private const uint Prime1 = 2654435761u;
+        private const uint Prime2 = 2246822519u;
+        private const uint Prime3 = 3266489917u;
+        private const uint Prime4 = 668265263u;
+        private const uint Prime5 = 374761393u;
 
         private uint _acc0, _acc1, _acc2, _acc3;
         private uint _queue0, _queue1, _queue2, _queue3;
@@ -93,10 +94,10 @@ namespace SourceCode.Clay.Buffers
             }
             else
             {
-                var acc0 = s_seed + Prime1 + Prime2;
-                var acc1 = s_seed + Prime2;
+                var acc0 = unchecked(s_seed + Prime1 + Prime2);
+                var acc1 = unchecked(s_seed + Prime2);
                 var acc2 = s_seed;
-                var acc3 = s_seed - Prime1;
+                var acc3 = unchecked(s_seed - Prime1);
 
                 while (ints.Length > 3)
                 {
@@ -148,25 +149,25 @@ namespace SourceCode.Clay.Buffers
 #else
             Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
 #endif
-                    Span<byte> octets = MemoryMarshal.Cast<uint, byte>(span);
-                    octets[position] = value;
+            Span<byte> octets = MemoryMarshal.Cast<uint, byte>(span);
+            octets[position] = value;
 
-                    if (position == 15)
-                    {
-                        if (index == 15)
-                        {
-                            _acc0 = s_seed + Prime1 + Prime2;
-                            _acc1 = s_seed + Prime2;
-                            _acc2 = s_seed;
-                            _acc3 = s_seed - Prime1;
-                        }
+            if (position == 15)
+            {
+                if (index == 15)
+                {
+                    _acc0 = unchecked(s_seed + Prime1 + Prime2);
+                    _acc1 = unchecked(s_seed + Prime2);
+                    _acc2 = s_seed;
+                    _acc3 = unchecked(s_seed - Prime1);
+                }
 
-                        _acc0 = Round(_acc0, _queue0);
-                        _acc1 = Round(_acc1, _queue1);
-                        _acc2 = Round(_acc2, _queue2);
-                        _acc3 = Round(_acc3, _queue3);
-                        _queue0 = _queue1 = _queue2 = _queue3 = 0;
-                    }
+                _acc0 = Round(_acc0, _queue0);
+                _acc1 = Round(_acc1, _queue1);
+                _acc2 = Round(_acc2, _queue2);
+                _acc3 = Round(_acc3, _queue3);
+                _queue0 = _queue1 = _queue2 = _queue3 = 0;
+            }
 #if NETSTANDARD2_0
                 }
             }
@@ -191,25 +192,25 @@ namespace SourceCode.Clay.Buffers
 #else
             Span<uint> span = MemoryMarshal.CreateSpan(ref _queue0, 4);
 #endif
-                    Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(span)
-                        .Slice(0, (int)(length % 16));
-                    Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
+            Span<byte> remainder = MemoryMarshal.Cast<uint, byte>(span)
+                .Slice(0, (int)(length % 16));
+            Span<uint> ints = MemoryMarshal.Cast<byte, uint>(remainder);
 
-                    while (ints.Length > 0)
-                    {
-                        acc = RemainderRound(acc, ints[0]);
-                        ints = ints.Slice(1);
-                        remainder = remainder.Slice(sizeof(uint));
-                    }
+            while (ints.Length > 0)
+            {
+                acc = RemainderRound(acc, ints[0]);
+                ints = ints.Slice(1);
+                remainder = remainder.Slice(sizeof(uint));
+            }
 
-                    while (remainder.Length > 0)
-                    {
-                        acc = RemainderRound(acc, remainder[0]);
-                        remainder = remainder.Slice(1);
-                    }
+            while (remainder.Length > 0)
+            {
+                acc = RemainderRound(acc, remainder[0]);
+                remainder = remainder.Slice(1);
+            }
 
-                    acc = MixFinal(acc);
-                    return (int)acc;
+            acc = MixFinal(acc);
+            return (int)acc;
 #if NETSTANDARD2_0
                 }
             }
