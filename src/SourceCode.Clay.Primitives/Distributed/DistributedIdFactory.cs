@@ -62,13 +62,34 @@ namespace SourceCode.Clay.Distributed
             if (s_divisor == 0)
                 throw new PlatformNotSupportedException($"A system timer with at least {1000 / TimestampFrequency}ms frequency is required.");
             if ((machineId & ~MachineMask) != 0)
-                throw new ArgumentOutOfRangeException(nameof(machineId));
-
-            epoch = epoch.ToUniversalTime();
+                throw new ArgumentOutOfRangeException(nameof(machineId), machineId, "The machine ID cannot be larger than 16383.");
+            if (epoch.Kind != DateTimeKind.Utc)
+                throw new ArgumentOutOfRangeException(nameof(epoch), epoch, "The epoch must be a UTC DateTime.");
 
             Epoch = epoch;
-            _offset = ((ulong)DateTime.UtcNow.Ticks - (ulong)epoch.Ticks + (ulong)Stopwatch.GetTimestamp()) / s_divisor;
+
+            var epochDifference = ((ulong)DateTime.UtcNow.Ticks - (ulong)epoch.Ticks) / s_divisor;
+            var stopwatchDifference = (ulong)Stopwatch.GetTimestamp() / s_divisor;
+            _offset = stopwatchDifference - epochDifference;
+
+            if ((_offset & ~TimestampMask) != 0)
+                throw new ArgumentOutOfRangeException(nameof(epoch), epoch, "The epoch is in the future.");
+
             MachineId = machineId;
+            _lastTimestamp = Timestamp;
+            _lastSequence = 0;
+            _lock = new object();
+        }
+
+        /// <summary>
+        /// Testing constructor.
+        /// </summary>
+        /// <param name="offset">The value for the offset field.</param>
+        /// <param name="machineId">The machine ID.</param>
+        internal DistributedIdFactory(ulong offset, ushort machineId)
+        {
+            MachineId = machineId;
+            _offset = offset;
             _lastTimestamp = Timestamp;
             _lastSequence = 0;
             _lock = new object();
