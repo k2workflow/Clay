@@ -5,16 +5,17 @@
 
 #endregion
 
-using SourceCode.Clay.Tests;
 using System.Security;
+using SourceCode.Clay.Tests;
 using Xunit;
 
 namespace SourceCode.Clay.Security.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SecureStringExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_convert_securestring))]
+        [Fact]
         public static void When_convert_securestring()
         {
             // Null
@@ -64,7 +65,7 @@ namespace SourceCode.Clay.Security.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_convert_string))]
+        [Fact]
         public static void When_convert_string()
         {
             // Null

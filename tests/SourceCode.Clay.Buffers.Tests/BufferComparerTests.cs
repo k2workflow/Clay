@@ -29,14 +29,14 @@ namespace SourceCode.Clay.Buffers.Tests
             => (ReadOnlyMemory<byte>)array;
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Null_Array))]
+        [Fact]
         public static void BufferComparer_GetHashCode_Null_Array()
         {
             Assert.Equal(0, BufferComparer.Array.GetHashCode(default));
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Array))]
+        [Fact]
         public static void BufferComparer_GetHashCode_Empty_Array()
         {
             Assert.Equal(ByteHashCode.Combine(Array.Empty<byte>()), BufferComparer.Array.GetHashCode(Array.Empty<byte>()));
@@ -44,14 +44,14 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_Empty_Memory))]
+        [Fact]
         public static void BufferComparer_GetHashCode_Empty_Memory()
         {
             Assert.Equal(ByteHashCode.Combine(Array.Empty<byte>()), BufferComparer.Memory.GetHashCode(Memory<byte>.Empty));
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryShort))]
+        [Fact]
         public static void BufferComparer_GetHashCode_MemoryShort()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 16);
@@ -64,7 +64,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryMedium))]
+        [Fact]
         public static void BufferComparer_GetHashCode_MemoryMedium()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 712);
@@ -77,7 +77,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_MemoryLong))]
+        [Fact]
         public static void BufferComparer_GetHashCode_MemoryLong()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 1024);
@@ -90,7 +90,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryShort))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryShort()
         {
             ReadOnlyMemory<byte> bytes = GenerateSegment(0, 16).AsReadOnlyMemory();
@@ -103,7 +103,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryMedium))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryMedium()
         {
             ReadOnlyMemory<byte> bytes = GenerateSegment(0, 712).AsReadOnlyMemory();
@@ -116,7 +116,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ReadOnlyMemoryLong))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ReadOnlyMemoryLong()
         {
             ReadOnlyMemory<byte> bytes = GenerateSegment(0, 1024).AsReadOnlyMemory();
@@ -129,7 +129,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArrayShort))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArrayShort()
         {
             var bytes = GenerateSegment(0, 16).Array;
@@ -138,7 +138,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArrayMedium))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArrayMedium()
         {
             var bytes = GenerateSegment(0, BufferComparer.DefaultHashCodeFidelity).Array;
@@ -147,7 +147,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArrayLong))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArrayLong()
         {
             var bytes = GenerateSegment(0, 1024).Array;
@@ -156,7 +156,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentShort))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArraySegmentShort()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 16);
@@ -169,7 +169,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentMedium))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArraySegmentMedium()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 712);
@@ -182,7 +182,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_GetHashCode_ArraySegmentLong))]
+        [Fact]
         public static void BufferComparer_GetHashCode_ArraySegmentLong()
         {
             ArraySegment<byte> bytes = GenerateSegment(0, 1024);
@@ -195,7 +195,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_Null_Array))]
+        [Fact]
         public static void BufferComparer_Equals_Null_Array()
         {
             byte[] a = null;
@@ -209,7 +209,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_Empty_Array))]
+        [Fact]
         public static void BufferComparer_Equals_Empty_Array()
         {
             var a = Array.Empty<byte>();
@@ -220,7 +220,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_Memory))]
+        [Fact]
         public static void BufferComparer_Equals_Memory()
         {
             ArraySegment<byte> a = GenerateSegment(0, 16);
@@ -236,7 +236,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_ReadOnlyMemory))]
+        [Fact]
         public static void BufferComparer_Equals_ReadOnlyMemory()
         {
             ReadOnlyMemory<byte> a = GenerateSegment(0, 16).AsReadOnlyMemory();
@@ -252,7 +252,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_Array))]
+        [Fact]
         public static void BufferComparer_Equals_Array()
         {
             var a = GenerateSegment(0, 16).Array;
@@ -272,7 +272,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Equals_ArraySegment))]
+        [Fact]
         public static void BufferComparer_Equals_ArraySegment()
         {
             ArraySegment<byte> a = GenerateSegment(0, 16);
@@ -288,7 +288,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Null))]
+        [Fact]
         public static void BufferComparer_Compare_Array_Null()
         {
             byte[] a = null;
@@ -302,7 +302,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Length_One))]
+        [Fact]
         public static void BufferComparer_Compare_Array_Length_One()
         {
             var a = new byte[1] { 1 };
@@ -339,7 +339,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_Length_N))]
+        [Fact]
         public static void BufferComparer_Compare_Array_Length_N()
         {
             ArraySegment<byte> a = GenerateSegment(0, 16);
@@ -388,7 +388,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_ArraySegment_Length_One))]
+        [Fact]
         public static void BufferComparer_Compare_ArraySegment_Length_One()
         {
             var a = new ArraySegment<byte>(new byte[] { 1 });
@@ -403,7 +403,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_ArraySegment_Length_N))]
+        [Fact]
         public static void BufferComparer_Compare_ArraySegment_Length_N()
         {
             ArraySegment<byte> a = GenerateSegment(0, 16);
@@ -422,7 +422,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Array_With_Comparison))]
+        [Fact]
         public static void BufferComparer_Compare_Array_With_Comparison()
         {
             var expected = new byte[4] { 1, 2, 3, 4 };
@@ -438,7 +438,7 @@ namespace SourceCode.Clay.Buffers.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(BufferComparer_Compare_Memory_With_Comparison))]
+        [Fact]
         public static void BufferComparer_Compare_Memory_With_Comparison()
         {
             ReadOnlyMemory<byte> expected = new byte[4] { 1, 2, 3, 4 }.AsReadOnlyMemory();

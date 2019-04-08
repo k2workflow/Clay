@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Tests
     public static class ExceptionExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_suppress_exception))]
+        [Fact]
         public static void When_suppress_exception()
         {
             var expected = new Exception();
@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_fatal_exception))]
+        [Fact]
         public static void When_fatal_exception()
         {
             Assert.True(new OutOfMemoryException().IsFatal());

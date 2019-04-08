@@ -5,15 +5,15 @@
 
 #endregion
 
-using SourceCode.Clay.Data.SqlParser;
 using Xunit;
 
-namespace SourceCode.Clay.Data.SqlClient.Tests
+namespace SourceCode.Clay.Data.SqlParser.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SqlTokenizerTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_quote_square_null_empty))]
+        [Fact]
         public static void When_quote_square_null_empty()
         {
             Assert.Null(SqlTokenizer.EncodeNameSquare(null));
@@ -22,7 +22,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_quote_square))]
+        [Theory]
         [InlineData("a", "[a]")]
         [InlineData(" a", "[ a]")]
         [InlineData("a ", "[a ]")]
@@ -36,7 +36,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_quote_quote_null_empty))]
+        [Fact]
         public static void When_quote_quote_null_empty()
         {
             Assert.Null(SqlTokenizer.EncodeNameQuotes(null));
@@ -45,7 +45,7 @@ namespace SourceCode.Clay.Data.SqlClient.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_quote_quote))]
+        [Theory]
         [InlineData("a", "\"a\"")]
         [InlineData(" a", "\" a\"")]
         [InlineData("a ", "\"a \"")]

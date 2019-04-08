@@ -5,17 +5,17 @@
 
 #endregion
 
-using Newtonsoft.Json.Linq;
-using SourceCode.Clay.Json.Pointers;
 using System;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using SourceCode.Clay.Json.Pointers;
 using Xunit;
 
 namespace SourceCode.Clay.Json.Tests
 {
     public static class JsonPointerTests
     {
-        [Fact(DisplayName = nameof(JsonPointer_ToString))]
+        [Fact]
         public static void JsonPointer_ToString()
         {
             var sut = new JsonPointer();
@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal("/test~0~1/", str);
         }
 
-        [Fact(DisplayName = nameof(JsonPointer_Parse))]
+        [Fact]
         public static void JsonPointer_Parse()
         {
             var str = "";
@@ -79,7 +79,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(new JsonPointer("test~/", ""), sut);
         }
 
-        [Fact(DisplayName = nameof(JsonPointer_Evaluate))]
+        [Fact]
         public static void JsonPointer_Evaluate()
         {
             var json = JToken.Parse(@"
@@ -133,7 +133,7 @@ namespace SourceCode.Clay.Json.Tests
             Assert.Equal(8, (int)result);
         }
 
-        [Fact(DisplayName = nameof(JsonPointer_Evaluate_Errors))]
+        [Fact]
         public static void JsonPointer_Evaluate_Errors()
         {
             var json = JToken.Parse(@"

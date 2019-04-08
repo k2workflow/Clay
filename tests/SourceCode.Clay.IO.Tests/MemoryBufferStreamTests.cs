@@ -31,7 +31,7 @@ namespace SourceCode.Clay.IO.Tests
         public static ReadOnlyMemory<byte> AsReadOnlyMemory(this byte[] array)
             => (ReadOnlyMemory<byte>)array;
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_Read_SmallBuffer))]
+        [Fact]
         public static void MemoryBufferStream_Read_SmallBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 203, 1).AsReadOnlyMemory();
@@ -57,7 +57,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_Read_BigBuffer))]
+        [Fact]
         public static void MemoryBufferStream_Read_BigBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 107, 1).AsReadOnlyMemory();
@@ -75,7 +75,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_AsyncPatternRead_SmallBuffer))]
+        [Fact]
         public static void MemoryBufferStream_AsyncPatternRead_SmallBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 203, 1).AsReadOnlyMemory();
@@ -101,7 +101,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_AsyncPatternRead_BigBuffer))]
+        [Fact]
         public static void MemoryBufferStream_AsyncPatternRead_BigBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 107, 1).AsReadOnlyMemory();
@@ -148,7 +148,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_ReadAsync_SmallBuffer))]
+        [Fact]
         public static async Task MemoryBufferStream_ReadAsync_SmallBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 203, 1).AsReadOnlyMemory();
@@ -174,7 +174,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_ReadAsync_BigBuffer))]
+        [Fact]
         public static async Task MemoryBufferStream_ReadAsync_BigBuffer()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 107, 1).AsReadOnlyMemory();
@@ -192,7 +192,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_ReadByte))]
+        [Fact]
         public static void MemoryBufferStream_ReadByte()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 107, 1).AsReadOnlyMemory();
@@ -205,7 +205,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_Seek))]
+        [Fact]
         public static void MemoryBufferStream_Seek()
         {
             using (var sut = new MemoryBufferStream(new byte[1027]))
@@ -248,7 +248,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_Copy))]
+        [Fact]
         public static void MemoryBufferStream_Copy()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
@@ -263,7 +263,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_CopyAsync))]
+        [Fact]
         public static void MemoryBufferStream_CopyAsync()
         {
             ReadOnlyMemory<byte> truth = GenerateSegment(13, 99834, 1).AsReadOnlyMemory();
@@ -278,7 +278,7 @@ namespace SourceCode.Clay.IO.Tests
             }
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_NotSupported))]
+        [Fact]
         public static void MemoryBufferStream_NotSupported()
         {
             var sut = new MemoryBufferStream(new byte[10]);
@@ -290,7 +290,7 @@ namespace SourceCode.Clay.IO.Tests
             Assert.Throws<NotSupportedException>(() => sut.WriteByte(default));
         }
 
-        [Fact(DisplayName = nameof(MemoryBufferStream_Properties))]
+        [Fact]
         public static void MemoryBufferStream_Properties()
         {
             var sut = new MemoryBufferStream(new byte[10]);

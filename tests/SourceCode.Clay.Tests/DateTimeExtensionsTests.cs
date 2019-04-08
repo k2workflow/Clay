@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Tests
     public static class DateTimeExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DateTimeExtensions_RoundMinute))]
+        [Fact]
         public static void DateTimeExtensions_RoundMinute()
         {
             DateTime tt = new DateTime(1987, 01, 19, 02, 0, 0, 0, DateTimeKind.Utc).RoundDownMinute();
@@ -30,7 +30,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DateTimeExtensions_RoundHour))]
+        [Fact]
         public static void DateTimeExtensions_RoundHour()
         {
             DateTime tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownHour();
@@ -47,7 +47,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(DateTimeExtensions_RoundDay))]
+        [Fact]
         public static void DateTimeExtensions_RoundDay()
         {
             DateTime tt = new DateTime(1987, 01, 19, 00, 0, 0, 0, DateTimeKind.Utc).RoundDownDay();

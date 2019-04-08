@@ -10,102 +10,103 @@ using Xunit;
 
 namespace SourceCode.Clay.Data.SqlParser.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SqlParamBlockParserTests
     {
         // Block comment is not closed
         private const string sqlBadComment = @"
-			CReaTE /*blah
-				FUNCTION abc.def()
+            CReaTE /*blah
+                FUNCTION abc.def()
             AS RETURNS INT
-			BEGIN
+            BEGIN
                 RETURN 1;
-			END;";
+            END;";
 
         // [abc]]def]
         // [abc[]]def]
         private const string sqlEscapedNames = @"
-			CReaTE /*blah*/
-				FunCTIOn            --etc
-			[abc]]def].[abc[]]def]
-			( --test--
-			)AS RETURNS
-			    inT
-			BEGIN RETURN 1;
-			END; /**/";
+            CReaTE /*blah*/
+                FunCTIOn            --etc
+            [abc]]def].[abc[]]def]
+            ( --test--
+            )AS RETURNS
+                inT
+            BEGIN RETURN 1;
+            END; /**/";
 
         private const string sqlMessyProcWithParen = @"
-			CReaTE /*blah*/
-				PROCedure            --etc
-			abc.[def]
-					/*
-						xyz -- /*
-					*/
-			( @p1  --test--
-			/* yada
-			*/
-			NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */,
+            CReaTE /*blah*/
+                PROCedure            --etc
+            abc.[def]
+                    /*
+                        xyz -- /*
+                    */
+            ( @p1  --test--
+            /* yada
+            */
+            NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */,
             @p_2 /*@p2*/ dbo.[MyTvp] /*=NULL*/ READONLY
-			) AS
-			/**/
-			BEGIN --
-			--
-			--blah */ etc
-				/* ok -- */
-			END;";
+            ) AS
+            /**/
+            BEGIN --
+            --
+            --blah */ etc
+                /* ok -- */
+            END;";
 
         private const string sqlRealFunction = @"
 /*
-	Refactored from [Utility].[SplitMax].
-	See that function for implementation details.
+    Refactored from [Utility].[SplitMax].
+    See that function for implementation details.
 
-	SELECT * FROM [ServerLog].[GetContainerList](N'a b c d e e');
-	SELECT * FROM [ServerLog].[GetContainerList](N'a,b,c,d,e,e');
-	SELECT DISTINCT N'-' + [Value] + N'-' FROM [ServerLog].[GetContainerList](N'a,b,c  ,d,e,e');
-	SELECT DISTINCT N'-' + [Value] + N'-' FROM [ServerLog].[GetContainerList](N'a,b,c,  ,d,e,e');
-	SELECT * FROM [ServerLog].[GetContainerList](N'a b c d e');
-	SELECT * FROM [ServerLog].[GetContainerList](N'');
+    SELECT * FROM [ServerLog].[GetContainerList](N'a b c d e e');
+    SELECT * FROM [ServerLog].[GetContainerList](N'a,b,c,d,e,e');
+    SELECT DISTINCT N'-' + [Value] + N'-' FROM [ServerLog].[GetContainerList](N'a,b,c  ,d,e,e');
+    SELECT DISTINCT N'-' + [Value] + N'-' FROM [ServerLog].[GetContainerList](N'a,b,c,  ,d,e,e');
+    SELECT * FROM [ServerLog].[GetContainerList](N'a b c d e');
+    SELECT * FROM [ServerLog].[GetContainerList](N'');
 */
 CREATE FUNCTION [ServerLog].[GetContainerList]
 (
-	@Containers		NVARCHAR(MAX),
-	@foo            AS UNIQUEIDENTIFIER = NULL,
+    @Containers		NVARCHAR(MAX),
+    @foo            AS UNIQUEIDENTIFIER = NULL,
 )
 RETURNS TABLE
 WITH SCHEMABINDING
 AS RETURN
 (
-	WITH
+    WITH
 
-	-- Create virtual numbers table
-	c1(N) AS (SELECT n FROM (VALUES (0), (1)) AS v(n)), -- 10^1 = 10
-	-- Elided --
-	WHERE
-		[Identity] IS NOT NULL
+    -- Create virtual numbers table
+    c1(N) AS (SELECT n FROM (VALUES (0), (1)) AS v(n)), -- 10^1 = 10
+    -- Elided --
+    WHERE
+        [Identity] IS NOT NULL
 );
-		";
+        ";
 
         private const string sqlMessyProcNoParen = @"
-			CReaTE /*blah*/
-				PROCedure            --etc
-			abc.[def]
-					/*
-						xyz -- /*
-					*/
-			@p  --test--
-			/* yada
-			*/
-			NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */
-			WITH ( OPTION -- opt
+            CReaTE /*blah*/
+                PROCedure            --etc
+            abc.[def]
+                    /*
+                        xyz -- /*
+                    */
+            @p  --test--
+            /* yada
+            */
+            NVARCHAR(MAX) = 3 OUT -- /* -- */ -- */
+            WITH ( OPTION -- opt
                /* AS */ RECOMPILE) AS
-			/**/
-			BEGIN --
-			--
-			--blah */ etc
-				/* ok -- */
-			END;";
+            /**/
+            BEGIN --
+            --
+            --blah */ etc
+                /* ok -- */
+            END;";
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_bad_comment))]
+        [Fact]
         public static void Tokenize_bad_comment()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlBadComment);
@@ -114,7 +115,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_escaped_names))]
+        [Fact]
         public static void Tokenize_escaped_names()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlEscapedNames);
@@ -123,7 +124,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_params))]
+        [Fact]
         public static void Tokenize_messy_proc_2_params()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcWithParen);
@@ -150,7 +151,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_real_function_2_params))]
+        [Fact]
         public static void Tokenize_real_function_2_params()
         {
             var @params = SqlParamBlockParser.ParseFunction(sqlRealFunction);
@@ -177,7 +178,7 @@ AS RETURN
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(Tokenize_messy_proc_2_no_parenthesis))]
+        [Fact]
         public static void Tokenize_messy_proc_2_no_parenthesis()
         {
             var @params = SqlParamBlockParser.ParseProcedure(sqlMessyProcNoParen);

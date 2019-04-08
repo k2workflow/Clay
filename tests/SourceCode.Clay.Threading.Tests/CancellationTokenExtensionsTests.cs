@@ -4,6 +4,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Threading.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class CancellationTokenExtensionsTests
     {
         [Fact]
@@ -43,7 +44,7 @@ namespace SourceCode.Clay.Threading.Tests
         public void When_using_a_valid_token_and_timeout_uses_Token()
         {
             // Arrange
-            var ct = new CancellationToken();
+            CancellationToken ct = new CancellationTokenSource().Token;
             var timeout = TimeSpan.FromSeconds(2);
 
             // Act

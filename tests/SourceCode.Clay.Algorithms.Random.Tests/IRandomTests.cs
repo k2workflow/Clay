@@ -13,6 +13,7 @@ using Xunit;
 
 namespace SourceCode.Clay.Algorithms.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class IRandomTests
     {
         private const int Seed = 123456789; // Specific seed for determinism
@@ -28,7 +29,7 @@ namespace SourceCode.Clay.Algorithms.Tests
         }
 
 
-        [Fact(DisplayName = nameof(Random_clamped_uniform))]
+        [Fact]
         public static void Random_clamped_uniform()
         {
             const int count = 100_000;
@@ -47,7 +48,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.True(groupCount >= 1000); // 1,479
         }
 
-        [Fact(DisplayName = nameof(Random_clamped_normal))]
+        [Fact]
         public static void Random_clamped_normal()
         {
             const int count = 100_000;
@@ -66,7 +67,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.True(groupCount >= 1000); // 1,479
         }
 
-        [Fact(DisplayName = nameof(Random_clamped_uniform_range_zero))]
+        [Fact]
         public static void Random_clamped_uniform_range_zero()
         {
             const int count = 150_000;
@@ -79,7 +80,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.All(values, n => Assert.True(n == min));
         }
 
-        [Fact(DisplayName = nameof(Random_clamped_normal_range_zero))]
+        [Fact]
         public static void Random_clamped_normal_range_zero()
         {
             const int count = 150_000;
@@ -92,7 +93,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.All(values, n => Assert.True(n == min));
         }
 
-        [Fact(DisplayName = nameof(Random_derive_uniform))]
+        [Fact]
         public static void Random_derive_uniform()
         {
             const int count = 100_000;
@@ -118,7 +119,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.True(avg < max);
         }
 
-        [Fact(DisplayName = nameof(Random_derive_normal))]
+        [Fact]
         public static void Random_derive_normal()
         {
             const int count = 100_000;
@@ -144,7 +145,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.True(avg < max);
         }
 
-        [Fact(DisplayName = nameof(Random_derive_uniform_sigma_zero))]
+        [Fact]
         public static void Random_derive_uniform_sigma_zero()
         {
             const int count = 1_000;
@@ -157,7 +158,7 @@ namespace SourceCode.Clay.Algorithms.Tests
             Assert.All(values, n => Assert.True(n == μ));
         }
 
-        [Fact(DisplayName = nameof(Random_derive_normal_sigma_zero))]
+        [Fact]
         public static void Random_derive_normal_sigma_zero()
         {
             const int count = 1_000;

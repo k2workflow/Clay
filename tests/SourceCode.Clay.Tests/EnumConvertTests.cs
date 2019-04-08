@@ -88,7 +88,7 @@ namespace SourceCode.Clay.Tests
         }
 
         // TODO: Negative tests should pass
-        //[Fact(DisplayName = nameof(EnumConvert_EmptyEnum))]
+        //[Fact]
         //public static void EnumConvert_EmptyEnum()
         //{
         //    var x = EnumConvert.ToEnum<EmptyEnum>(0);
@@ -104,7 +104,7 @@ namespace SourceCode.Clay.Tests
         //    Assert.Throws<OverflowException>(() => EnumConvert.ConvertToEnumChecked<EmptyEnum>(1));
         //}
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfSByte))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfSByte()
         {
             Assert.Equal(SByteEnum.MinValue, EnumConvert.ToEnumChecked<SByteEnum>(sbyte.MinValue));
@@ -114,7 +114,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<SByteEnum>(byte.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfUInt16))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfUInt16()
         {
             Assert.Equal(UInt16Enum.MinValue, EnumConvert.ConvertToEnumChecked<UInt16Enum>(ushort.MinValue));
@@ -124,7 +124,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<UInt16Enum>(uint.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfInt16))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfInt16()
         {
             Assert.Equal(Int16Enum.MinValue, EnumConvert.ToEnumChecked<Int16Enum>(short.MinValue));
@@ -134,7 +134,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ConvertToEnumChecked<Int16Enum>(ushort.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfUInt32))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfUInt32()
         {
             Assert.Equal(UInt32Enum.MinValue, EnumConvert.ToEnumChecked<UInt32Enum>(uint.MinValue));
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<UInt32Enum>(ulong.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfInt32))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfInt32()
         {
             Assert.Equal(Int32Enum.MinValue, EnumConvert.ToEnumChecked<Int32Enum>(int.MinValue));
@@ -154,7 +154,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<Int32Enum>(uint.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfUInt64))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfUInt64()
         {
             Assert.Equal(UInt64Enum.MinValue, EnumConvert.ToEnumChecked<UInt64Enum>(ulong.MinValue));
@@ -163,7 +163,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<UInt64Enum>(long.MinValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumCheckedOfInt64))]
+        [Fact]
         public static void EnumConvert_ToEnumCheckedOfInt64()
         {
             Assert.Equal(Int64Enum.MinValue, EnumConvert.ToEnumChecked<Int64Enum>(long.MinValue));
@@ -172,7 +172,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToEnumChecked<Int64Enum>(ulong.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToByteChecked))]
+        [Fact]
         public static void EnumConvert_ToByteChecked()
         {
             Assert.Equal(byte.MinValue, EnumConvert.ToByteChecked(ByteEnum.MinValue));
@@ -182,7 +182,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToByteChecked(UInt16Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToSByteChecked))]
+        [Fact]
         public static void EnumConvert_ToSByteChecked()
         {
             Assert.Equal(sbyte.MinValue, EnumConvert.ToSByteChecked(SByteEnum.MinValue));
@@ -192,7 +192,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToSByteChecked(ByteEnum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt16Checked))]
+        [Fact]
         public static void EnumConvert_ToUInt16Checked()
         {
             Assert.Equal(ushort.MinValue, EnumConvert.ToUInt16Checked(UInt16Enum.MinValue));
@@ -202,7 +202,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToUInt16Checked(UInt32Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt16Checked))]
+        [Fact]
         public static void EnumConvert_ToInt16Checked()
         {
             Assert.Equal(short.MinValue, EnumConvert.ToInt16Checked(Int16Enum.MinValue));
@@ -212,7 +212,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToInt16Checked(UInt16Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt32Checked))]
+        [Fact]
         public static void EnumConvert_ToUInt32Checked()
         {
             Assert.Equal(uint.MinValue, EnumConvert.ToUInt32Checked(UInt32Enum.MinValue));
@@ -222,7 +222,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToUInt32Checked(UInt64Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt32Checked))]
+        [Fact]
         public static void EnumConvert_ToInt32Checked()
         {
             Assert.Equal(int.MinValue, EnumConvert.ToInt32Checked(Int32Enum.MinValue));
@@ -232,7 +232,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToInt32Checked(UInt32Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt64Checked))]
+        [Fact]
         public static void EnumConvert_ToUInt64Checked()
         {
             Assert.Equal(ulong.MinValue, EnumConvert.ToUInt64Checked(UInt64Enum.MinValue));
@@ -241,7 +241,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToUInt64Checked(Int64Enum.MinValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt64Checked))]
+        [Fact]
         public static void EnumConvert_ToInt64Checked()
         {
             Assert.Equal(long.MinValue, EnumConvert.ToInt64Checked(Int64Enum.MinValue));
@@ -250,7 +250,7 @@ namespace SourceCode.Clay.Tests
             Assert.Throws<OverflowException>(() => EnumConvert.ToInt64Checked(UInt64Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfByte))]
+        [Fact]
         public static void EnumConvert_ToEnumOfByte()
         {
             Assert.Equal(ByteEnum.MinValue, EnumConvert.ToEnum<ByteEnum>(byte.MinValue));
@@ -260,7 +260,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(ByteEnum.UInt16MaxValue, EnumConvert.ToEnum<ByteEnum>(ushort.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfSByte))]
+        [Fact]
         public static void EnumConvert_ToEnumOfSByte()
         {
             Assert.Equal(SByteEnum.MinValue, EnumConvert.ToEnum<SByteEnum>(sbyte.MinValue));
@@ -270,7 +270,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(SByteEnum.ByteMaxValue, EnumConvert.ToEnum<SByteEnum>(byte.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfUInt16))]
+        [Fact]
         public static void EnumConvert_ToEnumOfUInt16()
         {
             Assert.Equal(UInt16Enum.MinValue, EnumConvert.ToEnum<UInt16Enum>(ushort.MinValue));
@@ -280,7 +280,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(UInt16Enum.UInt32MaxValue, EnumConvert.ToEnum<UInt16Enum>(uint.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfInt16))]
+        [Fact]
         public static void EnumConvert_ToEnumOfInt16()
         {
             Assert.Equal(Int16Enum.MinValue, EnumConvert.ToEnum<Int16Enum>(short.MinValue));
@@ -290,7 +290,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(Int16Enum.UInt16MaxValue, EnumConvert.ToEnum<Int16Enum>(ushort.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfUInt32))]
+        [Fact]
         public static void EnumConvert_ToEnumOfUInt32()
         {
             Assert.Equal(UInt32Enum.MinValue, EnumConvert.ToEnum<UInt32Enum>(uint.MinValue));
@@ -300,7 +300,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(UInt32Enum.UInt64MaxValue, EnumConvert.ToEnum<UInt32Enum>(ulong.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfInt32))]
+        [Fact]
         public static void EnumConvert_ToEnumOfInt32()
         {
             Assert.Equal(Int32Enum.MinValue, EnumConvert.ToEnum<Int32Enum>(int.MinValue));
@@ -310,7 +310,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(Int32Enum.UInt32MaxValue, EnumConvert.ToEnum<Int32Enum>(uint.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfUInt64))]
+        [Fact]
         public static void EnumConvert_ToEnumOfUInt64()
         {
             Assert.Equal(UInt64Enum.MinValue, EnumConvert.ToEnum<UInt64Enum>(ulong.MinValue));
@@ -319,7 +319,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(UInt64Enum.Int64MinValue, EnumConvert.ToEnum<UInt64Enum>(long.MinValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToEnumOfInt64))]
+        [Fact]
         public static void EnumConvert_ToEnumOfInt64()
         {
             Assert.Equal(Int64Enum.MinValue, EnumConvert.ToEnum<Int64Enum>(long.MinValue));
@@ -328,7 +328,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(Int64Enum.UInt64MaxValue, EnumConvert.ToEnum<Int64Enum>(ulong.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToByte))]
+        [Fact]
         public static void EnumConvert_ToByte()
         {
             Assert.Equal(byte.MinValue, EnumConvert.ToByte(ByteEnum.MinValue));
@@ -338,7 +338,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((byte)ushort.MaxValue), EnumConvert.ToByte(UInt16Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToSByte))]
+        [Fact]
         public static void EnumConvert_ToSByte()
         {
             Assert.Equal(sbyte.MinValue, EnumConvert.ToSByte(SByteEnum.MinValue));
@@ -348,7 +348,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((sbyte)byte.MaxValue), EnumConvert.ToSByte(ByteEnum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt16))]
+        [Fact]
         public static void EnumConvert_ToUInt16()
         {
             Assert.Equal(ushort.MinValue, EnumConvert.ToUInt16(UInt16Enum.MinValue));
@@ -358,7 +358,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((ushort)uint.MaxValue), EnumConvert.ToUInt16(UInt32Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt16))]
+        [Fact]
         public static void EnumConvert_ToInt16()
         {
             Assert.Equal(short.MinValue, EnumConvert.ToInt16(Int16Enum.MinValue));
@@ -368,7 +368,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((short)ushort.MaxValue), EnumConvert.ToInt16(UInt16Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt32))]
+        [Fact]
         public static void EnumConvert_ToUInt32()
         {
             Assert.Equal(uint.MinValue, EnumConvert.ToUInt32(UInt32Enum.MinValue));
@@ -378,7 +378,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((uint)ulong.MaxValue), EnumConvert.ToUInt32(UInt64Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt32))]
+        [Fact]
         public static void EnumConvert_ToInt32()
         {
             Assert.Equal(int.MinValue, EnumConvert.ToInt32(Int32Enum.MinValue));
@@ -388,7 +388,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((int)uint.MaxValue), EnumConvert.ToInt32(UInt32Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToUInt64))]
+        [Fact]
         public static void EnumConvert_ToUInt64()
         {
             Assert.Equal(ulong.MinValue, EnumConvert.ToUInt64(UInt64Enum.MinValue));
@@ -397,7 +397,7 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((ulong)long.MinValue), EnumConvert.ToUInt64(Int64Enum.MinValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_ToInt64))]
+        [Fact]
         public static void EnumConvert_ToInt64()
         {
             Assert.Equal(long.MinValue, EnumConvert.ToInt64(Int64Enum.MinValue));
@@ -406,13 +406,13 @@ namespace SourceCode.Clay.Tests
             Assert.Equal(unchecked((long)ulong.MaxValue), EnumConvert.ToInt64(UInt64Enum.MaxValue));
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_Cached_EmptyEnum))]
+        [Fact]
         public static void EnumConvert_Cached_EmptyEnum()
         {
             Assert.Equal(Enum.GetValues(typeof(EmptyEnum)).Length, EnumConvert.Length<EmptyEnum>());
         }
 
-        [Fact(DisplayName = nameof(EnumConvert_Cached_ValidEnum))]
+        [Fact]
         public static void EnumConvert_Cached_ValidEnum()
         {
             Assert.Equal(Enum.GetValues(typeof(ByteEnum)).Length, EnumConvert.Length<ByteEnum>());
@@ -427,7 +427,7 @@ namespace SourceCode.Clay.Tests
             Bar
         }
 
-        [Fact(DisplayName = nameof(EnumDescription_Get))]
+        [Fact]
         public static void EnumDescription_Get()
         {
             Assert.Equal("foo1", DecoratedEnum.Foo.GetEnumDescription());

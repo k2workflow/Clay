@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Json.Tests
     public static class ReadOnlyJObjectTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_ReadOnlyJObject_Parse))]
+        [Fact]
         public static void When_ReadOnlyJObject_Parse()
         {
             var arr = new JArray(new[] { new JValue("hi"), new JValue(456), new JValue(false), null });
@@ -25,7 +25,7 @@ namespace SourceCode.Clay.Json.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_JObject_TryGetValue))]
+        [Fact]
         public static void When_JObject_TryGetValue()
         {
             var json = new JObject
@@ -52,7 +52,7 @@ namespace SourceCode.Clay.Json.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_ReadOnlyJObject_TryGetValue))]
+        [Fact]
         public static void When_ReadOnlyJObject_TryGetValue()
         {
             var jobj = new JObject

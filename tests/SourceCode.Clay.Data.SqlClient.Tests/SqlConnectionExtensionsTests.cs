@@ -11,10 +11,11 @@ using Xunit;
 
 namespace SourceCode.Clay.Data.SqlClient.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class SqlConnectionExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_command_from_connection))]
+        [Fact]
         public static void When_create_command_from_connection()
         {
             var tsql = "SELECT * FROM [Customer].[Address];";

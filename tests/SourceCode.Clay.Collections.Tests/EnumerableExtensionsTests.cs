@@ -5,17 +5,18 @@
 
 #endregion
 
-using SourceCode.Clay.Collections.Generic;
 using System;
 using System.Collections.Generic;
+using SourceCode.Clay.Collections.Generic;
 using Xunit;
 
 namespace SourceCode.Clay.Collections.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class EnumerableExtensionsTests
     {
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_both_null))]
+        [Fact]
         public static void SequenceEquals_both_null()
         {
             var equal = ((HashSet<string>)null).NullableSequenceEqual(null);
@@ -23,7 +24,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_both_empty))]
+        [Fact]
         public static void SequenceEquals_both_empty()
         {
             var set1 = new HashSet<string>();
@@ -34,7 +35,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_both_one))]
+        [Fact]
         public static void SequenceEquals_both_one()
         {
             var set1 = new HashSet<string> { "hi" };
@@ -49,7 +50,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_one_null))]
+        [Fact]
         public static void SequenceEquals_one_null()
         {
             var equal = TestData.Set.NullableSequenceEqual(null);
@@ -57,7 +58,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_different_count))]
+        [Fact]
         public static void SequenceEquals_different_count()
         {
             var set2 = new HashSet<string>(TestData.Set);
@@ -68,7 +69,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_is_equal))]
+        [Fact]
         public static void SequenceEquals_is_equal()
         {
             var set2 = new HashSet<string>(TestData.Set);
@@ -78,7 +79,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_not_equal))]
+        [Fact]
         public static void SequenceEquals_not_equal()
         {
             var set2 = new HashSet<string>(TestData.Set)
@@ -91,7 +92,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_not_equal_0))]
+        [Fact]
         public static void SequenceEquals_not_equal_0()
         {
             var set = new[]
@@ -107,7 +108,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_not_equal_1))]
+        [Fact]
         public static void SequenceEquals_not_equal_1()
         {
             var list2 = new[]
@@ -123,7 +124,7 @@ namespace SourceCode.Clay.Collections.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(SequenceEquals_not_equal_duplicates))]
+        [Fact]
         public static void SequenceEquals_not_equal_duplicates()
         {
             var equal = TestData.Dupe1.NullableSequenceEqual(TestData.Dupe2, StringComparer.Ordinal);

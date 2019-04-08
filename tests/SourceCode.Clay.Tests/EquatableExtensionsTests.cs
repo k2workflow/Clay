@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Tests
         private const string _a = "a";
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_nullable_equals_string))]
+        [Theory]
         [InlineData(null, null, true)]
         [InlineData(null, _a, false)]
         [InlineData(_a, null, false)]
@@ -28,7 +28,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_nullable_equals_int))]
+        [Theory]
         [InlineData(1, 1, true)]
         [InlineData(1, 2, false)]
         public static void When_nullable_equals_int(int? x, int? y, bool expected)

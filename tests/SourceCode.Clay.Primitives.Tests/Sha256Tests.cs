@@ -14,12 +14,13 @@ using crypt = System.Security.Cryptography;
 
 namespace SourceCode.Clay.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class Sha256Tests
     {
         private static readonly crypt.SHA256 s_sha256 = crypt.SHA256.Create();
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_check_default))]
+        [Fact]
         public static void When_check_default()
         {
             var expected = default(Sha256);
@@ -31,7 +32,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_check_empty))]
+        [Fact]
         public static void When_check_empty()
         {
             var expected = Sha256.Parse(Sha256TestVectors.Empty);
@@ -83,7 +84,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_null_sha256))]
+        [Fact]
         public static void When_create_null_sha256()
         {
             var expected = default(Sha256);
@@ -139,7 +140,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_Bytes))]
+        [Fact]
         public static void When_construct_sha256_from_Bytes()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -168,7 +169,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_ArraySegment))]
+        [Fact]
         public static void When_construct_sha256_from_ArraySegment()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -203,7 +204,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_Memory))]
+        [Fact]
         public static void When_construct_sha256_from_Memory()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -235,7 +236,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_ReadOnlyMemory))]
+        [Fact]
         public static void When_construct_sha256_from_ReadOnlyMemory()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -264,7 +265,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_Stream))]
+        [Fact]
         public static void When_construct_sha256_from_Stream()
         {
             byte[] buffer = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString());
@@ -292,7 +293,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_Span))]
+        [Fact]
         public static void When_construct_sha256_from_Span()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -321,7 +322,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_copyto_with_null_buffer))]
+        [Fact]
         public static void When_copyto_with_null_buffer()
         {
             // Arrange
@@ -333,7 +334,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_construct_sha256_from_ReadOnlySpan))]
+        [Fact]
         public static void When_construct_sha256_from_ReadOnlySpan()
         {
             Sha256 expected = s_sha256.HashData("abc");
@@ -362,7 +363,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Theory(DisplayName = nameof(When_create_test_vectors))]
+        [Theory]
         [ClassData(typeof(Sha256TestVectors))] // http://www.di-mgt.com.au/sha_testvectors.html
         public static void When_create_test_vectors(string input, string expected)
         {
@@ -427,7 +428,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha256_from_empty_ArraySegment))]
+        [Fact]
         public static void When_create_sha256_from_empty_ArraySegment()
         {
             Sha256 expected = s_sha256.HashData(Array.Empty<byte>());
@@ -439,7 +440,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha_from_bytes))]
+        [Fact]
         public static void When_create_sha_from_bytes()
         {
             byte[] buffer = new byte[Sha256.ByteLength];
@@ -466,7 +467,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha_from_empty_string))]
+        [Fact]
         public static void When_create_sha_from_empty_string()
         {
             const string expected = Sha256TestVectors.Empty; // http://www.di-mgt.com.au/sha_testvectors.html
@@ -531,7 +532,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha_from_narrow_string))]
+        [Fact]
         public static void When_create_sha_from_narrow_string()
         {
             for (int i = 1; i < 200; i++)
@@ -545,7 +546,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha_from_wide_string_1))]
+        [Fact]
         public static void When_create_sha_from_wide_string_1()
         {
             for (int i = 1; i < 200; i++)
@@ -559,7 +560,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_create_sha_from_wide_string_2))]
+        [Fact]
         public static void When_create_sha_from_wide_string_2()
         {
             string str = string.Empty;
@@ -574,7 +575,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_format_sha256))]
+        [Fact]
         public static void When_format_sha256()
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
@@ -643,7 +644,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_parse_sha256))]
+        [Fact]
         public static void When_parse_sha256()
         {
             // http://www.di-mgt.com.au/sha_testvectors.html
@@ -731,7 +732,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_lexographic_compare_sha256))]
+        [Fact]
         public static void When_lexographic_compare_sha256()
         {
             byte[] byt1 = new byte[32] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
@@ -754,7 +755,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_compare_sha256))]
+        [Fact]
         public static void When_compare_sha256()
         {
             Sha256 sha256 = s_sha256.HashData("abc"); // ba7816bf-8f01cfea-414140de-5dae2223-b00361a3-96177a9c-b410ff61-f20015ad
@@ -790,7 +791,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_parse_sha256_whitespace))]
+        [Fact]
         public static void When_parse_sha256_whitespace()
         {
             const string whitespace = " \n  \t \r ";
@@ -820,7 +821,7 @@ namespace SourceCode.Clay.Tests
         }
 
         [Trait("Type", "Unit")]
-        [Fact(DisplayName = nameof(When_sha256_equality))]
+        [Fact]
         public static void When_sha256_equality()
         {
             var sha0 = default(Sha256);
