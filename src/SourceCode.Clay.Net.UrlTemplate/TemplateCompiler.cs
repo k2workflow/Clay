@@ -91,10 +91,6 @@ namespace SourceCode.Clay.Net
         #endregion
 #pragma warning restore IDE1006 // Naming Styles
 
-        private const string QueryStart = "?";
-        private const string QueryAssign = "=";
-        private const string QuerySeparator = "&";
-
         public static Func<object, string> Compile(RawUriTemplate raw, RuntimeTypeHandle typeHandle)
         {
             ParameterExpression param = Expression.Parameter(typeof(object), "value");

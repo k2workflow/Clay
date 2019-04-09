@@ -123,7 +123,13 @@ namespace SourceCode.Clay.IO
         private
 #endif
         ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
-        => new ValueTask<int>(Read(buffer.Span));
+        {
+            if (cancellationToken.IsCancellationRequested)
+                return new ValueTask<int>(Task.FromCanceled<int>(cancellationToken));
+
+            int result = Read(buffer.Span);
+            return new ValueTask<int>(result);
+        }
 
         public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
         {

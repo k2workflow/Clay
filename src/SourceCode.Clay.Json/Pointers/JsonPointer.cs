@@ -100,23 +100,23 @@ namespace SourceCode.Clay.Json.Pointers
         /// Create a new <see cref="JsonPointer"/> instance by appending
         /// multiple <see cref="JsonPointerToken"/> instances to the current <see cref="JsonPointer"/>.
         /// </summary>
-        /// <param name="pointer">The <see cref="JsonPointerToken"/> instances to append.</param>
+        /// <param name="jsonPointer">The <see cref="JsonPointerToken"/> instances to append.</param>
         /// <returns></returns>
-        public JsonPointer Merge(JsonPointer pointer)
+        public JsonPointer Merge(JsonPointer jsonPointer)
         {
-            if (pointer.Count == 0)
+            if (jsonPointer.Count == 0)
                 return this;
 
             if (Count == 0)
-                return pointer;
+                return jsonPointer;
 
-            var array = new JsonPointerToken[Count + pointer.Count];
+            var array = new JsonPointerToken[Count + jsonPointer.Count];
 
             for (var i = 0; i < Count; i++)
                 array[i] = _tokens[i];
 
-            for (var i = 0; i < pointer.Count; i++)
-                array[Count + i] = pointer._tokens[i];
+            for (var i = 0; i < jsonPointer.Count; i++)
+                array[Count + i] = jsonPointer._tokens[i];
 
             var result = new JsonPointer(array);
             return result;
