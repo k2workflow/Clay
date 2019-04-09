@@ -22,6 +22,9 @@ namespace SourceCode.Clay.Net
         public override string ToString() => Template;
         public string ToString(object value) => GetCompiled(value)(value);
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
+        // Provided by ctor.
         public static implicit operator UrlTemplate(string template) => new UrlTemplate(template);
+#pragma warning restore CA2225 // Operator overloads have named alternates
     }
 }
