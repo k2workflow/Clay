@@ -57,15 +57,18 @@ namespace SourceCode.Clay
                     ConvertTo = Expression.Lambda<Func<TEnum, TInteger>>(enumConv, enumParam).Compile();
                     ConvertFrom = Expression.Lambda<Func<TInteger, TEnum>>(integerConv, integerParam).Compile();
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+                // Exception forwarding
+                // Exceptions are not raised in this method.
                 catch (Exception e)
                 {
-#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-                    // Exceptions are not raised in this method.
 
                     ConvertTo = _ => throw e;
                     ConvertFrom = _ => throw e;
-#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
                 }
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
+#pragma warning restore CA1031 // Do not catch general exception types
             }
 
             private static Expression Convert(in Expression value, in Type type) => s_isChecked

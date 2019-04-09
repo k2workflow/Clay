@@ -259,7 +259,7 @@ namespace SourceCode.Clay.IO
                     foreach (MappedFile item in files) item.Dispose();
                     Directory.Delete(rootPath, true);
                 }
-                catch { }
+                catch (IOException) { }
 
                 throw;
             }
