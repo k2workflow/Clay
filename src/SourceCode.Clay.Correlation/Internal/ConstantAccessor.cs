@@ -3,14 +3,14 @@ using System.Diagnostics;
 namespace SourceCode.Clay.Correlation.Internal
 {
     /// <summary>
-    /// Represents a <see cref="ICorrelationIdAccessor"/> instance that returns a constant value.
+    /// Represents a <see cref="ICorrelationIdAccessor{T}"/> instance that returns a constant value.
     /// </summary>
     [DebuggerStepThrough]
-    internal sealed class ConstantAccessor : ICorrelationIdAccessor
+    internal sealed class ConstantAccessor<T> : ICorrelationIdAccessor<T>
     {
-        public string CorrelationId { get; }
+        public T CorrelationId { get; }
 
-        public ConstantAccessor(string value)
+        public ConstantAccessor(T value)
             => CorrelationId = value;
     }
 }

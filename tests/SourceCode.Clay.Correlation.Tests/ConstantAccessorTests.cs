@@ -14,7 +14,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void ConstantAccessor_returns_string_input(string expected)
         {
             // Arrange
-            var accessor = new ConstantAccessor(expected);
+            var accessor = new ConstantAccessor<string>(expected);
 
             // Act
             var actual = accessor.CorrelationId;

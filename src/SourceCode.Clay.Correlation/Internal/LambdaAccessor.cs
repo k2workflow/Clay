@@ -7,15 +7,16 @@ namespace SourceCode.Clay.Correlation.Internal
     /// Represents a <see cref="ICorrelationIdAccessor"/> instance that returns a lambda-based value.
     /// </summary>
     [DebuggerStepThrough]
-    internal sealed class LambdaAccessor : ICorrelationIdAccessor
+    internal sealed class LambdaAccessor<T> : ICorrelationIdAccessor<T>
     {
-        private readonly Func<string> _getter;
+        private readonly Func<T> _getter;
 
-        public string CorrelationId => _getter();
+        public T CorrelationId => _getter();
 
-        public LambdaAccessor(Func<string> getter)
+        public LambdaAccessor(Func<T> getter)
         {
-            _getter = getter ?? throw new ArgumentNullException(nameof(getter));
+            Debug.Assert(getter != null);
+            _getter = getter;
         }
     }
 }

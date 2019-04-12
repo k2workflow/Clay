@@ -16,7 +16,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_returns_string_input(string expected)
         {
             // Arrange
-            var accessor = new LambdaAccessor(() => expected);
+            var accessor = new LambdaAccessor<string>(() => expected);
 
             // Act
             var actual = accessor.CorrelationId;
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_executes_null_lambda()
         {
             // Arrange
-            var accessor = new LambdaAccessor(() => null);
+            var accessor = new LambdaAccessor<string>(() => null);
 
             // Act
             var actual = accessor.CorrelationId;
@@ -42,7 +42,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_executes_static_lambda()
         {
             // Arrange
-            var accessor = new LambdaAccessor(MyLambda);
+            var accessor = new LambdaAccessor<string>(MyLambda);
 
             // Act
             var actual = accessor.CorrelationId;
@@ -60,7 +60,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_executes_dynamic_lambda()
         {
             // Arrange
-            var accessor = new LambdaAccessor(MyLambda);
+            var accessor = new LambdaAccessor<string>(MyLambda);
 
             // Act
             var actual = accessor.CorrelationId;
@@ -78,10 +78,10 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_throws_null_lambda()
         {
             // Act
-            void Act() => new LambdaAccessor(null);
+            void act() => new LambdaAccessor<string>(null);
 
             // Assert
-            Assert.Throws<ArgumentNullException>(Act);
+            Assert.Throws<ArgumentNullException>(act);
         }
     }
 }
