@@ -67,7 +67,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
 
             var middleware = new CorrelationMiddleware(next, accessor, logger, options);
 
-
             // Invoke middleware
             middleware.Invoke(context);
 
@@ -156,7 +155,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().NotContainKey(Constants.XCorrelationID, "because the middleware was configured to not return the correlation id in the response.");
         }
-
 
         [Theory]
         [InlineData(true)]

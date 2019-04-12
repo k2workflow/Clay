@@ -31,6 +31,5 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             Action action = () => CollelationServicesCollectionExtensions.AddCorrelationId(null);
             action.Should().Throw<ArgumentNullException>();
         }
-
     }
 }

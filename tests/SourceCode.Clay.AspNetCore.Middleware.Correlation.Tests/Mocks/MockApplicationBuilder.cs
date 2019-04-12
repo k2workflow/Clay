@@ -34,7 +34,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests.Mocks
                 throw new NotImplementedException();
         }
 
-
         public Action<Func<RequestDelegate, RequestDelegate>> OnUseCalled { get; set; }
 
         internal static MockApplicationBuilder MockUpWithRequiredServices(out MockCorrelationContextAccessor accessor, out MockLogger logger, out MockServiceProvider provider)

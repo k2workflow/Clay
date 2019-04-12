@@ -50,4 +50,3 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             => Guid.NewGuid().ToString("D", CultureInfo.InvariantCulture);
     }
 }
-

@@ -10,7 +10,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
 {
     public class UseCorrelationIdShould
     {
-
         [Fact]
         public void AddMiddlewareWithDefaultOptionsIfNonIsProvided()
         {
@@ -34,7 +33,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             returned.Should().Be(app, "the extension method should return the application builder to allow for chaining");
             middlewareWasCalled.Should().Be(true, "the correlation id middleware should have been added to the pipeline");
 
-
             // Arrange
             if (middlewareSupplied != null)
             {
@@ -53,7 +51,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
 
             RequestDelegate next = new RequestDelegate((HttpContext _) => Task.CompletedTask);
 
-
             var middlewareWasCalled = false;
             Func<RequestDelegate, RequestDelegate> middlewareSupplied = null;
 
@@ -70,9 +67,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             returned.Should().Be(app, "the extension method should return the application builder to allow for chaining");
             middlewareWasCalled.Should().Be(true, "the correlation id middleware should have been added to the pipeline");
 
-
             // Arrange
-
             if (middlewareSupplied != null)
             {
                 RequestDelegate result = middlewareSupplied.Invoke(next);
@@ -89,7 +84,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             var app = MockApplicationBuilder.MockUpWithRequiredServices(out _, out _, out _);
 
             RequestDelegate next = new RequestDelegate((HttpContext _) => Task.CompletedTask);
-
 
             var middlewareWasCalled = false;
             Func<RequestDelegate, RequestDelegate> middlewareSupplied = null;
@@ -113,9 +107,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             returned.Should().Be(app, "the extension method should return the application builder to allow for chaining");
             middlewareWasCalled.Should().Be(true, "the correlation id middleware should have been added to the pipeline");
 
-
             // Arrange
-
             if (middlewareSupplied != null)
             {
                 RequestDelegate result = middlewareSupplied.Invoke(next);
@@ -125,7 +117,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
                 middlewareInstance.Options.Header.Should().Be("SomeCustomHeader", "the middleware should be initialized with the configured CorrelationIdOptions");
             }
         }
-
 
         [Fact]
         public void ThrowIfCalledWithNullApplicationBuilder()
@@ -155,13 +146,11 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             action.Should().Throw<ArgumentNullException>();
         }
 
-
         [Fact]
         public void ThrowIfCalledWithApplicationBuilderAndNullConfigureAction()
         {
             Action action = () => CorrelationApplicationBuilderExtensions.UseCorrelationId(new MockApplicationBuilder(), (Action<CorrelationOptions>)null);
             action.Should().Throw<ArgumentNullException>();
         }
-
     }
 }

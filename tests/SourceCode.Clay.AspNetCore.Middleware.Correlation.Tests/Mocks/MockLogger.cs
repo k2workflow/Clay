@@ -43,7 +43,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests.Mocks
             public object State { get; set; }
             public Exception Exception { get; set; }
             public Func<object, Exception, string> Formatter { get; set; }
-
         }
     }
 }
