@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -40,4 +40,12 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup>
+    <PackageId>SourceCode.Clay.AspNetCore.Middleware.Correlation</PackageId>
+    <Authors>SourceCode</Authors>
+    <Description>Configurable middleware for ASP.NET Core to handle correlation Ids.</Description>
+    <PackageTags>clay aspnetcore middleware x-correlation-id correlationid</PackageTags>
+    <Version>1.0.0-local</Version>
+    <PackageVersion>1.0.0-local</PackageVersion>
+  </PropertyGroup>
 </Project>
