@@ -15,7 +15,7 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void CorrelationId_From_string_returns_value(string expected)
         {
             // Arrange
-            ICorrelationIdAccessor accessor = CorrelationId.From(expected);
+            ICorrelationIdAccessor<string> accessor = CorrelationId.From(expected);
 
             // Act
             var actual = accessor.CorrelationId;
@@ -29,7 +29,7 @@ namespace SourceCode.Clay.Correlation.Tests
         {
             // Arrange
             var expected = Guid.NewGuid();
-            ICorrelationIdAccessor accessor = CorrelationId.From(expected);
+            ICorrelationIdAccessor<string> accessor = CorrelationId.From(expected.ToString("D"));
 
             // Act
             var actual = Guid.Parse(accessor.CorrelationId);
@@ -42,7 +42,8 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void CorrelationId_From_lambda_returns_value()
         {
             // Act
-            ICorrelationIdAccessor accessor = CorrelationId.From(() => Guid.NewGuid().ToString("D", CultureInfo.InvariantCulture));
+            ICorrelationIdAccessor<string> accessor = CorrelationId.From(()
+                => Guid.NewGuid().ToString("D", CultureInfo.InvariantCulture));
 
             // Assert
             Assert.True(Guid.TryParse(accessor.CorrelationId, out _));

@@ -3,11 +3,12 @@ namespace SourceCode.Clay.Correlation
     /// <summary>
     /// Interface that is implemented by classes that expose the correlation identifer getter.
     /// </summary>
-    public interface ICorrelationIdAccessor
+    /// <typeparam name="T">The type of value to use as the correlation identifier.</typeparam>
+    public interface ICorrelationIdAccessor<T>
     {
         /// <summary>
         /// Gets the correlation identifier.
         /// </summary>
-        string CorrelationId { get; }
+        T CorrelationId { get; }
     }
 }
