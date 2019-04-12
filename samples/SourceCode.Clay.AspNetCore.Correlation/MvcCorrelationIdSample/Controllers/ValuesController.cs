@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using MvcCorrelationCustomSample.Services;
 using SourceCode.Clay.AspNetCore.Middleware.Correlation;
 
 namespace MvcCorrelationCustomSample.Controllers
