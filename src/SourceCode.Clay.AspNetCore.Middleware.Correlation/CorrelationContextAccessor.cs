@@ -5,7 +5,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
     /// <inheritdoc />
     public class CorrelationContextAccessor : ICorrelationContextAccessor
     {
-        private static AsyncLocal<CorrelationContext> s_correlationContext = new AsyncLocal<CorrelationContext>();
+        private static readonly AsyncLocal<CorrelationContext> s_correlationContext = new AsyncLocal<CorrelationContext>();
 
         /// <inheritdoc />
         public CorrelationContext CorrelationContext
