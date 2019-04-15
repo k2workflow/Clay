@@ -16,7 +16,8 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         private readonly ICorrelationContextAccessor _accessor;
         private readonly RequestDelegate _next;
         private readonly ILogger<CorrelationMiddleware> _logger;
-        private readonly CorrelationOptions _options;
+
+        internal CorrelationOptions Options { get; }
 
         /// <summary>
         /// Creates a new instance of the CorrelationIdMiddleware.
@@ -42,12 +43,10 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _accessor = accessor;
             _logger = logger;
-            _options = options ?? new CorrelationOptions();
-            if (_options.CorrelationIdGenerator == null)
+            Options = options ?? new CorrelationOptions();
+            if (Options.CorrelationIdGenerator == null)
                 throw new ArgumentNullException($"{nameof(options)}.{nameof(options.CorrelationIdGenerator)}");
         }
-
-        internal CorrelationOptions Options { get { return _options; } }
 
         /// <summary>
         /// Processes a request to synchronise TraceIdentifier and Correlation ID headers.
@@ -59,7 +58,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
 
             if (StringValues.IsNullOrEmpty(correlationId))
             {
-                correlationId = _options.CorrelationIdGenerator(context);
+                correlationId = Options.CorrelationIdGenerator(context);
                 _logger?.LogDebug(NoExistingRequestCorrelationIDFound, correlationId);
             }
             else
@@ -70,28 +69,28 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             // Create correlation context from the correlationId and header
             if (_accessor != null)
             {
-                _accessor.CorrelationContext = new CorrelationContext(correlationId, _options.Header);
+                _accessor.CorrelationContext = new CorrelationContext(correlationId, Options.Header);
             }
 
-            if (_options.UpdateTraceIdentifier && context.TraceIdentifier != correlationId)
+            if (Options.UpdateTraceIdentifier && context.TraceIdentifier != correlationId)
             {
                 _logger?.LogDebug(UpdatingHttpContextTraceIdentifier, context.TraceIdentifier, correlationId);
                 context.TraceIdentifier = correlationId;
             }
 
-            if (_options.IncludeInResponse)
+            if (Options.IncludeInResponse)
             {
                 // Add delegate to add correlation header just before the response headers are sent to the client.
                 context.Response.OnStarting(() =>
                 {
-                    if (!context.Response.Headers.ContainsKey(_options.Header))
+                    if (!context.Response.Headers.ContainsKey(Options.Header))
                     {
                         _logger?.LogDebug(AddCorrelationIdToResponse, correlationId);
-                        context.Response.Headers.Add(_options.Header, correlationId);
+                        context.Response.Headers.Add(Options.Header, correlationId);
                     }
                     else
                     {
-                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, _options.Header, context.Response.Headers[_options.Header], correlationId);
+                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, Options.Header, context.Response.Headers[Options.Header], correlationId);
                     }
 
                     return Task.CompletedTask;
@@ -103,11 +102,11 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
 
         private StringValues GetCurrentCorrelationId(HttpContext context)
         {
-            var headerExists = context.Request.Headers.TryGetValue(_options.Header, out StringValues headerValue);
+            var headerExists = context.Request.Headers.TryGetValue(Options.Header, out StringValues headerValue);
             if (headerExists && !StringValues.IsNullOrEmpty(headerValue))
                 return headerValue;
 
-            if (_options.UseTraceIdentifier && !string.IsNullOrEmpty(context.TraceIdentifier))
+            if (Options.UseTraceIdentifier && !string.IsNullOrEmpty(context.TraceIdentifier))
                 return context.TraceIdentifier;
 
             return default;
