@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28407.52
+VisualStudioVersion = 16.0.28809.33
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay", "src\SourceCode.Clay\SourceCode.Clay.csproj", "{D029C294-B983-4173-9220-550175041CC0}"
 EndProject
@@ -82,6 +82,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.Threading.Tests", "tests\SourceCode.Clay.Threading.Tests\SourceCode.Clay.Threading.Tests.csproj", "{FD1160FF-7409-4D93-9104-EF01641A017A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.WaitAndRetry.Tests", "tests\SourceCode.Clay.WaitAndRetry.Tests\SourceCode.Clay.WaitAndRetry.Tests.csproj", "{8629B8E9-0EB5-4920-A958-C062B619EFCE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".samples", ".samples", "{E57BDA2A-46D1-4782-A85C-7AD542E661AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcCorrelationCustomSample", "samples\SourceCode.Clay.AspNetCore.Correlation\MvcCorrelationIdSample\MvcCorrelationCustomSample.csproj", "{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcCorrelationMinimalSample", "samples\SourceCode.Clay.AspNetCore.Correlation\MvcMinimalSample\MvcCorrelationMinimalSample.csproj", "{57943693-30DC-4E3F-97CC-D239F0F96D17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Correlation", "Correlation", "{A6FC1066-E18D-4616-8512-347688D3C74E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.AspNetCore.Middleware.Correlation", "src\SourceCode.Clay.AspNetCore.Middleware.Correlation\SourceCode.Clay.AspNetCore.Middleware.Correlation.csproj", "{B4A0CF79-87D2-4DF3-B37B-BECB9C7F5968}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests", "tests\SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests\SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests.csproj", "{054D9B10-4EED-4575-94B4-7B5EA2CCAA51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,6 +237,22 @@ Global
 		{8629B8E9-0EB5-4920-A958-C062B619EFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8629B8E9-0EB5-4920-A958-C062B619EFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8629B8E9-0EB5-4920-A958-C062B619EFCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57943693-30DC-4E3F-97CC-D239F0F96D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57943693-30DC-4E3F-97CC-D239F0F96D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57943693-30DC-4E3F-97CC-D239F0F96D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57943693-30DC-4E3F-97CC-D239F0F96D17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A0CF79-87D2-4DF3-B37B-BECB9C7F5968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A0CF79-87D2-4DF3-B37B-BECB9C7F5968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A0CF79-87D2-4DF3-B37B-BECB9C7F5968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A0CF79-87D2-4DF3-B37B-BECB9C7F5968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{054D9B10-4EED-4575-94B4-7B5EA2CCAA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054D9B10-4EED-4575-94B4-7B5EA2CCAA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054D9B10-4EED-4575-94B4-7B5EA2CCAA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054D9B10-4EED-4575-94B4-7B5EA2CCAA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -249,6 +277,10 @@ Global
 		{74BDE758-D8B5-437D-B6B6-CD64F7E41ADC} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{FD1160FF-7409-4D93-9104-EF01641A017A} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 		{8629B8E9-0EB5-4920-A958-C062B619EFCE} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
+		{04D5BF18-F2BE-43EC-8863-F7C3DEF5353F} = {A6FC1066-E18D-4616-8512-347688D3C74E}
+		{57943693-30DC-4E3F-97CC-D239F0F96D17} = {A6FC1066-E18D-4616-8512-347688D3C74E}
+		{A6FC1066-E18D-4616-8512-347688D3C74E} = {E57BDA2A-46D1-4782-A85C-7AD542E661AE}
+		{054D9B10-4EED-4575-94B4-7B5EA2CCAA51} = {C8ACBBA9-16BD-4361-A5FB-B35278752B19}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9F58E15-1F9A-4AAC-831F-9C7A81512C01}
