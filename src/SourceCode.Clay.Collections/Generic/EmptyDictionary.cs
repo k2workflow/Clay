@@ -13,7 +13,7 @@ namespace SourceCode.Clay.Collections.Generic
     /// <summary>
     /// Represents an empty <see cref="IReadOnlyDictionary{TKey, TValue}"/> instance.
     /// </summary>
-    public sealed class EmptyMap
+    public sealed class EmptyDictionary
     {
         public static IReadOnlyDictionary<TKey, TValue> Empty<TKey, TValue>() => new EmptyMapImpl<TKey, TValue>();
 
