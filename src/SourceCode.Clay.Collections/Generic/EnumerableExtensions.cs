@@ -19,16 +19,16 @@ namespace SourceCode.Clay.Collections.Generic
         /// The lists are required to have corresponding items in the same ordinal position.
         /// </summary>
         /// <typeparam name="TSource">The type of items.</typeparam>
-        /// <param name="xe">Input 1</param>
-        /// <param name="ye">Input 2</param>
+        /// <param name="first">Input 1</param>
+        /// <param name="second">Input 2</param>
         /// <param name="comparer">The comparer to use to test for equality.</param>
-        public static bool NullableSequenceEqual<TSource>(this IEnumerable<TSource> xe, IEnumerable<TSource> ye, IEqualityComparer<TSource> comparer = null)
+        public static bool NullableSequenceEqual<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
         {
-            if (xe is null) return ye is null; // (null, null) or (null, y)
-            if (ye is null) return false; // (x, null)
-            if (ReferenceEquals(xe, ye)) return true; // (x, x)
+            if (first is null) return second is null; // (null, null) or (null, y)
+            if (second is null) return false; // (x, null)
+            if (ReferenceEquals(first, second)) return true; // (x, x)
 
-            return System.Linq.Enumerable.SequenceEqual(xe, ye, comparer);
+            return System.Linq.Enumerable.SequenceEqual(first, second, comparer);
         }
 
         /// <summary>
@@ -42,11 +42,9 @@ namespace SourceCode.Clay.Collections.Generic
         internal static bool BothAreCollections<TSource>(IEnumerable<TSource> xe, IEnumerable<TSource> ye, out int xCount, out int yCount)
         {
             // Try get item counts
-            // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-            var xN = xe is ICollection<TSource> xc ? xc.Count : (xe is IReadOnlyCollection<TSource> xrc ? xrc.Count : (int?)null);
-            var yN = ye is ICollection<TSource> yc ? yc.Count : (ye is IReadOnlyCollection<TSource> yrc ? yrc.Count : (int?)null);
+            var xN = xe is ICollection<TSource> xc ? xc.Count : (int?)null;
+            var yN = ye is ICollection<TSource> yc ? yc.Count : (int?)null;
 
-            // If both are some kind of collection
             if (xN.HasValue && yN.HasValue)
             {
                 xCount = xN.Value;
