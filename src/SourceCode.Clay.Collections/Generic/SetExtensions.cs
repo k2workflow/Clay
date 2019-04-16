@@ -28,11 +28,20 @@ namespace SourceCode.Clay.Collections.Generic
             if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
             // If both are some kind of collection
-            if (EnumerableExtensions.BothAreCollections(xe, ye, out var xCount, out var yCount))
+            if (xe is ICollection<TSource> xc
+                && ye is ICollection<TSource> yc)
             {
                 // Then we can short-circuit on counts
-                if (xCount != yCount) return false; // (n, m)
-                if (xCount == 0) return true; // (0, 0)
+                if (xc.Count != yc.Count) return false; // (n, m)
+                if (xc.Count == 0) return true; // (0, 0)
+            }
+
+            // If both are a HashSet and comparer is not specified
+            if (comparer == null
+                && xe is HashSet<TSource> xs
+                && ye is HashSet<TSource> ys)
+            {
+                return xs.SetEquals(ys);
             }
 
             IEqualityComparer<TSource> cmpr = comparer ?? EqualityComparer<TSource>.Default;
