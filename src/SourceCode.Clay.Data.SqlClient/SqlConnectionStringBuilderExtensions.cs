@@ -129,27 +129,26 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 
-            // TODO: No need to mutate, just search
-            string ds = datasource;
+            ReadOnlySpan<char> ds = datasource.AsSpan();
 
-            // Remove server port
+            // Remove any server port
             int i = ds.LastIndexOf(',');
             if (i >= 0)
             {
-                ds = ds.Substring(0, i);
+                ds = ds.Slice(0, i);
             }
 
-            // Check for the instance name
+            // Remove any InstanceName
             i = ds.LastIndexOf('\\');
             if (i >= 0)
             {
-                ds = ds.Substring(0, i);
+                ds = ds.Slice(0, i);
             }
 
-            // Trim redundant whitespace
+            // Trim whitespace
             ds = ds.Trim();
 
-            // Check if servername ends with any Azure endpoints
+            // Check if ServerName ends with any Azure endpoints
             for (i = 0; i < s_azureSqlServerEndpoints.Length; i++)
             {
                 if (ds.EndsWith(s_azureSqlServerEndpoints[i], StringComparison.OrdinalIgnoreCase))
