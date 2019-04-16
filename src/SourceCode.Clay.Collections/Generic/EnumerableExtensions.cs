@@ -28,65 +28,7 @@ namespace SourceCode.Clay.Collections.Generic
             if (ye is null) return false; // (x, null)
             if (ReferenceEquals(xe, ye)) return true; // (x, x)
 
-            IEqualityComparer<TSource> cmpr = comparer ?? EqualityComparer<TSource>.Default;
-
-            // If both are some kind of collection
-            if (BothAreCollections(xe, ye, out var xCount, out var yCount))
-            {
-                // Then we can short-circuit on counts
-                if (xCount != yCount) return false; // (n, m)
-                if (xCount == 0) return true; // (0, 0)
-
-                // IList is more common
-                if (xe is IList<TSource> xl)
-                {
-                    // IList is more likely
-                    if (ye is IList<TSource> yl)
-                    {
-                        for (var i = 0; i < xl.Count; i++)
-                            if (!cmpr.Equals(xl[i], yl[i]))
-                                return false;
-
-                        return true;
-                    }
-
-                    // IReadOnlyList
-                    // TODO: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-                    if (ye is IReadOnlyList<TSource> yrl)
-                    {
-                        var eq = ListEqualsLedger(xl, yrl);
-                        return eq;
-                    }
-                }
-
-                // IReadOnlyList
-                // Note: Casting to covariant interface is up to 200x slower: https://github.com/dotnet/coreclr/issues/603
-            }
-
-            // Else resort to an IEnumerable comparison
-            using (IEnumerator<TSource> xi = xe.GetEnumerator())
-            using (IEnumerator<TSource> yi = ye.GetEnumerator())
-            {
-                while (xi.MoveNext())
-                {
-                    if (!yi.MoveNext()) return false;
-
-                    if (!cmpr.Equals(xi.Current, yi.Current)) return false;
-                }
-
-                return !yi.MoveNext();
-            }
-
-            // Local functions
-
-            bool ListEqualsLedger(IList<TSource> l1, IReadOnlyList<TSource> l2)
-            {
-                for (var i = 0; i < l1.Count; i++)
-                    if (!cmpr.Equals(l1[i], l2[i]))
-                        return false;
-
-                return true;
-            }
+            return System.Linq.Enumerable.SequenceEqual(xe, ye, comparer);
         }
 
         /// <summary>
