@@ -7,7 +7,7 @@ namespace SourceCode.Clay.Threading
     /// <summary>
     /// Represents a lock that can operate under an asynchronous context.
     /// </summary>
-    public sealed partial class AsyncLock : IDisposable
+    public sealed class AsyncLock : IDisposable
     {
         private readonly SemaphoreSlim _semaphore;
 
@@ -31,10 +31,9 @@ namespace SourceCode.Clay.Threading
             async ValueTask<AsyncLockCookie> ImplAsync(Task<bool> task)
                 => Wait(await task);
 
-            if (wait.IsCompleted)
-                return new ValueTask<AsyncLockCookie>(Wait(wait.Result));
-            else
-                return ImplAsync(wait);
+            return wait.IsCompleted
+                ? new ValueTask<AsyncLockCookie>(Wait(wait.Result))
+                : ImplAsync(wait);
         }
 
         private bool TryAcquire(out ValueTask<AsyncLockCookie> result, bool ping, CancellationToken cancellationToken)
