@@ -23,13 +23,13 @@ namespace SourceCode.Clay.Threading
 
         private AsyncLockCookie Wait(bool result)
             => result
-                ? new AsyncLockCookie(this)
-                : new AsyncLockCookie();
+            ? new AsyncLockCookie(this)
+            : new AsyncLockCookie();
 
         private ValueTask<AsyncLockCookie> WaitAsync(Task<bool> wait)
         {
-            async ValueTask<AsyncLockCookie> ImplAsync(Task<bool> wait)
-                => Wait(await wait);
+            async ValueTask<AsyncLockCookie> ImplAsync(Task<bool> task)
+                => Wait(await task);
 
             if (wait.IsCompleted)
                 return new ValueTask<AsyncLockCookie>(Wait(wait.Result));
