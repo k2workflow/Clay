@@ -78,10 +78,10 @@ namespace SourceCode.Clay.Correlation.Tests
         public static void LambdaAccessor_throws_null_lambda()
         {
             // Act
-            void act() => new LambdaAccessor<string>(null);
+            void Act() => CorrelationId.From((Func<string>)null);
 
             // Assert
-            Assert.Throws<ArgumentNullException>(act);
+            Assert.Throws<ArgumentNullException>(Act);
         }
     }
 }
