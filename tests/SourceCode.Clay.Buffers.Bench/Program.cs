@@ -28,6 +28,7 @@ namespace SourceCode.Clay.Buffers.Bench
             //new TrimBench().SingleViaRef();
             //Summary summary = BenchmarkRunner.Run<MinBench>();
             //Summary summary = BenchmarkRunner.Run<SpanBench>();
+            Summary summary = BenchmarkRunner.Run<WriteBitBench>();
 
             //SpanBench.Legacy();
             //SpanBench.Cast();

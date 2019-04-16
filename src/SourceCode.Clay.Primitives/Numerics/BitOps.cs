@@ -101,7 +101,6 @@ namespace SourceCode.Clay.Numerics
         {
             uint mask = 1u << (bitOffset & 7);
 
-            // TODO: Lose the branch
             if (on)
                 return (byte)(value | mask);
 
@@ -122,7 +121,6 @@ namespace SourceCode.Clay.Numerics
         {
             uint mask = 1u << (bitOffset & 15);
 
-            // TODO: Lose the branch
             if (on)
                 return (ushort)(value | mask);
 
@@ -142,7 +140,6 @@ namespace SourceCode.Clay.Numerics
         {
             uint mask = 1u << bitOffset;
 
-            // TODO: Lose the branch
             if (on)
                 return value | mask;
 
@@ -163,7 +160,6 @@ namespace SourceCode.Clay.Numerics
         {
             ulong mask = 1ul << bitOffset;
 
-            // TODO: Lose the branch
             if (on)
                 return value | mask;
 
@@ -184,7 +180,6 @@ namespace SourceCode.Clay.Numerics
             uint mask = 1u << (bitOffset & 7);
             bool btw = (value & mask) != 0;
 
-            // TODO: Lose the branch
             if (on)
                 value = (byte)(value | mask);
             else
@@ -207,7 +202,6 @@ namespace SourceCode.Clay.Numerics
             uint mask = 1u << (bitOffset & 15);
             bool btw = (value & mask) != 0;
 
-            // TODO: Lose the branch
             if (on)
                 value = (ushort)(value | mask);
             else
@@ -230,7 +224,6 @@ namespace SourceCode.Clay.Numerics
             uint mask = 1u << bitOffset;
             bool btw = (value & mask) != 0;
 
-            // TODO: Lose the branch
             if (on)
                 value |= mask;
             else
@@ -253,7 +246,6 @@ namespace SourceCode.Clay.Numerics
             ulong mask = 1ul << bitOffset;
             bool btw = (value & mask) != 0;
 
-            // TODO: Lose the branch
             if (on)
                 value |= mask;
             else
@@ -740,7 +732,7 @@ namespace SourceCode.Clay.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint Iff(ref bool condition, uint trueValue, uint falseValue)
         {
-            // Branchless equivalent of (eg): value == 0 ? 32 : 0
+            // Branchless equivalent of: value == 0 ? x : y
             uint sel = (uint)-Unsafe.As<bool, byte>(ref condition); // T=FFFFFFFF, F=00000000
             Debug.Assert(sel == 0xFFFF_FFFF || sel == 0); // CLR permits other values for bool
 
