@@ -54,6 +54,8 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         /// <param name="context">The <see cref="HttpContext"/> for the current request.</param>
         public Task Invoke(HttpContext context)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+
             StringValues correlationId = GetCurrentCorrelationId(context);
 
             if (StringValues.IsNullOrEmpty(correlationId))
