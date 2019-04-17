@@ -283,7 +283,26 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         }
 
         [Fact]
-        public void ShouldThrowIfNullNextDelegateWasSupplied()
+        public void ThrowIfNullNextContextWasSuppliedToInvoke()
+        {
+            // Arrange
+            var next = new MockMiddleware();
+            var accessor = new MockCorrelationContextAccessor();
+            var logger = new MockLogger();
+            var options = new CorrelationOptions();
+            var middleware = new CorrelationMiddleware(next, accessor, logger, Options.Create(options));
+
+            // Act
+            Action invoker = () => middleware.Invoke(null);
+
+            // Assert
+            invoker.Should().Throw<ArgumentNullException>()
+                .And.ParamName.Should().Be("context");
+        }
+
+
+        [Fact]
+        public void ThrowIfNullNextDelegateWasSuppliedToConstructor()
         {
             // Arrange
             var next = (RequestDelegate)null;
@@ -300,7 +319,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         }
 
         [Fact]
-        public void ShouldThrowIfNullGeneratorWasSupplied()
+        public void ThrowIfNullGeneratorWasSuppliedToConstructor()
         {
             // Arrange
             var next = new MockMiddleware();
@@ -318,7 +337,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         }
 
         [Fact]
-        public void ShouldNotThrowIfNullAccessorWasSupplied()
+        public void NotThrowIfNullAccessorWasSuppliedToConstructor()
         {
             // Arrange
             var next = new MockMiddleware();
@@ -334,7 +353,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         }
 
         [Fact]
-        public void ShouldNotThrowIfNullOptionsWasSupplied()
+        public void NotThrowIfNullOptionsWasSuppliedToConstructor()
         {
             // Arrange
             var next = new MockMiddleware();
@@ -350,7 +369,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         }
 
         [Fact]
-        public void ShouldNotThrowIfNullIOptionsWasSupplied()
+        public void NotThrowIfNullIOptionsWasSuppliedToConstructor()
         {
             // Arrange
             var next = new MockMiddleware();
