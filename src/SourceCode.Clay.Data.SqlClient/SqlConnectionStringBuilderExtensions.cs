@@ -89,8 +89,13 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
                     sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
 
+#if NETSTANDARD2_0
+                if (!sqlCsb.DataSource.Contains(","))
+                    sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
+#else
                 if (!sqlCsb.DataSource.Contains(",", StringComparison.Ordinal))
                     sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
+#endif
             }
 
             // Add connectivity robustness
@@ -129,29 +134,40 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 
-            ReadOnlySpan<char> ds = datasource.AsSpan();
+            int len = datasource.Length;
 
-            // Remove any server port
-            int i = ds.LastIndexOf(',');
-            if (i >= 0)
+            // Elide any Port
+            // a.database.windows.net\foo,1433 -> a.database.windows.net\foo
+            for (int i = len - 1; i >= 1; i--)
             {
-                ds = ds.Slice(0, i);
+                if (datasource[i] == ',')
+                {
+                    len = i;
+                    break;
+                }
             }
 
-            // Remove any InstanceName
-            i = ds.LastIndexOf('\\');
-            if (i >= 0)
+            // Elide any InstanceName
+            // a.database.windows.net\foo -> a.database.windows.net
+            for (int i = len - 1; i >= 1; i--)
             {
-                ds = ds.Slice(0, i);
+                if (datasource[i] == '\\')
+                {
+                    len = i;
+                    break;
+                }
             }
 
-            // Trim whitespace
-            ds = ds.Trim();
-
-            // Check if ServerName ends with any Azure endpoints
-            for (i = 0; i < s_azureSqlServerEndpoints.Length; i++)
+            if (len != datasource.Length)
             {
-                if (ds.EndsWith(s_azureSqlServerEndpoints[i], StringComparison.OrdinalIgnoreCase))
+                datasource = datasource.Substring(0, len);
+            }
+
+            // Check if ServerName ends with any well-known Azure hosts
+            // a.database.windows.net -> true
+            for (int i = 0; i < s_azureSqlServerEndpoints.Length; i++)
+            {
+                if (datasource.EndsWith(s_azureSqlServerEndpoints[i], StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
