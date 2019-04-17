@@ -300,7 +300,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
                 .And.ParamName.Should().Be("context");
         }
 
-
         [Fact]
         public void ThrowIfNullNextDelegateWasSuppliedToConstructor()
         {
