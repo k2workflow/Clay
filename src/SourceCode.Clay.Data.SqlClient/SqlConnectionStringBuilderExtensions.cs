@@ -89,8 +89,13 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
                 if (!sqlCsb.DataSource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
                     sqlCsb.DataSource = $"tcp:{sqlCsb.DataSource}";
 
+#if NETSTANDARD2_0
+                if (!sqlCsb.DataSource.Contains(","))
+                    sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
+#else
                 if (!sqlCsb.DataSource.Contains(",", StringComparison.Ordinal))
                     sqlCsb.DataSource = $"{sqlCsb.DataSource},1433";
+#endif
             }
 
             // Add connectivity robustness
@@ -129,26 +134,27 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
         {
             if (string.IsNullOrWhiteSpace(datasource)) return false;
 
-            ReadOnlySpan<char> ds = datasource.AsSpan();
+            // TODO: No need to mutate, just search
+            string ds = datasource;
 
-            // Remove any server port
+            // Remove server port
             int i = ds.LastIndexOf(',');
             if (i >= 0)
             {
-                ds = ds.Slice(0, i);
+                ds = ds.Substring(0, i);
             }
 
-            // Remove any InstanceName
+            // Check for the instance name
             i = ds.LastIndexOf('\\');
             if (i >= 0)
             {
-                ds = ds.Slice(0, i);
+                ds = ds.Substring(0, i);
             }
 
-            // Trim whitespace
+            // Trim redundant whitespace
             ds = ds.Trim();
 
-            // Check if ServerName ends with any Azure endpoints
+            // Check if servername ends with any Azure endpoints
             for (i = 0; i < s_azureSqlServerEndpoints.Length; i++)
             {
                 if (ds.EndsWith(s_azureSqlServerEndpoints[i], StringComparison.OrdinalIgnoreCase))
