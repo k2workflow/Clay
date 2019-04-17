@@ -138,22 +138,22 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
 
             // Elide any Port
             // a.database.windows.net\foo,1433 -> a.database.windows.net\foo
-            for (int j = len - 1; j >= 1; j--)
+            for (int i = len - 1; i >= 1; i--)
             {
-                if (datasource[j] == ',')
+                if (datasource[i] == ',')
                 {
-                    len = j;
+                    len = i;
                     break;
                 }
             }
 
             // Elide any InstanceName
             // a.database.windows.net\foo -> a.database.windows.net
-            for (int j = len - 1; j >= 1; j--)
+            for (int i = len - 1; i >= 1; i--)
             {
-                if (datasource[j] == '\\')
+                if (datasource[i] == '\\')
                 {
-                    len = j;
+                    len = i;
                     break;
                 }
             }
@@ -165,9 +165,9 @@ namespace SourceCode.Clay.Data.SqlClient // .Azure
 
             // Check if ServerName ends with any well-known Azure hosts
             // a.database.windows.net -> true
-            for (len = 0; len < s_azureSqlServerEndpoints.Length; len++)
+            for (int i = 0; i < s_azureSqlServerEndpoints.Length; i++)
             {
-                if (datasource.EndsWith(s_azureSqlServerEndpoints[len], StringComparison.OrdinalIgnoreCase))
+                if (datasource.EndsWith(s_azureSqlServerEndpoints[i], StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
