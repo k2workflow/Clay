@@ -10,7 +10,11 @@
     <Company>SourceCode Technology Holdings Inc.</Company>
     <Product>SourceCode.Clay</Product>
     <Copyright>Copyright © 2017 SourceCode Technology Holdings Inc.</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
