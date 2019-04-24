@@ -31,8 +31,7 @@ namespace SourceCode.Clay.Security
             {
                 ptr = Marshal.SecureStringToGlobalAllocUnicode(ss);
 
-                var str = Marshal.PtrToStringUni(ptr);
-                return str;
+                return Marshal.PtrToStringUni(ptr);
             }
             finally
             {

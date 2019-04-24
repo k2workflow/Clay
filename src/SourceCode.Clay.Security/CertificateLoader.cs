@@ -35,13 +35,13 @@ namespace SourceCode.Clay.Security
         /// <exception cref="ArgumentNullException">
         /// <paramref name="thumbprint"/>
         /// </exception>
-        /// <exception cref="FormatException">
-        /// <paramref name="thumbprint"/>
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="storeName"/>
         /// or
         /// <paramref name="storeLocation"/>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <paramref name="thumbprint"/>
         /// </exception>
         /// <exception cref="InvalidOperationException">Certificate not found: {thumbprint} in {storeLocation}/{storeName}</exception>
         public static X509Certificate2 LoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly)
@@ -61,12 +61,23 @@ namespace SourceCode.Clay.Security
         /// <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
         /// <param name="certificate">If found, the certificate with the specified details.</param>
         /// <returns>Returns true if the specified certificate was found; otherwise, false.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="storeName"/>
+        /// or
+        /// <paramref name="storeLocation"/>
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="thumbprint"/>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <paramref name="thumbprint"/>
+        /// </exception>
         public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly, out X509Certificate2 certificate)
         {
-            if (!Enum.IsDefined(typeof(StoreName), storeName)) throw new ArgumentOutOfRangeException(nameof(storeName));
-            if (!Enum.IsDefined(typeof(StoreLocation), storeLocation)) throw new ArgumentOutOfRangeException(nameof(storeLocation));
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
             if (thumbprint.Length != Sha1Length) throw new FormatException($"Specified thumbprint should be {Sha1Length} characters long.");
+            if (!Enum.IsDefined(typeof(StoreName), storeName)) throw new ArgumentOutOfRangeException(nameof(storeName));
+            if (!Enum.IsDefined(typeof(StoreLocation), storeLocation)) throw new ArgumentOutOfRangeException(nameof(storeLocation));
             if (!IsHex(thumbprint[0]) || !IsHex(thumbprint[thumbprint.Length - 1])) throw new FormatException($"Invalid character(s) detected in thumbprint.");
 
             using (var store = new X509Store(storeName, storeLocation))
@@ -81,13 +92,17 @@ namespace SourceCode.Clay.Security
 
                     X509Certificate2Collection found = storeCertificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
-                    if (found == null || found.Count == 0)
+                    if (found.Count == 0)
                     {
                         return false;
                     }
 
-                    certificate = found[0]; // By convention we return the first certificate
-                    return true;
+                    certificate = found
+                        .OfType<X509Certificate2>()
+                        .OrderByDescending(cert => cert.NotAfter)
+                        .FirstOrDefault();
+
+                    return certificate != null;
                 }
                 finally
                 {
@@ -144,7 +159,6 @@ namespace SourceCode.Clay.Security
         /// or
         /// <paramref name="storeLocation"/>
         /// </exception>
-        /// <exception cref="InvalidOperationException">Certificate not found: {subject} ({issuer}) in {storeLocation}/{storeName}</exception>
         public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string subject, string issuer, bool validOnly, out X509Certificate2 certificate)
         {
             if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentNullException(nameof(subject));
@@ -164,7 +178,7 @@ namespace SourceCode.Clay.Security
 
                     X509Certificate2Collection found = storeCertificates.Find(X509FindType.FindBySubjectDistinguishedName, subject, validOnly);
 
-                    if (found == null || found.Count == 0)
+                    if (found.Count == 0)
                     {
                         return false;
                     }
@@ -173,7 +187,7 @@ namespace SourceCode.Clay.Security
                         .OfType<X509Certificate2>()
                         .Where(c => StringComparer.Ordinal.Equals(c.Issuer, issuer))
                         .OrderByDescending(cert => cert.NotAfter)
-                        .FirstOrDefault(); // By convention we return the first certificate
+                        .FirstOrDefault();
 
                     return certificate != null;
                 }
@@ -185,7 +199,7 @@ namespace SourceCode.Clay.Security
         }
 
         /// <summary>
-        /// Try load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/>/<paramref name="password"/>.
+        /// Try load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/> and <paramref name="password"/>.
         /// </summary>
         /// <param name="fileName">The file path of the certificate.</param>
         /// <param name="password">The certificate password.</param>
@@ -195,10 +209,6 @@ namespace SourceCode.Clay.Security
         /// <paramref name="fileName"/>
         /// or
         /// <paramref name="password"/>
-        /// </exception>
-        /// <exception cref="CryptographicException">
-        /// An error with the certificate occurs. For example: The certificate file does
-        /// not exist. The certificate is invalid. The certificate's password is incorrect.
         /// </exception>
         public static bool TryLoadCertificate(string fileName, SecureString password, out X509Certificate2 certificate)
         {
@@ -259,16 +269,16 @@ namespace SourceCode.Clay.Security
                (c >= 'A' && c <= 'Z') ||
                (c >= 'a' && c <= 'z');
 
-        private static void DisposeCertificates(X509Certificate2Collection foundCertificates, X509Certificate2 except)
+        private static void DisposeCertificates(X509Certificate2Collection certificates, X509Certificate2 except)
         {
-            if (foundCertificates != null)
+            if (certificates == null || certificates.Count == 0)
+                return;
+
+            foreach (X509Certificate2 certificate in certificates)
             {
-                foreach (X509Certificate2 certificate in foundCertificates)
+                if (except == null || !certificate.Equals(except))
                 {
-                    if (except == null || !certificate.Equals(except))
-                    {
-                        certificate.Dispose();
-                    }
+                    certificate.Dispose();
                 }
             }
         }
