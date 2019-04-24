@@ -269,16 +269,16 @@ namespace SourceCode.Clay.Security
                (c >= 'A' && c <= 'Z') ||
                (c >= 'a' && c <= 'z');
 
-        private static void DisposeCertificates(X509Certificate2Collection foundCertificates, X509Certificate2 except)
+        private static void DisposeCertificates(X509Certificate2Collection certificates, X509Certificate2 except)
         {
-            if (foundCertificates != null)
+            if (certificates == null || certificates.Count == 0)
+                return;
+
+            foreach (X509Certificate2 certificate in certificates)
             {
-                foreach (X509Certificate2 certificate in foundCertificates)
+                if (except == null || !certificate.Equals(except))
                 {
-                    if (except == null || !certificate.Equals(except))
-                    {
-                        certificate.Dispose();
-                    }
+                    certificate.Dispose();
                 }
             }
         }
