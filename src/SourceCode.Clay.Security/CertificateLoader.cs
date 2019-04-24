@@ -185,29 +185,6 @@ namespace SourceCode.Clay.Security
         }
 
         /// <summary>
-        /// Load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/>/<paramref name="password"/>.
-        /// </summary>
-        /// <param name="fileName">The file path of the certificate.</param>
-        /// <param name="password">The certificate password.</param>
-        /// <returns>If found, the certificate with the specified details.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="fileName"/>
-        /// or
-        /// <paramref name="password"/>
-        /// </exception>
-        /// <exception cref="CryptographicException">
-        /// An error with the certificate occurs. For example: The certificate file does
-        /// not exist. The certificate is invalid. The certificate's password is incorrect.
-        /// </exception>
-        //public static X509Certificate2 LoadCertificate(string fileName, SecureString password)
-        //{
-        //    if (string.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException(nameof(fileName));
-        //    if (password == null) throw new ArgumentNullException(nameof(password));
-
-        //    return new X509Certificate2(fileName, password);
-        //}
-
-        /// <summary>
         /// Try load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/>/<paramref name="password"/>.
         /// </summary>
         /// <param name="fileName">The file path of the certificate.</param>
