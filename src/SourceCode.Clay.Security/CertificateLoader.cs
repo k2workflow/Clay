@@ -92,7 +92,7 @@ namespace SourceCode.Clay.Security
 
                     X509Certificate2Collection found = storeCertificates.Find(X509FindType.FindByThumbprint, thumbprint, validOnly);
 
-                    if (found == null || found.Count == 0)
+                    if (found.Count == 0)
                     {
                         return false;
                     }
@@ -102,7 +102,7 @@ namespace SourceCode.Clay.Security
                         .OrderByDescending(cert => cert.NotAfter)
                         .FirstOrDefault();
 
-                    return true;
+                    return certificate != null;
                 }
                 finally
                 {
@@ -178,7 +178,7 @@ namespace SourceCode.Clay.Security
 
                     X509Certificate2Collection found = storeCertificates.Find(X509FindType.FindBySubjectDistinguishedName, subject, validOnly);
 
-                    if (found == null || found.Count == 0)
+                    if (found.Count == 0)
                     {
                         return false;
                     }
