@@ -74,10 +74,10 @@ namespace SourceCode.Clay.Security
         /// </exception>
         public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly, out X509Certificate2 certificate)
         {
-            if (!Enum.IsDefined(typeof(StoreName), storeName)) throw new ArgumentOutOfRangeException(nameof(storeName));
-            if (!Enum.IsDefined(typeof(StoreLocation), storeLocation)) throw new ArgumentOutOfRangeException(nameof(storeLocation));
             if (string.IsNullOrWhiteSpace(thumbprint)) throw new ArgumentNullException(nameof(thumbprint));
             if (thumbprint.Length != Sha1Length) throw new FormatException($"Specified thumbprint should be {Sha1Length} characters long.");
+            if (!Enum.IsDefined(typeof(StoreName), storeName)) throw new ArgumentOutOfRangeException(nameof(storeName));
+            if (!Enum.IsDefined(typeof(StoreLocation), storeLocation)) throw new ArgumentOutOfRangeException(nameof(storeLocation));
             if (!IsHex(thumbprint[0]) || !IsHex(thumbprint[thumbprint.Length - 1])) throw new FormatException($"Invalid character(s) detected in thumbprint.");
 
             using (var store = new X509Store(storeName, storeLocation))
