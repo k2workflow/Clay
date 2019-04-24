@@ -35,13 +35,13 @@ namespace SourceCode.Clay.Security
         /// <exception cref="ArgumentNullException">
         /// <paramref name="thumbprint"/>
         /// </exception>
-        /// <exception cref="FormatException">
-        /// <paramref name="thumbprint"/>
-        /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="storeName"/>
         /// or
         /// <paramref name="storeLocation"/>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <paramref name="thumbprint"/>
         /// </exception>
         /// <exception cref="InvalidOperationException">Certificate not found: {thumbprint} in {storeLocation}/{storeName}</exception>
         public static X509Certificate2 LoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly)
@@ -61,6 +61,17 @@ namespace SourceCode.Clay.Security
         /// <param name="validOnly">true to allow only valid certificates to be returned from the search; otherwise, false.</param>
         /// <param name="certificate">If found, the certificate with the specified details.</param>
         /// <returns>Returns true if the specified certificate was found; otherwise, false.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="storeName"/>
+        /// or
+        /// <paramref name="storeLocation"/>
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="thumbprint"/>
+        /// </exception>
+        /// <exception cref="FormatException">
+        /// <paramref name="thumbprint"/>
+        /// </exception>
         public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string thumbprint, bool validOnly, out X509Certificate2 certificate)
         {
             if (!Enum.IsDefined(typeof(StoreName), storeName)) throw new ArgumentOutOfRangeException(nameof(storeName));
@@ -86,7 +97,11 @@ namespace SourceCode.Clay.Security
                         return false;
                     }
 
-                    certificate = found[0]; // By convention we return the first certificate
+                    certificate = found
+                        .OfType<X509Certificate2>()
+                        .OrderByDescending(cert => cert.NotAfter)
+                        .FirstOrDefault();
+
                     return true;
                 }
                 finally
@@ -144,7 +159,6 @@ namespace SourceCode.Clay.Security
         /// or
         /// <paramref name="storeLocation"/>
         /// </exception>
-        /// <exception cref="InvalidOperationException">Certificate not found: {subject} ({issuer}) in {storeLocation}/{storeName}</exception>
         public static bool TryLoadCertificate(StoreName storeName, StoreLocation storeLocation, string subject, string issuer, bool validOnly, out X509Certificate2 certificate)
         {
             if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentNullException(nameof(subject));
@@ -173,7 +187,7 @@ namespace SourceCode.Clay.Security
                         .OfType<X509Certificate2>()
                         .Where(c => StringComparer.Ordinal.Equals(c.Issuer, issuer))
                         .OrderByDescending(cert => cert.NotAfter)
-                        .FirstOrDefault(); // By convention we return the first certificate
+                        .FirstOrDefault();
 
                     return certificate != null;
                 }
@@ -185,7 +199,7 @@ namespace SourceCode.Clay.Security
         }
 
         /// <summary>
-        /// Try load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/>/<paramref name="password"/>.
+        /// Try load a <see cref="X509Certificate2"/> given its <paramref name="fileName"/> and <paramref name="password"/>.
         /// </summary>
         /// <param name="fileName">The file path of the certificate.</param>
         /// <param name="password">The certificate password.</param>
@@ -195,10 +209,6 @@ namespace SourceCode.Clay.Security
         /// <paramref name="fileName"/>
         /// or
         /// <paramref name="password"/>
-        /// </exception>
-        /// <exception cref="CryptographicException">
-        /// An error with the certificate occurs. For example: The certificate file does
-        /// not exist. The certificate is invalid. The certificate's password is incorrect.
         /// </exception>
         public static bool TryLoadCertificate(string fileName, SecureString password, out X509Certificate2 certificate)
         {
