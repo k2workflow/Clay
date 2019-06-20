@@ -27,7 +27,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.DeleteAsync(uri, cancellationToken);
+            return httpClient.DeleteAsync(new Uri(uri), cancellationToken);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetAsync(uri, cancellationToken);
+            return httpClient.GetAsync(new Uri(uri), cancellationToken);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetAsync(uri, completionOption, cancellationToken);
+            return httpClient.GetAsync(new Uri(uri), completionOption, cancellationToken);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetByteArrayAsync(uri);
+            return httpClient.GetByteArrayAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetStreamAsync(uri);
+            return httpClient.GetStreamAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetStringAsync(uri);
+            return httpClient.GetStringAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.PostAsync(uri, content, cancellationToken);
+            return httpClient.PostAsync(new Uri(uri), content, cancellationToken);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.PutAsync(uri, content, cancellationToken);
+            return httpClient.PutAsync(new Uri(uri), content, cancellationToken);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace SourceCode.Clay.Net
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return new HttpRequestMessage(method, uri);
+            return new HttpRequestMessage(method, new Uri(uri));
         }
         #endregion
 
@@ -181,7 +181,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.DeleteAsync(uri, cancellationToken);
+            return httpClient.DeleteAsync(new Uri(uri), cancellationToken);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetAsync(uri, cancellationToken);
+            return httpClient.GetAsync(new Uri(uri), cancellationToken);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetAsync(uri, completionOption, cancellationToken);
+            return httpClient.GetAsync(new Uri(uri), completionOption, cancellationToken);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetByteArrayAsync(uri);
+            return httpClient.GetByteArrayAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetStreamAsync(uri);
+            return httpClient.GetStreamAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.GetStringAsync(uri);
+            return httpClient.GetStringAsync(new Uri(uri));
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.PostAsync(uri, content, cancellationToken);
+            return httpClient.PostAsync(new Uri(uri), content, cancellationToken);
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace SourceCode.Clay.Net
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return httpClient.PutAsync(uri, content, cancellationToken);
+            return httpClient.PutAsync(new Uri(uri), content, cancellationToken);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace SourceCode.Clay.Net
             if (method == null) throw new ArgumentNullException(nameof(method));
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return new HttpRequestMessage(method, uri);
+            return new HttpRequestMessage(method, new Uri(uri));
         }
         #endregion
     }

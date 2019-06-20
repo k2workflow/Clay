@@ -24,7 +24,7 @@ namespace SourceCode.Clay.Net
             SubName = null;
             if (type == UriTokenType.Value)
             {
-                var idx = name.IndexOf('.');
+                var idx = name.AsSpan().IndexOf('.');
                 if (name.EndsWith("[]", StringComparison.Ordinal))
                 {
                     name = name.Substring(0, name.Length - 2);

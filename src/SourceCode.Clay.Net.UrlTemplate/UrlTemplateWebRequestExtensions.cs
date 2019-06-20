@@ -17,7 +17,7 @@ namespace SourceCode.Clay.Net
         {
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return WebRequest.Create(uri);
+            return WebRequest.Create(new Uri(uri));
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SourceCode.Clay.Net
         {
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return WebRequest.CreateHttp(uri);
+            return WebRequest.CreateHttp(new Uri(uri));
         }
         #endregion
 
@@ -48,7 +48,7 @@ namespace SourceCode.Clay.Net
         {
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return WebRequest.Create(uri);
+            return WebRequest.Create(new Uri(uri));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SourceCode.Clay.Net
         {
             if (urlTemplate == null) throw new ArgumentNullException(nameof(urlTemplate));
             var uri = urlTemplate.ToString(parameters);
-            return WebRequest.CreateHttp(uri);
+            return WebRequest.CreateHttp(new Uri(uri));
         }
         #endregion
     }
