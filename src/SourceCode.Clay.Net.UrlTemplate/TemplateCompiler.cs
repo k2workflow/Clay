@@ -331,12 +331,12 @@ namespace SourceCode.Clay.Net
 
         private static string ToString<T>(T value, string formatString, string @default)
             where T : IFormattable
-            => !(value is null)
+            => value != null
             ? Uri.EscapeDataString(value.ToString(formatString, CultureInfo.InvariantCulture))
             : @default;
 
         private static string ToString<T>(T value, string @default)
-            => !(value is null)
+            => value != null
             ? Uri.EscapeDataString(value.ToString())
             : @default;
     }
