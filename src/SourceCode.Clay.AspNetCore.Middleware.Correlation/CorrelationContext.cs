@@ -12,9 +12,8 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         {
             if (string.IsNullOrWhiteSpace(correlationId))
                 throw new ArgumentException(ArgumentNullOrWhitespace, nameof(correlationId));
-
-            if (string.IsNullOrWhiteSpace(header))
-                throw new ArgumentException(ArgumentNullOrWhitespace, nameof(header));
+            if (header != null && string.IsNullOrWhiteSpace(header))
+                throw new ArgumentOutOfRangeException(ArgumentNullOrWhitespace, nameof(CorrelationId));
 
             CorrelationId = correlationId;
             Header = header;

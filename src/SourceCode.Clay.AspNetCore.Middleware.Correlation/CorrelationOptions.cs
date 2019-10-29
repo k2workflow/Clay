@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
@@ -13,29 +14,24 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         /// <summary>
         /// The default http header to use.
         /// </summary>
-        internal const string DefaultHeader = "X-Correlation-ID";
+        public const string DefaultHeader = "X-Correlation-ID";
 
         /// <summary>
-        /// Gets or sets whether the <see cref="HttpContext.TraceIdentifier"/> of the context should be used if not correlation id
+        /// Gets or sets whether the <see cref="HttpContext.TraceIdentifier"/> of the context should be used if no correlation ID
         /// is present in request (defaults to false).
         /// If <c>false</c>, <see cref="CorrelationIdGenerator"/> is invoked to generate the correlation id.
         /// </summary>
-        public bool UseTraceIdentifier { get; internal set; } = false;
+        public bool UseTraceIdentifier { get; set; } = false;
 
         /// <summary>
         /// Gets or sets whether the <see cref="HttpContext.TraceIdentifier"/> of the context should be updated (defaults to true).
         /// </summary>
-        public bool UpdateTraceIdentifier { get; internal set; } = true;
+        public bool UpdateTraceIdentifier { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets whether the http response is updated to include the correlation id (defaults to true).
+        /// Gets or sets the list of headers.
         /// </summary>
-        public bool IncludeInResponse { get; internal set; } = true;
-
-        /// <summary>
-        /// Gets or sets the name of the header to use for correlation ids.
-        /// </summary>
-        public string Header { get; internal set; } = DefaultHeader;
+        public IList<CorrelationHeader> Headers { get; }
 
         /// <summary>
         /// Get function used to generate new correlation ids.
@@ -48,5 +44,16 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         /// </remarks>
         public Func<HttpContext, StringValues> CorrelationIdGenerator { get; set; } = (HttpContext _)
             => Guid.NewGuid().ToString("D", CultureInfo.InvariantCulture);
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="CorrelationOptions"/> type.
+        /// </summary>
+        public CorrelationOptions()
+        {
+            Headers = new List<CorrelationHeader>()
+            {
+                new CorrelationHeader(DefaultHeader)
+            };
+        }
     }
 }

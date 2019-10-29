@@ -75,7 +75,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(generatedId, "the TraceIdentifier should have been set");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(generatedId, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the generated value form the options provider function.");
-            accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().BeNull("the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().Contain(Constants.XCorrelationID, generatedId);
         }
 
@@ -113,7 +113,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(incomingCorrelationId, "the TraceIdentifier should have been set");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(incomingCorrelationId, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the supplied value from the request");
-            accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().Be(Constants.XCorrelationID, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().Contain(Constants.XCorrelationID, incomingCorrelationId);
         }
 
@@ -138,9 +138,11 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             ILogger<CorrelationMiddleware> logger = withLogger ? new MockLogger() : null;
             IOptions<CorrelationOptions> options = Options.Create(new CorrelationOptions()
             {
-                IncludeInResponse = false,
                 CorrelationIdGenerator = (_) => throw new InvalidOperationException("Should not be called because a request correlation id was supplied")
             });
+
+            options.Value.Headers.Clear();
+            options.Value.Headers.Add(new CorrelationHeader(Constants.XCorrelationID, false));
 
             var middleware = new CorrelationMiddleware(next, accessor, logger, options);
 
@@ -152,7 +154,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(incomingCorrelationId, "the TraceIdentifier should have been set");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(incomingCorrelationId, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the supplied value from the request");
-            accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().Be(Constants.XCorrelationID, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().NotContainKey(Constants.XCorrelationID, "because the middleware was configured to not return the correlation id in the response.");
         }
 
@@ -190,7 +192,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(traceIdentifier, "the TraceIdentifier should still be the same");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(traceIdentifier, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the trace identifier from the HttpContext");
-            accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().BeNull("the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().Contain(Constants.XCorrelationID, traceIdentifier);
         }
 
@@ -229,7 +231,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(traceIdentifier, "the TraceIdentifier should still be the same");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(generatedId, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the the generated id (not the trace identifier)");
-            accessor.CorrelationContext.Header.Should().Be(options.Value.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().BeNull("the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().Contain(Constants.XCorrelationID, generatedId, "the generated id should be used (not the trace identifier)");
         }
 
@@ -254,7 +256,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
 
             var accessor = new CorrelationContextAccessor();
             MockLogger logger = withLogger ? new MockLogger() : null;
-            CorrelationOptions options = new CorrelationOptions()
+            var options = new CorrelationOptions()
             {
                 CorrelationIdGenerator = (_) => generatedId
             };
@@ -269,12 +271,12 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             next.WithTraceIdentifier.Should().Be(generatedId, "the TraceIdentifier should have been set");
             accessor.CorrelationContext.Should().NotBeNull("the middleware should initialize the CorrelationContext");
             accessor.CorrelationContext.CorrelationId.Should().Be(generatedId, "the middleware should initialize the CorrelationContext.CorrelatioId correctly with the generated value form the options provider function.");
-            accessor.CorrelationContext.Header.Should().Be(options.Header, "the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
+            accessor.CorrelationContext.Header.Should().BeNull("the middleware should initialize the CorrelationContext.Header correctly with the header from the options provided");
             context.Response.Headers.Should().Contain(Constants.XCorrelationID, otherId, "the middleware should not override a custom correlation id if added by other middleware");
             // TBD: Should both be added?
             if (withLogger)
             {
-                var expectedMessage = string.Format(CultureInfo.InvariantCulture, Properties.Resources.CorrelationIdAlreadyAddedToResponse, options.Header, otherId, generatedId);
+                var expectedMessage = string.Format(CultureInfo.InvariantCulture, Properties.Resources.CorrelationIdAlreadyAddedToResponse, Constants.XCorrelationID, otherId, generatedId);
                 logger.Messages.Any(element =>
                     element.LogLevel == LogLevel.Warning &&
                     element.Formatter.Invoke(element.State, element.Exception).IndexOf(expectedMessage, StringComparison.OrdinalIgnoreCase) > -1

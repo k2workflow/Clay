@@ -56,7 +56,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            StringValues correlationId = GetCurrentCorrelationId(context);
+            StringValues correlationId = GetCurrentCorrelationId(context, out string headerName);
 
             if (StringValues.IsNullOrEmpty(correlationId))
             {
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             // Create correlation context from the correlationId and header
             if (_accessor != null)
             {
-                _accessor.CorrelationContext = new CorrelationContext(correlationId, Options.Header);
+                _accessor.CorrelationContext = new CorrelationContext(correlationId, headerName);
             }
 
             if (Options.UpdateTraceIdentifier && context.TraceIdentifier != correlationId)
@@ -80,34 +80,45 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
                 context.TraceIdentifier = correlationId;
             }
 
-            if (Options.IncludeInResponse)
+            // Add delegate to add correlation header just before the response headers are sent to the client.
+            context.Response.OnStarting(() =>
             {
-                // Add delegate to add correlation header just before the response headers are sent to the client.
-                context.Response.OnStarting(() =>
+                for (var i = 0; i < Options.Headers.Count; i++)
                 {
-                    if (!context.Response.Headers.ContainsKey(Options.Header))
+                    CorrelationHeader header = Options.Headers[i];
+                    if (!header.IncludeInResponse) continue;
+
+                    if (!context.Response.Headers.ContainsKey(header.Name))
                     {
                         _logger?.LogDebug(AddCorrelationIdToResponse, correlationId);
-                        context.Response.Headers.Add(Options.Header, correlationId);
+                        context.Response.Headers.Add(header.Name, correlationId);
                     }
                     else
                     {
-                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, Options.Header, context.Response.Headers[Options.Header], correlationId);
+                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, header.Name, context.Response.Headers[header.Name], correlationId);
                     }
+                }
 
-                    return Task.CompletedTask;
-                });
-            }
+                return Task.CompletedTask;
+            });
 
             return _next(context);
         }
 
-        private StringValues GetCurrentCorrelationId(HttpContext context)
+        private StringValues GetCurrentCorrelationId(HttpContext context, out string headerName)
         {
-            var headerExists = context.Request.Headers.TryGetValue(Options.Header, out StringValues headerValue);
-            if (headerExists && !StringValues.IsNullOrEmpty(headerValue))
-                return headerValue;
+            for (var i = 0; i < Options.Headers.Count; i++)
+            {
+                CorrelationHeader header = Options.Headers[i];
+                var headerExists = context.Request.Headers.TryGetValue(header.Name, out StringValues headerValue);
+                if (headerExists && !StringValues.IsNullOrEmpty(headerValue))
+                {
+                    headerName = header.Name;
+                    return headerValue;
+                }
+            }
 
+            headerName = null;
             if (Options.UseTraceIdentifier && !string.IsNullOrEmpty(context.TraceIdentifier))
                 return context.TraceIdentifier;
 

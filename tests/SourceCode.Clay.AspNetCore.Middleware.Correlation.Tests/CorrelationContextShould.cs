@@ -7,14 +7,13 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
     public class CorrelationContextShould
     {
         [Fact]
-        public void ThrowWhenCalledWithANullHeaderName()
+        public void NotThrowWhenCalledWithANullHeaderName()
         {
-            Func<CorrelationContext> factory = () => new CorrelationContext("abc", null);
-            factory.Should().Throw<ArgumentException>();
+            var _ = new CorrelationContext("abc", null);
         }
 
         [Fact]
-        public void ThrowWhenCalledWithAnEmtpyHeaderName()
+        public void ThrowWhenCalledWithAnEmptyHeaderName()
         {
             Func<CorrelationContext> factory = () => new CorrelationContext("abc", string.Empty);
             factory.Should().Throw<ArgumentException>();

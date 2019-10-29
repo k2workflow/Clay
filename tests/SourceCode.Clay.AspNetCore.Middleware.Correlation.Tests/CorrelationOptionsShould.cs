@@ -15,8 +15,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             var options = new CorrelationOptions();
 
             // Assert
-            options.Header.Should().Be(Constants.XCorrelationID, "the default correlation id header should be used.");
-            options.IncludeInResponse.Should().Be(true, "the correlation id should be included in the response by default.");
+            options.Headers.Should().Equal(new[] { new CorrelationHeader(Constants.XCorrelationID, true) }, "the default correlation id header should be used.");
             options.UseTraceIdentifier.Should().Be(false, "the default trace identifier is machine and connection specific - it is not a very good cross machine correlation id by default.");
             options.UpdateTraceIdentifier.Should().Be(true, "the internal logging of ASP.NET uses the trace identifier thus it is easier if it is updated to match any incoming correlation id.");
             options.CorrelationIdGenerator.Should().NotBeNull("the options should have a non-null correlation id generator by default");

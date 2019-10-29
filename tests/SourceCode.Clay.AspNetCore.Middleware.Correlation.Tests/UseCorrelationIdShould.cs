@@ -100,7 +100,8 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             IApplicationBuilder returned = app.UseCorrelationId((options) =>
             {
                 configureWasCalled = true;
-                options.Header = "SomeCustomHeader";
+                options.Headers.Clear();
+                options.Headers.Add(new CorrelationHeader("SomeCustomHeader", false));
             });
 
             // Assert
@@ -112,9 +113,9 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             {
                 RequestDelegate result = middlewareSupplied.Invoke(next);
                 result.Target.Should().BeAssignableTo(typeof(CorrelationMiddleware), "the build delegate target should be an instance of CorrelationIdMiddleware");
-                CorrelationMiddleware middlewareInstance = result.Target as CorrelationMiddleware;
+                var middlewareInstance = result.Target as CorrelationMiddleware;
                 configureWasCalled.Should().Be(true, "the configure action should have been called to configure the options for the middleware");
-                middlewareInstance.Options.Header.Should().Be("SomeCustomHeader", "the middleware should be initialized with the configured CorrelationIdOptions");
+                middlewareInstance.Options.Headers.Should().Equal(new[] { new CorrelationHeader("SomeCustomHeader", false) }, "the middleware should be initialized with the configured CorrelationIdOptions");
             }
         }
 
