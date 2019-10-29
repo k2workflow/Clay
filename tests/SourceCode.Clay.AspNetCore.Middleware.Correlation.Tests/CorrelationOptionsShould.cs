@@ -15,12 +15,9 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             var options = new CorrelationOptions();
 
             // Assert
-            options.Headers.Should().Equal(new[] { new CorrelationHeader(Constants.XCorrelationID, true) }, "the default correlation id header should be used.");
-            options.UseTraceIdentifier.Should().Be(false, "the default trace identifier is machine and connection specific - it is not a very good cross machine correlation id by default.");
-            options.UpdateTraceIdentifier.Should().Be(true, "the internal logging of ASP.NET uses the trace identifier thus it is easier if it is updated to match any incoming correlation id.");
-            options.CorrelationIdGenerator.Should().NotBeNull("the options should have a non-null correlation id generator by default");
+            options.Headers.Should().BeEquivalentTo(new[] { new CorrelationHeader(Constants.XCorrelationID) }, "the default correlation id header should be used.");
 
-            string generated = options.CorrelationIdGenerator(new DefaultHttpContext());
+            string generated = options.Headers[0].CorrelationIdGenerator(new DefaultHttpContext());
             generated.Should().NotBeNullOrWhiteSpace();
             Guid.TryParse(generated, out _).Should().Be(true, "the default generator should create guid strings");
         }
@@ -36,7 +33,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
             // Assert
             while (previous.Count < 10000)
             {
-                string generated = options.CorrelationIdGenerator(context);
+                string generated = options.Headers[0].CorrelationIdGenerator(context);
 
                 // .Add returns false if the element is already present.
                 previous.Add(generated).Should().BeTrue("each generated value should be unique");

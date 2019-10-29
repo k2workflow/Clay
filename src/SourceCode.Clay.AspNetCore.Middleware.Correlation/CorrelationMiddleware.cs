@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -44,8 +46,6 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             _accessor = accessor;
             _logger = logger;
             Options = options ?? new CorrelationOptions();
-            if (Options.CorrelationIdGenerator == null)
-                throw new ArgumentNullException($"{nameof(options)}.{nameof(options.CorrelationIdGenerator)}");
         }
 
         /// <summary>
@@ -56,11 +56,11 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            StringValues correlationId = GetCurrentCorrelationId(context, out string headerName);
+            IReadOnlyDictionary<CorrelationHeader, StringValues> headers = GetCurrentCorrelationId(context, out StringValues correlationId);
 
             if (StringValues.IsNullOrEmpty(correlationId))
             {
-                correlationId = Options.CorrelationIdGenerator(context);
+                correlationId = Guid.NewGuid().ToString("D", CultureInfo.InvariantCulture);
                 _logger?.LogDebug(NoExistingRequestCorrelationIDFound, correlationId);
             }
             else
@@ -71,7 +71,7 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             // Create correlation context from the correlationId and header
             if (_accessor != null)
             {
-                _accessor.CorrelationContext = new CorrelationContext(correlationId, headerName);
+                _accessor.CorrelationContext = new CorrelationContext(correlationId, headers);
             }
 
             if (Options.UpdateTraceIdentifier && context.TraceIdentifier != correlationId)
@@ -83,46 +83,55 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
             // Add delegate to add correlation header just before the response headers are sent to the client.
             context.Response.OnStarting(() =>
             {
-                for (var i = 0; i < Options.Headers.Count; i++)
+                foreach ((CorrelationHeader header, StringValues value) in headers)
                 {
-                    CorrelationHeader header = Options.Headers[i];
                     if (!header.IncludeInResponse) continue;
 
                     if (!context.Response.Headers.ContainsKey(header.Name))
                     {
-                        _logger?.LogDebug(AddCorrelationIdToResponse, correlationId);
-                        context.Response.Headers.Add(header.Name, correlationId);
+                        _logger?.LogDebug(AddCorrelationIdToResponse, value);
+                        context.Response.Headers.Add(header.Name, value);
                     }
                     else
                     {
-                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, header.Name, context.Response.Headers[header.Name], correlationId);
+                        _logger?.LogWarning(CorrelationIdAlreadyAddedToResponse, header.Name, context.Response.Headers[header.Name], value);
                     }
                 }
-
                 return Task.CompletedTask;
             });
 
             return _next(context);
         }
 
-        private StringValues GetCurrentCorrelationId(HttpContext context, out string headerName)
+        private IReadOnlyDictionary<CorrelationHeader, StringValues> GetCurrentCorrelationId(HttpContext context, out StringValues correlationId)
         {
+            correlationId = StringValues.Empty;
+
+            var result = new Dictionary<CorrelationHeader, StringValues>();
             for (var i = 0; i < Options.Headers.Count; i++)
             {
                 CorrelationHeader header = Options.Headers[i];
                 var headerExists = context.Request.Headers.TryGetValue(header.Name, out StringValues headerValue);
                 if (headerExists && !StringValues.IsNullOrEmpty(headerValue))
                 {
-                    headerName = header.Name;
-                    return headerValue;
+                    if (correlationId.Count == 0) correlationId = headerValue;
+                    result.Add(header, headerValue);
+                }
+                else if (header.UseTraceIdentifier && !string.IsNullOrEmpty(context.TraceIdentifier))
+                {
+                    headerValue = context.TraceIdentifier;
+                    if (correlationId.Count == 0) correlationId = headerValue;
+                    result.Add(header, headerValue);
+                }
+                else if (header.CorrelationIdGenerator != null)
+                {
+                    headerValue = header.CorrelationIdGenerator(context);
+                    if (correlationId.Count == 0) correlationId = headerValue;
+                    result.Add(header, headerValue);
                 }
             }
 
-            headerName = null;
-            if (Options.UseTraceIdentifier && !string.IsNullOrEmpty(context.TraceIdentifier))
-                return context.TraceIdentifier;
-
-            return default;
+            return result;
         }
     }
 }

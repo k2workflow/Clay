@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.Primitives;
 using Xunit;
 
 namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
@@ -9,27 +11,21 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation.Tests
         [Fact]
         public void NotThrowWhenCalledWithANullHeaderName()
         {
-            var _ = new CorrelationContext("abc", null);
-        }
-
-        [Fact]
-        public void ThrowWhenCalledWithAnEmptyHeaderName()
-        {
-            Func<CorrelationContext> factory = () => new CorrelationContext("abc", string.Empty);
-            factory.Should().Throw<ArgumentException>();
+            Func<CorrelationContext> factory = () => new CorrelationContext("abc", null);
+            factory.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void ThrowWhenCalledWithANullCorrelationId()
         {
-            Func<CorrelationContext> factory = () => new CorrelationContext(null, "abc");
+            Func<CorrelationContext> factory = () => new CorrelationContext(null, new Dictionary<CorrelationHeader, StringValues>());
             factory.Should().Throw<ArgumentException>();
         }
 
         [Fact]
         public void ThrowWhenCalledWithAnEmptyNullCorrelationId()
         {
-            Func<CorrelationContext> factory = () => new CorrelationContext(string.Empty, "abc");
+            Func<CorrelationContext> factory = () => new CorrelationContext(string.Empty, new Dictionary<CorrelationHeader, StringValues>());
             factory.Should().Throw<ArgumentException>();
         }
     }
