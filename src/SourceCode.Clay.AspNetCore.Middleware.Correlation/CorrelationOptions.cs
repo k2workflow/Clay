@@ -20,22 +20,22 @@ namespace SourceCode.Clay.AspNetCore.Middleware.Correlation
         /// is present in request (defaults to false).
         /// If <c>false</c>, <see cref="CorrelationIdGenerator"/> is invoked to generate the correlation id.
         /// </summary>
-        public bool UseTraceIdentifier { get; internal set; } = false;
+        public bool UseTraceIdentifier { get; set; } = false;
 
         /// <summary>
         /// Gets or sets whether the <see cref="HttpContext.TraceIdentifier"/> of the context should be updated (defaults to true).
         /// </summary>
-        public bool UpdateTraceIdentifier { get; internal set; } = true;
+        public bool UpdateTraceIdentifier { get; set; } = true;
 
         /// <summary>
         /// Gets or sets whether the http response is updated to include the correlation id (defaults to true).
         /// </summary>
-        public bool IncludeInResponse { get; internal set; } = true;
+        public bool IncludeInResponse { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the name of the header to use for correlation ids.
         /// </summary>
-        public string Header { get; internal set; } = DefaultHeader;
+        public string Header { get; set; } = DefaultHeader;
 
         /// <summary>
         /// Get function used to generate new correlation ids.
